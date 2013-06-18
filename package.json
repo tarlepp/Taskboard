@@ -1,18 +1,19 @@
 {
     "name": "taskboard",
     "private": true,
-    "version": "0.0.0",
+    "version": "0.0.1",
     "description": "a Sails application",
     "dependencies": {
         "sails": "0.8.91",
-        "optimist": "0.4.0"
+        "optimist": "0.4.0",
+        "sails-mysql": "~0.7.8"
     },
     "scripts": {
         "start": "node app.js",
         "debug": "node debug app.js"
     },
     "main": "app.js",
-    "repository": "",
-    "author": "",
+    "repository": "https://github.com/tarlepp/Taskboard.git",
+    "author": "Tarmo Leppänen",
     "license": "MIT"
 }
