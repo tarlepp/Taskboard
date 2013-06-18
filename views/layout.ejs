@@ -1,22 +1,95 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title><%- title %></title>
+    <head>
+        <title><%- title %></title>
 
-		<!-- Viewport mobile tag for sensible mobile support -->
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-		
-		<!-- Stylesheets from your assets folder are included here -->
-		<%- assets.css() %>
-	</head>
+        <!-- Viewport mobile tag for sensible mobile support -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-	<body>
-		<%- body %>
+        <link href="http://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet" type="text/css">
+        <link href='http://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Condiment' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Swanky+and+Moo+Moo' rel='stylesheet' type='text/css'>
 
-		<!-- Templates from your view path are included here -->
-		<%- assets.templateLibrary() %>
 
-		<!-- Javascripts from your assets folder are included here -->
-		<%- assets.js() %>
-	</body>
+        <!-- Stylesheets from your assets folder are included here -->
+        <%- assets.css() %>
+    </head>
+
+    <body>
+        <div id="header">
+            <div class="navbar navbar-fixed-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="brand" href="#">Taskboard</a>
+
+                        <div class="nav-collapse collapse">
+                            <ul class="nav">
+                                <li>
+                                    <select id="selectProject"
+                                        data-bind="
+                                            options: projects,
+                                            optionsText: 'title',
+                                            optionsValue: 'id',
+                                            changeProject: 'id',
+                                            optionsCaption: '--select project--'
+                                        "
+                                    ></select>
+</li>
+                                <li>
+                                    <select id="selectSprint"
+                                        disabled="disabled"
+                                        data-bind="
+                                            options: sprints,
+                                            optionsText: 'formattedTitle',
+                                            optionsValue: 'id',
+                                            changeSprint: 'id',
+                                            optionsCaption: '-- select project first --'
+                                        "
+                                        data-text-choose-project="-- select project first --"
+                                        data-text-choose-sprint="-- select sprint --"
+                                        data-text-no-data="-- No sprint data --"
+                                    ></select>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="container">
+            <div class="container-fluid">
+                <%- body %>
+            </div>
+        </div>
+
+        <div id="footer">
+            <div class="navbar navbar-fixed-bottom">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <ul>
+                            <li><a href="https://github.com/tarlepp/Taskboard" target="_blank">GitHub</a></li>
+                            <li class="muted">&middot;</li>
+                            <li><a href="https://github.com/tarlepp/Taskboard/issues" target="_blank">Issues</a></li>
+                            <li class="muted">&middot;</li>
+                            <li><a href="https://github.com/tarlepp/" target="_blank">Tarmo Leppänen</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Templates from your view path are included here -->
+        <%- assets.templateLibrary() %>
+
+
+        <!-- Javascripts from your assets folder are included here -->
+        <%- assets.js() %>
+    </body>
 </html>

@@ -1,0 +1,144 @@
+<div id="board" data-bind="if: $root.phases().length">
+    <table class="table table-bordered">
+        <thead>
+            <tr >
+                <th colspan="2" style="width:20%">Story</th>
+                <th style="width:18%">Tasks</th>
+
+                <!-- ko foreach: $root.phases -->
+                <th data-bind="style: {width: getColumnWidth(38, $root.phases().length)}">
+                    <span data-bind="text: title"></span>
+                </th>
+                <!-- /ko -->
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: $root.stories">
+
+        <tr>
+            <tr id="test">
+                <th>
+                    <div class="story taped" data-bind="template: {name: 'story-template'}"></div>
+                </th>
+                <td class="addTask">
+                    <button data-bind="click: addNewTask">+</button>
+                </td>
+
+                <td class="myClass" data-bind="sortable: {template: 'task-template', data: getTasks(0), afterMove: myDropCallback, connectClass: 'myClass'}">
+                </td>
+
+            <!-- ko foreach: $root.phases -->
+
+            <td class="myClass" data-bind="
+                    attr: {
+                        'data-phase-id': id(),
+                        'data-phase-title': title()
+                    },
+                    sortable: {
+                        template: 'task-template',
+                        data: getTasks($parent.id(), id()),
+                        beforeMove: myBeforeMoveCallback,
+                        afterMove: myAfterMoveCallback,
+                        connectClass: 'myClass'
+                    }
+                 ">
+            </td>
+
+            <!-- /ko -->
+
+                <!-- _ko foreach: phases -->
+            <!--
+                <td class="myClass" data-bind="
+                    attr: {
+                        'data-phase-id': id(),
+                        'data-phase-title': title()
+                    },
+                    sortable: {
+                        template: 'task-template',
+                        data: tasks,
+                        afterMove: myDropCallback,
+                        connectClass: 'myClass'
+                    }
+                 ">
+                </td>
+                -->
+                <!-- _/ko -->
+
+
+
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<script id="task-template-test" type="text/html">
+    <div class="task sticky taped">
+        <h3>aa</h3>
+    </div>
+</script>
+
+
+<script id="task-template" type="text/html">
+    <div class="task sticky taped" data-bind="attr: {'id': 'task_' + id()}">
+        <h3 data-bind="text: title"></h3>
+
+        <!-- ko if: description -->
+        <p data-bind="text: description"></p>
+        <!-- /ko -->
+    </div>
+</script>
+
+<script id="story-template" type="text/html">
+    <h3 data-bind="text: titleFormatted"></h3>
+
+    <!-- ko if: description -->
+    <p data-bind="text: description"></p>
+    <!-- /ko -->
+</script>
+
+<script id="task-form-new" type="text/x-handlebars-template">
+    <form id="formTaskNew" class="form-horizontal">
+        <input type="hidden" name="storyId" value="{{storyId}}">
+        <input type="hidden" name="phaseId" value="0">
+
+        <fieldset>
+            <div class="control-group">
+                <label class="control-label" for="title">Title</label>
+                <div class="controls">
+                    <input id="title" name="title" type="text" placeholder="enter task title" class="span3" required="required">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="typeId">Task type</label>
+                <div class="controls">
+                    <select id="typeId" name="typeId" class="span3">
+                        <option>Normal</option>
+                        <option>Test</option>
+                        <option>Bug</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="userId">Owner</label>
+                <div class="controls">
+                    <select id="userId" name="userId" class="span3">
+                        <option value="0">-- select --</option>
+                        {{#each users}}
+                        <option value="{{id}}">{{fullname}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="description">Description</label>
+                <div class="controls">
+                    <textarea id="description" name="description" class="span3" placeholder="enter task description"></textarea>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+</script>
