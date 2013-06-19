@@ -3,10 +3,9 @@
         <thead>
             <tr >
                 <th colspan="2" style="width:20%">Story</th>
-                <th style="width:18%">Tasks</th>
 
                 <!-- ko foreach: $root.phases -->
-                <th data-bind="style: {width: getColumnWidth(38, $root.phases().length)}">
+                <th data-bind="style: {width: getColumnWidth(20, $root.phases().length)}">
                     <span data-bind="text: title"></span>
                 </th>
                 <!-- /ko -->
@@ -23,30 +22,7 @@
                     <button data-bind="click: addNewTask">+</button>
                 </td>
 
-                <td class="myClass" data-bind="sortable: {template: 'task-template', data: getTasks(0), afterMove: myDropCallback, connectClass: 'myClass'}">
-                </td>
-
-            <!-- ko foreach: $root.phases -->
-
-            <td class="myClass" data-bind="
-                    attr: {
-                        'data-phase-id': id(),
-                        'data-phase-title': title()
-                    },
-                    sortable: {
-                        template: 'task-template',
-                        data: getTasks($parent.id(), id()),
-                        beforeMove: myBeforeMoveCallback,
-                        afterMove: myAfterMoveCallback,
-                        connectClass: 'myClass'
-                    }
-                 ">
-            </td>
-
-            <!-- /ko -->
-
-                <!-- _ko foreach: phases -->
-            <!--
+                <!-- ko foreach: phases -->
                 <td class="myClass" data-bind="
                     attr: {
                         'data-phase-id': id(),
@@ -60,10 +36,7 @@
                     }
                  ">
                 </td>
-                -->
-                <!-- _/ko -->
-
-
+                <!-- /ko -->
 
             </tr>
         </tbody>
@@ -99,7 +72,7 @@
 <script id="task-form-new" type="text/x-handlebars-template">
     <form id="formTaskNew" class="form-horizontal">
         <input type="hidden" name="storyId" value="{{storyId}}">
-        <input type="hidden" name="phaseId" value="0">
+        <input type="hidden" name="phaseId" value="{{phaseId}}">
 
         <fieldset>
             <div class="control-group">

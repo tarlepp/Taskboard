@@ -244,78 +244,11 @@ function Phase(data) {
     self.title          = ko.observable(data.title);
     self.description    = ko.observable(data.description);
     self.order          = ko.observable(data.order);
-    self.tasks          = ko.observableArray([]);
 
     self.getColumnWidth = function(reservedSize, phasesCount) {
         var columnWidth = (100 - reservedSize) / phasesCount;
 
         return columnWidth + '%';
-    };
-
-
-
-    self.getTasks = function(storyId, phaseId) {
-        var tasks = [];
-
-        jQuery.each(myViewModel.stories(), function(storyIndex, storyObject) {
-            if (storyObject.id() === storyId) {
-                jQuery.each(storyObject.tasks(), function(taskIndex, taskObject) {
-                    if (taskObject.phaseId() == phaseId) {
-                        tasks.push(taskObject);
-                    }
-                });
-            }
-        });
-
-        return tasks;
-
-        //console.log(phaseId);
-        //console.log(storyId);
-    };
-
-    self.myBeforeMoveCallback = function(arg, event, ui) {
-        console.log(arg.targetParent)
-    };
-
-    self.myAfterMoveCallback = function(arg, event, ui) {
-        // console.log(arg.item.parent());
-        console.log(ko.toJS(arg.item));
-        console.log(arg.targetParent);
-
-       // arg.item.phaseId(5);
-
-        console.log(ko.toJS(arg.item));
-
-        //console.log("Moved '" + arg.item.title() + "' from " + arg.sourceParentNode.id + " (index: " + arg.sourceIndex + ") to " + arg.targetParent.id + " (index " + arg.targetIndex + ")");
-    };
-}
-
-function PhaseStory(phase, tasks) {
-    var self = this;
-
-    // Initialize object data
-    self.id             = ko.observable(phase.id);
-    self.title          = ko.observable(phase.title);
-    self.description    = ko.observable(phase.description);
-    self.order          = ko.observable(phase.order);
-    self.tasks          = ko.observableArray([]);
-
-    var mappedData = ko.utils.arrayMap(tasks, function(task) {
-        return new Task(ko.toJS(task));
-    });
-
-    self.tasks(mappedData);
-
-    self.myDropCallback = function(arg, event, ui) {
-       // console.log(arg.item.parent());
-        console.log(ko.toJS(arg.item));
-        console.log(arg.targetParent);
-
-        arg.item.phaseId(2);
-
-        console.log(ko.toJS(arg.item));
-
-        //console.log("Moved '" + arg.item.title() + "' from " + arg.sourceParentNode.id + " (index: " + arg.sourceIndex + ") to " + arg.targetParent.id + " (index " + arg.targetIndex + ")");
     };
 }
 
@@ -357,17 +290,6 @@ function Sprint(data) {
         sprintId: self.id,
         sort: 'priority ASC'
     };
-
-    // Fetch story JSON data
-    //jQuery.getJSON("/story/", parameters)
-    //    .done(function(/** models.story[] */stories) {
-    //        // Map fetched JSON data to story objects
-    //        var mappedData = ko.utils.arrayMap(stories, function(/** models.story */story) {
-    //            return new Story(story);
-    //        });
-    //
-    //        self.stories(mappedData);
-    //    });
 }
 
 /**
@@ -386,8 +308,7 @@ function Story(data) {
     self.estimate       = ko.observable(data.estimate);
     self.priority       = ko.observable(data.priority);
     self.vfCase         = ko.observable(data.vfCase);
-    self.tasks          = ko.observableArray([]);
-   // self.phases         = ko.observableArray([]);
+    self.phases         = ko.observableArray([]);
 
     // Specify parameters to fetch task data
     var parameters = {
@@ -397,42 +318,30 @@ function Story(data) {
     // Fetch task JSON data
     jQuery.getJSON("/task/", parameters, function(/** models.task[] */tasks) {
         // Map fetched JSON data to task objects
-        var mappedData = ko.utils.arrayMap(tasks, function(/** models.task */task) {
+        var tasksObjects = ko.utils.arrayMap(tasks, function(/** models.task */task) {
             return new Task(task);
         });
 
-        self.tasks(mappedData);
+        var phases = ko.utils.arrayMap(myViewModel.phases(), function(phase) {
+            var phaseTasks = [];
 
-        /*
-        var mappedData = ko.utils.arrayMap(myViewModel.phases(), function(phase) {
-            return new PhaseStory(phase, self.getTasks(phase.id()));
+            ko.utils.arrayForEach(tasksObjects, function(task) {
+                var taskPhaseId = parseInt(task.phaseId(), 10);
+
+                if (phase.id() === taskPhaseId) {
+                    phaseTasks.push(task);
+                }
+            });
+
+            return new PhaseStory(phase, phaseTasks);
         });
 
-        self.phases(mappedData)
-        */
+        self.phases(phases)
     });
 
     self.titleFormatted = ko.computed(function() {
         return self.title() + " (" + self.estimate() + ")";
     });
-
-    self.getTasks = function(phaseId) {
-        var output = [];
-
-        ko.utils.arrayForEach(self.tasks(), function(task) {
-            var taskPhaseId = parseInt(task.phaseId(), 10);
-
-            if (isNaN(taskPhaseId)) {
-                taskPhaseId = 0;
-            }
-
-            if (phaseId === taskPhaseId) {
-                output.push(task);
-            }
-        });
-
-        return output;
-    };
 
     self.addNewTask = function(data, event) {
         var source = jQuery('#task-form-new').html();
@@ -477,7 +386,7 @@ function Story(data) {
                         if (valid) {
                             jQuery.getJSON("/task/create/", formItems)
                                 .done(function (/** models.task */task) {
-                                    self.tasks.push(new Task(task));
+                                    self.phases()[0].tasks.push(new Task(task));
 
                                     jQuery('div.bootbox').modal('hide');
                                 })
@@ -495,30 +404,42 @@ function Story(data) {
                 header: "Add a new task to story '" + data.title() + "'"
             }
         );
-
-        /*
-        var task = {
-            id: 22,
-            storyId: data.id(),
-            userId: 1,
-            phaseId: 0,
-            title: 'testi',
-            description: 'lorem ipsum'
-        };
-
-        var newTask = new Task(task);
-
-        self.tasks.push(newTask);
-
-        console.log(data.id());
-        console.log(event);
-        */
     };
+}
 
-    self.myDropCallback = function (arg) {
+function PhaseStory(phase, tasks) {
+    var self = this;
 
-        console.log("Moved '" + arg.item.title() + "' from " + arg.sourceParent.id + " (index: " + arg.sourceIndex + ") to " + arg.targetParent.id + " (index " + arg.targetIndex + ")");
+    // Initialize object data
+    self.id             = ko.observable(phase.id);
+    self.title          = ko.observable(phase.title);
+    self.description    = ko.observable(phase.description);
+    self.order          = ko.observable(phase.order);
+    self.tasks          = ko.observableArray([]);
 
+    var mappedTasks = ko.utils.arrayMap(tasks, function(task) {
+        return new Task(ko.toJS(task));
+    });
+
+    self.tasks(mappedTasks);
+
+    self.myDropCallback = function(arg, event, ui) {
+        var context = ko.contextFor(this);
+        var foo = ko.toJS(context.$data);
+
+        console.log('current phase: '+ arg.item.phaseId());
+        console.log('update phase to: '+ foo.id);
+
+        // Why the hell this doesn't work?
+        console.log(context.$data.id());
+
+        jQuery.getJSON("/task/update/" + arg.item.id(), {phaseId: foo.id})
+            .done(function (task) {
+                // Todo: update task model data
+            })
+            .fail(function (jqxhr, textStatus, error) {
+                handleAjaxError(jqxhr, textStatus, error);
+            });
     };
 }
 
@@ -546,6 +467,13 @@ function Task(data) {
             .done(function(/** models.user */user) {
                 self.user(new User(user));
             });
+    }
+
+    // Fix tasks that have not yet
+    if (self.phaseId() == null || self.phaseId() == 0) {
+        var firstPhase = myViewModel.phases()[0];
+
+        self.phaseId(firstPhase.id());
     }
 }
 
