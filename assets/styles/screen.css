@@ -24,7 +24,7 @@ a:focus,
 }
 
 .navbar .nav > li select {
-    margin: 5px 5px 0 0;
+    margin: 5px 0 0 0;
     width: auto;
 }
 

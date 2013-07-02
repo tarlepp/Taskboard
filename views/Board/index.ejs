@@ -1,7 +1,7 @@
 <div id="board" data-bind="if: $root.phases().length">
     <table class="table table-bordered">
         <thead>
-            <tr >
+            <tr id="boardHeader">
                 <th colspan="2" style="width:20%">Story</th>
 
                 <!-- ko foreach: $root.phases -->
@@ -13,8 +13,7 @@
         </thead>
         <tbody data-bind="foreach: $root.stories">
 
-        <tr>
-            <tr id="test">
+            <tr data-bind="attr: {'id': getStoryRowId()}">
                 <th>
                     <div class="story taped" data-bind="template: {name: 'story-template'}"></div>
                 </th>
@@ -50,7 +49,6 @@
     </div>
 </script>
 
-
 <script id="task-template" type="text/html">
     <div class="task sticky taped" data-bind="attr: {'id': 'task_' + id()}">
         <h3 data-bind="text: title"></h3>
@@ -71,8 +69,8 @@
 
 <script id="task-form-new" type="text/x-handlebars-template">
     <form id="formTaskNew" class="form-horizontal">
-        <input type="hidden" name="storyId" value="{{storyId}}">
-        <input type="hidden" name="phaseId" value="{{phaseId}}">
+        <input type="hidden" name="storyId" value="{{storyId}}" />
+        <input type="hidden" name="phaseId" value="{{phaseId}}" />
 
         <fieldset>
             <div class="control-group">
@@ -112,6 +110,47 @@
                 </div>
             </div>
 
+        </fieldset>
+    </form>
+</script>
+
+<script id="project-form-new" type="text/x-handlebars-template">
+    <form id="formProjectNew" class="form-horizontal">
+
+        <fieldset>
+            <div class="control-group">
+                <label class="control-label" for="title">Project name</label>
+                <div class="controls">
+                    <input id="title" name="title" type="text" placeholder="enter project name" class="span3" required="required" />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="userId">Project manager</label>
+                <div class="controls">
+                    <select id="projectManagerId" name="projectManagerId" class="span3 required">
+                        <option value="#">-- select --</option>
+                        {{#each users}}
+                        <option value="{{id}}">{{fullname}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="dateRange">Duration</label>
+                <div class="controls">
+                    <input id="dateStart" name="dateStart" type="text" class="" />
+                    <input id="dateEnd" name="dateEnd" type="text" class="" />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="description">Description</label>
+                <div class="controls">
+                    <textarea id="description" name="description" class="span3" placeholder="enter project description"></textarea>
+                </div>
+            </div>
         </fieldset>
     </form>
 </script>

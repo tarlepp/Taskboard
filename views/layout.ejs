@@ -6,11 +6,10 @@
         <!-- Viewport mobile tag for sensible mobile support -->
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-        <link href="http://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet" type="text/css">
-        <link href='http://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
-        <link href='http://fonts.googleapis.com/css?family=Condiment' rel='stylesheet' type='text/css'>
-        <link href='http://fonts.googleapis.com/css?family=Swanky+and+Moo+Moo' rel='stylesheet' type='text/css'>
-
+        <link href="http://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet" type="text/css" />
+        <link href="http://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet" type="text/css" />
+        <link href="http://fonts.googleapis.com/css?family=Condiment" rel="stylesheet" type="text/css" />
+        <link href="http://fonts.googleapis.com/css?family=Swanky+and+Moo+Moo" rel="stylesheet" type="text/css" />
 
         <!-- Stylesheets from your assets folder are included here -->
         <%- assets.css() %>
@@ -40,7 +39,8 @@
                                             optionsCaption: '--select project--'
                                         "
                                     ></select>
-</li>
+                                </li>
+
                                 <li>
                                     <select id="selectSprint"
                                         disabled="disabled"
@@ -55,6 +55,15 @@
                                         data-text-choose-sprint="-- select sprint --"
                                         data-text-no-data="-- No sprint data --"
                                     ></select>
+                                </li>
+                                <li id="functionAddSprint"></li>
+                            </ul>
+
+                            <ul class="nav pull-right">
+                                <li id="functionAddProject">
+                                    <a href="javascript: void(0);" data-bind="
+                                        click: $root.addNewProject
+                                    ">Add new project</a>
                                 </li>
                             </ul>
                         </div>
@@ -87,7 +96,6 @@
 
         <!-- Templates from your view path are included here -->
         <%- assets.templateLibrary() %>
-
 
         <!-- Javascripts from your assets folder are included here -->
         <%- assets.js() %>

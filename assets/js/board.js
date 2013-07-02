@@ -1,37 +1,7 @@
 jQuery(document).ready(function () {
-    jQuery.fn.serializeJSON = function () {
-        var json = {};
-        jQuery.map(jQuery(this).serializeArray(), function (n, i) {
-            var _ = n.name.indexOf('[');
-            if (_ > -1) {
-                var o = json;
-                _name = n.name.replace(/\]/gi, '').split('[');
-                for (var i = 0, len = _name.length; i < len; i++) {
-                    if (i == len - 1) {
-                        if (o[_name[i]]) {
-                            if (typeof o[_name[i]] == 'string') {
-                                o[_name[i]] = [o[_name[i]]];
-                            }
-                            o[_name[i]].push(n.value);
-                        }
-                        else o[_name[i]] = n.value || '';
-                    }
-                    else o = o[_name[i]] = o[_name[i]] || {};
-                }
-            }
-            else {
-                if (json[n.name] !== undefined) {
-                    if (!json[n.name].push) {
-                        json[n.name] = [json[n.name]];
-                    }
-                    json[n.name].push(n.value || '');
-                }
-                else json[n.name] = n.value || '';
-            }
-        });
+    /*
 
-        return json;
-    };
+    */
 });
 
 ko.bindingHandlers.changeProject = {
@@ -185,7 +155,98 @@ function ViewModel() {
     self.trash = ko.observableArray([]);
     self.trash.id = "trash";
 
+    self.addNewProject = function() {
+        var source = jQuery('#project-form-new').html();
+        var template = Handlebars.compile(source);
+        var templateData = {
+            users: ko.toJS(myViewModel.users())
+        };
 
+        var modal = bootbox.dialog(
+            template(templateData),
+            [
+                {
+                    label: "Close",
+                    class: "pull-left",
+                    callback: function () {
+                    }
+                },
+                {
+                    label: "Add new Project",
+                    class: "btn-primary pull-right",
+                    callback: function () {
+                        var form = jQuery('#formProjectNew');
+                        var formItems = form.serializeJSON();
+
+                        if (validateForm(formItems)) {
+                            jQuery.getJSON("/project/create/", formItems)
+                                .done(function (/** models.project */project) {
+                                    self.projects.push(new Project(project));
+
+                                    jQuery('div.bootbox').modal('hide');
+                                })
+                                .fail(function (jqxhr, textStatus, error) {
+                                    handleAjaxError(jqxhr, textStatus, error);
+                                });
+                        }
+
+                        return false;
+                    }
+
+                }
+            ],
+            {
+                header: "Add a new project"
+            }
+        );
+
+        modal.on('shown', function() {
+            function startChange() {
+                var startDate = start.value(),
+                    endDate = end.value();
+
+                if (startDate) {
+                    startDate = new Date(startDate);
+                    startDate.setDate(startDate.getDate());
+                    end.min(startDate);
+                } else if (endDate) {
+                    start.max(new Date(endDate));
+                } else {
+                    endDate = new Date();
+                    start.max(endDate);
+                    end.min(endDate);
+                }
+            }
+
+            function endChange() {
+                var endDate = end.value(),
+                    startDate = start.value();
+
+                if (endDate) {
+                    endDate = new Date(endDate);
+                    endDate.setDate(endDate.getDate());
+                    start.max(endDate);
+                } else if (startDate) {
+                    end.min(new Date(startDate));
+                } else {
+                    endDate = new Date();
+                    start.max(endDate);
+                    end.min(endDate);
+                }
+            }
+
+            var start = $("#dateStart").kendoDatePicker({
+                change: startChange
+            }).data("kendoDatePicker");
+
+            var end = $("#dateEnd").kendoDatePicker({
+                change: endChange
+            }).data("kendoDatePicker");
+
+            start.max(end.value());
+            end.min(start.value());
+        })
+    };
 }
 
 var myViewModel = new ViewModel();
@@ -351,8 +412,6 @@ function Story(data) {
             users: ko.toJS(myViewModel.users())
         };
 
-        //console.log(templateData);
-
         bootbox.dialog(
             template(templateData),
             [
@@ -368,22 +427,8 @@ function Story(data) {
                     callback: function () {
                         var form = jQuery('#formTaskNew');
                         var formItems = form.serializeJSON();
-                        var valid = true;
 
-                        jQuery.each(formItems, function (key, value) {
-                            var input = jQuery('#' + key);
-                            var group = input.closest('.control-group');
-
-                            if (input.prop('required') && jQuery.trim(input.val()) == '') {
-                                group.addClass('error');
-
-                                valid = false;
-                            } else {
-                                group.removeClass('error');
-                            }
-                        });
-
-                        if (valid) {
+                        if (validateForm(formItems)) {
                             jQuery.getJSON("/task/create/", formItems)
                                 .done(function (/** models.task */task) {
                                     self.phases()[0].tasks.push(new Task(task));
