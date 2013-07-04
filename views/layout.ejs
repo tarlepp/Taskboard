@@ -40,12 +40,11 @@
                                         "
                                     ></select>
                                 </li>
-
                                 <li>
                                     <select id="selectSprint"
                                         disabled="disabled"
                                         data-bind="
-                                            options: sprints,
+                                            options: sortedSprints,
                                             optionsText: 'formattedTitle',
                                             optionsValue: 'id',
                                             changeSprint: 'id',
@@ -56,7 +55,6 @@
                                         data-text-no-data="-- No sprint data --"
                                     ></select>
                                 </li>
-                                <li id="functionAddSprint"></li>
                             </ul>
 
                             <ul class="nav pull-right">

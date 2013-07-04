@@ -2,7 +2,16 @@
     <table class="table table-bordered">
         <thead>
             <tr id="boardHeader">
-                <th colspan="2" style="width:20%">Story</th>
+                <th style="width:20%">Story</th>
+                <td class="addStory">
+                    <button data-bind="
+                        click: addNewStory.bind($data, $root.project().id(), $root.getSprintId()),
+                        tooltip: {
+                            title: 'Add a new story to project<br/>' + $root.project().title(),
+                            html: true
+                        }
+                    ">+</button>
+                </td>
 
                 <!-- ko foreach: $root.phases -->
                 <th data-bind="style: {width: getColumnWidth(20, $root.phases().length)}">
@@ -11,14 +20,20 @@
                 <!-- /ko -->
             </tr>
         </thead>
-        <tbody data-bind="foreach: $root.stories">
+        <tbody data-bind="foreach: $root.sortedStories">
 
             <tr data-bind="attr: {'id': getStoryRowId()}">
                 <th>
                     <div class="story taped" data-bind="template: {name: 'story-template'}"></div>
                 </th>
                 <td class="addTask">
-                    <button data-bind="click: addNewTask">+</button>
+                    <button data-bind="
+                        click: addNewTask,
+                        tooltip: {
+                            title: 'Add a new task to story<br />' + title(),
+                            html: true
+                        }
+                    ">+</button>
                 </td>
 
                 <!-- ko foreach: phases -->
@@ -67,6 +82,8 @@
     <!-- /ko -->
 </script>
 
+<!-- handlebars templates -->
+
 <script id="task-form-new" type="text/x-handlebars-template">
     <form id="formTaskNew" class="form-horizontal">
         <input type="hidden" name="storyId" value="{{storyId}}" />
@@ -74,16 +91,16 @@
 
         <fieldset>
             <div class="control-group">
-                <label class="control-label" for="title">Title</label>
+                <label class="control-label" for="formTaskNewTitle">Title</label>
                 <div class="controls">
-                    <input id="title" name="title" type="text" placeholder="enter task title" class="span3" required="required">
+                    <input id="formTaskNewTitle" name="title" type="text" placeholder="enter task title" class="span3" required="required">
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="typeId">Task type</label>
+                <label class="control-label" for="formTaskNewTypeId">Task type</label>
                 <div class="controls">
-                    <select id="typeId" name="typeId" class="span3">
+                    <select id="formTaskNewTypeId" name="typeId" class="span3">
                         <option>Normal</option>
                         <option>Test</option>
                         <option>Bug</option>
@@ -92,9 +109,9 @@
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="userId">Owner</label>
+                <label class="control-label" for="formTaskNewOwner">Owner</label>
                 <div class="controls">
-                    <select id="userId" name="userId" class="span3">
+                    <select id="formTaskNewOwner" name="userId" class="span3">
                         <option value="0">-- select --</option>
                         {{#each users}}
                         <option value="{{id}}">{{fullname}}</option>
@@ -104,9 +121,9 @@
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="description">Description</label>
+                <label class="control-label" for="formTaskNewDescription">Description</label>
                 <div class="controls">
-                    <textarea id="description" name="description" class="span3" placeholder="enter task description"></textarea>
+                    <textarea id="formTaskNewDescription" name="description" class="span3" placeholder="enter task description"></textarea>
                 </div>
             </div>
 
@@ -116,19 +133,17 @@
 
 <script id="project-form-new" type="text/x-handlebars-template">
     <form id="formProjectNew" class="form-horizontal">
-
         <fieldset>
             <div class="control-group">
-                <label class="control-label" for="title">Project name</label>
+                <label class="control-label" for="formProjectNewTitle">Project name</label>
                 <div class="controls">
-                    <input id="title" name="title" type="text" placeholder="enter project name" class="span3" required="required" />
+                    <input id="formProjectNewTitle" name="title" type="text" placeholder="enter project name" class="span3" required="required" />
                 </div>
             </div>
-
             <div class="control-group">
-                <label class="control-label" for="userId">Project manager</label>
+                <label class="control-label" for="formProjectNewProjectManagerId">Project manager</label>
                 <div class="controls">
-                    <select id="projectManagerId" name="projectManagerId" class="span3 required">
+                    <select id="formProjectNewProjectManagerId" name="projectManagerId" class="span3 required">
                         <option value="#">-- select --</option>
                         {{#each users}}
                         <option value="{{id}}">{{fullname}}</option>
@@ -136,12 +151,12 @@
                     </select>
                 </div>
             </div>
-
             <div class="control-group">
-                <label class="control-label" for="dateStart">Duration</label>
+                <label class="control-label" for="formProjectNewDateStart">Duration</label>
+                <label class="control-label" for="formProjectNewDateEnd" style="display: none;"></label>
                 <div class="controls">
                     <div id="dateStartContainer" class="input-append date">
-                        <input id="dateStart" name="dateStart" type="text" class="dateInput" size="16" required="required" readonly="readonly"
+                        <input id="formProjectNewDateStart" name="dateStart" type="text" class="dateInput" size="16" required="required" readonly="readonly"
                            data-validate-type="daterange"
                            data-role="start"
                            data-pair="dateEnd"
@@ -150,7 +165,7 @@
                     </div>
                     <span class="separator">&mdash;</span>
                     <div id="dateEndContainer" class="input-append date">
-                        <input id="dateEnd" name="dateEnd" type="text" class="dateInput" size="16" required="required" readonly="readonly"
+                        <input id="formProjectNewDateEnd" name="dateEnd" type="text" class="dateInput" size="16" required="required" readonly="readonly"
                            data-validate-type="daterange"
                            data-role="end"
                            data-pair="dateStart"
@@ -159,11 +174,51 @@
                     </div>
                 </div>
             </div>
-
             <div class="control-group">
-                <label class="control-label" for="description">Description</label>
+                <label class="control-label" for="formProjectNewDescription">Description</label>
                 <div class="controls">
-                    <textarea id="description" name="description" class="span3" placeholder="enter project description"></textarea>
+                    <textarea id="formProjectNewDescription" name="description" class="span3" placeholder="enter project description"></textarea>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</script>
+
+
+<script id="story-form-new" type="text/x-handlebars-template">
+    <form id="formStoryNew" class="form-horizontal">
+        <input type="hidden" name="projectId" value="{{projectId}}" />
+        <input type="hidden" name="sprintId" value="{{sprintId}}" />
+
+        <fieldset>
+            <div class="control-group">
+                <label class="control-label" for="formStoryNewTitle">Story name</label>
+                <div class="controls">
+                    <input id="formStoryNewTitle" name="title" type="text" placeholder="enter story name" class="span3" required="required" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="formStoryNewDescription">Description</label>
+                <div class="controls">
+                    <textarea id="formStoryNewDescription" name="description" class="span3" placeholder="enter user story description"></textarea>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="formStoryNewVfCase">ValueFrame case</label>
+                <div class="controls">
+                    <input id="formStoryNewVfCase" name="vfCase" type="text" placeholder="#case" class="span1" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="formStoryNewEstimate">Estimate</label>
+                <div class="controls">
+                    <input id="formStoryNewEstimate" name="estimate" type="text" placeholder="estimate" class="span1" required="required" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="formStoryNewPriority">Priority</label>
+                <div class="controls">
+                    <input id="formStoryNewPriority" name="priority" type="text" placeholder="priority" class="span1" required="required" />
                 </div>
             </div>
         </fieldset>

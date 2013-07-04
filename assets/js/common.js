@@ -36,7 +36,7 @@ jQuery(document).ready(function() {
 
     jQuery.fn.getType = function() {
         return this[0].tagName == "INPUT" ? jQuery(this[0]).attr("type").toLowerCase() : this[0].tagName.toLowerCase();
-    }
+    };
 });
 
 function makeMessage(text, type, options) {

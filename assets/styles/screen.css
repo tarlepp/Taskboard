@@ -24,7 +24,7 @@ a:focus,
 }
 
 .navbar .nav > li select {
-    margin: 5px 0 0 0;
+    margin: 5px 5px 0 0;
     width: auto;
 }
 
@@ -174,12 +174,14 @@ div.story p:last-of-type {
     margin-left: -30px;
 }
 
-#board .table td.addTask {
+#board .table td.addTask,
+#board .table td.addStory {
     margin: 0;
     padding: 0;
 }
 
-#board .table td.addTask button {
+#board .table td.addTask button,
+#board .table td.addStory button {
     width: 100%;
     height: 100%;
     margin: 0;
@@ -188,7 +190,8 @@ div.story p:last-of-type {
     background-color: #f2f2f2;
 }
 
-#board .table td.addTask button:hover {
+#board .table td.addTask button:hover,
+#board .table td.addStory button:hover {
     background-color: #fafafa;
 }
 
@@ -274,4 +277,8 @@ div.story p:last-of-type {
 .input-append.date .add-on i,
 .input-prepend.date .add-on i {
     margin: 3px 0 0 3px;
+}
+
+.form-horizontal .controls {
+    margin-left: 170px;
 }

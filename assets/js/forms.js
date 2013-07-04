@@ -20,6 +20,10 @@ function validateForm(items) {
     jQuery.each(items, function(key, item) {
         var input = jQuery('#' + key);
 
+        if (input.length === 0) {
+            input = jQuery("[name='"+ key +"']");
+        }
+
         if (input.getType() == 'div') {
             input = input.find('input');
         }

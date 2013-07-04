@@ -15,8 +15,15 @@ ko.bindingHandlers.changeProject = {
                 jQuery('option:selected', elementSprint).text(elementSprint.data('textChooseProject'));
 
                 viewModel.phases([]);
+                viewModel.project();
             } else {
                 var parameters = {};
+
+                jQuery.each(viewModel.projects(), function(key, project) {
+                    if (value == project.id()) {
+                        viewModel.project(project);
+                    }
+                });
 
                 // Specify parameters to fetch project sprint data
                 parameters = {
@@ -86,6 +93,12 @@ ko.bindingHandlers.changeSprint = {
             if (isNaN(sprintId)) {
                 viewModel.stories([]);
             } else {
+                jQuery.each(viewModel.sprints(), function(key, sprint) {
+                    if (sprintId == sprint.id()) {
+                        viewModel.sprint(sprint);
+                    }
+                });
+
                 // Specify parameters to fetch project sprint story data
                 var parameters = {
                     sprintId: sprintId,
@@ -152,6 +165,18 @@ function ViewModel() {
     self.sortedProjects = ko.computed(function() {
         return self.projects().sort(function(a, b) {
             return a.title().toLowerCase() > b.title().toLowerCase() ? 1 : -1;
+        });
+    });
+
+    self.sortedSprints = ko.computed(function() {
+        return self.sprints().sort(function(a, b) {
+            return a.start() > b.start() ? 1 : -1;
+        });
+    });
+
+    self.sortedStories = ko.computed(function() {
+        return self.stories().sort(function(a, b) {
+            return a.priority() > b.priority() ? 1 : -1;
         });
     });
 
@@ -268,6 +293,63 @@ function ViewModel() {
             });
         })
     };
+
+    self.addNewStory = function(projectId, sprintId) {
+        console.log(projectId);
+        console.log(sprintId);
+        console.log('jeee');
+
+        var source = jQuery('#story-form-new').html();
+        var template = Handlebars.compile(source);
+        var templateData = {
+            projectId: projectId,
+            sprintId: sprintId,
+            project: ko.toJS(self.project),
+            sprint: ko.toJS(self.sprint)
+        };
+
+        var modal = bootbox.dialog(
+            template(templateData),
+            [
+                {
+                    label: "Close",
+                    class: "pull-left",
+                    callback: function () {
+                    }
+                },
+                {
+                    label: "Add new story",
+                    class: "btn-primary pull-right",
+                    callback: function () {
+                        var form = jQuery('#formStoryNew');
+                        var formItems = form.serializeJSON();
+
+                        if (validateForm(formItems)) {
+                            jQuery.getJSON("/story/create/", formItems)
+                                .done(function (/** models.story */story) {
+                                    self.stories.push(new Story(story));
+
+                                    jQuery('div.bootbox').modal('hide');
+                                })
+                                .fail(function (jqxhr, textStatus, error) {
+                                    handleAjaxError(jqxhr, textStatus, error);
+                                });
+                        }
+
+                        return false;
+                    }
+
+                }
+            ],
+            {
+                header: "Add a new story"
+            }
+        );
+    };
+
+    self.getSprintId = function() {
+        return self.sprint() ? self.sprint().id() : 0;
+    }
 }
 
 var myViewModel = new ViewModel();
@@ -305,17 +387,6 @@ function Project(data) {
         projectId: self.id,
         sort: 'dateStart ASC'
     };
-
-    // Fetch sprint JSON data
-    //jQuery.getJSON("/sprint/", parameters)
-    //    .done(function(/** models.sprint[] */sprints) {
-    //        // Map fetched JSON data to sprint objects
-    //        var mappedData = ko.utils.arrayMap(sprints, function(/** models.sprint */sprint) {
-    //            return new Sprint(sprint);
-    //        });
-    //
-    //        self.sprints(mappedData);
-    //    });
 }
 
 function Phase(data) {
