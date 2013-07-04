@@ -149,6 +149,12 @@ function ViewModel() {
             self.users(mappedData);
         });
 
+    self.sortedProjects = ko.computed(function() {
+        return self.projects().sort(function(a, b) {
+            return a.title().toLowerCase() > b.title().toLowerCase() ? 1 : -1;
+        });
+    });
+
     self.trash = ko.observableArray([]);
     self.trash.id = "trash";
 
@@ -464,6 +470,10 @@ function Story(data) {
                 header: "Add a new task to story '" + data.title() + "'"
             }
         );
+    };
+
+    self.getStoryRowId = function() {
+        return "storyRow_" + self.id();
     };
 }
 
