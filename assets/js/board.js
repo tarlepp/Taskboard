@@ -1,7 +1,4 @@
-jQuery(document).ready(function () {
-    /*
-
-    */
+jQuery(document).ready(function() {
 });
 
 ko.bindingHandlers.changeProject = {
@@ -118,7 +115,7 @@ ko.bindingHandlers.changeSprint = {
 function handleAjaxError(jqxhr, textStatus, error) {
     var err = textStatus + ', ' + error;
 
-    console.log( "Request Failed: " + err);
+    makeMessage("Request Failed: " + err, "error");
 }
 
 function ViewModel() {
@@ -201,50 +198,68 @@ function ViewModel() {
         );
 
         modal.on('shown', function() {
-            function startChange() {
-                var startDate = start.value(),
-                    endDate = end.value();
+            jQuery.fn.bootstrapDP = jQuery.fn.datepicker.noConflict();
 
-                if (startDate) {
-                    startDate = new Date(startDate);
-                    startDate.setDate(startDate.getDate());
-                    end.min(startDate);
-                } else if (endDate) {
-                    start.max(new Date(endDate));
-                } else {
-                    endDate = new Date();
-                    start.max(endDate);
-                    end.min(endDate);
-                }
+            var inputStart = jQuery("#dateStartContainer");
+            var inputEnd = jQuery("#dateEndContainer");
+            var bitsStart = inputStart.val().split('-');
+            var bitsEnd = inputEnd.val().split('-');
+            var valueStart = null;
+            var valueEnd = null;
+
+            if (bitsStart.length === 3) {
+                valueStart = new Date(bitsStart[0], bitsStart[1] - 1, bitsStart[2]);
             }
 
-            function endChange() {
-                var endDate = end.value(),
-                    startDate = start.value();
-
-                if (endDate) {
-                    endDate = new Date(endDate);
-                    endDate.setDate(endDate.getDate());
-                    start.max(endDate);
-                } else if (startDate) {
-                    end.min(new Date(startDate));
-                } else {
-                    endDate = new Date();
-                    start.max(endDate);
-                    end.min(endDate);
-                }
+            if (bitsEnd.length === 3) {
+                valueEnd = new Date(bitsEnd[0], bitsEnd[1] - 1, bitsEnd[2]);
             }
 
-            var start = $("#dateStart").kendoDatePicker({
-                change: startChange
-            }).data("kendoDatePicker");
+            inputStart.bootstrapDP({
+                format: 'yyyy-mm-dd',
+                weekStart: 1,
+                calendarWeeks: true
+            }).on('changeDate', function(event) {
+                if (valueEnd && event.date.valueOf() > valueEnd.valueOf()) {
+                    if (valueStart) {
+                        inputStart.val(valueStart.format('yyyy-mm-dd'));
+                    } else {
+                        inputStart.val('');
+                    }
 
-            var end = $("#dateEnd").kendoDatePicker({
-                change: endChange
-            }).data("kendoDatePicker");
+                    makeMessage('Start date cannot be later than end date.', 'error');
 
-            start.max(end.value());
-            end.min(start.value());
+                    inputEnd.closest('.control-group').addClass('error');
+                } else {
+                    valueStart = new Date(event.date);
+                    inputStart.bootstrapDP('hide');
+
+                    inputEnd.closest('.control-group').removeClass('error');
+                }
+            });
+
+            inputEnd.bootstrapDP({
+                format: 'yyyy-mm-dd',
+                weekStart: 1,
+                calendarWeeks: true
+            }).on('changeDate', function(event) {
+                if (valueStart && event.date.valueOf() < valueStart.valueOf()) {
+                    if (valueEnd) {
+                        inputEnd.val(valueEnd.format('yyyy-mm-dd'));
+                    } else {
+                        inputEnd.val('');
+                    }
+
+                    makeMessage('End date cannot be before than start date.', 'error');
+
+                    inputEnd.closest('.control-group').addClass('error');
+                } else {
+                    valueEnd = new Date(event.date);
+                    inputEnd.bootstrapDP('hide');
+
+                    inputEnd.closest('.control-group').removeClass('error');
+                }
+            });
         })
     };
 }

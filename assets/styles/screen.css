@@ -255,3 +255,23 @@ div.story p:last-of-type {
 .form-horizontal .control-group {
     margin-bottom: 5px;
 }
+
+.form-horizontal .dateInput {
+    width: 75px;
+    text-align: center;
+}
+
+.separator {
+    position: relative;
+    top: 2px;
+}
+
+.datepicker .cw {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.input-append.date .add-on i,
+.input-prepend.date .add-on i {
+    margin: 3px 0 0 3px;
+}
