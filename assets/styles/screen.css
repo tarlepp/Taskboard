@@ -155,9 +155,17 @@ div.story p:last-of-type {
 }
 
 .task {
-    background-color: #F4F39E;
-    border-color: #DEE184;
+    background-color: rgb(245, 240, 160);
+    border: 1px solid rgba(0, 0, 0, 0.05);
     display: inline-block;
+}
+
+.task.bug {
+    background-color: rgb(255, 140, 140);
+}
+
+.task.test {
+    background-color: rgb(145, 255, 155);
 }
 
 .taped:after {
@@ -265,7 +273,7 @@ div.story p:last-of-type {
 }
 
 .form-horizontal .dateInput {
-    width: 75px;
+    width: 82px;
     text-align: center;
 }
 

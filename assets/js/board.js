@@ -492,7 +492,7 @@ function Phase(data) {
             output = '(' + self.cntTask();
 
             if (self.cntTasksMax() != '') {
-                output += '|' + self.cntTasksMax();
+                output += ' | ' + self.cntTasksMax();
             }
 
             output += ')';
