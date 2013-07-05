@@ -282,3 +282,9 @@ div.story p:last-of-type {
 .form-horizontal .controls {
     margin-left: 170px;
 }
+
+.phaseTaskCount {
+    font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    font-size: 14px;
+}

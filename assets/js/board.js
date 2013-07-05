@@ -226,8 +226,6 @@ function ViewModel() {
         );
 
         modal.on('shown', function() {
-
-
             var inputStart = jQuery("#dateStartContainer");
             var inputEnd = jQuery("#dateEndContainer");
             var bitsStart = inputStart.val().split('-');
@@ -390,6 +388,7 @@ function Phase(data) {
     self.title          = ko.observable(data.title);
     self.description    = ko.observable(data.description);
     self.order          = ko.observable(data.order);
+    self.tasks          = ko.observable(data.tasks);
 
     self.getColumnWidth = function(reservedSize, phasesCount) {
         var columnWidth = (100 - reservedSize) / phasesCount;
@@ -397,14 +396,20 @@ function Phase(data) {
         return columnWidth + '%';
     };
 
+    self.cntTasksMax = ko.computed(function() {
+        return self.tasks() < 1 ? "-" : self.tasks();
+    });
+
     self.cntTask = ko.computed(function() {
-        var output = 0;
+        var output = '-';
         var phaseId = self.id();
 
         // We may have some stories
         if (myViewModel.stories()) {
             // Oh, yes we have stories
             if (myViewModel.stories().length > 0) {
+                output = 0;
+
                 // Iterate each story
                 jQuery.each(myViewModel.stories(), function(storyKey, story) {
                     // Iterate each phase
@@ -425,6 +430,10 @@ function Phase(data) {
         }
 
         return output;
+    });
+
+    self.phaseTaskCountStatus = ko.computed(function() {
+        return self.tasks() < 1 ? '' : (self.tasks() < self.cntTask() ? 'text-error' : '');
     });
 }
 
