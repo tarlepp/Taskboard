@@ -357,7 +357,37 @@ function ViewModel() {
 
     self.getSprintId = function() {
         return self.sprint() ? self.sprint().id() : 0;
-    }
+    };
+
+    /**
+     * Method removes specified task from knockout bindings.
+     *
+     * Note: this doesn't seem to be very sensible, but it works :D
+     *
+     * @param   {Integer}   taskId      Task ID
+     * @param   {Integer}   phaseId     Phase ID
+     * @param   {Integer}   storyId     Story ID
+     *
+     * @returns {void}
+     */
+    self.deleteTask = function(taskId, phaseId, storyId) {
+        // Iterate each story
+        jQuery.each(myViewModel.stories(), function(storyKey, story) {
+            if (story.id() === storyId) {
+                // Iterate each phase
+                jQuery.each(story.phases(), function(phaseKey, phase) {
+                    if (ko.toJS(phase.id()) === phaseId) {
+                        // Iterate phase tasks
+                        jQuery.each(phase.tasks(), function(taskKey, task) {
+                            if (ko.toJS(task.id() === taskId)) {
+                                phase.tasks.remove(task);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    };
 }
 
 var myViewModel = new ViewModel();

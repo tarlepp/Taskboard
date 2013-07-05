@@ -4,11 +4,25 @@ jQuery(document).ready(function() {
     // Task open event
     body.on('dblclick', '.task', function(event) {
         var data = ko.dataFor(this);
+
+        body.trigger('taskEdit', [data]);
+    });
+
+    // Story open event
+    body.on('dblclick', '.story', function(event) {
+        var data = ko.dataFor(this);
+
+        console.log('implement story edit');
+        console.log(ko.toJS(data));
+    });
+
+
+    body.on('taskEdit', function(event, taskData) {
         var source = jQuery('#task-form-edit').html();
         var template = Handlebars.compile(source);
         var templateData = jQuery.extend(
             {},
-            ko.toJS(data),
+            ko.toJS(taskData),
             {
                 users: ko.toJS(myViewModel.users()),
                 types: ko.toJS(myViewModel.types())
@@ -34,7 +48,7 @@ jQuery(document).ready(function() {
                         if (validateForm(formItems)) {
                             jQuery.ajax({
                                 type: "PUT",
-                                url: "/task/" + data.id(),
+                                url: "/task/" + taskData.id(),
                                 data: formItems,
                                 dataType: 'json'
                             }).done(function (/** models.task */task) {
@@ -57,11 +71,22 @@ jQuery(document).ready(function() {
                         bootbox.confirm(
                             "Are you sure of task delete?",
                             function(result) {
-                                console.log("confirm: " + result);
+                                if (result) {
+                                    jQuery.ajax({
+                                        type: "DELETE",
+                                        url: "/task/" + taskData.id(),
+                                        dataType: 'json'
+                                    }).done(function () {
+                                        myViewModel.deleteTask(taskData.id(), taskData.phaseId(), taskData.storyId());
+                                    })
+                                    .fail(function (jqxhr, textStatus, error) {
+                                        handleAjaxError(jqxhr, textStatus, error);
+                                    });
+                                } else {
+                                    body.trigger('taskEdit', [taskData]);
+                                }
                             }
                         );
-
-                        return false;
                     }
                 }
             ],
@@ -71,15 +96,8 @@ jQuery(document).ready(function() {
         );
 
         modal.on('shown', function() {
-            jQuery('input[name="title"]', modal).focus();
+            var input = jQuery('input[name="title"]', modal);
+            input.focus().val(input.val());
         });
-    });
-
-    // Story open event
-    body.on('dblclick', '.story', function(event) {
-        var data = ko.dataFor(this);
-
-        console.log('implement story edit');
-        console.log(ko.toJS(data));
     });
 });
