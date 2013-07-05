@@ -46,15 +46,21 @@ function validateForm(items) {
         if ((input.prop('required') && value == '')
             || (input.getType() == 'select' && value == '#')
         ) {
-            group.addClass('error');
-            input.focus();
-
             required.push(label);
+
+            group.addClass('error');
+
+            if (input.data('focus') !== false) {
+                input.focus();
+            }
 
             valid = false;
         } else if (method && dispatch(method, [input, group, label, value, errors]) !== true) {
             group.addClass('error');
-            input.focus();
+
+            if (input.data('focus') !== false) {
+                input.focus();
+            }
 
             valid = false;
         } else {
@@ -163,7 +169,11 @@ function validateDateRange(input, group, label, date, errors) {
  * @returns {boolean}
  */
 function checkDate(dateText) {
-    var match = dateText.toString().match(/^(\d{4})([-\.\/])(\d{2})\2(\d{2})$/);
+    if (typeof(dateText) == 'undefined') {
+        return false;
+    }
+
+    var match = dateText.match(/^(\d{4})([-\.\/])(\d{2})\2(\d{2})$/);
 
     if (match === null) {
         return false;

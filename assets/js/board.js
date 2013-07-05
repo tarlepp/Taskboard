@@ -1,6 +1,3 @@
-jQuery(document).ready(function() {
-});
-
 ko.bindingHandlers.changeProject = {
     init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
         var elementProject = jQuery(element);
@@ -295,10 +292,6 @@ function ViewModel() {
     };
 
     self.addNewStory = function(projectId, sprintId) {
-        console.log(projectId);
-        console.log(sprintId);
-        console.log('jeee');
-
         var source = jQuery('#story-form-new').html();
         var template = Handlebars.compile(source);
         var templateData = {
@@ -669,4 +662,3 @@ function User(data) {
         return self.firstname() + " " + self.surname();
     });
 }
-
