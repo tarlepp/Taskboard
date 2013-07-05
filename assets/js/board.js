@@ -397,11 +397,11 @@ function Phase(data) {
     };
 
     self.cntTasksMax = ko.computed(function() {
-        return self.tasks() < 1 ? "-" : self.tasks();
+        return self.tasks() < 1 ? "" : self.tasks();
     });
 
     self.cntTask = ko.computed(function() {
-        var output = '-';
+        var output = '';
         var phaseId = self.id();
 
         // We may have some stories
@@ -434,6 +434,24 @@ function Phase(data) {
 
     self.phaseTaskCountStatus = ko.computed(function() {
         return self.tasks() < 1 ? '' : (self.tasks() < self.cntTask() ? 'text-error' : '');
+    });
+
+    self.phaseTaskCountText = ko.computed(function() {
+        var output;
+
+        if (self.cntTask() == '') {
+            output = '';
+        } else {
+            output = '(' + self.cntTask();
+
+            if (self.cntTasksMax() != '') {
+                output += '|' + self.cntTasksMax();
+            }
+
+            output += ')';
+        }
+
+        return output;
     });
 }
 

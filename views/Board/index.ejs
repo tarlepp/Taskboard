@@ -16,10 +16,7 @@
                 <!-- ko foreach: $root.phases -->
                 <th data-bind="style: {width: getColumnWidth(20, $root.phases().length)}">
                     <span data-bind="text: title"></span>
-
-                    <span class="phaseTaskCount" data-bind="css: phaseTaskCountStatus">
-                        (<span data-bind="text: cntTask"></span>|<span data-bind="text: cntTasksMax"></span>)
-                    </span>
+                    <span class="phaseTaskCount" data-bind="css: phaseTaskCountStatus, text: phaseTaskCountText"></span>
                 </th>
                 <!-- /ko -->
             </tr>
