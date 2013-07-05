@@ -69,12 +69,19 @@
 </script>
 
 <script id="task-template" type="text/html">
-    <div class="task sticky taped" data-bind="attr: {'id': 'task_' + id()}">
+    <div class="task sticky taped"
+        data-bind="
+            attr: {
+                'id': 'task_' + id()
+            },
+            tooltip: {
+                title: description(),
+                placement: 'bottom',
+                html: true
+            },
+            css: taskClass()
+        ">
         <h3 data-bind="text: title"></h3>
-
-        <!-- ko if: description -->
-        <p data-bind="text: description"></p>
-        <!-- /ko -->
     </div>
 </script>
 
