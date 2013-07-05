@@ -1,4 +1,6 @@
 jQuery(document).ready(function() {
+    jQuery.fn.bootstrapDP = jQuery.fn.datepicker.noConflict();
+
     jQuery.fn.serializeJSON = function() {
         var json = {};
 

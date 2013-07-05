@@ -226,7 +226,7 @@ function ViewModel() {
         );
 
         modal.on('shown', function() {
-            jQuery.fn.bootstrapDP = jQuery.fn.datepicker.noConflict();
+
 
             var inputStart = jQuery("#dateStartContainer");
             var inputEnd = jQuery("#dateEndContainer");
