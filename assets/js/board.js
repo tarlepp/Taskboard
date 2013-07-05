@@ -138,6 +138,7 @@ function ViewModel() {
     self.project    = ko.observable();
     self.sprint     = ko.observable();
     self.stories    = ko.observableArray([]);
+    self.types      = ko.observableArray([]);
 
     jQuery.getJSON("/project", {sort: 'title ASC'})
         .done(function(data) {
@@ -157,6 +158,16 @@ function ViewModel() {
             });
 
             self.users(mappedData);
+        });
+
+    jQuery.getJSON("/type", {sort: 'order ASC'})
+        .done(function(data) {
+            // Map fetched JSON data to project objects
+            var mappedData = ko.utils.arrayMap(data, function(/** models.type */type) {
+                return new Type(type);
+            });
+
+            self.types(mappedData);
         });
 
     self.sortedProjects = ko.computed(function() {
@@ -557,7 +568,8 @@ function Story(data) {
         var template = Handlebars.compile(source);
         var templateData = {
             storyId: data.id(),
-            users: ko.toJS(myViewModel.users())
+            users: ko.toJS(myViewModel.users()),
+            types: ko.toJS(myViewModel.types())
         };
 
         var modal = bootbox.dialog(
@@ -652,6 +664,7 @@ function Task(data) {
     self.storyId        = ko.observable(data.storyId);
     self.userId         = ko.observable(data.userId);
     self.phaseId        = ko.observable(data.phaseId);
+    self.typeId         = ko.observable(data.typeId);
     self.title          = ko.observable(data.title);
     self.description    = ko.observable(data.description);
     self.user           = ko.observable("");
@@ -670,6 +683,18 @@ function Task(data) {
 
         self.phaseId(firstPhase.id());
     }
+
+    self.taskClass = ko.computed(function() {
+        var output = '';
+
+        jQuery.each(myViewModel.types(), function(key, type) {
+            if (type.id() === self.typeId()) {
+                output = type.class();
+            }
+        });
+
+        return output;
+    });
 }
 
 /**
@@ -692,4 +717,20 @@ function User(data) {
     self.fullname = ko.computed(function() {
         return self.firstname() + " " + self.surname();
     });
+}
+
+/**
+ * Object to present task type.
+ *
+ * @param   {models.type}    data
+ * @constructor
+ */
+function Type(data) {
+    var self = this;
+
+    // Initialize object data
+    self.id     = ko.observable(data.id);
+    self.title  = ko.observable(data.title);
+    self.order  = ko.observable(data.order);
+    self.class  = ko.observable(data.class);
 }

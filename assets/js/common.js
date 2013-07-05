@@ -39,6 +39,46 @@ jQuery(document).ready(function() {
     jQuery.fn.getType = function() {
         return this[0].tagName == "INPUT" ? jQuery(this[0]).attr("type").toLowerCase() : this[0].tagName.toLowerCase();
     };
+
+    Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
+        switch (operator) {
+            case '==':
+                return (v1 == v2) ? options.fn(this) : options.inverse(this);
+                break;
+            case '===':
+                return (v1 === v2) ? options.fn(this) : options.inverse(this);
+                break;
+            case '<':
+                return (v1 < v2) ? options.fn(this) : options.inverse(this);
+                break;
+            case '<=':
+                return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+                break;
+            case '>':
+                return (v1 > v2) ? options.fn(this) : options.inverse(this);
+                break;
+            case '>=':
+                return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+                break;
+            default:
+                return options.inverse(this);
+                break;
+        }
+    });
+
+    Handlebars.registerHelper('ifItemSelected', function(current, selected) {
+        //var selected = false;
+        // lots of logic that determines if item is selected
+
+        return (current === selected) ? 'selected="selected"' : '';
+
+        console.log(item);
+        console.log(options);
+
+        if (selected) {
+            return options.fn(this);
+        }
+    });
 });
 
 function makeMessage(text, type, options) {
