@@ -48,9 +48,18 @@ var models = {
         updatedAt: '',
         storyId: '',
         userId: '',
+        typeId: '',
         phaseId: '',
         title: '',
         description: ''
+    },
+    type: {
+        id: '',
+        createdAt: '',
+        updatedAt: '',
+        title: '',
+        order: '',
+        class: ''
     },
     user: {
         id: '',
