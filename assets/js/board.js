@@ -197,7 +197,7 @@ function ViewModel() {
                     }
                 },
                 {
-                    label: "Add new Project",
+                    label: "Save",
                     class: "btn-primary pull-right",
                     callback: function () {
                         var form = jQuery('#formProjectNew');
@@ -221,11 +221,13 @@ function ViewModel() {
                 }
             ],
             {
-                header: "Add a new project"
+                header: "Add new project"
             }
         );
 
         modal.on('shown', function() {
+            jQuery('input[name="title"]', modal).focus();
+
             var inputStart = jQuery("#dateStartContainer");
             var inputEnd = jQuery("#dateEndContainer");
             var bitsStart = inputStart.val().split('-');
@@ -286,7 +288,7 @@ function ViewModel() {
                     inputEnd.closest('.control-group').removeClass('error');
                 }
             });
-        })
+        });
     };
 
     self.addNewStory = function(projectId, sprintId) {
@@ -309,7 +311,7 @@ function ViewModel() {
                     }
                 },
                 {
-                    label: "Add new story",
+                    label: "Save",
                     class: "btn-primary pull-right",
                     callback: function () {
                         var form = jQuery('#formStoryNew');
@@ -333,9 +335,13 @@ function ViewModel() {
                 }
             ],
             {
-                header: "Add a new story"
+                header: "Add new story"
             }
         );
+
+        modal.on('shown', function() {
+            jQuery('input[name="title"]', modal).focus();
+        });
     };
 
     self.getSprintId = function() {
@@ -554,7 +560,7 @@ function Story(data) {
             users: ko.toJS(myViewModel.users())
         };
 
-        bootbox.dialog(
+        var modal = bootbox.dialog(
             template(templateData),
             [
                 {
@@ -564,7 +570,7 @@ function Story(data) {
                     }
                 },
                 {
-                    label: "Add new Task",
+                    label: "Save",
                     class: "btn-primary pull-right",
                     callback: function () {
                         var form = jQuery('#formTaskNew');
@@ -588,9 +594,13 @@ function Story(data) {
                 }
             ],
             {
-                header: "Add a new task to story '" + data.title() + "'"
+                header: "Add new task to story '" + data.title() + "'"
             }
         );
+
+        modal.on('shown', function() {
+            jQuery('input[name="title"]', modal).focus();
+        });
     };
 
     self.getStoryRowId = function() {
@@ -616,15 +626,9 @@ function PhaseStory(phase, tasks) {
 
     self.myDropCallback = function(arg, event, ui) {
         var context = ko.contextFor(this);
-        var foo = ko.toJS(context.$data);
+        var phase = ko.toJS(context.$data);
 
-        console.log('current phase: '+ arg.item.phaseId());
-        console.log('update phase to: '+ foo.id);
-
-        // Why the hell this doesn't work?
-        console.log(context.$data.id());
-
-        jQuery.getJSON("/task/update/" + arg.item.id(), {phaseId: foo.id})
+        jQuery.getJSON("/task/update/" + arg.item.id(), {phaseId: phase.id})
             .done(function (task) {
                 // Todo: update task model data
             })
