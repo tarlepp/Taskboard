@@ -107,6 +107,11 @@ div.task {
     text-align: center;
     box-shadow: 0 1px 3px rgba(0,0,0,0.25);
     font-family: 'Swanky and Moo Moo', cursive;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
 }
 
 div.story:hover,
@@ -287,4 +292,9 @@ div.story p:last-of-type {
     font-family: 'PT Sans', Helvetica, Arial, sans-serif;
     font-weight: normal;
     font-size: 14px;
+}
+
+.modal-backdrop,
+.modal-backdrop.fade.in {
+    opacity: 0.5;
 }
