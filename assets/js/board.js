@@ -403,6 +403,36 @@ function Phase(data) {
 
         return columnWidth + '%';
     };
+
+    self.cntTask = ko.computed(function() {
+        var output = 0;
+        var phaseId = self.id();
+
+        // We may have some stories
+        if (myViewModel.stories()) {
+            // Oh, yes we have stories
+            if (myViewModel.stories().length > 0) {
+                // Iterate each story
+                jQuery.each(myViewModel.stories(), function(storyKey, story) {
+                    // Iterate each phase
+                    jQuery.each(story.phases(), function(phaseKey, phase) {
+                        /**
+                         * Why phase.id() doesn't work?
+                         *
+                         * Workaround is to use ko.toJS, but this is not the *proper* way to do this.
+                         */
+                        var phaseJs = ko.toJS(phase);
+
+                        if (phaseJs.id == phaseId) {
+                            output += phase.tasks().length;
+                        }
+                    });
+                });
+            }
+        }
+
+        return output;
+    });
 }
 
 /**

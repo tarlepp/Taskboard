@@ -16,6 +16,7 @@
                 <!-- ko foreach: $root.phases -->
                 <th data-bind="style: {width: getColumnWidth(20, $root.phases().length)}">
                     <span data-bind="text: title"></span>
+                    <em>(</em><span data-bind="text: cntTask"></span>)</em>
                 </th>
                 <!-- /ko -->
             </tr>
