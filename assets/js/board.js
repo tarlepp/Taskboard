@@ -427,13 +427,13 @@ function ViewModel() {
     self.deleteTask = function(taskId, phaseId, storyId) {
         // Iterate each story
         jQuery.each(myViewModel.stories(), function(storyKey, story) {
-            if (story.id() === storyId) {
+            if (ko.toJS(story.id()) === storyId) {
                 // Iterate each phase
                 jQuery.each(story.phases(), function(phaseKey, phase) {
                     if (ko.toJS(phase.id()) === phaseId) {
                         // Iterate phase tasks
                         jQuery.each(phase.tasks(), function(taskKey, task) {
-                            if (ko.toJS(task.id() === taskId)) {
+                            if (ko.toJS(task.id()) === taskId) {
                                 phase.tasks.remove(task);
                             }
                         });
@@ -453,7 +453,7 @@ function ViewModel() {
     self.deleteStory = function(storyId) {
         // Iterate each story
         jQuery.each(myViewModel.stories(), function(storyKey, story) {
-            if (story.id() === storyId) {
+            if (ko.toJS(story.id()) === storyId) {
                 myViewModel.stories.remove(story);
             }
         });
