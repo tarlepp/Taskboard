@@ -7,7 +7,7 @@ jQuery(document).ready(function() {
      *
      * console.log(jQuery('#yourForm').serializeJSON());
      *
-     * @returns {Object}  {}
+     * @returns {{}}
      */
     jQuery.fn.serializeJSON = function() {
         var json = {};

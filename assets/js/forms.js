@@ -7,7 +7,7 @@
  *     // Form is not valid
  * }
  *
- * @param   {jQuery[]}  items
+ * @param   {{}}  items
  *
  * @returns {boolean}
  */

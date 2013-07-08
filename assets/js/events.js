@@ -12,8 +12,7 @@ jQuery(document).ready(function() {
     body.on('dblclick', '.story', function(event) {
         var data = ko.dataFor(this);
 
-        console.log('implement story edit');
-        console.log(ko.toJS(data));
+        body.trigger('storyEdit', [data]);
     });
 
 
@@ -92,6 +91,68 @@ jQuery(document).ready(function() {
             ],
             {
                 header: "Edit task"
+            }
+        );
+
+        modal.on('shown', function() {
+            var inputTitle = jQuery('input[name="title"]', modal);
+
+            inputTitle.focus().val(inputTitle.val());
+
+            jQuery('textarea', modal).autosize();
+        });
+    });
+
+
+    body.on('storyEdit', function(event, storyData) {
+        var source = jQuery('#story-form-edit').html();
+        var template = Handlebars.compile(source);
+        var templateData = jQuery.extend(
+            {},
+            ko.toJS(storyData),
+            {
+            }
+        );
+
+        var modal = bootbox.dialog(
+            template(templateData),
+            [
+                {
+                    label: "Close",
+                    class: "pull-left",
+                    callback: function () {
+                    }
+                },
+                {
+                    label: "Save",
+                    class: "btn-primary pull-right",
+                    callback: function () {
+                        var form = jQuery('#formStoryEdit');
+                        var formItems = form.serializeJSON();
+
+                        if (validateForm(formItems)) {
+                            jQuery.ajax({
+                                type: "PUT",
+                                url: "/story/" + storyData.id(),
+                                data: formItems,
+                                dataType: 'json'
+                            }).done(function (/** models.story */story) {
+                                    // TODO: update model data
+
+                                    jQuery('div.bootbox').modal('hide');
+                                })
+                                .fail(function (jqxhr, textStatus, error) {
+                                    handleAjaxError(jqxhr, textStatus, error);
+                                });
+                        }
+
+                        return false;
+                    }
+
+                }
+            ],
+            {
+                header: "Edit story"
             }
         );
 
