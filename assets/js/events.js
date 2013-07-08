@@ -15,6 +15,27 @@ jQuery(document).ready(function() {
         body.trigger('storyEdit', [data]);
     });
 
+    // Help click event
+    jQuery('#functionHelp').on('click', 'a', function(event) {
+        var source = jQuery('#help-generic').html();
+        var template = Handlebars.compile(source);
+        var templateData = {};
+
+        var modal = bootbox.dialog(
+            template(templateData),
+            [
+                {
+                    label: "Close",
+                    class: "pull-left",
+                    callback: function () {
+                    }
+                }
+            ],
+            {
+                header: "Generic help"
+            }
+        );
+    });
 
     body.on('taskEdit', function(event, taskData) {
         var source = jQuery('#task-form-edit').html();

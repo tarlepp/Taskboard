@@ -61,6 +61,12 @@ jQuery(document).ready(function() {
     Handlebars.registerHelper('ifItemSelected', function(current, selected) {
         return (current === selected) ? 'selected="selected"' : '';
     });
+
+    var tooltips = jQuery('[rel=tooltip]');
+
+    if (tooltips.length) {
+        tooltips.tooltip();
+    }
 });
 
 /**

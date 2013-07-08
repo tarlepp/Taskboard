@@ -336,3 +336,14 @@ form .required label:after {
 .modal.fade.in {
     top: 20%;
 }
+
+li#functionHelp {
+    padding-right: 10px;
+}
+
+li#functionHelp a {
+    padding-left: 0;
+    padding-right: 0;
+    position: relative;
+    top: 2px;
+}
