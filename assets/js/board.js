@@ -418,9 +418,9 @@ function ViewModel() {
      *
      * Note: this doesn't seem to be very sensible, but it works :D
      *
-     * @param   {Integer}   taskId      Task ID
-     * @param   {Integer}   phaseId     Phase ID
-     * @param   {Integer}   storyId     Story ID
+     * @param   {number}    taskId      Task ID
+     * @param   {number}    phaseId     Phase ID
+     * @param   {number}    storyId     Story ID
      *
      * @returns {void}
      */
@@ -439,6 +439,22 @@ function ViewModel() {
                         });
                     }
                 });
+            }
+        });
+    };
+
+    /**
+     * Method removes specified story from knockout bindings.
+     *
+     * @param   {number}    storyId Story ID
+     *
+     * @returns {void}
+     */
+    self.deleteStory = function(storyId) {
+        // Iterate each story
+        jQuery.each(myViewModel.stories(), function(storyKey, story) {
+            if (story.id() === storyId) {
+                myViewModel.stories.remove(story);
             }
         });
     };

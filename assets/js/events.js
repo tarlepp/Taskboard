@@ -148,7 +148,31 @@ jQuery(document).ready(function() {
 
                         return false;
                     }
-
+                },
+                {
+                    label: "Delete",
+                    class: "btn-danger pull-right",
+                    callback: function () {
+                        bootbox.confirm(
+                            "Are you sure of story delete?",
+                            function(result) {
+                                if (result) {
+                                    jQuery.ajax({
+                                        type: "DELETE",
+                                        url: "/story/" + storyData.id(),
+                                        dataType: 'json'
+                                    }).done(function () {
+                                            myViewModel.deleteStory(storyData.id());
+                                        })
+                                        .fail(function (jqxhr, textStatus, error) {
+                                            handleAjaxError(jqxhr, textStatus, error);
+                                        });
+                                } else {
+                                    body.trigger('storyEdit', [storyData]);
+                                }
+                            }
+                        );
+                    }
                 }
             ],
             {
