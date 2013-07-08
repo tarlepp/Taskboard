@@ -2,7 +2,7 @@
     "name": "Taskboard",
     "private": true,
     "version": "0.0.1",
-    "description": "a Sails application",
+    "description": "a Sails application to present 'scrum' taskboard.",
     "dependencies": {
         "sails": "0.8.94",
         "optimist": "0.4.0",

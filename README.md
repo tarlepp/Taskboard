@@ -1,4 +1,4 @@
 # taskboard
-### a Sails application
+### a Sails application to present "scrum" taskboard.
 
-Let's do something
+This needs a lots of work...
