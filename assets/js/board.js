@@ -288,6 +288,7 @@ function ViewModel() {
         // Make form init when dialog is opened.
         modal.on('shown', function() {
             jQuery('input[name="title"]', modal).focus();
+            jQuery('textarea', modal).autosize();
 
             var inputStart = jQuery("#dateStartContainer");
             var inputEnd = jQuery("#dateEndContainer");
@@ -408,6 +409,7 @@ function ViewModel() {
 
         modal.on('shown', function() {
             jQuery('input[name="title"]', modal).focus();
+            jQuery('textarea', modal).autosize();
         });
     };
 
@@ -722,6 +724,7 @@ function Story(data) {
 
         modal.on('shown', function() {
             jQuery('input[name="title"]', modal).focus();
+            jQuery('textarea', modal).autosize();
         });
     };
 

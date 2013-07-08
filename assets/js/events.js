@@ -96,8 +96,11 @@ jQuery(document).ready(function() {
         );
 
         modal.on('shown', function() {
-            var input = jQuery('input[name="title"]', modal);
-            input.focus().val(input.val());
+            var inputTitle = jQuery('input[name="title"]', modal);
+
+            inputTitle.focus().val(inputTitle.val());
+
+            jQuery('textarea', modal).autosize();
         });
     });
 });
