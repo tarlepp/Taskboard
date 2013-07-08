@@ -1,13 +1,13 @@
 <script id="project-form-new" type="text/x-handlebars-template">
     <form id="formProjectNew" class="form-horizontal">
         <fieldset>
-            <div class="control-group">
+            <div class="control-group required">
                 <label class="control-label" for="formProjectNewTitle">Title</label>
                 <div class="controls">
                     <input id="formProjectNewTitle" name="title" type="text" placeholder="enter project name" class="span3" required="required" />
                 </div>
             </div>
-            <div class="control-group">
+            <div class="control-group required">
                 <label class="control-label" for="formProjectNewProjectManagerId">Project manager</label>
                 <div class="controls">
                     <select id="formProjectNewProjectManagerId" name="projectManagerId" class="span3 required">
@@ -18,7 +18,7 @@
                     </select>
                 </div>
             </div>
-            <div class="control-group">
+            <div class="control-group required">
                 <label class="control-label" for="formProjectNewDateStart">Duration</label>
                 <label class="control-label" for="formProjectNewDateEnd" style="display: none;"></label>
                 <div class="controls">

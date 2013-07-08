@@ -4,7 +4,7 @@
         <input type="hidden" name="phaseId" value="{{phaseId}}" />
 
         <fieldset>
-            <div class="control-group">
+            <div class="control-group required">
                 <label class="control-label" for="formTaskNewTitle">Title</label>
                 <div class="controls">
                     <input id="formTaskNewTitle" name="title" type="text" placeholder="enter task title" class="span3" required="required">
@@ -44,14 +44,14 @@
 <script id="task-form-edit" type="text/x-handlebars-template">
     <form id="formTaskEdit" class="form-horizontal">
         <fieldset>
-            <div class="control-group">
-                <label class="control-label" for="formTaskNewTitle">Title</label>
+            <div class="control-group required">
+                <label class="control-label" for="formTaskEditTitle">Title</label>
                 <div class="controls">
                     <input id="formTaskEditTitle" name="title" type="text" value="{{title}}" placeholder="enter task title" class="span3" required="required">
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="formTaskNewTypeId">Type</label>
+                <label class="control-label" for="formTaskEditTypeId">Type</label>
                 <div class="controls">
                     <select id="formTaskEditTypeId" name="typeId" class="span3">
                         {{#each types}}
@@ -61,7 +61,7 @@
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="formTaskNewOwner">Owner</label>
+                <label class="control-label" for="formTaskEditOwner">Owner</label>
                 <div class="controls">
                     <select id="formTaskEditOwner" name="userId" class="span3">
                         <option value="0">-- select --</option>
@@ -72,7 +72,7 @@
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="formTaskNewDescription">Description</label>
+                <label class="control-label" for="formTaskEditDescription">Description</label>
                 <div class="controls">
                     <textarea id="formTaskEditDescription" name="description" class="span3" placeholder="enter task description">{{description}}</textarea>
                 </div>

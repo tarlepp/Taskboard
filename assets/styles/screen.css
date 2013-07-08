@@ -293,7 +293,7 @@ div.story p:last-of-type {
 }
 
 .form-horizontal .controls {
-    margin-left: 170px;
+    margin-left: 175px;
 }
 
 .phaseTaskCount {
@@ -305,4 +305,22 @@ div.story p:last-of-type {
 .modal-backdrop,
 .modal-backdrop.fade.in {
     opacity: 0.5;
+}
+
+textarea {
+    resize: none;
+}
+
+label {
+    cursor: default;
+}
+
+form .required label:after {
+    color: #b94a48;
+    content: '*';
+    position: relative;
+    float: right;
+    right: -2px;
+    margin-right: -10px;
+    font-size: 25px;
 }

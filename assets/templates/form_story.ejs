@@ -4,10 +4,16 @@
         <input type="hidden" name="sprintId" value="{{sprintId}}" />
 
         <fieldset>
-            <div class="control-group">
-                <label class="control-label" for="formStoryNewTitle">Story name</label>
+            <div class="control-group required">
+                <label class="control-label" for="formStoryNewTitle">Title</label>
                 <div class="controls">
                     <input id="formStoryNewTitle" name="title" type="text" placeholder="enter story name" class="span3" required="required" />
+                </div>
+            </div>
+            <div class="control-group required">
+                <label class="control-label" for="formStoryNewEstimate">Estimate</label>
+                <div class="controls">
+                    <input id="formStoryNewEstimate" name="estimate" type="text" placeholder="estimate" class="span1" required="required" />
                 </div>
             </div>
             <div class="control-group">
@@ -20,18 +26,6 @@
                 <label class="control-label" for="formStoryNewVfCase">ValueFrame case</label>
                 <div class="controls">
                     <input id="formStoryNewVfCase" name="vfCase" type="text" placeholder="#case" class="span1" />
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="formStoryNewEstimate">Estimate</label>
-                <div class="controls">
-                    <input id="formStoryNewEstimate" name="estimate" type="text" placeholder="estimate" class="span1" required="required" />
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="formStoryNewPriority">Priority</label>
-                <div class="controls">
-                    <input id="formStoryNewPriority" name="priority" type="text" placeholder="priority" class="span1" required="required" />
                 </div>
             </div>
         </fieldset>
