@@ -17,8 +17,7 @@ var models = {
         projectId: '',
         title: '',
         description: '',
-        order: '',
-        tasks: ''
+        order: ''
     },
     sprint: {
         id: '',
@@ -69,5 +68,15 @@ var models = {
         firstname: '',
         surname: '',
         email: ''
+    },
+    phaseStory: {
+        id: '',
+        createdAt: '',
+        updatedAt: '',
+        projectId: '',
+        title: '',
+        description: '',
+        order: '',
+        tasks: []
     }
 };

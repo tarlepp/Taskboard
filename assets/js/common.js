@@ -1,6 +1,14 @@
 jQuery(document).ready(function() {
+    // Bootstrap date picker fix with jQuery UI component
     jQuery.fn.bootstrapDP = jQuery.fn.datepicker.noConflict();
 
+    /**
+     * jQuery function to serialize forms to JSON objects. Usage example:
+     *
+     * console.log(jQuery('#yourForm').serializeJSON());
+     *
+     * @returns {Object}  {}
+     */
     jQuery.fn.serializeJSON = function() {
         var json = {};
 
@@ -36,15 +44,61 @@ jQuery(document).ready(function() {
         return json;
     };
 
+    /**
+     * Generic html element type getter.
+     *
+     * @returns {string}
+     */
     jQuery.fn.getType = function() {
         return this[0].tagName == "INPUT" ? jQuery(this[0]).attr("type").toLowerCase() : this[0].tagName.toLowerCase();
     };
 
+    /**
+     * Handlebars helper for option lists.
+     *
+     * @returns {string}
+     */
     Handlebars.registerHelper('ifItemSelected', function(current, selected) {
         return (current === selected) ? 'selected="selected"' : '';
     });
 });
 
+/**
+ * Generic AJAX error handler.
+ *
+ * @param   {XMLHttpRequest}    jqXhr
+ * @param   {String}            textStatus
+ * @param   {String}            error
+ */
+function handleAjaxError(jqXhr, textStatus, error) {
+    var message = '';
+
+    if (jqXhr.status === 0) {
+        message = 'Not connect. Verify Network. ' + error + ' (' + textStatus + ')';
+    } else if (jqXhr.status == 404) {
+        message = 'Requested page not found [404]. ' + error + ' (' + textStatus + ')';
+    } else if (jqXhr.status == 500) {
+        message = 'Internal Server Error [500]. ' + error + ' (' + textStatus + ')';
+    } else if (textStatus === 'parsererror') {
+        message = 'Requested JSON parse failed.';
+    } else if (textStatus === 'timeout') {
+        message = 'Time out error.';
+    } else if (textStatus === 'abort') {
+        message = 'Ajax request aborted.';
+    } else {
+        message = 'Uncaught Error.\n' + jqXhr.responseText + textStatus + ', ' + error;
+    }
+
+    makeMessage(message, 'error', {});
+}
+
+/**
+ * Function to trigger noty message.
+ *
+ * @param   {string}    text    Message to show
+ * @param   {string}    type    Type of message
+ * @param   {object}    options Custom options for noty
+ */
 function makeMessage(text, type, options) {
     noty(jQuery.extend({}, {
         text: text,

@@ -1,11 +1,19 @@
+/**
+ * Project change binding handler, this is activated when
+ * user changes project selection.
+ *
+ * @type {{init: Function}}
+ */
 ko.bindingHandlers.changeProject = {
     init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
         var elementProject = jQuery(element);
         var elementSprint = jQuery('#selectSprint');
 
+        // Actual change event is triggered
         elementProject.change(function() {
             var value = parseInt(elementProject.val(), 10);
 
+            // We are not interest in NaN values
             if (isNaN(value)) {
                 elementSprint.attr('disabled', 'disabled');
 
@@ -13,10 +21,12 @@ ko.bindingHandlers.changeProject = {
 
                 viewModel.phases([]);
                 viewModel.project();
-            } else {
+            } else { // Seems like a real project
                 var parameters = {};
 
+                // Iterate all projects
                 jQuery.each(viewModel.projects(), function(key, project) {
+                    // Current project is selected, add it to knockout bindings
                     if (value == project.id()) {
                         viewModel.project(project);
                     }
@@ -41,10 +51,12 @@ ko.bindingHandlers.changeProject = {
                         if (mappedData.length > 0) {
                             elementSprint.removeAttr('disabled');
 
+                            // @todo this has some bug, fix later
                             jQuery('option:selected', elementSprint).text(elementSprint.data('textChooseSprint'));
                         } else {
                             elementSprint.attr('disabled', 'disabled');
 
+                            // @todo maybe bug, check and fix later
                             jQuery('option:selected', elementSprint).text(elementSprint.data('textNoData'));
                         }
                     })
@@ -80,17 +92,27 @@ ko.bindingHandlers.changeProject = {
     }
 };
 
+/**
+ * Sprint change binding handler, this is activated when
+ * user changes sprint selection.
+ *
+ * @type {{init: Function}}
+ */
 ko.bindingHandlers.changeSprint = {
     init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
         var elementSprint = jQuery(element);
 
+        // Actual change event is triggered
         elementSprint.change(function() {
             var sprintId = parseInt(elementSprint.val(), 10);
 
+            // NaN:s are not for us
             if (isNaN(sprintId)) {
                 viewModel.stories([]);
             } else {
+                // Iterate current project sprints
                 jQuery.each(viewModel.sprints(), function(key, sprint) {
+                    // Founded selected sprint, associate it to knockout bindings
                     if (sprintId == sprint.id()) {
                         viewModel.sprint(sprint);
                     }
@@ -102,10 +124,10 @@ ko.bindingHandlers.changeSprint = {
                     sort: 'priority ASC'
                 };
 
-                // Fetch project sprint data
+                // Fetch sprint story data
                 jQuery.getJSON("/story/", parameters)
                     .done(function(/** models.story[] */stories) {
-                        // Map fetched JSON data to sprint objects
+                        // Map fetched JSON data to story objects
                         var mappedData = ko.utils.arrayMap(stories, function(/** models.story */story) {
                             return new Story(story);
                         });
@@ -122,25 +144,30 @@ ko.bindingHandlers.changeSprint = {
     }
 };
 
-function handleAjaxError(jqxhr, textStatus, error) {
-    var err = textStatus + ', ' + error;
-
-    makeMessage("Request Failed: " + err, "error");
-}
-
+/**
+ * Actual TaskBoard knockout view model object. This contains all
+ * necessary data for application.
+ *
+ * Note that this object is accessible via myViewModel variable in
+ * all javascript code.
+ *
+ * @constructor
+ */
 function ViewModel() {
     var self = this;
 
+    // Specify used observable data
     self.projects   = ko.observableArray([]);
     self.phases     = ko.observableArray([]);
     self.users      = ko.observableArray([]);
     self.sprints    = ko.observableArray([]);
-    self.project    = ko.observable();
-    self.sprint     = ko.observable();
     self.stories    = ko.observableArray([]);
     self.types      = ko.observableArray([]);
+    self.project    = ko.observable();
+    self.sprint     = ko.observable();
 
-    jQuery.getJSON("/project", {sort: 'title ASC'})
+    // Fetch project data from server
+    jQuery.getJSON("/project")
         .done(function(data) {
             // Map fetched JSON data to project objects
             var mappedData = ko.utils.arrayMap(data, function(/** models.project */project) {
@@ -150,9 +177,10 @@ function ViewModel() {
             self.projects(mappedData);
         });
 
+    // Fetch user data from server
     jQuery.getJSON("/user")
         .done(function(data) {
-            // Map fetched JSON data to project objects
+            // Map fetched JSON data to user objects
             var mappedData = ko.utils.arrayMap(data, function(/** models.user */user) {
                 return new User(user);
             });
@@ -160,9 +188,10 @@ function ViewModel() {
             self.users(mappedData);
         });
 
+    // Fetch task type data from server
     jQuery.getJSON("/type", {sort: 'order ASC'})
         .done(function(data) {
-            // Map fetched JSON data to project objects
+            // Map fetched JSON data to task type objects
             var mappedData = ko.utils.arrayMap(data, function(/** models.type */type) {
                 return new Type(type);
             });
@@ -170,27 +199,42 @@ function ViewModel() {
             self.types(mappedData);
         });
 
+    // Sorted project objects
     self.sortedProjects = ko.computed(function() {
         return self.projects().sort(function(a, b) {
             return a.title().toLowerCase() > b.title().toLowerCase() ? 1 : -1;
         });
     });
 
+    // Sorted sprint objects
     self.sortedSprints = ko.computed(function() {
         return self.sprints().sort(function(a, b) {
             return a.start() > b.start() ? 1 : -1;
         });
     });
 
+    // Sorted story objects
     self.sortedStories = ko.computed(function() {
         return self.stories().sort(function(a, b) {
             return a.priority() > b.priority() ? 1 : -1;
         });
     });
 
-    self.trash = ko.observableArray([]);
-    self.trash.id = "trash";
+    /**
+     * Getter for current sprint ID.
+     *
+     * @returns {Number}
+     */
+    self.getSprintId = function() {
+        return self.sprint() ? self.sprint().id() : 0;
+    };
 
+    /**
+     * Method to trigger new project adding dialog.
+     *
+     * @todo    Should we just trigger some event here and pass data
+     *          to actual function?
+     */
     self.addNewProject = function() {
         var source = jQuery('#project-form-new').html();
         var template = Handlebars.compile(source);
@@ -198,6 +242,11 @@ function ViewModel() {
             users: ko.toJS(myViewModel.users())
         };
 
+        /**
+         * Create bootbox dialog and show it to user.
+         *
+         * @type {jQuery}
+         */
         var modal = bootbox.dialog(
             template(templateData),
             [
@@ -236,6 +285,7 @@ function ViewModel() {
             }
         );
 
+        // Make form init when dialog is opened.
         modal.on('shown', function() {
             jQuery('input[name="title"]', modal).focus();
 
@@ -302,6 +352,12 @@ function ViewModel() {
         });
     };
 
+    /**
+     * Method to trigger new story add dialog.
+     *
+     * @param   {Number}    projectId   Project ID
+     * @param   {Number}    sprintId    Sprint ID
+     */
     self.addNewStory = function(projectId, sprintId) {
         var source = jQuery('#story-form-new').html();
         var template = Handlebars.compile(source);
@@ -355,10 +411,6 @@ function ViewModel() {
         });
     };
 
-    self.getSprintId = function() {
-        return self.sprint() ? self.sprint().id() : 0;
-    };
-
     /**
      * Method removes specified task from knockout bindings.
      *
@@ -388,11 +440,15 @@ function ViewModel() {
             }
         });
     };
+
+    self.trash = ko.observableArray([]);
+    self.trash.id = "trash";
 }
 
 var myViewModel = new ViewModel();
 
 ko.applyBindings(myViewModel);
+
 
 /**
  * Object to present project.
@@ -412,9 +468,10 @@ function Project(data) {
     self.sprints        = ko.observableArray([]);
     self.backlog        = ko.observableArray([]);
 
-    if (parseInt(self.managerId) > 0) {
+    // Fetch project manager (user) data
+    if (parseInt(self.managerId(), 10) > 0) {
         // Fetch user JSON data
-        jQuery.getJSON("/user/" + self.managerId)
+        jQuery.getJSON("/user/" + self.managerId())
             .done(function(/** models.user */user) {
                 self.manager(new User(user));
             });
@@ -427,6 +484,12 @@ function Project(data) {
     };
 }
 
+/**
+ * Object to present project phases.
+ *
+ * @param   {models.phase}    data
+ * @constructor
+ */
 function Phase(data) {
     var self = this;
 
@@ -437,16 +500,23 @@ function Phase(data) {
     self.order          = ko.observable(data.order);
     self.tasks          = ko.observable(data.tasks);
 
+    // Calculate phase column width
     self.getColumnWidth = function(reservedSize, phasesCount) {
         var columnWidth = (100 - reservedSize) / phasesCount;
 
         return columnWidth + '%';
     };
 
+    // Max task count for this phase
     self.cntTasksMax = ko.computed(function() {
         return self.tasks() < 1 ? "" : self.tasks();
     });
 
+    /**
+     * Task count for current phase
+     *
+     * @todo    Is there any other way to get task count for each phase?
+     */
     self.cntTask = ko.computed(function() {
         var output = '';
         var phaseId = self.id();
@@ -466,9 +536,7 @@ function Phase(data) {
                          *
                          * Workaround is to use ko.toJS, but this is not the *proper* way to do this.
                          */
-                        var phaseJs = ko.toJS(phase);
-
-                        if (phaseJs.id == phaseId) {
+                        if (ko.toJS(phase.id()) === phaseId) {
                             output += phase.tasks().length;
                         }
                     });
@@ -479,10 +547,21 @@ function Phase(data) {
         return output;
     });
 
+    /**
+     * Task count class getter.
+     *
+     * If actual task count is greater than specified phase task count, method will
+     * return 'text-error' class otherwise empty string.
+     */
     self.phaseTaskCountStatus = ko.computed(function() {
         return self.tasks() < 1 ? '' : (self.tasks() < self.cntTask() ? 'text-error' : '');
     });
 
+    /**
+     * Method returns formatted phase task count text. This is shown
+     * in phase title.
+     *
+     */
     self.phaseTaskCountText = ko.computed(function() {
         var output;
 
@@ -534,12 +613,6 @@ function Sprint(data) {
 
         return end.getDate() - start.getDate();
     });
-
-    // Specify parameters to fetch story data
-    var parameters = {
-        sprintId: self.id,
-        sort: 'priority ASC'
-    };
 }
 
 /**
@@ -562,10 +635,10 @@ function Story(data) {
 
     // Specify parameters to fetch task data
     var parameters = {
-        storyId: self.id
+        storyId: self.id()
     };
 
-    // Fetch task JSON data
+    // Fetch story task JSON data
     jQuery.getJSON("/task/", parameters, function(/** models.task[] */tasks) {
         // Map fetched JSON data to task objects
         var tasksObjects = ko.utils.arrayMap(tasks, function(/** models.task */task) {
@@ -589,10 +662,17 @@ function Story(data) {
         self.phases(phases)
     });
 
+    // Formatted story title
     self.titleFormatted = ko.computed(function() {
         return self.title() + " (" + self.estimate() + ")";
     });
 
+    /**
+     * Method triggers add a new task for current story.
+     *
+     * @param   data    Current story knockout model object
+     * @param   event   Event data
+     */
     self.addNewTask = function(data, event) {
         var source = jQuery('#task-form-new').html();
         var template = Handlebars.compile(source);
@@ -650,6 +730,13 @@ function Story(data) {
     };
 }
 
+/**
+ * Object to present story phase.
+ *
+ * @param   {models.phaseStory} phase   Phase data
+ * @param   {models.task[]}     tasks   Task data for current phase
+ * @constructor
+ */
 function PhaseStory(phase, tasks) {
     var self = this;
 
@@ -658,13 +745,7 @@ function PhaseStory(phase, tasks) {
     self.title          = ko.observable(phase.title);
     self.description    = ko.observable(phase.description);
     self.order          = ko.observable(phase.order);
-    self.tasks          = ko.observableArray([]);
-
-    var mappedTasks = ko.utils.arrayMap(tasks, function(task) {
-        return new Task(ko.toJS(task));
-    });
-
-    self.tasks(mappedTasks);
+    self.tasks          = ko.observableArray(tasks);
 
     self.myDropCallback = function(arg, event, ui) {
         var context = ko.contextFor(this);
@@ -699,21 +780,23 @@ function Task(data) {
     self.description    = ko.observable(data.description);
     self.user           = ko.observable("");
 
-    if (parseInt(self.userId) > 0) {
+    // Fetch task owner (user) data.
+    if (parseInt(self.userId()) > 0) {
         // Fetch user JSON data
-        jQuery.getJSON("/user/" + self.userId)
+        jQuery.getJSON("/user/" + self.userId())
             .done(function(/** models.user */user) {
                 self.user(new User(user));
             });
     }
 
-    // Fix tasks that have not yet
+    // Fix tasks that have not yet phase id defined
     if (self.phaseId() == null || self.phaseId() == 0) {
         var firstPhase = myViewModel.phases()[0];
 
         self.phaseId(firstPhase.id());
     }
 
+    // Task class determination, basically task type
     self.taskClass = ko.computed(function() {
         var output = '';
 
