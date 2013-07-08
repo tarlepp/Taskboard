@@ -116,3 +116,7 @@ function dispatch(fn, args) {
 Array.prototype.unique = function(a) {
     return function(){return this.filter(a)}}(function(a,b,c){return c.indexOf(a,b+1)<0
 });
+
+String.prototype.nl2br = function() {
+    return this.replace(/\n/g, "<br />");
+}

@@ -811,6 +811,15 @@ function Task(data) {
 
         return output;
     });
+
+    // Formatted description text, basically just nl2br
+    self.descriptionFormatted = ko.computed(function() {
+        if (self.description() === null) {
+            return '';
+        }
+
+        return self.description().nl2br();
+    });
 }
 
 /**
