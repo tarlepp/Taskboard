@@ -20,12 +20,15 @@ a:focus,
 }
 
 .navbar .nav > li > a {
-    padding: 10px 15px;
+    padding: 10px 5px;
 }
 
 .navbar .nav > li select {
-    margin: 5px 5px 0 0;
     width: auto;
+}
+
+.navbar .nav li .navBarSelect {
+    margin: 5px 5px 0 0;
 }
 
 .container-fluid {
@@ -342,8 +345,65 @@ li#functionHelp {
 }
 
 li#functionHelp a {
-    padding-left: 0;
     padding-right: 0;
     position: relative;
     top: 2px;
+}
+
+.input-append .add-on li {
+    text-align: left;
+}
+
+.dropdown-menu > li > a {
+    padding: 3px 20px 3px 10px;
+}
+
+.dropdown-menu > li > a i {
+    position: relative;
+    top: 1px;
+    margin-right: 3px;
+}
+
+li .nav-header.text-error {
+    color: #b94a48;
+}
+
+li .nav-header.text-info {
+    color: #3a87ad;
+}
+
+.dropdown-menu .divider {
+    margin: 2px 0;
+}
+
+.dropdown .dropdown-menu .nav-header {
+    padding-right: 20px;
+    padding-left: 10px;
+}
+
+.nav li + .nav-header {
+    margin-top: 0;
+}
+
+.dropdown-menu:before {
+    position: absolute;
+    top: -7px;
+    left: 5px;
+    display: inline-block;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid #ccc;
+    border-left: 7px solid transparent;
+    border-bottom-color: rgba(0, 0, 0, 0.2);
+    content: '';
+}
+
+.dropdown-menu:after {
+    position: absolute;
+    top: -6px;
+    left: 6px;
+    display: inline-block;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #ffffff;
+    border-left: 6px solid transparent;
+    content: '';
 }

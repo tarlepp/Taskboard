@@ -15,12 +15,8 @@ ko.bindingHandlers.changeProject = {
 
             // We are not interest in NaN values
             if (isNaN(value)) {
-                elementSprint.attr('disabled', 'disabled');
-
-                jQuery('option:selected', elementSprint).text(elementSprint.data('textChooseProject'));
-
                 viewModel.phases([]);
-                viewModel.project();
+                viewModel.project(null);
             } else { // Seems like a real project
                 var parameters = {};
 
@@ -108,6 +104,7 @@ ko.bindingHandlers.changeSprint = {
 
             // NaN:s are not for us
             if (isNaN(sprintId)) {
+                viewModel.sprint(null);
                 viewModel.stories([]);
             } else {
                 // Iterate current project sprints
@@ -202,7 +199,7 @@ function ViewModel() {
     // Sorted project objects
     self.sortedProjects = ko.computed(function() {
         return self.projects().sort(function(a, b) {
-            return a.title().toLowerCase() > b.title().toLowerCase() ? 1 : -1;
+            return a.title().toString().toLowerCase() > b.title().toString().toLowerCase() ? 1 : -1;
         });
     });
 
@@ -443,6 +440,34 @@ function ViewModel() {
         });
     };
 
+    self.editProject = function() {
+        console.log('Implement project edit');
+    };
+
+    self.deleteProject = function() {
+        console.log('Implement project delete');
+    };
+
+    self.openBacklog = function() {
+        console.log('Implement project backlog');
+    };
+
+    self.phasesEdit = function() {
+        console.log('Implement project phases admin');
+    };
+
+    self.sprintAdd = function() {
+        console.log('Implement sprint add');
+    };
+
+    self.sprintEdit = function() {
+        console.log('Implement sprint edit');
+    };
+
+    self.sprintDelete = function() {
+        console.log('Implement sprint delete');
+    };
+
     /**
      * Method removes specified story from knockout bindings.
      *
@@ -453,7 +478,7 @@ function ViewModel() {
     self.deleteStory = function(storyId) {
         // Iterate each story
         jQuery.each(myViewModel.stories(), function(storyKey, story) {
-            if (ko.toJS(story.id()) === storyId) {
+            if (story && ko.toJS(story.id()) === storyId) {
                 myViewModel.stories.remove(story);
             }
         });
@@ -612,7 +637,7 @@ function Phase(data) {
             output = '(' + self.cntTask();
 
             if (self.cntTasksMax() != '') {
-                output += ' | ' + self.cntTasksMax();
+                output += ' / ' + self.cntTasksMax();
             }
 
             output += ')';
