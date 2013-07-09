@@ -467,7 +467,19 @@ function ViewModel() {
      * @returns {string}
      */
     self.nl2br = function(value) {
-        return value.nl2br();
+        return (value === null) ? '' : value.nl2br();
+    };
+
+    /**
+     * Method returns specified number of words from given value.
+     *
+     * @param   {string}    value
+     * @param   {number}    number
+     *
+     * @returns {string}
+     */
+    self.words = function(value, number) {
+        return value.split(/\s+/,number).join(" ");
     };
 
     self.trash = ko.observableArray([]);
@@ -667,19 +679,6 @@ function Story(data) {
         storyId: self.id()
     };
 
-    // Formatted description text, which is truncate to certain word
-    self.descriptionFormatted = function(length) {
-        return ko.computed(function() {
-            var output = self.description();
-
-            if (self.description().length > length) {
-                output = self.description().split(/\s+/,length).join(" ");
-            }
-
-            return output;
-        });
-    };
-
     // Fetch story task JSON data
     jQuery.getJSON("/task/", parameters, function(/** models.task[] */tasks) {
         // Map fetched JSON data to task objects
@@ -705,7 +704,7 @@ function Story(data) {
     });
 
     // Formatted story title
-    self.titleFormatted = ko.computed(function() {
+    self.formattedTitle = ko.computed(function() {
         return self.title() + " (" + self.estimate() + ")";
     });
 
@@ -850,15 +849,6 @@ function Task(data) {
         });
 
         return output;
-    });
-
-    // Formatted description text, basically just nl2br
-    self.descriptionFormatted = ko.computed(function() {
-        if (self.description() === null) {
-            return '';
-        }
-
-        return self.description().nl2br();
     });
 }
 

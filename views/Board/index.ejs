@@ -86,7 +86,7 @@
                 'id': 'task_' + id()
             },
             tooltip: {
-                title: descriptionFormatted(),
+                title: $root.nl2br(description()),
                 placement: 'bottom',
                 html: true
             },
@@ -97,9 +97,9 @@
 </script>
 
 <script id="story-template" type="text/html">
-    <h3 data-bind="text: titleFormatted"></h3>
+    <h3 data-bind="text: formattedTitle"></h3>
 
     <!-- ko if: description -->
-    <p data-bind="text: descriptionFormatted(8)"></p>
+    <p data-bind="text: $root.words(description(), 8)"></p>
     <!-- /ko -->
 </script>
