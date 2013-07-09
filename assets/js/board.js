@@ -459,6 +459,17 @@ function ViewModel() {
         });
     };
 
+    /**
+     * Generic nl2br method
+     *
+     * @param   {string}    value
+     *
+     * @returns {string}
+     */
+    self.nl2br = function(value) {
+        return value.nl2br();
+    };
+
     self.trash = ko.observableArray([]);
     self.trash.id = "trash";
 }
@@ -654,6 +665,19 @@ function Story(data) {
     // Specify parameters to fetch task data
     var parameters = {
         storyId: self.id()
+    };
+
+    // Formatted description text, which is truncate to certain word
+    self.descriptionFormatted = function(length) {
+        return ko.computed(function() {
+            var output = self.description();
+
+            if (self.description().length > length) {
+                output = self.description().split(/\s+/,length).join(" ");
+            }
+
+            return output;
+        });
     };
 
     // Fetch story task JSON data

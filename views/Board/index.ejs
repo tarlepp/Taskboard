@@ -25,7 +25,18 @@
 
             <tr data-bind="attr: {'id': getStoryRowId()}">
                 <th>
-                    <div class="story taped" data-bind="template: {name: 'story-template'}"></div>
+                    <div class="story taped"
+                        data-bind="
+                            template: {
+                                name: 'story-template'
+                            },
+                            tooltip: {
+                                title: $root.nl2br(description()),
+                                placement: 'right',
+                                html: true
+                            }
+
+                        "></div>
                 </th>
                 <td class="addTask">
                     <button data-bind="
@@ -89,6 +100,6 @@
     <h3 data-bind="text: titleFormatted"></h3>
 
     <!-- ko if: description -->
-    <p data-bind="text: description"></p>
+    <p data-bind="text: descriptionFormatted(8)"></p>
     <!-- /ko -->
 </script>
