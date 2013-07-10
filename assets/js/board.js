@@ -163,17 +163,6 @@ function ViewModel() {
     self.project    = ko.observable();
     self.sprint     = ko.observable();
 
-    // Fetch project data from server
-    jQuery.getJSON("/project")
-        .done(function(data) {
-            // Map fetched JSON data to project objects
-            var mappedData = ko.utils.arrayMap(data, function(/** models.project */project) {
-                return new Project(project);
-            });
-
-            self.projects(mappedData);
-        });
-
     // Fetch user data from server
     jQuery.getJSON("/user")
         .done(function(data) {
@@ -194,6 +183,17 @@ function ViewModel() {
             });
 
             self.types(mappedData);
+        });
+
+    // Fetch project data from server
+    jQuery.getJSON("/project")
+        .done(function(data) {
+            // Map fetched JSON data to project objects
+            var mappedData = ko.utils.arrayMap(data, function(/** models.project */project) {
+                return new Project(project);
+            });
+
+            self.projects(mappedData);
         });
 
     // Sorted project objects
@@ -534,24 +534,16 @@ function Project(data) {
     self.managerId      = ko.observable(data.managerId);
     self.title          = ko.observable(data.title);
     self.description    = ko.observable(data.description);
-    self.manager        = ko.observable("");
+    self.manager        = ko.observable(null);
     self.sprints        = ko.observableArray([]);
     self.backlog        = ko.observableArray([]);
 
-    // Fetch project manager (user) data
-    if (parseInt(self.managerId(), 10) > 0) {
-        // Fetch user JSON data
-        jQuery.getJSON("/user/" + self.managerId())
-            .done(function(/** models.user */user) {
-                self.manager(new User(user));
-            });
-    }
-
-    // Specify parameters to fetch sprint data
-    var parameters = {
-        projectId: self.id,
-        sort: 'dateStart ASC'
-    };
+    // Iterate users and set manager
+    jQuery.each(myViewModel.users(), function(index, user) {
+        if (self.managerId() === user.id()) {
+            self.manager(user);
+        }
+    });
 }
 
 /**
@@ -849,16 +841,14 @@ function Task(data) {
     self.typeId         = ko.observable(data.typeId);
     self.title          = ko.observable(data.title);
     self.description    = ko.observable(data.description);
-    self.user           = ko.observable("");
+    self.user           = ko.observable(null);
 
-    // Fetch task owner (user) data.
-    if (parseInt(self.userId()) > 0) {
-        // Fetch user JSON data
-        jQuery.getJSON("/user/" + self.userId())
-            .done(function(/** models.user */user) {
-                self.user(new User(user));
-            });
-    }
+    // Iterate users and set manager
+    jQuery.each(myViewModel.users(), function(index, user) {
+        if (self.userId() === user.id()) {
+            self.user(user);
+        }
+    });
 
     // Fix tasks that have not yet phase id defined
     if (self.phaseId() == null || self.phaseId() == 0) {

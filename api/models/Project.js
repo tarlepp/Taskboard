@@ -4,7 +4,7 @@
 ---------------------*/
 module.exports = {
     attributes: {
-        projectManagerId: {
+        managerId: {
             type:       'integer',
             required:   'true'
         },
