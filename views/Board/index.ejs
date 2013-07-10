@@ -1,3 +1,15 @@
+<div class="alert alert-error"
+    data-bind="visible: $root.phases().length === 0 && $root.project()"
+>
+    <h3>No phases for current project</h3>
+    <p>
+        Current project does not have any <strong><em>phases</em></strong>, please add phases before anything else.
+    </p>
+    <p>
+        You can setup project phases within <strong><em>project settings menu</em></strong>.
+    </p>
+</div>
+
 <div id="board" data-bind="if: $root.phases().length">
     <table class="table table-bordered">
         <thead>
