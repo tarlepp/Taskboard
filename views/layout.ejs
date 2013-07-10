@@ -169,13 +169,22 @@
                             </ul>
 
                             <ul class="nav pull-right">
-                                <!--
-                                <li id="functionAddProject">
-                                    <a href="javascript: void(0);" data-bind="
-                                        click: $root.addNewProject
-                                    ">Add new project</a>
+                                <li class="dropdown">
+                                    <a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown">
+                                        Settings
+                                        <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="javascript: void(0);"
+                                                data-bind="click: $root.usersOpen"
+                                            >
+                                                <i class="icon-user"></i>
+                                                Users
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
-                                -->
                                 <li id="functionHelp">
                                     <a href="javascript: void(0);"><i class="icon-question-sign" rel="tooltip" title="Show help" data-placement="bottom"></i></a>
                                 </li>

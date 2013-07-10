@@ -468,6 +468,10 @@ function ViewModel() {
         console.log('Implement sprint delete');
     };
 
+    self.usersOpen = function() {
+        console.log('Implement users');
+    };
+
     /**
      * Method removes specified story from knockout bindings.
      *

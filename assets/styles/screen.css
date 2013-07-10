@@ -23,6 +23,10 @@ a:focus,
     padding: 10px 5px;
 }
 
+.navbar .nav > li.dropdown > a {
+    padding: 10px 15px;
+}
+
 .navbar .nav > li select {
     width: auto;
 }
@@ -347,7 +351,7 @@ li#functionHelp {
 li#functionHelp a {
     padding-right: 0;
     position: relative;
-    top: 2px;
+    top: 1px;
 }
 
 .input-append .add-on li {
