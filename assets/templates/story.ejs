@@ -44,7 +44,9 @@
             <div class="control-group required">
                 <label class="control-label" for="formStoryEditEstimate">Estimate</label>
                 <div class="controls">
-                    <input id="formStoryEditEstimate" name="estimate" type="text" value="{{estimate}}" placeholder="estimate" class="span1" required="required" />
+                    <input id="estimateSliderValue" type="text" readonly="readonly" value="{{estimate}}" />
+                    <div class="estimateSlider"></div>
+                    <input id="formStoryEditEstimate" name="estimate" type="hidden" value="{{estimate}}" />
                 </div>
             </div>
             <div class="control-group">

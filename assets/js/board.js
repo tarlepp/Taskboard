@@ -361,8 +361,7 @@ function ViewModel() {
         );
 
         modal.on('shown', function() {
-            jQuery('input[name="title"]', modal).focus();
-            jQuery('textarea', modal).autosize();
+            initStoryForm(modal, false);
         });
     };
 

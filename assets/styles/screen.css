@@ -460,3 +460,16 @@ form fieldset {
 .ui-slider .ui-slider-handle {
     cursor: pointer;
 }
+
+#estimateSliderValue {
+    width: 25px;
+    text-align: center;
+}
+
+.estimateSlider {
+    width: 205px;
+    margin: 0 10px;
+    position: relative;
+    top: 4px;
+    display: inline-block;
+}

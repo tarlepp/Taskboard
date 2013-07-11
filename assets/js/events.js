@@ -128,12 +128,7 @@ jQuery(document).ready(function() {
     body.on('storyEdit', function(event, storyData) {
         var source = jQuery('#story-form-edit').html();
         var template = Handlebars.compile(source);
-        var templateData = jQuery.extend(
-            {},
-            ko.toJS(storyData),
-            {
-            }
-        );
+        var templateData = ko.toJS(storyData);
 
         var modal = bootbox.dialog(
             template(templateData),
@@ -202,11 +197,7 @@ jQuery(document).ready(function() {
         );
 
         modal.on('shown', function() {
-            var inputTitle = jQuery('input[name="title"]', modal);
-
-            inputTitle.focus().val(inputTitle.val());
-
-            jQuery('textarea', modal).autosize();
+            initStoryForm(modal, true);
         });
     });
 

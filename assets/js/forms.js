@@ -294,8 +294,42 @@ function initProjectForm(modal, edit) {
     });
 }
 
+/**
+ * Function to initialize story form.
+ *
+ * @param   {jQuery}    modal   Current modal content
+ * @param   {bool}      edit    Are we editing or not
+ */
 function initStoryForm(modal, edit) {
     var inputTitle = jQuery('input[name="title"]', modal);
 
     inputTitle.focus().val(inputTitle.val());
+
+    jQuery('textarea', modal).autosize();
+
+    var slider = jQuery('.estimateSlider', modal);
+    var input = slider.next('input');
+    var show = jQuery('#estimateSliderValue', modal);
+    var currentValue = 0;
+
+    // Specify fibonacci values for story sizes
+    var values = [ 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100 ];
+
+    jQuery.each(values, function(key, value) {
+        if (value == input.val()) {
+            currentValue = key;
+        }
+    });
+
+    // Note that this slider only accepts fibonacci values
+    slider.slider({
+        min: 0,
+        max: values.length - 1,
+        value: currentValue,
+        step: 1,
+        slide: function(event, ui) {
+            input.val(values[ui.value]);
+            show.val(values[ui.value]);
+        }
+    });
 }
