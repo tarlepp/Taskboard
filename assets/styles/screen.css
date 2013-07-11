@@ -416,6 +416,31 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0 0 5px 0;
 }
 
-.alert {
-    padding: 3px 35px 0 14px;
+table input[type="text"] {
+    margin: 0;
+}
+
+.modal-body {
+    padding: 0 15px;
+}
+
+form {
+    margin: 0 0 15px;
+}
+
+form fieldset {
+    margin-top: 15px;
+}
+
+.table th,
+.table td {
+    vertical-align: middle;
+}
+
+.slider-phase-task {
+    width: 100px;
+}
+
+.alert .close {
+    right: -28px;
 }

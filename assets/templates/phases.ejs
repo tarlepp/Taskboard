@@ -1,0 +1,53 @@
+<script id="phases-form-edit" type="text/x-handlebars-template">
+    <div class="alert alert-info" style="margin-top: 15px; margin-bottom: 0;">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        You can change phases order simply just dragging rows.
+    </div>
+
+    <form>
+        <table id="projectPhases" class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Name of the phase</th>
+                    <th colspan="2">Target task count</th>
+                </tr>
+            </thead>
+            <tbody>
+            {{#each phases}}
+                <tr class="control-group" data-phase-id="{{id}}">
+                    <td>
+                        <input type="text" name="title[]" value="{{title}}" />
+                    </td>
+                    <td>
+                        <div class="slider slider-phase-task"></div>
+                        <input type="hidden" name="tasks[]" value="{{tasks}}" />
+                        <input type="hidden" name="order[]" value="{{order}}" />
+                        <input type="hidden" name="id[]" value="{{id}}" />
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </form>
+
+    <div class="hidden">
+        <table id="projectPhasesNew">
+            <tr class="control-group">
+                <td>
+                    <input type="text" name="title[]" value="" placeholder="enter phase name" />
+                </td>
+                <td>
+                    <div class="slider slider-phase-task"></div>
+                    <input type="hidden" name="tasks[]" value="" />
+                    <input type="hidden" name="order[]" value="" />
+                    <input type="hidden" name="id[]" value="" />
+                </td>
+                <td>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</script>

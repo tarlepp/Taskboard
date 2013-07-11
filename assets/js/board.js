@@ -440,6 +440,15 @@ function ViewModel() {
         });
     };
 
+    /**
+     * Method opens project phases admin.
+     *
+     * Note that this needs project data.
+     */
+    self.phasesEdit = function() {
+        jQuery('body').trigger('phasesEdit');
+    };
+
     self.editProject = function() {
         console.log('Implement project edit');
     };
@@ -450,10 +459,6 @@ function ViewModel() {
 
     self.openBacklog = function() {
         console.log('Implement project backlog');
-    };
-
-    self.phasesEdit = function() {
-        console.log('Implement project phases admin');
     };
 
     self.sprintAdd = function() {
