@@ -41,12 +41,25 @@ ko.bindingHandlers.changeProject = {
                 // Fetch project sprint data
                 jQuery.getJSON("/sprint/", parameters)
                     .done(function(/** models.sprint[] */sprints) {
+                        var valuesStart = [];
+                        var valuesEnd = [];
+
                         // Map fetched JSON data to sprint objects
                         var mappedData = ko.utils.arrayMap(sprints, function(/** models.sprint */sprint) {
+                            var dateStart = new Date(sprint.dateStart);
+                            var dateEnd = new Date(sprint.dateEnd);
+
+                            valuesStart.push(dateStart.getTime());
+                            valuesEnd.push(dateEnd.getTime());
+
                             return new Sprint(sprint);
                         });
 
                         viewModel.sprints(mappedData);
+
+                        // Set project specified min/max sprint dates
+                        myViewModel.project().sprintDateMin(new Date(Math.max.apply(Math, valuesStart)));
+                        myViewModel.project().sprintDateMax(new Date(Math.max.apply(Math, valuesEnd)));
 
                         if (mappedData.length > 0) {
                             elementSprint.removeAttr('disabled');
@@ -289,69 +302,7 @@ function ViewModel() {
 
         // Make form init when dialog is opened.
         modal.on('shown', function() {
-            jQuery('input[name="title"]', modal).focus();
-            jQuery('textarea', modal).autosize();
-
-            var inputStart = jQuery("#dateStartContainer");
-            var inputEnd = jQuery("#dateEndContainer");
-            var bitsStart = inputStart.val().split('-');
-            var bitsEnd = inputEnd.val().split('-');
-            var valueStart = null;
-            var valueEnd = null;
-
-            if (bitsStart.length === 3) {
-                valueStart = new Date(bitsStart[0], bitsStart[1] - 1, bitsStart[2]);
-            }
-
-            if (bitsEnd.length === 3) {
-                valueEnd = new Date(bitsEnd[0], bitsEnd[1] - 1, bitsEnd[2]);
-            }
-
-            inputStart.bootstrapDP({
-                format: 'yyyy-mm-dd',
-                weekStart: 1,
-                calendarWeeks: true
-            }).on('changeDate', function(event) {
-                if (valueEnd && event.date.valueOf() > valueEnd.valueOf()) {
-                    if (valueStart) {
-                        inputStart.val(valueStart.format('yyyy-mm-dd'));
-                    } else {
-                        inputStart.val('');
-                    }
-
-                    makeMessage('Start date cannot be later than end date.', 'error');
-
-                    inputEnd.closest('.control-group').addClass('error');
-                } else {
-                    valueStart = new Date(event.date);
-                    inputStart.bootstrapDP('hide');
-
-                    inputEnd.closest('.control-group').removeClass('error');
-                }
-            });
-
-            inputEnd.bootstrapDP({
-                format: 'yyyy-mm-dd',
-                weekStart: 1,
-                calendarWeeks: true
-            }).on('changeDate', function(event) {
-                if (valueStart && event.date.valueOf() < valueStart.valueOf()) {
-                    if (valueEnd) {
-                        inputEnd.val(valueEnd.format('yyyy-mm-dd'));
-                    } else {
-                        inputEnd.val('');
-                    }
-
-                    makeMessage('End date cannot be before than start date.', 'error');
-
-                    inputEnd.closest('.control-group').addClass('error');
-                } else {
-                    valueEnd = new Date(event.date);
-                    inputEnd.bootstrapDP('hide');
-
-                    inputEnd.closest('.control-group').removeClass('error');
-                }
-            });
+            initProjectForm(modal, false);
         });
     };
 
@@ -471,8 +422,11 @@ function ViewModel() {
         jQuery('body').trigger('phasesEdit');
     };
 
+    /**
+     * Method opens project edit.
+     */
     self.editProject = function() {
-        console.log('Implement project edit');
+        jQuery('body').trigger('projectEdit');
     };
 
     self.deleteProject = function() {
@@ -561,15 +515,31 @@ function Project(data) {
     self.managerId      = ko.observable(data.managerId);
     self.title          = ko.observable(data.title);
     self.description    = ko.observable(data.description);
+    self.dateStart      = ko.observable(data.dateStart);
+    self.dateEnd        = ko.observable(data.dateEnd);
     self.manager        = ko.observable(null);
     self.sprints        = ko.observableArray([]);
     self.backlog        = ko.observableArray([]);
+    self.sprintDateMin  = ko.observable(null);
+    self.sprintDateMax  = ko.observable(null);
 
     // Iterate users and set manager
     jQuery.each(myViewModel.users(), function(index, user) {
         if (self.managerId() === user.id()) {
             self.manager(user);
         }
+    });
+
+    self.dateStartFormatted = ko.computed(function() {
+        var date = new Date(self.dateStart());
+
+        return date.format('yyyy-mm-dd');
+    });
+
+    self.dateEndFormatted = ko.computed(function() {
+        var date = new Date(self.dateEnd());
+
+        return date.format('yyyy-mm-dd');
     });
 }
 

@@ -439,4 +439,66 @@ jQuery(document).ready(function() {
             }
         });
     });
+
+    body.on('projectEdit', function() {
+        var source = jQuery('#project-form-edit').html();
+        var template = Handlebars.compile(source);
+        var templateData = {
+            users: ko.toJS(myViewModel.users()),
+            data: ko.toJS(myViewModel.project())
+        };
+
+        var modal = bootbox.dialog(
+            template(templateData),
+            [
+                {
+                    label: "Close",
+                    class: "pull-left",
+                    callback: function () {
+                    }
+                },
+                {
+                    label: "Save",
+                    class: "btn-primary pull-right",
+                    callback: function () {
+                        var form = jQuery('#formProjectEdit');
+                        var formItems = form.serializeJSON();
+
+                        if (validateForm(formItems)) {
+                            jQuery.ajax({
+                                type: 'PUT',
+                                url: "/project/" + ko.toJS(myViewModel.project().id()),
+                                data: formItems,
+                                dataType: 'json'
+                            }).done(function (/** models.project */project) {
+                                 // TODO: update knockout data
+                            })
+                            .fail(function (jqxhr, textStatus, error) {
+                                handleAjaxError(jqxhr, textStatus, error);
+                            });
+                        }
+
+                        return false;
+                    }
+                },
+                {
+                    label: "Delete",
+                    class: "btn-danger pull-right",
+                    callback: function () {
+                        console.log('implement project delete');
+
+                        return false;
+                    }
+
+                }
+            ],
+            {
+                header: "Edit project"
+            }
+        );
+
+        modal.on('shown', function() {
+            initProjectForm(modal, true);
+        });
+    });
 });
