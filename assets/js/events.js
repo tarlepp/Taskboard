@@ -489,7 +489,6 @@ jQuery(document).ready(function() {
 
                         return false;
                     }
-
                 }
             ],
             {

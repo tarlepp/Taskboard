@@ -205,7 +205,8 @@ function checkDate(dateText) {
 /**
  * Function to initialize project form.
  *
- * @param modal
+ * @param   {jQuery}    modal   Current modal content
+ * @param   {bool}      edit    Are we editing or not
  */
 function initProjectForm(modal, edit) {
     var inputTitle = jQuery('input[name="title"]', modal);
@@ -222,7 +223,6 @@ function initProjectForm(modal, edit) {
     var bitsEnd = inputEnd.val().split('-');
     var valueStart = null;
     var valueEnd = null;
-
     var dateMin = null;
     var dateMax = null;
 
@@ -292,4 +292,10 @@ function initProjectForm(modal, edit) {
             containerEnd.closest('.control-group').removeClass('error');
         }
     });
+}
+
+function initStoryForm(modal, edit) {
+    var inputTitle = jQuery('input[name="title"]', modal);
+
+    inputTitle.focus().val(inputTitle.val());
 }
