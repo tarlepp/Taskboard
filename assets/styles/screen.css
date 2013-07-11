@@ -144,12 +144,13 @@ div.story h3 {
     font-size: 14px;
     font-weight: bold;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    color: rgba(51, 51, 51, 0.8);
 }
 
 div.task h3 {
     font-weight: normal;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
-    color: rgba(0, 0, 0, 0.8);
+    color: rgba(51, 51, 51, 0.8);
 }
 
 div.story p,
@@ -157,6 +158,7 @@ div.task p {
     font-weight: normal;
     font-size: 12px;
     line-height: 12px;
+    color: rgba(51, 51, 51, 0.8);
 }
 
 div.story p:last-of-type {
