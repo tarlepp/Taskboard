@@ -13,7 +13,9 @@
             <div class="control-group required">
                 <label class="control-label" for="formStoryNewEstimate">Estimate</label>
                 <div class="controls">
-                    <input id="formStoryNewEstimate" name="estimate" type="text" placeholder="estimate" class="span1" required="required" />
+                    <input id="estimateSliderValue" type="text" readonly="readonly" value="0" />
+                    <div class="estimateSlider"></div>
+                    <input id="formStoryNewEstimate" name="estimate" type="hidden" value="0" />
                 </div>
             </div>
             <div class="control-group">
