@@ -309,7 +309,7 @@ function initStoryForm(modal, edit) {
 
     var slider = jQuery('.estimateSlider', modal);
     var input = slider.next('input');
-    var show = jQuery('#estimateSliderValue', modal);
+    var show = jQuery('.sliderValue', modal);
     var currentValue = 0;
 
     // Specify fibonacci values for story sizes

@@ -13,7 +13,7 @@
             <div class="control-group required">
                 <label class="control-label" for="formStoryNewEstimate">Estimate</label>
                 <div class="controls">
-                    <input id="estimateSliderValue" type="text" readonly="readonly" value="0" />
+                    <input class="sliderValue" type="text" readonly="readonly" value="0" />
                     <div class="estimateSlider"></div>
                     <input id="formStoryNewEstimate" name="estimate" type="hidden" value="0" />
                 </div>
@@ -46,7 +46,7 @@
             <div class="control-group required">
                 <label class="control-label" for="formStoryEditEstimate">Estimate</label>
                 <div class="controls">
-                    <input id="estimateSliderValue" type="text" readonly="readonly" value="{{estimate}}" />
+                    <input class="sliderValue" type="text" readonly="readonly" value="{{estimate}}" />
                     <div class="estimateSlider"></div>
                     <input id="formStoryEditEstimate" name="estimate" type="hidden" value="{{estimate}}" />
                 </div>

@@ -461,7 +461,7 @@ form fieldset {
     cursor: pointer;
 }
 
-#estimateSliderValue {
+.sliderValue {
     width: 25px;
     text-align: center;
 }
