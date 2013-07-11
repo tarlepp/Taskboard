@@ -1,5 +1,5 @@
 <script id="phases-form-edit" type="text/x-handlebars-template">
-    <div class="alert alert-info" style="margin-top: 15px; margin-bottom: 0;">
+    <div class="alert alert-info">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
         You can change phases order simply just dragging rows.
     </div>
@@ -9,7 +9,7 @@
             <thead>
                 <tr>
                     <th>Name of the phase</th>
-                    <th colspan="2">Target task count</th>
+                    <th colspan="3">Target task count</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,7 +24,9 @@
                         <input type="hidden" name="order[]" value="{{order}}" />
                         <input type="hidden" name="id[]" value="{{id}}" />
                     </td>
+                    <td></td>
                     <td>
+                        <button class="btn btn-danger btn-mini phaseDelete" type="button">&times;</button>
                     </td>
                 </tr>
             {{/each}}
@@ -44,7 +46,9 @@
                     <input type="hidden" name="order[]" value="" />
                     <input type="hidden" name="id[]" value="" />
                 </td>
+                <td></td>
                 <td>
+                    <button class="btn btn-danger btn-mini phaseDelete" type="button">&times;</button>
                 </td>
             </tr>
         </table>

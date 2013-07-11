@@ -158,13 +158,13 @@ jQuery(document).ready(function() {
                                 data: formItems,
                                 dataType: 'json'
                             }).done(function (/** models.story */story) {
-                                    // TODO: update model data
+                                // TODO: update model data
 
-                                    jQuery('div.bootbox').modal('hide');
-                                })
-                                .fail(function (jqxhr, textStatus, error) {
-                                    handleAjaxError(jqxhr, textStatus, error);
-                                });
+                                jQuery('div.bootbox').modal('hide');
+                            })
+                            .fail(function (jqxhr, textStatus, error) {
+                                handleAjaxError(jqxhr, textStatus, error);
+                            });
                         }
 
                         return false;
@@ -256,7 +256,7 @@ jQuery(document).ready(function() {
                                     order: key,
                                     tasks: isNaN(tasks) ? 0 : tasks,
                                     projectId: ko.toJS(myViewModel.project().id())
-                                }
+                                };
 
                                 if (isNaN(phaseId)) {
                                     type = 'POST';
@@ -275,6 +275,10 @@ jQuery(document).ready(function() {
                                     switch (type) {
                                         case 'POST':
                                             myViewModel.phases.push(new Phase(phase));
+
+                                            if (myViewModel.sprint()) {
+                                                // TODO: add phase story phases
+                                            }
                                             break;
                                         case 'PUT':
                                             // TODO: update model data
@@ -382,6 +386,57 @@ jQuery(document).ready(function() {
                     });
                 }
             }).disableSelection();
+        });
+
+        modal.on('click', '.phaseDelete', function() {
+            var row = jQuery(this).closest('tr');
+            var phaseId = parseInt(row.data('phaseId'), 10);
+
+            // Not a "real" phase, so just remove whole row
+            if (isNaN(phaseId)) {
+                row.remove();
+            } else { // Otherwise we have a real phase
+                // Specify parameters to fetch phase task data
+                var parameters = {
+                    phaseId: phaseId
+                };
+
+                // Fetch project sprint data
+                jQuery.getJSON("/task/", parameters)
+                    .done(function(/** models.task[] */tasks) {
+                        // Phase doesn't contain any tasks so delete is possible
+                        if (tasks.length === 0) {
+                            modal.modal('hide');
+
+                            bootbox.confirm(
+                                "Are you sure of phase delete?",
+                                function(result) {
+                                    if (result) {
+                                        jQuery.ajax({
+                                            type: "DELETE",
+                                            url: "/phase/" + phaseId,
+                                            dataType: 'json'
+                                        }).done(function () {
+                                            myViewModel.deletePhase(phaseId);
+
+                                            body.trigger('phasesEdit');
+                                        })
+                                        .fail(function (jqxhr, textStatus, error) {
+                                            handleAjaxError(jqxhr, textStatus, error);
+                                        });
+                                    } else {
+                                        body.trigger('phasesEdit');
+                                    }
+                                }
+                            );
+                        } else {
+                            makeMessage("Cannot delete phase, because it contains tasks.", "error", {});
+                        }
+                    })
+                    .fail(function(jqxhr, textStatus, error) {
+                        handleAjaxError(jqxhr, textStatus, error);
+                    });
+            }
         });
     });
 });

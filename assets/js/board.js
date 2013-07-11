@@ -441,6 +441,23 @@ function ViewModel() {
     };
 
     /**
+     * Method deletes specified phase from knockout model bindings.
+     *
+     * @param   {number}    phaseId Phase ID
+     *
+     * @returns {void}
+     */
+    self.deletePhase = function(phaseId) {
+        jQuery.each(myViewModel.phases(), function(key, phase) {
+            if (phase.id() && ko.toJS(phase.id()) === phaseId) {
+                myViewModel.phases.remove(phase);
+            }
+        });
+
+        // TODO: delete phase from story phases
+    };
+
+    /**
      * Method opens project phases admin.
      *
      * Note that this needs project data.
