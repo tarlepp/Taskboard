@@ -235,8 +235,9 @@ jQuery(document).ready(function() {
                     class: "btn-primary pull-right",
                     callback: function () {
                         var errors = false;
+                        var lines = jQuery("#projectPhases", modal).find("tbody tr");
 
-                        jQuery("#projectPhases", modal).find("tbody tr").each(function(key) {
+                        lines.each(function(key) {
                             var row = jQuery(this);
                             var title = jQuery.trim(row.find('input[name="title[]"]').val());
                             var tasks = parseInt(row.find('input[name="tasks[]"]').val(), 10);
