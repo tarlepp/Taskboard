@@ -431,8 +431,8 @@ table input[type="text"] {
     margin: -10px 0 0 0;
 }
 
-.modal-body .alert {
-
+.modal-body table {
+    margin-bottom: 0;
 }
 
 form {
@@ -446,6 +446,7 @@ form fieldset {
 .table th,
 .table td {
     vertical-align: middle;
+    padding: 4px;
 }
 
 .slider-phase-task {

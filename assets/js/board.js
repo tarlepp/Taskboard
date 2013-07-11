@@ -13,11 +13,15 @@ ko.bindingHandlers.changeProject = {
         elementProject.change(function() {
             var value = parseInt(elementProject.val(), 10);
 
-            // We are not interest in NaN values
-            if (isNaN(value)) {
-                viewModel.phases([]);
-                viewModel.project(null);
-            } else { // Seems like a real project
+            // Reset used data
+            viewModel.phases([]);
+            viewModel.stories([]);
+            viewModel.sprints([]);
+            viewModel.project(null);
+            viewModel.sprint(null);
+
+            // Seems like a real project
+            if (!isNaN(value)) {
                 var parameters = {};
 
                 // Iterate all projects
@@ -102,11 +106,12 @@ ko.bindingHandlers.changeSprint = {
         elementSprint.change(function() {
             var sprintId = parseInt(elementSprint.val(), 10);
 
+            // Reset used child data
+            viewModel.sprint(null);
+            viewModel.stories([]);
+
             // NaN:s are not for us
-            if (isNaN(sprintId)) {
-                viewModel.sprint(null);
-                viewModel.stories([]);
-            } else {
+            if (!isNaN(sprintId)) {
                 // Iterate current project sprints
                 jQuery.each(viewModel.sprints(), function(key, sprint) {
                     // Founded selected sprint, associate it to knockout bindings
