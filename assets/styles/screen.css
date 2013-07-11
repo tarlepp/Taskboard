@@ -141,7 +141,7 @@ div.task h3 {
 }
 
 div.story h3 {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
     color: rgba(51, 51, 51, 0.8);
@@ -156,8 +156,8 @@ div.task h3 {
 div.story p,
 div.task p {
     font-weight: normal;
-    font-size: 12px;
-    line-height: 12px;
+    font-size: 11px;
+    line-height: 11px;
     color: rgba(51, 51, 51, 0.8);
 }
 
@@ -455,4 +455,8 @@ form fieldset {
 
 .alert .close {
     right: -28px;
+}
+
+.ui-slider .ui-slider-handle {
+    cursor: pointer;
 }
