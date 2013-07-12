@@ -17,6 +17,7 @@ ko.bindingHandlers.changeProject = {
             viewModel.phases([]);
             viewModel.stories([]);
             viewModel.sprints([]);
+            viewModel.backlog([]);
             viewModel.project(null);
             viewModel.sprint(null);
 
@@ -31,6 +32,31 @@ ko.bindingHandlers.changeProject = {
                         viewModel.project(project);
                     }
                 });
+
+                // Specify parameters to fetch backlog story data
+                parameters = {
+                    projectId: value,
+                    sprintId: 0,
+                    sort: 'priority ASC'
+                };
+
+                // Fetch story task JSON data
+                jQuery.getJSON("/story/", parameters)
+                    .done(function(/** models.story[] */stories) {
+                        // Map fetched JSON data to story objects
+                        var storyObjects = ko.utils.arrayMap(stories, function(/** models.story */story) {
+                            return new Story(story);
+                        });
+
+                        // Assign stories to backlog
+                        viewModel.backlog(storyObjects);
+                    })
+                    .fail(function(jqxhr, textStatus, error) {
+                        viewModel.backlog([]);
+
+                        handleAjaxError(jqxhr, textStatus, error);
+                    });
+
 
                 // Specify parameters to fetch project sprint data
                 parameters = {
@@ -178,6 +204,7 @@ function ViewModel() {
     self.sprints    = ko.observableArray([]);
     self.stories    = ko.observableArray([]);
     self.types      = ko.observableArray([]);
+    self.backlog    = ko.observableArray([]);
     self.project    = ko.observable();
     self.sprint     = ko.observable();
 
@@ -432,8 +459,11 @@ function ViewModel() {
         console.log('Implement project delete');
     };
 
+    /**
+     * Method opens project backlog
+     */
     self.openBacklog = function() {
-        console.log('Implement project backlog');
+        jQuery('body').trigger('projectBacklog');
     };
 
     self.sprintAdd = function() {
@@ -518,7 +548,6 @@ function Project(data) {
     self.dateEnd        = ko.observable(data.dateEnd);
     self.manager        = ko.observable(null);
     self.sprints        = ko.observableArray([]);
-    self.backlog        = ko.observableArray([]);
     self.sprintDateMin  = ko.observable(null);
     self.sprintDateMax  = ko.observable(null);
 
@@ -656,12 +685,16 @@ function Sprint(data) {
     self.end            = ko.observable(data.dateEnd);
     self.stories        = ko.observableArray([]);
 
-    // Make formatted sprint title
-    self.formattedTitle = ko.computed(function() {
+    self.formattedDuration = ko.computed(function() {
         var start = new Date(self.start());
         var end = new Date(self.end());
 
-        return start.format('isoDate') + " - " + end.format('isoDate') + " " +  self.title();
+        return start.format('isoDate') + " - " + end.format('isoDate');
+    });
+
+    // Make formatted sprint title
+    self.formattedTitle = ko.computed(function() {
+        return self.formattedDuration() + " " +  self.title();
     });
 
     // Sprint duration as in days
