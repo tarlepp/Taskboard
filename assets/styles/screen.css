@@ -473,3 +473,31 @@ form fieldset {
     top: 4px;
     display: inline-block;
 }
+
+.modalBacklog {
+    width: 800px;
+    margin-left: -400px;
+
+}
+
+.modalBacklog .modal-body {
+    height: 100%;
+    min-height: 500px;
+    max-height: 500px;
+    overflow-y: scroll;
+}
+
+#backlogAccordion .accordion-inner {
+    padding: 5px;
+    background-color: rgba(217,237,247, 0.2);
+}
+
+#backlogAccordion .accordion-inner ul {
+    margin-bottom: 0;
+    background-color: #ffffff;
+}
+
+a:hover,
+a:focus {
+    text-decoration: none;
+}

@@ -491,4 +491,84 @@ jQuery(document).ready(function() {
             initProjectForm(modal, true);
         });
     });
+
+    body.on('projectBacklog', function() {
+        var sprints = ko.toJS(myViewModel.sprints());
+
+        var data = [];
+
+        jQuery.each(sprints, function(sprintKey, sprintData) {
+            data['sprint_' + sprintData.id] = [];
+        });
+
+        // Specify parameters to fetch all project stories
+        var parameters = {
+            projectId: ko.toJS(myViewModel.project().id()),
+            sort: 'priority ASC'
+        };
+
+        // Make REST request
+        jQuery.getJSON("/story/", parameters)
+            .done(function (/** models.story[] */stories) {
+                // Iterate stories
+                jQuery.each(stories, function(storyKey, storyData) {
+                    if (typeof data['sprint_' + storyData.sprintId] === 'object') {
+                        data['sprint_' + storyData.sprintId].push(storyData);
+                    }
+                });
+
+                // Iterate stories and assign stories to them
+                jQuery.each(sprints, function(sprintKey, sprintData) {
+                    sprintData.stories = data['sprint_' + sprintData.id];
+                });
+
+                var source = jQuery('#project-backlog').html();
+                var template = Handlebars.compile(source);
+                var templateData = {
+                    project: ko.toJS(myViewModel.project()),
+                    backlog: ko.toJS(myViewModel.backlog()),
+                    sprints: sprints
+                };
+
+                var modal = bootbox.dialog(
+                    template(templateData),
+                    [
+                        {
+                            label: "Close",
+                            class: "pull-left",
+                            callback: function () {
+                            }
+                        },
+                        {
+                            label: "Save",
+                            class: "btn-primary pull-right",
+                            callback: function () {
+                                console.log('save backlog order');
+
+                                return false;
+                            }
+                        },
+                        {
+                            label: "Add new story",
+                            class: "pull-right",
+                            callback: function () {
+                                console.log('open story add dialog');
+
+                                return false;
+                            }
+                        }
+                    ],
+                    {
+                        header: "Project backlog"
+                    }
+                ).addClass('modalBacklog');
+
+                modal.on('shown', function() {
+                    initProjectBacklog(modal);
+                });
+            })
+            .fail(function (jqxhr, textStatus, error) {
+                handleAjaxError(jqxhr, textStatus, error);
+            });
+    });
 });

@@ -333,3 +333,31 @@ function initStoryForm(modal, edit) {
         }
     });
 }
+
+/**
+ * Function initializes project backlog modal content.
+ *
+ * @param   {jQuery}    modal   Current modal content
+ */
+function initProjectBacklog(modal) {
+    var tooltips = jQuery('[rel=tooltip]', modal);
+
+    if (tooltips.length) {
+        tooltips.tooltip()
+            .on('show', function(e) {
+                e.stopPropagation();
+            })
+            .on('hidden', function(e) {
+                e.stopPropagation();
+            });
+    }
+
+    jQuery('#backlogAccordion', modal)
+        .collapse()
+        .on('hidden', function(event) {
+            event.stopPropagation();
+        })
+        .on('show', function(event) {
+            jQuery(this).css('overflow', 'visible');
+        });
+}
