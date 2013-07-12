@@ -352,6 +352,18 @@ function initProjectBacklog(modal) {
             });
     }
 
+    var c = document.cookie;
+
+    jQuery('#backlogAccordion', modal).find('.collapse').each(function () {
+        if (this.id) {
+            var pos = c.indexOf(this.id + "_collapse_in=");
+
+            if (pos > -1) {
+                c.substr(pos).split('=')[1].indexOf('false') ? jQuery(this).addClass('in') : jQuery(this).removeClass('in');
+            }
+        }
+    });
+
     jQuery('#backlogAccordion', modal)
         .collapse()
         .on('hidden', function(event) {
@@ -359,5 +371,13 @@ function initProjectBacklog(modal) {
         })
         .on('show', function(event) {
             jQuery(this).css('overflow', 'visible');
+        })
+        .on('hidden shown', function() {
+
+            jQuery(this).find('.collapse').each(function() {
+                if (this.id) {
+                    document.cookie = this.id + "_collapse_in=" + jQuery(this).hasClass('in');
+                }
+            });
         });
 }
