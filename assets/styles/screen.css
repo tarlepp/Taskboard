@@ -488,7 +488,7 @@ form fieldset {
 }
 
 #backlogAccordion .accordion-inner {
-    padding: 5px;
+    padding: 6px 5px;
     background-color: rgba(217,237,247, 0.2);
 }
 
@@ -497,7 +497,32 @@ form fieldset {
     background-color: #ffffff;
 }
 
+.backlog .nav-tabs > li > a,
+#backlogAccordion .accordion-heading .accordion-toggle {
+    padding: 5px 8px;
+}
+
 a:hover,
 a:focus {
     text-decoration: none;
+}
+
+.text-small {
+    font-size: 12px;
+}
+
+.ui-sortable-helper {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #dddddd;
+    background-color: #eeeeee;
+}
+
+.ui-sortable-helper a {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    top: 5px;
+    left: 8px;
 }

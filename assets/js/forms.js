@@ -380,4 +380,12 @@ function initProjectBacklog(modal) {
                 }
             });
         });
+
+    jQuery('.nav-stacked', modal).sortable({
+        connectWith: '.nav-stacked',
+        zIndex:'5000',
+        helper: 'clone',
+        cursor: 'move',
+        appendTo: 'body'
+    });
 }
