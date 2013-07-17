@@ -1,5 +1,58 @@
+// Init events for container
+var initContainer = {
+    users: false,
+    projects: false,
+    types: false,
+    phases: false
+};
+
+// Init events for container
+var initNavigation = {
+    users: false,
+    projects: false
+};
+
 jQuery(document).ready(function() {
     var body = jQuery('body');
+
+    /**
+     * Event to check if all initialize methods are done
+     *
+     * @param   {Event}     event       Current event object
+     * @param   {String}    initMethod  Initialize event name
+     */
+    body.on('initializeCheck', function(event, initMethod) {
+        var initContainerDone = true;
+        var initNavigationDone = true;
+
+        // Change init event state to done
+        initContainer[initMethod] = true;
+        initNavigation[initMethod] = true;
+
+        // Iterate init event states
+        jQuery.each(initContainer, function(key, value) {
+            // All not yet done.
+            if (value === false) {
+                initContainerDone = false;
+            }
+        });
+
+        // Iterate init event states
+        jQuery.each(initNavigation, function(key, value) {
+            // All not yet done.
+            if (value === false) {
+                initNavigationDone = false;
+            }
+        });
+
+        if (initContainerDone) {
+            jQuery('#container').show();
+        }
+
+        if (initNavigationDone) {
+            jQuery('#navigation').show();
+        }
+    });
 
     // Task open event
     body.on('dblclick', '.task', function(event) {

@@ -110,6 +110,8 @@ ko.bindingHandlers.changeProject = {
                         });
 
                         viewModel.phases(mappedData);
+
+                        jQuery('body').trigger('initializeCheck', 'phases');
                     })
                     .fail(function(jqxhr, textStatus, error) {
                         viewModel.phases([]);
@@ -207,6 +209,8 @@ function ViewModel() {
             });
 
             self.users(mappedData);
+
+            jQuery('body').trigger('initializeCheck', 'users');
         });
 
     // Fetch task type data from server
@@ -218,6 +222,8 @@ function ViewModel() {
             });
 
             self.types(mappedData);
+
+            jQuery('body').trigger('initializeCheck', 'types');
         });
 
     // Fetch project data from server
@@ -229,6 +235,8 @@ function ViewModel() {
             });
 
             self.projects(mappedData);
+
+            jQuery('body').trigger('initializeCheck', 'projects');
         });
 
     // Sorted project objects
