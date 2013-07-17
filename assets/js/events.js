@@ -571,4 +571,73 @@ jQuery(document).ready(function() {
                 handleAjaxError(jqxhr, textStatus, error);
             });
     });
+
+    /**
+     * This event handles sprint add functionality. Basically event triggers
+     * modal dialog for adding new sprint, form validation and actual POST query
+     * to server after form data is validated.
+     *
+     * After POST query knockout data is updated.
+     */
+    body.on('sprintAdd', function() {
+        // Specify used template data
+        var source = jQuery('#sprint-form-new').html();
+        var template = Handlebars.compile(source);
+        var templateData = {
+            projectId: ko.toJS(myViewModel.project().id())
+        };
+
+        // Modal initialize
+        var modal = bootbox.dialog(
+            template(templateData),
+            [
+                {
+                    label: "Close",
+                    class: "pull-left",
+                    callback: function () {
+                    }
+                },
+                {
+                    label: "Save",
+                    class: "btn-primary pull-right",
+                    callback: function () {
+                        var form = jQuery('#formSprintNew');
+                        var formItems = form.serializeJSON();
+
+                        if (validateForm(formItems)) {
+                            // Make POST query to server
+                            jQuery.ajax({
+                                type: 'POST',
+                                url: "/sprint/",
+                                data: formItems,
+                                dataType: 'json'
+                            }).done(function (/** models.sprint */sprint) {
+                                // Add inserted sprint to knockout model data
+                                myViewModel.sprints.push(new Sprint(sprint));
+
+                                // Update current project sprint dates
+                                myViewModel.updateProjectSprintDates();
+
+                                // Remove modal
+                                modal.modal('hide');
+                            })
+                            .fail(function (jqXhr, textStatus, error) {
+                                handleAjaxError(jqXhr, textStatus, error);
+                            });
+                        }
+
+                        return false;
+                    }
+                }
+            ],
+            {
+                header: "Add sprint"
+            }
+        );
+
+        // Method initializes sprint form to use
+        modal.on('shown', function() {
+            initSprintForm(modal, false);
+        });
+    });
 });

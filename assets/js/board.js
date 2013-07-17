@@ -67,25 +67,15 @@ ko.bindingHandlers.changeProject = {
                 // Fetch project sprint data
                 jQuery.getJSON("/sprint/", parameters)
                     .done(function(/** models.sprint[] */sprints) {
-                        var valuesStart = [];
-                        var valuesEnd = [];
-
                         // Map fetched JSON data to sprint objects
                         var mappedData = ko.utils.arrayMap(sprints, function(/** models.sprint */sprint) {
-                            var dateStart = new Date(sprint.dateStart);
-                            var dateEnd = new Date(sprint.dateEnd);
-
-                            valuesStart.push(dateStart.getTime());
-                            valuesEnd.push(dateEnd.getTime());
-
                             return new Sprint(sprint);
                         });
 
                         viewModel.sprints(mappedData);
 
                         // Set project specified min/max sprint dates
-                        myViewModel.project().sprintDateMin(new Date(Math.max.apply(Math, valuesStart)));
-                        myViewModel.project().sprintDateMax(new Date(Math.max.apply(Math, valuesEnd)));
+                        viewModel.updateProjectSprintDates();
 
                         if (mappedData.length > 0) {
                             elementSprint.removeAttr('disabled');
@@ -466,8 +456,11 @@ function ViewModel() {
         jQuery('body').trigger('projectBacklog');
     };
 
+    /**
+     * Method opens sprint add
+     */
     self.sprintAdd = function() {
-        console.log('Implement sprint add');
+        jQuery('body').trigger('sprintAdd');
     };
 
     self.sprintEdit = function() {
@@ -496,6 +489,24 @@ function ViewModel() {
                 myViewModel.stories.remove(story);
             }
         });
+    };
+
+    self.updateProjectSprintDates = function() {
+        var valuesStart = [];
+        var valuesEnd = [];
+
+        // Map fetched JSON data to sprint objects
+        jQuery.each(self.sprints(), function(index, /** models.sprint */sprint) {
+            var dateStart = ko.toJS(sprint.dateStartObject());
+            var dateEnd = ko.toJS(sprint.dateEndObject());
+
+            valuesStart.push(dateStart.getTime());
+            valuesEnd.push(dateEnd.getTime());
+        });
+
+        // Set project specified min/max sprint dates
+        myViewModel.project().sprintDateMin(new Date(Math.max.apply(Math, valuesStart)));
+        myViewModel.project().sprintDateMax(new Date(Math.max.apply(Math, valuesEnd)));
     };
 
     /**
@@ -556,6 +567,14 @@ function Project(data) {
         if (self.managerId() === user.id()) {
             self.manager(user);
         }
+    });
+
+    self.dateStartObject = ko.computed(function() {
+        return new Date(self.dateStart());
+    });
+
+    self.dateEndObject = ko.computed(function() {
+        return new Date(self.dateEnd());
     });
 
     self.dateStartFormatted = ko.computed(function() {
@@ -685,11 +704,16 @@ function Sprint(data) {
     self.end            = ko.observable(data.dateEnd);
     self.stories        = ko.observableArray([]);
 
-    self.formattedDuration = ko.computed(function() {
-        var start = new Date(self.start());
-        var end = new Date(self.end());
+    self.dateStartObject = ko.computed(function() {
+        return new Date(self.start());
+    });
 
-        return start.format('isoDate') + " - " + end.format('isoDate');
+    self.dateEndObject = ko.computed(function() {
+        return new Date(self.end());
+    });
+
+    self.formattedDuration = ko.computed(function() {
+        return self.dateStartObject().format('isoDate') + " - " + self.dateEndObject().format('isoDate');
     });
 
     // Make formatted sprint title
@@ -699,10 +723,7 @@ function Sprint(data) {
 
     // Sprint duration as in days
     self.duration = ko.computed(function() {
-        var start = new Date(self.start());
-        var end = new Date(self.end());
-
-        return end.getDate() - start.getDate();
+        return self.dateStartObject().getDate() - self.dateEndObject().getDate();
     });
 }
 
@@ -769,6 +790,7 @@ function Story(data) {
         var template = Handlebars.compile(source);
         var templateData = {
             storyId: data.id(),
+            phaseId: ko.toJS(myViewModel.phases()[0].id()),
             users: ko.toJS(myViewModel.users()),
             types: ko.toJS(myViewModel.types())
         };
@@ -794,16 +816,15 @@ function Story(data) {
                                 .done(function (/** models.task */task) {
                                     self.phases()[0].tasks.push(new Task(task));
 
-                                    jQuery('div.bootbox').modal('hide');
+                                    modal.modal('hide');
                                 })
-                                .fail(function (jqxhr, textStatus, error) {
-                                    handleAjaxError(jqxhr, textStatus, error);
+                                .fail(function (jqXhr, textStatus, error) {
+                                    handleAjaxError(jqXhr, textStatus, error);
                                 });
                         }
 
                         return false;
                     }
-
                 }
             ],
             {
@@ -847,8 +868,8 @@ function PhaseStory(phase, tasks) {
             .done(function (task) {
                 // Todo: update task model data
             })
-            .fail(function (jqxhr, textStatus, error) {
-                handleAjaxError(jqxhr, textStatus, error);
+            .fail(function (jqXhr, textStatus, error) {
+                handleAjaxError(jqXhr, textStatus, error);
             });
     };
 }

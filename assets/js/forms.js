@@ -119,10 +119,9 @@ function validateDate(input, group, label, date, errors) {
 function validateDateRange(input, group, label, date, errors) {
     var role = input.data('role');
     var edit = input.data('edit');
+    var type = input.data('type');
     var pair = jQuery('#' + input.data('pair')).val();
     var message = "";
-
-    console.log(edit);
 
     /**
      * Make basic check for given date. Note that else block does not
@@ -161,7 +160,7 @@ function validateDateRange(input, group, label, date, errors) {
         return false;
     }
 
-    if (edit) {
+    if (type == 'project' && edit) {
         var dateMin = new Date(myViewModel.project().sprintDateMin());
         var dateMax = new Date(myViewModel.project().sprintDateMax());
 
@@ -171,6 +170,16 @@ function validateDateRange(input, group, label, date, errors) {
             return false;
         } else if (role == 'end' && dateSelf.format('yyyy-mm-dd') < dateMax.format('yyyy-mm-dd')) {
             errors.push('End date overlaps with project sprints. End date must be at least ' + dateMax.format('yyyy-mm-dd') + '.');
+
+            return false;
+        }
+    } else if (type == 'sprint') {
+        var sprintId = edit ? ko.toJS(myViewModel.sprint().id()) : 0;
+        var dateType = role == 'start' ? 0 : 1;
+        var isValid = checkSprintDates(dateSelf, dateType, sprintId, false);
+
+        if (isValid !== true) {
+            errors.push(isValid);
 
             return false;
         }
@@ -344,12 +353,12 @@ function initProjectBacklog(modal) {
 
     if (tooltips.length) {
         tooltips.tooltip()
-            .on('show', function(e) {
-                e.stopPropagation();
-            })
-            .on('hidden', function(e) {
-                e.stopPropagation();
-            });
+        .on('show', function(e) {
+            e.stopPropagation();
+        })
+        .on('hidden', function(e) {
+            e.stopPropagation();
+        });
     }
 
     var c = document.cookie;
@@ -388,4 +397,148 @@ function initProjectBacklog(modal) {
         cursor: 'move',
         appendTo: 'body'
     });
+}
+
+/**
+ * Function initializes sprint add/edit form to use. Note that form is
+ * located in modal content.
+ *
+ * @param   {jQuery}    modal   Current modal content
+ * @param   {Boolean}   edit    Are we editing existing sprint or not
+ */
+function initSprintForm(modal, edit) {
+    var inputTitle = jQuery('input[name="title"]', modal);
+
+    inputTitle.focus().val(inputTitle.val());
+
+    jQuery('textarea', modal).autosize();
+
+    var containerStart = jQuery('.dateStart', modal);
+    var containerEnd = jQuery('.dateEnd', modal);
+    var inputStart = containerStart.find('input');
+    var inputEnd = containerEnd.find('input');
+    var bitsStart = inputStart.val().split('-');
+    var bitsEnd = inputEnd.val().split('-');
+    var valueStart = null;
+    var valueEnd = null;
+    var dateMin = myViewModel.project().dateStartObject();
+    var dateMax = myViewModel.project().dateEndObject();
+
+    if (bitsStart.length === 3) {
+        valueStart = new Date(bitsStart[0], bitsStart[1] - 1, bitsStart[2], 3, 0, 0);
+    }
+
+    if (bitsEnd.length === 3) {
+        valueEnd = new Date(bitsEnd[0], bitsEnd[1] - 1, bitsEnd[2], 3, 0, 0);
+    }
+
+    containerStart.bootstrapDP({
+        format: 'yyyy-mm-dd',
+        weekStart: 1,
+        calendarWeeks: true
+    })
+    .on('onRender', function(event) {
+        console.log('wut');
+        return 'disabled';
+    })
+    .on('changeDate', function(event) {
+        if (valueEnd && event.date.format('yyyy-mm-dd') > valueEnd.format('yyyy-mm-dd')) {
+            if (valueStart) {
+                containerStart.val(valueStart.format('yyyy-mm-dd'));
+            } else {
+                containerStart.val('');
+            }
+
+            makeMessage('Start date cannot be later than end date.', 'error', {});
+
+            containerStart.closest('.control-group').addClass('error');
+        } else if (
+            (event.date.format('yyyy-mm-dd') < dateMin.format('yyyy-mm-dd'))
+            || (event.date.format('yyyy-mm-dd') > dateMax.format('yyyy-mm-dd'))
+        ) {
+            makeMessage('Start date conflicts with project duration. Start date must be between ' + dateMin.format('yyyy-mm-dd') + ' and ' + dateMax.format('yyyy-mm-dd')  + '.', 'error', {});
+
+            containerStart.closest('.control-group').addClass('error');
+        } else if (checkSprintDates(event.date, 1, 0, true) !== true) {
+            containerStart.closest('.control-group').addClass('error');
+        } else {
+            valueStart = new Date(event.date);
+
+            containerStart.bootstrapDP('hide');
+            containerStart.closest('.control-group').removeClass('error');
+        }
+    });
+
+    containerEnd.bootstrapDP({
+        format: 'yyyy-mm-dd',
+        weekStart: 1,
+        calendarWeeks: true
+    })
+    .on('changeDate', function(event) {
+        if (valueStart && event.date.format('yyyy-mm-dd') < valueStart.format('yyyy-mm-dd')) {
+            if (valueEnd) {
+                containerEnd.val(valueEnd.format('yyyy-mm-dd'));
+            } else {
+                containerEnd.val('');
+            }
+
+            makeMessage('End date cannot be before than start date.', 'error', {});
+
+            containerEnd.closest('.control-group').addClass('error');
+        } else if (
+            (event.date.format('yyyy-mm-dd') < dateMin.format('yyyy-mm-dd'))
+                || (event.date.format('yyyy-mm-dd') > dateMax.format('yyyy-mm-dd'))
+            ) {
+            makeMessage('End date conflicts with project duration. End date must be between ' + dateMin.format('yyyy-mm-dd') + ' and ' + dateMax.format('yyyy-mm-dd')  + '.', 'error', {});
+
+            containerStart.closest('.control-group').addClass('error');
+        } else if (checkSprintDates(event.date, 1, 0, true) !== true) {
+            containerStart.closest('.control-group').addClass('error');
+        } else {
+            valueEnd = new Date(event.date);
+
+            containerEnd.bootstrapDP('hide');
+            containerEnd.closest('.control-group').removeClass('error');
+        }
+    });
+}
+
+/**
+ * Method checks if given sprint date conflicts with existing project sprint durations.
+ *
+ * @param   {Date}      date        Date object to check
+ * @param   {Number}    type        Date type, 0 = start, 1 = end
+ * @param   {Number}    sprintId    Current sprint ID, this is skipped in test if give ( > 0 )
+ * @param   {Boolean}   showMessage Return possible error message
+ *
+ * @returns {Boolean|String}        Boolean true if ok, otherwise error message
+ */
+function checkSprintDates(date, type, sprintId, showMessage) {
+    var check = date.format('yyyy-mm-dd');
+    var errors = [];
+
+    jQuery.each(myViewModel.sprints(), function(key, sprint) {
+        var start = ko.toJS(sprint.dateStartObject()).format('yyyy-mm-dd');
+        var end = ko.toJS(sprint.dateEndObject()).format('yyyy-mm-dd');
+
+        if (sprintId != ko.toJS(sprint.id()) && start <= check && end >= check) {
+            errors.push(ko.toJS(sprint.formattedTitle()));
+        }
+    });
+
+    var output = true;
+
+    if (errors.length > 0) {
+        var message = type === 0 ? "Start " : "End ";
+
+        message += "date overlaps with following existing project sprints:\n" + errors.join("\n");
+
+        if (showMessage) {
+            makeMessage(message, 'error', {});
+        }
+
+        output = message;
+    }
+
+    return output;
 }
