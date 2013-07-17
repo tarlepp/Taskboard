@@ -679,13 +679,19 @@ function Phase(data) {
     self.phaseTaskCountText = ko.computed(function() {
         var output;
 
-        if (self.cntTask() == '') {
+        if (self.cntTask() == '' && self.cntTasksMax() == '') {
             output = '';
         } else {
-            output = '(' + self.cntTask();
+            output = '(';
 
-            if (self.cntTasksMax() != '') {
-                output += '/' + self.cntTasksMax();
+            if (myViewModel.sprint()) {
+                output += self.cntTask() == '' ? 0 : self.cntTask();
+
+                if (self.cntTasksMax() != '') {
+                    output += '/' + self.cntTasksMax();
+                }
+            } else if (self.cntTasksMax() != '') {
+                output += self.cntTasksMax();
             }
 
             output += ')';
