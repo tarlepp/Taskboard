@@ -107,7 +107,7 @@ function handleAjaxError(jqXhr, textStatus, error) {
  */
 function makeMessage(text, type, options) {
     noty(jQuery.extend({}, {
-        text: text,
+        text: text.nl2br(),
         type: type,
         layout: 'top',
         timeout: 3000
@@ -125,4 +125,4 @@ Array.prototype.unique = function(a) {
 
 String.prototype.nl2br = function() {
     return this.replace(/\n/g, "<br />");
-}
+};
