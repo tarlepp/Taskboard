@@ -214,6 +214,10 @@ div.story p:last-of-type {
     background-color: #f2f2f2;
 }
 
+#board .table td.addStory button {
+    background-color: #e1e1e1;
+}
+
 #board .table td.addTask button:hover,
 #board .table td.addStory button:hover {
     background-color: #fafafa;
