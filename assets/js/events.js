@@ -664,7 +664,8 @@ jQuery(document).ready(function() {
                                 url: "/sprint/",
                                 data: formItems,
                                 dataType: 'json'
-                            }).done(function (/** models.sprint */sprint) {
+                            })
+                            .done(function (/** models.sprint */sprint) {
                                 // Add inserted sprint to knockout model data
                                 myViewModel.sprints.push(new Sprint(sprint));
 
