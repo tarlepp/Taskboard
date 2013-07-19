@@ -305,11 +305,6 @@ function ViewModel() {
             users: ko.toJS(myViewModel.users())
         };
 
-        /**
-         * Create bootbox dialog and show it to user.
-         *
-         * @type {jQuery}
-         */
         var modal = bootbox.dialog(
             template(templateData),
             [
@@ -334,7 +329,7 @@ function ViewModel() {
                                 data: formItems,
                                 dataType: 'json'
                             })
-                            .done(function (/** models..rest.project */project) {
+                            .done(function (/** models.rest.project */project) {
                                 self.projects.push(new Project(project));
 
                                 modal.modal('hide');
