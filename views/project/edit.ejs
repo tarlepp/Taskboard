@@ -11,8 +11,8 @@
             <div class="controls">
                 <select id="formProjectEditManagerId" name="managerId" class="span3 required">
                     <option value="#">-- select --</option>
-                    <% _.each(users, function (user) { %>
-                    <option value="<%= user.id %>" <%if (user.id == project.managerId) { %>selected="selected"<% } %>><%= user.fullName() %></option>
+                    <% _.each(users, function(user) { %>
+                    <option value="<%= user.id %>" <%if (user.id === project.managerId) { %>selected="selected"<% } %>><%= user.fullName() %></option>
                     <% }) %>
                 </select>
             </div>

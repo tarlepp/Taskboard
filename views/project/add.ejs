@@ -11,7 +11,7 @@
             <div class="controls">
                 <select id="formProjectNewManagerId" name="managerId" class="span3 required">
                     <option value="#">-- select --</option>
-                    <% _.each(users, function (user) { %>
+                    <% _.each(users, function(user) { %>
                     <option value="<%= user.id %>"><%= user.fullName() %></option>
                     <% }) %>
                 </select>
