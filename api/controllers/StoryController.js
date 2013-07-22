@@ -19,5 +19,28 @@ module.exports = {
             projectId: projectId,
             sprintId: sprintId
         });
+    },
+    edit: function(req, res) {
+        if (!req.isAjax) {
+            res.send('Only AJAX request allowed', 403);
+        }
+
+        var storyId = parseInt(req.param('id'), 10);
+
+        Story.findOne(storyId)
+        .done(function(error, story) {
+            if (error) {
+                res.send(error, 500);
+            } else {
+                makeView(story);
+            }
+        });
+
+        function makeView(story) {
+            return res.view({
+                layout: "layout_ajax",
+                story: story
+            });
+        }
     }
 };

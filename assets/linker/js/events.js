@@ -495,6 +495,96 @@ jQuery(document).ready(function() {
         });
     });
 
+    /**
+     * User story edit event, this opens a modal bootbox dialog with user story edit
+     * form on it.
+     */
+    body.on('storyEdit', function(event, story) {
+        jQuery.get('/Story/edit', {id: story.id()}, function(content) {
+            var title = "Edit user story";
+            var buttons = [
+                {
+                    label: "Save",
+                    class: "btn-primary pull-right",
+                    callback: function() {
+                        var form = jQuery('#formStoryEdit');
+                        var formItems = form.serializeJSON();
+
+                        // Validate current form items and try to update user story data
+                        if (validateForm(formItems)) {
+                            jQuery.ajax({
+                                type: "PUT",
+                                url: "/story/" + story.id(),
+                                data: formItems,
+                                dataType: 'json'
+                            })
+                            .done(function(/** models.rest.story */story) {
+                                makeMessage("User story updated successfully.", "success", {});
+
+                                var storyObject = new Story(story);
+
+                                // Iterate current user stories
+                                jQuery.each(myViewModel.stories(), function(key, story) {
+                                    if (story.id() === storyObject.id()) {
+                                        // Replace old user story model with new one
+                                        myViewModel.stories.replace(story, storyObject);
+                                    }
+                                });
+
+                                modal.modal('hide');
+                            })
+                            .fail(function(jqxhr, textStatus, error) {
+                                handleAjaxError(jqxhr, textStatus, error);
+                            });
+                        }
+
+                        return false;
+                    }
+                },
+                {
+                    label: "Delete",
+                    class: "btn-danger pull-right",
+                    callback: function() {
+                        bootbox.confirm(
+                            "Are you sure of story delete?",
+                            function(result) {
+                                if (result) {
+                                    jQuery.ajax({
+                                        type: "DELETE",
+                                        url: "/story/" + story.id(),
+                                        dataType: 'json'
+                                    })
+                                    .done(function() {
+                                        makeMessage("User story deleted successfully.", "success", {});
+
+                                        // Remove user story from knockout models.
+                                        myViewModel.deleteStory(story.id());
+                                    })
+                                    .fail(function(jqxhr, textStatus, error) {
+                                        handleAjaxError(jqxhr, textStatus, error);
+                                    });
+                                } else {
+                                    body.trigger('storyEdit', [story]);
+                                }
+                            }
+                        );
+                    }
+                }
+            ];
+
+            // Open bootbox modal
+            var modal = openBootboxDialog(title, content, buttons);
+
+            // Make form init when dialog is opened.
+            modal.on('shown', function() {
+                initStoryForm(modal, true);
+            });
+        })
+        .fail(function(jqXhr, textStatus, error) {
+            handleAjaxError(jqXhr, textStatus, error);
+        });
+    });
+
 
     /**
      * Below is code that needs refactoring...
@@ -626,81 +716,7 @@ jQuery(document).ready(function() {
     });
 
 
-    body.on('storyEdit', function(event, storyData) {
-        var source = jQuery('#story-form-edit').html();
-        var template = Handlebars.compile(source);
-        var templateData = ko.toJS(storyData);
 
-        var modal = bootbox.dialog(
-            template(templateData),
-            [
-                {
-                    label: "Close",
-                    class: "pull-left",
-                    callback: function() {
-                    }
-                },
-                {
-                    label: "Save",
-                    class: "btn-primary pull-right",
-                    callback: function() {
-                        var form = jQuery('#formStoryEdit');
-                        var formItems = form.serializeJSON();
-
-                        if (validateForm(formItems)) {
-                            jQuery.ajax({
-                                type: "PUT",
-                                url: "/story/" + storyData.id(),
-                                data: formItems,
-                                dataType: 'json'
-                            }).done(function(/** models.story */story) {
-                                // TODO: update model data
-
-                                jQuery('div.bootbox').modal('hide');
-                            })
-                            .fail(function(jqxhr, textStatus, error) {
-                                handleAjaxError(jqxhr, textStatus, error);
-                            });
-                        }
-
-                        return false;
-                    }
-                },
-                {
-                    label: "Delete",
-                    class: "btn-danger pull-right",
-                    callback: function() {
-                        bootbox.confirm(
-                            "Are you sure of story delete?",
-                            function(result) {
-                                if (result) {
-                                    jQuery.ajax({
-                                        type: "DELETE",
-                                        url: "/story/" + storyData.id(),
-                                        dataType: 'json'
-                                    }).done(function() {
-                                            myViewModel.deleteStory(storyData.id());
-                                        })
-                                        .fail(function(jqxhr, textStatus, error) {
-                                            handleAjaxError(jqxhr, textStatus, error);
-                                        });
-                                } else {
-                                    body.trigger('storyEdit', [storyData]);
-                                }
-                            }
-                        );
-                    }
-                }
-            ],
-            {
-                header: "Edit story"
-            }
-        );
-
-        modal.on('shown', function() {
-            initStoryForm(modal, true);
-        });
-    });
 
 
 
