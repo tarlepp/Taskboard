@@ -278,7 +278,10 @@ div.story p:last-of-type {
     line-height: 28px;
 }
 
-.modal-header,
+.modal-header {
+    padding: 8px 12px;
+}
+
 .modal-footer {
     padding: 8px;
 }
