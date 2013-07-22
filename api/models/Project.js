@@ -34,10 +34,10 @@ module.exports = {
             return new Date(this.dateEnd);
         },
         dateStartFormatted: function() {
-            return this.dateStartObject().format('yyyy-mm-dd');
+            return this.dateStartObject().format('isoDate');
         },
         dateEndFormatted: function() {
-            return this.dateEndObject().format('yyyy-mm-dd');
+            return this.dateEndObject().format('isoDate');
         }
     }
 };
