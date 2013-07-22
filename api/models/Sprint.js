@@ -24,6 +24,25 @@ module.exports = {
         dateEnd: {
             type:       'date',
             required:   true
+        },
+
+        dateStartObject: function() {
+            return new Date(this.dateStart);
+        },
+        dateEndObject: function() {
+            return new Date(this.dateEnd);
+        },
+        dateStartFormatted: function() {
+            return this.dateStartObject().format('isoDate');
+        },
+        dateEndFormatted: function() {
+            return this.dateEndObject().format('isoDate');
+        },
+        durationDates: function() {
+            return this.dateStartFormatted() + " - " + this.dateEndFormatted();
+        },
+        durationDays: function() {
+            return this.dateEndObject().getDate() - this.dateStartObject().getDate();
         }
     }
 };
