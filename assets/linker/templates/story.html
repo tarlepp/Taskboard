@@ -1,0 +1,68 @@
+<script id="story-form-new" type="text/x-handlebars-template">
+    <form id="formStoryNew" class="form-horizontal">
+        <input type="hidden" name="projectId" value="{{projectId}}" />
+        <input type="hidden" name="sprintId" value="{{sprintId}}" />
+
+        <fieldset>
+            <div class="control-group required">
+                <label class="control-label" for="formStoryNewTitle">Title</label>
+                <div class="controls">
+                    <input id="formStoryNewTitle" name="title" type="text" placeholder="enter story name" class="span3" required="required" />
+                </div>
+            </div>
+            <div class="control-group required">
+                <label class="control-label" for="formStoryNewEstimate">Estimate</label>
+                <div class="controls">
+                    <input class="sliderValue" type="text" readonly="readonly" value="0" />
+                    <div class="estimateSlider"></div>
+                    <input id="formStoryNewEstimate" name="estimate" type="hidden" value="0" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="formStoryNewDescription">Description</label>
+                <div class="controls">
+                    <textarea id="formStoryNewDescription" name="description" class="span3" placeholder="enter user story description"></textarea>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="formStoryNewVfCase">ValueFrame case</label>
+                <div class="controls">
+                    <input id="formStoryNewVfCase" name="vfCase" type="text" placeholder="#case" class="span1" />
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</script>
+
+<script id="story-form-edit" type="text/x-handlebars-template">
+    <form id="formStoryEdit" class="form-horizontal">
+        <fieldset>
+            <div class="control-group required">
+                <label class="control-label" for="formStoryEditTitle">Title</label>
+                <div class="controls">
+                    <input id="formStoryEditTitle" name="title" type="text" value="{{title}}" placeholder="enter story name" class="span3" required="required" />
+                </div>
+            </div>
+            <div class="control-group required">
+                <label class="control-label" for="formStoryEditEstimate">Estimate</label>
+                <div class="controls">
+                    <input class="sliderValue" type="text" readonly="readonly" value="{{estimate}}" />
+                    <div class="estimateSlider"></div>
+                    <input id="formStoryEditEstimate" name="estimate" type="hidden" value="{{estimate}}" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="formStoryEditDescription">Description</label>
+                <div class="controls">
+                    <textarea id="formStoryEditDescription" name="description" class="span3" placeholder="enter user story description">{{description}}</textarea>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="formStoryEditVfCase">ValueFrame case</label>
+                <div class="controls">
+                    <input id="formStoryEditVfCase" name="vfCase" type="text"value="{{vfCase}}"  placeholder="#case" class="span1" />
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</script>

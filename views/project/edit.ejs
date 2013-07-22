@@ -1,0 +1,54 @@
+<form id="formProjectEdit" class="form-horizontal">
+    <fieldset>
+        <div class="control-group required">
+            <label class="control-label" for="formProjectEditTitle">Title</label>
+            <div class="controls">
+                <input id="formProjectEditTitle" name="title" type="text" value="<%= project.title %>" placeholder="enter project name" class="span3" required="required" />
+            </div>
+        </div>
+        <div class="control-group required">
+            <label class="control-label" for="formProjectEditManagerId">Project manager</label>
+            <div class="controls">
+                <select id="formProjectEditManagerId" name="managerId" class="span3 required">
+                    <option value="#">-- select --</option>
+                    <% _.each(users, function (user) { %>
+                    <option value="<%= user.id %>" <%if (user.id == project.managerId) { %>selected="selected"<% } %>><%= user.fullName() %></option>
+                    <% }) %>
+                </select>
+            </div>
+        </div>
+        <div class="control-group required">
+            <label class="control-label" for="formProjectEditDateStart">Duration</label>
+            <label class="control-label" for="formProjectEditDateEnd" style="display: none;"></label>
+            <div class="controls">
+                <div class="input-append date dateStart">
+                    <input id="formProjectEditDateStart" name="dateStart" type="text" value="<%= project.dateStartFormatted() %>" class="dateInput" size="16" required="required" readonly="readonly"
+                        data-validate-type="daterange"
+                        data-role="start"
+                        data-pair="formProjectEditDateEnd"
+                        data-focus="false"
+                        data-edit="true"
+                    />
+                    <span class="add-on"><i class="icon-calendar"></i></span>
+                </div>
+                <span class="separator">&mdash;</span>
+                <div class="input-append date dateEnd">
+                    <input id="formProjectEditDateEnd" name="dateEnd" type="text" value="<%= project.dateEndFormatted() %>" class="dateInput" size="16" required="required" readonly="readonly"
+                        data-validate-type="daterange"
+                        data-role="end"
+                        data-pair="formProjectEditDateStart"
+                        data-focus="false"
+                        data-edit="true"
+                    />
+                    <span class="add-on"><i class="icon-calendar"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="formProjectEditDescription">Description</label>
+            <div class="controls">
+                <textarea id="formProjectEditDescription" name="description" class="span3" placeholder="enter project description"><%= project.description %></textarea>
+            </div>
+        </div>
+    </fieldset>
+</form>

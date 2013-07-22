@@ -1,0 +1,115 @@
+<div id="boardContent">
+
+    <div class="alert alert-error"
+        data-bind="visible: $root.phases().length === 0 && $root.project()"
+    >
+        <h3>No phases for current project</h3>
+        <p>
+            Current project does not have any <strong><em>phases</em></strong>, please add phases before anything else.
+        </p>
+        <p>
+            You can setup project phases within <strong><em>project settings menu</em></strong>.
+        </p>
+    </div>
+
+    <div id="board" data-bind="if: $root.phases().length">
+        <table class="table table-bordered">
+            <thead>
+                <tr id="boardHeader">
+                    <th style="width:20%">Story</th>
+                    <td class="addStory" data-bind="visible: sprint()">
+                        <button data-bind="
+                            click: addNewStory.bind($data, $root.project().id(), $root.getSprintId()),
+                            tooltip: {
+                                title: 'Add a new story to current sprint',
+                                html: true
+                            }
+                        ">+</button>
+                    </td>
+
+                    <!-- ko foreach: $root.phases -->
+                    <th data-bind="style: {width: getColumnWidth(20, $root.phases().length)}">
+                        <span data-bind="text: title"></span>
+                        <span class="phaseTaskCount" data-bind="css: phaseTaskCountStatus, text: phaseTaskCountText"></span>
+                    </th>
+                    <!-- /ko -->
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: $root.sortedStories">
+
+                <tr data-bind="attr: {'id': storyRowId()}">
+                    <th>
+                        <div class="story taped"
+                            data-bind="
+                                template: {
+                                    name: 'story-template'
+                                },
+                                tooltip: {
+                                    title: $root.nl2br(description()),
+                                    placement: 'right',
+                                    html: true
+                                }
+
+                            "></div>
+                    </th>
+                    <td class="addTask">
+                        <button data-bind="
+                            click: addNewTask,
+                            tooltip: {
+                                title: 'Add a new task to story<br />' + title(),
+                                html: true
+                            }
+                        ">+</button>
+                    </td>
+
+                    <!-- ko foreach: phases -->
+                    <td class="myClass" data-bind="
+                        attr: {
+                            'data-phase-id': id(),
+                            'data-phase-title': title()
+                        },
+                        sortable: {
+                            template: 'task-template',
+                            data: tasks,
+                            afterMove: myDropCallback,
+                            connectClass: 'myClass',
+                            options: {
+                                cursor: 'move'
+                            }
+                        }
+                     ">
+                    </td>
+                    <!-- /ko -->
+
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <script id="task-template" type="text/html">
+        <div class="task sticky taped"
+            data-bind="
+                attr: {
+                    'id': 'task_' + id()
+                },
+                tooltip: {
+                    title: $root.nl2br(description()),
+                    placement: 'bottom',
+                    html: true
+                },
+                css: taskClass()
+            ">
+            <h3 data-bind="text: title"></h3>
+        </div>
+    </script>
+
+    <script id="story-template" type="text/html">
+        <h3 data-bind="text: formattedTitle"></h3>
+
+        <!-- ko if: description -->
+        <p data-bind="text: $root.words(description(), 8)"></p>
+        <!-- /ko -->
+    </script>
+
+</div>

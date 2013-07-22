@@ -1,0 +1,63 @@
+<script id="phases-form-edit" type="text/x-handlebars-template">
+    <div class="alert alert-info">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        You can change phases order simply just dragging rows.
+    </div>
+
+    <form>
+        <table id="projectPhases" class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th colspan="2">Name of the phase</th>
+                    <th colspan="3">Target task count</th>
+                </tr>
+            </thead>
+            <tbody>
+            {{#each phases}}
+                <tr class="control-group" data-phase-id="{{id}}">
+                    <td>
+                        <i class="icon-resize-vertical" style="cursor: move;"></i>
+                    </td>
+                    <td>
+                        <input type="text" name="title[]" value="{{title}}" />
+                    </td>
+                    <td>
+                        <div class="slider slider-phase-task"></div>
+                        <input type="hidden" name="tasks[]" value="{{tasks}}" />
+                        <input type="hidden" name="order[]" value="{{order}}" />
+                        <input type="hidden" name="id[]" value="{{id}}" />
+                    </td>
+                    <td></td>
+                    <td>
+                        <button class="btn btn-danger btn-mini phaseDelete" type="button">&times;</button>
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </form>
+
+    <div class="hidden">
+        <table id="projectPhasesNew">
+            <tr class="control-group">
+                <td>
+                    <i class="icon-resize-vertical" style="cursor: move;"></i>
+                </td>
+                <td>
+                    <input type="text" name="title[]" value="" placeholder="enter phase name" />
+                </td>
+                <td>
+                    <div class="slider slider-phase-task"></div>
+                    <input type="hidden" name="tasks[]" value="" />
+                    <input type="hidden" name="order[]" value="" />
+                    <input type="hidden" name="id[]" value="" />
+                </td>
+                <td></td>
+                <td>
+                    <button class="btn btn-danger btn-mini phaseDelete" type="button">&times;</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</script>
