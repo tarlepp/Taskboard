@@ -112,11 +112,18 @@ function handleAjaxError(jqXhr, textStatus, error) {
  * @param   {object}    options Custom options for noty
  */
 function makeMessage(text, type, options) {
+    var timeout = 3000;
+
+    switch (type) {
+        case 'success':
+            timeout = 1500;
+    }
+
     noty(jQuery.extend({}, {
         text: text.nl2br(),
         type: type,
         layout: 'top',
-        timeout: 3000
+        timeout: timeout
     }, options));
 }
 
