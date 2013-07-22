@@ -16,7 +16,8 @@ jQuery(document).ready(function() {
     var body = jQuery('body');
 
     /**
-     * Event to check if all initialize methods are done. If all necessary
+     * Event to check if all initialize methods are done. If all necessary init methods
+     * are executed event trigger will un-hide specified dom elements.
      *
      * @param   {Event}     event       Current event object
      * @param   {String}    initMethod  Initialize event name
@@ -68,6 +69,7 @@ jQuery(document).ready(function() {
                     var form = jQuery('#formProjectNew', modal);
                     var formItems = form.serializeJSON();
 
+                    // Validate form and try to create new project
                     if (validateForm(formItems)) {
                         // Make POST query to server
                         jQuery.ajax({
@@ -77,6 +79,7 @@ jQuery(document).ready(function() {
                             dataType: 'json'
                         })
                         .done(function (project) {
+                            // Add new project to knockout data
                             myViewModel.projects.push(new Project(project));
 
                             makeMessage('Project created successfully.', 'success', {});
@@ -122,6 +125,7 @@ jQuery(document).ready(function() {
                         var form = jQuery('#formProjectEdit');
                         var formItems = form.serializeJSON();
 
+                        // Validate form and try to update project data
                         if (validateForm(formItems)) {
                             jQuery.ajax({
                                 type: 'PUT',
@@ -132,8 +136,10 @@ jQuery(document).ready(function() {
                             .done(function (/** models.rest.project */projectData) {
                                 var updatedProject = new Project(projectData);
 
+                                // Iterate current knockout model projects
                                 jQuery.each(myViewModel.projects(), function(index, project) {
                                     if (project.id() === myViewModel.project().id()) {
+                                        // Replace old project model with new one
                                         myViewModel.projects.replace(project, updatedProject);
                                         myViewModel.project(updatedProject);
                                     }
@@ -166,6 +172,7 @@ jQuery(document).ready(function() {
             // Open bootbox modal
             var modal = openBootboxDialog(title, content, buttons);
 
+            // Make form init when dialog is opened.
             modal.on('shown', function() {
                 initProjectForm(modal, true);
             });
@@ -175,8 +182,57 @@ jQuery(document).ready(function() {
         });
     });
 
+    /**
+     * Project backlog event, this opens a modal bootbox dialog with project backlog view on it.
+     * In this dialog user can prioritize user stories and assign them to existing sprints or move
+     * them back to backlog.
+     */
+    body.on('projectBacklog', function() {
+        jQuery.get('/Project/backlog', {id: ko.toJS(myViewModel.project().id())}, function(content) {
+            var title = 'Edit project';
+            var buttons = [
+                {
+                    label: "Save",
+                    class: "btn-primary pull-right",
+                    callback: function () {
+                        // @todo: implement this
+                        console.log('save backlog order');
+
+                        return false;
+                    }
+                },
+                {
+                    label: "Add new story",
+                    class: "pull-right",
+                    callback: function () {
+                        // @todo: implement this
+                        console.log('open story add dialog');
+
+                        return false;
+                    }
+                }
+            ];
+
+            // Open bootbox modal
+            var modal = openBootboxDialog(title, content, buttons);
+
+            // Add required class for backlog
+            modal.addClass('modalBacklog');
+
+            // Make form init when dialog is opened.
+            modal.on('shown', function() {
+                initProjectBacklog(modal);
+            });
+        })
+        .fail(function (jqXhr, textStatus, error) {
+            handleAjaxError(jqXhr, textStatus, error);
+        });
+    });
 
 
+    /**
+     * Below is code that needs refactoring...
+     */
 
 
 
@@ -610,85 +666,7 @@ jQuery(document).ready(function() {
         });
     });
 
-    body.on('projectBacklog', function() {
-        var sprints = ko.toJS(myViewModel.sprints());
 
-        var data = [];
-
-        jQuery.each(sprints, function(sprintKey, sprintData) {
-            data['sprint_' + sprintData.id] = [];
-        });
-
-        // Specify parameters to fetch all project stories
-        var parameters = {
-            projectId: ko.toJS(myViewModel.project().id()),
-            sort: 'priority ASC'
-        };
-
-        // Make REST request
-        jQuery.getJSON("/story/", parameters)
-            .done(function (/** models.story[] */stories) {
-                // Iterate stories
-                jQuery.each(stories, function(storyKey, storyData) {
-                    if (typeof data['sprint_' + storyData.sprintId] === 'object') {
-                        data['sprint_' + storyData.sprintId].push(storyData);
-                    }
-                });
-
-                // Iterate stories and assign stories to them
-                jQuery.each(sprints, function(sprintKey, sprintData) {
-                    sprintData.stories = data['sprint_' + sprintData.id];
-                });
-
-                var source = jQuery('#project-backlog').html();
-                var template = Handlebars.compile(source);
-                var templateData = {
-                    project: ko.toJS(myViewModel.project()),
-                    backlog: ko.toJS(myViewModel.backlog()),
-                    sprints: sprints
-                };
-
-                var modal = bootbox.dialog(
-                    template(templateData),
-                    [
-                        {
-                            label: "Close",
-                            class: "pull-left",
-                            callback: function () {
-                            }
-                        },
-                        {
-                            label: "Save",
-                            class: "btn-primary pull-right",
-                            callback: function () {
-                                console.log('save backlog order');
-
-                                return false;
-                            }
-                        },
-                        {
-                            label: "Add new story",
-                            class: "pull-right",
-                            callback: function () {
-                                console.log('open story add dialog');
-
-                                return false;
-                            }
-                        }
-                    ],
-                    {
-                        header: "Project backlog"
-                    }
-                ).addClass('modalBacklog');
-
-                modal.on('shown', function() {
-                    initProjectBacklog(modal);
-                });
-            })
-            .fail(function (jqxhr, textStatus, error) {
-                handleAjaxError(jqxhr, textStatus, error);
-            });
-    });
 
     /**
      * This event handles sprint add functionality. Basically event triggers

@@ -1,0 +1,48 @@
+<div class="alert alert-info">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    You can prioritize stories by dragging them in lists. You can also assign story to sprint by dragging it to sprint story list.
+</div>
+
+<div class="row-fluid backlog">
+    <div class="span6">
+        <h4>Backlog</h4>
+        <ul class="nav nav-tabs nav-stacked">
+        <% _.each(stories, function(story) { %>
+            <% if(story.sprintId === 0 || story.sprintId === null) { %>
+            <li>
+                <a href="javascript: void(0);"><%= story.title %></a>
+            </li>
+            <% } %>
+        <% }) %>
+        </ul>
+    </div>
+    <div class="span6">
+        <h4>Sprints</h4>
+
+        <div class="accordion" id="backlogAccordion">
+        <% _.each(sprints, function(sprint) { %>
+            <div class="accordion-group">
+                <div class="accordion-heading alert-info">
+                    <a class="accordion-toggle" data-toggle="collapse" href="#sprintContent_<%= sprint.id %>">
+                        <strong><%= sprint.title %></strong>
+                        <span class="pull-right text-small"><%= sprint.durationDates() %> (<%= sprint.durationDays() %>)</span>
+                    </a>
+                </div>
+                <div id="sprintContent_<%= sprint.id %>" class="accordion-body collapse ">
+                    <div class="accordion-inner">
+                        <ul class="nav nav-tabs nav-stacked" data-sprint-id="<%= sprint.id %>">
+                        <% _.each(stories, function(story) { %>
+                            <% if(story.sprintId === sprint.id) { %>
+                            <li>
+                                <a href="javascript: void(0);"><%= story.title %> (<%= story.estimate %>)</a>
+                            </li>
+                            <% } %>
+                        <% }) %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+        </div>
+    </div>
+</div>
