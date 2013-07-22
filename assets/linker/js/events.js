@@ -65,7 +65,7 @@ jQuery(document).ready(function() {
             var buttons = {
                 label: "Save",
                 class: "btn-primary pull-right",
-                callback: function () {
+                callback: function() {
                     var form = jQuery('#formProjectNew', modal);
                     var formItems = form.serializeJSON();
 
@@ -78,7 +78,7 @@ jQuery(document).ready(function() {
                             data: formItems,
                             dataType: 'json'
                         })
-                        .done(function (project) {
+                        .done(function(/** models.rest.project */project) {
                             // Add new project to knockout data
                             myViewModel.projects.push(new Project(project));
 
@@ -86,9 +86,9 @@ jQuery(document).ready(function() {
 
                             modal.modal('hide');
 
-                            // @todo should this new project to be selected automatically?
+                            // TODO should this new project to be selected automatically?
                         })
-                        .fail(function (jqXhr, textStatus, error) {
+                        .fail(function(jqXhr, textStatus, error) {
                             handleAjaxError(jqXhr, textStatus, error);
                         });
                     }
@@ -105,7 +105,7 @@ jQuery(document).ready(function() {
                 initProjectForm(modal, false);
             });
         })
-        .fail(function (jqXhr, textStatus, error) {
+        .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
         });
     });
@@ -121,7 +121,7 @@ jQuery(document).ready(function() {
                 {
                     label: "Save",
                     class: "btn-primary pull-right",
-                    callback: function () {
+                    callback: function() {
                         var form = jQuery('#formProjectEdit');
                         var formItems = form.serializeJSON();
 
@@ -133,7 +133,7 @@ jQuery(document).ready(function() {
                                 data: formItems,
                                 dataType: 'json'
                             })
-                            .done(function (/** models.rest.project */projectData) {
+                            .done(function(/** models.rest.project */projectData) {
                                 var updatedProject = new Project(projectData);
 
                                 // Iterate current knockout model projects
@@ -149,7 +149,7 @@ jQuery(document).ready(function() {
 
                                 modal.modal('hide');
                             })
-                            .fail(function (jqXhr, textStatus, error) {
+                            .fail(function(jqXhr, textStatus, error) {
                                 handleAjaxError(jqXhr, textStatus, error);
                             });
                         }
@@ -160,8 +160,8 @@ jQuery(document).ready(function() {
                 {
                     label: "Delete",
                     class: "btn-danger pull-right",
-                    callback: function () {
-                        // @todo implement this
+                    callback: function() {
+                        // TODO implement this
                         console.log('implement project delete');
 
                         return false;
@@ -177,7 +177,7 @@ jQuery(document).ready(function() {
                 initProjectForm(modal, true);
             });
         })
-        .fail(function (jqXhr, textStatus, error) {
+        .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
         });
     });
@@ -194,8 +194,8 @@ jQuery(document).ready(function() {
                 {
                     label: "Save",
                     class: "btn-primary pull-right",
-                    callback: function () {
-                        // @todo: implement this
+                    callback: function() {
+                        // TODO implement this
                         console.log('save backlog order');
 
                         return false;
@@ -204,8 +204,8 @@ jQuery(document).ready(function() {
                 {
                     label: "Add new story",
                     class: "pull-right",
-                    callback: function () {
-                        // @todo: implement this
+                    callback: function() {
+                        // TODO implement this
                         console.log('open story add dialog');
 
                         return false;
@@ -224,7 +224,153 @@ jQuery(document).ready(function() {
                 initProjectBacklog(modal);
             });
         })
-        .fail(function (jqXhr, textStatus, error) {
+        .fail(function(jqXhr, textStatus, error) {
+            handleAjaxError(jqXhr, textStatus, error);
+        });
+    });
+
+    /**
+     * Project phases edit event. This opens a modal dialog which contains all current project
+     * phases. User can edit existing phases, add new ones and change phases order simply by
+     * dragging them. All the phases are saved in "same" time.
+     */
+    body.on('phasesEdit', function(event) {
+        jQuery.get('/Phase/edit', {id: ko.toJS(myViewModel.project().id())}, function(content) {
+            var title = "Phases for project '" + ko.toJS(myViewModel.project().title()) + "'";
+            var buttons = [
+                {
+                    label: "Save",
+                    class: "btn-primary pull-right",
+                    callback: function() {
+                        var errors = false;
+                        var lines = jQuery("#projectPhases", modal).find("tbody tr");
+
+                        lines.each(function(key) {
+                            var row = jQuery(this);
+                            var title = jQuery.trim(row.find('input[name="title[]"]').val());
+                            var tasks = parseInt(row.find('input[name="tasks[]"]').val(), 10);
+                            var phaseId = parseInt(row.find('input[name="id[]"]').val(), 10);
+
+                            if (title.length == 0) {
+                                makeMessage('Phase name cannot be empty.', 'error', {});
+
+                                row.addClass('error');
+
+                                errors = true;
+                            } else {
+                                row.removeClass('error');
+
+                                var type = '';
+                                var url = '';
+
+                                var phaseData = {
+                                    title: title,
+                                    order: key,
+                                    tasks: isNaN(tasks) ? 0 : tasks,
+                                    projectId: ko.toJS(myViewModel.project().id())
+                                };
+
+                                if (isNaN(phaseId)) {
+                                    type = 'POST';
+                                    url = ''
+                                } else {
+                                    type = 'PUT';
+                                    url = phaseId;
+                                }
+
+                                jQuery.ajax({
+                                    type: type,
+                                    url: "/phase/" + url,
+                                    data: phaseData,
+                                    dataType: 'json'
+                                })
+                                .done(function(/** models.rest.phase */phase) {
+                                    var phaseObject = new Phase(phase);
+
+                                    switch (type) {
+                                        case 'POST':
+                                            myViewModel.phases.push(phaseObject);
+
+                                            if (myViewModel.sprint()) {
+                                                // TODO: add phase story phases
+                                            }
+                                            break;
+                                        case 'PUT':
+                                            jQuery.each(myViewModel.phases(), function(key, phase) {
+                                                if (phase.id() === phaseObject.id()) {
+                                                    // Replace old phase model with new one
+                                                    myViewModel.phases.replace(phase, phaseObject);
+                                                }
+                                            });
+
+                                            if (myViewModel.sprint()) {
+                                                // TODO: update phase story phases
+                                            }
+                                            break;
+                                    }
+                                })
+                                .fail(function(jqXhr, textStatus, error) {
+                                    errors = true;
+
+                                    handleAjaxError(jqXhr, textStatus, error);
+                                });
+                            }
+                        });
+
+                        // All went just like in strömsö
+                        if (errors === false) {
+                            makeMessage('Project phases saved successfully.', 'success', {});
+
+                            modal.modal('hide');
+                        }
+
+                        return false;
+                    }
+                },
+                {
+                    label: "Add new phase",
+                    class: "pull-right",
+                    callback: function() {
+                        var newRow = jQuery('#projectPhasesNew', modal).find('tr').clone();
+                        var slider = newRow.find('.slider');
+                        var input = slider.next('input');
+                        var cellValue = slider.parent().next('td');
+
+                        cellValue.html('unlimited');
+
+                        slider.slider({
+                            min: 0,
+                            max: 10,
+                            value: 0,
+                            slide: function(event, ui) {
+                                if (isNaN(ui.value) || ui.value === 0) {
+                                    cellValue.html('unlimited');
+                                } else {
+                                    cellValue.html(ui.value);
+                                }
+
+                                input.val(ui.value);
+                            }
+                        });
+
+                        jQuery('#projectPhases', modal).find('tbody').append(newRow);
+
+                        return false;
+                    }
+                }
+            ];
+
+            // Open bootbox modal
+            var modal = openBootboxDialog(title, content, buttons);
+
+            // Make form init when dialog is opened.
+            modal.on('shown', function() {
+                initProjectPhases(modal);
+            });
+
+
+        })
+        .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
         });
     });
@@ -262,7 +408,7 @@ jQuery(document).ready(function() {
                 {
                     label: "Close",
                     class: "pull-left",
-                    callback: function () {
+                    callback: function() {
                     }
                 }
             ],
@@ -290,13 +436,13 @@ jQuery(document).ready(function() {
                 {
                     label: "Close",
                     class: "pull-left",
-                    callback: function () {
+                    callback: function() {
                     }
                 },
                 {
                     label: "Save",
                     class: "btn-primary pull-right",
-                    callback: function () {
+                    callback: function() {
                         var form = jQuery('#formTaskEdit');
                         var formItems = form.serializeJSON();
 
@@ -306,12 +452,12 @@ jQuery(document).ready(function() {
                                 url: "/task/" + taskData.id(),
                                 data: formItems,
                                 dataType: 'json'
-                            }).done(function (/** models.task */task) {
+                            }).done(function(/** models.task */task) {
                                 // TODO: update model data
 
                                 jQuery('div.bootbox').modal('hide');
                             })
-                            .fail(function (jqxhr, textStatus, error) {
+                            .fail(function(jqxhr, textStatus, error) {
                                 handleAjaxError(jqxhr, textStatus, error);
                             });
                         }
@@ -322,7 +468,7 @@ jQuery(document).ready(function() {
                 {
                     label: "Delete",
                     class: "btn-danger pull-right",
-                    callback: function () {
+                    callback: function() {
                         bootbox.confirm(
                             "Are you sure of task delete?",
                             function(result) {
@@ -331,10 +477,10 @@ jQuery(document).ready(function() {
                                         type: "DELETE",
                                         url: "/task/" + taskData.id(),
                                         dataType: 'json'
-                                    }).done(function () {
+                                    }).done(function() {
                                         myViewModel.deleteTask(taskData.id(), taskData.phaseId(), taskData.storyId());
                                     })
-                                    .fail(function (jqxhr, textStatus, error) {
+                                    .fail(function(jqxhr, textStatus, error) {
                                         handleAjaxError(jqxhr, textStatus, error);
                                     });
                                 } else {
@@ -371,13 +517,13 @@ jQuery(document).ready(function() {
                 {
                     label: "Close",
                     class: "pull-left",
-                    callback: function () {
+                    callback: function() {
                     }
                 },
                 {
                     label: "Save",
                     class: "btn-primary pull-right",
-                    callback: function () {
+                    callback: function() {
                         var form = jQuery('#formStoryEdit');
                         var formItems = form.serializeJSON();
 
@@ -387,12 +533,12 @@ jQuery(document).ready(function() {
                                 url: "/story/" + storyData.id(),
                                 data: formItems,
                                 dataType: 'json'
-                            }).done(function (/** models.story */story) {
+                            }).done(function(/** models.story */story) {
                                 // TODO: update model data
 
                                 jQuery('div.bootbox').modal('hide');
                             })
-                            .fail(function (jqxhr, textStatus, error) {
+                            .fail(function(jqxhr, textStatus, error) {
                                 handleAjaxError(jqxhr, textStatus, error);
                             });
                         }
@@ -403,7 +549,7 @@ jQuery(document).ready(function() {
                 {
                     label: "Delete",
                     class: "btn-danger pull-right",
-                    callback: function () {
+                    callback: function() {
                         bootbox.confirm(
                             "Are you sure of story delete?",
                             function(result) {
@@ -412,10 +558,10 @@ jQuery(document).ready(function() {
                                         type: "DELETE",
                                         url: "/story/" + storyData.id(),
                                         dataType: 'json'
-                                    }).done(function () {
+                                    }).done(function() {
                                             myViewModel.deleteStory(storyData.id());
                                         })
-                                        .fail(function (jqxhr, textStatus, error) {
+                                        .fail(function(jqxhr, textStatus, error) {
                                             handleAjaxError(jqxhr, textStatus, error);
                                         });
                                 } else {
@@ -436,235 +582,7 @@ jQuery(document).ready(function() {
         });
     });
 
-    /**
-     * Project phases edit
-     */
-    body.on('phasesEdit', function(event) {
-        var source = jQuery('#phases-form-edit').html();
-        var template = Handlebars.compile(source);
-        var templateData = {
-            project: ko.toJS(myViewModel.project()),
-            phases: ko.toJS(myViewModel.phases())
-        };
 
-        var modal = bootbox.dialog(
-            template(templateData),
-            [
-                {
-                    label: "Close",
-                    class: "pull-left",
-                    callback: function () {
-                    }
-                },
-                {
-                    label: "Save",
-                    class: "btn-primary pull-right",
-                    callback: function () {
-                        var errors = false;
-                        var lines = jQuery("#projectPhases", modal).find("tbody tr");
-
-                        lines.each(function(key) {
-                            var row = jQuery(this);
-                            var title = jQuery.trim(row.find('input[name="title[]"]').val());
-                            var tasks = parseInt(row.find('input[name="tasks[]"]').val(), 10);
-                            var phaseId = parseInt(row.find('input[name="id[]"]').val(), 10);
-
-                            if (title.length == 0) {
-                                row.addClass('error');
-                            } else {
-                                row.removeClass('error');
-
-                                var type = '';
-                                var url = '';
-
-                                var phaseData = {
-                                    title: title,
-                                    order: key,
-                                    tasks: isNaN(tasks) ? 0 : tasks,
-                                    projectId: ko.toJS(myViewModel.project().id())
-                                };
-
-                                if (isNaN(phaseId)) {
-                                    type = 'POST';
-                                    url = ''
-                                } else {
-                                    type = 'PUT';
-                                    url = phaseId;
-                                }
-
-                                jQuery.ajax({
-                                    type: type,
-                                    url: "/phase/" + url,
-                                    data: phaseData,
-                                    dataType: 'json'
-                                }).done(function (/** models.phase */phase) {
-                                    switch (type) {
-                                        case 'POST':
-                                            myViewModel.phases.push(new Phase(phase));
-
-                                            if (myViewModel.sprint()) {
-                                                // TODO: add phase story phases
-                                            }
-                                            break;
-                                        case 'PUT':
-                                            // TODO: update model data
-                                            break;
-                                    }
-                                })
-                                .fail(function (jqxhr, textStatus, error) {
-                                    errors = true;
-
-                                    handleAjaxError(jqxhr, textStatus, error);
-                                });
-                            }
-                        });
-
-                        return false;
-                    }
-                },
-                {
-                    label: "Add new phase",
-                    class: "pull-right",
-                    callback: function () {
-                        var newRow = jQuery('#projectPhasesNew', modal).find('tr').clone();
-                        var slider = newRow.find('.slider');
-                        var input = slider.next('input');
-                        var currentValue = parseInt(input.val(), 10);
-                        var cellValue = slider.parent().next('td');
-
-                        cellValue.html('unlimited');
-
-                        slider.slider({
-                            min: 0,
-                            max: 10,
-                            value: 0,
-                            slide: function(event, ui) {
-                                if (isNaN(ui.value) || ui.value === 0) {
-                                    cellValue.html('unlimited');
-                                } else {
-                                    cellValue.html(ui.value);
-                                }
-
-                                input.val(ui.value);
-                            }
-                        });
-
-                        jQuery('#projectPhases', modal).find('tbody').append(newRow);
-
-                        return false;
-                    }
-                }
-            ],
-            {
-                header: "Phases for project '" + ko.toJS(myViewModel.project().title()) +"'"
-            }
-        );
-
-        modal.on('shown', function() {
-            jQuery.each(jQuery('#projectPhases', modal).find('.slider'), function() {
-                var slider = jQuery(this);
-                var input = slider.next('input');
-                var currentValue = parseInt(input.val(), 10);
-                var cellValue = slider.parent().next('td');
-
-                if (isNaN(currentValue) || currentValue === 0) {
-                    cellValue.html('unlimited');
-                } else {
-                    cellValue.html(currentValue);
-                }
-
-                slider.slider({
-                    min: 0,
-                    max: 10,
-                    value: currentValue,
-                    slide: function(event, ui) {
-                        if (isNaN(ui.value) || ui.value === 0) {
-                            cellValue.html('unlimited');
-                        } else {
-                            cellValue.html(ui.value);
-                        }
-
-                        input.val(ui.value);
-                    }
-                });
-            });
-
-            var fixHelper = function(e, ui) {
-                ui.children().each(function() {
-                    jQuery(this).width(jQuery(this).width());
-                });
-
-                return ui;
-            };
-
-            var sortable = jQuery("#projectPhases").find("tbody");
-
-            sortable.sortable({
-                helper: fixHelper,
-                axis: 'y',
-                cursor: 'move',
-                stop: function (event, ui) {
-                    jQuery.each(sortable.find('tr'), function(key) {
-                        var row = jQuery(this);
-                        var phaseId = row.data('phaseId');
-
-                        row.find('input[name="order['+ phaseId +']"]').val(key);
-                    });
-                }
-            }).disableSelection();
-        });
-
-        modal.on('click', '.phaseDelete', function() {
-            var row = jQuery(this).closest('tr');
-            var phaseId = parseInt(row.data('phaseId'), 10);
-
-            // Not a "real" phase, so just remove whole row
-            if (isNaN(phaseId)) {
-                row.remove();
-            } else { // Otherwise we have a real phase
-                // Specify parameters to fetch phase task data
-                var parameters = {
-                    phaseId: phaseId
-                };
-
-                // Fetch project sprint data
-                jQuery.getJSON("/task/", parameters)
-                    .done(function(/** models.task[] */tasks) {
-                        // Phase doesn't contain any tasks so delete is possible
-                        if (tasks.length === 0) {
-                            modal.modal('hide');
-
-                            bootbox.confirm(
-                                "Are you sure of phase delete?",
-                                function(result) {
-                                    if (result) {
-                                        jQuery.ajax({
-                                            type: "DELETE",
-                                            url: "/phase/" + phaseId,
-                                            dataType: 'json'
-                                        }).done(function () {
-                                            myViewModel.deletePhase(phaseId);
-
-                                            body.trigger('phasesEdit');
-                                        })
-                                        .fail(function (jqxhr, textStatus, error) {
-                                            handleAjaxError(jqxhr, textStatus, error);
-                                        });
-                                    } else {
-                                        body.trigger('phasesEdit');
-                                    }
-                                }
-                            );
-                        } else {
-                            makeMessage("Cannot delete phase, because it contains tasks.", "error", {});
-                        }
-                    })
-                    .fail(function(jqxhr, textStatus, error) {
-                        handleAjaxError(jqxhr, textStatus, error);
-                    });
-            }
-        });
-    });
 
 
 
@@ -690,13 +608,13 @@ jQuery(document).ready(function() {
                 {
                     label: "Close",
                     class: "pull-left",
-                    callback: function () {
+                    callback: function() {
                     }
                 },
                 {
                     label: "Save",
                     class: "btn-primary pull-right",
-                    callback: function () {
+                    callback: function() {
                         var form = jQuery('#formSprintNew');
                         var formItems = form.serializeJSON();
 
@@ -708,7 +626,7 @@ jQuery(document).ready(function() {
                                 data: formItems,
                                 dataType: 'json'
                             })
-                            .done(function (/** models.sprint */sprint) {
+                            .done(function(/** models.sprint */sprint) {
                                 // Add inserted sprint to knockout model data
                                 myViewModel.sprints.push(new Sprint(sprint));
 
@@ -718,7 +636,7 @@ jQuery(document).ready(function() {
                                 // Remove modal
                                 modal.modal('hide');
                             })
-                            .fail(function (jqXhr, textStatus, error) {
+                            .fail(function(jqXhr, textStatus, error) {
                                 handleAjaxError(jqXhr, textStatus, error);
                             });
                         }

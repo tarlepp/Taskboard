@@ -399,6 +399,122 @@ function initProjectBacklog(modal) {
     });
 }
 
+function initProjectPhases(modal) {
+    // Initialize jQuery UI sliders for phase task count
+    jQuery.each(jQuery('#projectPhases', modal).find('.slider'), function() {
+        var slider = jQuery(this);
+        var input = slider.next('input');
+        var currentValue = parseInt(input.val(), 10);
+        var cellValue = slider.parent().next('td');
+
+        if (isNaN(currentValue) || currentValue === 0) {
+            cellValue.html('unlimited');
+        } else {
+            cellValue.html(currentValue);
+        }
+
+        slider.slider({
+            min: 0,
+            max: 10,
+            value: currentValue,
+            slide: function(event, ui) {
+                if (isNaN(ui.value) || ui.value === 0) {
+                    cellValue.html('unlimited');
+                } else {
+                    cellValue.html(ui.value);
+                }
+
+                input.val(ui.value);
+            }
+        });
+    });
+
+    // Fix for jQuery UI sortable helper
+    var fixHelper = function(e, ui) {
+        ui.children().each(function() {
+            jQuery(this).width(jQuery(this).width());
+        });
+
+        return ui;
+    };
+
+    var sortable = jQuery("#projectPhases").find("tbody");
+
+    sortable.sortable({
+        helper: fixHelper,
+        axis: 'y',
+        cursor: 'move',
+        stop: function(event, ui) {
+            // Update order data
+            jQuery.each(sortable.find('tr'), function(key) {
+                var row = jQuery(this);
+                var phaseId = row.data('phaseId');
+
+                row.find('input[name="order['+ phaseId +']"]').val(key);
+            });
+        }
+    })
+    .disableSelection();
+
+    // Phase delete
+    modal.on('click', '.phaseDelete', function() {
+        var row = jQuery(this).closest('tr');
+        var phaseId = parseInt(row.data('phaseId'), 10);
+
+        // Not a "real" phase (row is not yet saved), so just remove whole row
+        if (isNaN(phaseId)) {
+            row.remove();
+        } else { // Otherwise we have a real phase
+            // Specify parameters to fetch phase task data
+            var parameters = {
+                phaseId: phaseId
+            };
+
+            // Fetch tasks for current phase
+            jQuery.getJSON("/task/", parameters)
+            .done(function(/** models.task[] */tasks) {
+                var body = jQuery('body');
+
+                // Phase doesn't contain any tasks so delete is possible
+                if (tasks.length === 0) {
+                    modal.modal('hide');
+
+                    // Show confirm modal to user
+                    bootbox.confirm(
+                        "Are you sure of phase delete?",
+                        function(result) {
+                            if (result) {
+                                jQuery.ajax({
+                                    type: "DELETE",
+                                    url: "/phase/" + phaseId,
+                                    dataType: 'json'
+                                })
+                                .done(function() {
+                                    makeMessage("Phase deleted successfully.", "success", {});
+
+                                    myViewModel.deletePhase(phaseId);
+
+                                    body.trigger('phasesEdit');
+                                })
+                                .fail(function(jqXhr, textStatus, error) {
+                                    handleAjaxError(jqXhr, textStatus, error);
+                                });
+                            } else {
+                                body.trigger('phasesEdit');
+                            }
+                        }
+                    );
+                } else {
+                    makeMessage("Cannot delete phase, because it contains tasks.", "error", {});
+                }
+            })
+            .fail(function(jqXhr, textStatus, error) {
+                handleAjaxError(jqXhr, textStatus, error);
+            });
+        }
+    });
+}
+
 /**
  * Function initializes sprint add/edit form to use. Note that form is
  * located in modal content.
