@@ -8,7 +8,7 @@
         "grunt": "0.4.1",
         "sails-disk": "~0.9.0",
         "optimist": "0.3.4",
-        "handlebars": "~1.0.12"
+        "ejs": "0.8.4"
     },
     "scripts": {
         "start": "node app.js",

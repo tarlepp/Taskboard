@@ -60,7 +60,7 @@ module.exports = function (grunt) {
         'linker/js/app.js',
 
         // Taskboard specified vendor dependencies
-        'linker/vendor/date.format',
+        'linker/vendor/date.format.js',
         'linker/vendor/jquery-2.0.3.min.js',
         'linker/vendor/jquery.autosize.js',
         'linker/vendor/jQuery-noty/jquery.noty.js',
@@ -71,8 +71,6 @@ module.exports = function (grunt) {
         'linker/vendor/bootstrap-datepicker/bootstrap-datepicker.js',
         'linker/vendor/twitter-bootstrap-hover-dropdown.js',
         'linker/vendor/bootbox.js',
-        'linker/vendor/handlebars.js',
-        'linker/vendor/handlebars-helpers.js',
         'linker/vendor/Knockout/knockout-2.2.1.js',
         'linker/vendor/knockout-bootstrap.min.js',
         'linker/vendor/knockout-sortable.js',
