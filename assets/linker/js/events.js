@@ -435,6 +435,66 @@ jQuery(document).ready(function() {
         });
     });
 
+    body.on('sprintEdit', function() {
+        // TODO: implement later
+    });
+
+    /**
+     * User story add event, this opens a modal bootbox dialog with user story add
+     * form on it.
+     *
+     * Note that this events requires projectId and sprintId parameters.
+     */
+    body.on('storyAdd', function(event, projectId, sprintId) {
+        jQuery.get('/Story/add', {projectId: projectId, sprintId: sprintId}, function(content) {
+            var title = "Add new user story";
+            var buttons = [
+                {
+                    label: "Save",
+                    class: "btn-primary pull-right",
+                    callback: function() {
+                        var form = jQuery('#formStoryNew');
+                        var formItems = form.serializeJSON();
+
+                        // Validate form and try to create new user story
+                        if (validateForm(formItems)) {
+                            jQuery.ajax({
+                                type: 'POST',
+                                url: "/Story/",
+                                data: formItems,
+                                dataType: 'json'
+                            })
+                            .done(function(/** models.rest.story */story) {
+                                makeMessage("User story created successfully.", "success", {});
+
+                                // Add created story to knockout model data.
+                                myViewModel.stories.push(new Story(story));
+
+                                modal.modal('hide');
+                            })
+                            .fail(function(jqXhr, textStatus, error) {
+                                handleAjaxError(jqXhr, textStatus, error);
+                            });
+                        }
+
+                        return false;
+                    }
+                }
+            ];
+
+            // Open bootbox modal
+            var modal = openBootboxDialog(title, content, buttons);
+
+            // Make form init when dialog is opened.
+            modal.on('shown', function() {
+                initStoryForm(modal, false);
+            });
+        })
+        .fail(function(jqXhr, textStatus, error) {
+            handleAjaxError(jqXhr, textStatus, error);
+        });
+    });
+
 
     /**
      * Below is code that needs refactoring...

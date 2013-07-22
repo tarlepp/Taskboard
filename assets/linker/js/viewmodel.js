@@ -295,8 +295,6 @@ function ViewModel() {
 
     /**
      * Method to trigger new project adding dialog.
-     *
-     * @todo    Move actual functionality to events.js / forms.js
      */
     self.addNewProject = function() {
         jQuery('body').trigger('projectAdd');
@@ -309,60 +307,7 @@ function ViewModel() {
      * @param   {Number}    sprintId    Sprint ID
      */
     self.addNewStory = function(projectId, sprintId) {
-        var source = jQuery('#story-form-new').html();
-        var template = Handlebars.compile(source);
-        var templateData = {
-            projectId: projectId,
-            sprintId: sprintId,
-            project: ko.toJS(self.project),
-            sprint: ko.toJS(self.sprint)
-        };
-
-        var modal = bootbox.dialog(
-            template(templateData),
-            [
-                {
-                    label: "Close",
-                    class: "pull-left",
-                    callback: function () {
-                    }
-                },
-                {
-                    label: "Save",
-                    class: "btn-primary pull-right",
-                    callback: function () {
-                        var form = jQuery('#formStoryNew');
-                        var formItems = form.serializeJSON();
-
-                        if (validateForm(formItems)) {
-                            jQuery.ajax({
-                                type: 'POST',
-                                url: "/story/",
-                                data: formItems,
-                                dataType: 'json'
-                            })
-                            .done(function (/** models.rest.story */story) {
-                                self.stories.push(new Story(story));
-
-                                modal.modal('hide');
-                            })
-                            .fail(function (jqXhr, textStatus, error) {
-                                handleAjaxError(jqXhr, textStatus, error);
-                            });
-                        }
-
-                        return false;
-                    }
-                }
-            ],
-            {
-                header: "Add new story"
-            }
-        );
-
-        modal.on('shown', function() {
-            initStoryForm(modal, false);
-        });
+        jQuery('body').trigger('storyAdd', [projectId, sprintId]);
     };
 
     /**

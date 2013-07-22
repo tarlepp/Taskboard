@@ -1,17 +1,23 @@
 /**
  * StoryController
  *
- * @module		:: Controller
- * @description	:: Contains logic for handling requests.
+ * @module      ::  Controller
+ * @description ::  Contains logic for handling requests.
  */
 
 module.exports = {
+    add: function(req, res) {
+        if (!req.isAjax) {
+            res.send('Only AJAX request allowed', 403);
+        }
 
-  /* e.g.
-  sayHello: function (req, res) {
-    res.send('hello world!');
-  }
-  */
-  
+        var projectId = parseInt(req.param('projectId'), 10);
+        var sprintId = parseInt(req.param('sprintId'), 10);
 
+        return res.view({
+            layout: "layout_ajax",
+            projectId: projectId,
+            sprintId: sprintId
+        });
+    }
 };
