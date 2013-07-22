@@ -53,15 +53,6 @@ jQuery(document).ready(function() {
         return this[0].tagName == "INPUT" ? jQuery(this[0]).attr("type").toLowerCase() : this[0].tagName.toLowerCase();
     };
 
-    /**
-     * Handlebars helper for option lists.
-     *
-     * @returns {string}
-     */
-    Handlebars.registerHelper('ifItemSelected', function(current, selected) {
-        return (current === selected) ? 'selected="selected"' : '';
-    });
-
     var tooltips = jQuery('[rel=tooltip]');
 
     if (tooltips.length) {
