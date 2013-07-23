@@ -620,6 +620,21 @@ function initSprintForm(modal, edit) {
 }
 
 /**
+ * Function initializes task add/edit form to use. Note that form is
+ * located in modal content.
+ *
+ * @param   {jQuery}    modal   Current modal content
+ * @param   {Boolean}   edit    Are we editing existing task or not
+ */
+function initTaskForm(modal, edit) {
+    var inputTitle = jQuery('input[name="title"]', modal);
+
+    inputTitle.focus().val(inputTitle.val());
+
+    jQuery('textarea', modal).autosize();
+}
+
+/**
  * Method checks if given sprint date conflicts with existing project sprint durations.
  *
  * @param   {Date}      date        Date object to check

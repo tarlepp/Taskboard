@@ -12,18 +12,17 @@ module.exports = {
             required:   true
         },
         userId: {
-            type:       'integer',
-            required:   true
+            type:       'integer'
         },
         phaseId: {
             type:       'integer',
             required:   true,
-            default:    0
+            defaultsTo: 0
         },
         typeId: {
             type:       'integer',
             required:   true,
-            default:    1
+            defaultsTo: 1
         },
         title: {
             type:       'string',

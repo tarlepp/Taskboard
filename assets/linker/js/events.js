@@ -533,8 +533,8 @@ jQuery(document).ready(function() {
 
                                 modal.modal('hide');
                             })
-                            .fail(function(jqxhr, textStatus, error) {
-                                handleAjaxError(jqxhr, textStatus, error);
+                            .fail(function(jqXhr, textStatus, error) {
+                                handleAjaxError(jqXhr, textStatus, error);
                             });
                         }
 
@@ -560,8 +560,8 @@ jQuery(document).ready(function() {
                                         // Remove user story from knockout models.
                                         myViewModel.deleteStory(story.id());
                                     })
-                                    .fail(function(jqxhr, textStatus, error) {
-                                        handleAjaxError(jqxhr, textStatus, error);
+                                    .fail(function(jqXhr, textStatus, error) {
+                                        handleAjaxError(jqXhr, textStatus, error);
                                     });
                                 } else {
                                     body.trigger('storyEdit', [story]);
@@ -578,6 +578,62 @@ jQuery(document).ready(function() {
             // Make form init when dialog is opened.
             modal.on('shown', function() {
                 initStoryForm(modal, true);
+            });
+        })
+        .fail(function(jqXhr, textStatus, error) {
+            handleAjaxError(jqXhr, textStatus, error);
+        });
+    });
+
+    /**
+     * Task add event, this opens a modal bootbox dialog with task add
+     * form on it.
+     *
+     * Note that this event requires knockout story model in parameters.
+     */
+    body.on('taskAdd', function(event, story) {
+        jQuery.get('/Task/add', {projectId: story.projectId(), storyId: story.id()}, function(content) {
+            var title = "Add new task to story '" + ko.toJS(story.title()) + "'";
+            var buttons = [
+                {
+                    label: "Save",
+                    class: "btn-primary pull-right",
+                    callback: function () {
+                        var form = jQuery('#formTaskNew');
+                        var formItems = form.serializeJSON();
+
+                        // Validate current form items and try to create new task
+                        if (validateForm(formItems)) {
+                            jQuery.ajax({
+                                type: 'POST',
+                                url: "/task/",
+                                data: formItems,
+                                dataType: 'json'
+                            })
+                            .done(function(/** models.rest.task */task) {
+                                makeMessage("Task created successfully.", "success", {});
+
+                                // Add new task to current story first phase tasks
+                                story.phases()[0].tasks.push(new Task(task));
+
+                                modal.modal('hide');
+                            })
+                            .fail(function(jqXhr, textStatus, error) {
+                                handleAjaxError(jqXhr, textStatus, error);
+                            });
+                        }
+
+                        return false;
+                    }
+                }
+            ];
+
+            // Open bootbox modal
+            var modal = openBootboxDialog(title, content, buttons);
+
+            // Make form init when dialog is opened.
+            modal.on('shown', function() {
+                initTaskForm(modal, false);
             });
         })
         .fail(function(jqXhr, textStatus, error) {

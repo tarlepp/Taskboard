@@ -208,6 +208,8 @@ function Story(data) {
 
     // Initialize object data
     self.id             = ko.observable(data.id);
+    self.projectId      = ko.observable(data.projectId);
+    self.sprintId       = ko.observable(data.sprintId);
     self.title          = ko.observable(data.title);
     self.description    = ko.observable(data.description);
     self.estimate       = ko.observable(data.estimate);
@@ -256,68 +258,11 @@ function Story(data) {
     /**
      * Method triggers add a new task for current story.
      *
-     * @todo    refactor actual functionality to event.js / forms.js
-     *
      * @param   {models.knockout.story} data    Current story knockout model object
      * @param   {jQuery}                event   Event data
      */
     self.addNewTask = function(data, event) {
-        var source = jQuery('#task-form-new').html();
-        var template = Handlebars.compile(source);
-        var templateData = {
-            storyId: ko.toJS(data.id()),
-            phaseId: ko.toJS(myViewModel.phases()[0].id()),
-            users: ko.toJS(myViewModel.users()),
-            types: ko.toJS(myViewModel.types())
-        };
-
-        var modal = bootbox.dialog(
-            template(templateData),
-            [
-                {
-                    label: "Close",
-                    class: "pull-left",
-                    callback: function () {
-                    }
-                },
-                {
-                    label: "Save",
-                    class: "btn-primary pull-right",
-                    callback: function () {
-                        var form = jQuery('#formTaskNew');
-                        var formItems = form.serializeJSON();
-
-                        if (validateForm(formItems)) {
-                            // Make POST query to server
-                            jQuery.ajax({
-                                type: 'POST',
-                                url: "/task/",
-                                data: formItems,
-                                dataType: 'json'
-                            })
-                            .done(function (/** models.rest.task */task) {
-                                self.phases()[0].tasks.push(new Task(task));
-
-                                modal.modal('hide');
-                            })
-                            .fail(function (jqXhr, textStatus, error) {
-                                handleAjaxError(jqXhr, textStatus, error);
-                            });
-                        }
-
-                        return false;
-                    }
-                }
-            ],
-            {
-                header: "Add new task to story '" + ko.toJS(data.title()) + "'"
-            }
-        );
-
-        modal.on('shown', function() {
-            jQuery('input[name="title"]', modal).focus();
-            jQuery('textarea', modal).autosize();
-        });
+        jQuery('body').trigger('taskAdd', [data]);
     };
 }
 
