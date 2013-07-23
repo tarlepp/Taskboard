@@ -1,5 +1,5 @@
 body {
-    font-family: 'Lato', sans-serif;
+    font-family: 'Roboto', sans-serif;
     background-image: url('/images/background-body.png');
     cursor: default;
 }
@@ -15,7 +15,7 @@ a:focus,
 }
 
 .navbar .brand {
-    padding: 10px 20px;
+    padding: 8px 15px 10px 25px;
     color: #000;
 }
 
@@ -347,15 +347,10 @@ form .required label:after {
 }
 
 .modal.fade {
-    top: 20%;
     -webkit-transition: opacity 0.3s linear;
     -moz-transition: opacity 0.3s linear;
     -o-transition: opacity 0.3s linear;
     transition: opacity 0.3s linear;
-}
-
-.modal.fade.in {
-    top: 20%;
 }
 
 li#functionHelp {
