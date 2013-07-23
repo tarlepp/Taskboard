@@ -380,31 +380,115 @@ function initProjectBacklog(modal) {
     });
 
     jQuery('#backlogAccordion', modal)
-        .collapse()
-        .on('hidden', function(event) {
-            event.stopPropagation();
-        })
-        .on('show', function(event) {
-            jQuery(this).css('overflow', 'visible');
-        })
-        .on('hidden shown', function() {
-
-            jQuery(this).find('.collapse').each(function() {
-                if (this.id) {
-                    document.cookie = this.id + "_collapse_in=" + jQuery(this).hasClass('in');
-                }
-            });
+    .collapse()
+    .on('hidden', function(event) {
+        event.stopPropagation();
+    })
+    .on('show', function() {
+        jQuery(this).css('overflow', 'visible');
+    })
+    .on('hidden shown', function() {
+        jQuery(this).find('.collapse').each(function() {
+            if (this.id) {
+                document.cookie = this.id + "_collapse_in=" + jQuery(this).hasClass('in');
+            }
         });
+    });
 
-    jQuery('.nav-stacked', modal).sortable({
-        connectWith: '.nav-stacked',
+    jQuery('.sortable', modal).sortable({
+        connectWith: '.sortable',
         zIndex:'5000',
         helper: 'clone',
         cursor: 'move',
-        appendTo: 'body'
+        appendTo: 'body',
+        stop: function(event, ui) {
+            var list = ui.item.closest('ul');
+            var sprintId = parseInt(list.data('sprintId'));
+            var items = list.find('li');
+            var models = [];
+
+            // Iterate current list data
+            jQuery.each(items, function(key, item) {
+                var storyId = jQuery(item).data('storyId');
+
+                // Update user story priority and sprint id data
+                jQuery.ajax({
+                    type: 'PUT',
+                    url: "/Story/" + storyId,
+                    data: {
+                        priority: key,
+                        sprintId: sprintId
+                    },
+                    dataType: 'json'
+                })
+                .done(function(/** models.rest.story */story) {
+                    models.push(new Story(story));
+
+                    checkData();
+                })
+                .fail(function(jqXhr, textStatus, error) {
+                    handleAjaxError(jqXhr, textStatus, error);
+                });
+            });
+
+            /**
+             * This function updates actual knockout data models after all
+             * story updates are done to the server successfully.
+             *
+             * Note that sprint must be selected otherwise there is no need
+             * to update knockout model data.
+             */
+            function checkData() {
+                // Check that all is fine
+                if (models.length === items.length && myViewModel.sprint()) {
+                    var currentSprintId = ko.toJS(ko.toJS(myViewModel.sprint().id()));
+
+                    // Iterate updated models
+                    jQuery.each(models, function(keyData, storyData) {
+                        var dataId = ko.toJS(storyData.id());
+                        var dataSprintId = ko.toJS(storyData.sprintId());
+                        var founded = false;
+
+                        // Iterate current stories
+                        jQuery.each(myViewModel.stories(), function(keyModel, storyModel) {
+                            if (storyModel) {
+                                var modelId = ko.toJS(storyModel.id());
+                                var modelSprintId = ko.toJS(storyModel.sprintId());
+
+                                // We founded story in current sprint stories
+                                if (dataId === modelId) {
+                                    founded = true;
+
+                                    // User has only change story priorities, update current story model
+                                    if (dataSprintId === modelSprintId) {
+                                        myViewModel.stories.replace(storyModel, storyData);
+                                    } else { // Otherwise remove current story model
+                                        myViewModel.stories.remove(storyModel);
+                                    }
+                                }
+                            }
+                        });
+
+                        // We haven't founded story and it's belongs to current sprint
+                        if (founded === false && dataSprintId === currentSprintId) {
+                            myViewModel.stories.push(storyData);
+                        }
+                    });
+
+                    makeMessage("User stories priorities changed successfully.", "success", {});
+                } else if (models.length === items.length) {
+                    makeMessage("User stories priorities changed successfully.", "success", {});
+                }
+            }
+        }
     });
 }
 
+/**
+ * Function initializes project phases admin modal content.
+ *
+ * @param   {jQuery}    modal   Current modal content
+ */
 function initProjectPhases(modal) {
     // Initialize jQuery UI sliders for phase task count
     jQuery.each(jQuery('#projectPhases', modal).find('.slider'), function() {

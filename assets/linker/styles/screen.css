@@ -446,6 +446,7 @@ table input[type="text"] {
 
 .modal-body {
     padding: 15px;
+    overflow-y: auto;
 }
 
 .modal-body form {
@@ -510,18 +511,21 @@ form fieldset {
 
 #backlogAccordion .accordion-inner {
     padding: 6px 5px;
-    background-color: rgba(217,237,247, 0.2);
 }
 
 #backlogAccordion .accordion-inner ul {
     margin-bottom: 0;
     background-color: #ffffff;
+    min-height: 30px;
 }
 
-.backlog .nav-tabs > li > a,
 #backlogAccordion .accordion-heading .accordion-toggle {
     padding: 5px 8px;
+    font-size: 16px;
+    font-variant: small-caps;
 }
+
+
 
 a:hover,
 a:focus {
@@ -534,16 +538,36 @@ a:focus {
 
 li.ui-sortable-helper {
     list-style-type: none;
+    border: 1px solid #dddddd;
+    background-color: #eeeeee;
+    padding: 3px 5px 3px 10px;
+}
+
+.backlog ul {
+    list-style-type: none;
     margin: 0;
     padding: 0;
+    min-height: 30px;
+}
+
+.backlog ul li {
     border: 1px solid #dddddd;
+    padding: 3px 5px 3px 10px;
+    background-color: #F7FBFD;
+    font-size: 12px;
+}
+
+.backlog ul li:hover {
     background-color: #eeeeee;
 }
 
-.ui-sortable-helper a {
-    margin: 0;
-    padding: 0;
-    position: relative;
-    top: 5px;
-    left: 8px;
+.backlog ul li:first-of-type {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.backlog ul li:last-of-type {
+    border-bottom: 1px solid #dddddd;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }

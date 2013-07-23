@@ -212,24 +212,15 @@ jQuery(document).ready(function() {
      */
     body.on('projectBacklog', function() {
         jQuery.get('/Project/backlog', {id: ko.toJS(myViewModel.project().id())}, function(content) {
-            var title = 'Edit project';
+            var title = 'Project backlog';
             var buttons = [
                 {
-                    label: "Save",
+                    label: "Add new story",
                     class: "btn-primary pull-right",
                     callback: function() {
-                        // TODO implement this
-                        console.log('save backlog order');
+                        modal.modal('hide');
 
-                        return false;
-                    }
-                },
-                {
-                    label: "Add new story",
-                    class: "pull-right",
-                    callback: function() {
-                        // TODO implement this
-                        console.log('open story add dialog');
+                        jQuery('body').trigger('storyAdd', [myViewModel.project().id(), 0, 'projectBacklog']);
 
                         return false;
                     }
@@ -543,7 +534,9 @@ jQuery(document).ready(function() {
      *
      * Note that this events requires projectId and sprintId parameters.
      */
-    body.on('storyAdd', function(event, projectId, sprintId) {
+    body.on('storyAdd', function(event, projectId, sprintId, trigger) {
+        trigger = trigger || false;
+
         jQuery.get('/Story/add', {projectId: projectId, sprintId: sprintId}, function(content) {
             var title = "Add new user story";
             var buttons = [
@@ -565,10 +558,16 @@ jQuery(document).ready(function() {
                             .done(function(/** models.rest.story */story) {
                                 makeMessage("User story created successfully.", "success", {});
 
-                                // Add created story to knockout model data.
-                                myViewModel.stories.push(new Story(story));
+                                if (myViewModel.sprint()) {
+                                    // Add created story to knockout model data.
+                                    myViewModel.stories.push(new Story(story));
+                                }
 
                                 modal.modal('hide');
+
+                                if (trigger) {
+                                    body.trigger(trigger)
+                                }
                             })
                             .fail(function(jqXhr, textStatus, error) {
                                 handleAjaxError(jqXhr, textStatus, error);
@@ -581,7 +580,7 @@ jQuery(document).ready(function() {
             ];
 
             // Open bootbox modal
-            var modal = openBootboxDialog(title, content, buttons);
+            var modal = openBootboxDialog(title, content, buttons, trigger);
 
             // Make form init when dialog is opened.
             modal.on('shown', function() {

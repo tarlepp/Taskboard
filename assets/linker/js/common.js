@@ -70,14 +70,12 @@ jQuery(document).ready(function() {
 function handleAjaxError(jqXhr, textStatus, error) {
     var message = '';
     var errorMessage = '';
-    var errorTrace = '';
 
     try {
         var errorInfo = jQuery.parseJSON(jqXhr.responseText);
 
         if (errorInfo.errors[0]) {
             errorMessage = errorInfo.errors[0].message;
-            errorTrace = errorInfo.errors[0].stack;
         }
     } catch (exception) {
         errorMessage = jqXhr.responseText;
@@ -138,16 +136,22 @@ function dispatch(fn, args) {
  * @param   {string}            title   Modal title
  * @param   {string}            content Modal content as html
  * @param   {object|array|null} buttons Button(s) to add dialog
+ * @param   {undefined|string}  trigger Possible body trigger event on close
  * @returns {*}
  */
-function openBootboxDialog(title, content, buttons) {
+function openBootboxDialog(title, content, buttons, trigger) {
+    trigger = trigger || false;
+
     var buttonsToShow = [];
 
     // Every dialog has close button.
     buttonsToShow.push({
         label: "Close",
         class: "pull-left",
-        callback: function () {
+        callback: function() {
+            if (trigger) {
+                jQuery('body').trigger(trigger);
+            }
         }
     });
 
@@ -161,13 +165,17 @@ function openBootboxDialog(title, content, buttons) {
     }
 
     // Return bootbox dialog
-    return bootbox.dialog(
+    var modal = bootbox.dialog(
         content,
         buttonsToShow,
         {
             header: title
         }
     );
+
+    modal.removeClass('fade');
+
+    return modal;
 }
 
 Array.prototype.unique = function(a) {
