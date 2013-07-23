@@ -16,6 +16,12 @@ function validateForm(items) {
     var errors = [];
     var required = [];
 
+    if (jQuery.isEmptyObject(items)) {
+        valid = false;
+
+        errors.push("No form items to validate.");
+    }
+
     // Iterate each form item
     jQuery.each(items, function(key, item) {
         var input = jQuery('#' + key);
@@ -540,6 +546,8 @@ function initSprintForm(modal, edit) {
     var dateMin = myViewModel.project().dateStartObject();
     var dateMax = myViewModel.project().dateEndObject();
 
+    var sprintId = edit ? ko.toJS(myViewModel.sprint().id()) : 0;
+
     if (bitsStart.length === 3) {
         valueStart = new Date(bitsStart[0], bitsStart[1] - 1, bitsStart[2], 3, 0, 0);
     }
@@ -575,7 +583,7 @@ function initSprintForm(modal, edit) {
             makeMessage('Start date conflicts with project duration. Start date must be between ' + dateMin.format('yyyy-mm-dd') + ' and ' + dateMax.format('yyyy-mm-dd')  + '.', 'error', {});
 
             containerStart.closest('.control-group').addClass('error');
-        } else if (checkSprintDates(event.date, 1, 0, true) !== true) {
+        } else if (checkSprintDates(event.date, 1, sprintId, true) !== true) {
             containerStart.closest('.control-group').addClass('error');
         } else {
             valueStart = new Date(event.date);
@@ -608,7 +616,7 @@ function initSprintForm(modal, edit) {
             makeMessage('End date conflicts with project duration. End date must be between ' + dateMin.format('yyyy-mm-dd') + ' and ' + dateMax.format('yyyy-mm-dd')  + '.', 'error', {});
 
             containerStart.closest('.control-group').addClass('error');
-        } else if (checkSprintDates(event.date, 1, 0, true) !== true) {
+        } else if (checkSprintDates(event.date, 1, sprintId, true) !== true) {
             containerStart.closest('.control-group').addClass('error');
         } else {
             valueEnd = new Date(event.date);

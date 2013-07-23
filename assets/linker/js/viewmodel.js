@@ -398,8 +398,11 @@ function ViewModel() {
         jQuery('body').trigger('sprintAdd');
     };
 
+    /**
+     * Method opens sprint edit
+     */
     self.sprintEdit = function() {
-        console.log('Implement sprint edit');
+        jQuery('body').trigger('sprintEdit');
     };
 
     self.sprintDelete = function() {

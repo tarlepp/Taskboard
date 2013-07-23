@@ -56,21 +56,21 @@ jQuery(document).ready(function() {
     });
 
     // Task open event
-    body.on('dblclick', '.task', function(event) {
+    body.on('dblclick', '.task', function() {
         var data = ko.dataFor(this);
 
         body.trigger('taskEdit', [data]);
     });
 
     // Story open event
-    body.on('dblclick', '.story', function(event) {
+    body.on('dblclick', '.story', function() {
         var data = ko.dataFor(this);
 
         body.trigger('storyEdit', [data]);
     });
 
     // Help click event
-    jQuery('#functionHelp').on('click', 'a', function(event) {
+    jQuery('#functionHelp').on('click', 'a', function() {
         var title = "Generic help";
         var content = "TODO: try to use sails client side templates...";
 
@@ -464,8 +464,77 @@ jQuery(document).ready(function() {
         });
     });
 
+    /**
+     * This event handles sprint edit functionality. Basically event triggers
+     * modal dialog for editing currently selected sprint, form validation and
+     * actual PUT query to server after form data is validated.
+     *
+     * After PUT query knockout data is updated.
+     */
     body.on('sprintEdit', function() {
-        // TODO: implement later
+        var sprintId = myViewModel.sprint().id();
+
+        jQuery.get('/Sprint/edit', {id: sprintId}, function(content) {
+            var title = "Edit sprint";
+            var buttons = [
+                {
+                    label: "Save",
+                    class: "btn-primary pull-right",
+                    callback: function() {
+                        var form = jQuery('#formSprintEdit');
+                        var formItems = form.serializeJSON();
+
+                        // Validate form and try to create new sprint
+                        if (validateForm(formItems)) {
+                            // Make POST query to server
+                            jQuery.ajax({
+                                type: 'PUT',
+                                url: "/sprint/" + sprintId,
+                                data: formItems,
+                                dataType: 'json'
+                            })
+                            .done(function(/** models.rest.sprint */sprint) {
+                                makeMessage('Sprint saved successfully.', 'success', {});
+
+                                var sprintObject = new Sprint(sprint);
+
+                                // Update knockout sprint data array
+                                jQuery.each(myViewModel.sprints(), function(key, sprint){
+                                    if (sprint.id() === sprintId) {
+                                        myViewModel.sprints.replace(sprint, sprintObject);
+                                    }
+                                });
+
+                                // Update currently selected sprint
+                                myViewModel.sprint(sprintObject);
+
+                                // Update current project sprint dates
+                                myViewModel.updateProjectSprintDates();
+
+                                // Remove modal
+                                modal.modal('hide');
+                            })
+                            .fail(function(jqXhr, textStatus, error) {
+                                handleAjaxError(jqXhr, textStatus, error);
+                            });
+                        }
+
+                        return false;
+                    }
+                }
+            ];
+
+            // Open bootbox modal
+            var modal = openBootboxDialog(title, content, buttons);
+
+            // Make form init when dialog is opened.
+            modal.on('shown', function() {
+                initSprintForm(modal, true);
+            });
+        })
+        .fail(function(jqXhr, textStatus, error) {
+            handleAjaxError(jqXhr, textStatus, error);
+        });
     });
 
     /**
