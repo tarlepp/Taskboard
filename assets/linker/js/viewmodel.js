@@ -284,7 +284,7 @@ function ViewModel() {
         });
     });
 
-    // Sorted story objects
+    // Sorted phases
     self.sortedPhases = ko.computed(function() {
         return self.phases().sort(function(a, b) {
             return a.order() > b.order() ? 1 : -1;
