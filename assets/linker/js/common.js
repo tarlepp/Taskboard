@@ -135,9 +135,9 @@ function dispatch(fn, args) {
 /**
  * Function opens a Bootbox modal dialog with specified title, content and buttons.
  *
- * @param   {string}        title
- * @param   {string}        content
- * @param   {object|array}  buttons
+ * @param   {string}            title   Modal title
+ * @param   {string}            content Modal content as html
+ * @param   {object|array|null} buttons Button(s) to add dialog
  * @returns {*}
  */
 function openBootboxDialog(title, content, buttons) {
@@ -156,7 +156,7 @@ function openBootboxDialog(title, content, buttons) {
         jQuery.each(buttons, function(index, button) {
             buttonsToShow.push(button);
         });
-    } else { // Just one button to add
+    } else if (buttons !== null) { // Just one button to add
         buttonsToShow.push(buttons);
     }
 
