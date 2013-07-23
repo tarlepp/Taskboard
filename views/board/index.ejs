@@ -69,7 +69,7 @@
                             'data-phase-title': title()
                         },
                         sortable: {
-                            template: 'task-template',
+                            template: taskTemplate,
                             data: tasks,
                             afterMove: myDropCallback,
                             connectClass: 'myClass',
@@ -87,7 +87,7 @@
 
     </div>
 
-    <script id="task-template" type="text/html">
+    <script id="task-template-normal" type="text/html">
         <div class="task sticky taped"
             data-bind="
                 attr: {
@@ -95,6 +95,23 @@
                 },
                 tooltip: {
                     title: $root.nl2br(description()),
+                    placement: 'bottom',
+                    html: true
+                },
+                css: taskClass()
+            ">
+            <h3 data-bind="text: title"></h3>
+        </div>
+    </script>
+
+    <script id="task-template-small" type="text/html">
+        <div class="task sticky taped small"
+             data-bind="
+                attr: {
+                    'id': 'task_' + id()
+                },
+                tooltip: {
+                    title: '<strong>' + title() + '</strong><br />' + $root.nl2br(description()),
                     placement: 'bottom',
                     html: true
                 },

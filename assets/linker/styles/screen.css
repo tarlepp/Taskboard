@@ -157,6 +157,14 @@ div.task h3 {
     color: rgba(51, 51, 51, 0.8);
 }
 
+div.task.small {
+    padding: 10px;
+}
+
+div.task.small h3 {
+    display: none;
+}
+
 div.story p,
 div.task p {
     font-weight: normal;
@@ -195,6 +203,13 @@ div.story p:last-of-type {
     -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
     -moz-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.small.taped:after {
+    height: 10px;
+    width: 16px;
+    margin-left: -8px;
+    top: -6px;
 }
 
 .story.taped:after {
