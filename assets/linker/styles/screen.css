@@ -255,11 +255,11 @@ div.story p:last-of-type {
 .table .task:hover,
 .table .task:focus {
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-    -webkit-transform: scale(1.20);
-    -moz-transform: scale(1.20);
-    -o-transform: scale(1.20);
-    position:relative;
-    z-index:5;
+    -webkit-transform: scale(1.15);
+    -moz-transform: scale(1.15);
+    -o-transform: scale(1.15);
+    position: relative;
+    z-index: 5;
 }
 
 .modal-header {
