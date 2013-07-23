@@ -286,14 +286,15 @@ jQuery(document).ready(function() {
                                 })
                                 .done(function(/** models.rest.phase */phase) {
                                     var phaseObject = new Phase(phase);
+                                    var phaseStoryObject = new PhaseStory(phase, []);
 
                                     switch (type) {
                                         case 'POST':
                                             myViewModel.phases.push(phaseObject);
 
-                                            if (myViewModel.sprint()) {
-                                                // TODO: add phase story phases
-                                            }
+                                            jQuery.each(myViewModel.stories(), function(key, story) {
+                                                story.phases.push(phaseStoryObject);
+                                            });
                                             break;
                                         case 'PUT':
                                             jQuery.each(myViewModel.phases(), function(key, phase) {
@@ -303,9 +304,14 @@ jQuery(document).ready(function() {
                                                 }
                                             });
 
-                                            if (myViewModel.sprint()) {
-                                                // TODO: update phase story phases
-                                            }
+                                            // In this we need just to update order information
+                                            jQuery.each(myViewModel.stories(), function(key, story) {
+                                                jQuery.each(story.phases(), function(phaseKey, phase) {
+                                                    if (ko.toJS(phase.id()) === phaseObject.id()) {
+                                                        phase.order(phaseObject.order());
+                                                    }
+                                                });
+                                            });
                                             break;
                                     }
                                 })

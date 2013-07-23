@@ -246,6 +246,13 @@ function Story(data) {
         self.phases(phases)
     });
 
+    // Sorted story objects
+    self.sortedPhases = ko.computed(function() {
+        return self.phases().sort(function(a, b) {
+            return a.order() > b.order() ? 1 : -1;
+        });
+    });
+
     // Formatted story title
     self.formattedTitle = ko.computed(function() {
         return self.title() + " (" + self.estimate() + ")";

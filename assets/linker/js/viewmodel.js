@@ -284,6 +284,13 @@ function ViewModel() {
         });
     });
 
+    // Sorted story objects
+    self.sortedPhases = ko.computed(function() {
+        return self.phases().sort(function(a, b) {
+            return a.order() > b.order() ? 1 : -1;
+        });
+    });
+
     /**
      * Getter for current sprint ID.
      *
