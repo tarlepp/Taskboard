@@ -55,6 +55,29 @@ jQuery(document).ready(function() {
         }
     });
 
+    // Task open event
+    body.on('dblclick', '.task', function(event) {
+        var data = ko.dataFor(this);
+
+        body.trigger('taskEdit', [data]);
+    });
+
+    // Story open event
+    body.on('dblclick', '.story', function(event) {
+        var data = ko.dataFor(this);
+
+        body.trigger('storyEdit', [data]);
+    });
+
+    // Help click event
+    jQuery('#functionHelp').on('click', 'a', function(event) {
+        var title = "Generic help";
+        var content = "TODO: try to use sails client side templates...";
+
+        // Open bootbox modal
+        var modal = openBootboxDialog(title, content, null);
+    });
+
     /**
      * Project add event, this opens a modal bootbox dialog with project add
      * form on it.
@@ -719,8 +742,8 @@ jQuery(document).ready(function() {
 
                                         myViewModel.deleteTask(task.id(), task.phaseId(), task.storyId());
                                     })
-                                    .fail(function(jqxhr, textStatus, error) {
-                                        handleAjaxError(jqxhr, textStatus, error);
+                                    .fail(function(jqXhr, textStatus, error) {
+                                        handleAjaxError(jqXhr, textStatus, error);
                                     });
                                 } else {
                                     body.trigger('taskEdit', [task]);
@@ -743,58 +766,4 @@ jQuery(document).ready(function() {
             handleAjaxError(jqXhr, textStatus, error);
         });
     });
-
-
-
-    /**
-     * Below is code that needs refactoring...
-     */
-
-
-
-    // Task open event
-    body.on('dblclick', '.task', function(event) {
-        var data = ko.dataFor(this);
-
-        body.trigger('taskEdit', [data]);
-    });
-
-    // Story open event
-    body.on('dblclick', '.story', function(event) {
-        var data = ko.dataFor(this);
-
-        body.trigger('storyEdit', [data]);
-    });
-
-    // Help click event
-    jQuery('#functionHelp').on('click', 'a', function(event) {
-        var source = jQuery('#help-generic').html();
-        var template = Handlebars.compile(source);
-        var templateData = {};
-
-        var modal = bootbox.dialog(
-            template(templateData),
-            [
-                {
-                    label: "Close",
-                    class: "pull-left",
-                    callback: function() {
-                    }
-                }
-            ],
-            {
-                header: "Generic help"
-            }
-        );
-    });
-
-
-
-
-
-
-
-
-
-
 });

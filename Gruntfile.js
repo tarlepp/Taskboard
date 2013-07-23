@@ -91,7 +91,7 @@ module.exports = function (grunt) {
      */
 
     var templateFilesToInject = [
-        'linker/templates/*.ejs'
+        'linker/templates/*.html'
     ];
 
 
