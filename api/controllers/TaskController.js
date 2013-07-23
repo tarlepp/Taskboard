@@ -74,5 +74,68 @@ module.exports = {
                 res.view(data);
             }
         }
+    },
+    edit: function(req, res) {
+        if (!req.isAjax) {
+            res.send('Only AJAX request allowed', 403);
+        }
+
+        var data = {
+            layout: "layout_ajax",
+            task: false,
+            types: false,
+            users: false
+        };
+
+        var taskId = parseInt(req.param('id'), 10);
+
+        Task.findOne(taskId)
+        .done(function(error, task) {
+            if (error) {
+                res.send(error, 500);
+            } else {
+                data.task = task;
+
+                makeView();
+            }
+        });
+
+        Type.find()
+        .sort('order ASC')
+        .done(function(error, types) {
+            if (error) {
+                res.send(error, 500);
+            } else {
+                data.types = types;
+
+                makeView();
+            }
+        });
+
+        User.find()
+        .sort('lastName ASC')
+        .done(function(error, users) {
+            if (error) {
+                res.send(error, 500);
+            } else {
+                data.users = users;
+
+                makeView();
+            }
+        });
+
+        function makeView() {
+            var ok = true;
+
+            jQuery.each(data, function(key, data) {
+                if (data === false) {
+                    ok = false;
+                }
+            });
+
+            if (ok) {
+                res.view(data);
+            }
+        }
     }
 };
