@@ -4,30 +4,41 @@
  * @module      ::  Controller
  * @description ::  Contains logic for handling requests.
  */
+var jQuery = require('jquery');
 
 module.exports = {
+    /**
+     * Project add action.
+     *
+     * @param req
+     * @param res
+     */
     add: function(req, res) {
         if (!req.isAjax) {
             res.send('Only AJAX request allowed', 403);
         }
 
-        User.find()
-        .sort('lastName ASC')
-        .done(function(error, users) {
-            if (error) {
-                res.send(error, 500);
-            } else {
-                makeView(users);
-            }
-        });
-
-        function makeView(users) {
-            return res.view({
-                layout: "layout_ajax",
-                users: users
+        // Fetch all users
+        User
+            .find()
+            .sort('lastName ASC')
+            .done(function(error, users) {
+                if (error) {
+                    res.send(error, 500);
+                } else {
+                    res.view({
+                        layout: "layout_ajax",
+                        users: users
+                    });
+                }
             });
-        }
     },
+    /**
+     * Project edit action.
+     *
+     * @param req
+     * @param res
+     */
     edit: function(req, res) {
         if (!req.isAjax) {
             res.send('Only AJAX request allowed', 403);
@@ -35,35 +46,66 @@ module.exports = {
 
         var projectId = parseInt(req.param('id'), 10);
 
-        Project.findOne(projectId)
-        .done(function(error, project) {
-            if (error) {
-                res.send(error, 500);
-            } else {
-                fetchUsers(project);
-            }
-        });
+        // Specify template data to use
+        var data = {
+            layout: "layout_ajax",
+            project: false,
+            users: false
+        };
 
-        function fetchUsers(project) {
-            User.find()
+        // Fetch project data.
+        Project
+            .findOne(projectId)
+            .done(function(error, project) {
+                if (error) {
+                    res.send(error, 500);
+                } else if (!project) {
+                    res.send("Project not found.", 404);
+                } else {
+                    data.project = project;
+
+                    makeView();
+                }
+            });
+
+        // Fetch all users
+        User
+            .find()
             .sort('lastName ASC')
             .done(function(error, users) {
                 if (error) {
                     res.send(error, 500);
                 } else {
-                    makeView(users, project);
+                    data.users = users;
+
+                    makeView();
                 }
             });
-        }
 
-        function makeView(users, project) {
-            return res.view({
-                layout: "layout_ajax",
-                users: users,
-                project: project
+        /**
+         * Function makes actual view if all necessary data is fetched
+         * from database for template.
+         */
+        function makeView() {
+            var ok = true;
+
+            jQuery.each(data, function(key, data) {
+                if (data === false) {
+                    ok = false;
+                }
             });
+
+            if (ok) {
+                res.view(data);
+            }
         }
     },
+    /**
+     * Project backlog action.
+     *
+     * @param req
+     * @param res
+     */
     backlog: function(req, res) {
         if (!req.isAjax) {
             res.send('Only AJAX request allowed', 403);
@@ -71,52 +113,79 @@ module.exports = {
 
         var projectId = parseInt(req.param('id'), 10);
 
-        Project.findOne(projectId)
-        .done(function(error, project) {
-            if (error) {
-                res.send(error, 500);
-            } else {
-                fetchStories(project);
-            }
-        });
+        // Specify template data to use
+        var data = {
+            layout: "layout_ajax",
+            project: false,
+            stories: false,
+            sprints: false
+        };
 
-        function fetchStories(project) {
-            Story.find()
+        // Fetch project data.
+        Project
+            .findOne(projectId)
+            .done(function(error, project) {
+                if (error) {
+                    res.send(error, 500);
+                } else if (!project) {
+                    res.send("Project not found.", 404);
+                } else {
+                    data.project = project;
+
+                    makeView();
+                }
+            });
+
+        // Fetch project stories
+        Story
+            .find()
             .where({
-                projectId: project.id
+                projectId: projectId
             })
             .sort('priority ASC')
             .done(function(error, stories) {
                 if (error) {
                     res.send(error, 500);
                 } else {
-                    fetchSprints(project, stories);
+                    data.stories = stories;
+
+                    makeView();
                 }
             });
-        }
 
-        function fetchSprints(project, stories) {
-            Sprint.find()
+        // Fetch project sprints
+        Sprint
+            .find()
             .where({
-                projectId: project.id
+                projectId: projectId
             })
             .sort('dateStart ASC')
             .done(function(error, sprints) {
                 if (error) {
                     res.send(error, 500);
                 } else {
-                    makeView(project, stories, sprints);
+                    data.sprints = sprints;
+
+                    makeView();
                 }
             });
-        }
 
-        function makeView(project, stories, sprints) {
-            return res.view({
-                layout: "layout_ajax",
-                project: project,
-                stories: stories,
-                sprints: sprints
+        /**
+         * Function makes actual view if all necessary data is fetched
+         * from database for template.
+         */
+        function makeView() {
+            var ok = true;
+
+            jQuery.each(data, function(key, data) {
+                if (data === false) {
+                    ok = false;
+                }
             });
+
+            if (ok) {
+                res.view(data);
+            }
         }
     }
 };
