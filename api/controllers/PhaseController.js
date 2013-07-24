@@ -53,7 +53,7 @@ module.exports = {
                 if (error) {
                     res.send(error, 500);
                 } else {
-                    data.project = phases;
+                    data.phases = phases;
 
                     makeView();
                 }
