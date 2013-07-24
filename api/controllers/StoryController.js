@@ -44,7 +44,7 @@ module.exports = {
             .done(function(error, story) {
                 if (error) {
                     res.send(error, 500);
-                } else if (!sprint) {
+                } else if (!story) {
                     res.send("Story not found.", 404);
                 } else {
                     res.view({
