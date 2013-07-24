@@ -10,8 +10,8 @@ module.exports = {
     /**
      * Project add action.
      *
-     * @param req
-     * @param res
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
      */
     add: function(req, res) {
         if (!req.isAjax) {
@@ -36,8 +36,8 @@ module.exports = {
     /**
      * Project edit action.
      *
-     * @param req
-     * @param res
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
      */
     edit: function(req, res) {
         if (!req.isAjax) {
@@ -103,8 +103,8 @@ module.exports = {
     /**
      * Project backlog action.
      *
-     * @param req
-     * @param res
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
      */
     backlog: function(req, res) {
         if (!req.isAjax) {

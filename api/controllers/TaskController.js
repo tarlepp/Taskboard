@@ -7,11 +7,18 @@
 var jQuery = require('jquery');
 
 module.exports = {
+    /**
+     * Task add action.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
     add: function(req, res) {
         if (!req.isAjax) {
             res.send('Only AJAX request allowed', 403);
         }
 
+        // Specify template data
         var data = {
             layout: "layout_ajax",
             projectId: parseInt(req.param('projectId'), 10),
@@ -21,46 +28,56 @@ module.exports = {
             users: false
         };
 
-        Phase.find()
-        .where({
-            projectId: data.projectId
-        })
-        .sort('order ASC')
-        .limit(1)
-        .done(function(error, phases) {
-            if (error) {
-                res.send(error, 500);
-            } else {
-                data.phaseId = phases[0].id;
+        // Fetch first phase for current project
+        Phase
+            .find()
+            .where({
+                projectId: data.projectId
+            })
+            .sort('order ASC')
+            .limit(1)
+            .done(function(error, phases) {
+                if (error) {
+                    res.send(error, 500);
+                } else {
+                    data.phaseId = (phases.length > 0) ? phases[0].id : 0;
 
-                makeView();
-            }
-        });
+                    makeView();
+                }
+            });
 
-        Type.find()
-        .sort('order ASC')
-        .done(function(error, types) {
-            if (error) {
-                res.send(error, 500);
-            } else {
-                data.types = types;
+        // Fetch task types
+        Type
+            .find()
+            .sort('order ASC')
+            .done(function(error, types) {
+                if (error) {
+                    res.send(error, 500);
+                } else {
+                    data.types = types;
 
-                makeView();
-            }
-        });
+                    makeView();
+                }
+            });
 
-        User.find()
-        .sort('lastName ASC')
-        .done(function(error, users) {
-            if (error) {
-                res.send(error, 500);
-            } else {
-                data.users = users;
+        // Fetch users
+        User
+            .find()
+            .sort('lastName ASC')
+            .done(function(error, users) {
+                if (error) {
+                    res.send(error, 500);
+                } else {
+                    data.users = users;
 
-                makeView();
-            }
-        });
+                    makeView();
+                }
+            });
 
+        /**
+         * Function makes actual view if all necessary data is fetched
+         * from database for template.
+         */
         function makeView() {
             var ok = true;
 
@@ -75,11 +92,20 @@ module.exports = {
             }
         }
     },
+    /**
+     * Task edit action.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
     edit: function(req, res) {
         if (!req.isAjax) {
             res.send('Only AJAX request allowed', 403);
         }
 
+        var taskId = parseInt(req.param('id'), 10);
+
+        // Specify template data
         var data = {
             layout: "layout_ajax",
             task: false,
@@ -87,43 +113,53 @@ module.exports = {
             users: false
         };
 
-        var taskId = parseInt(req.param('id'), 10);
+        // Fetch task data
+        Task
+            .findOne(taskId)
+            .done(function(error, task) {
+                if (error) {
+                    res.send(error, 500);
+                } else if (!project) {
+                    res.send("Task not found.", 404);
+                } else {
+                    data.task = task;
 
-        Task.findOne(taskId)
-        .done(function(error, task) {
-            if (error) {
-                res.send(error, 500);
-            } else {
-                data.task = task;
+                    makeView();
+                }
+            });
 
-                makeView();
-            }
-        });
+        // Fetch task types
+        Type
+            .find()
+            .sort('order ASC')
+            .done(function(error, types) {
+                if (error) {
+                    res.send(error, 500);
+                } else {
+                    data.types = types;
 
-        Type.find()
-        .sort('order ASC')
-        .done(function(error, types) {
-            if (error) {
-                res.send(error, 500);
-            } else {
-                data.types = types;
+                    makeView();
+                }
+            });
 
-                makeView();
-            }
-        });
+        // Fetch users
+        User
+            .find()
+            .sort('lastName ASC')
+            .done(function(error, users) {
+                if (error) {
+                    res.send(error, 500);
+                } else {
+                    data.users = users;
 
-        User.find()
-        .sort('lastName ASC')
-        .done(function(error, users) {
-            if (error) {
-                res.send(error, 500);
-            } else {
-                data.users = users;
+                    makeView();
+                }
+            });
 
-                makeView();
-            }
-        });
-
+        /**
+         * Function makes actual view if all necessary data is fetched
+         * from database for template.
+         */
         function makeView() {
             var ok = true;
 

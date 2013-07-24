@@ -10,8 +10,8 @@ module.exports = {
     /**
      * Project phase edit action.
      *
-     * @param req
-     * @param res
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
      */
     edit: function(req, res) {
         if (!req.isAjax) {
