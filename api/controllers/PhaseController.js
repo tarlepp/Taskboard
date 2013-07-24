@@ -29,35 +29,35 @@ module.exports = {
 
         // Fetch project data.
         Project
-        .findOne(projectId)
-        .done(function(error, project) {
-            if (error) {
-                res.send(error, 500);
-            } else if (!project) {
-                res.send("Project not found.", 404);
-            } else {
-                data.project = project;
+            .findOne(projectId)
+            .done(function(error, project) {
+                if (error) {
+                    res.send(error, 500);
+                } else if (!project) {
+                    res.send("Project not found.", 404);
+                } else {
+                    data.project = project;
 
-                makeView();
-            }
-        });
+                    makeView();
+                }
+            });
 
         // Fetch project phases
         Phase
-        .find()
-        .where({
-            projectId: projectId
-        })
-        .sort('order ASC')
-        .done(function(error, phases) {
-            if (error) {
-                res.send(error, 500);
-            } else {
-                data.project = phases;
+            .find()
+            .where({
+                projectId: projectId
+            })
+            .sort('order ASC')
+            .done(function(error, phases) {
+                if (error) {
+                    res.send(error, 500);
+                } else {
+                    data.project = phases;
 
-                makeView();
-            }
-        });
+                    makeView();
+                }
+            });
 
         /**
          * Function makes actual view if all necessary data is fetched
