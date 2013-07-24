@@ -212,7 +212,7 @@ ko.bindingHandlers.qtip = {
                     jQuery(element).qtip("api").hide();
                     jQuery(element).qtip("api").destroy();
                     jQuery(element).removeClass('generated_qtip');
-                } catch (e) {
+                } catch (err) {
                     //There was no Qtip defined on the element yet
                 }
             });
@@ -234,39 +234,61 @@ ko.bindingHandlers.qtip = {
                     //There was no Qtip defined on the element yet
                 }
 
-                jQuery(element).qtip({
-                    content: {
-                        title: settings.title,
-                        text: textValue
-                    },
-                    show: {
-                        when: {
-                            event: 'mouseenter'
+                var options = settings.options ? settings.options : {};
+                var width = settings.width ? settings.width : 'auto';
+
+                console.log(options);
+
+                jQuery(element).qtip(
+                    jQuery.extend(
+                        {},
+                        {
+                            content: {
+                                title: settings.title,
+                                text: textValue
+                            },
+                            show: {
+                                when: {
+                                    event: 'mouseenter'
+                                },
+                                delay: 150,
+                                effect: {
+                                    type: 'fade',
+                                    length: 150
+                                }
+                            },
+                            hide: {
+                                when: {
+                                    event: 'mouseleave'
+                                },
+                                effect: {
+                                    type: 'fade',
+                                    length: 150
+                                }
+                            },
+                            style: {
+                                classes: 'qtip-bootstrap',
+                                width: width
+                            },
+                            position: {
+                                my: 'top left',
+                                at: 'bottom center',
+                                viewport: jQuery(window)
+                            }
                         },
-                        delay: 500,
-                        effect: {
-                            type: 'fade',
-                            length: 500}
-                    },
-                    hide: {
-                        when: {
-                            event: 'mouseleave'
-                        },
-                        effect: {
-                            type: 'fade',
-                            length: 300
-                        }
-                    },
-                    style: {
-                        name: 'appStyle',
-                        width: settings.width
-                    }
-                });
+                        options
+                    )
+                );
             }
             else {
-                jQuery(element).qtip("api").hide();
-                jQuery(element).qtip("api").destroy();
-                jQuery(element).removeClass('generated_qtip');
+                try {
+                    jQuery(element).qtip("api").hide();
+                    jQuery(element).qtip("api").destroy();
+                    jQuery(element).removeClass('generated_qtip');
+                }
+                catch (err) {
+                    //There was no Qtip defined on the element yet
+                }
             }
         }
     }
