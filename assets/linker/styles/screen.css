@@ -416,10 +416,11 @@ li .nav-header.text-info {
 }
 
 li .nav-header {
-    padding: 3px 15px 0 15px;
-    font-size: 15px;
+    padding: 3px 15px;
+    font-size: 17px;
     font-weight: normal;
     line-height: 18px;
+    text-transform: none;
 }
 
 .dropdown-menu .divider {
