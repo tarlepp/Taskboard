@@ -193,6 +193,86 @@ ko.bindingHandlers.changeSprint = {
 };
 
 /**
+ * qTip knockout bindings.
+ *
+ * @type {{init: Function, update: Function}}
+ */
+ko.bindingHandlers.qtip = {
+    init: function (element, valueAccessor) {
+        var settings = ko.utils.unwrapObservable(valueAccessor()) || {};
+
+        if (!jQuery.isEmptyObject(settings)) {
+            // Add a class so we can search for all elements that have a Qtip
+            // This is used in the jqDialog Binding so we can hide and destroy all Qtips associated with elements in a dialog
+            jQuery(element).addClass('generated_qtip');
+
+            //handle disposal (if KO removes by the template binding)
+            ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                try {
+                    jQuery(element).qtip("api").hide();
+                    jQuery(element).qtip("api").destroy();
+                    jQuery(element).removeClass('generated_qtip');
+                } catch (e) {
+                    //There was no Qtip defined on the element yet
+                }
+            });
+        }
+    },
+    update: function (element, valueAccessor) {
+        var settings = ko.utils.unwrapObservable(valueAccessor()) || {};
+
+        if (!jQuery.isEmptyObject(settings)) {
+            var textValue = ko.utils.unwrapObservable(settings.text);
+
+            if (textValue) {
+                try {
+                    jQuery(element).qtip("api").hide();
+                    jQuery(element).qtip("api").destroy();
+                    jQuery(element).removeClass('generated_qtip');
+                }
+                catch (err) {
+                    //There was no Qtip defined on the element yet
+                }
+
+                jQuery(element).qtip({
+                    content: {
+                        title: settings.title,
+                        text: textValue
+                    },
+                    show: {
+                        when: {
+                            event: 'mouseenter'
+                        },
+                        delay: 500,
+                        effect: {
+                            type: 'fade',
+                            length: 500}
+                    },
+                    hide: {
+                        when: {
+                            event: 'mouseleave'
+                        },
+                        effect: {
+                            type: 'fade',
+                            length: 300
+                        }
+                    },
+                    style: {
+                        name: 'appStyle',
+                        width: settings.width
+                    }
+                });
+            }
+            else {
+                jQuery(element).qtip("api").hide();
+                jQuery(element).qtip("api").destroy();
+                jQuery(element).removeClass('generated_qtip');
+            }
+        }
+    }
+};
+
+/**
  * Actual TaskBoard knockout view model object. This contains all
  * necessary data for application.
  *
