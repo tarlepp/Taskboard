@@ -4,6 +4,8 @@
  * @module      ::  Controller
  * @description ::  Contains logic for handling requests.
  */
+var jQuery = require('jquery');
+
 module.exports = {
     /**
      * Project phase edit action.
