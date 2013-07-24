@@ -531,6 +531,11 @@ form fieldset {
     overflow-y: scroll;
 }
 
+.backlog h4 {
+    font-size: 20px;
+    font-weight: normal;
+}
+
 #backlogAccordion .accordion-inner {
     padding: 6px 5px;
 }
@@ -543,11 +548,14 @@ form fieldset {
 
 #backlogAccordion .accordion-heading .accordion-toggle {
     padding: 5px 8px;
-    font-size: 16px;
-    font-variant: small-caps;
+    font-size: 18px;
 }
 
-
+#backlogAccordion .chevron {
+    position: relative;
+    top: 3px;
+    left: -2px;
+}
 
 a:hover,
 a:focus {

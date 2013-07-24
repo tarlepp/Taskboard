@@ -25,8 +25,9 @@
             <div class="accordion-group">
                 <div class="accordion-heading alert-info">
                     <a class="accordion-toggle" data-toggle="collapse" href="#sprintContent_<%= sprint.id %>">
-                        <strong><%= sprint.title %></strong>
-                        <span class="pull-right text-small"><%= sprint.durationDates() %> (<%= sprint.durationDays() %>)</span>
+                        <i class="chevron icon icon-chevron-right icon-chevron-right"></i>
+                        <%= sprint.title %>
+                        <span class="pull-right text-small"><%= sprint.durationDates() %> (<%= sprint.durationDays() %> days)</span>
                     </a>
                 </div>
                 <div id="sprintContent_<%= sprint.id %>" class="accordion-body collapse ">

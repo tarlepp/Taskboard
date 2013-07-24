@@ -374,7 +374,13 @@ function initProjectBacklog(modal) {
             var pos = c.indexOf(this.id + "_collapse_in=");
 
             if (pos > -1) {
-                c.substr(pos).split('=')[1].indexOf('false') ? jQuery(this).addClass('in') : jQuery(this).removeClass('in');
+                if (c.substr(pos).split('=')[1].indexOf('false')) {
+                    jQuery(this).addClass('in');
+                    jQuery(this).parent().find('i.chevron').removeClass('icon-chevron-right').addClass('icon-chevron-down');
+                } else {
+                    jQuery(this).removeClass('in');
+                    jQuery(this).parent().find('i.chevron').removeClass('icon-chevron-down').addClass('icon-chevron-right');
+                }
             }
         }
     });
@@ -384,8 +390,13 @@ function initProjectBacklog(modal) {
     .on('hidden', function(event) {
         event.stopPropagation();
     })
-    .on('show', function() {
+    .on('show', function(e) {
         jQuery(this).css('overflow', 'visible');
+
+        jQuery(e.target).parent().find(".icon-chevron-right").removeClass("icon-chevron-right").addClass("icon-chevron-down");
+    })
+    .on('hide', function(e) {
+        jQuery(e.target).parent().find(".icon-chevron-down").removeClass("icon-chevron-down").addClass("icon-chevron-right");
     })
     .on('hidden shown', function() {
         jQuery(this).find('.collapse').each(function() {
@@ -394,6 +405,7 @@ function initProjectBacklog(modal) {
             }
         });
     });
+
 
     jQuery('.sortable', modal).sortable({
         connectWith: '.sortable',
