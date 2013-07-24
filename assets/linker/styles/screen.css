@@ -72,7 +72,7 @@ a:focus,
 #footer ul li {
     display: inline-block;
     line-height: 30px;
-    font-size: 12px;
+    font-size: 13px;
 }
 
 div.title h2 {
@@ -145,8 +145,8 @@ div.story {
 
 div.story h3,
 div.task h3 {
-    font-size: 12px;
-    line-height: 12px;
+    font-size: 13px;
+    line-height: 13px;
     padding: 0;
     margin: 5px;
     text-align: center;
@@ -158,7 +158,7 @@ div.task h3 {
 }
 
 div.story h3 {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
     color: rgba(51, 51, 51, .85);
 }
@@ -176,11 +176,10 @@ div.task.small h3 {
     display: none;
 }
 
-div.story p,
-div.task p {
+div.story p  {
     font-weight: normal;
-    font-size: 12px;
-    line-height: 12px;
+    font-size: 14px;
+    line-height: 14px;
     color: #333333;
 }
 
