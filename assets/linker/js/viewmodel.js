@@ -241,8 +241,6 @@ ko.bindingHandlers.qtip = {
                 var options = settings.options ? settings.options : {};
                 var width = settings.width ? settings.width : 'auto';
 
-                console.log(options);
-
                 jQuery(element).qtip(
                     jQuery.extend(
                         {},
