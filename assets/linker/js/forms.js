@@ -354,7 +354,7 @@ function initStoryForm(modal, edit) {
  *
  * @param   {jQuery}    modal   Current modal content
  */
-function initProjectBacklog(modal) {
+function initProjectPlanning(modal) {
     var c = document.cookie;
 
     jQuery('#backlogAccordion', modal).find('.collapse').each(function () {

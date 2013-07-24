@@ -213,14 +213,19 @@ jQuery(document).ready(function() {
         });
     });
 
+    // TODO
+    body.on('projectBacklog', function() {
+        console.log("Implement project backlog.");
+    });
+
     /**
      * Project backlog event, this opens a modal bootbox dialog with project backlog view on it.
      * In this dialog user can prioritize user stories and assign them to existing sprints or move
      * them back to backlog.
      */
-    body.on('projectBacklog', function() {
-        jQuery.get('/Project/backlog', {id: ko.toJS(myViewModel.project().id())}, function(content) {
-            var title = 'Project backlog';
+    body.on('projectPlanning', function() {
+        jQuery.get('/Project/planning', {id: ko.toJS(myViewModel.project().id())}, function(content) {
+            var title = 'Project planning view';
             var buttons = [
                 {
                     label: "Add new sprint",
@@ -228,7 +233,7 @@ jQuery(document).ready(function() {
                     callback: function() {
                         modal.modal('hide');
 
-                        jQuery('body').trigger('sprintAdd', ['projectBacklog']);
+                        jQuery('body').trigger('sprintAdd', ['projectPlanning']);
 
                         return false;
                     }
@@ -239,7 +244,7 @@ jQuery(document).ready(function() {
                     callback: function() {
                         modal.modal('hide');
 
-                        jQuery('body').trigger('storyAdd', [myViewModel.project().id(), 0, 'projectBacklog']);
+                        jQuery('body').trigger('storyAdd', [myViewModel.project().id(), 0, 'projectPlanning']);
 
                         return false;
                     }
@@ -254,7 +259,7 @@ jQuery(document).ready(function() {
 
             // Make form init when dialog is opened.
             modal.on('shown', function() {
-                initProjectBacklog(modal);
+                initProjectPlanning(modal);
             });
 
             modal.on('click', 'i.event', function(event) {
@@ -266,7 +271,7 @@ jQuery(document).ready(function() {
                 var id = element.data('id');
                 var trigger = element.data('type') + "Edit";
 
-                body.trigger(trigger, [id, 'projectBacklog'])
+                body.trigger(trigger, [id, 'projectPlanning'])
             });
         })
         .fail(function(jqXhr, textStatus, error) {

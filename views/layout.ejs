@@ -83,7 +83,7 @@
                                             </li>
                                             <li>
                                                 <a href="javascript: void(0);"
-                                                    data-bind="click: $root.openBacklog"
+                                                    data-bind="click: $root.projectBacklog"
                                                 >
                                                     <i class="icon-list"></i>
                                                     Project backlog
@@ -96,7 +96,13 @@
                                                     data-bind="click: $root.phasesEdit"
                                                 >
                                                     <i class="icon-th"></i>
-                                                    Project phases
+                                                    Edit phases
+                                                </a>
+                                                <a href="javascript: void(0);"
+                                                   data-bind="click: $root.projectPlanning"
+                                                        >
+                                                    <i class="icon-globe"></i>
+                                                    Planning view
                                                 </a>
                                             </li>
                                             <li class="divider"></li>
@@ -162,6 +168,14 @@
                                                 >
                                                     <i class="icon-wrench"></i>
                                                     Edit sprint
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript: void(0);"
+                                                    data-bind="click: $root.sprintBacklog"
+                                                >
+                                                    <i class="icon-list"></i>
+                                                    Sprint backlog
                                                 </a>
                                             </li>
                                             <li class="divider"></li>

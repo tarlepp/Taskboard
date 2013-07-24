@@ -101,12 +101,12 @@ module.exports = {
         }
     },
     /**
-     * Project backlog action.
+     * Project planning action.
      *
      * @param   {Request}   req Request object
      * @param   {Response}  res Response object
      */
-    backlog: function(req, res) {
+    planning: function(req, res) {
         if (!req.isAjax) {
             res.send('Only AJAX request allowed', 403);
         }

@@ -493,8 +493,15 @@ function ViewModel() {
     /**
      * Method opens project backlog
      */
-    self.openBacklog = function() {
+    self.projectBacklog = function() {
         jQuery('body').trigger('projectBacklog');
+    };
+
+    /**
+     * Method opens project planning view.
+     */
+    self.projectPlanning = function() {
+        jQuery('body').trigger('projectPlanning');
     };
 
     /**
