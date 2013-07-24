@@ -32,6 +32,7 @@ module.exports = function (grunt) {
         'linker/vendor/bootstrap/css/bootstrap-responsive.css',
         'linker/vendor/bootstrap-datepicker/datepicker.css',
         'linker/vendor/qTip/jquery.qtip.css',
+        'linker/vendor/font-awesome/css/font-awesome.css',
 
         'linker/styles/**/*.css'
     ];

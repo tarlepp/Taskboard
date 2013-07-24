@@ -401,9 +401,7 @@ li#functionHelp a {
 }
 
 .dropdown-menu > li > a i {
-    position: relative;
-    top: 1px;
-    margin-right: 3px;
+    margin-right: 5px;
 }
 
 li .nav-header.text-error {
@@ -629,4 +627,8 @@ li.ui-sortable-helper {
 
 .tooltipDivContainer {
     display: none;
+}
+
+.input-append .add-on ul a {
+    text-shadow: none;
 }
