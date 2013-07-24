@@ -257,7 +257,7 @@ jQuery(document).ready(function() {
                 initProjectBacklog(modal);
             });
 
-            modal.on('click', 'i', function(event) {
+            modal.on('click', 'i.event', function(event) {
                 event.preventDefault();
 
                 modal.modal('hide');

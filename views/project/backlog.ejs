@@ -12,7 +12,7 @@
             <li data-story-id="<%= story.id %>">
                 <%= story.title %> (<%= story.estimate %>)
 
-                <i class="icon icon-wrench pull-right tooltipTitle" title="Edit story"
+                <i class="icon icon-wrench pull-right tooltipTitle event" title="Edit story"
                     data-id="<%= story.id %>"
                     data-type="story"
                 ></i>
@@ -28,7 +28,7 @@
         <% _.each(sprints, function(sprint) { %>
             <div class="accordion-group">
                 <div class="accordion-heading alert-info">
-                    <i class="icon icon-wrench pull-right tooltipTitle" title="Edit sprint"
+                    <i class="icon icon-wrench pull-right tooltipTitle event" title="Edit sprint"
                        data-id="<%= sprint.id %>"
                        data-type="sprint"
                     ></i>
@@ -50,7 +50,7 @@
                             <li data-story-id="<%= story.id %>">
                                 <%= story.title %> (<%= story.estimate %>)
 
-                                <i class="icon icon-wrench pull-right tooltipTitle" title="Edit story"
+                                <i class="icon icon-wrench pull-right tooltipTitle event" title="Edit story"
                                     data-id="<%= story.id %>"
                                     data-type="story"
                                 ></i>
