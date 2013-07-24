@@ -74,7 +74,7 @@ jQuery(document).ready(function() {
     body.on('dblclick', '.story', function() {
         var data = ko.dataFor(this);
 
-        body.trigger('storyEdit', [data]);
+        body.trigger('storyEdit', [data.id()]);
     });
 
     // Help click event
@@ -244,6 +244,18 @@ jQuery(document).ready(function() {
             // Make form init when dialog is opened.
             modal.on('shown', function() {
                 initProjectBacklog(modal);
+            });
+
+            modal.on('click', 'i', function(event) {
+                event.preventDefault();
+
+                modal.modal('hide');
+
+                var element = jQuery(this);
+                var id = element.data('id');
+                var trigger = element.data('type') + "Edit";
+
+                body.trigger(trigger, [id, 'projectBacklog'])
             });
         })
         .fail(function(jqXhr, textStatus, error) {
@@ -470,8 +482,9 @@ jQuery(document).ready(function() {
      *
      * After PUT query knockout data is updated.
      */
-    body.on('sprintEdit', function() {
-        var sprintId = myViewModel.sprint().id();
+    body.on('sprintEdit', function(event, sprintId, trigger) {
+        sprintId = sprintId || myViewModel.sprint().id();
+        trigger = trigger || false;
 
         jQuery.get('/Sprint/edit', {id: sprintId}, function(content) {
             var title = "Edit sprint";
@@ -512,6 +525,10 @@ jQuery(document).ready(function() {
 
                                 // Remove modal
                                 modal.modal('hide');
+
+                                if (trigger) {
+                                    body.trigger(trigger)
+                                }
                             })
                             .fail(function(jqXhr, textStatus, error) {
                                 handleAjaxError(jqXhr, textStatus, error);
@@ -524,7 +541,7 @@ jQuery(document).ready(function() {
             ];
 
             // Open bootbox modal
-            var modal = openBootboxDialog(title, content, buttons);
+            var modal = openBootboxDialog(title, content, buttons, trigger);
 
             // Make form init when dialog is opened.
             modal.on('shown', function() {
@@ -604,8 +621,10 @@ jQuery(document).ready(function() {
      * User story edit event, this opens a modal bootbox dialog with user story edit
      * form on it.
      */
-    body.on('storyEdit', function(event, story) {
-        jQuery.get('/Story/edit', {id: story.id()}, function(content) {
+    body.on('storyEdit', function(event, storyId, trigger) {
+        trigger = trigger || false;
+
+        jQuery.get('/Story/edit', {id: storyId}, function(content) {
             var title = "Edit user story";
             var buttons = [
                 {
@@ -619,7 +638,7 @@ jQuery(document).ready(function() {
                         if (validateForm(formItems)) {
                             jQuery.ajax({
                                 type: "PUT",
-                                url: "/story/" + story.id(),
+                                url: "/story/" + storyId,
                                 data: formItems,
                                 dataType: 'json'
                             })
@@ -637,6 +656,10 @@ jQuery(document).ready(function() {
                                 });
 
                                 modal.modal('hide');
+
+                                if (trigger) {
+                                    body.trigger(trigger)
+                                }
                             })
                             .fail(function(jqXhr, textStatus, error) {
                                 handleAjaxError(jqXhr, textStatus, error);
@@ -656,20 +679,24 @@ jQuery(document).ready(function() {
                                 if (result) {
                                     jQuery.ajax({
                                         type: "DELETE",
-                                        url: "/story/" + story.id(),
+                                        url: "/story/" + storyId,
                                         dataType: 'json'
                                     })
                                     .done(function() {
                                         makeMessage("User story deleted successfully.", "success", {});
 
                                         // Remove user story from knockout models.
-                                        myViewModel.deleteStory(story.id());
+                                        myViewModel.deleteStory(storyId);
+
+                                        if (trigger) {
+                                            body.trigger(trigger)
+                                        }
                                     })
                                     .fail(function(jqXhr, textStatus, error) {
                                         handleAjaxError(jqXhr, textStatus, error);
                                     });
                                 } else {
-                                    body.trigger('storyEdit', [story]);
+                                    body.trigger('storyEdit', [storyId, trigger]);
                                 }
                             }
                         );
@@ -678,7 +705,7 @@ jQuery(document).ready(function() {
             ];
 
             // Open bootbox modal
-            var modal = openBootboxDialog(title, content, buttons);
+            var modal = openBootboxDialog(title, content, buttons, trigger);
 
             // Make form init when dialog is opened.
             modal.on('shown', function() {

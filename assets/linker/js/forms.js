@@ -355,18 +355,6 @@ function initStoryForm(modal, edit) {
  * @param   {jQuery}    modal   Current modal content
  */
 function initProjectBacklog(modal) {
-    var tooltips = jQuery('[rel=tooltip]', modal);
-
-    if (tooltips.length) {
-        tooltips.tooltip()
-        .on('show', function(e) {
-            e.stopPropagation();
-        })
-        .on('hidden', function(e) {
-            e.stopPropagation();
-        });
-    }
-
     var c = document.cookie;
 
     jQuery('#backlogAccordion', modal).find('.collapse').each(function () {
@@ -376,35 +364,35 @@ function initProjectBacklog(modal) {
             if (pos > -1) {
                 if (c.substr(pos).split('=')[1].indexOf('false')) {
                     jQuery(this).addClass('in');
-                    jQuery(this).parent().find('i.chevron').removeClass('icon-chevron-right').addClass('icon-chevron-down');
+                    jQuery(this).parent().find(".icon-chevron-right").removeClass("icon-chevron-right").addClass("icon-chevron-down");
                 } else {
                     jQuery(this).removeClass('in');
-                    jQuery(this).parent().find('i.chevron').removeClass('icon-chevron-down').addClass('icon-chevron-right');
+                    jQuery(this).parent().find(".icon-chevron-down").removeClass("icon-chevron-down").addClass("icon-chevron-right");
                 }
             }
         }
     });
 
     jQuery('#backlogAccordion', modal)
-    .collapse()
-    .on('hidden', function(event) {
-        event.stopPropagation();
-    })
-    .on('show', function(e) {
-        jQuery(this).css('overflow', 'visible');
+        .collapse()
+        .on('hidden', function(event) {
+            event.stopPropagation();
+        })
+        .on('show', function(e) {
+            jQuery(this).css('overflow', 'visible');
 
-        jQuery(e.target).parent().find(".icon-chevron-right").removeClass("icon-chevron-right").addClass("icon-chevron-down");
-    })
-    .on('hide', function(e) {
-        jQuery(e.target).parent().find(".icon-chevron-down").removeClass("icon-chevron-down").addClass("icon-chevron-right");
-    })
-    .on('hidden shown', function() {
-        jQuery(this).find('.collapse').each(function() {
-            if (this.id) {
-                document.cookie = this.id + "_collapse_in=" + jQuery(this).hasClass('in');
-            }
+            jQuery(e.target).parent().find(".icon-chevron-right").removeClass("icon-chevron-right").addClass("icon-chevron-down");
+        })
+        .on('hide', function(e) {
+            jQuery(e.target).parent().find(".icon-chevron-down").removeClass("icon-chevron-down").addClass("icon-chevron-right");
+        })
+        .on('hidden shown', function() {
+            jQuery(this).find('.collapse').each(function() {
+                if (this.id) {
+                    document.cookie = this.id + "_collapse_in=" + jQuery(this).hasClass('in');
+                }
+            });
         });
-    });
 
 
     jQuery('.sortable', modal).sortable({

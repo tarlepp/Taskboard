@@ -549,6 +549,7 @@ form fieldset {
 #backlogAccordion .accordion-heading .accordion-toggle {
     padding: 5px 8px;
     font-size: 18px;
+    margin-right: 15px;
 }
 
 #backlogAccordion .chevron {
@@ -600,6 +601,20 @@ li.ui-sortable-helper {
     border-bottom: 1px solid #dddddd;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+}
+
+.backlog ul li i {
+    position: relative;
+    top: 2px;
+    margin-left: 3px;
+    cursor: pointer;
+}
+
+.backlog .accordion-heading i {
+    position: relative;
+    top: 8px;
+    right: 5px;
+    cursor: pointer;
 }
 
 .qtip-bootstrap .qtip-content {

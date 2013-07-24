@@ -11,7 +11,11 @@
             <% if(story.sprintId === 0 || story.sprintId === null) { %>
             <li data-story-id="<%= story.id %>">
                 <%= story.title %> (<%= story.estimate %>)
-                <a href="javascript: void(0);" class="pull-right"><i class="icon-wrench"></i></a>
+
+                <i class="icon icon-wrench pull-right tooltipTitle" title="Edit story"
+                    data-id="<%= story.id %>"
+                    data-type="story"
+                ></i>
             </li>
             <% } %>
         <% }) %>
@@ -24,10 +28,18 @@
         <% _.each(sprints, function(sprint) { %>
             <div class="accordion-group">
                 <div class="accordion-heading alert-info">
+                    <i class="icon icon-wrench pull-right tooltipTitle" title="Edit sprint"
+                       data-id="<%= sprint.id %>"
+                       data-type="sprint"
+                    ></i>
+
                     <a class="accordion-toggle" data-toggle="collapse" href="#sprintContent_<%= sprint.id %>">
                         <i class="chevron icon icon-chevron-right icon-chevron-right"></i>
                         <%= sprint.title %>
-                        <span class="pull-right text-small"><%= sprint.durationDates() %> (<%= sprint.durationDays() %> days)</span>
+
+                        <span class="pull-right text-small">
+                            <%= sprint.durationDates() %> (<%= sprint.durationDays() %> days)
+                        </span>
                     </a>
                 </div>
                 <div id="sprintContent_<%= sprint.id %>" class="accordion-body collapse ">
@@ -37,7 +49,11 @@
                             <% if(story.sprintId === sprint.id) { %>
                             <li data-story-id="<%= story.id %>">
                                 <%= story.title %> (<%= story.estimate %>)
-                                <a href="javascript: void(0);" class="pull-right"><i class="icon-wrench"></i></a>
+
+                                <i class="icon icon-wrench pull-right tooltipTitle" title="Edit story"
+                                    data-id="<%= story.id %>"
+                                    data-type="story"
+                                ></i>
                             </li>
                             <% } %>
                         <% }) %>
