@@ -17,20 +17,34 @@
             <thead>
                 <tr id="boardHeader">
                     <th style="width:20%">Story</th>
-                    <td class="addStory" data-bind="visible: sprint()">
-                        <button data-bind="
-                            click: addNewStory.bind($data, $root.project().id(), $root.getSprintId()),
-                            tooltip: {
-                                title: 'Add a new story to current sprint',
-                                html: true
+                    <td class="addStory"
+                        data-bind="
+                            visible: sprint(),
+                            qtip: {
+                                text: 'Add new story to current sprint.',
+                                options: {
+                                    position: {
+                                        at: 'center right',
+                                        my: 'center left'
+                                    }
+                                }
                             }
+                        "
+                    >
+                        <button data-bind="
+                            click: addNewStory.bind($data, $root.project().id(), $root.getSprintId())
                         ">+</button>
                     </td>
 
                     <!-- ko foreach: $root.sortedPhases -->
                     <th data-bind="style: {width: getColumnWidth(20, $root.phases().length)}">
                         <span data-bind="text: title"></span>
-                        <span class="phaseTaskCount" data-bind="css: phaseTaskCountStatus, text: phaseTaskCountText"></span>
+                        <span class="phaseTaskCount"
+                            data-bind="
+                                css: phaseTaskCountStatus,
+                                text: phaseTaskCountText
+                            "
+                        ></span>
                     </th>
                     <!-- /ko -->
                 </tr>
@@ -44,21 +58,28 @@
                                 template: {
                                     name: 'story-template'
                                 },
-                                tooltip: {
-                                    title: $root.nl2br(description()),
-                                    placement: 'right',
-                                    html: true
+                                qtip: {
+                                    title: title(),
+                                    text: $root.nl2br(description())
                                 }
-
-                            "></div>
+                            "
+                        ></div>
                     </th>
-                    <td class="addTask">
-                        <button data-bind="
-                            click: addNewTask,
-                            tooltip: {
-                                title: 'Add a new task to story<br />' + title(),
-                                html: true
+                    <td class="addTask"
+                        data-qtipopts="{ style: { classes: 'qtip-green' } }"
+                        data-bind="
+                            qtip: {
+                                text: 'Add a new task to story<br />' + title(),
+                                options: {
+                                    position: {
+                                        at: 'center right',
+                                        my: 'center left'
+                                    }
+                                }
                             }
+                    ">
+                        <button data-bind="
+                            click: addNewTask
                         ">+</button>
                     </td>
 
@@ -93,10 +114,15 @@
                 attr: {
                     'id': 'task_' + id()
                 },
-                tooltip: {
-                    title: $root.nl2br(description()),
-                    placement: 'bottom',
-                    html: true
+                qtip: {
+                    title: title(),
+                    text: $root.nl2br(description()),
+                    options: {
+                        position: {
+                            at: 'bottom center',
+                            my: 'top center'
+                        }
+                    }
                 },
                 css: taskClass()
             ">
@@ -110,10 +136,15 @@
                 attr: {
                     'id': 'task_' + id()
                 },
-                tooltip: {
-                    title: '<strong>' + title() + '</strong><br />' + $root.nl2br(description()),
-                    placement: 'bottom',
-                    html: true
+                qtip: {
+                    title: title(),
+                    text: description() ? $root.nl2br(description()) : '<em>No description...</em>',
+                    options: {
+                        position: {
+                            at: 'bottom center',
+                            my: 'top center'
+                        }
+                    }
                 },
                 css: taskClass()
             ">

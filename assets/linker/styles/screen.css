@@ -285,9 +285,9 @@ div.story p:last-of-type {
 .table .task:hover,
 .table .task:focus {
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-    -webkit-transform: scale(1.15);
-    -moz-transform: scale(1.15);
-    -o-transform: scale(1.15);
+    -webkit-transform: scale(1.10);
+    -moz-transform: scale(1.10);
+    -o-transform: scale(1.10);
     position: relative;
     z-index: 5;
 }
@@ -600,4 +600,18 @@ li.ui-sortable-helper {
     border-bottom: 1px solid #dddddd;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+}
+
+.qtip-bootstrap .qtip-content {
+    padding: 5px 10px;
+}
+
+.qtip-bootstrap .qtip-titlebar {
+    padding: 5px 10px;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.tooltipDivContainer {
+    display: none;
 }
