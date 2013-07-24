@@ -555,7 +555,7 @@ a:focus {
 }
 
 .text-small {
-    font-size: 12px;
+    font-size: 14px;
 }
 
 li.ui-sortable-helper {
@@ -576,7 +576,7 @@ li.ui-sortable-helper {
     border: 1px solid #dddddd;
     padding: 3px 5px 3px 10px;
     background-color: #F7FBFD;
-    font-size: 12px;
+    font-size: 15px;
 }
 
 .backlog ul li:hover {
