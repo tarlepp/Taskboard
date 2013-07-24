@@ -119,7 +119,7 @@ module.exports = {
             .done(function(error, task) {
                 if (error) {
                     res.send(error, 500);
-                } else if (!project) {
+                } else if (!task) {
                     res.send("Task not found.", 404);
                 } else {
                     data.task = task;
