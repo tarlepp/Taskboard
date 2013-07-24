@@ -20,6 +20,10 @@ ko.bindingHandlers.changeProject = {
 
         // Actual change event is triggered
         elementProject.change(function() {
+            initContainer.phases = false;
+
+            jQuery('body').trigger('initializeCheck');
+
             var value = parseInt(elementProject.val(), 10);
 
             // Reset used data
@@ -273,7 +277,9 @@ ko.bindingHandlers.qtip = {
                             position: {
                                 my: 'top left',
                                 at: 'bottom center',
-                                viewport: jQuery(window)
+                                adjust: {
+                                    screen: true
+                                }
                             }
                         },
                         options

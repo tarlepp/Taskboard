@@ -26,9 +26,13 @@ jQuery(document).ready(function() {
         var initContainerDone = true;
         var initNavigationDone = true;
 
+        initMethod = initMethod || false;
+
         // Change init event state to done
-        initContainer[initMethod] = true;
-        initNavigation[initMethod] = true;
+        if (initMethod !== false) {
+            initContainer[initMethod] = true;
+            initNavigation[initMethod] = true;
+        }
 
         // Iterate init event states
         jQuery.each(initContainer, function(key, value) {
@@ -48,10 +52,14 @@ jQuery(document).ready(function() {
 
         if (initContainerDone) {
             jQuery('#boardContent').show();
+        } else {
+            jQuery('#boardContent').hide();
         }
 
         if (initNavigationDone) {
             jQuery('#navigation').show();
+        } else {
+            jQuery('#navigation').hide();
         }
     });
 
