@@ -1,5 +1,6 @@
 body {
     font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-size: 16px;
     background-image: url('/images/background-body.png');
     cursor: default;
 }
@@ -111,6 +112,11 @@ div.title .span2 {
 #board tbody th,
 #board tbody td {
     background-color: #ffffff;
+}
+
+.table th,
+.table td {
+    font-size: 16px;
 }
 
 div.story,
