@@ -223,6 +223,17 @@ jQuery(document).ready(function() {
             var title = 'Project backlog';
             var buttons = [
                 {
+                    label: "Add new sprint",
+                    class: "btn-primary pull-right",
+                    callback: function() {
+                        modal.modal('hide');
+
+                        jQuery('body').trigger('sprintAdd', ['projectBacklog']);
+
+                        return false;
+                    }
+                },
+                {
                     label: "Add new story",
                     class: "btn-primary pull-right",
                     callback: function() {
@@ -420,7 +431,9 @@ jQuery(document).ready(function() {
      *
      * After POST query knockout data is updated.
      */
-    body.on('sprintAdd', function() {
+    body.on('sprintAdd', function(event, trigger) {
+        trigger = trigger || false;
+
         jQuery.get('/Sprint/add', {projectId: ko.toJS(myViewModel.project().id())}, function(content) {
             var title = "Add sprint";
             var buttons = [
@@ -451,6 +464,10 @@ jQuery(document).ready(function() {
 
                                 // Remove modal
                                 modal.modal('hide');
+
+                                if (trigger) {
+                                    body.trigger(trigger)
+                                }
                             })
                             .fail(function(jqXhr, textStatus, error) {
                                 handleAjaxError(jqXhr, textStatus, error);
@@ -463,7 +480,7 @@ jQuery(document).ready(function() {
             ];
 
             // Open bootbox modal
-            var modal = openBootboxDialog(title, content, buttons);
+            var modal = openBootboxDialog(title, content, buttons, trigger);
 
             // Make form init when dialog is opened.
             modal.on('shown', function() {
