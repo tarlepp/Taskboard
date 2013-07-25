@@ -53,7 +53,7 @@ module.exports = {
             {sprintId: 0},
             function(err, stories) {
                 if (err) {
-                    // Todo how to handle errors in these?
+                    cb(err);
                 } else {
                     cb();
                 }
