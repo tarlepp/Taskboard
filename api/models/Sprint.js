@@ -47,7 +47,7 @@ module.exports = {
     },
 
     beforeDestroy: function(criteria, cb) {
-        // Update all stories sprint id to 0
+        // Update all stories sprint id to 0 which belongs to delete sprint
         Story.update(
             {sprintId: criteria},
             {sprintId: 0},
