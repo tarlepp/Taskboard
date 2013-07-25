@@ -559,6 +559,13 @@ jQuery(document).ready(function() {
 
                         return false;
                     }
+                },
+                {
+                    label: "Delete",
+                    class: "btn-danger pull-right",
+                    callback: function() {
+                        body.trigger('sprintDelete', [sprintId, {event: 'sprintEdit', parameters: [sprintId, trigger]}])
+                    }
                 }
             ];
 
@@ -573,6 +580,51 @@ jQuery(document).ready(function() {
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
         });
+    });
+
+    body.on('sprintDelete', function(event, sprintId, trigger) {
+        trigger = (trigger && trigger.event) ? trigger : false;
+
+        bootbox.confirm(
+            "Are you sure of sprint delete? Existing user stories in this sprint are moved to project backlog.",
+            function(result) {
+                if (result) {
+                    jQuery.ajax({
+                        type: "DELETE",
+                        url: "/sprint/" + sprintId,
+                        dataType: 'json'
+                    })
+                    .done(function() {
+                        makeMessage("Sprint deleted successfully.", "success", {});
+
+                        // Remove sprint from current sprint list
+                        jQuery.each(myViewModel.sprints(), function(key, sprint) {
+                            if (sprint.id() === sprintId) {
+                                myViewModel.sprints.remove(sprint);
+                            }
+                        });
+
+                        // If sprint is currently select, remove it and sprint stories
+                        if (myViewModel.sprint().id() === sprintId) {
+                            // Reset used child data
+                            myViewModel.sprint(null);
+                            myViewModel.stories([]);
+                        }
+
+                        if (trigger) {
+                            body.trigger(trigger.event, trigger.parameters)
+                        }
+                    })
+                    .fail(function(jqXhr, textStatus, error) {
+                        handleAjaxError(jqXhr, textStatus, error);
+                    });
+                } else {
+                    if (trigger) {
+                        body.trigger(trigger.event, trigger.parameters)
+                    }
+                }
+            }
+        );
     });
 
     /**

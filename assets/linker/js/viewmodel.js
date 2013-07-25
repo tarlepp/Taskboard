@@ -518,8 +518,11 @@ function ViewModel() {
         jQuery('body').trigger('sprintEdit');
     };
 
+    /**
+     * Method opens sprint delete
+     */
     self.sprintDelete = function() {
-        console.log('Implement sprint delete');
+        jQuery('body').trigger('sprintDelete', myViewModel.sprint().id());
     };
 
     self.usersOpen = function() {
