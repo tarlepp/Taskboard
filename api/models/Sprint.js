@@ -44,5 +44,20 @@ module.exports = {
         durationDays: function() {
             return this.dateEndObject().getDate() - this.dateStartObject().getDate();
         }
+    },
+
+    beforeDestroy: function(criteria, cb) {
+        // Update all stories sprint id to 0
+        Story.update(
+            {sprintId: criteria},
+            {sprintId: 0},
+            function(err, stories) {
+                if (err) {
+                    // Todo how to handle errors in these?
+                } else {
+                    cb();
+                }
+            }
+        );
     }
 };
