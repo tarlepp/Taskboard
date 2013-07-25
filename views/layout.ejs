@@ -49,7 +49,7 @@
                                 ></select>
                                 <span class="add-on dropdown">
                                     <div data-bind="visible: !project()">
-                                        <a href="javascript: void(0);" rel="tooltip" title="Add new project"
+                                        <a href="javascript: void(0);" class="tooltipTitle" title="Add new project"
                                             data-placement="bottom"
                                             data-bind="click: $root.addNewProject"
                                         >
@@ -102,7 +102,7 @@
                                                 <a href="javascript: void(0);"
                                                    data-bind="click: $root.projectPlanning"
                                                         >
-                                                    <i class="icon-globe"></i>
+                                                    <i class="icon-cogs"></i>
                                                     Planning view
                                                 </a>
                                             </li>
@@ -112,7 +112,7 @@
                                                 <a href="javascript: void(0);"
                                                     data-bind="click: $root.deleteProject"
                                                 >
-                                                    <i class="icon-remove"></i>
+                                                    <i class="icon-trash"></i>
                                                     Delete project
                                                 </a>
                                             </li>
@@ -137,7 +137,7 @@
                                 ></select>
                                 <span class="add-on dropdown">
                                     <div data-bind="visible: !sprint()">
-                                        <a href="javascript: void(0);" rel="tooltip" title="Add new sprint"
+                                        <a href="javascript: void(0);" class="tooltipTitle" title="Add new sprint"
                                             data-placement="bottom"
                                             data-bind="click: $root.sprintAdd"
                                         >
@@ -185,7 +185,7 @@
                                                 <a href="javascript: void(0);"
                                                     data-bind="click: $root.sprintDelete"
                                                 >
-                                                    <i class="icon-remove"></i>
+                                                    <i class="icon-trash"></i>
                                                     Delete sprint
                                                 </a>
                                             </li>
@@ -217,7 +217,11 @@
                             </ul>
                         </li>
                         <li id="functionHelp">
-                            <a href="javascript: void(0);"><i class="icon-question-sign" rel="tooltip" title="Show help" data-placement="bottom"></i></a>
+                            <a href="javascript: void(0);">
+                                <i class="icon-question-sign tooltipTitle" title="Show help"
+                                    data-qtipopts="{ position: { at: 'center center', my: 'center center' } }"
+                                ></i>
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -236,12 +240,25 @@
     <div class="navbar navbar-fixed-bottom">
         <div class="navbar-inner">
             <div class="container-fluid">
+                <span class="pull-right text-small">
+                    versio 0.2
+                </span>
                 <ul>
-                    <li><a href="https://github.com/tarlepp/Taskboard" target="_blank">GitHub</a></li>
-                    <li class="muted">&middot;</li>
-                    <li><a href="https://github.com/tarlepp/Taskboard/issues" target="_blank">Issues</a></li>
-                    <li class="muted">&middot;</li>
-                    <li><a href="https://github.com/tarlepp/" target="_blank">Tarmo Leppänen</a></li>
+                    <li>
+                        <a href="https://github.com/tarlepp/Taskboard" target="_blank">
+                            <i class="icon-github"></i>GitHub
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/tarlepp/Taskboard/issues" target="_blank">
+                            <i class="icon-bug"></i>Issues
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/tarlepp/" target="_blank">
+                            <i class="icon-user"></i>Tarmo Leppänen
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
