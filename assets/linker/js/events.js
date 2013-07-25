@@ -657,9 +657,12 @@ jQuery(document).ready(function() {
                             .done(function(/** models.rest.story */story) {
                                 makeMessage("User story created successfully.", "success", {});
 
-                                if (myViewModel.sprint()) {
+                                var storyObject = new Story(story);
+
+                                // Add story to current stories IF we story sprintId is same as current sprint id
+                                if (myViewModel.sprint() && storyObject.sprintId() === myViewModel.sprint().id()) {
                                     // Add created story to knockout model data.
-                                    myViewModel.stories.push(new Story(story));
+                                    myViewModel.stories.push(storyObject);
                                 }
 
                                 modal.modal('hide');
