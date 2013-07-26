@@ -371,13 +371,15 @@ label {
 }
 
 form .required label:after {
-    color: #b94a48;
     content: '*';
     position: relative;
     float: right;
     right: -2px;
+    top: -4px;
     margin-right: -10px;
-    font-size: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #b94a48;
 }
 
 .modal.fade {
