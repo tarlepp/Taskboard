@@ -328,13 +328,15 @@ function initStoryForm(modal, edit) {
     var currentValue = 0;
 
     // Specify fibonacci values for story sizes
-    var values = [ 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100 ];
+    var values = [ -1, 0, 0.5, 1, 2, 3, 5, 8, 13, 20, 40, 100 ];
 
     jQuery.each(values, function(key, value) {
         if (value == input.val()) {
             currentValue = key;
         }
     });
+
+    show.val(currentValue == 0 ? '???' : values[currentValue]);
 
     // Note that this slider only accepts fibonacci values
     slider.slider({
@@ -344,7 +346,12 @@ function initStoryForm(modal, edit) {
         step: 1,
         slide: function(event, ui) {
             input.val(values[ui.value]);
-            show.val(values[ui.value]);
+
+            if (ui.value === 0) {
+                show.val('???');
+            } else {
+                show.val(values[ui.value]);
+            }
         }
     });
 }
