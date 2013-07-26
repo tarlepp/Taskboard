@@ -33,5 +33,30 @@ module.exports = {
         vfCase: {
             type:       'integer'
         }
+    },
+
+    // Lifecycle Callbacks
+    beforeCreate: function(values, cb) {
+        Story
+            .findOne({
+                projectId: values.projectId,
+                sprintId: values.sprintId
+            })
+            .sort('priority DESC')
+            .done(function(error, story) {
+                var priority;
+
+                if (error) {
+                    cb(error)
+                } else if (!story) {
+                    priority = 0;
+                } else {
+                    priority = story.priority + 1;
+                }
+
+                values.priority = priority;
+
+                cb();
+            });
     }
 };
