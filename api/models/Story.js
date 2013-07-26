@@ -25,13 +25,18 @@ module.exports = {
         },
         estimate: {
             type:       'integer',
-            required:   true
+            required:   true,
+            defaultsTo: -1
         },
         priority: {
             type:       'integer'
         },
         vfCase: {
             type:       'integer'
+        },
+
+        estimateFormatted: function() {
+            return (this.estimate == -1) ? '???' : this.estimate;
         }
     },
 
