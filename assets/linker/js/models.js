@@ -255,7 +255,7 @@ function Story(data) {
 
     // Formatted story title
     self.formattedTitle = ko.computed(function() {
-        return self.title() + " (" + self.estimate() + ")";
+        return self.title() + " (" + (self.estimate() == -1 ? '???' : self.estimate()) + ")";
     });
 
     self.storyRowId = ko.computed(function() {

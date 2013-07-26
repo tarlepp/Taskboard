@@ -10,7 +10,7 @@
         <% _.each(stories, function(story) { %>
             <% if(story.sprintId === 0 || story.sprintId === null) { %>
             <li data-story-id="<%= story.id %>">
-                <%= story.title %> (<%= story.estimate %>)
+                <%= story.title %> (<%= story.estimateFormatted() %>)
 
                 <i class="icon icon-wrench pull-right tooltipTitle event" title="Edit story"
                     data-id="<%= story.id %>"
