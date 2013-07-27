@@ -297,31 +297,6 @@ div.story p:last-of-type {
     z-index: 5;
 }
 
-.modal-header {
-    background-color: #f5f5f5;
-    border-bottom: 1px solid #dddddd;
-}
-
-.modal-header h3 {
-    line-height: 28px;
-    font-size: 22px;
-    font-weight: normal;
-}
-
-.modal-header .close {
-    margin: 0;
-    font-size: 60px;
-    font-weight: normal;
-}
-
-.modal-header {
-    padding: 8px 12px;
-}
-
-.modal-footer {
-    padding: 8px;
-}
-
 .form-horizontal .control-group {
     margin-bottom: 5px;
 }
@@ -356,11 +331,6 @@ div.story p:last-of-type {
     padding-left: 5px;
 }
 
-.modal-backdrop,
-.modal-backdrop.fade.in {
-    opacity: 0.5;
-}
-
 textarea {
     resize: none;
 }
@@ -380,13 +350,6 @@ form .required label:after {
     font-size: 14px;
     font-weight: bold;
     color: #b94a48;
-}
-
-.modal.fade {
-    -webkit-transition: opacity 0.3s linear;
-    -moz-transition: opacity 0.3s linear;
-    -o-transition: opacity 0.3s linear;
-    transition: opacity 0.3s linear;
 }
 
 li#functionHelp {
@@ -480,19 +443,6 @@ table input[type="text"] {
     margin: 0;
 }
 
-.modal-body {
-    padding: 15px;
-    overflow-y: auto;
-}
-
-.modal-body form {
-    margin: -10px 0 0 0;
-}
-
-.modal-body table {
-    margin-bottom: 0;
-}
-
 form {
     margin: 0 0 15px;
 }
@@ -530,19 +480,6 @@ form fieldset {
     position: relative;
     top: 4px;
     display: inline-block;
-}
-
-.modalBacklog {
-    width: 800px;
-    margin-left: -400px;
-
-}
-
-.modalBacklog .modal-body {
-    height: 100%;
-    min-height: 500px;
-    max-height: 500px;
-    overflow-y: scroll;
 }
 
 .backlog h4 {
