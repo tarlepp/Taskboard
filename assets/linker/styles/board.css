@@ -1,0 +1,276 @@
+#board table {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+#board .table th,
+#board .table td {
+    padding: 5px 0 0 5px;
+}
+
+#board .table thead th {
+    text-align: center;
+    background: #fafafa linear-gradient(to bottom, #ffffff, #f2f2f2) repeat-x;
+    padding: 8px;
+    font-size: 20px;
+    font-weight: normal;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+#board tbody th,
+#board tbody td {
+    background-color: #ffffff;
+}
+
+#board .table td.addTask,
+#board .table td.addStory {
+    margin: 0;
+    padding: 0;
+}
+
+#board .table td.addTask button,
+#board .table td.addStory button {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0 3px;
+    border: none;
+    background-color: #f2f2f2;
+}
+
+#board .table td.addStory button {
+    background-color: #e1e1e1;
+}
+
+#board .table td.addTask button:hover,
+#board .table td.addStory button:hover {
+    background-color: #fafafa;
+}
+
+#board .table .story,
+#board .table .task {
+    -webkit-transform: rotate(-5deg);
+    -o-transform: rotate(-5deg);
+    -moz-transform:rotate(-5deg);
+}
+
+#board .table .story:nth-child(even),
+#board .table .task:nth-child(even) {
+    -o-transform:rotate(4deg);
+    -webkit-transform:rotate(4deg);
+    -moz-transform:rotate(4deg);
+}
+
+#board .table .story:nth-child(3n),
+#board .table .task:nth-child(3n) {
+    -o-transform:rotate(-3deg);
+    -webkit-transform:rotate(-3deg);
+    -moz-transform:rotate(-3deg);
+}
+#board .table .story:nth-child(5n),
+#board .table .task:nth-child(5n) {
+    -o-transform:rotate(5deg);
+    -webkit-transform:rotate(5deg);
+    -moz-transform:rotate(5deg);
+}
+
+#board .table .story:hover,
+#board .table .story:focus,
+#board .table .task:hover,
+#board .table .task:focus {
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    -webkit-transform: scale(1.10);
+    -moz-transform: scale(1.10);
+    -o-transform: scale(1.10);
+    position: relative;
+    z-index: 5;
+}
+
+div.story,
+div.task {
+    position: relative;
+    padding: 5px 0;
+    margin: 0 5px 5px 0;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+
+div.story:hover,
+div.task:hover {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.45);
+}
+
+div.story {
+    background-image: url('/images/background-body.png');
+    border: 1px solid #efefef;
+}
+
+div.story h3,
+div.task h3 {
+    font-size: 13px;
+    line-height: 13px;
+    padding: 0;
+    margin: 5px;
+    text-align: center;
+    font-weight: normal;
+    transform-style: preserve-3d;
+    -webkit-backface-vivbility: hidden;
+    -webkit-transform: translate3d(0,0,0);
+    -webkit-transform-style: preserve-3d;
+}
+
+div.story h3 {
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(51, 51, 51, .85);
+}
+
+div.task h3 {
+    font-weight: normal;
+    color: rgb(51, 51, 51);
+}
+
+div.task.small {
+    padding: 10px;
+}
+
+div.task.small h3 {
+    display: none;
+}
+
+div.story p  {
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    color: #333333;
+}
+
+div.story p:last-of-type {
+    margin-bottom: 0;
+}
+
+.task {
+    background-color: rgb(245, 240, 160);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: inline-block;
+}
+
+.task.bug {
+    background-color: rgb(255, 140, 140);
+}
+
+.task.test {
+    background-color: rgb(145, 255, 155);
+}
+
+.taped:after {
+    content: "";
+    height: 15px;
+    width: 30px;
+    background: rgba(255,255,255,0.5);
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    margin-left: -15px;
+    -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.small.taped:after {
+    height: 10px;
+    width: 16px;
+    margin-left: -8px;
+    top: -6px;
+}
+
+.story.taped:after {
+    width: 60px;
+    margin-left: -30px;
+}
+
+.phaseTaskCount {
+    font-weight: normal;
+    font-size: 16px;
+    padding-left: 5px;
+}
+
+#backlogAccordion .accordion-inner {
+    padding: 6px 5px;
+}
+
+#backlogAccordion .accordion-inner ul {
+    margin-bottom: 0;
+    background-color: #ffffff;
+    min-height: 30px;
+}
+
+#backlogAccordion .accordion-heading .accordion-toggle {
+    padding: 5px 8px;
+    font-size: 18px;
+    margin-right: 20px;
+}
+
+#backlogAccordion .chevron {
+    position: relative;
+    top: -1px;
+    left: -2px;
+    font-size: 10px;
+}
+
+.backlog h4 {
+    font-size: 20px;
+    font-weight: normal;
+}
+
+.backlog ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    min-height: 30px;
+}
+
+.backlog ul li {
+    border: 1px solid #dddddd;
+    padding: 3px 5px 3px 10px;
+    background-color: #F7FBFD;
+    font-size: 15px;
+}
+
+.backlog ul li:hover {
+    background-color: #eeeeee;
+}
+
+.backlog ul li:first-of-type {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.backlog ul li:last-of-type {
+    border-bottom: 1px solid #dddddd;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.backlog ul li i {
+    position: relative;
+    top: 3px;
+    margin-left: 3px;
+    cursor: pointer;
+}
+
+.backlog .accordion-heading i {
+    position: relative;
+    top: 7px;
+    right: 5px;
+    cursor: pointer;
+}
+
+.backlog ul li i:hover,
+.backlog .accordion-heading i:hover {
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, .5);
+}

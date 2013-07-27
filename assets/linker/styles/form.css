@@ -1,0 +1,83 @@
+form {
+    margin: 0 0 15px;
+}
+
+form fieldset {
+    margin-top: 15px;
+}
+
+textarea {
+    resize: none;
+}
+
+label {
+    cursor: default;
+    font-size: 16px;
+}
+
+.btn {
+    font-size: 16px;
+}
+
+.form-horizontal .control-group {
+    margin-bottom: 5px;
+}
+
+.form-horizontal .dateInput {
+    width: 82px;
+    text-align: center;
+}
+
+.datepicker .cw {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.form-horizontal .controls {
+    margin-left: 175px;
+}
+
+.input-append.date .add-on i,
+.input-prepend.date .add-on i {
+    margin: 3px 0 0 3px;
+}
+
+form .required label:after {
+    content: '*';
+    position: relative;
+    float: right;
+    right: -2px;
+    top: -4px;
+    margin-right: -10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #b94a48;
+}
+
+.ui-slider .ui-slider-handle {
+    cursor: pointer;
+}
+
+.sliderValue {
+    width: 25px;
+    text-align: center;
+}
+
+.estimateSlider {
+    width: 205px;
+    margin: 0 10px;
+    position: relative;
+    top: 4px;
+    display: inline-block;
+}
+
+.slider-phase-task {
+    width: 100px;
+}
+
+li.ui-sortable-helper {
+    list-style-type: none;
+    border: 1px solid #dddddd;
+    background-color: #eeeeee;
+    padding: 3px 5px 3px 10px;
+}
