@@ -177,3 +177,58 @@ function openBootboxDialog(title, content, buttons, trigger) {
 
     return modal;
 }
+
+/**
+ * Function to set specified cookie and value for given days.
+ *
+ * @param   {string}        name    Name of the cookie
+ * @param   {string|number} value   Cookie value
+ * @param   {number}        days    How many days cookie is valid
+ */
+function createCookie(name, value, days) {
+    var expires = "";
+
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+
+        expires = "; expires=" + date.toGMTString();
+    }
+
+    document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + expires + "; path=/";
+}
+
+/**
+ * Function to read specified cookie.
+ *
+ * @param   {string}    name     Name of the cookie
+ *
+ * @returns {*}
+ */
+function readCookie(name) {
+    var nameEQ = encodeURIComponent(name) + "=";
+    var ca = document.cookie.split(';');
+
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1, c.length);
+        }
+
+        if (c.indexOf(nameEQ) == 0) {
+            return decodeURIComponent(c.substring(nameEQ.length, c.length));
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Function to erase specified cookie.
+ *
+ * @param   {string}    name     Name of the cookie
+ */
+function eraseCookie(name) {
+    createCookie(name, "", -1);
+}
