@@ -12,9 +12,8 @@ ko.bindingHandlers.changeProject = {
      * @param                               valueAccessor
      * @param                               allBindingsAccessor
      * @param   {models.knockout.viewModel} viewModel
-     * @param                               bindingContext
      */
-    init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+    init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
         var elementProject = jQuery(element);
         var elementSprint = jQuery('#selectSprint');
 
@@ -24,7 +23,7 @@ ko.bindingHandlers.changeProject = {
 
             jQuery('body').trigger('initializeCheck');
 
-            var value = parseInt(elementProject.val(), 10);
+            var projectId = parseInt(elementProject.val(), 10);
 
             // Reset used data
             viewModel.phases([]);
@@ -35,99 +34,143 @@ ko.bindingHandlers.changeProject = {
             viewModel.sprint(null);
 
             // Seems like a real project
-            if (!isNaN(value)) {
+            if (!isNaN(projectId)) {
                 // Iterate all projects
                 jQuery.each(viewModel.projects(), function(key, project) {
                     // Current project is selected, add it to knockout bindings
-                    if (value == project.id()) {
+                    if (projectId == project.id()) {
                         viewModel.project(project);
                     }
                 });
 
+                if (viewModel.storeUrl() === true) {
+                    var url = window.location.href;
+
+                    if (url.indexOf("#") != -1) {
+                        url = url.substr(0, url.indexOf("#"));
+                    }
+
+                    if (url.charAt(url.length - 1) != '/') {
+                        url += '/';
+                    }
+
+                    if (url.indexOf("board/") == -1) {
+                        url += 'board/' + projectId +'/';
+                    } else {
+                        url = url.substr(0, url.indexOf("board/")) + 'board/' + projectId +'/';
+                    }
+
+                    history.pushState({}, '', url);
+                } else {
+                    viewModel.storeUrl(true);
+                }
+
+                viewModel.selectedProjectId(projectId);
+
+                createCookie('projectId', projectId, 30);
+
+                // TODO: this cannot work like this
+                var sprintId = readCookie('sprintId_' + projectId);
+
+                if (sprintId > 0) {
+                    viewModel.selectedSprintId(sprintId);
+                }
+
                 // Specify parameters to fetch backlog story data
                 var parameters = {
-                    projectId: value,
+                    projectId: projectId,
                     sprintId: 0,
                     sort: 'priority ASC'
                 };
 
                 // Fetch project backlog story JSON data
                 jQuery.getJSON("/story/", parameters)
-                .done(function(/** models.rest.story[] */stories) {
-                    // Map fetched JSON data to story objects
-                    var storyObjects = ko.utils.arrayMap(stories, function(/** models.rest.story */story) {
-                        return new Story(story);
+                    .done(function(/** models.rest.story[] */stories) {
+                        // Map fetched JSON data to story objects
+                        var storyObjects = ko.utils.arrayMap(stories, function(/** models.rest.story */story) {
+                            return new Story(story);
+                        });
+
+                        // Assign stories to backlog
+                        viewModel.backlog(storyObjects);
+                    })
+                    .fail(function(jqXhr, textStatus, error) {
+                        viewModel.backlog([]);
+
+                        handleAjaxError(jqXhr, textStatus, error);
                     });
-
-                    // Assign stories to backlog
-                    viewModel.backlog(storyObjects);
-                })
-                .fail(function(jqXhr, textStatus, error) {
-                    viewModel.backlog([]);
-
-                    handleAjaxError(jqXhr, textStatus, error);
-                });
 
                 // Specify parameters to fetch project sprint data
                 parameters = {
-                    projectId: value,
+                    projectId: projectId,
                     sort: 'dateStart ASC'
                 };
 
                 // Fetch project sprint data
                 jQuery.getJSON("/sprint/", parameters)
-                .done(function(/** models.rest.sprint[] */sprints) {
-                    // Map fetched JSON data to sprint objects
-                    var mappedData = ko.utils.arrayMap(sprints, function(/** models.rest.sprint */sprint) {
-                        return new Sprint(sprint);
+                    .done(function(/** models.rest.sprint[] */sprints) {
+                        // Map fetched JSON data to sprint objects
+                        var mappedData = ko.utils.arrayMap(sprints, function(/** models.rest.sprint */sprint) {
+                            return new Sprint(sprint);
+                        });
+
+                        viewModel.sprints(mappedData);
+
+                        // Set project specified min/max sprint dates
+                        viewModel.updateProjectSprintDates();
+
+                        if (mappedData.length > 0) {
+                            elementSprint.removeAttr('disabled');
+
+                            elementSprint.find('option').each(function() {
+                                if (jQuery(this).val() == '') {
+                                    jQuery(this).text(elementSprint.data('textChooseSprint'));
+                                }
+
+                            });
+
+                            if (viewModel.selectedSprintId() > 0) {
+                                jQuery('#selectSprint').trigger('change');
+                            }
+                        } else {
+                            elementSprint.attr('disabled', 'disabled');
+
+                            elementSprint.find('option').each(function() {
+                                if (jQuery(this).val() == '') {
+                                    jQuery(this).text(elementSprint.data('textNoData'));
+                                }
+                            });
+                        }
+                    })
+                    .fail(function(jqXhr, textStatus, error) {
+                        viewModel.sprints([]);
+
+                        handleAjaxError(jqXhr, textStatus, error);
                     });
-
-                    viewModel.sprints(mappedData);
-
-                    // Set project specified min/max sprint dates
-                    viewModel.updateProjectSprintDates();
-
-                    if (mappedData.length > 0) {
-                        elementSprint.removeAttr('disabled');
-
-                        // @todo this has some bug, fix later
-                        jQuery('option:selected', elementSprint).text(elementSprint.data('textChooseSprint'));
-                    } else {
-                        elementSprint.attr('disabled', 'disabled');
-
-                        // @todo maybe bug, check and fix later
-                        jQuery('option:selected', elementSprint).text(elementSprint.data('textNoData'));
-                    }
-                })
-                .fail(function(jqXhr, textStatus, error) {
-                    viewModel.sprints([]);
-
-                    handleAjaxError(jqXhr, textStatus, error);
-                });
 
                 // Specify parameters to fetch project phase data
                 parameters = {
-                    projectId: value,
+                    projectId: projectId,
                     sort: 'order ASC'
                 };
 
                 // Fetch project phase data
                 jQuery.getJSON("/phase/", parameters)
-                .done(function(/** models.rest.phase[] */phases) {
-                    // Map fetched JSON data to sprint objects
-                    var mappedData = ko.utils.arrayMap(phases, function(/** models.rest.phase */phase) {
-                        return new Phase(phase);
+                    .done(function(/** models.rest.phase[] */phases) {
+                        // Map fetched JSON data to sprint objects
+                        var mappedData = ko.utils.arrayMap(phases, function(/** models.rest.phase */phase) {
+                            return new Phase(phase);
+                        });
+
+                        viewModel.phases(mappedData);
+
+                        jQuery('body').trigger('initializeCheck', 'phases');
+                    })
+                    .fail(function(jqXhr, textStatus, error) {
+                        viewModel.phases([]);
+
+                        handleAjaxError(jqXhr, textStatus, error);
                     });
-
-                    viewModel.phases(mappedData);
-
-                    jQuery('body').trigger('initializeCheck', 'phases');
-                })
-                .fail(function(jqXhr, textStatus, error) {
-                    viewModel.phases([]);
-
-                    handleAjaxError(jqXhr, textStatus, error);
-                });
             }
         });
     }
@@ -147,9 +190,8 @@ ko.bindingHandlers.changeSprint = {
      * @param                               valueAccessor
      * @param                               allBindingsAccessor
      * @param   {models.knockout.viewModel} viewModel
-     * @param                               bindingContext
      */
-    init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+    init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
         var elementSprint = jQuery(element);
 
         // Actual change event is triggered
@@ -170,6 +212,26 @@ ko.bindingHandlers.changeSprint = {
                     }
                 });
 
+                // TODO: not always push url to history...
+
+                var url = window.location.href;
+
+                if (url.charAt(url.length - 1) != '/') {
+                    url += '/';
+                }
+
+                if (url.indexOf("sprint/") == -1) {
+                    url += 'sprint/' + sprintId +'/';
+                } else {
+                    url = url.substr(0, url.indexOf("sprint/")) + 'sprint/' + sprintId +'/';
+                }
+
+                history.pushState({}, '', url);
+
+                viewModel.selectedSprintId(sprintId);
+
+                createCookie('sprintId_' + viewModel.selectedProjectId(), sprintId, 30);
+
                 // Specify parameters to fetch project sprint story data
                 var parameters = {
                     sprintId: sprintId,
@@ -178,19 +240,19 @@ ko.bindingHandlers.changeSprint = {
 
                 // Fetch sprint story data
                 jQuery.getJSON("/story/", parameters)
-                .done(function(/** models.rest.story[] */stories) {
-                    // Map fetched JSON data to story objects
-                    var mappedData = ko.utils.arrayMap(stories, function(/** models.rest.story */story) {
-                        return new Story(story);
+                    .done(function(/** models.rest.story[] */stories) {
+                        // Map fetched JSON data to story objects
+                        var mappedData = ko.utils.arrayMap(stories, function(/** models.rest.story */story) {
+                            return new Story(story);
+                        });
+
+                        viewModel.stories(mappedData);
+                    })
+                    .fail(function(jqXhr, textStatus, error) {
+                        viewModel.stories([]);
+
+                        handleAjaxError(jqXhr, textStatus, error);
                     });
-
-                    viewModel.stories(mappedData);
-                })
-                .fail(function(jqXhr, textStatus, error) {
-                    viewModel.stories([]);
-
-                    handleAjaxError(jqXhr, textStatus, error);
-                });
             }
         });
     }
@@ -217,7 +279,7 @@ ko.bindingHandlers.qtip = {
                     jQuery(element).qtip("api").destroy();
                     jQuery(element).removeClass('generated_qtip');
                 } catch (err) {
-                    //There was no Qtip defined on the element yet
+                    // There was no Qtip defined on the element yet
                 }
             });
         }
@@ -235,7 +297,7 @@ ko.bindingHandlers.qtip = {
                     jQuery(element).removeClass('generated_qtip');
                 }
                 catch (err) {
-                    //There was no Qtip defined on the element yet
+                    // There was no Qtip defined on the element yet
                 }
 
                 var options = settings.options ? settings.options : {};
@@ -291,7 +353,7 @@ ko.bindingHandlers.qtip = {
                     jQuery(element).removeClass('generated_qtip');
                 }
                 catch (err) {
-                    //There was no Qtip defined on the element yet
+                    // There was no Qtip defined on the element yet
                 }
             }
         }
@@ -321,53 +383,65 @@ function ViewModel() {
     self.project    = ko.observable();
     self.sprint     = ko.observable();
 
+    self.selectedProjectId = ko.observable(selectedProjectId);
+    self.selectedSprintId = ko.observable(selectedSprintId);
+    self.storeUrl = ko.observable(true);
+
     // Fetch user data from server
     jQuery.getJSON("/user")
-    .done(function(data) {
-        // Map fetched JSON data to user objects
-        var mappedData = ko.utils.arrayMap(data, function(/** models.rest.user */user) {
-            return new User(user);
+        .done(function(data) {
+            // Map fetched JSON data to user objects
+            var mappedData = ko.utils.arrayMap(data, function(/** models.rest.user */user) {
+                return new User(user);
+            });
+
+            self.users(mappedData);
+
+            jQuery('body').trigger('initializeCheck', 'users');
+        })
+        .fail(function(jqXhr, textStatus, error) {
+            handleAjaxError(jqXhr, textStatus, error);
         });
-
-        self.users(mappedData);
-
-        jQuery('body').trigger('initializeCheck', 'users');
-    })
-    .fail(function(jqXhr, textStatus, error) {
-        handleAjaxError(jqXhr, textStatus, error);
-    });
 
     // Fetch task type data from server
     jQuery.getJSON("/type", {sort: 'order ASC'})
-    .done(function(data) {
-        // Map fetched JSON data to task type objects
-        var mappedData = ko.utils.arrayMap(data, function(/** models.rest.type */type) {
-            return new Type(type);
+        .done(function(data) {
+            // Map fetched JSON data to task type objects
+            var mappedData = ko.utils.arrayMap(data, function(/** models.rest.type */type) {
+                return new Type(type);
+            });
+
+            self.types(mappedData);
+
+            jQuery('body').trigger('initializeCheck', 'types');
+        })
+        .fail(function(jqXhr, textStatus, error) {
+            handleAjaxError(jqXhr, textStatus, error);
         });
-
-        self.types(mappedData);
-
-        jQuery('body').trigger('initializeCheck', 'types');
-    })
-    .fail(function(jqXhr, textStatus, error) {
-        handleAjaxError(jqXhr, textStatus, error);
-    });
 
     // Fetch project data from server
     jQuery.getJSON("/project")
-    .done(function(data) {
-        // Map fetched JSON data to project objects
-        var mappedData = ko.utils.arrayMap(data, function(/** models.rest.project */project) {
-            return new Project(project);
+        .done(function(data) {
+            // Map fetched JSON data to project objects
+            var mappedData = ko.utils.arrayMap(data, function(/** models.rest.project */project) {
+                return new Project(project);
+            });
+
+            self.projects(mappedData);
+
+            if (self.selectedProjectId() > 0) {
+                jQuery.each(myViewModel.projects(), function(key, project) {
+                    if (project.id() === self.selectedProjectId()) {
+                        jQuery('#selectProject').trigger('change');
+                    }
+                });
+            }
+
+            jQuery('body').trigger('initializeCheck', 'projects');
+        })
+        .fail(function(jqXhr, textStatus, error) {
+            handleAjaxError(jqXhr, textStatus, error);
         });
-
-        self.projects(mappedData);
-
-        jQuery('body').trigger('initializeCheck', 'projects');
-    })
-    .fail(function(jqXhr, textStatus, error) {
-        handleAjaxError(jqXhr, textStatus, error);
-    });
 
     // Sorted project objects
     self.sortedProjects = ko.computed(function() {

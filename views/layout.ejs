@@ -23,6 +23,12 @@
     <link rel="stylesheet" href="/linker/styles/modal.css">
     <link rel="stylesheet" href="/linker/styles/screen.css">
     <!--STYLES END-->
+
+    <script type="text/javascript">
+        var selectedProjectId = <%= projectId %>;
+        var selectedSprintId = <%= sprintId %>;
+    </script>
+
 </head>
 
 <body>
@@ -36,7 +42,8 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="brand" href="#">Taskboard</a>
+
+                <a class="brand" href="/">Taskboard</a>
 
                 <div class="nav-collapse collapse">
                     <ul id="navigation" class="nav" style="display: none;">
@@ -47,8 +54,9 @@
                                         options: sortedProjects,
                                         optionsText: 'title',
                                         optionsValue: 'id',
-                                        changeProject: 'id',
-                                        optionsCaption: '--select project--'
+                                        optionsCaption: '--select project--',
+                                        value: selectedProjectId(),
+                                        changeProject: 'id'
                                     "
                                 ></select>
                                 <span class="add-on dropdown">
@@ -132,10 +140,10 @@
                                         options: sortedSprints,
                                         optionsText: 'formattedTitle',
                                         optionsValue: 'id',
-                                        changeSprint: 'id',
-                                        optionsCaption: '-- select project first --'
+                                        optionsCaption: '-- select sprint --',
+                                        value: selectedSprintId(),
+                                        changeSprint: 'id'
                                     "
-                                    data-text-choose-project="-- select project first --"
                                     data-text-choose-sprint="-- select sprint --"
                                     data-text-no-data="-- No sprint data --"
                                 ></select>
