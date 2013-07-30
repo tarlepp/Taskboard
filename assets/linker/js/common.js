@@ -147,7 +147,7 @@ function openBootboxDialog(title, content, buttons, trigger) {
     // Every dialog has close button.
     buttonsToShow.push({
         label: "Close",
-        class: "pull-left",
+        class: "btn btn-default pull-left",
         callback: function() {
             if (trigger) {
                 jQuery('body').trigger(trigger);
