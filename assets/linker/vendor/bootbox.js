@@ -361,6 +361,9 @@ var bootbox = window.bootbox || (function(document, $) {
 
         var parts = ["<div class='bootbox modal' tabindex='-1' style='overflow:hidden;'>"];
 
+        parts.push("<div class='modal-dialog'>");
+        parts.push("<div class='modal-content'>");
+
         if (options['header']) {
             var closeButton = '';
             if (typeof options['headerCloseButton'] == 'undefined' || options['headerCloseButton']) {
@@ -377,6 +380,8 @@ var bootbox = window.bootbox || (function(document, $) {
             parts.push("<div class='modal-footer'>"+buttons+"</div>");
         }
 
+        parts.push("</div>");
+        parts.push("</div>");
         parts.push("</div>");
 
         var div = $(parts.join("\n"));
