@@ -1,54 +1,55 @@
 <form id="formProjectNew" class="form-horizontal">
-    <fieldset>
-        <div class="control-group required">
-            <label class="control-label" for="formProjectNewTitle">Title</label>
-            <div class="controls">
-                <input id="formProjectNewTitle" name="title" type="text" placeholder="enter project name" class="span3" required="required" />
+    <div class="form-group required">
+        <label class="col-lg-3 control-label" for="formProjectNewTitle">Title</label>
+        <div class="col-lg-9">
+            <input id="formProjectNewTitle" name="title" type="text" class="form-control" placeholder="enter project name" required="required" />
+        </div>
+    </div>
+
+    <div class="form-group required">
+        <label class="col-lg-3 control-label" for="formProjectNewManagerId">Project manager</label>
+        <div class="col-lg-9">
+            <select id="formProjectNewManagerId" name="managerId" class="form-control">
+                <option value="#">-- select --</option>
+                <% _.each(users, function(user) { %>
+                <option value="<%= user.id %>"><%= user.fullName() %></option>
+                <% }) %>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group required">
+        <label class="col-lg-3 control-label" for="formProjectNewDateStart">Duration</label>
+        <label class="col-lg-3 control-label" for="formProjectNewDateEnd" style="display: none;"></label>
+        <div class="col-lg-9">
+            <div class="input-group date dateStart">
+                <input id="formProjectNewDateStart" name="dateStart" type="text" class="form-control dateInput" size="16" required="required" readonly="readonly"
+                    data-validate-type="daterange"
+                    data-role="start"
+                    data-pair="formProjectNewDateEnd"
+                    data-focus="false"
+                    data-type="project"
+                />
+                <span class="input-group-addon"><i class="icon-calendar"></i></span>
+            </div>
+            <span class="separator">&mdash;</span>
+            <div class="input-group date dateEnd">
+                <input id="formProjectNewDateEnd" name="dateEnd" type="text" class="form-control dateInput" size="16" required="required" readonly="readonly"
+                    data-validate-type="daterange"
+                    data-role="end"
+                    data-pair="formProjectNewDateStart"
+                    data-focus="false"
+                    data-type="project"
+                />
+                <span class="input-group-addon"><i class="icon-calendar"></i></span>
             </div>
         </div>
-        <div class="control-group required">
-            <label class="control-label" for="formProjectNewManagerId">Project manager</label>
-            <div class="controls">
-                <select id="formProjectNewManagerId" name="managerId" class="span3 required">
-                    <option value="#">-- select --</option>
-                    <% _.each(users, function(user) { %>
-                    <option value="<%= user.id %>"><%= user.fullName() %></option>
-                    <% }) %>
-                </select>
-            </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-lg-3 control-label" for="formProjectNewDescription">Description</label>
+        <div class="col-lg-9">
+            <textarea id="formProjectNewDescription" name="description" class="form-control" placeholder="enter project description"></textarea>
         </div>
-        <div class="control-group required">
-            <label class="control-label" for="formProjectNewDateStart">Duration</label>
-            <label class="control-label" for="formProjectNewDateEnd" style="display: none;"></label>
-            <div class="controls">
-                <div class="input-append date dateStart">
-                    <input id="formProjectNewDateStart" name="dateStart" type="text" class="dateInput" size="16" required="required" readonly="readonly"
-                        data-validate-type="daterange"
-                        data-role="start"
-                        data-pair="formProjectNewDateEnd"
-                        data-focus="false"
-                        data-type="project"
-                    />
-                    <span class="add-on"><i class="icon-calendar"></i></span>
-                </div>
-                <span class="separator">&mdash;</span>
-                <div class="input-append date dateEnd">
-                    <input id="formProjectNewDateEnd" name="dateEnd" type="text" class="dateInput" size="16" required="required" readonly="readonly"
-                        data-validate-type="daterange"
-                        data-role="end"
-                        data-pair="formProjectNewDateStart"
-                        data-focus="false"
-                        data-type="project"
-                    />
-                    <span class="add-on"><i class="icon-calendar"></i></span>
-                </div>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label" for="formProjectNewDescription">Description</label>
-            <div class="controls">
-                <textarea id="formProjectNewDescription" name="description" class="span3" placeholder="enter project description"></textarea>
-            </div>
-        </div>
-    </fieldset>
+    </div>
 </form>
