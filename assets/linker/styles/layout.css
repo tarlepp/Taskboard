@@ -1,9 +1,9 @@
 #container {
-    margin-top: 50px;
+    margin-top: 60px;
     margin-bottom: 20px;
 }
 
-#footer .container-fluid {
+#footer .container {
     text-align: center;
 }
 
@@ -11,8 +11,11 @@
     min-height: 40px;
 }
 
-#footer .navbar-inner {
+#footer .navbar {
     min-height: 30px;
+}
+
+#footer .navbar-inner {
     line-height: 30px;
     font-size: 12px;
 }
@@ -31,44 +34,51 @@
     margin-right: 3px;
 }
 
-.container-fluid {
-    padding-right: 10px;
-    padding-left: 10px;
+#header .navbar {
+    border-bottom: 1px solid #dddddd;
 }
 
-.navbar .brand {
-    padding: 8px 15px 10px 25px;
+#header .navbar .navbar-brand {
+    padding: 13px 10px 10px 20px;
     color: #333333;
     font-weight: normal;
-    font-size: 26px;
+    font-size: 30px;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
 }
 
-.navbar .nav > li > a {
-    padding: 10px 5px;
+#navigation {
+    position: relative;
+    top: 5px;
 }
 
-.navbar .nav > li.dropdown > a {
-    padding: 10px 15px;
-}
-
-.navbar .nav > li select {
+#navigation select {
     width: auto;
+    font-size: 16px;
 }
 
-.navbar .nav li .navBarSelect {
-    margin: 5px 5px 0 0;
+#navigation .input-group,
+#navigation .input-group span {
+    display: inline-block;
 }
 
-li .nav-header.text-error {
-    color: #b94a48;
+#navigation .input-group {
+    margin-right: -15px;
 }
 
-li .nav-header.text-info {
-    color: #3a87ad;
+#navigation .input-group span {
+    position: relative;
+    left: -3px;
 }
 
-li .nav-header {
+#navigation .input-group-addon {
+    padding: 8px 20px 8px 8px
+}
+
+#navigation ul.dropdown-menu li {
+    text-align: left;
+}
+
+#navigation ul.dropdown-menu li.nav-header {
     padding: 3px 15px;
     font-size: 17px;
     font-weight: normal;
@@ -76,58 +86,23 @@ li .nav-header {
     text-transform: none;
 }
 
-.nav li + .nav-header {
-    margin-top: 0;
-}
-
-.input-append .add-on ul a {
-    text-shadow: none;
-}
-
-li#functionHelp {
-    padding-right: 10px;
-}
-
-li#functionHelp a {
-    padding-right: 0;
-    color: #0088cc;
-}
-
-li#functionHelp a:hover {
-    color: #333333;
-}
-
-.input-append .add-on li {
-    text-align: left;
-}
-
-.dropdown-menu > li > a {
-    padding: 3px 20px 3px 10px;
-    font-size: 15px;
-}
-
-.dropdown-menu > li > a i {
+#navigation ul.dropdown-menu > li > a i,
+#navigation-static ul.dropdown-menu > li > a i {
     position: relative;
-    float: left;
-    top: 2px;
-    width: 20px;
+    left: -5px;
+    width: 15px;
     text-align: center;
-    margin-right: 5px;
+    display: inline-block;
 }
 
-.dropdown-menu .divider {
-    margin: 2px 0;
+#navigation ul.dropdown-menu .divider {
+    margin: 5px 0;
 }
 
-.dropdown .dropdown-menu .nav-header {
-    padding-right: 20px;
-    padding-left: 10px;
-}
-
-.dropdown-menu:before {
+#navigation .dropdown-menu:before {
     position: absolute;
     top: -7px;
-    left: 5px;
+    left: 7px;
     display: inline-block;
     border-right: 7px solid transparent;
     border-bottom: 7px solid #ccc;
@@ -136,13 +111,68 @@ li#functionHelp a:hover {
     content: '';
 }
 
-.dropdown-menu:after {
+#navigation .dropdown-menu:after {
     position: absolute;
     top: -6px;
-    left: 6px;
+    left: 8px;
     display: inline-block;
     border-right: 6px solid transparent;
     border-bottom: 6px solid #ffffff;
     border-left: 6px solid transparent;
     content: '';
+}
+
+#navigation-static .dropdown-menu:before {
+    position: absolute;
+    top: -7px;
+    right: 12px;
+    display: inline-block;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid #ccc;
+    border-left: 7px solid transparent;
+    border-bottom-color: rgba(0, 0, 0, 0.2);
+    content: '';
+}
+
+#navigation-static .dropdown-menu:after {
+    position: absolute;
+    top: -6px;
+    right: 13px;
+    display: inline-block;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #ffffff;
+    border-left: 6px solid transparent;
+    content: '';
+}
+
+#navigation-static.navbar-nav > li > .dropdown-menu {
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+}
+
+#navigation-static.navbar-nav > li > a i {
+    color: #428bca;
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 100%;
+    }
+}
+
+.container {
+    padding-right: 10px;
+    padding-left: 10px;
 }

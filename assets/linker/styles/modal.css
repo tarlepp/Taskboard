@@ -26,22 +26,23 @@
 .modal-header {
     background-color: #f5f5f5;
     border-bottom: 1px solid #dddddd;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    padding: 8px 5px 8px 12px;
 }
 
 .modal-header h3 {
     line-height: 28px;
     font-size: 22px;
     font-weight: normal;
+    margin: 0;
 }
 
 .modal-header .close {
     margin: 0;
     font-size: 60px;
     font-weight: normal;
-}
-
-.modal-header {
-    padding: 8px 12px;
+    line-height: 20px;
 }
 
 .modal-footer {
@@ -51,7 +52,6 @@
 .modalBacklog {
     width: 800px;
     margin-left: -400px;
-
 }
 
 .modalBacklog .modal-body {

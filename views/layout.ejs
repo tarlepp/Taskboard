@@ -6,14 +6,13 @@
     </title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,300' rel='stylesheet' type='text/css'>
 
     <!--STYLES-->
     <link rel="stylesheet" href="/linker/vendor/jQuery-UI/jquery-ui.css">
     <link rel="stylesheet" href="/linker/vendor/bootstrap/css/bootstrap.css">
-    <link rel="stylesheet" href="/linker/vendor/bootstrap/css/bootstrap-responsive.css">
     <link rel="stylesheet" href="/linker/vendor/bootstrap-datepicker/datepicker.css">
     <link rel="stylesheet" href="/linker/vendor/qTip/jquery.qtip.css">
     <link rel="stylesheet" href="/linker/vendor/font-awesome/css/font-awesome.css">
@@ -35,215 +34,203 @@
 
 <div id="header">
     <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
 
-                <a class="brand" href="/">Taskboard</a>
+        <a class="navbar-brand" href="/">Taskboard</a>
 
-                <div class="nav-collapse collapse">
-                    <ul id="navigation" class="nav" style="display: none;">
-                        <li class="">
-                            <div class="input-append navBarSelect">
-                                <select id="selectProject"
-                                    data-bind="
-                                        options: sortedProjects,
-                                        optionsText: 'title',
-                                        optionsValue: 'id',
-                                        optionsCaption: '--select project--',
-                                        value: selectedProjectId(),
-                                        changeProject: 'id'
-                                    "
-                                ></select>
-                                <span class="add-on dropdown">
-                                    <div data-bind="visible: !project()">
-                                        <a href="javascript: void(0);" class="tooltipTitle" title="Add new project"
-                                            data-placement="bottom"
-                                            data-bind="click: $root.addNewProject"
-                                        >
-                                            <i class="icon-plus"></i>
-                                        </a>
-                                    </div>
-                                    <div data-bind="visible: project()">
-                                        <a href="#" class="dropdown-toggle"
-                                            data-toggle="dropdown"
-                                            data-hover="dropdown"
-                                            data-delay="0"
-                                        >
-                                            <i class="icon-wrench"></i>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li class="nav-header text-info">Basic functions</li>
-                                            <li>
-                                                <a href="javascript: void(0);"
-                                                    data-bind="click: $root.addNewProject"
-                                                >
-                                                    <i class="icon-plus"></i>
-                                                    Add new project
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript: void(0);"
-                                                    data-bind="click: $root.editProject"
-                                                >
-                                                    <i class="icon-wrench"></i>
-                                                    Edit project
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript: void(0);"
-                                                    data-bind="click: $root.projectBacklog"
-                                                >
-                                                    <i class="icon-list-ol"></i>
-                                                    Project backlog
-                                                </a>
-                                            </li>
-                                            <li class="divider"></li>
-                                            <li class="nav-header text-info">Settings</li>
-                                            <li>
-                                                <a href="javascript: void(0);"
-                                                    data-bind="click: $root.phasesEdit"
-                                                >
-                                                    <i class="icon-reorder icon-rotate-90"></i>
-                                                    Edit phases
-                                                </a>
-                                                <a href="javascript: void(0);"
-                                                   data-bind="click: $root.projectPlanning"
-                                                        >
-                                                    <i class="icon-cogs"></i>
-                                                    Planning view
-                                                </a>
-                                            </li>
-                                            <li class="divider"></li>
-                                            <li class="nav-header text-error">Danger zone</li>
-                                            <li>
-                                                <a href="javascript: void(0);"
-                                                    data-bind="click: $root.deleteProject"
-                                                >
-                                                    <i class="icon-trash"></i>
-                                                    Delete project
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </span>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="input-append navBarSelect" data-bind="visible: project()">
-                                <select id="selectSprint" disabled="disabled"
-                                    data-bind="
-                                        options: sortedSprints,
-                                        optionsText: 'formattedTitle',
-                                        optionsValue: 'id',
-                                        optionsCaption: '-- select sprint --',
-                                        value: selectedSprintId(),
-                                        changeSprint: 'id'
-                                    "
-                                    data-text-choose-sprint="-- select sprint --"
-                                    data-text-no-data="-- No sprint data --"
-                                ></select>
-                                <span class="add-on dropdown">
-                                    <div data-bind="visible: !sprint()">
-                                        <a href="javascript: void(0);" class="tooltipTitle" title="Add new sprint"
-                                            data-placement="bottom"
-                                            data-bind="click: $root.sprintAdd"
-                                        >
-                                            <i class="icon-plus"></i>
-                                        </a>
-                                    </div>
-                                    <div data-bind="visible: sprint()">
-                                        <a href="#" class="dropdown-toggle"
-                                            data-toggle="dropdown"
-                                            data-hover="dropdown"
-                                            data-delay="0"
-                                        >
-                                            <i class="icon-wrench"></i>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li class="nav-header text-info">Basic functions</li>
-                                            <li>
-                                                <a href="javascript: void(0);"
-                                                    data-placement="bottom"
-                                                    data-bind="click: $root.sprintAdd"
-                                                >
-                                                    <i class="icon-plus"></i>
-                                                    Add new sprint
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript: void(0);"
-                                                    data-bind="click: $root.sprintEdit"
-                                                >
-                                                    <i class="icon-wrench"></i>
-                                                    Edit sprint
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript: void(0);"
-                                                    data-bind="click: $root.sprintBacklog"
-                                                >
-                                                    <i class="icon-list-ol"></i>
-                                                    Sprint backlog
-                                                </a>
-                                            </li>
-                                            <li class="divider"></li>
-                                            <li class="nav-header text-error">Danger zone</li>
-                                            <li>
-                                                <a href="javascript: void(0);"
-                                                    data-bind="click: $root.sprintDelete"
-                                                >
-                                                    <i class="icon-trash"></i>
-                                                    Delete sprint
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </span>
-                            </div>
-                        </li>
-                    </ul>
-
-                    <ul class="nav pull-right">
-                        <li class="dropdown">
-                            <a href="javascript: void(0);" class="dropdown-toggle"
-                                data-toggle="dropdown"
-                                data-hover="dropdown"
+        <ul id="navigation" class="nav navbar-nav" style="display: none;">
+            <li>
+                <div class="input-group">
+                    <select id="selectProject" class="form-control"
+                            data-bind="
+                                    options: sortedProjects,
+                                    optionsText: 'title',
+                                    optionsValue: 'id',
+                                    optionsCaption: '--select project--',
+                                    value: selectedProjectId(),
+                                    changeProject: 'id'
+                                "
+                    ></select>
+                    <span class="input-group-addon dropdown">
+                        <div data-bind="visible: !project()">
+                            <a href="javascript: void(0);" class="tooltipTitle" title="Add new project"
+                               data-placement="bottom"
+                               data-bind="click: $root.addNewProject"
                             >
-                                Settings
-                                <b class="caret"></b>
+                                <i class="icon-plus"></i>
+                            </a>
+                        </div>
+                        <div data-bind="visible: project()">
+                            <a href="#" class="dropdown-toggle"
+                               data-toggle="dropdown"
+                               data-hover="dropdown"
+                               data-delay="100"
+                                    >
+                                <i class="icon-wrench"></i>
                             </a>
                             <ul class="dropdown-menu">
+                                <li class="nav-header text-info">Basic functions</li>
                                 <li>
                                     <a href="javascript: void(0);"
-                                        data-bind="click: $root.usersOpen"
-                                    >
-                                        <i class="icon-user"></i>
-                                        Users
+                                       data-bind="click: $root.addNewProject"
+                                            >
+                                        <i class="icon-plus"></i>
+                                        Add new project
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript: void(0);"
+                                       data-bind="click: $root.editProject"
+                                            >
+                                        <i class="icon-wrench"></i>
+                                        Edit project
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript: void(0);"
+                                       data-bind="click: $root.projectBacklog"
+                                            >
+                                        <i class="icon-list-ol"></i>
+                                        Project backlog
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li class="nav-header text-info">Settings</li>
+                                <li>
+                                    <a href="javascript: void(0);"
+                                       data-bind="click: $root.phasesEdit"
+                                            >
+                                        <i class="icon-reorder icon-rotate-90"></i>
+                                        Edit phases
+                                    </a>
+                                    <a href="javascript: void(0);"
+                                       data-bind="click: $root.projectPlanning"
+                                            >
+                                        <i class="icon-cogs"></i>
+                                        Planning view
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li class="nav-header text-danger">Danger zone</li>
+                                <li>
+                                    <a href="javascript: void(0);"
+                                       data-bind="click: $root.deleteProject"
+                                            >
+                                        <i class="icon-trash"></i>
+                                        Delete project
                                     </a>
                                 </li>
                             </ul>
-                        </li>
-                        <li id="functionHelp">
-                            <a href="javascript: void(0);">
-                                <i class="icon-question-sign tooltipTitle" title="Show help"
-                                    data-qtipopts="{ position: { at: 'center center', my: 'center center' } }"
-                                ></i>
-                            </a>
-                        </li>
-                    </ul>
+                        </div>
+                    </span>
                 </div>
-            </div>
-        </div>
+
+                <div class="input-group" data-bind="visible: project()">
+                    <select id="selectSprint" class="form-control" disabled="disabled"
+                        data-bind="
+                            options: sortedSprints,
+                            optionsText: 'formattedTitle',
+                            optionsValue: 'id',
+                            optionsCaption: '-- select sprint --',
+                            value: selectedSprintId(),
+                            changeSprint: 'id'
+                        "
+                        data-text-choose-sprint="-- select sprint --"
+                        data-text-no-data="-- No sprint data --"
+                    ></select>
+                    <span class="input-group-addon dropdown">
+                        <div data-bind="visible: !sprint()">
+                            <a href="javascript: void(0);" class="tooltipTitle" title="Add new sprint"
+                               data-placement="bottom"
+                               data-bind="click: $root.sprintAdd"
+                                    >
+                                <i class="icon-plus"></i>
+                            </a>
+                        </div>
+                        <div data-bind="visible: sprint()">
+                            <a href="#" class="dropdown-toggle"
+                               data-toggle="dropdown"
+                               data-hover="dropdown"
+                               data-delay="100"
+                                    >
+                                <i class="icon-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-header text-info">Basic functions</li>
+                                <li>
+                                    <a href="javascript: void(0);"
+                                       data-placement="bottom"
+                                       data-bind="click: $root.sprintAdd"
+                                            >
+                                        <i class="icon-plus"></i>
+                                        Add new sprint
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript: void(0);"
+                                       data-bind="click: $root.sprintEdit"
+                                            >
+                                        <i class="icon-wrench"></i>
+                                        Edit sprint
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript: void(0);"
+                                       data-bind="click: $root.sprintBacklog"
+                                            >
+                                        <i class="icon-list-ol"></i>
+                                        Sprint backlog
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li class="nav-header text-danger">Danger zone</li>
+                                <li>
+                                    <a href="javascript: void(0);"
+                                       data-bind="click: $root.sprintDelete"
+                                            >
+                                        <i class="icon-trash"></i>
+                                        Delete sprint
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </span>
+                </div>
+            </li>
+        </ul>
+
+        <ul id="navigation-static" class="nav navbar-nav pull-right">
+            <li class="dropdown">
+                <a href="javascript: void(0);" class="dropdown-toggle"
+                    data-toggle="dropdown"
+                    data-hover="dropdown"
+                >
+                    Settings
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="javascript: void(0);"
+                            data-bind="click: $root.usersOpen"
+                        >
+                            <i class="icon-user"></i>
+                            Users
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li id="functionHelp">
+                <a href="javascript: void(0);">
+                    <i class="icon-question-sign tooltipTitle" title="Show help"
+                        data-qtipopts="{ position: { at: 'center center', my: 'center center' } }"
+                    ></i>
+                </a>
+            </li>
+        </ul>
     </div>
 </div>
 
 <div id="container">
-    <div class="container-fluid">
+    <div class="container">
         <%- body %>
     </div>
 </div>
@@ -251,7 +238,7 @@
 <div id="footer">
     <div class="navbar navbar-fixed-bottom">
         <div class="navbar-inner">
-            <div class="container-fluid">
+            <div class="container">
                 <span class="pull-right text-small">
                     versio 0.2
                 </span>
