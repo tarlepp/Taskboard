@@ -123,7 +123,7 @@ jQuery(document).ready(function() {
             var title = 'Add new project';
             var buttons = {
                 label: "Save",
-                class: "btn-primary pull-right",
+                class: "btn btn-primary pull-right",
                 callback: function() {
                     var form = jQuery('#formProjectNew', modal);
                     var formItems = form.serializeJSON();
@@ -179,7 +179,7 @@ jQuery(document).ready(function() {
             var buttons = [
                 {
                     label: "Save",
-                    class: "btn-primary pull-right",
+                    class: "btn btn-primary pull-right",
                     callback: function() {
                         var form = jQuery('#formProjectEdit');
                         var formItems = form.serializeJSON();
@@ -218,7 +218,7 @@ jQuery(document).ready(function() {
                 },
                 {
                     label: "Delete",
-                    class: "btn-danger pull-right",
+                    class: "btn btn-danger pull-right",
                     callback: function() {
                         // TODO implement this
                         console.log('implement project delete');
