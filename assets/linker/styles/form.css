@@ -1,17 +1,18 @@
-form {
-    margin: 0 0 15px;
-}
-
-form fieldset {
-    margin-top: 15px;
-}
-
 textarea {
     resize: none;
 }
 
 label {
     cursor: default;
+    font-size: 18px;
+    font-weight: normal;
+}
+
+select.form-control {
+    padding-left: 8px;
+}
+
+.form-control {
     font-size: 16px;
 }
 
@@ -19,13 +20,41 @@ label {
     font-size: 16px;
 }
 
-.form-horizontal .control-group {
-    margin-bottom: 5px;
+.input-group.date,
+.input-group.date span {
+    display: inline-block;
+}
+
+.input-group.date span.input-group-addon {
+    position: relative;
+    left: -3px;
+    padding: 8px 20px 8px 8px;
+}
+
+.input-group.date span.input-group-addon i {
+    color: #428bca;
+    cursor: pointer;
+}
+
+.form-group span.separator {
+    left: -8px;
+}
+
+.form-group .col-lg-9 {
+    padding-left: 5px;
+}
+
+.form-horizontal .form-group  {
+    margin-bottom: 10px;
 }
 
 .form-horizontal .dateInput {
-    width: 82px;
+    width: 90px;
     text-align: center;
+}
+
+.has-error .form-control {
+    padding-right: 12px;
 }
 
 .datepicker .cw {
@@ -33,25 +62,16 @@ label {
     font-weight: bold;
 }
 
-.form-horizontal .controls {
-    margin-left: 175px;
-}
-
-.input-append.date .add-on i,
-.input-prepend.date .add-on i {
-    margin: 3px 0 0 3px;
-}
-
 form .required label:after {
     content: '*';
     position: relative;
     float: right;
-    right: -2px;
+    right: -4px;
     top: -4px;
     margin-right: -10px;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
-    color: #b94a48;
+    color: #d9534f;
 }
 
 .ui-slider .ui-slider-handle {

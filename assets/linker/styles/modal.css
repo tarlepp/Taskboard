@@ -3,10 +3,6 @@
     overflow-y: auto;
 }
 
-.modal-body form {
-    margin: -10px 0 0 0;
-}
-
 .modal-body table {
     margin-bottom: 0;
 }
@@ -28,7 +24,7 @@
     border-bottom: 1px solid #dddddd;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
-    padding: 8px 5px 8px 12px;
+    padding: 8px 8px 8px 12px;
 }
 
 .modal-header h3 {
