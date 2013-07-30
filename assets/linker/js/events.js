@@ -257,7 +257,7 @@ jQuery(document).ready(function() {
             var buttons = [
                 {
                     label: "Add new sprint",
-                    class: "btn-primary pull-right",
+                    class: "btn btn-primary pull-right",
                     callback: function() {
                         modal.modal('hide');
 
@@ -268,7 +268,7 @@ jQuery(document).ready(function() {
                 },
                 {
                     label: "Add new story",
-                    class: "btn-primary pull-right",
+                    class: "btn btn-primary pull-right",
                     callback: function() {
                         modal.modal('hide');
 
@@ -280,7 +280,7 @@ jQuery(document).ready(function() {
             ];
 
             // Open bootbox modal
-            var modal = openBootboxDialog(title, content, buttons);
+            var modal = openBootboxDialog(title, content, buttons, false);
 
             // Add required class for backlog
             modal.addClass('modalBacklog');

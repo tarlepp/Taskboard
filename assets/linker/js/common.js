@@ -133,10 +133,10 @@ function dispatch(fn, args) {
 /**
  * Function opens a Bootbox modal dialog with specified title, content and buttons.
  *
- * @param   {string}            title   Modal title
- * @param   {string}            content Modal content as html
- * @param   {object|array|null} buttons Button(s) to add dialog
- * @param   {undefined|string}  trigger Possible body trigger event on close
+ * @param   {string}                    title   Modal title
+ * @param   {string}                    content Modal content as html
+ * @param   {object|array|null}         buttons Button(s) to add dialog
+ * @param   {undefined|string|boolean}  trigger Possible body trigger event on close
  * @returns {*}
  */
 function openBootboxDialog(title, content, buttons, trigger) {
