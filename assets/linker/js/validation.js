@@ -34,7 +34,7 @@ function validateForm(items) {
             input = input.find('input');
         }
 
-        var group = input.closest('.control-group');
+        var group = input.closest('.form-group');
         var label = group.find('label').html();
         var value = jQuery.trim(input.val());
         var type = input.data('validateType');
@@ -54,7 +54,7 @@ function validateForm(items) {
             ) {
             required.push(label);
 
-            group.addClass('error');
+            group.addClass('has-error');
 
             if (input.data('focus') !== false) {
                 input.focus();
@@ -62,7 +62,7 @@ function validateForm(items) {
 
             valid = false;
         } else if (method && dispatch(method, [input, group, label, value, errors]) !== true) {
-            group.addClass('error');
+            group.addClass('has-error');
 
             if (input.data('focus') !== false) {
                 input.focus();
@@ -70,7 +70,7 @@ function validateForm(items) {
 
             valid = false;
         } else {
-            group.removeClass('error')
+            group.removeClass('has-error')
         }
     });
 
@@ -85,7 +85,7 @@ function validateForm(items) {
             message += errors.unique().join("<br />");
         }
 
-        makeMessage(message, 'error');
+        makeMessage(message, 'error', {});
     }
 
     return valid;
@@ -105,7 +105,6 @@ function validateForm(items) {
  * @returns {boolean}
  */
 function validateDate(input, group, label, date, errors) {
-
     return checkDate(date);
 }
 
