@@ -111,7 +111,7 @@ jQuery(document).ready(function() {
         var content = "TODO: try to use sails client side templates...";
 
         // Open bootbox modal
-        var modal = openBootboxDialog(title, content, null);
+        var modal = createBootboxDialog(title, content, null);
     });
 
     /**
@@ -157,12 +157,14 @@ jQuery(document).ready(function() {
             };
 
             // Open bootbox modal
-            var modal = openBootboxDialog(title, content, buttons);
+            var modal = createBootboxDialog(title, content, buttons, false);
 
             // Make form init when dialog is opened.
-            modal.on('shown', function() {
+            modal.on('shown.bs.modal', function() {
                 initProjectForm(modal, false);
             });
+
+            modal.modal('show');
         })
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
@@ -229,12 +231,14 @@ jQuery(document).ready(function() {
             ];
 
             // Open bootbox modal
-            var modal = openBootboxDialog(title, content, buttons);
+            var modal = createBootboxDialog(title, content, buttons, false);
 
             // Make form init when dialog is opened.
-            modal.on('shown', function() {
+            modal.on('shown.bs.modal', function() {
                 initProjectForm(modal, true);
             });
+
+            modal.modal('show');
         })
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
@@ -280,13 +284,13 @@ jQuery(document).ready(function() {
             ];
 
             // Open bootbox modal
-            var modal = openBootboxDialog(title, content, buttons, false);
+            var modal = createBootboxDialog(title, content, buttons, false);
 
             // Add required class for backlog
             modal.addClass('modalBacklog');
 
             // Make form init when dialog is opened.
-            modal.on('shown', function() {
+            modal.on('shown.bs.modal', function() {
                 initProjectPlanning(modal);
             });
 
@@ -301,6 +305,8 @@ jQuery(document).ready(function() {
 
                 body.trigger(trigger, [id, 'projectPlanning'])
             });
+
+            modal.modal('show');
         })
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
@@ -318,7 +324,7 @@ jQuery(document).ready(function() {
             var buttons = [
                 {
                     label: "Save",
-                    class: "btn-primary pull-right",
+                    class: "btn btn-primary pull-right",
                     callback: function() {
                         var errors = false;
                         var lines = jQuery("#projectPhases", modal).find("tbody tr");
@@ -413,7 +419,7 @@ jQuery(document).ready(function() {
                 },
                 {
                     label: "Add new phase",
-                    class: "pull-right",
+                    class: "btn btn-primary pull-right",
                     callback: function() {
                         var newRow = jQuery('#projectPhasesNew', modal).find('tr').clone();
                         var slider = newRow.find('.slider');
@@ -445,12 +451,14 @@ jQuery(document).ready(function() {
             ];
 
             // Open bootbox modal
-            var modal = openBootboxDialog(title, content, buttons);
+            var modal = createBootboxDialog(title, content, buttons, false);
 
             // Make form init when dialog is opened.
-            modal.on('shown', function() {
+            modal.on('shown.bs.modal', function() {
                 initProjectPhases(modal);
             });
+
+            modal.modal('show');
         })
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
@@ -513,7 +521,7 @@ jQuery(document).ready(function() {
             ];
 
             // Open bootbox modal
-            var modal = openBootboxDialog(title, content, buttons, trigger);
+            var modal = createBootboxDialog(title, content, buttons, trigger);
 
             // Make form init when dialog is opened.
             modal.on('shown', function() {
@@ -598,7 +606,7 @@ jQuery(document).ready(function() {
             ];
 
             // Open bootbox modal
-            var modal = openBootboxDialog(title, content, buttons, trigger);
+            var modal = createBootboxDialog(title, content, buttons, trigger);
 
             // Make form init when dialog is opened.
             modal.on('shown', function() {
@@ -710,7 +718,7 @@ jQuery(document).ready(function() {
             ];
 
             // Open bootbox modal
-            var modal = openBootboxDialog(title, content, buttons, trigger);
+            var modal = createBootboxDialog(title, content, buttons, trigger);
 
             // Make form init when dialog is opened.
             modal.on('shown', function() {
@@ -810,7 +818,7 @@ jQuery(document).ready(function() {
             ];
 
             // Open bootbox modal
-            var modal = openBootboxDialog(title, content, buttons, trigger);
+            var modal = createBootboxDialog(title, content, buttons, trigger);
 
             // Make form init when dialog is opened.
             modal.on('shown', function() {
@@ -866,7 +874,7 @@ jQuery(document).ready(function() {
             ];
 
             // Open bootbox modal
-            var modal = openBootboxDialog(title, content, buttons);
+            var modal = createBootboxDialog(title, content, buttons);
 
             // Make form init when dialog is opened.
             modal.on('shown', function() {
@@ -963,7 +971,7 @@ jQuery(document).ready(function() {
             ];
 
             // Open bootbox modal
-            var modal = openBootboxDialog(title, content, buttons);
+            var modal = createBootboxDialog(title, content, buttons);
 
             // Make form init when dialog is opened.
             modal.on('shown', function() {

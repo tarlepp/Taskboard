@@ -131,15 +131,16 @@ function dispatch(fn, args) {
 }
 
 /**
- * Function opens a Bootbox modal dialog with specified title, content and buttons.
+ * Function creates a Bootbox modal dialog with specified title, content and buttons.
  *
  * @param   {string}                    title   Modal title
  * @param   {string}                    content Modal content as html
  * @param   {object|array|null}         buttons Button(s) to add dialog
  * @param   {undefined|string|boolean}  trigger Possible body trigger event on close
+ *
  * @returns {*}
  */
-function openBootboxDialog(title, content, buttons, trigger) {
+function createBootboxDialog(title, content, buttons, trigger) {
     trigger = trigger || false;
 
     var buttonsToShow = [];
@@ -165,17 +166,15 @@ function openBootboxDialog(title, content, buttons, trigger) {
     }
 
     // Return bootbox dialog
-    var modal = bootbox.dialog(
+    return bootbox.dialog(
         content,
         buttonsToShow,
         {
-            header: title
+            header: title,
+            animate: false,
+            show: false
         }
     );
-
-    modal.removeClass('fade');
-
-    return modal;
 }
 
 /**
