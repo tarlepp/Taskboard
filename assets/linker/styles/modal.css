@@ -45,7 +45,7 @@
     padding: 8px;
 }
 
-.modalBacklog {
+.modalBacklog .modal-dialog {
     width: 800px;
     margin-left: -400px;
 }
@@ -55,4 +55,8 @@
     min-height: 500px;
     max-height: 500px;
     overflow-y: scroll;
+}
+
+.backlog .col-lg-6:first-of-type {
+    padding-right: 0;
 }

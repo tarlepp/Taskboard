@@ -10,6 +10,7 @@ label {
 
 select.form-control {
     padding-left: 8px;
+    padding-right: 8px;
 }
 
 .form-control {

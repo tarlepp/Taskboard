@@ -38,6 +38,10 @@
     border-bottom: 1px solid #dddddd;
 }
 
+#footer .navbar {
+    border-top: 1px solid #dddddd;
+}
+
 #header .navbar .navbar-brand {
     padding: 13px 10px 10px 20px;
     color: #333333;
