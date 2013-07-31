@@ -433,10 +433,6 @@ function initSprintForm(modal, edit) {
         weekStart: 1,
         calendarWeeks: true
     })
-    .on('onRender', function(event) {
-        console.log('wut');
-        return 'disabled';
-    })
     .on('changeDate', function(event) {
         if (valueEnd && event.date.format('yyyy-mm-dd') > valueEnd.format('yyyy-mm-dd')) {
             if (valueStart) {
@@ -447,21 +443,21 @@ function initSprintForm(modal, edit) {
 
             makeMessage('Start date cannot be later than end date.', 'error', {});
 
-            containerStart.closest('.control-group').addClass('error');
+            containerStart.closest('.input-group').addClass('has-error');
         } else if (
             (event.date.format('yyyy-mm-dd') < dateMin.format('yyyy-mm-dd'))
             || (event.date.format('yyyy-mm-dd') > dateMax.format('yyyy-mm-dd'))
         ) {
             makeMessage('Start date conflicts with project duration. Start date must be between ' + dateMin.format('yyyy-mm-dd') + ' and ' + dateMax.format('yyyy-mm-dd')  + '.', 'error', {});
 
-            containerStart.closest('.control-group').addClass('error');
+            containerStart.closest('.input-group').addClass('has-error');
         } else if (checkSprintDates(event.date, 1, sprintId, true) !== true) {
-            containerStart.closest('.control-group').addClass('error');
+            containerStart.closest('.input-group').addClass('has-error');
         } else {
             valueStart = new Date(event.date);
 
             containerStart.bootstrapDP('hide');
-            containerStart.closest('.control-group').removeClass('error');
+            containerStart.closest('.input-group').removeClass('has-error');
         }
     });
 
@@ -480,21 +476,21 @@ function initSprintForm(modal, edit) {
 
             makeMessage('End date cannot be before than start date.', 'error', {});
 
-            containerEnd.closest('.control-group').addClass('error');
+            containerEnd.closest('.input-group').addClass('has-error');
         } else if (
             (event.date.format('yyyy-mm-dd') < dateMin.format('yyyy-mm-dd'))
-                || (event.date.format('yyyy-mm-dd') > dateMax.format('yyyy-mm-dd'))
+            || (event.date.format('yyyy-mm-dd') > dateMax.format('yyyy-mm-dd'))
             ) {
             makeMessage('End date conflicts with project duration. End date must be between ' + dateMin.format('yyyy-mm-dd') + ' and ' + dateMax.format('yyyy-mm-dd')  + '.', 'error', {});
 
-            containerStart.closest('.control-group').addClass('error');
+            containerStart.closest('.input-group').addClass('has-error');
         } else if (checkSprintDates(event.date, 1, sprintId, true) !== true) {
-            containerStart.closest('.control-group').addClass('error');
+            containerStart.closest('.input-group').addClass('has-error');
         } else {
             valueEnd = new Date(event.date);
 
             containerEnd.bootstrapDP('hide');
-            containerEnd.closest('.control-group').removeClass('error');
+            containerEnd.closest('.input-group').removeClass('has-error');
         }
     });
 }

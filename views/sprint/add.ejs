@@ -1,45 +1,45 @@
 <form id="formSprintNew" class="form-horizontal">
     <input type="hidden" name="projectId" value="<%= projectId %>" />
 
-    <fieldset>
-        <div class="control-group required">
-            <label class="control-label" for="formSprintNewTitle">Title</label>
-            <div class="controls">
-                <input id="formSprintNewTitle" name="title" type="text" placeholder="enter sprint name" class="span3" required="required" />
+    <div class="form-group required">
+        <label class="col-lg-3 control-label" for="formSprintNewTitle">Title</label>
+        <div class="col-lg-9">
+            <input id="formSprintNewTitle" name="title" type="text" placeholder="enter sprint name" class="form-control" required="required" />
+        </div>
+    </div>
+
+    <div class="form-group required">
+        <label class="col-lg-3 control-label" for="formSprintNewDateStart">Duration</label>
+        <label class="col-lg-3 control-label" for="formSprintNewDateEnd" style="display: none;"></label>
+        <div class="col-lg-9">
+            <div class="input-group date dateStart">
+                <input id="formSprintNewDateStart" name="dateStart" type="text" class="dateInput form-control" size="16" required="required" readonly="readonly"
+                    data-validate-type="daterange"
+                    data-role="start"
+                    data-pair="formSprintNewDateEnd"
+                    data-focus="false"
+                    data-type="sprint"
+                />
+                <span class="input-group-addon"><i class="icon-calendar"></i></span>
+            </div>
+            <span class="separator">&mdash;</span>
+            <div class="input-group date dateEnd">
+                <input id="formSprintNewDateEnd" name="dateEnd" type="text" class="dateInput form-control" size="16" required="required" readonly="readonly"
+                    data-validate-type="daterange"
+                    data-role="end"
+                    data-pair="formSprintNewDateStart"
+                    data-focus="false"
+                    data-type="sprint"
+                />
+                <span class="input-group-addon"><i class="icon-calendar"></i></span>
             </div>
         </div>
-        <div class="control-group required">
-            <label class="control-label" for="formSprintNewDateStart">Duration</label>
-            <label class="control-label" for="formSprintNewDateEnd" style="display: none;"></label>
-            <div class="controls">
-                <div class="input-append date dateStart">
-                    <input id="formSprintNewDateStart" name="dateStart" type="text" class="dateInput" size="16" required="required" readonly="readonly"
-                        data-validate-type="daterange"
-                        data-role="start"
-                        data-pair="formSprintNewDateEnd"
-                        data-focus="false"
-                        data-type="sprint"
-                    />
-                    <span class="add-on"><i class="icon-calendar"></i></span>
-                </div>
-                <span class="separator">&mdash;</span>
-                <div class="input-append date dateEnd">
-                    <input id="formSprintNewDateEnd" name="dateEnd" type="text" class="dateInput" size="16" required="required" readonly="readonly"
-                        data-validate-type="daterange"
-                        data-role="end"
-                        data-pair="formSprintNewDateStart"
-                        data-focus="false"
-                        data-type="sprint"
-                    />
-                    <span class="add-on"><i class="icon-calendar"></i></span>
-                </div>
-            </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-lg-3 control-label" for="formSprintNewDescription">Description</label>
+        <div class="col-lg-9">
+            <textarea id="formSprintNewDescription" name="description" class="form-control" placeholder="enter sprint description"></textarea>
         </div>
-        <div class="control-group">
-            <label class="control-label" for="formSprintNewDescription">Description</label>
-            <div class="controls">
-                <textarea id="formSprintNewDescription" name="description" class="span3" placeholder="enter sprint description"></textarea>
-            </div>
-        </div>
-    </fieldset>
+    </div>
 </form>

@@ -244,7 +244,7 @@ function checkSprintDates(date, type, sprintId, showMessage) {
     if (errors.length > 0) {
         var message = type === 0 ? "Start " : "End ";
 
-        message += "date overlaps with following existing project sprints:\n" + errors.join("\n");
+        message += "date overlaps with following existing project sprint:\n" + errors.join("\n");
 
         if (showMessage) {
             makeMessage(message, 'error', {});
