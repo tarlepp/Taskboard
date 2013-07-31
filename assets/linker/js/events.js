@@ -15,7 +15,7 @@ var initNavigation = {
 // Back / forward button pressed, this needs works
 window.onpopstate = function(event) {
     var url = window.location.href;
-    var matches = '';
+    var matches;
 
     event.preventDefault();
 
@@ -318,7 +318,7 @@ jQuery(document).ready(function() {
      * phases. User can edit existing phases, add new ones and change phases order simply by
      * dragging them. All the phases are saved in "same" time.
      */
-    body.on('phasesEdit', function(event) {
+    body.on('phasesEdit', function() {
         jQuery.get('/Phase/edit', {id: ko.toJS(myViewModel.project().id())}, function(content) {
             var title = "Phases for project '" + ko.toJS(myViewModel.project().title()) + "'";
             var buttons = [
@@ -854,7 +854,7 @@ jQuery(document).ready(function() {
             var buttons = [
                 {
                     label: "Save",
-                    class: "btn-primary pull-right",
+                    class: "btn btn-primary pull-right",
                     callback: function () {
                         var form = jQuery('#formTaskNew');
                         var formItems = form.serializeJSON();
@@ -885,13 +885,16 @@ jQuery(document).ready(function() {
                 }
             ];
 
-            // Open bootbox modal
-            var modal = createBootboxDialog(title, content, buttons);
+            // Create bootbox modal
+            var modal = createBootboxDialog(title, content, buttons, false);
 
             // Make form init when dialog is opened.
-            modal.on('shown', function() {
+            modal.on('shown.bs.modal', function() {
                 initTaskForm(modal, false);
             });
+
+            // Open bootbox modal
+            modal.modal('show');
         })
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
@@ -908,7 +911,7 @@ jQuery(document).ready(function() {
             var buttons = [
                 {
                     label: "Save",
-                    class: "btn-primary pull-right",
+                    class: "btn btn-primary pull-right",
                     callback: function() {
                         var form = jQuery('#formTaskEdit');
                         var formItems = form.serializeJSON();
@@ -920,7 +923,8 @@ jQuery(document).ready(function() {
                                 url: "/task/" + task.id(),
                                 data: formItems,
                                 dataType: 'json'
-                            }).done(function(/** models.rest.task */task) {
+                            })
+                            .done(function(/** models.rest.task */task) {
                                 makeMessage("Task updated successfully.", "success", {});
 
                                 var taskObject = new Task(task);
@@ -954,7 +958,7 @@ jQuery(document).ready(function() {
                 },
                 {
                     label: "Delete",
-                    class: "btn-danger pull-right",
+                    class: "btn btn-danger pull-right",
                     callback: function() {
                         bootbox.confirm(
                             "Are you sure of task delete?",
@@ -982,13 +986,16 @@ jQuery(document).ready(function() {
                 }
             ];
 
-            // Open bootbox modal
-            var modal = createBootboxDialog(title, content, buttons);
+            // Create bootbox modal
+            var modal = createBootboxDialog(title, content, buttons, false);
 
             // Make form init when dialog is opened.
             modal.on('shown', function() {
                 initTaskForm(modal, true);
             });
+
+            // Open bootbox modal
+            modal.modal('show');
         })
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);

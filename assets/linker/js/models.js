@@ -276,8 +276,8 @@ function Story(data) {
 /**
  * Object to present story phase.
  *
- * @param   {models.rest.phaseStory}    phase   Phase data
- * @param   {models.knockout.task[]}    tasks   Task data for current phase
+ * @param   {models.rest.phase|models.rest.phaseStory}  phase   Phase data
+ * @param   {models.knockout.task[]}                    tasks   Task data for current phase
  * @constructor
  */
 function PhaseStory(phase, tasks) {
