@@ -108,10 +108,13 @@ jQuery(document).ready(function() {
     // Help click event
     jQuery('#functionHelp').on('click', 'a', function() {
         var title = "Generic help";
-        var content = "TODO: try to use sails client side templates...";
 
-        // Open bootbox modal
-        var modal = createBootboxDialog(title, content, null);
+        // create bootbox modal
+        var modal = createBootboxDialog(title, JST["assets/linker/templates/help_generic.html"](), null, false);
+
+        // Add help class and show help modal
+        modal.addClass('modalHelp');
+        modal.modal('show');
     });
 
     /**

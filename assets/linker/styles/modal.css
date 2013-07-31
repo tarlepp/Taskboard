@@ -51,6 +51,17 @@
     margin-left: -400px;
 }
 
+.modalHelp .modal-dialog {
+    width: 800px;
+    margin-left: -400px;
+}
+
+.modalHelp .modal-body {
+    height: 100%;
+    min-height: 600px;
+    max-height: 600px;
+}
+
 .modalBacklog .modal-body {
     height: 100%;
     min-height: 500px;
