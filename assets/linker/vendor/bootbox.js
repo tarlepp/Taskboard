@@ -253,7 +253,7 @@ var bootbox = window.bootbox || (function(document, $) {
         // before any show(n) events are triggered
         // @see https://github.com/makeusabrew/bootbox/issues/69
 
-        div.on("shown", function() {
+        div.on("shown.bs.modal", function() {
             form.find("input[type=text]").focus();
 
             // ensure that submitting the form (e.g. with the enter key)
@@ -430,11 +430,11 @@ var bootbox = window.bootbox || (function(document, $) {
         });
 
         // well, *if* we have a primary - give the first dom element focus
-        div.on('shown', function() {
+        div.on('shown.bs.modal', function() {
             div.find("a.btn-primary:first").focus();
         });
 
-        div.on('hidden', function(e) {
+        div.on('hidden.bs.modal', function(e) {
             // @see https://github.com/makeusabrew/bootbox/issues/115
             // allow for the fact hidden events can propagate up from
             // child elements like tooltips
@@ -445,7 +445,6 @@ var bootbox = window.bootbox || (function(document, $) {
 
         // wire up button handlers
         div.on('click', '.modal-footer a', function(e) {
-
             var handler   = $(this).data("handler"),
                 cb        = callbacks[handler],
                 hideModal = null;
@@ -491,8 +490,8 @@ var bootbox = window.bootbox || (function(document, $) {
         // @see https://github.com/makeusabrew/bootbox/issues/60
         // ...caused by...
         // @see https://github.com/twitter/bootstrap/issues/4781
-        div.on("show", function(e) {
-            $(document).off("focusin.modal");
+        div.on("show.bs.modal", function(e) {
+            $(document).off("focusin.bs.modal");
         });
 
         if (typeof options.show === 'undefined' || options.show === true) {
