@@ -62,6 +62,7 @@ module.exports = function (grunt) {
 
         // Taskboard specified vendor dependencies
         'linker/vendor/date.format.js',
+        'linker/vendor/underscore.js',
         'linker/vendor/jquery-2.0.3.min.js',
         'linker/vendor/jquery.autosize.js',
         'linker/vendor/jQuery-noty/jquery.noty.js',
@@ -69,7 +70,6 @@ module.exports = function (grunt) {
         'linker/vendor/jQuery-noty/jquery.noty-top.js',
         'linker/vendor/jQuery-UI/jquery-ui.min.js',
         'linker/vendor/qTip/jquery.qtip.js',
-        //'linker/vendor/qTip/imagesloaded.min.js',
         'linker/vendor/bootstrap/js/bootstrap.js',
         'linker/vendor/bootstrap-datepicker/bootstrap-datepicker.js',
         'linker/vendor/twitter-bootstrap-hover-dropdown.js',
