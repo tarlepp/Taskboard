@@ -683,7 +683,7 @@ jQuery(document).ready(function() {
             var buttons = [
                 {
                     label: "Save",
-                    class: "btn-primary pull-right",
+                    class: "btn btn-primary pull-right",
                     callback: function() {
                         var form = jQuery('#formStoryNew');
                         var formItems = form.serializeJSON();
@@ -723,13 +723,16 @@ jQuery(document).ready(function() {
                 }
             ];
 
-            // Open bootbox modal
+            // Create bootbox modal
             var modal = createBootboxDialog(title, content, buttons, trigger);
 
             // Make form init when dialog is opened.
-            modal.on('shown', function() {
+            modal.on('shown.bs.modal', function() {
                 initStoryForm(modal, false);
             });
+
+            // Open bootbox modal
+            modal.modal('show')
         })
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
@@ -748,7 +751,7 @@ jQuery(document).ready(function() {
             var buttons = [
                 {
                     label: "Save",
-                    class: "btn-primary pull-right",
+                    class: "btn btn-primary pull-right",
                     callback: function() {
                         var form = jQuery('#formStoryEdit');
                         var formItems = form.serializeJSON();
@@ -790,7 +793,7 @@ jQuery(document).ready(function() {
                 },
                 {
                     label: "Delete",
-                    class: "btn-danger pull-right",
+                    class: "btn btn-danger pull-right",
                     callback: function() {
                         bootbox.confirm(
                             "Are you sure of story delete?",
@@ -823,13 +826,16 @@ jQuery(document).ready(function() {
                 }
             ];
 
-            // Open bootbox modal
+            // Create bootbox modal
             var modal = createBootboxDialog(title, content, buttons, trigger);
 
             // Make form init when dialog is opened.
-            modal.on('shown', function() {
+            modal.on('shown.bs.modal', function() {
                 initStoryForm(modal, true);
             });
+
+            // Open bootbox modal
+            modal.modal('show');
         })
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);

@@ -2,32 +2,35 @@
     <input type="hidden" name="projectId" value="<%= projectId %>" />
     <input type="hidden" name="sprintId" value="<%= sprintId %>" />
 
-    <fieldset>
-        <div class="control-group required">
-            <label class="control-label" for="formStoryNewTitle">Title</label>
-            <div class="controls">
-                <input id="formStoryNewTitle" name="title" type="text" placeholder="enter story name" class="span3" required="required" />
-            </div>
+    <div class="form-group required">
+        <label class="col-lg-3 control-label" for="formStoryNewTitle">Title</label>
+        <div class="col-lg-9">
+            <input id="formStoryNewTitle" name="title" type="text" placeholder="enter story name" class="form-control" required="required" />
         </div>
-        <div class="control-group required">
-            <label class="control-label" for="formStoryNewEstimate">Estimate</label>
-            <div class="controls">
-                <input class="sliderValue" type="text" readonly="readonly" value="" />
-                <div class="estimateSlider"></div>
-                <input id="formStoryNewEstimate" name="estimate" type="hidden" value="-1" />
+    </div>
+
+    <div class="form-group required">
+        <label class="col-lg-3 control-label" for="formStoryNewEstimate">Estimate</label>
+        <div class="col-lg-9">
+            <div class="col-lg-2">
+                <input class="form-control sliderValue" type="text" readonly="readonly" value="" />
             </div>
+            <div class="col-lg-10 estimateSlider"></div>
+            <input id="formStoryNewEstimate" name="estimate" type="hidden" value="-1" />
         </div>
-        <div class="control-group">
-            <label class="control-label" for="formStoryNewDescription">Description</label>
-            <div class="controls">
-                <textarea id="formStoryNewDescription" name="description" class="span3" placeholder="enter user story description"></textarea>
-            </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-lg-3 control-label" for="formStoryNewDescription">Description</label>
+        <div class="col-lg-9">
+            <textarea id="formStoryNewDescription" name="description" class="form-control col-lg-1" placeholder="enter user story description"></textarea>
         </div>
-        <div class="control-group">
-            <label class="control-label" for="formStoryNewVfCase">ValueFrame case</label>
-            <div class="controls">
-                <input id="formStoryNewVfCase" name="vfCase" type="text" placeholder="case #" class="span1" />
-            </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-lg-3 control-label" for="formStoryNewVfCase">ValueFrame case</label>
+        <div class="col-lg-2">
+            <input id="formStoryNewVfCase" name="vfCase" type="text" placeholder="case #" class="vfCase form-control" />
         </div>
-    </fieldset>
+    </div>
 </form>

@@ -1,30 +1,45 @@
 <form id="formStoryEdit" class="form-horizontal">
-    <fieldset>
-        <div class="control-group required">
-            <label class="control-label" for="formStoryEditTitle">Title</label>
-            <div class="controls">
-                <input id="formStoryEditTitle" name="title" type="text" value="<%= story.title %>" placeholder="enter story name" class="span3" required="required" />
-            </div>
+    <div class="form-group required">
+        <label class="col-lg-3 control-label" for="formStoryEditTitle">Title</label>
+        <div class="col-lg-9">
+            <input id="formStoryEditTitle" name="title" type="text" value="<%= story.title %>" placeholder="enter story name" class="form-control" required="required" />
         </div>
-        <div class="control-group required">
-            <label class="control-label" for="formStoryEditEstimate">Estimate</label>
-            <div class="controls">
-                <input class="sliderValue" type="text" readonly="readonly" value="" />
-                <div class="estimateSlider"></div>
-                <input id="formStoryEditEstimate" name="estimate" type="hidden" value="<%= story.estimate %>" />
+    </div>
+
+    <div class="form-group required">
+        <label class="col-lg-3 control-label" for="formStoryEditEstimate">Estimate</label>
+        <div class="col-lg-9">
+            <div class="col-lg-2">
+                <input class="form-control sliderValue" type="text" readonly="readonly" value="" />
             </div>
+            <div class="col-lg-10 estimateSlider"></div>
+            <input id="formStoryEditEstimate" name="estimate" type="hidden" value="<%= story.estimate %>" />
         </div>
-        <div class="control-group">
-            <label class="control-label" for="formStoryEditDescription">Description</label>
-            <div class="controls">
-                <textarea id="formStoryEditDescription" name="description" class="span3" placeholder="enter user story description"><%= story.description %></textarea>
+    </div>
+
+    <div class="form-group">
+        <label class="col-lg-3 control-label" for="formStoryEditDescription">Description</label>
+        <div class="col-lg-9">
+            <textarea id="formStoryEditDescription" name="description" class="form-control" placeholder="enter user story description"><%= story.description %></textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-lg-3 control-label" for="formStoryEditVfCase">ValueFrame case</label>
+        <div class="col-lg-9">
+            <% if (story.vfCase > 0) { %>
+            <div class="input-group">
+                <input id="formStoryEditVfCase" name="vfCase" type="text" value="<%= story.vfCase %>"  placeholder="case #" class="vfCase form-control" />
+
+                <span class="input-group-link" style="display: inline-block;">
+                    <a href="#" class="btn btn-link">Open case</a>
+                </span>
             </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label" for="formStoryEditVfCase">ValueFrame case</label>
-            <div class="controls">
-                <input id="formStoryEditVfCase" name="vfCase" type="text" value="<%= story.vfCase %>"  placeholder="case #" class="span1" />
+            <% } else { %>
+            <div class="col-lg-3">
+                <input id="formStoryEditVfCase" name="vfCase" type="text" value=""  placeholder="case #" class="vfCase form-control" />
             </div>
+            <% }  %>
         </div>
-    </fieldset>
+    </div>
 </form>
