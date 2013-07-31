@@ -338,11 +338,11 @@ jQuery(document).ready(function() {
                             if (title.length == 0) {
                                 makeMessage('Phase name cannot be empty.', 'error', {});
 
-                                row.addClass('error');
+                                row.addClass('has-error');
 
                                 errors = true;
                             } else {
-                                row.removeClass('error');
+                                row.removeClass('has-error');
 
                                 var type = '';
                                 var url = '';

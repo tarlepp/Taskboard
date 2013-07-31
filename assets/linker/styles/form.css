@@ -102,3 +102,8 @@ li.ui-sortable-helper {
     background-color: #eeeeee;
     padding: 3px 5px 3px 10px;
 }
+
+#projectPhases i.icon-resize-vertical {
+    margin: 0 0 0 10px;
+    cursor: move;
+}

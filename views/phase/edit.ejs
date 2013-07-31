@@ -13,12 +13,12 @@
         </thead>
         <tbody>
         <% _.each(phases, function(phase) { %>
-        <tr class="control-group" data-phase-id="<%= phase.id %>">
+        <tr class="form-group" data-phase-id="<%= phase.id %>">
             <td>
-                <i class="icon-resize-vertical" style="cursor: move;"></i>
+                <i class="icon-resize-vertical"></i>
             </td>
             <td>
-                <input type="text" name="title[]" value="<%= phase.title %>" placeholder="enter phase name" />
+                <input type="text" name="title[]" class="form-control" value="<%= phase.title %>" placeholder="enter phase name" />
             </td>
             <td>
                 <div class="slider slider-phase-task"></div>
@@ -28,7 +28,9 @@
             </td>
             <td></td>
             <td>
-                <button class="btn btn-danger btn-mini phaseDelete" type="button">&times;</button>
+                <button class="btn btn-danger btn-small phaseDelete" type="button">
+                    <i class="icon icon-trash"></i>
+                </button>
             </td>
         </tr>
         <% }) %>
@@ -40,10 +42,10 @@
     <table id="projectPhasesNew">
         <tr class="control-group">
             <td>
-                <i class="icon-resize-vertical" style="cursor: move;"></i>
+                <i class="icon-resize-vertical"></i>
             </td>
             <td>
-                <input type="text" name="title[]" value="" placeholder="enter phase name" />
+                <input type="text" name="title[]" class="form-control" value="" placeholder="enter phase name" />
             </td>
             <td>
                 <div class="slider slider-phase-task"></div>
@@ -53,7 +55,9 @@
             </td>
             <td></td>
             <td>
-                <button class="btn btn-danger btn-mini phaseDelete" type="button">&times;</button>
+                <button class="btn btn-danger btn-small phaseDelete" type="button">
+                    <i class="icon icon-trash"></i>
+                </button>
             </td>
         </tr>
     </table>
