@@ -993,7 +993,7 @@ jQuery(document).ready(function() {
             var modal = createBootboxDialog(title, content, buttons, false);
 
             // Make form init when dialog is opened.
-            modal.on('shown', function() {
+            modal.on('shown.bs.modal', function() {
                 initTaskForm(modal, true);
             });
 
