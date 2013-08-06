@@ -27,6 +27,11 @@ module.exports = {
             type:       'integer',
             required:   true,
             defaultsTo: 0
+        },
+        split: {
+            type:       'boolean',
+            required:   true,
+            defaultsTo: 0
         }
     }
 };
