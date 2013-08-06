@@ -12,10 +12,12 @@ jQuery(document).ready(function() {
     jQuery.fn.serializeJSON = function() {
         var json = {};
 
-        jQuery.map(jQuery(this).serializeArray(), function(n, i) {
+        jQuery.map(jQuery(this).serializeArray(), function(n) {
             var _ = n.name.indexOf('[');
+
             if (_ > -1) {
-                var o = json;
+                var o = json, _name;
+
                 _name = n.name.replace(/\]/gi, '').split('[');
                 for (var i = 0, len = _name.length; i < len; i++) {
                     if (i == len - 1) {
@@ -24,20 +26,23 @@ jQuery(document).ready(function() {
                                 o[_name[i]] = [o[_name[i]]];
                             }
                             o[_name[i]].push(n.value);
+                        } else {
+                            o[_name[i]] = n.value || '';
                         }
-                        else o[_name[i]] = n.value || '';
+                    } else {
+                        o = o[_name[i]] = o[_name[i]] || {};
                     }
-                    else o = o[_name[i]] = o[_name[i]] || {};
                 }
-            }
-            else {
+            } else {
                 if (json[n.name] !== undefined) {
                     if (!json[n.name].push) {
                         json[n.name] = [json[n.name]];
                     }
+
                     json[n.name].push(n.value || '');
+                } else {
+                    json[n.name] = n.value || '';
                 }
-                else json[n.name] = n.value || '';
             }
         });
 
@@ -53,12 +58,24 @@ jQuery(document).ready(function() {
         return this[0].tagName == "INPUT" ? jQuery(this[0]).attr("type").toLowerCase() : this[0].tagName.toLowerCase();
     };
 
-    var tooltips = jQuery('[rel=tooltip]');
-
-    if (tooltips.length) {
-        tooltips.tooltip();
-    }
+    // Global tooltip event
+    initTooltips(jQuery(document));
 });
+
+/**
+ * Function initializes default "static" tooltips for specified context.
+ *
+ * @param   {jQuery}    context
+ */
+function initTooltips(context) {
+    context.on('mouseover', '.tooltipDiv', function() {
+        createQtipDiv(jQuery(this));
+    });
+
+    context.on('mouseover', '.tooltipTitle', function() {
+        createQtipTitle(jQuery(this));
+    });
+}
 
 /**
  * Generic AJAX error handler.
@@ -110,6 +127,8 @@ function handleAjaxError(jqXhr, textStatus, error) {
  * @param   {object}    options Custom options for noty
  */
 function makeMessage(text, type, options) {
+    options = options || {};
+
     var timeout = 3000;
 
     switch (type) {
@@ -125,9 +144,17 @@ function makeMessage(text, type, options) {
     }, options));
 }
 
+/**
+ * Generic javascript "job" dispatcher.
+ *
+ * @returns {*}
+ */
 function dispatch(fn, args) {
-    fn = (typeof fn == "function") ? fn : window[fn];  // Allow fn to be a function object or the name of a global function
-    return fn.apply(this, args || []);  // args is optional, use an empty array by default
+    // Allow fn to be a function object or the name of a global function
+    fn = (typeof fn == "function") ? fn : window[fn];
+
+    // args is optional, use an empty array by default
+    return fn.apply(this, args || []);
 }
 
 /**
@@ -230,4 +257,95 @@ function readCookie(name) {
  */
 function eraseCookie(name) {
     createCookie(name, "", -1);
+}
+
+/**
+ * Function makes qTip2 tooltip for specified element. Note that this tooltip can contain
+ * desired HTML structure which is shown as tooltip.
+ *
+ * Below is example HTML structure of usage:
+ *
+ *  <icon class="icon icon-help tooltipDiv">
+ *      <div class="tooltipDivContainer">
+ *          <h1>Tooltip title</h1>
+ *          <div>
+ *              Your <em>tooltip</em> content <strong>here</strong>
+ *          </div>
+ *      </div>
+ *  </icon>
+ *
+ *  And in your CSS definitions add following:
+ *
+ *  .tooltipDivContainer {
+ *      display: none;
+ *  }
+ *
+ * @param   {jQuery}    element
+ */
+function createQtipDiv(element) {
+    var title = element.find('.tooltipDivContainer h1').html();
+    var content = element.find('.tooltipDivContainer div');
+
+    createQtip(element, title, content, 'auto', 'top left', 'bottom center', true, 100);
+}
+
+/**
+ * Function makes simple qTip2 tooltip for specified element.
+ *
+ * Below is example HTML structure of usage:
+ *
+ *  <a href="#" class="tooltipTitle" title="Your tooltip here">click me</a>
+ *
+ * @param   {jQuery}    element
+ */
+function createQtipTitle(element) {
+    var title = '';
+    var content = element.attr('title');
+
+    createQtip(element, title, content, 'auto', 'top left', 'bottom center', false, 50);
+}
+
+/**
+ * Function creates actual qTip2 for specified element.
+ *
+ * @param   {jQuery}        element
+ * @param   {string}        tipTitle
+ * @param   {string}        tipText
+ * @param   {string|number} tipWidth
+ * @param   {string}        tipMy
+ * @param   {string}        tipAt
+ * @param   {boolean}       tipFixed
+ * @param   {number}        tipDelay
+ */
+function createQtip(element, tipTitle, tipText, tipWidth, tipMy, tipAt, tipFixed, tipDelay) {
+    element.qtip({
+        metadata: {
+            type: 'html5',      // Use HTML5 data-* attributes
+            name: 'qtipopts'    // Grab the metadata from the data-qtipOpts HTML5 attribute
+        },
+        content: {
+            title: tipTitle,
+            text: tipText
+        },
+        style: {
+            tip: {
+                corner: true
+            },
+            classes: 'qtip-bootstrap',
+            width: tipWidth
+        },
+        show: {
+            ready: true
+        },
+        hide: {
+            fixed: tipFixed,
+            delay: tipDelay,
+            effect: false
+        },
+        position: {
+            my: tipMy,
+            at: tipAt,
+            viewport: jQuery(window)
+        }
+    });
 }
