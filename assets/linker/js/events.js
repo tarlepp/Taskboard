@@ -797,6 +797,16 @@ jQuery(document).ready(function() {
                     }
                 },
                 {
+                    label: "Split story",
+                    class: "btn btn-warning pull-right",
+                    id: "split",
+                    callback: function() {
+                        console.log('Implement story splitting...');
+
+                        return false;
+                    }
+                },
+                {
                     label: "Delete",
                     class: "btn btn-danger pull-right",
                     callback: function() {
