@@ -335,6 +335,7 @@ jQuery(document).ready(function() {
                         lines.each(function(key) {
                             var row = jQuery(this);
                             var title = jQuery.trim(row.find('input[name="title[]"]').val());
+                            var split = row.find('input[name="split[]"]').is(':checked') ? 1 : 0;
                             var tasks = parseInt(row.find('input[name="tasks[]"]').val(), 10);
                             var phaseId = parseInt(row.find('input[name="id[]"]').val(), 10);
 
@@ -354,6 +355,7 @@ jQuery(document).ready(function() {
                                     title: title,
                                     order: key,
                                     tasks: isNaN(tasks) ? 0 : tasks,
+                                    split: split,
                                     projectId: ko.toJS(myViewModel.project().id())
                                 };
 
@@ -413,8 +415,6 @@ jQuery(document).ready(function() {
                         // All went just like in strömsö
                         if (errors === false) {
                             makeMessage('Project phases saved successfully.', 'success', {});
-
-                            modal.modal('hide');
                         }
 
                         return false;

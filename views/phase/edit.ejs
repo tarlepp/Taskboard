@@ -8,6 +8,7 @@
         <thead>
         <tr>
             <th colspan="2">Name of the phase</th>
+            <th><i class="icon icon-question-sign tooltipTitle" title="Select phases which task are transferred to the new user story on story splitting."></i></th>
             <th colspan="3">Target task count</th>
         </tr>
         </thead>
@@ -15,10 +16,13 @@
         <% _.each(phases, function(phase) { %>
         <tr class="form-group" data-phase-id="<%= phase.id %>">
             <td>
-                <i class="icon-resize-vertical"></i>
+                <i class="icon icon-resize-vertical"></i>
             </td>
             <td>
                 <input type="text" name="title[]" class="form-control" value="<%= phase.title %>" placeholder="enter phase name" />
+            </td>
+            <td>
+                <input type="checkbox" name="split[]" value="1" <% if (phase.split) { %><%= checked="checked" %><% } %> />
             </td>
             <td>
                 <div class="slider slider-phase-task"></div>
@@ -46,6 +50,9 @@
             </td>
             <td>
                 <input type="text" name="title[]" class="form-control" value="" placeholder="enter phase name" />
+            </td>
+            <td>
+                <input type="checkbox" name="split[]" value="1" />
             </td>
             <td>
                 <div class="slider slider-phase-task"></div>
