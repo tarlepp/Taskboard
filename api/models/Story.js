@@ -13,7 +13,9 @@ module.exports = {
             required:   true
         },
         sprintId: {
-            type:       'integer'
+            type:       'integer',
+            defaultsTo: 0,
+            required:   true
         },
         title: {
             type:       'string',
@@ -32,7 +34,8 @@ module.exports = {
             type:       'integer'
         },
         vfCase: {
-            type:       'integer'
+            type:       'integer',
+            defaultsTo: 0
         },
 
         estimateFormatted: function() {
