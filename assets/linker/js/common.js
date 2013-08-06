@@ -192,8 +192,8 @@ function createBootboxDialog(title, content, buttons, trigger) {
         buttonsToShow.push(buttons);
     }
 
-    // Return bootbox dialog
-    return bootbox.dialog(
+    // Create bootbox modal
+    var modal = bootbox.dialog(
         content,
         buttonsToShow,
         {
@@ -202,6 +202,14 @@ function createBootboxDialog(title, content, buttons, trigger) {
             show: false
         }
     );
+
+    // Initialize possible modal context tooltips
+    modal.on('shown.bs.modal', function() {
+        initTooltips(modal);
+    });
+
+    // Return bootbox dialog
+    return modal;
 }
 
 /**
