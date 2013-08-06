@@ -387,7 +387,7 @@ jQuery(document).ready(function() {
                                             break;
                                         case 'PUT':
                                             jQuery.each(myViewModel.phases(), function(key, phase) {
-                                                if (phase.id() === phaseObject.id()) {
+                                                if (ko.toJS(phase.id()) === phaseObject.id()) {
                                                     // Replace old phase model with new one
                                                     myViewModel.phases.replace(phase, phaseObject);
                                                 }
@@ -398,6 +398,8 @@ jQuery(document).ready(function() {
                                                 jQuery.each(story.phases(), function(phaseKey, phase) {
                                                     if (ko.toJS(phase.id()) === phaseObject.id()) {
                                                         phase.order(phaseObject.order());
+                                                        phase.title(phaseObject.title());
+                                                        phase.description(phaseObject.description());
                                                     }
                                                 });
                                             });

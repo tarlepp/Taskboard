@@ -243,7 +243,7 @@ function Story(data) {
             return new PhaseStory(phase, phaseTasks);
         });
 
-        self.phases(phases)
+        self.phases(phases);
     });
 
     // Sorted phases
