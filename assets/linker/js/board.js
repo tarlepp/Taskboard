@@ -7,6 +7,11 @@ jQuery(document).ready(function() {
     jQuery(document).on('mouseover', '.tooltipTitle', function() {
         createQtipTitle(jQuery(this));
     });
+
+    bootbox.setBtnClasses({
+        CANCEL: 'pull-left',
+        OK: 'pull-right'
+    });
 });
 
 function createQtipDiv(el) {

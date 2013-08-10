@@ -801,9 +801,66 @@ jQuery(document).ready(function() {
                     class: "btn btn-warning pull-right",
                     id: "split",
                     callback: function() {
-                        console.log('Implement story splitting...');
+                        var options = [];
 
-                        return false;
+                        options.push({value: 0, text: 'Backlog'});
+
+                        jQuery.each(myViewModel.sprints(), function(key, sprint) {
+                            options.push({value: sprint.id(), text: sprint.title()});
+                        });
+
+                        bootbox.prompt(
+                            "Select sprint where to add new story",
+                            "Close",
+                            "Split story",
+                            function(result) {
+                                if (result !== null) {
+                                    socket.get("/Story/" + storyId, function(story) {
+                                        var newStory = jQuery.extend(
+                                            {},
+                                            story,
+                                            {
+                                                sprintId: result,
+                                                id: null,
+                                                createdAt: null,
+                                                updatedAt: null
+                                            }
+                                        );
+
+                                        jQuery.ajax({
+                                            type: 'POST',
+                                            url: "/Story/",
+                                            data: newStory,
+                                            dataType: 'json'
+                                        })
+                                        .done(function(/** models.rest.story */story) {
+                                            makeMessage("User story splitted successfully.", "success", {});
+
+                                            var storyObject = new Story(story);
+
+                                            // Add story to current stories IF we story sprintId is same as current sprint id
+                                            if (myViewModel.sprint() && storyObject.sprintId() === myViewModel.sprint().id()) {
+                                                // Add created story to knockout model data.
+                                                myViewModel.stories.push(storyObject);
+                                            }
+
+                                            body.trigger('storyEdit', [storyObject.id()]);
+                                        })
+                                        .fail(function(jqXhr, textStatus, error) {
+                                            handleAjaxError(jqXhr, textStatus, error);
+                                        });
+                                    });
+
+                                    return false;
+                                } else {
+                                    body.trigger('storyEdit', [storyId, trigger]);
+                                }
+                            },
+                            {
+                                type: "select",
+                                options: options
+                            }
+                        );
                     }
                 },
                 {
