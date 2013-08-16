@@ -634,6 +634,8 @@ jQuery(document).ready(function() {
 
         bootbox.confirm(
             "Are you sure of sprint delete? Existing user stories in this sprint are moved to project backlog.",
+            'Cancel',
+            'Delete',
             function(result) {
                 if (result) {
                     jQuery.ajax({
@@ -869,6 +871,8 @@ jQuery(document).ready(function() {
                     callback: function() {
                         bootbox.confirm(
                             "Are you sure of story delete?",
+                            'Cancel',
+                            'Delete',
                             function(result) {
                                 if (result) {
                                     jQuery.ajax({
@@ -1034,6 +1038,8 @@ jQuery(document).ready(function() {
                     callback: function() {
                         bootbox.confirm(
                             "Are you sure of task delete?",
+                            'Cancel',
+                            'Delete',
                             function(result) {
                                 if (result) {
                                     jQuery.ajax({

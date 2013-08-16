@@ -10,7 +10,8 @@ jQuery(document).ready(function() {
 
     bootbox.setBtnClasses({
         CANCEL: 'pull-left',
-        OK: 'pull-right'
+        OK: 'pull-right',
+        CONFIRM: 'btn-danger'
     });
 });
 
