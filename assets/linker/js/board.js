@@ -8,9 +8,12 @@ jQuery(document).ready(function() {
         createQtipTitle(jQuery(this));
     });
 
+    bootbox.animate(false);
+
     bootbox.setBtnClasses({
-        CANCEL: 'pull-left',
         OK: 'pull-right',
+        CANCEL: 'pull-left',
+        PROMPT: 'btn-primary',
         CONFIRM: 'btn-danger'
     });
 });
