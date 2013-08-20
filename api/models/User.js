@@ -5,6 +5,7 @@
  * @description ::  Model to represents taskboard user.
  */
 module.exports = {
+    schema: true,
     attributes: {
         username: {
             type:       'string',
