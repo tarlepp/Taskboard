@@ -186,7 +186,7 @@ jQuery(document).ready(function() {
                     label: "Save",
                     class: "btn btn-primary pull-right",
                     callback: function() {
-                        var form = jQuery('#formProjectEdit');
+                        var form = jQuery('#formProjectEdit', modal);
                         var formItems = form.serializeJSON();
 
                         // Validate form and try to update project data
@@ -487,7 +487,7 @@ jQuery(document).ready(function() {
                     label: "Save",
                     class: "btn btn-primary pull-right",
                     callback: function() {
-                        var form = jQuery('#formSprintNew');
+                        var form = jQuery('#formSprintNew', modal);
                         var formItems = form.serializeJSON();
 
                         // Validate form and try to create new sprint
@@ -559,7 +559,7 @@ jQuery(document).ready(function() {
                     label: "Save",
                     class: "btn btn-primary pull-right",
                     callback: function() {
-                        var form = jQuery('#formSprintEdit');
+                        var form = jQuery('#formSprintEdit', modal);
                         var formItems = form.serializeJSON();
 
                         // Validate form and try to create new sprint
@@ -692,7 +692,7 @@ jQuery(document).ready(function() {
                     label: "Save",
                     class: "btn btn-primary pull-right",
                     callback: function() {
-                        var form = jQuery('#formStoryNew');
+                        var form = jQuery('#formStoryNew', modal);
                         var formItems = form.serializeJSON();
 
                         // Validate form and try to create new user story
@@ -760,7 +760,7 @@ jQuery(document).ready(function() {
                     label: "Save",
                     class: "btn btn-primary pull-right",
                     callback: function() {
-                        var form = jQuery('#formStoryEdit');
+                        var form = jQuery('#formStoryEdit', modal);
                         var formItems = form.serializeJSON();
 
                         // Validate current form items and try to update user story data
@@ -805,58 +805,49 @@ jQuery(document).ready(function() {
                     callback: function() {
                         var options = [];
 
-                        options.push({value: 0, text: 'Backlog'});
+                        options.push({value: 0, text: 'Project backlog'});
 
                         jQuery.each(myViewModel.sprints(), function(key, sprint) {
-                            options.push({value: sprint.id(), text: sprint.title()});
+                            options.push({value: sprint.id(), text: sprint.formattedTitle()});
                         });
 
-                        bootbox.prompt(
+                        var prompt = bootbox.prompt(
                             "Select sprint where to add new story",
                             "Close",
                             "Split story",
                             function(result) {
                                 if (result !== null) {
-                                    socket.get("/Story/" + storyId, function(story) {
-                                        var newStory = jQuery.extend(
-                                            {},
-                                            story,
-                                            {
-                                                sprintId: result,
-                                                id: null,
-                                                createdAt: null,
-                                                updatedAt: null
-                                            }
-                                        );
+                                    jQuery.ajax({
+                                        type: 'POST',
+                                        url: "/Story/split",
+                                        data: {
+                                            storyId: storyId,
+                                            sprintId: result,
+                                            projectId: myViewModel.project().id()
+                                        },
+                                        dataType: 'json'
+                                    })
+                                    .done(function(data) {
+                                        console.log(data);
 
-                                        jQuery.ajax({
-                                            type: 'POST',
-                                            url: "/Story/",
-                                            data: newStory,
-                                            dataType: 'json'
-                                        })
-                                        .done(function(/** models.rest.story */story) {
-                                            makeMessage("User story splitted successfully.", "success", {});
+                                        //return true
 
-                                            var storyObject = new Story(story);
+                                        //body.trigger('storyEdit', [storyObject.id()]);
+                                    })
+                                    .fail(function(jqXhr, textStatus, error) {
+                                        handleAjaxError(jqXhr, textStatus, error);
 
-                                            // Add story to current stories IF we story sprintId is same as current sprint id
-                                            if (myViewModel.sprint() && storyObject.sprintId() === myViewModel.sprint().id()) {
-                                                // Add created story to knockout model data.
-                                                myViewModel.stories.push(storyObject);
-                                            }
-
-                                            body.trigger('storyEdit', [storyObject.id()]);
-                                        })
-                                        .fail(function(jqXhr, textStatus, error) {
-                                            handleAjaxError(jqXhr, textStatus, error);
-                                        });
+                                        //return false;
                                     });
 
                                     return false;
                                 } else {
+                                    prompt.modal('hide');
+
                                     body.trigger('storyEdit', [storyId, trigger]);
                                 }
+
+                                return false;
                             },
                             {
                                 type: "select",
@@ -932,7 +923,7 @@ jQuery(document).ready(function() {
                     label: "Save",
                     class: "btn btn-primary pull-right",
                     callback: function () {
-                        var form = jQuery('#formTaskNew');
+                        var form = jQuery('#formTaskNew', modal);
                         var formItems = form.serializeJSON();
 
                         // Validate current form items and try to create new task
@@ -989,7 +980,7 @@ jQuery(document).ready(function() {
                     label: "Save",
                     class: "btn btn-primary pull-right",
                     callback: function() {
-                        var form = jQuery('#formTaskEdit');
+                        var form = jQuery('#formTaskEdit', modal);
                         var formItems = form.serializeJSON();
 
                         // Validate current form items and try to update task data
