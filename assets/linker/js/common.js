@@ -78,6 +78,36 @@ function initTooltips(context) {
 }
 
 /**
+ * Method parses sails.js error object to human readable format.
+ *
+ * @param   {sails.serverError}    errorObject
+ *
+ * @returns {string}
+ */
+function parseSailsError(errorObject) {
+    var message = "";
+
+    try {
+        var object = JSON5.parse(errorObject.message);
+
+        jQuery.each(object, function(column, errors) {
+            var rules = [];
+
+            jQuery.each(errors, function(i, error) {
+                rules.push(error.rule);
+            });
+
+            message += "\n" + column + ": " + rules.join(", ");
+        });
+
+    } catch (exception) {
+        message = errorObject;
+    }
+
+    return message;
+}
+
+/**
  * Generic AJAX error handler.
  *
  * @param   {XMLHttpRequest}    jqXhr
@@ -91,21 +121,21 @@ function handleAjaxError(jqXhr, textStatus, error) {
     try {
         var errorInfo = jQuery.parseJSON(jqXhr.responseText);
 
-        if (errorInfo.errors[0]) {
-            errorMessage = errorInfo.errors[0].message;
+        if (errorInfo.errors[0].message) {
+            errorMessage = parseSailsError(errorInfo.errors[0]);
         }
     } catch (exception) {
         errorMessage = jqXhr.responseText;
     }
 
     if (jqXhr.status === 0) {
-        message = 'Not connect. Verify Network. ' + errorMessage;
+        message = 'Not connect. Verify Network.' + errorMessage;
     } else if (jqXhr.status == 403) {
         message = 'Forbidden [403]. ' + errorMessage;
     } else if (jqXhr.status == 404) {
-        message = 'Requested page not found [404]. ' + errorMessage;
+        message = 'Requested page not found [404].' + errorMessage;
     } else if (jqXhr.status == 500) {
-        message = 'Internal Server Error [500]. ' + errorMessage;
+        message = 'Internal Server Error [500].' + errorMessage;
     } else if (textStatus === 'parsererror') {
         message = 'Requested JSON parse failed.';
     } else if (textStatus === 'timeout') {
