@@ -5,18 +5,22 @@
  * @description ::  This model represents project on taskboard.
  */
 module.exports = {
+    schema: true,
     attributes: {
-        managerId: { // This is relation to user model
+        // Relation to User model
+        managerId: {
             type:       'integer',
             required:   true
         },
         title: {
             type:       'string',
-            required:   true
+            required:   true,
+            minLength:  5
         },
         description: {
             type:       'text',
-            required:   true
+            required:   true,
+            defaultsTo: ''
         },
         dateStart: {
             type:       'date',

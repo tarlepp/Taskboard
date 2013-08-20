@@ -7,11 +7,14 @@
  *                  in project backlog.
  */
 module.exports = {
+    schema: true,
     attributes: {
+        // Relation to Project model
         projectId: {
             type:       'integer',
             required:   true
         },
+        // Relation to Sprint model
         sprintId: {
             type:       'integer',
             defaultsTo: 0,
@@ -19,11 +22,13 @@ module.exports = {
         },
         title: {
             type:       'string',
-            required:   true
+            required:   true,
+            minLength:  5
         },
         description: {
             type:       'text',
-            required:   true
+            required:   true,
+            minLength:  10
         },
         estimate: {
             type:       'integer',
@@ -31,7 +36,8 @@ module.exports = {
             defaultsTo: -1
         },
         priority: {
-            type:       'integer'
+            type:       'integer',
+            required:   true
         },
         vfCase: {
             type:       'integer',
@@ -39,7 +45,7 @@ module.exports = {
         },
 
         estimateFormatted: function() {
-            return (this.estimate == -1) ? '???' : this.estimate;
+            return (parseInt(this.estimate, 10) === -1) ? '???' : this.estimate;
         }
     },
 

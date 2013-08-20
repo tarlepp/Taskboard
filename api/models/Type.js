@@ -3,11 +3,12 @@
  *
  * @module      ::  Model
  * @description ::  This model represent task types on taskboard. Basically this types are 'static':
- *                   - normal
- *                   - bug
- *                   - test
+ *                   - 1 = normal
+ *                   - 2 = bug
+ *                   - 3 = test
  */
 module.exports = {
+    schema: true,
     attributes: {
         title: {
             type:       'string',

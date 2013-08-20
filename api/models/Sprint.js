@@ -5,7 +5,9 @@
  * @description ::  This model represents project sprint.
  */
 module.exports = {
+    schema: true,
     attributes: {
+        // Relation to Project model
         projectId: {
             type:       'integer',
             required:   true
@@ -15,7 +17,8 @@ module.exports = {
             required:   true
         },
         description: {
-            type:       'text'
+            type:       'text',
+            defaultsTo: ''
         },
         dateStart: {
             type:       'date',

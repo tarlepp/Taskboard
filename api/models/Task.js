@@ -6,19 +6,25 @@
  *                  type and user.
  */
 module.exports = {
+    schema: true,
     attributes: {
+        // Relation to Story model
         storyId: {
             type:       'integer',
             required:   true
         },
+        // Relation to User model
         userId: {
-            type:       'integer'
+            type:       'integer',
+            defaultsTo: 0
         },
+        // Relation to Phase model
         phaseId: {
             type:       'integer',
             required:   true,
             defaultsTo: 0
         },
+        // Relation to Type model
         typeId: {
             type:       'integer',
             required:   true,
@@ -26,10 +32,14 @@ module.exports = {
         },
         title: {
             type:       'string',
-            required:   true
+            required:   true,
+            minLength:  5
         },
         description: {
-            type:       'text'
+            type:       'text',
+            defaultsTo: ''
         }
     }
+
+    // TODO: add history data collection on create/update/delete
 };
