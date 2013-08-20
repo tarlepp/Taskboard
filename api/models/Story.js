@@ -37,7 +37,8 @@ module.exports = {
         },
         priority: {
             type:       'integer',
-            required:   true
+            required:   true,
+            defaultsTo: 0
         },
         vfCase: {
             type:       'integer',
