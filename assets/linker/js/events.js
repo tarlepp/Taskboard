@@ -695,8 +695,6 @@ jQuery(document).ready(function() {
                         var form = jQuery('#formStoryNew', modal);
                         var formItems = form.serializeJSON();
 
-                        console.log(formItems);
-
                         // Validate form and try to create new user story
                         if (validateForm(formItems, modal)) {
                             jQuery.ajax({
