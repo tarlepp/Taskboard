@@ -11,7 +11,7 @@
  *
  * @returns {boolean}
  */
-function validateForm(items) {
+function validateForm(items, context) {
     var valid = true;
     var errors = [];
     var required = [];
@@ -24,10 +24,10 @@ function validateForm(items) {
 
     // Iterate each form item
     jQuery.each(items, function(key, item) {
-        var input = jQuery('#' + key);
+        var input = jQuery('#' + key, context);
 
         if (input.length === 0) {
-            input = jQuery("[name='"+ key +"']");
+            input = jQuery("[name='"+ key +"']", context);
         }
 
         if (input.getType() == 'div') {
@@ -61,7 +61,7 @@ function validateForm(items) {
             }
 
             valid = false;
-        } else if (method && dispatch(method, [input, group, label, value, errors]) !== true) {
+        } else if (method && dispatch(method, [context, input, group, label, value, errors]) !== true) {
             group.addClass('has-error');
 
             if (input.data('focus') !== false) {
@@ -96,6 +96,7 @@ function validateForm(items) {
  *
  * @todo    this function needs lots of work...
  *
+ * @param   {jQuery}    context Current context
  * @param   {jQuery}    input   Current input field
  * @param   {jQuery}    group   Input control group
  * @param   {String}    label   Input label as a text
@@ -104,7 +105,7 @@ function validateForm(items) {
  *
  * @returns {boolean}
  */
-function validateDate(input, group, label, date, errors) {
+function validateDate(context, input, group, label, date, errors) {
     return checkDate(date);
 }
 
@@ -113,6 +114,7 @@ function validateDate(input, group, label, date, errors) {
  *
  * @todo    How to avoid double check?
  *
+ * @param   {jQuery}    context Current context
  * @param   {jQuery}    input   Current input field
  * @param   {jQuery}    group   Input control group
  * @param   {String}    label   Input label as a text
@@ -121,11 +123,11 @@ function validateDate(input, group, label, date, errors) {
  *
  * @returns {boolean}
  */
-function validateDateRange(input, group, label, date, errors) {
+function validateDateRange(context, input, group, label, date, errors) {
     var role = input.data('role');
     var edit = input.data('edit');
     var type = input.data('type');
-    var pair = jQuery('#' + input.data('pair')).val();
+    var pair = jQuery('#' + input.data('pair'), context).val();
     var message = "";
 
     /**

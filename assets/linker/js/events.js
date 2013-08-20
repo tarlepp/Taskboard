@@ -132,7 +132,7 @@ jQuery(document).ready(function() {
                     var formItems = form.serializeJSON();
 
                     // Validate form and try to create new project
-                    if (validateForm(formItems)) {
+                    if (validateForm(formItems, modal)) {
                         // Make POST query to server
                         jQuery.ajax({
                             type: 'POST',
@@ -190,7 +190,7 @@ jQuery(document).ready(function() {
                         var formItems = form.serializeJSON();
 
                         // Validate form and try to update project data
-                        if (validateForm(formItems)) {
+                        if (validateForm(formItems, modal)) {
                             jQuery.ajax({
                                 type: 'PUT',
                                 url: "/project/" + ko.toJS(myViewModel.project().id()),
@@ -491,7 +491,7 @@ jQuery(document).ready(function() {
                         var formItems = form.serializeJSON();
 
                         // Validate form and try to create new sprint
-                        if (validateForm(formItems)) {
+                        if (validateForm(formItems, modal)) {
                             // Make POST query to server
                             jQuery.ajax({
                                 type: 'POST',
@@ -563,7 +563,7 @@ jQuery(document).ready(function() {
                         var formItems = form.serializeJSON();
 
                         // Validate form and try to create new sprint
-                        if (validateForm(formItems)) {
+                        if (validateForm(formItems, modal)) {
                             // Make POST query to server
                             jQuery.ajax({
                                 type: 'PUT',
@@ -695,8 +695,10 @@ jQuery(document).ready(function() {
                         var form = jQuery('#formStoryNew', modal);
                         var formItems = form.serializeJSON();
 
+                        console.log(formItems);
+
                         // Validate form and try to create new user story
-                        if (validateForm(formItems)) {
+                        if (validateForm(formItems, modal)) {
                             jQuery.ajax({
                                 type: 'POST',
                                 url: "/Story/",
@@ -764,7 +766,7 @@ jQuery(document).ready(function() {
                         var formItems = form.serializeJSON();
 
                         // Validate current form items and try to update user story data
-                        if (validateForm(formItems)) {
+                        if (validateForm(formItems, modal)) {
                             jQuery.ajax({
                                 type: "PUT",
                                 url: "/story/" + storyId,
@@ -927,7 +929,7 @@ jQuery(document).ready(function() {
                         var formItems = form.serializeJSON();
 
                         // Validate current form items and try to create new task
-                        if (validateForm(formItems)) {
+                        if (validateForm(formItems, modal)) {
                             jQuery.ajax({
                                 type: 'POST',
                                 url: "/task/",
@@ -984,7 +986,7 @@ jQuery(document).ready(function() {
                         var formItems = form.serializeJSON();
 
                         // Validate current form items and try to update task data
-                        if (validateForm(formItems)) {
+                        if (validateForm(formItems, modal)) {
                             jQuery.ajax({
                                 type: "PUT",
                                 url: "/task/" + task.id(),
