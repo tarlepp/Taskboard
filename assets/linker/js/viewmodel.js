@@ -120,21 +120,16 @@ ko.bindingHandlers.changeProject = {
                         viewModel.updateProjectSprintDates();
 
                         if (mappedData.length > 0) {
-                            elementSprint.removeAttr('disabled');
-
                             elementSprint.find('option').each(function() {
                                 if (jQuery(this).val() == '') {
                                     jQuery(this).text(elementSprint.data('textChooseSprint'));
                                 }
-
                             });
 
                             if (viewModel.selectedSprintId() > 0) {
                                 jQuery('#selectSprint').trigger('change');
                             }
                         } else {
-                            elementSprint.attr('disabled', 'disabled');
-
                             elementSprint.find('option').each(function() {
                                 if (jQuery(this).val() == '') {
                                     jQuery(this).text(elementSprint.data('textNoData'));
