@@ -46,41 +46,42 @@
     background-color: #fafafa;
 }
 
+
 #board .table .story,
 #board .table .task {
-    -webkit-transform: rotate(-5deg);
-    -o-transform: rotate(-5deg);
-    -moz-transform:rotate(-5deg);
+    -webkit-transform: rotate(-2deg);
+    -o-transform: rotate(-2deg);
+    -moz-transform:rotate(-2deg);
 }
 
 #board .table .story:nth-child(even),
 #board .table .task:nth-child(even) {
-    -o-transform:rotate(4deg);
-    -webkit-transform:rotate(4deg);
-    -moz-transform:rotate(4deg);
+    -o-transform:rotate(1deg);
+    -webkit-transform:rotate(1deg);
+    -moz-transform:rotate(1deg);
 }
 
 #board .table .story:nth-child(3n),
 #board .table .task:nth-child(3n) {
-    -o-transform:rotate(-3deg);
-    -webkit-transform:rotate(-3deg);
-    -moz-transform:rotate(-3deg);
+    -o-transform:rotate(-1deg);
+    -webkit-transform:rotate(-1deg);
+    -moz-transform:rotate(-1deg);
 }
 #board .table .story:nth-child(5n),
 #board .table .task:nth-child(5n) {
-    -o-transform:rotate(5deg);
-    -webkit-transform:rotate(5deg);
-    -moz-transform:rotate(5deg);
+    -o-transform:rotate(2deg);
+    -webkit-transform:rotate(2deg);
+    -moz-transform:rotate(2deg);
 }
 
 #board .table .story:hover,
 #board .table .story:focus,
 #board .table .task:hover,
 #board .table .task:focus {
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-    -webkit-transform: scale(1.10);
-    -moz-transform: scale(1.10);
-    -o-transform: scale(1.10);
+    box-shadow: 3px 6px 20px rgba(0, 0, 0, 0.4);
+    -webkit-transform: scale(1.15);
+    -moz-transform: scale(1.15);
+    -o-transform: scale(1.15);
     position: relative;
     z-index: 5;
 }
@@ -91,22 +92,12 @@ div.task {
     padding: 5px 0;
     margin: 0 5px 5px 0;
     text-align: center;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+    box-shadow: 2px 2px 3px rgba(0,0,0,0.1);
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
     cursor: pointer;
-}
-
-div.story:hover,
-div.task:hover {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.45);
-}
-
-div.story {
-    background-image: url('/images/background-body.png');
-    border: 1px solid #efefef;
 }
 
 div.story h3,
@@ -126,12 +117,10 @@ div.task h3 {
 div.story h3 {
     font-size: 16px;
     font-weight: bold;
-    color: rgba(51, 51, 51, .85);
 }
 
 div.task h3 {
     font-weight: normal;
-    color: rgb(51, 51, 51);
 }
 
 div.task.small {
@@ -146,7 +135,6 @@ div.story p  {
     font-weight: normal;
     font-size: 14px;
     line-height: 14px;
-    color: #333333;
 }
 
 div.story p:last-of-type {
@@ -154,17 +142,7 @@ div.story p:last-of-type {
 }
 
 .task {
-    background-color: rgb(245, 240, 160);
-    border: 1px solid rgba(0, 0, 0, 0.05);
     display: inline-block;
-}
-
-.task.bug {
-    background-color: rgb(255, 140, 140);
-}
-
-.task.test {
-    background-color: rgb(145, 255, 155);
 }
 
 .taped:after {
@@ -199,27 +177,40 @@ div.story p:last-of-type {
     padding-left: 5px;
 }
 
-#backlogAccordion .accordion-inner {
+#backlogAccordion .panel-body {
     padding: 6px 5px;
 }
 
-#backlogAccordion .accordion-inner ul {
+#backlogAccordion .panel-body ul {
     margin-bottom: 0;
     background-color: #ffffff;
     min-height: 30px;
 }
 
-#backlogAccordion .accordion-heading .accordion-toggle {
-    padding: 5px 8px;
-    font-size: 18px;
-    margin-right: 20px;
-}
-
 #backlogAccordion .chevron {
     position: relative;
     top: -1px;
-    left: -2px;
     font-size: 10px;
+    width: 10px;
+    display: inline-block;
+}
+
+#backlogAccordion .panel-heading {
+    padding: 5px 7px;
+}
+
+#backlogAccordion .panel-heading i.icon-wrench {
+    line-height: 23px;
+    cursor: pointer;
+}
+
+#backlogAccordion .panel-heading .text-small {
+    font-size: 13px;
+    line-height: 23px;
+}
+
+#backlogAccordion .panel a:hover {
+    text-decoration: none;
 }
 
 .backlog h4 {
@@ -263,14 +254,3 @@ div.story p:last-of-type {
     cursor: pointer;
 }
 
-.backlog .accordion-heading i {
-    position: relative;
-    top: 7px;
-    right: 5px;
-    cursor: pointer;
-}
-
-.backlog ul li i:hover,
-.backlog .accordion-heading i:hover {
-    text-shadow: 1px 1px 5px rgba(0, 0, 0, .5);
-}

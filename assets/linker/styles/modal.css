@@ -7,11 +7,6 @@
     margin-bottom: 0;
 }
 
-.modal-backdrop,
-.modal-backdrop.fade.in {
-    opacity: 0.5;
-}
-
 .modal.fade {
     -webkit-transition: opacity 0.3s linear;
     -moz-transition: opacity 0.3s linear;
@@ -46,14 +41,9 @@
     padding: 8px;
 }
 
-.modalBacklog .modal-dialog {
-    width: 800px;
-    margin-left: -400px;
-}
-
+.modalBacklog .modal-dialog,
 .modalHelp .modal-dialog {
     width: 800px;
-    margin-left: -400px;
 }
 
 .modalHelp .modal-body {

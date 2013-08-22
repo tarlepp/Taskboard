@@ -6,6 +6,11 @@ label {
     cursor: default;
     font-size: 18px;
     font-weight: normal;
+    line-height: 20px;
+}
+
+label.col-lg-3 {
+    padding-right: 5px;
 }
 
 select.form-control {
@@ -22,6 +27,13 @@ select.form-control {
     line-height: 20px;
 }
 
+.btn-default + .btn-primary,
+.btn-default + .btn-warning,
+.btn-default + .btn-danger,
+.btn-default + .btn-info {
+    text-shadow: none;
+}
+
 .input-group.date,
 .input-group.date span {
     display: inline-block;
@@ -30,7 +42,7 @@ select.form-control {
 .input-group.date span.input-group-addon {
     position: relative;
     left: -3px;
-    padding: 8px 20px 8px 8px;
+    padding: 9px 20px 9px 8px;
 }
 
 .input-group.date span.input-group-addon i {
@@ -88,10 +100,8 @@ select.form-control {
 form .required label:after {
     content: '*';
     position: relative;
-    float: right;
     right: -4px;
     top: -4px;
-    margin-right: -10px;
     font-size: 16px;
     font-weight: bold;
     color: #d9534f;
@@ -103,6 +113,7 @@ form .required label:after {
 
 .sliderValue {
     text-align: center;
+    width: 50px;
 }
 
 .estimateSlider {

@@ -24,10 +24,10 @@
     <div class="col-lg-6">
         <h4>Sprints</h4>
 
-        <div class="accordion" id="backlogAccordion">
+        <div class="panel-group" id="backlogAccordion">
         <% _.each(sprints, function(sprint) { %>
-            <div class="accordion-group">
-                <div class="accordion-heading alert-info">
+            <div class="panel panel-info">
+                <div class="panel-heading alert-info">
                     <i class="icon icon-wrench pull-right tooltipTitle event" title="Edit sprint"
                        data-id="<%= sprint.id %>"
                        data-type="sprint"
@@ -42,8 +42,8 @@
                         </span>
                     </a>
                 </div>
-                <div id="sprintContent_<%= sprint.id %>" class="accordion-body collapse ">
-                    <div class="accordion-inner">
+                <div id="sprintContent_<%= sprint.id %>" class="panel-collapse collapse ">
+                    <div class="panel-body">
                         <ul class="sortable" data-sprint-id="<%= sprint.id %>">
                         <% _.each(stories, function(story) { %>
                             <% if(story.sprintId === sprint.id) { %>
