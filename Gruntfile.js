@@ -29,6 +29,7 @@ module.exports = function (grunt) {
         // Taskboard specified vendor dependencies
         'linker/vendor/jQuery-UI/jquery-ui.css',
         'linker/vendor/bootstrap/css/bootstrap.css',
+        'linker/vendor/bootstrap/css/bootstrap-theme.css',
         'linker/vendor/bootstrap-datepicker/datepicker.css',
         'linker/vendor/qTip/jquery.qtip.css',
         'linker/vendor/font-awesome/css/font-awesome.css',
