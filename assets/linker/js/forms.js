@@ -163,25 +163,24 @@ function initProjectPlanning(modal) {
 
     jQuery('#backlogAccordion', modal)
         .collapse()
-        .on('hidden', function(event) {
+        .on('hidden.bs.collapse', function(event) {
             event.stopPropagation();
         })
-        .on('show', function(e) {
+        .on('show.bs.collapse', function(e) {
             jQuery(this).css('overflow', 'visible');
 
             jQuery(e.target).parent().find(".icon-chevron-right").removeClass("icon-chevron-right").addClass("icon-chevron-down");
         })
-        .on('hide', function(e) {
+        .on('hide.bs.collapse', function(e) {
             jQuery(e.target).parent().find(".icon-chevron-down").removeClass("icon-chevron-down").addClass("icon-chevron-right");
         })
-        .on('hidden shown', function() {
+        .on('hidden.bs.collapse shown.bs.collapse', function() {
             jQuery(this).find('.collapse').each(function() {
                 if (this.id) {
                     document.cookie = this.id + "_collapse_in=" + jQuery(this).hasClass('in');
                 }
             });
         });
-
 
     jQuery('.sortable', modal).sortable({
         connectWith: '.sortable',
