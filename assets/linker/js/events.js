@@ -254,7 +254,7 @@ jQuery(document).ready(function() {
     });
 
     /**
-     * Project backlog event, this opens a modal bootbox dialog with project backlog view on it.
+     * Project planning event, this opens a modal bootbox dialog with project backlog view on it.
      * In this dialog user can prioritize user stories and assign them to existing sprints or move
      * them back to backlog.
      */
@@ -300,13 +300,13 @@ jQuery(document).ready(function() {
             modal.on('click', 'i.event', function(event) {
                 event.preventDefault();
 
-                modal.modal('hide');
-
                 var element = jQuery(this);
                 var id = element.data('id');
                 var trigger = element.data('type') + "Edit";
 
-                body.trigger(trigger, [id, 'projectPlanning'])
+                body.trigger(trigger, [id, 'projectPlanning']);
+
+                modal.modal('hide');
             });
 
             modal.modal('show');
