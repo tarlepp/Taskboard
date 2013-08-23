@@ -207,9 +207,6 @@ function createBootboxDialog(title, content, buttons, trigger) {
         label: "Close",
         class: "btn btn-default pull-left",
         callback: function() {
-            jQuery('.bootbox').remove();
-            jQuery('.modal-backdrop').remove();
-
             if (trigger) {
                 jQuery('body').trigger(trigger);
             }
@@ -239,6 +236,11 @@ function createBootboxDialog(title, content, buttons, trigger) {
     // Initialize possible modal context tooltips
     modal.on('shown.bs.modal', function() {
         initTooltips(modal);
+    });
+
+    // Remove modal on hidden event, this solves some JS errors
+    modal.on('hidden.bs.modal', function() {
+        jQuery(this).remove();
     });
 
     // Return bootbox dialog
