@@ -3,6 +3,10 @@
     width: 25%;
 }
 
+.col-lg-6 {
+    width: 50%;
+}
+
 .col-lg-9 {
     width: 75%;
 }
