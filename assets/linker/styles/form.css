@@ -129,13 +129,6 @@ form .required label:after {
     width: 100px;
 }
 
-li.ui-sortable-helper {
-    list-style-type: none;
-    border: 1px solid #dddddd;
-    background-color: #eeeeee;
-    padding: 3px 5px 3px 10px;
-}
-
 #projectPhases i.icon-resize-vertical {
     margin: 0 0 0 10px;
     cursor: move;

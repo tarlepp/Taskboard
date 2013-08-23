@@ -6,10 +6,10 @@
 <div class="row backlog">
     <div class="col-lg-6">
         <h4>Project backlog</h4>
-        <ul class="sortable" data-sprint-id="0">
+        <ul class="sortable list-group" data-sprint-id="0">
         <% _.each(stories, function(story) { %>
             <% if(story.sprintId === 0 || story.sprintId === null) { %>
-            <li data-story-id="<%= story.id %>">
+            <li class="list-group-item" data-story-id="<%= story.id %>">
                 <%= story.title %> (<%= story.estimateFormatted() %>)
 
                 <i class="icon icon-wrench pull-right tooltipTitle event" title="Edit story"
@@ -33,7 +33,7 @@
                        data-type="sprint"
                     ></i>
 
-                    <a class="accordion-toggle" data-toggle="collapse" href="#sprintContent_<%= sprint.id %>">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#backlogAccordion" href="#sprintContent_<%= sprint.id %>">
                         <i class="chevron icon icon-chevron-right icon-chevron-right"></i>
                         <%= sprint.title %>
 
@@ -42,12 +42,12 @@
                         </span>
                     </a>
                 </div>
-                <div id="sprintContent_<%= sprint.id %>" class="panel-collapse collapse ">
+                <div id="sprintContent_<%= sprint.id %>" class="panel-collapse collapse">
                     <div class="panel-body">
-                        <ul class="sortable" data-sprint-id="<%= sprint.id %>">
+                        <ul class="sortable list-group" data-sprint-id="<%= sprint.id %>">
                         <% _.each(stories, function(story) { %>
                             <% if(story.sprintId === sprint.id) { %>
-                            <li data-story-id="<%= story.id %>">
+                            <li class="list-group-item" data-story-id="<%= story.id %>">
                                 <%= story.title %> (<%= story.estimateFormatted() %>)
 
                                 <i class="icon icon-wrench pull-right tooltipTitle event" title="Edit story"

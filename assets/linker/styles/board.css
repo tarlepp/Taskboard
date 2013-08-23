@@ -46,7 +46,6 @@
     background-color: #fafafa;
 }
 
-
 #board .table .story,
 #board .table .task {
     -webkit-transform: rotate(-2deg);
@@ -218,39 +217,33 @@ div.story p:last-of-type {
     font-weight: normal;
 }
 
-.backlog ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    min-height: 30px;
+.backlog .list-group-item {
+    padding: 5px 10px;
+    cursor: move;
 }
 
-.backlog ul li {
-    border: 1px solid #dddddd;
-    padding: 3px 5px 3px 10px;
-    background-color: #F7FBFD;
-    font-size: 15px;
+li.list-group-item.ui-sortable-helper {
+    border-radius: 4px;
+    color: #428bca;
+    background-image: -webkit-gradient(linear, left 0%, left 100%, from(#d9edf7), to(#c4e3f3));
+    background-image: -webkit-linear-gradient(top, #d9edf7, 0%, #c4e3f3, 100%);
+    background-image: -moz-linear-gradient(top, #d9edf7 0%, #c4e3f3 100%);
+    background-image: linear-gradient(to bottom, #d9edf7 0%, #c4e3f3 100%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd9edf7', endColorstr='#ffc4e3f3', GradientType=0);
 }
 
-.backlog ul li:hover {
-    background-color: #eeeeee;
+.backlog .list-group-item:hover {
+    background-color: #f5f5f5;
 }
 
-.backlog ul li:first-of-type {
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-}
-
-.backlog ul li:last-of-type {
-    border-bottom: 1px solid #dddddd;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-
-.backlog ul li i {
-    position: relative;
-    top: 3px;
-    margin-left: 3px;
+.backlog .list-group-item i {
+    line-height: 23px;
     cursor: pointer;
 }
+
+.backlog .list-group-item i:hover {
+    color: #428bca;
+}
+
 
