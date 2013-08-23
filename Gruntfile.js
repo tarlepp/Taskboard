@@ -47,7 +47,6 @@ module.exports = function (grunt) {
      */
 
     var jsFilesToInject = [
-
         // Below, as a demonstration, you'll see the built-in dependencies
         // linked in the proper order order
 
@@ -66,6 +65,7 @@ module.exports = function (grunt) {
         'linker/vendor/json5.js',
         'linker/vendor/underscore.js',
         'linker/vendor/jquery-2.0.3.min.js',
+        'linker/vendor/trunk8.js',
         'linker/vendor/jquery.autosize.js',
         'linker/vendor/jQuery-noty/jquery.noty.js',
         'linker/vendor/jQuery-noty/jquery.noty-default.js',
