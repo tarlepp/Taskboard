@@ -207,6 +207,9 @@ function createBootboxDialog(title, content, buttons, trigger) {
         label: "Close",
         class: "btn btn-default pull-left",
         callback: function() {
+            jQuery('.bootbox').remove();
+            jQuery('.modal-backdrop').remove();
+
             if (trigger) {
                 jQuery('body').trigger(trigger);
             }

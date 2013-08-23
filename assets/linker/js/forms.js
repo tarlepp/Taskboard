@@ -187,7 +187,6 @@ function initProjectPlanning(modal) {
         zIndex:'5000',
         helper: 'clone',
         cursor: 'move',
-        appendTo: 'body',
         stop: function(event, ui) {
             var list = ui.item.closest('ul');
             var sprintId = parseInt(list.data('sprintId'));
