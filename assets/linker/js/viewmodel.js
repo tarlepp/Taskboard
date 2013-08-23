@@ -637,6 +637,32 @@ function ViewModel() {
     };
 
     /**
+     * Update task data after story splitting.
+     *
+     * Please exam if this can be done some other way...
+     *
+     * @param   {Array}     tasks
+     * @param   {Number}    storyIdOld
+     * @param   {Number}    storyIdNew
+     */
+    self.updateTasks = function(tasks, storyIdOld, storyIdNew) {
+        jQuery.each(self.stories(), function(index, /** models.knockout.story */story) {
+            if (ko.toJS(story.id()) === storyIdOld) {
+                // Iterate each phase
+                jQuery.each(story.phases(), function(phaseKey, phase) {
+                    jQuery.each(phase.tasks(), function(taskKey, task) {
+                        jQuery.each(tasks, function(newTaskKey, newTask) {
+                            if (ko.toJS(task.id()) === newTask.id) {
+                                phase.tasks.remove(task);
+                            }
+                        });
+                    });
+                });
+            }
+        });
+    };
+
+    /**
      * Generic nl2br method
      *
      * @param   {string}    value

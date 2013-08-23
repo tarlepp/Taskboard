@@ -828,16 +828,26 @@ jQuery(document).ready(function() {
                                         dataType: 'json'
                                     })
                                     .done(function(data) {
-                                        console.log(data);
+                                        var newStoryId = false;
 
-                                        //return true
+                                        // Add story to current stories IF we story sprintId is same as current sprint id
+                                        if (myViewModel.sprint() && data.story.sprintId === myViewModel.sprint().id()) {
+                                            // Add created story to knockout model data.
+                                            myViewModel.stories.push(new Story(data.story));
 
-                                        //body.trigger('storyEdit', [storyObject.id()]);
+                                            newStoryId = data.story.id;
+                                        }
+
+                                        myViewModel.updateTasks(data.tasks, storyId, newStoryId);
+
+                                        makeMessage("User story splitted successfully.", "success", {});
+
+                                        prompt.modal('hide');
+
+                                        body.trigger('storyEdit', [storyId, trigger]);
                                     })
                                     .fail(function(jqXhr, textStatus, error) {
                                         handleAjaxError(jqXhr, textStatus, error);
-
-                                        //return false;
                                     });
 
                                     return false;

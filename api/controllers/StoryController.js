@@ -183,10 +183,9 @@ module.exports = {
                                     if (err) {
                                         res.send(error, 500);
                                     } else {
-                                        data.tasks.push(task);
+                                        data.tasks.push(task[0]);
 
                                         if (data.taskCnt === data.tasks.length) {
-                                            console.log("send data");
                                             res.send(data);
                                         }
                                     }
