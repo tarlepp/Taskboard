@@ -45,10 +45,6 @@ h1, h2, h3, h4, h5, h6,
     font-weight: normal;
 }
 
-.table th i {
-    font-size: 16px;
-}
-
 table input[type="text"] {
     margin: 0;
 }
@@ -73,7 +69,7 @@ table input[type="text"] {
 .qtip-bootstrap .qtip-titlebar {
     padding: 5px 10px;
     font-size: 16px;
-    white-space: nowrap;
+    white-space: normal;
 }
 
 .tooltipDivContainer {
