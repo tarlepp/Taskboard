@@ -8,10 +8,10 @@ ko.bindingHandlers.changeProject = {
     /**
      * Init function for project change event.
      *
-     * @param   {String}                    element             Name of the current element
-     * @param                               valueAccessor
-     * @param                               allBindingsAccessor
-     * @param   {models.knockout.viewModel} viewModel
+     * @param   {String}        element             Name of the current element
+     * @param                   valueAccessor
+     * @param                   allBindingsAccessor
+     * @param   {myViewModel}   viewModel
      */
     init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
         var elementProject = jQuery(element);
@@ -268,7 +268,7 @@ ko.bindingHandlers.qtip = {
             jQuery(element).addClass('generated_qtip');
 
             //handle disposal (if KO removes by the template binding)
-            ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+            ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
                 try {
                     jQuery(element).qtip("api").hide();
                     jQuery(element).qtip("api").destroy();
@@ -309,20 +309,11 @@ ko.bindingHandlers.qtip = {
                             show: {
                                 when: {
                                     event: 'mouseenter'
-                                },
-                                delay: 150,
-                                effect: {
-                                    type: 'fade',
-                                    length: 150
                                 }
                             },
                             hide: {
                                 when: {
                                     event: 'mouseleave'
-                                },
-                                effect: {
-                                    type: 'fade',
-                                    length: 150
                                 }
                             },
                             style: {
@@ -352,6 +343,45 @@ ko.bindingHandlers.qtip = {
                 }
             }
         }
+    }
+};
+
+/**
+ * trunk8 bindings for knockout, usage:
+ *
+ * <h3 data-bind="text: title, trunk8: {lines: 1}"></h3>
+ *
+ * @type {{init: Function, update: Function}}
+ */
+ko.bindingHandlers.trunk8 = {
+    init: function (element, valueAccessor) {
+        var settings = ko.utils.unwrapObservable(valueAccessor()) || {};
+        var defaultSettings = {
+            fill: '&hellip;'
+        };
+
+        jQuery(element).trunk8(jQuery.extend({}, defaultSettings, settings));
+    },
+    update: function (element, valueAccessor) {
+        var selector = jQuery(element);
+
+        // Update trunk8 data
+        selector.trunk8('update', jQuery(element).html());
+
+        // Remove element title
+        selector.prop('title', '');
+
+        selector.on('mouseover', function(event) {
+            jQuery(this).trunk8('revert');
+
+            return false;
+        });
+
+        selector.on('mouseout', function(event) {
+            jQuery(this).trunk8().prop('title', '');
+
+            return false;
+        });
     }
 };
 
