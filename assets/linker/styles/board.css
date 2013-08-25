@@ -78,9 +78,9 @@
 #board .table .task:hover,
 #board .table .task:focus {
     box-shadow: 3px 6px 20px rgba(0, 0, 0, 0.4);
-    -webkit-transform: scale(1.15);
-    -moz-transform: scale(1.15);
-    -o-transform: scale(1.15);
+    -webkit-transform: scale(1.12);
+    -moz-transform: scale(1.12);
+    -o-transform: scale(1.12);
     position: relative;
     z-index: 5;
 }
