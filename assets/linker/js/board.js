@@ -8,13 +8,26 @@ jQuery(document).ready(function() {
         createQtipTitle(jQuery(this));
     });
 
+    // Global bootbox settings
     bootbox.animate(false);
-
     bootbox.setBtnClasses({
         OK: 'pull-right',
         CANCEL: 'pull-left',
         PROMPT: 'btn-primary',
         CONFIRM: 'btn-danger'
+    });
+
+    // Global task / story mouseover/out events for trunk8 functionality
+    jQuery(document).on('mouseover', '.task, .story', function(event) {
+        jQuery(this).find('.trunk8').each(function(a, b) {
+            jQuery(this).trunk8('revert');
+        });
+    });
+
+    jQuery(document).on('mouseout', '.task, .story', function(event) {
+        jQuery(this).find('.trunk8').each(function() {
+            jQuery(this).trunk8().prop('title', '');
+        });
     });
 });
 

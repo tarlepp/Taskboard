@@ -134,6 +134,7 @@ div.story p  {
     font-weight: normal;
     font-size: 14px;
     line-height: 14px;
+    padding: 0 5px;
 }
 
 div.story p:last-of-type {

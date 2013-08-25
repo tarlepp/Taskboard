@@ -363,25 +363,11 @@ ko.bindingHandlers.trunk8 = {
         jQuery(element).trunk8(jQuery.extend({}, defaultSettings, settings));
     },
     update: function (element, valueAccessor) {
-        var selector = jQuery(element);
-
-        // Update trunk8 data
-        selector.trunk8('update', jQuery(element).html());
-
-        // Remove element title
-        selector.prop('title', '');
-
-        selector.on('mouseover', function(event) {
-            jQuery(this).trunk8('revert');
-
-            return false;
-        });
-
-        selector.on('mouseout', function(event) {
-            jQuery(this).trunk8().prop('title', '');
-
-            return false;
-        });
+        jQuery(element)
+            .trunk8('update', jQuery(element).html())   // Update trunk8 data
+            .prop('title', '')                          // Remove element title
+            .addClass('trunk8')                         // Set helper class
+        ;
     }
 };
 
