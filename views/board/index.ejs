@@ -140,7 +140,7 @@
                 },
                 css: taskClass()
             ">
-            <h3 data-bind="text: title, trunk8: {lines: 1}"></h3>
+            <h3 data-bind="html: title, trunk8: {lines: 1}"></h3>
         </div>
     </script>
 
@@ -162,7 +162,7 @@
                 },
                 css: taskClass()
             ">
-            <h3 data-bind="text: title"></h3>
+            <h3 data-bind="html: title, trunk8: {lines: 1}"></h3>
         </div>
     </script>
 
@@ -170,7 +170,7 @@
         <h3 data-bind="text: formattedTitle"></h3>
 
         <!-- ko if: description -->
-        <p data-bind="text: description, trunk8: {lines: 2}"></p>
+        <p data-bind="html: description, trunk8: {lines: 2}"></p>
         <!-- /ko -->
     </script>
 
