@@ -60,7 +60,13 @@
                                 },
                                 qtip: {
                                     title: title(),
-                                    text: $root.nl2br(description())
+                                    text: descriptionTooltip(),
+                                    options: {
+                                        hide: {
+                                            fixed: true,
+                                            delay: 150
+                                        }
+                                    }
                                 }
                             "
                         ></div>
@@ -116,11 +122,15 @@
                 },
                 qtip: {
                     title: title(),
-                    text: $root.nl2br(description()),
+                    text: descriptionTooltip(),
                     options: {
                         position: {
                             at: 'bottom center',
                             my: 'top center'
+                        },
+                        hide: {
+                            fixed: true,
+                            delay: 150
                         }
                     }
                 },
@@ -138,7 +148,7 @@
                 },
                 qtip: {
                     title: title(),
-                    text: description() ? $root.nl2br(description()) : '<em>No description...</em>',
+                    text: descriptionTooltip() ? descriptionTooltip() : '<em>No description...</em>',
                     options: {
                         position: {
                             at: 'bottom center',

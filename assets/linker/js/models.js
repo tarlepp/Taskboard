@@ -262,6 +262,23 @@ function Story(data) {
         return "storyRow_" + self.id();
     });
 
+    // Story description tooltip text
+    self.descriptionTooltip = ko.computed(function() {
+        var description = self.description();
+
+        // No description but VF case defined
+        if (description.length === 0 && self.vfCase()) {
+            description = "<em>No description...</em>";
+        }
+
+        // ValueFrame case defined
+        if (self.vfCase()) {
+            description += "\nValueFrame case: <a href=''>#" + self.vfCase() + "</a>";
+        }
+
+        return description.nl2br();
+    });
+
     /**
      * Method triggers add a new task for current story.
      *
@@ -357,6 +374,15 @@ function Task(data) {
         });
 
         return output;
+    });
+
+    // Task description tooltip text
+    self.descriptionTooltip = ko.computed(function() {
+        if (self.description().length === 0) {
+            return '';
+        }
+
+        return self.description().nl2br();
     });
 }
 
