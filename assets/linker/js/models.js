@@ -120,10 +120,10 @@ function Phase(data) {
      * Task count class getter.
      *
      * If actual task count is greater than specified phase task count, method will
-     * return 'text-error' class otherwise empty string.
+     * return 'text-danger' class otherwise empty string.
      */
     self.phaseTaskCountStatus = ko.computed(function() {
-        return self.tasks() < 1 ? '' : (self.tasks() < self.cntTask() ? 'text-error' : '');
+        return self.tasks() < 1 ? '' : (self.tasks() < self.cntTask() ? 'text-danger' : '');
     });
 
     /**
