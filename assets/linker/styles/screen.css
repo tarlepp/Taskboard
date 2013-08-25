@@ -66,6 +66,10 @@ table input[type="text"] {
     padding: 5px 10px;
 }
 
+.qtip-bootstrap .qtip-content hr {
+    margin: 5px 0;
+}
+
 .qtip-bootstrap .qtip-titlebar {
     padding: 5px 10px;
     font-size: 16px;

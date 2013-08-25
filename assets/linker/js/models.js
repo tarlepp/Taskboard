@@ -271,10 +271,16 @@ function Story(data) {
             description = "<em>No description...</em>";
         }
 
+        var parts = [];
+
+        parts.push("Estimate: " + (self.estimate() == -1 ? "???" : self.estimate()));
+
         // ValueFrame case defined
         if (self.vfCase()) {
-            description += "\nValueFrame case: <a href=''>#" + self.vfCase() + "</a>";
+            parts.push("ValueFrame case: <a href=''>#" + self.vfCase() + "</a>");
         }
+
+        description += "<hr />" + parts.join("\n");
 
         return description.nl2br();
     });
