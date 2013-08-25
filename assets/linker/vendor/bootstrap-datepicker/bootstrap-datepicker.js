@@ -358,7 +358,7 @@
 			this.picker.css({
 				top: offset.top + height,
 				left: offset.left,
-				zIndex: zIndex
+				zIndex: zIndex + 1100
 			});
 		},
 
