@@ -1080,4 +1080,42 @@ jQuery(document).ready(function() {
             handleAjaxError(jqXhr, textStatus, error);
         });
     });
+
+    /**
+     * Project milestone list event. This opens a modal dialog which contains all current project
+     * milestones. User can edit existing milestones, add new ones, change existing milestones, add
+     * stories to milestones and edit stories which are attached to milestone.
+     */
+    body.on('milestoneList', function(event, projectId) {
+        jQuery.get('/Milestone/list', {projectId: projectId}, function(content) {
+            var title = "Project milestones";
+
+            var buttons = [
+                {
+                    label: "Add new milestone",
+                    class: "btn btn-primary pull-right",
+                    callback: function() {
+                        modal.modal('hide');
+
+                        jQuery('body').trigger('milestoneAdd', [projectId, 'milestoneList']);
+
+                        return false;
+                    }
+                },
+            ];
+
+            // Create bootbox modal
+            var modal = createBootboxDialog(title, content, buttons, false);
+
+            // Make init when dialog is opened.
+            modal.on('shown.bs.modal', function() {
+            });
+
+            // Open bootbox modal
+            modal.modal('show');
+        })
+        .fail(function(jqXhr, textStatus, error) {
+            handleAjaxError(jqXhr, textStatus, error);
+        });
+    });
 });

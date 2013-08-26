@@ -615,6 +615,13 @@ function ViewModel() {
     };
 
     /**
+     * Method opens project milestone list dialog
+     */
+    self.milestoneList = function() {
+        jQuery('body').trigger('milestoneList', myViewModel.project().id());
+    };
+
+    /**
      * Method removes specified story from knockout bindings.
      *
      * @param   {number}    storyId Story ID
