@@ -24,6 +24,10 @@ h1, h2, h3, h4, h5, h6,
     font-family: 'Yanone Kaffeesatz', "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+em {
+    margin-right: 2px;
+}
+
 .table thead > tr > th,
 .table tbody > tr > th,
 .table tfoot > tr > th,
@@ -62,6 +66,10 @@ table input[type="text"] {
     right: -28px;
 }
 
+.qtip-bootstrap {
+    font-size: 15px;
+}
+
 .qtip-bootstrap .qtip-content {
     padding: 5px 10px;
 }
@@ -72,7 +80,7 @@ table input[type="text"] {
 
 .qtip-bootstrap .qtip-titlebar {
     padding: 5px 10px;
-    font-size: 16px;
+    font-size: 18px;
     white-space: normal;
 }
 
