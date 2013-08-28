@@ -1,2 +1,326 @@
-//knockout-sortable 0.8.1 | (c) 2013 Ryan Niemeyer | http://www.opensource.org/licenses/mit-license
-(function(e){typeof define=="function"&&define.amd?define(["./","jquery","jquery.ui.sortable"],e):e(window.ko,jQuery)})(function(e,t,n){var r="ko_sortItem",i="ko_sourceIndex",s="ko_sortList",o="ko_parentList",u="ko_dragItem",a=e.utils.unwrapObservable,f=e.utils.domData.get,l=e.utils.domData.set,c=function(t,n){e.utils.arrayForEach(t,function(e){e.nodeType===1&&(l(e,r,n),l(e,o,f(e.parentNode,s)))})},h=function(t,n){var r={},i=a(t()),s;return i.data?(r[n]=i.data,r.name=i.template):r[n]=t(),e.utils.arrayForEach(["afterAdd","afterRender","as","beforeRemove","includeDestroyed","templateEngine","templateOptions"],function(t){r[t]=i[t]||e.bindingHandlers.sortable[t]}),n==="foreach"&&(r.afterRender?(s=r.afterRender,r.afterRender=function(e,t){c.call(t,e,t),s.call(t,e,t)}):r.afterRender=c),r},p=function(e,t){var n=a(t);if(n)for(var r=0;r<e;r++)n[r]&&a(n[r]._destroy)&&e++;return e};e.bindingHandlers.sortable={init:function(c,d,v,m,g){var y=t(c),b=a(d())||{},w=h(d,"foreach"),E={},S,x;e.utils.arrayForEach(c.childNodes,function(e){e&&e.nodeType===3&&e.parentNode.removeChild(e)}),t.extend(!0,E,e.bindingHandlers.sortable),b.options&&E.options&&(e.utils.extend(E.options,b.options),delete b.options),e.utils.extend(E,b),E.connectClass&&(e.isObservable(E.allowDrop)||typeof E.allowDrop=="function")?e.computed({read:function(){var t=a(E.allowDrop),n=typeof t=="function"?t.call(this,w.foreach):t;e.utils.toggleDomNodeCssClass(c,E.connectClass,n)},disposeWhenNodeIsRemoved:c},this):e.utils.toggleDomNodeCssClass(c,E.connectClass,E.allowDrop),e.bindingHandlers.template.init(c,function(){return w},v,m,g),S=E.options.start,x=E.options.update;var T=setTimeout(function(){var h;y.sortable(e.utils.extend(E.options,{start:function(t,n){var r=n.item[0];l(r,i,e.utils.arrayIndexOf(n.item.parent().children(),r)),n.item.find("input:focus").change(),S&&S.apply(this,arguments)},receive:function(e,t){h=f(t.item[0],u),h&&(h.clone&&(h=h.clone()),E.dragged&&(h=E.dragged.call(this,h,e,t)||h))},update:function(n,u){var a,c,d,v,m,g=u.item[0],y=u.item.parent()[0],b=f(g,r)||h;h=null;if(b&&(this===y||t.contains(this,y))){a=f(g,o),d=f(g,i),c=f(g.parentNode,s),v=e.utils.arrayIndexOf(u.item.parent().children(),g),w.includeDestroyed||(d=p(d,a),v=p(v,c));if(E.beforeMove||E.afterMove)m={item:b,sourceParent:a,sourceParentNode:a&&u.sender||g.parentNode,sourceIndex:d,targetParent:c,targetIndex:v,cancelDrop:!1};if(E.beforeMove){E.beforeMove.call(this,m,n,u);if(m.cancelDrop){m.sourceParent?t(m.sourceParent===m.targetParent?this:u.sender).sortable("cancel"):t(g).remove();return}}v>=0&&(a&&(a.splice(d,1),e.processAllDeferredBindingUpdates&&e.processAllDeferredBindingUpdates()),c.splice(v,0,b)),l(g,r,null),u.item.remove(),e.processAllDeferredBindingUpdates&&e.processAllDeferredBindingUpdates(),E.afterMove&&E.afterMove.call(this,m,n,u)}x&&x.apply(this,arguments)},connectWith:E.connectClass?"."+E.connectClass:!1})),E.isEnabled!==n&&e.computed({read:function(){y.sortable(a(E.isEnabled)?"enable":"disable")},disposeWhenNodeIsRemoved:c})},0);return e.utils.domNodeDisposal.addDisposeCallback(c,function(){y.data("sortable")&&y.sortable("destroy"),clearTimeout(T)}),{controlsDescendantBindings:!0}},update:function(t,n,r,i,o){var u=h(n,"foreach");l(t,s,u.foreach),e.bindingHandlers.template.update(t,function(){return u},r,i,o)},connectClass:"ko_container",allowDrop:!0,afterMove:null,beforeMove:null,options:{}},e.bindingHandlers.draggable={init:function(r,i,s,o,f){var c=a(i())||{},p=c.options||{},d=e.utils.extend({},e.bindingHandlers.draggable.options),v=h(i,"data"),m=c.connectClass||e.bindingHandlers.draggable.connectClass,g=c.isEnabled!==n?c.isEnabled:e.bindingHandlers.draggable.isEnabled;return c=c.data||c,l(r,u,c),e.utils.extend(d,p),d.connectToSortable=m?"."+m:!1,t(r).draggable(d),g!==n&&e.computed({read:function(){t(r).draggable(a(g)?"enable":"disable")},disposeWhenNodeIsRemoved:r}),e.bindingHandlers.template.init(r,function(){return v},s,o,f)},update:function(t,n,r,i,s){var o=h(n,"data");return e.bindingHandlers.template.update(t,function(){return o},r,i,s)},connectClass:e.bindingHandlers.sortable.connectClass,options:{helper:"clone"}}})
+;(function(factory) {
+    if (typeof define === "function" && define.amd) {
+        // AMD anonymous module
+        define(["knockout", "jquery", "jquery.ui.sortable"], factory);
+    } else {
+        // No module loader (plain <script> tag) - put directly in global namespace
+        factory(window.ko, jQuery);
+    }
+})(function(ko, $, undefined) {
+    var ITEMKEY = "ko_sortItem",
+        INDEXKEY = "ko_sourceIndex",
+        LISTKEY = "ko_sortList",
+        PARENTKEY = "ko_parentList",
+        DRAGKEY = "ko_dragItem",
+        unwrap = ko.utils.unwrapObservable,
+        dataGet = ko.utils.domData.get,
+        dataSet = ko.utils.domData.set;
+
+    //internal afterRender that adds meta-data to children
+    var addMetaDataAfterRender = function(elements, data) {
+        ko.utils.arrayForEach(elements, function(element) {
+            if (element.nodeType === 1) {
+                dataSet(element, ITEMKEY, data);
+                dataSet(element, PARENTKEY, dataGet(element.parentNode, LISTKEY));
+            }
+        });
+    };
+
+    //prepare the proper options for the template binding
+    var prepareTemplateOptions = function(valueAccessor, dataName) {
+        var result = {},
+            options = unwrap(valueAccessor()),
+            actualAfterRender;
+
+        //build our options to pass to the template engine
+        if (options.data) {
+            result[dataName] = options.data;
+            result.name = options.template;
+        } else {
+            result[dataName] = valueAccessor();
+        }
+
+        ko.utils.arrayForEach(["afterAdd", "afterRender", "as", "beforeRemove", "includeDestroyed", "templateEngine", "templateOptions"], function (option) {
+            result[option] = options[option] || ko.bindingHandlers.sortable[option];
+        });
+
+        //use an afterRender function to add meta-data
+        if (dataName === "foreach") {
+            if (result.afterRender) {
+                //wrap the existing function, if it was passed
+                actualAfterRender = result.afterRender;
+                result.afterRender = function(element, data) {
+                    addMetaDataAfterRender.call(data, element, data);
+                    actualAfterRender.call(data, element, data);
+                };
+            } else {
+                result.afterRender = addMetaDataAfterRender;
+            }
+        }
+
+        //return options to pass to the template binding
+        return result;
+    };
+
+    var updateIndexFromDestroyedItems = function(index, items) {
+        var unwrapped = unwrap(items);
+
+        if (unwrapped) {
+            for (var i = 0; i < index; i++) {
+                //add one for every destroyed item we find before the targetIndex in the target array
+                if (unwrapped[i] && unwrap(unwrapped[i]._destroy)) {
+                    index++;
+                }
+            }
+        }
+
+        return index;
+    };
+
+    //connect items with observableArrays
+    ko.bindingHandlers.sortable = {
+        init: function(element, valueAccessor, allBindingsAccessor, data, context) {
+            var $element = $(element),
+                value = unwrap(valueAccessor()) || {},
+                templateOptions = prepareTemplateOptions(valueAccessor, "foreach"),
+                sortable = {},
+                startActual, updateActual;
+
+            //remove leading/trailing non-elements from anonymous templates
+            ko.utils.arrayForEach(element.childNodes, function(node) {
+                if (node && node.nodeType !== 1) {
+                    node.parentNode.removeChild(node);
+                }
+            });
+
+            //build a new object that has the global options with overrides from the binding
+            $.extend(true, sortable, ko.bindingHandlers.sortable);
+            if (value.options && sortable.options) {
+                ko.utils.extend(sortable.options, value.options);
+                delete value.options;
+            }
+            ko.utils.extend(sortable, value);
+
+            //if allowDrop is an observable or a function, then execute it in a computed observable
+            if (sortable.connectClass && (ko.isObservable(sortable.allowDrop) || typeof sortable.allowDrop == "function")) {
+                ko.computed({
+                    read: function() {
+                        var value = unwrap(sortable.allowDrop),
+                            shouldAdd = typeof value == "function" ? value.call(this, templateOptions.foreach) : value;
+                        ko.utils.toggleDomNodeCssClass(element, sortable.connectClass, shouldAdd);
+                    },
+                    disposeWhenNodeIsRemoved: element
+                }, this);
+            } else {
+                ko.utils.toggleDomNodeCssClass(element, sortable.connectClass, sortable.allowDrop);
+            }
+
+            //wrap the template binding
+            ko.bindingHandlers.template.init(element, function() { return templateOptions; }, allBindingsAccessor, data, context);
+
+            //keep a reference to start/update functions that might have been passed in
+            startActual = sortable.options.start;
+            updateActual = sortable.options.update;
+
+            //initialize sortable binding after template binding has rendered in update function
+            var createTimeout = setTimeout(function() {
+                var dragItem;
+                $element.sortable(ko.utils.extend(sortable.options, {
+                    start: function(event, ui) {
+                        //track original index
+                        var el = ui.item[0];
+                        dataSet(el, INDEXKEY, ko.utils.arrayIndexOf(ui.item.parent().children(), el));
+
+                        //make sure that fields have a chance to update model
+                        ui.item.find("input:focus").change();
+                        if (startActual) {
+                            startActual.apply(this, arguments);
+                        }
+                    },
+                    receive: function(event, ui) {
+                        dragItem = dataGet(ui.item[0], DRAGKEY);
+                        if (dragItem) {
+                            //copy the model item, if a clone option is provided
+                            if (dragItem.clone) {
+                                dragItem = dragItem.clone();
+                            }
+
+                            //configure a handler to potentially manipulate item before drop
+                            if (sortable.dragged) {
+                                dragItem = sortable.dragged.call(this, dragItem, event, ui) || dragItem;
+                            }
+                        }
+                    },
+                    update: function(event, ui) {
+                        var sourceParent, targetParent, sourceIndex, targetIndex, arg,
+                            el = ui.item[0],
+                            parentEl = ui.item.parent()[0],
+                            item = dataGet(el, ITEMKEY) || dragItem;
+
+                        dragItem = null;
+
+                        //make sure that moves only run once, as update fires on multiple containers
+                        if (item && (this === parentEl || $.contains(this, parentEl))) {
+                            //identify parents
+                            sourceParent = dataGet(el, PARENTKEY);
+                            sourceIndex = dataGet(el, INDEXKEY);
+                            targetParent = dataGet(el.parentNode, LISTKEY);
+                            targetIndex = ko.utils.arrayIndexOf(ui.item.parent().children(), el);
+
+                            //take destroyed items into consideration
+                            if (!templateOptions.includeDestroyed) {
+                                sourceIndex = updateIndexFromDestroyedItems(sourceIndex, sourceParent);
+                                targetIndex = updateIndexFromDestroyedItems(targetIndex, targetParent);
+                            }
+
+                            if (sortable.beforeMove || sortable.afterMove) {
+                                arg = {
+                                    item: item,
+                                    sourceParent: sourceParent,
+                                    sourceParentNode: sourceParent && ui.sender || el.parentNode,
+                                    sourceIndex: sourceIndex,
+                                    targetParent: targetParent,
+                                    targetIndex: targetIndex,
+                                    cancelDrop: false
+                                };
+                            }
+
+                            if (sortable.beforeMove) {
+                                sortable.beforeMove.call(this, arg, event, ui);
+                                if (arg.cancelDrop) {
+                                    //call cancel on the correct list
+                                    if (arg.sourceParent) {
+                                        $(arg.sourceParent === arg.targetParent ? this : ui.sender).sortable('cancel');
+                                    }
+                                    //for a draggable item just remove the element
+                                    else {
+                                        $(el).remove();
+                                    }
+
+                                    return;
+                                }
+                            }
+
+                            if (targetIndex >= 0) {
+                                if (sourceParent) {
+                                    sourceParent.splice(sourceIndex, 1);
+
+                                    //if using deferred updates plugin, force updates
+                                    if (ko.processAllDeferredBindingUpdates) {
+                                        ko.processAllDeferredBindingUpdates();
+                                    }
+                                }
+
+                                targetParent.splice(targetIndex, 0, item);
+                            }
+
+                            //rendering is handled by manipulating the observableArray; ignore dropped element
+                            dataSet(el, ITEMKEY, null);
+                            ui.item.remove();
+
+                            //if using deferred updates plugin, force updates
+                            if (ko.processAllDeferredBindingUpdates) {
+                                ko.processAllDeferredBindingUpdates();
+                            }
+
+                            //allow binding to accept a function to execute after moving the item
+                            if (sortable.afterMove) {
+                                sortable.afterMove.call(this, arg, event, ui);
+                            }
+                        }
+
+                        if (updateActual) {
+                            updateActual.apply(this, arguments);
+                        }
+                    },
+                    connectWith: sortable.connectClass ? "." + sortable.connectClass : false
+                }));
+
+                //handle enabling/disabling sorting
+                if (sortable.isEnabled !== undefined) {
+                    ko.computed({
+                        read: function() {
+                            $element.sortable(unwrap(sortable.isEnabled) ? "enable" : "disable");
+                        },
+                        disposeWhenNodeIsRemoved: element
+                    });
+                }
+            }, 0);
+
+            //handle disposal
+            ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
+                //only call destroy if sortable has been created
+                if ($element.data("sortable")) {
+                    $element.sortable("destroy");
+                }
+
+                //do not create the sortable if the element has been removed from DOM
+                clearTimeout(createTimeout);
+            });
+
+            return { 'controlsDescendantBindings': true };
+        },
+        update: function(element, valueAccessor, allBindingsAccessor, data, context) {
+            var templateOptions = prepareTemplateOptions(valueAccessor, "foreach");
+
+            //attach meta-data
+            dataSet(element, LISTKEY, templateOptions.foreach);
+
+            //call template binding's update with correct options
+            ko.bindingHandlers.template.update(element, function() { return templateOptions; }, allBindingsAccessor, data, context);
+        },
+        connectClass: 'ko_container',
+        allowDrop: true,
+        afterMove: null,
+        beforeMove: null,
+        options: {}
+    };
+
+    //create a draggable that is appropriate for dropping into a sortable
+    ko.bindingHandlers.draggable = {
+        init: function(element, valueAccessor, allBindingsAccessor, data, context) {
+            var value = unwrap(valueAccessor()) || {},
+                options = value.options || {},
+                draggableOptions = ko.utils.extend({}, ko.bindingHandlers.draggable.options),
+                templateOptions = prepareTemplateOptions(valueAccessor, "data"),
+                connectClass = value.connectClass || ko.bindingHandlers.draggable.connectClass,
+                isEnabled = value.isEnabled !== undefined ? value.isEnabled : ko.bindingHandlers.draggable.isEnabled;
+
+            value = value.data || value;
+
+            //set meta-data
+            dataSet(element, DRAGKEY, value);
+
+            //override global options with override options passed in
+            ko.utils.extend(draggableOptions, options);
+
+            //setup connection to a sortable
+            draggableOptions.connectToSortable = connectClass ? "." + connectClass : false;
+
+            //initialize draggable
+            $(element).draggable(draggableOptions);
+
+            //handle enabling/disabling sorting
+            if (isEnabled !== undefined) {
+                ko.computed({
+                    read: function() {
+                        $(element).draggable(unwrap(isEnabled) ? "enable" : "disable");
+                    },
+                    disposeWhenNodeIsRemoved: element
+                });
+            }
+
+            return ko.bindingHandlers.template.init(element, function() { return templateOptions; }, allBindingsAccessor, data, context);
+        },
+        update: function(element, valueAccessor, allBindingsAccessor, data, context) {
+            var templateOptions = prepareTemplateOptions(valueAccessor, "data");
+
+            return ko.bindingHandlers.template.update(element, function() { return templateOptions; }, allBindingsAccessor, data, context);
+        },
+        connectClass: ko.bindingHandlers.sortable.connectClass,
+        options: {
+            helper: "clone"
+        }
+    };
+
+});
