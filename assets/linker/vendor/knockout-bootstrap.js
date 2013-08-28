@@ -172,8 +172,37 @@ ko.bindingHandlers.popover = {
 
             // if the popover is visible bind the view model to our dom ID
             if($('#' + domId).is(':visible')){
+
                 ko.applyBindingsToDescendants(childBindingContext, $('#' + domId)[0]);
+
+                /* Since bootstrap calculates popover position before template is filled,
+                 * a smaller popover height is used and it appears moved down relative to the trigger element.
+                 * So we have to fix the position after the bind
+                 *  */
+
+                var triggerElementPosition = $(element).offset().top;
+                var triggerElementLeft = $(element).offset().left;
+                var triggerElementHeight = $(element).outerHeight();
+                var triggerElementWidth = $(element).outerWidth();
+
+                var popover = $(popoverInnerEl).parents('.popover');
+                var popoverHeight = popover.outerHeight();
+                var popoverWidth = popover.outerWidth();
+                var arrowSize = 10;
+
+                switch (popoverOptions.placement) {
+                    case 'left':
+                    case 'right':
+                        popover.offset({ top: triggerElementPosition - popoverHeight / 2 + triggerElementHeight / 2 });
+                        break;
+                    case 'top':
+                        popover.offset({ top: triggerElementPosition - popoverHeight - arrowSize, left: triggerElementLeft - popoverWidth / 2 + triggerElementWidth / 2 });
+                        break;
+                    case 'bottom':
+                        popover.offset({ top: triggerElementPosition + triggerElementHeight + arrowSize, left:triggerElementLeft - popoverWidth/2 + triggerElementWidth/2});
+                }
             }
+
 
             // bind close button to remove popover
             $(document).on('click', '[data-dismiss="popover"]', function (e) {
