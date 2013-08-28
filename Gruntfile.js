@@ -77,7 +77,7 @@ module.exports = function (grunt) {
         'linker/vendor/twitter-bootstrap-hover-dropdown.js',
         'linker/vendor/bootbox.js',
         'linker/vendor/Knockout/knockout-2.2.1.js',
-        'linker/vendor/knockout-bootstrap.min.js',
+        'linker/vendor/knockout-bootstrap.js',
         'linker/vendor/knockout-sortable.js',
 
         // All of the rest of your app scripts imported here
