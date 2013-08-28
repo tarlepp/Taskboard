@@ -29,10 +29,10 @@
 }
 
 .modal-header .close {
-    margin: 0;
+    margin: -5px 0 0 0;
     font-size: 60px;
     font-weight: normal;
-    line-height: 20px;
+    line-height: 30px;
 }
 
 .modal-footer {
@@ -61,7 +61,6 @@
 .backlog .col-lg-6:first-of-type {
     padding-right: 0;
 }
-
 
 .modal-content #projectMilestones {
     margin-top: -15px;
