@@ -233,9 +233,13 @@ function createBootboxDialog(title, content, buttons, trigger) {
         }
     );
 
-    // Initialize possible modal context tooltips
+    // Generic modal init
     modal.on('shown.bs.modal', function() {
+        // Initialize possible modal context tooltips
         initTooltips(modal);
+
+        // Dropdown hover init
+        jQuery('[data-hover="dropdown"]', modal).dropdownHover();
     });
 
     // Remove modal on hidden event, this solves some JS errors
@@ -326,8 +330,8 @@ function eraseCookie(name) {
  * @param   {jQuery}    element
  */
 function createQtipDiv(element) {
-    var title = element.find('.tooltipDivContainer h1').html();
-    var content = element.find('.tooltipDivContainer div');
+    var title = element.find('.tooltipDivContainer h1').clone().html();
+    var content = element.find('.tooltipDivContainer div').clone();
 
     createQtip(element, title, content, 'auto', 'top left', 'bottom center', true, 100);
 }
@@ -378,7 +382,8 @@ function createQtip(element, tipTitle, tipText, tipWidth, tipMy, tipAt, tipFixed
             width: tipWidth
         },
         show: {
-            ready: true
+            ready: true,
+            solo: true
         },
         hide: {
             fixed: tipFixed,

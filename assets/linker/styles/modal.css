@@ -1,6 +1,5 @@
 .modal-body {
     padding: 15px;
-    overflow-y: auto;
 }
 
 .modal-body table {
@@ -61,4 +60,9 @@
 
 .backlog .col-lg-6:first-of-type {
     padding-right: 0;
+}
+
+
+.modal-content #projectMilestones {
+    margin-top: -15px;
 }

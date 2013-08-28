@@ -20,6 +20,12 @@ module.exports = {
             defaultsTo: 0,
             required:   true
         },
+        // Relation to Milestone model
+        milestoneId: {
+            type:       'integer',
+            defaultsTo: 0,
+            required:   true
+        },
         title: {
             type:       'string',
             required:   true,

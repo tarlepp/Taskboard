@@ -9,6 +9,15 @@ var sails = {
         message: ''
     },
     model: {
+        milestone: {
+            projectId: '',
+            title: '',
+            description: '',
+            deadline: '',
+            id: '',
+            createdAt: '',
+            updatedAt: ''
+        },
         phase: {
             projectId: '',
             title: '',

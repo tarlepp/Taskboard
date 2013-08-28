@@ -246,3 +246,9 @@ li.list-group-item.ui-sortable-helper {
 .backlog .list-group-item i:hover {
     color: #428bca;
 }
+
+.storyList.list-unstyled {
+    list-style-type: square;
+    padding-left: 15px;
+}
+

@@ -68,7 +68,10 @@ table input[type="text"] {
 }
 
 .alert .close {
-    right: -28px;
+    right: -10px;
+    top: -18px;
+    position: relative;
+    font-size: 28px;
 }
 
 .qtip-bootstrap {
@@ -87,6 +90,10 @@ table input[type="text"] {
     padding: 5px 10px;
     font-size: 18px;
     white-space: normal;
+}
+
+.qtip-bootstrap .qtip-content ul.list-unstyled:last-of-type {
+    margin-bottom: 0;
 }
 
 .tooltipDivContainer {
