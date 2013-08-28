@@ -205,7 +205,7 @@ function createBootboxDialog(title, content, buttons, trigger) {
     // Every dialog has close button.
     buttonsToShow.push({
         label: "Close",
-        class: "btn btn-default pull-left",
+        className: "btn-default pull-left",
         callback: function() {
             if (trigger) {
                 jQuery('body').trigger(trigger);
@@ -223,15 +223,12 @@ function createBootboxDialog(title, content, buttons, trigger) {
     }
 
     // Create bootbox modal
-    var modal = bootbox.dialog(
-        content,
-        buttonsToShow,
-        {
-            header: title,
-            animate: false,
-            show: false
-        }
-    );
+    var modal = bootbox.dialog({
+        message: content,
+        title: title,
+        buttons: buttonsToShow,
+        show: false
+    });
 
     // Generic modal init
     modal.on('shown.bs.modal', function() {
@@ -242,10 +239,12 @@ function createBootboxDialog(title, content, buttons, trigger) {
         jQuery('[data-hover="dropdown"]', modal).dropdownHover();
     });
 
+    /*
     // Remove modal on hidden event, this solves some JS errors
     modal.on('hidden.bs.modal', function() {
         jQuery(this).remove();
     });
+    */
 
     // Return bootbox dialog
     return modal;

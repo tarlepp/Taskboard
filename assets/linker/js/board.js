@@ -9,12 +9,8 @@ jQuery(document).ready(function() {
     });
 
     // Global bootbox settings
-    bootbox.animate(false);
-    bootbox.setBtnClasses({
-        OK: 'pull-right',
-        CANCEL: 'pull-left',
-        PROMPT: 'btn-primary',
-        CONFIRM: 'btn-danger'
+    bootbox.setDefaults({
+        animate: false
     });
 
     // Global task / story mouseover/out events for trunk8 functionality

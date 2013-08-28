@@ -5,11 +5,11 @@
  * @param   {bool}      edit    Are we editing or not
  */
 function initProjectForm(modal, edit) {
+    jQuery('textarea', modal).autosize();
+
     var inputTitle = jQuery('input[name="title"]', modal);
 
     inputTitle.focus().val(inputTitle.val());
-
-    jQuery('textarea', modal).autosize();
 
     var containerStart = jQuery('.dateStart', modal);
     var containerEnd = jQuery('.dateEnd', modal);

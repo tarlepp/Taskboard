@@ -126,7 +126,7 @@ jQuery(document).ready(function() {
             var title = 'Add new project';
             var buttons = {
                 label: "Save",
-                class: "btn btn-primary pull-right",
+                className: "btn-primary pull-right",
                 callback: function() {
                     var form = jQuery('#formProjectNew', modal);
                     var formItems = form.serializeJSON();
@@ -184,7 +184,7 @@ jQuery(document).ready(function() {
             var buttons = [
                 {
                     label: "Save",
-                    class: "btn btn-primary pull-right",
+                    className: "btn-primary pull-right",
                     callback: function() {
                         var form = jQuery('#formProjectEdit', modal);
                         var formItems = form.serializeJSON();
@@ -223,7 +223,7 @@ jQuery(document).ready(function() {
                 },
                 {
                     label: "Delete",
-                    class: "btn btn-danger pull-right",
+                    className: "btn-danger pull-right",
                     callback: function() {
                         // TODO implement this
                         console.log('implement project delete');
@@ -264,7 +264,7 @@ jQuery(document).ready(function() {
             var buttons = [
                 {
                     label: "Add new sprint",
-                    class: "btn btn-primary pull-right",
+                    className: "btn-primary pull-right",
                     callback: function() {
                         modal.modal('hide');
 
@@ -275,7 +275,7 @@ jQuery(document).ready(function() {
                 },
                 {
                     label: "Add new story",
-                    class: "btn btn-primary pull-right",
+                    className: "btn-primary pull-right",
                     callback: function() {
                         modal.modal('hide');
 
@@ -327,7 +327,7 @@ jQuery(document).ready(function() {
             var buttons = [
                 {
                     label: "Save",
-                    class: "btn btn-primary pull-right",
+                    className: "btn-primary pull-right",
                     callback: function() {
                         var errors = false;
                         var lines = jQuery("#projectPhases", modal).find("tbody tr");
@@ -424,7 +424,7 @@ jQuery(document).ready(function() {
                 },
                 {
                     label: "Add new phase",
-                    class: "btn btn-primary pull-right",
+                    className: "btn-primary pull-right",
                     callback: function() {
                         var newRow = jQuery('#projectPhasesNew', modal).find('tr').clone();
                         var slider = newRow.find('.slider');
@@ -485,7 +485,7 @@ jQuery(document).ready(function() {
             var buttons = [
                 {
                     label: "Save",
-                    class: "btn btn-primary pull-right",
+                    className: "btn-primary pull-right",
                     callback: function() {
                         var form = jQuery('#formSprintNew', modal);
                         var formItems = form.serializeJSON();
@@ -557,7 +557,7 @@ jQuery(document).ready(function() {
             var buttons = [
                 {
                     label: "Save",
-                    class: "btn btn-primary pull-right",
+                    className: "btn-primary pull-right",
                     callback: function() {
                         var form = jQuery('#formSprintEdit', modal);
                         var formItems = form.serializeJSON();
@@ -606,7 +606,7 @@ jQuery(document).ready(function() {
                 },
                 {
                     label: "Delete",
-                    class: "btn btn-danger pull-right",
+                    className: "btn-danger pull-right",
                     callback: function() {
                         body.trigger('sprintDelete', [sprintId, {event: 'sprintEdit', parameters: [sprintId, trigger]}])
                     }
@@ -632,48 +632,56 @@ jQuery(document).ready(function() {
     body.on('sprintDelete', function(event, sprintId, trigger) {
         trigger = (trigger && trigger.event) ? trigger : false;
 
-        bootbox.confirm(
-            "Are you sure of sprint delete? Existing user stories in this sprint are moved to project backlog.",
-            'Cancel',
-            'Delete',
-            function(result) {
+        bootbox.confirm({
+            title: 'Are you sure? Really?',
+            message: 'Are you sure of sprint delete? Existing user stories in this sprint are moved to project backlog.',
+            buttons: {
+                'cancel': {
+                    className: 'btn-default pull-left'
+                },
+                'confirm': {
+                    label: 'Delete',
+                    className: 'btn-danger pull-right'
+                }
+            },
+            callback: function(result) {
                 if (result) {
                     jQuery.ajax({
                         type: "DELETE",
                         url: "/sprint/" + sprintId,
                         dataType: 'json'
                     })
-                    .done(function() {
-                        makeMessage("Sprint deleted successfully.", "success", {});
+                        .done(function() {
+                            makeMessage("Sprint deleted successfully.", "success", {});
 
-                        // Remove sprint from current sprint list
-                        jQuery.each(myViewModel.sprints(), function(key, sprint) {
-                            if (sprint.id() === sprintId) {
-                                myViewModel.sprints.remove(sprint);
+                            // Remove sprint from current sprint list
+                            jQuery.each(myViewModel.sprints(), function(key, sprint) {
+                                if (sprint.id() === sprintId) {
+                                    myViewModel.sprints.remove(sprint);
+                                }
+                            });
+
+                            // If sprint is currently select, remove it and sprint stories
+                            if (myViewModel.sprint().id() === sprintId) {
+                                // Reset used child data
+                                myViewModel.sprint(null);
+                                myViewModel.stories([]);
                             }
+
+                            if (trigger) {
+                                body.trigger(trigger.event, trigger.parameters)
+                            }
+                        })
+                        .fail(function(jqXhr, textStatus, error) {
+                            handleAjaxError(jqXhr, textStatus, error);
                         });
-
-                        // If sprint is currently select, remove it and sprint stories
-                        if (myViewModel.sprint().id() === sprintId) {
-                            // Reset used child data
-                            myViewModel.sprint(null);
-                            myViewModel.stories([]);
-                        }
-
-                        if (trigger) {
-                            body.trigger(trigger.event, trigger.parameters)
-                        }
-                    })
-                    .fail(function(jqXhr, textStatus, error) {
-                        handleAjaxError(jqXhr, textStatus, error);
-                    });
                 } else {
                     if (trigger) {
                         body.trigger(trigger.event, trigger.parameters)
                     }
                 }
             }
-        );
+        });
     });
 
     /**
@@ -690,7 +698,7 @@ jQuery(document).ready(function() {
             var buttons = [
                 {
                     label: "Save",
-                    class: "btn btn-primary pull-right",
+                    className: "btn-primary pull-right",
                     callback: function() {
                         var form = jQuery('#formStoryNew', modal);
                         var formItems = form.serializeJSON();
@@ -758,7 +766,7 @@ jQuery(document).ready(function() {
             var buttons = [
                 {
                     label: "Save",
-                    class: "btn btn-primary pull-right",
+                    className: "btn-primary pull-right",
                     callback: function() {
                         var form = jQuery('#formStoryEdit', modal);
                         var formItems = form.serializeJSON();
@@ -800,7 +808,7 @@ jQuery(document).ready(function() {
                 },
                 {
                     label: "Split story",
-                    class: "btn btn-warning pull-right",
+                    className: "btn-warning pull-right",
                     id: "split",
                     callback: function() {
                         var options = [];
@@ -868,37 +876,45 @@ jQuery(document).ready(function() {
                 },
                 {
                     label: "Delete",
-                    class: "btn btn-danger pull-right",
+                    className: "btn-danger pull-right",
                     callback: function() {
-                        bootbox.confirm(
-                            "Are you sure of story delete?",
-                            'Cancel',
-                            'Delete',
-                            function(result) {
+                        bootbox.confirm({
+                            title: 'Are you sure? Really?',
+                            message: 'Are you sure of story delete?',
+                            buttons: {
+                                'cancel': {
+                                    className: 'btn-default pull-left'
+                                },
+                                'confirm': {
+                                    label: 'Delete',
+                                        className: 'btn-danger pull-right'
+                                }
+                            },
+                            callback: function(result) {
                                 if (result) {
                                     jQuery.ajax({
                                         type: "DELETE",
                                         url: "/story/" + storyId,
                                         dataType: 'json'
                                     })
-                                    .done(function() {
-                                        makeMessage("User story deleted successfully.", "success", {});
+                                        .done(function() {
+                                            makeMessage("User story deleted successfully.", "success", {});
 
-                                        // Remove user story from knockout models.
-                                        myViewModel.deleteStory(storyId);
+                                            // Remove user story from knockout models.
+                                            myViewModel.deleteStory(storyId);
 
-                                        if (trigger) {
-                                            body.trigger(trigger)
-                                        }
-                                    })
-                                    .fail(function(jqXhr, textStatus, error) {
-                                        handleAjaxError(jqXhr, textStatus, error);
-                                    });
+                                            if (trigger) {
+                                                body.trigger(trigger)
+                                            }
+                                        })
+                                        .fail(function(jqXhr, textStatus, error) {
+                                            handleAjaxError(jqXhr, textStatus, error);
+                                        });
                                 } else {
                                     body.trigger('storyEdit', [storyId, trigger]);
                                 }
                             }
-                        );
+                        });
                     }
                 }
             ];
@@ -931,7 +947,7 @@ jQuery(document).ready(function() {
             var buttons = [
                 {
                     label: "Save",
-                    class: "btn btn-primary pull-right",
+                    className: "btn-primary pull-right",
                     callback: function () {
                         var form = jQuery('#formTaskNew', modal);
                         var formItems = form.serializeJSON();
@@ -988,7 +1004,7 @@ jQuery(document).ready(function() {
             var buttons = [
                 {
                     label: "Save",
-                    class: "btn btn-primary pull-right",
+                    className: "btn-primary pull-right",
                     callback: function() {
                         var form = jQuery('#formTaskEdit', modal);
                         var formItems = form.serializeJSON();
@@ -1035,32 +1051,40 @@ jQuery(document).ready(function() {
                 },
                 {
                     label: "Delete",
-                    class: "btn btn-danger pull-right",
+                    className: "btn-danger pull-right",
                     callback: function() {
-                        bootbox.confirm(
-                            "Are you sure of task delete?",
-                            'Cancel',
-                            'Delete',
-                            function(result) {
+                        bootbox.confirm({
+                            title: 'danger - danger - danger',
+                            message: 'Are you sure of task delete?',
+                            buttons: {
+                                'cancel': {
+                                    className: 'btn-default pull-left'
+                                },
+                                'confirm': {
+                                    label: 'Delete',
+                                    className: 'btn-danger pull-right'
+                                }
+                            },
+                            callback: function(result) {
                                 if (result) {
                                     jQuery.ajax({
                                         type: "DELETE",
                                         url: "/task/" + task.id(),
                                         dataType: 'json'
                                     })
-                                    .done(function() {
-                                        makeMessage("Task deleted successfully.", "success", {});
+                                        .done(function() {
+                                            makeMessage("Task deleted successfully.", "success", {});
 
-                                        myViewModel.deleteTask(task.id(), task.phaseId(), task.storyId());
-                                    })
-                                    .fail(function(jqXhr, textStatus, error) {
-                                        handleAjaxError(jqXhr, textStatus, error);
-                                    });
+                                            myViewModel.deleteTask(task.id(), task.phaseId(), task.storyId());
+                                        })
+                                        .fail(function(jqXhr, textStatus, error) {
+                                            handleAjaxError(jqXhr, textStatus, error);
+                                        });
                                 } else {
                                     body.trigger('taskEdit', [task]);
                                 }
                             }
-                        );
+                        });
                     }
                 }
             ];
@@ -1093,7 +1117,7 @@ jQuery(document).ready(function() {
             var buttons = [
                 {
                     label: "Add new milestone",
-                    class: "btn btn-primary pull-right",
+                    className: "btn-primary pull-right",
                     callback: function() {
                         modal.modal('hide');
 
@@ -1101,7 +1125,7 @@ jQuery(document).ready(function() {
 
                         return false;
                     }
-                },
+                }
             ];
 
             // Create bootbox modal
