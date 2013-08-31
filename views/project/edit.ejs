@@ -23,7 +23,7 @@
         <label class="col-lg-3 control-label" for="formProjectEditDateEnd" style="display: none;"></label>
         <div class="col-lg-9">
             <div class="input-group date dateStart">
-                <input id="formProjectEditDateStart" name="dateStart" type="text" value="<%= project.dateStartFormatted() %>" class="dateInput form-control" size="16" required="required" readonly="readonly"
+                <input id="formProjectEditDateStart" name="dateStart" type="text" value="<%= project.dateStartFormatted() %>" class="dateInput form-control" size="16" required="required"
                     data-validate-type="daterange"
                     data-role="start"
                     data-pair="formProjectEditDateEnd"
@@ -34,7 +34,7 @@
             </div>
             <span class="separator">&mdash;</span>
             <div class="input-group date dateEnd">
-                <input id="formProjectEditDateEnd" name="dateEnd" type="text" value="<%= project.dateEndFormatted() %>" class="dateInput form-control" size="16" required="required" readonly="readonly"
+                <input id="formProjectEditDateEnd" name="dateEnd" type="text" value="<%= project.dateEndFormatted() %>" class="dateInput form-control" size="16" required="required"
                     data-validate-type="daterange"
                     data-role="end"
                     data-pair="formProjectEditDateStart"
