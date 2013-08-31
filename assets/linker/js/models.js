@@ -282,7 +282,7 @@ function Story(data) {
 
         description += "<hr />" + parts.join("\n");
 
-        return description.nl2br();
+        return description;
     });
 
     /**
@@ -388,7 +388,7 @@ function Task(data) {
             return '';
         }
 
-        return self.description().nl2br();
+        return self.description();
     });
 }
 
