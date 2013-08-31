@@ -134,13 +134,8 @@ form .required label:after {
     cursor: move;
 }
 
-.modal-body textarea {
-    min-height: 200px;
-    max-height: 200px;
-}
-
 .modal-body .btn-toolbar {
-    margin-bottom: 3px;
+    margin-bottom: 5px;
 }
 
 .modal-body .btn-toolbar .btn-editor {
@@ -166,8 +161,13 @@ form .required label:after {
     box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
     border-top-right-radius: 3px; border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px; border-top-left-radius: 3px;
-    overflow: scroll;
+    overflow: auto;
     outline: none;
+}
+
+.modal-body .editor {
+    height: 200px;
+    max-height: 200px;
 }
 
 div[data-role="editor-toolbar"] {
