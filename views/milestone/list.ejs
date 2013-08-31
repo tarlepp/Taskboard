@@ -11,15 +11,15 @@
         <tbody>
         <% _.each(milestones, function(milestone) { %>
         <tr>
-            <td>
-                <div class="dropdown actionMenu">
+            <td class="actionMenu">
+                <div class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" href="#">
-                        <i class="icon icon-collapse"></i>
+                        <i class="icon icon-chevron-down"></i>
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="#" class="icon"><i class="icon icon-wrench"></i> Edit milestone</a></li>
                         <li class="divider"></li>
-                        <li><a href="#" class="icon"><i class="icon icon-remove"></i> Delete milestone</a></li>
+                        <li><a href="#" class="icon text-danger"><i class="icon icon-remove"></i> Delete milestone</a></li>
                     </ul>
                 </div>
             </td>
