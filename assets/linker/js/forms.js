@@ -97,11 +97,11 @@ function initProjectForm(modal, edit) {
  * @param   {bool}      edit    Are we editing or not
  */
 function initStoryForm(modal, edit) {
+    jQuery('textarea', modal).autosize();
+
     var inputTitle = jQuery('input[name="title"]', modal);
 
     inputTitle.focus().val(inputTitle.val());
-
-    jQuery('textarea', modal).autosize();
 
     var slider = jQuery('.estimateSlider', modal);
     var input = slider.next('input');
@@ -399,11 +399,11 @@ function initProjectPhases(modal) {
  * @param   {Boolean}   edit    Are we editing existing sprint or not
  */
 function initSprintForm(modal, edit) {
+    jQuery('textarea', modal).autosize();
+
     var inputTitle = jQuery('input[name="title"]', modal);
 
     inputTitle.focus().val(inputTitle.val());
-
-    jQuery('textarea', modal).autosize();
 
     var containerStart = jQuery('.dateStart', modal);
     var containerEnd = jQuery('.dateEnd', modal);
@@ -501,9 +501,9 @@ function initSprintForm(modal, edit) {
  * @param   {Boolean}   edit    Are we editing existing task or not
  */
 function initTaskForm(modal, edit) {
+    jQuery('textarea', modal).autosize();
+
     var inputTitle = jQuery('input[name="title"]', modal);
 
     inputTitle.focus().val(inputTitle.val());
-
-    jQuery('textarea', modal).autosize();
 }
