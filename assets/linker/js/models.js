@@ -267,7 +267,7 @@ function Story(data) {
         var description = self.description();
 
         // No description but VF case defined
-        if (description.length === 0 && self.vfCase()) {
+        if (description.length === 0) {
             description = "<em>No description...</em>";
         }
 
