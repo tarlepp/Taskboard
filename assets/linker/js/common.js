@@ -241,13 +241,6 @@ function createBootboxDialog(title, content, buttons, trigger) {
         jQuery('[data-hover="dropdown"]', modal).dropdownHover();
     });
 
-    /*
-    // Remove modal on hidden event, this solves some JS errors
-    modal.on('hidden.bs.modal', function() {
-        jQuery(this).remove();
-    });
-    */
-
     // Return bootbox dialog
     return modal;
 }
@@ -269,15 +262,17 @@ function initWysiwyg(context) {
         // Determine textarea id, which we are used in wysiwyg
         var textareaId = textarea.prop("id") + "wysiwyg";
 
-        //
+        var qtipopts = "{ position: { at: 'top center', my: 'bottom center' } }";
+
+        // Actual editor HTML content
         var editor = jQuery(''
             + '<div>'
                 + '<div class="btn-toolbar" data-role="editor-toolbar" data-target="#' + textareaId + '">'
                     + '<div class="btn-group">'
-                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="bold" title="Bold (Ctrl/Cmd+B)"><i class="icon-bold"></i></button>'
-                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="italic" title="Italic (Ctrl/Cmd+I)"><i class="icon-italic"></i></button>'
-                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="strikethrough" title="Strikethrough"><i class="icon-strikethrough"></i></button>'
-                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="underline" title="Underline (Ctrl/Cmd+U)"><i class="icon-underline"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options="' + qtipopts + '" data-edit="bold" title="Bold (Ctrl/Cmd+B)"><i class="icon-bold"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options="' + qtipopts + '" data-edit="italic" title="Italic (Ctrl/Cmd+I)"><i class="icon-italic"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options="' + qtipopts + '" data-edit="strikethrough" title="Strikethrough"><i class="icon-strikethrough"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options="' + qtipopts + '" data-edit="underline" title="Underline (Ctrl/Cmd+U)"><i class="icon-underline"></i></button>'
                     + '</div>'
                     + '<div class="btn-group">'
                         + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="insertunorderedlist" title="Bullet list"><i class="icon-list-ul"></i></button>'
@@ -443,7 +438,7 @@ function createQtip(element, tipTitle, tipText, tipWidth, tipMy, tipAt, tipFixed
     element.qtip({
         metadata: {
             type: 'html5',      // Use HTML5 data-* attributes
-            name: 'qtipopts'    // Grab the metadata from the data-qtipOpts HTML5 attribute
+            name: 'qtip-options'    // Grab the metadata from the data-qtip-options HTML5 attribute
         },
         content: {
             title: tipTitle,

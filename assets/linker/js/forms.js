@@ -9,8 +9,6 @@ function initProjectForm(modal, edit) {
 
     inputTitle.focus().val(inputTitle.val());
 
-    jQuery('textarea', modal).wysihtml5();
-
     var containerStart = jQuery('.dateStart', modal);
     var containerEnd = jQuery('.dateEnd', modal);
     var inputStart = containerStart.find('input');
@@ -100,8 +98,6 @@ function initStoryForm(modal, edit) {
     var inputTitle = jQuery('input[name="title"]', modal);
 
     inputTitle.focus().val(inputTitle.val());
-
-    jQuery('textarea', modal).wysihtml5();
 
     var slider = jQuery('.estimateSlider', modal);
     var input = slider.next('input');
@@ -402,8 +398,6 @@ function initSprintForm(modal, edit) {
     var inputTitle = jQuery('input[name="title"]', modal);
 
     inputTitle.focus().val(inputTitle.val());
-
-    jQuery('textarea', modal).wysihtml5();
 
     var containerStart = jQuery('.dateStart', modal);
     var containerEnd = jQuery('.dateEnd', modal);
