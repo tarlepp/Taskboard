@@ -12,15 +12,15 @@ window.bootbox = window.bootbox || (function init($, undefined) {
         dialog:
             "<div class='bootbox modal' tabindex='-1' role='dialog'>" +
                 "<div class='modal-dialog'>" +
-                    "<div class='modal-content'>" +
-                        "<div class='modal-body'><div class='bootbox-body'></div></div>" +
-                    "</div>" +
+                "<div class='modal-content'>" +
+                "<div class='modal-body'><div class='bootbox-body'></div></div>" +
                 "</div>" +
-            "</div>",
+                "</div>" +
+                "</div>",
         header:
             "<div class='modal-header'>" +
                 "<h4 class='modal-title'></h4>" +
-            "</div>",
+                "</div>",
         footer:
             "<div class='modal-footer'></div>",
         closeButton:
@@ -29,7 +29,11 @@ window.bootbox = window.bootbox || (function init($, undefined) {
             "<form class='bootbox-form'></form>",
         inputs: {
             text:
-                "<input class='bootbox-input form-control' autocomplete=off type=text />"
+                "<input class='bootbox-input form-control' autocomplete='off' type='text' />",
+            email:
+                "<input class='bootbox-input-email form-control' autocomplete='off' type='email' />",
+            select:
+                "<select class='bootbox-select form-control'></select>"
         }
     };
 
@@ -284,7 +288,9 @@ window.bootbox = window.bootbox || (function init($, undefined) {
 
         defaults = {
             buttons: createLabels("cancel", "confirm"),
-            value: ""
+            value: "",
+            inputType: "text",
+            placeholder: ""
         };
 
         options = validateButtons(
@@ -321,9 +327,43 @@ window.bootbox = window.bootbox || (function init($, undefined) {
             throw new Error("prompt requires a callback");
         }
 
+        if (!templates.inputs[options.inputType]) {
+            throw new Error("invalid prompt type");
+        }
+
         // create the input
-        input = $(templates.inputs.text);
-        input.val(options.value);
+        input = $(templates.inputs[options.inputType]);
+
+        switch (options.inputType) {
+            case 'text':
+            case 'email':
+                input.val(options.value);
+                break;
+            case 'select':
+                if (typeof options.options !== 'object' || options.options.length === 0) {
+                    throw new Error("prompt with select requires options");
+                }
+
+                if (typeof options.options[0].value === "undefined" || typeof options.options[0].text === "undefined") {
+                    throw new Error("given options in wrong format");
+                }
+
+                // Create options for select
+                for (var i = 0; i < options.options.length; i++) {
+                    var option = options.options[i];
+
+                    input.append(new Option(option.text, option.value));
+                }
+
+                // Set selected option
+                input.find("option").filter(function() {
+                    return $(this).val() == options.value;
+                }).prop('selected', true);
+                break;
+        }
+
+        // add placeholder value
+        input.prop("placeholder", options.placeholder);
 
         // now place it in our form
         form.append(input);
