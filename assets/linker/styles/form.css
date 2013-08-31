@@ -133,3 +133,14 @@ form .required label:after {
     margin: 0 0 0 10px;
     cursor: move;
 }
+
+.modal-body textarea {
+    min-height: 200px;
+    max-height: 200px;
+}
+
+.modal-body .wysihtml5-toolbar .btn {
+    font-size: 14px;
+    padding: 5px 8px;
+    line-height: 18px;
+}
