@@ -252,6 +252,13 @@ function createBootboxDialog(title, content, buttons, trigger) {
     return modal;
 }
 
+/**
+ * Function initializes wysiwyg editor for text areas in specified content.
+ * Note that function just hides real input and replaces it with wysiwyg
+ * component.
+ *
+ * @param   {jQuery}    context
+ */
 function initWysiwyg(context) {
     var textarea = jQuery('[data-wysiwyg]', context);
 
@@ -303,10 +310,13 @@ function initWysiwyg(context) {
             + '</div>'
         );
 
+        // Set content
         editor.find('#' + textareaId).html(textarea.val());
 
+        // Append editor to gui
         jQuery(editor).appendTo(textarea.parent());
 
+        // Trigger wysiwyg
         editor.find('#' + textareaId).wysiwyg();
 
         // Update actual textarea value on focus out event
