@@ -169,6 +169,10 @@ module.exports = {
                     } else {
                         data.taskCnt = tasks.length;
 
+                        if (tasks.length === 0) {
+                            res.send(data);
+                        }
+
                         jQuery.each(tasks, function(key, /** sails.model.task */task) {
                             task.storyId = data.story.id;
 

@@ -819,11 +819,22 @@ jQuery(document).ready(function() {
                             options.push({value: sprint.id(), text: sprint.formattedTitle()});
                         });
 
-                        var prompt = bootbox.prompt(
-                            "Select sprint where to add new story",
-                            "Close",
-                            "Split story",
-                            function(result) {
+                        var prompt = bootbox.prompt({
+                            title: "Select sprint where to add new story",
+                            buttons: {
+                                'cancel': {
+                                    label: 'close',
+                                    className: 'btn-default pull-left'
+                                },
+                                'confirm': {
+                                    label: 'Split story',
+                                    className: 'btn-primary pull-right'
+                                }
+                            },
+                            inputType: "select",
+                            options: options,
+                            callback: function(result) {
+                                console.log(result);
                                 if (result !== null) {
                                     jQuery.ajax({
                                         type: 'POST',
@@ -843,10 +854,9 @@ jQuery(document).ready(function() {
                                             // Add created story to knockout model data.
                                             myViewModel.stories.push(new Story(data.story));
 
-                                            newStoryId = data.story.id;
+                                            // Update task data
+                                            myViewModel.updateTasks(data.tasks, storyId, data.story.id);
                                         }
-
-                                        myViewModel.updateTasks(data.tasks, storyId, newStoryId);
 
                                         makeMessage("User story splitted successfully.", "success", {});
 
@@ -866,12 +876,8 @@ jQuery(document).ready(function() {
                                 }
 
                                 return false;
-                            },
-                            {
-                                type: "select",
-                                options: options
                             }
-                        );
+                        });
                     }
                 },
                 {
