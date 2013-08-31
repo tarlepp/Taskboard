@@ -5510,6 +5510,7 @@ wysihtml5.dom.replaceWithChildNodes = function(node) {
 
       return wysihtml5.lang.string(
         '<!DOCTYPE html><html><head>'
+        + '<link href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,300" rel="stylesheet" type="text/css">'
         + '<meta charset="#{charset}">#{stylesheets}</head>'
         + '<body></body></html>'
       ).interpolate(templateVars);
