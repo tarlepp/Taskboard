@@ -31,7 +31,6 @@ module.exports = function (grunt) {
         'linker/vendor/bootstrap/css/bootstrap.css',
         'linker/vendor/bootstrap/css/bootstrap-theme.css',
         'linker/vendor/bootstrap-datepicker/datepicker.css',
-        'linker/vendor/bootstrap-wysihtml5/bootstrap-wysihtml5.css',
         'linker/vendor/qTip/jquery.qtip.css',
         'linker/vendor/font-awesome/css/font-awesome.css',
 
@@ -64,9 +63,9 @@ module.exports = function (grunt) {
         // Taskboard specified vendor dependencies
         'linker/vendor/date.format.js',
         'linker/vendor/json5.js',
-        'linker/vendor/wysihtml5-0.3.0.js',
         'linker/vendor/underscore.js',
         'linker/vendor/jquery-2.0.3.min.js',
+        'linker/vendor/jquery.hotkeys.js',
         'linker/vendor/trunk8.js',
         'linker/vendor/jquery.autosize.js',
         'linker/vendor/jQuery-noty/jquery.noty.js',
@@ -76,8 +75,8 @@ module.exports = function (grunt) {
         'linker/vendor/qTip/jquery.qtip.js',
         'linker/vendor/bootstrap/js/bootstrap.js',
         'linker/vendor/bootstrap-datepicker/bootstrap-datepicker.js',
-        'linker/vendor/bootstrap-wysihtml5/bootstrap-wysihtml5.js',
         'linker/vendor/twitter-bootstrap-hover-dropdown.js',
+        'linker/vendor/bootstrap-wysiwyg.js',
         'linker/vendor/bootbox.js',
         'linker/vendor/Knockout/knockout-2.2.1.js',
         'linker/vendor/knockout-bootstrap.js',

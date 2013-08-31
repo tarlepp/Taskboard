@@ -27,10 +27,10 @@ select.form-control {
     line-height: 20px;
 }
 
-.btn-default + .btn-primary,
-.btn-default + .btn-warning,
-.btn-default + .btn-danger,
-.btn-default + .btn-info {
+.btn-default.btn-primary,
+.btn-default.btn-warning,
+.btn-default.btn-danger,
+.btn-default.btn-info {
     text-shadow: none;
 }
 
@@ -139,8 +139,40 @@ form .required label:after {
     max-height: 200px;
 }
 
-.modal-body .wysihtml5-toolbar .btn {
+.modal-body .btn-toolbar {
+    margin-bottom: 3px;
+}
+
+.modal-body .btn-toolbar .btn-editor {
     font-size: 14px;
-    padding: 5px 8px;
-    line-height: 18px;
+    line-height: 14px;
+    padding: 5px 5px 5px 7px;
+}
+
+.modal-body .btn-toolbar .dropdown-menu {
+    width: 250px;
+    padding: 5px;
+}
+
+.editor {
+    max-height: 250px;
+    height: 250px;
+    background-color: white;
+    border-collapse: separate;
+    border: 1px solid rgb(204, 204, 204);
+    padding: 4px;
+    box-sizing: content-box;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+    box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+    border-top-right-radius: 3px; border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px; border-top-left-radius: 3px;
+    overflow: scroll;
+    outline: none;
+}
+
+div[data-role="editor-toolbar"] {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

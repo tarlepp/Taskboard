@@ -232,6 +232,8 @@ function createBootboxDialog(title, content, buttons, trigger) {
 
     // Generic modal init
     modal.on('shown.bs.modal', function() {
+        initWysiwyg(modal);
+
         // Initialize possible modal context tooltips
         initTooltips(modal);
 
@@ -248,6 +250,70 @@ function createBootboxDialog(title, content, buttons, trigger) {
 
     // Return bootbox dialog
     return modal;
+}
+
+function initWysiwyg(context) {
+    var textarea = jQuery('[data-wysiwyg]', context);
+
+    // Textarea founded
+    if (textarea.length === 1) {
+        textarea.hide();
+
+        // Determine textarea id, which we are used in wysiwyg
+        var textareaId = textarea.prop("id") + "wysiwyg";
+
+        //
+        var editor = jQuery(''
+            + '<div>'
+                + '<div class="btn-toolbar" data-role="editor-toolbar" data-target="#' + textareaId + '">'
+                    + '<div class="btn-group">'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="bold" title="Bold (Ctrl/Cmd+B)"><i class="icon-bold"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="italic" title="Italic (Ctrl/Cmd+I)"><i class="icon-italic"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="strikethrough" title="Strikethrough"><i class="icon-strikethrough"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="underline" title="Underline (Ctrl/Cmd+U)"><i class="icon-underline"></i></button>'
+                    + '</div>'
+                    + '<div class="btn-group">'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="insertunorderedlist" title="Bullet list"><i class="icon-list-ul"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="insertorderedlist" title="Number list"><i class="icon-list-ol"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="outdent" title="Reduce indent (Shift+Tab)"><i class="icon-indent-left"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="indent" title="Indent (Tab)"><i class="icon-indent-right"></i></button>'
+                    + '</div>'
+                    + '<div class="btn-group">'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="justifyleft" title="Align Left (Ctrl/Cmd+L)"><i class="icon-align-left"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="justifycenter" title="Center (Ctrl/Cmd+E)"><i class="icon-align-center"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)"><i class="icon-align-right"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><i class="icon-align-justify"></i></button>'
+                    + '</div>'
+                    + '<div class="btn-group">'
+                        + '<div class="btn-group">'
+                            + '<button type="button" class="btn btn-default btn-editor tooltipTitle dropdown-toggle" data-toggle="dropdown" title="Hyperlink"><i class="icon-link"></i></button>'
+                            + '<div class="dropdown-menu col-md-6">'
+                                + '<div class="input-group">'
+                                    + '<input class="form-control" placeholder="URL" type="text" data-edit="createLink"/>'
+                                    + '<span class="input-group-btn">'
+                                        + '<button class="btn btn-default" type="button">Add</button>'
+                                    + '</span>'
+                                + '</div>'
+                            + '</div>'
+                        + '</div>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="unlink" title="Remove Hyperlink"><i class="icon-cut"></i></button>'
+                    + '</div>'
+                + '</div>'
+                + '<div id="' + textareaId + '" class="editor"></div>'
+            + '</div>'
+        );
+
+        editor.find('#' + textareaId).html(textarea.val());
+
+        jQuery(editor).appendTo(textarea.parent());
+
+        editor.find('#' + textareaId).wysiwyg();
+
+        // Update actual textarea value on focus out event
+        editor.on('focusout', function() {
+            textarea.val(editor.find('#' + textareaId).cleanHtml());
+        });
+    }
 }
 
 /**

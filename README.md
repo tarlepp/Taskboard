@@ -17,14 +17,13 @@ Maybe sails are lifted on http://wunder.sytes.net:1337/ or maybe not...
 - Twitter Bootstrap (https://github.com/twitter/bootstrap/)
 - Twitter Bootstrap Hover Dropdown Plugin (https://github.com/CWSpear/twitter-bootstrap-hover-dropdown)
 - bootstrap-datepicker (https://github.com/eternicode/bootstrap-datepicker/)
-- bootstrap-wysihtml5 (https://github.com/jhollingworth/bootstrap-wysihtml5/)
+- bootstrap-wysiwyg (http://mindmup.github.io/bootstrap-wysiwyg/)
 - Bootbox.js (http://bootboxjs.com/)
 - Knockout (http://knockoutjs.com/)
 - Knockout-Bootstrap (http://billpull.github.io/knockout-bootstrap/)
 - knockout-sortable (https://github.com/rniemeyer/knockout-sortable/)
 - trunk8 (http://jrvis.com/trunk8/)
 - JSON5 – Modern JSON (http://json5.org/)
-- wysihtml5 (https://github.com/xing/wysihtml5)
 - Font Awesome (http://fortawesome.github.io/Font-Awesome/)
 - <em>This list will be updated</em>
 

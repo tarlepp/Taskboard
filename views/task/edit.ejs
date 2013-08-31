@@ -32,7 +32,34 @@
     <div class="form-group">
         <label class="col-lg-3 control-label" for="formTaskEditDescription">Description</label>
         <div class="col-lg-9">
-            <textarea id="formTaskEditDescription" name="description" class="form-control" placeholder="enter task description"><%= task.description %></textarea>
+
+            <!--
+            <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default" data-edit="bold" title="Bold (Ctrl/Cmd+B)"><i class="icon-bold"></i></button>
+                    <button type="button" class="btn btn-default" data-edit="italic" title="Italic (Ctrl/Cmd+I)"><i class="icon-italic"></i></button>
+                    <button type="button" class="btn btn-default" data-edit="strikethrough" title="Strikethrough"><i class="icon-strikethrough"></i></button>
+                    <button type="button" class="btn btn-default" data-edit="underline" title="Underline (Ctrl/Cmd+U)"><i class="icon-underline"></i></button>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default" data-edit="insertunorderedlist" title="Bullet list"><i class="icon-list-ul"></i></button>
+                    <button type="button" class="btn btn-default" data-edit="insertorderedlist" title="Number list"><i class="icon-list-ol"></i></button>
+                    <button type="button" class="btn btn-default" data-edit="outdent" title="Reduce indent (Shift+Tab)"><i class="icon-indent-left"></i></button>
+                    <button type="button" class="btn btn-default" data-edit="indent" title="Indent (Tab)"><i class="icon-indent-right"></i></button>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default" data-edit="justifyleft" title="Align Left (Ctrl/Cmd+L)"><i class="icon-align-left"></i></button>
+                    <button type="button" class="btn btn-default" data-edit="justifycenter" title="Center (Ctrl/Cmd+E)"><i class="icon-align-center"></i></button>
+                    <button type="button" class="btn btn-default" data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)"><i class="icon-align-right"></i></button>
+                    <button type="button" class="btn btn-default" data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><i class="icon-align-justify"></i></button>
+                </div>
+
+            </div>
+            <div id="editor">
+            </div>
+            -->
+
+            <textarea id="formTaskEditDescription" name="description" class="form-control" data-wysiwyg="true" placeholder="enter task description"><%= task.description %></textarea>
         </div>
     </div>
 </form>

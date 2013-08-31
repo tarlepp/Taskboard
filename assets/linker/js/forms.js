@@ -504,6 +504,4 @@ function initTaskForm(modal, edit) {
     var inputTitle = jQuery('input[name="title"]', modal);
 
     inputTitle.focus().val(inputTitle.val());
-
-    jQuery('textarea', modal).wysihtml5();
 }
