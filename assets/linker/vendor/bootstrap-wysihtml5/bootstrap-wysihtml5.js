@@ -58,8 +58,8 @@
                 "<label class='checkbox'> <input type='checkbox' class='bootstrap-wysihtml5-insert-link-target' checked>" + locale.link.target + "</label>" +
                 "</div>" +
                 "<div class='modal-footer'>" +
-                "<a href='#' class='btn btn-default' data-dismiss='modal'>" + locale.link.cancel + "</a>" +
-                "<a href='#' class='btn btn-primary' data-dismiss='modal'>" + locale.link.insert + "</a>" +
+                "<a href='#' class='btn btn-default pull-left' data-dismiss='modal'>" + locale.link.cancel + "</a>" +
+                "<a href='#' class='btn btn-primary pull-right' data-dismiss='modal'>" + locale.link.insert + "</a>" +
                 "</div>" +
                 "</div>" +
                 "</div>" +
@@ -82,8 +82,8 @@
                 "<input value='http://' class='bootstrap-wysihtml5-insert-image-url form-control'>" +
                 "</div>" +
                 "<div class='modal-footer'>" +
-                "<a href='#' class='btn btn-default' data-dismiss='modal'>" + locale.image.cancel + "</a>" +
-                "<a href='#' class='btn btn-primary' data-dismiss='modal'>" + locale.image.insert + "</a>" +
+                "<a href='#' class='btn btn-default pull-left' data-dismiss='modal'>" + locale.image.cancel + "</a>" +
+                "<a href='#' class='btn btn-primary pull-right' data-dismiss='modal'>" + locale.image.insert + "</a>" +
                 "</div>" +
                 "</div>" +
                 "</div>" +
