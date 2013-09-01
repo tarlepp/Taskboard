@@ -1139,6 +1139,7 @@ jQuery(document).ready(function() {
 
             // Make init when dialog is opened.
             modal.on('shown.bs.modal', function() {
+
             });
 
             // Open bootbox modal
