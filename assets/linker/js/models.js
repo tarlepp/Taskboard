@@ -280,7 +280,7 @@ function Story(data) {
             parts.push("ValueFrame case: <a href=''>#" + self.vfCase() + "</a>");
         }
 
-        description += "<hr />" + parts.join("\n");
+        description += "<hr />" + parts.join("<br />");
 
         return description;
     });
