@@ -3,9 +3,10 @@
         <thead>
         <tr>
             <th></th>
-            <th class="col-md-8">Milestone</th>
+            <th class="col-md-5">Milestone</th>
+            <th class="col-md-4">Progress</th>
             <th class="col-md-2">Deadline</th>
-            <th class="col-md-2 text-right">Stories</th>
+            <th class="col-md-1 text-right">Stories</th>
         </tr>
         </thead>
         <tbody>
@@ -16,10 +17,18 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" href="#">
                         <i class="icon icon-chevron-down"></i>
                     </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#" class="icon"><i class="icon icon-wrench"></i> Edit milestone</a></li>
+                    <ul class="dropdown-menu milestone-actions">
+                        <li>
+                            <a href="javascript: void(0);" data-milestone-id="<%= milestone.id %>">
+                                <i class="icon icon-wrench"></i> Edit milestone
+                            </a>
+                        </li>
                         <li class="divider"></li>
-                        <li><a href="#" class="icon text-danger"><i class="icon icon-remove"></i> Delete milestone</a></li>
+                        <li>
+                            <a href="javascript: void(0);" data-milestone-id="<%= milestone.id %>" class="text-danger">
+                                <i class="icon icon-remove"></i> Delete milestone
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </td>
@@ -27,23 +36,34 @@
                 <%= milestone.title %>
             </td>
             <td>
+                <% if (milestone.stories.length > 0) { %>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                        <span class="sr-only">60% Complete</span>
+                    </div>
+                </div>
+                <% } %>
+            </td>
+            <td>
                 <%= milestone.deadlineFormatted() %>
             </td>
             <td class="text-right">
                 <% if (milestone.stories.length > 0) { %>
-                    <span class="tooltipDiv">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" href="#">
                         <%= milestone.stories.length %>
-                        <div class="tooltipDivContainer">
-                            <h1>Attached stories</h1>
-                            <div>
-                                <ul class="list-unstyled">
-                                <% _.each(milestone.stories, function(story) { %>
-                                    <li><a href="javascript: void(0);" data-story-id="<%= story.id %>"><%= story.title %> (<%= story.estimate %>)</a></li>
-                                <% }) %>
-                                </ul>
-                            </div>
-                        </div>
-                    </span>
+                    </a>
+                    <ul class="dropdown-menu story-list text-left">
+                        <li class="dropdown-header"><span class="text-info">Attached stories</span></li>
+                        <% _.each(milestone.stories, function(story) { %>
+                        <li>
+                            <a href="javascript: void(0);" data-story-id="<%= story.id %>">
+                                <%= story.title %> (<%= story.estimate %>)
+                            </a>
+                        </li>
+                        <% }) %>
+                    </ul>
+                </div>
                 <% } else { %>
                     <%= milestone.stories.length %>
                 <% } %>

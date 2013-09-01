@@ -1117,9 +1117,16 @@ jQuery(document).ready(function() {
      * stories to milestones and edit stories which are attached to milestone.
      */
     body.on('milestoneList', function(event, projectId) {
+        // If projectId parameter not given select current project id
+        if (!projectId) {
+            projectId = myViewModel.selectedProjectId();
+        }
+
+        // Fetch milestone list data from server
         jQuery.get('/Milestone/list', {projectId: projectId}, function(content) {
             var title = "Project milestones";
 
+            // Specify modal buttons
             var buttons = [
                 {
                     label: "Add new milestone",
@@ -1139,7 +1146,7 @@ jQuery(document).ready(function() {
 
             // Make init when dialog is opened.
             modal.on('shown.bs.modal', function() {
-
+                initMilestoneList(modal);
             });
 
             // Open bootbox modal

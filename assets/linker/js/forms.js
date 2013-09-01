@@ -499,3 +499,23 @@ function initTaskForm(modal, edit) {
 
     inputTitle.focus().val(inputTitle.val());
 }
+
+/**
+ * Function initializes milestone list to use. Note that milestone list
+ * content is in modal parameter.
+ *
+ * @param   {jQuery}    modal   Current modal content
+ */
+function initMilestoneList(modal) {
+    var body = jQuery('body');
+    var trigger = 'milestoneList';
+
+    // User clicks story
+    jQuery('ul.story-list', modal).on('click', 'a', function() {
+        // Hide current modal
+        modal.modal('hide');
+
+        // Trigger story edit
+        body.trigger('storyEdit', [jQuery(this).data('storyId'), trigger]);
+    });
+}
