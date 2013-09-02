@@ -1254,12 +1254,46 @@ jQuery(document).ready(function() {
                     label: "Delete",
                     className: "btn-danger pull-right",
                     callback: function() {
+                        modal.modal('hide');
+
+                        bootbox.confirm({
+                            title: 'danger - danger - danger',
+                            message: 'Are you sure of milesone delete?',
+                            buttons: {
+                                'cancel': {
+                                    className: 'btn-default pull-left'
+                                },
+                                'confirm': {
+                                    label: 'Delete',
+                                    className: 'btn-danger pull-right'
+                                }
+                            },
+                            callback: function(result) {
+                                if (result) {
+                                    jQuery.ajax({
+                                        type: "DELETE",
+                                        url: "/milestone/" + milestoneId,
+                                        dataType: 'json'
+                                    })
+                                        .done(function() {
+                                            makeMessage("Milestone deleted successfully.", "success", {});
+
+                                            jQuery('body').trigger(trigger);
+                                        })
+                                        .fail(function(jqXhr, textStatus, error) {
+                                            handleAjaxError(jqXhr, textStatus, error);
+                                        });
+                                } else {
+                                    jQuery('body').trigger('milestoneEdit', [milestoneId, trigger]);
+                                }
+                            }
+                        });
                     }
                 }
             ];
 
             // Create bootbox modal
-            var modal = createBootboxDialog(title, content, buttons, false);
+            var modal = createBootboxDialog(title, content, buttons, trigger);
 
             // Make form init when dialog is opened.
             modal.on('shown.bs.modal', function() {
@@ -1275,6 +1309,37 @@ jQuery(document).ready(function() {
     });
 
     body.on('milestoneDelete', function(event, milestoneId, trigger) {
-        console.log("implement delete " + milestoneId);
+        bootbox.confirm({
+            title: 'danger - danger - danger',
+            message: 'Are you sure of milesone delete?',
+            buttons: {
+                'cancel': {
+                    className: 'btn-default pull-left'
+                },
+                'confirm': {
+                    label: 'Delete',
+                    className: 'btn-danger pull-right'
+                }
+            },
+            callback: function(result) {
+                if (result) {
+                    jQuery.ajax({
+                        type: "DELETE",
+                        url: "/milestone/" + milestoneId,
+                        dataType: 'json'
+                    })
+                    .done(function() {
+                        makeMessage("Milestone deleted successfully.", "success", {});
+
+                        jQuery('body').trigger(trigger);
+                    })
+                    .fail(function(jqXhr, textStatus, error) {
+                        handleAjaxError(jqXhr, textStatus, error);
+                    });
+                } else {
+                    jQuery('body').trigger(trigger);
+                }
+            }
+        });
     });
 });
