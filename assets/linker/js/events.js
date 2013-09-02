@@ -1179,7 +1179,7 @@ jQuery(document).ready(function() {
                                 data: formItems,
                                 dataType: 'json'
                             })
-                            .done(function(/** models.rest.task */task) {
+                            .done(function(/** models.rest.milestone */milestone) {
                                 makeMessage("Milestone created successfully.", "success", {});
 
                                 modal.modal('hide');
@@ -1212,5 +1212,69 @@ jQuery(document).ready(function() {
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
         });
+    });
+
+    body.on('milestoneEdit', function(event, milestoneId, trigger) {
+        jQuery.get('/Milestone/edit', {id: milestoneId}, function(content) {
+            var title = "Edit milestone";
+            var buttons = [
+                {
+                    label: "Save",
+                    className: "btn-primary pull-right",
+                    callback: function() {
+                        var form = jQuery('#formMilestoneEdit', modal);
+                        var formItems = form.serializeJSON();
+
+                        // Validate current form items and try to update milestone data
+                        if (validateForm(formItems, modal)) {
+                            jQuery.ajax({
+                                type: "PUT",
+                                url: "/Milestone/" + milestoneId,
+                                data: formItems,
+                                dataType: 'json'
+                            })
+                            .done(function(/** models.rest.milestone */milestone) {
+                                makeMessage("Milestone updated successfully.", "success", {});
+
+                                modal.modal('hide');
+
+                                if (trigger) {
+                                    body.trigger(trigger)
+                                }
+                            })
+                            .fail(function(jqXhr, textStatus, error) {
+                                handleAjaxError(jqXhr, textStatus, error);
+                            });
+                        }
+
+                        return false;
+                    }
+                },
+                {
+                    label: "Delete",
+                    className: "btn-danger pull-right",
+                    callback: function() {
+                    }
+                }
+            ];
+
+            // Create bootbox modal
+            var modal = createBootboxDialog(title, content, buttons, false);
+
+            // Make form init when dialog is opened.
+            modal.on('shown.bs.modal', function() {
+                initMilestoneForm(modal, true);
+            });
+
+            // Open bootbox modal
+            modal.modal('show');
+        })
+        .fail(function(jqXhr, textStatus, error) {
+            handleAjaxError(jqXhr, textStatus, error);
+        });
+    });
+
+    body.on('milestoneDelete', function(event, milestoneId, trigger) {
+        console.log("implement delete " + milestoneId);
     });
 });

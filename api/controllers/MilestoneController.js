@@ -134,13 +134,23 @@ module.exports = {
             .done(function(error, milestone) {
                 if (error) {
                     res.send(error, 500);
-                } else if (!story) {
+                } else if (!milestone) {
                     res.send("Milestone not found.", 404);
                 } else {
-                    res.view({
-                        layout: "layout_ajax",
-                        milestone: milestone
-                    });
+                    // Find all user stories which are attached to milestone
+                    Story
+                        .find()
+                        .where({
+                            milestoneId: milestoneId
+                        })
+                        .sort('title ASC')
+                        .done(function(error, stories) {
+                            res.view({
+                                layout: "layout_ajax",
+                                milestone: milestone,
+                                stories: stories
+                            });
+                        });
                 }
             });
     }

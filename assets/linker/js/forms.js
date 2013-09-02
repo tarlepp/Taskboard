@@ -518,6 +518,19 @@ function initMilestoneList(modal) {
         // Trigger story edit
         body.trigger('storyEdit', [jQuery(this).data('storyId'), trigger]);
     });
+
+    // User clicks milestone action menu link
+    jQuery('ul.milestone-actions', modal).on('click', 'a', function() {
+        // Hide current modal
+        modal.modal('hide');
+
+        var element = jQuery(this);
+        var milestoneId = element.data('milestoneId');
+        var action = element.data('action');
+
+        // Trigger milestone action event
+        body.trigger(action, [milestoneId, trigger]);
+    });
 }
 
 /**
