@@ -81,6 +81,10 @@
     text-decoration: none;
 }
 
+ul.dropdown-menu.story-list {
+    left: 20px;
+}
+
 ul.dropdown-menu li {
     text-align: left;
 }
@@ -107,6 +111,7 @@ ul.dropdown-menu .divider {
 }
 
 #navigation .dropdown-menu:before,
+.dropdown-menu.with-tick:before,
 .actionMenu .dropdown-menu:before {
     position: absolute;
     top: -7px;
@@ -120,6 +125,7 @@ ul.dropdown-menu .divider {
 }
 
 #navigation .dropdown-menu:after,
+.dropdown-menu.with-tick:after,
 .actionMenu .dropdown-menu:after {
     position: absolute;
     top: -6px;
