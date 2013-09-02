@@ -7,7 +7,8 @@
  *     // Form is not valid
  * }
  *
- * @param   {{}}  items
+ * @param   {{}}        items
+ * @param   {jQuery}    context
  *
  * @returns {boolean}
  */
@@ -51,7 +52,7 @@ function validateForm(items, context) {
 
         if ((input.prop('required') && value == '')
             || (input.getType() == 'select' && value == '#')
-            ) {
+        ) {
             required.push(label);
 
             group.addClass('has-error');
@@ -106,7 +107,27 @@ function validateForm(items, context) {
  * @returns {boolean}
  */
 function validateDate(context, input, group, label, date, errors) {
-    return checkDate(date);
+    if (date.length === 0) {
+        return true;
+    } else if (!checkDate(date)) {
+        return false;
+    }
+
+    // Date type is project, so make sure that date is between project start and end date.
+    if (input.data('type') === 'project') {
+        var dateBits = date.split('-');
+        var dateObject = new Date(+dateBits[0], +dateBits[1] - 1, +dateBits[2]);
+        var message = checkProjectDates(dateObject, false);
+
+        // Oh, date conflicts with project start and end dates
+        if (message !== true) {
+            errors.push(message);
+
+            return false;
+        }
+    }
+
+    return true;
 }
 
 /**
@@ -205,6 +226,8 @@ function validateDateRange(context, input, group, label, date, errors) {
 function checkDate(dateText) {
     if (typeof(dateText) == 'undefined') {
         return false;
+    } else if (dateText.length === 0) {
+        return true;
     }
 
     var match = dateText.match(/^(\d{4})([-\.\/])(\d{2})\2(\d{2})$/);
@@ -256,4 +279,32 @@ function checkSprintDates(date, type, sprintId, showMessage) {
     }
 
     return output;
+}
+
+/**
+ * Function checks that given date is valid for current project.
+ *
+ * @param   {Date}      date        Date to check
+ * @param   {Boolean}   showMessage Make possible error message
+ *
+ * @returns {Boolean|String}        Boolean true if ok, otherwise error message.
+ */
+function checkProjectDates(date, showMessage) {
+    var dateMin = myViewModel.project().dateStartObject();
+    var dateMax = myViewModel.project().dateEndObject();
+
+    // Date conflicts with project duration
+    if ((date.format('yyyy-mm-dd') < dateMin.format('yyyy-mm-dd'))
+        || (date.format('yyyy-mm-dd') > dateMax.format('yyyy-mm-dd'))
+    ) {
+        var message = 'Given date conflicts with project duration. Date must be between ' + dateMin.format('yyyy-mm-dd') + ' and ' + dateMax.format('yyyy-mm-dd')  + '.'
+
+        if (showMessage) {
+            makeMessage(message, 'error', {});
+        }
+
+        return message;
+    }
+
+    return true;
 }

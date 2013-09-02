@@ -1142,11 +1142,68 @@ jQuery(document).ready(function() {
             ];
 
             // Create bootbox modal
-            var modal = createBootboxDialog(title, content, buttons, false);
+            var modal = createBootboxDialog (title, content, buttons, false);
 
             // Make init when dialog is opened.
             modal.on('shown.bs.modal', function() {
                 initMilestoneList(modal);
+            });
+
+            // Open bootbox modal
+            modal.modal('show');
+        })
+        .fail(function(jqXhr, textStatus, error) {
+            handleAjaxError(jqXhr, textStatus, error);
+        });
+    });
+
+    /**
+     * Milestone add event. This opens a modal dialog with milestone add form.
+     */
+    body.on('milestoneAdd', function(event, projectId, trigger) {
+        jQuery.get('/Milestone/add', {projectId: projectId}, function(content) {
+            var title = "Add new milestone";
+            var buttons = [
+                {
+                    label: "Save",
+                    className: "btn-primary pull-right",
+                    callback: function () {
+                        var form = jQuery('#formMilestoneNew', modal);
+                        var formItems = form.serializeJSON();
+
+                        // Validate current form items and try to create new task
+                        if (validateForm(formItems, modal)) {
+                            jQuery.ajax({
+                                type: 'POST',
+                                url: "/Milestone/",
+                                data: formItems,
+                                dataType: 'json'
+                            })
+                            .done(function(/** models.rest.task */task) {
+                                makeMessage("Milestone created successfully.", "success", {});
+
+                                modal.modal('hide');
+
+                                if (trigger) {
+                                    body.trigger(trigger)
+                                }
+                            })
+                            .fail(function(jqXhr, textStatus, error) {
+                                handleAjaxError(jqXhr, textStatus, error);
+                            });
+                        }
+
+                        return false;
+                    }
+                }
+            ];
+
+            // Create bootbox modal
+            var modal = createBootboxDialog(title, content, buttons, trigger);
+
+            // Make form init when dialog is opened.
+            modal.on('shown.bs.modal', function() {
+                initMilestoneForm(modal, false);
             });
 
             // Open bootbox modal

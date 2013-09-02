@@ -519,3 +519,31 @@ function initMilestoneList(modal) {
         body.trigger('storyEdit', [jQuery(this).data('storyId'), trigger]);
     });
 }
+
+/**
+ * Function initializes milestone form.
+ *
+ * @param   {jQuery}    context Current modal content
+ * @param   {Boolean}   edit    Are we editing existing milestone or not
+ */
+function initMilestoneForm(context, edit) {
+    var inputTitle = jQuery('input[name="title"]', context);
+    var containerDeadline = jQuery('.deadline', context);
+
+    inputTitle.focus().val(inputTitle.val());
+
+    containerDeadline.bootstrapDP({
+        format: 'yyyy-mm-dd',
+        weekStart: 1,
+        calendarWeeks: true
+    })
+    .on('changeDate', function(event) {
+        var isValid = checkProjectDates(event.date, false);
+
+        if (isValid !== true) {
+            makeMessage(isValid, 'error', {});
+
+            containerDeadline.closest('.input-group').addClass('has-error');
+        }
+    });
+}
