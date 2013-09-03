@@ -335,7 +335,7 @@ jQuery(document).ready(function() {
                         lines.each(function(key) {
                             var row = jQuery(this);
                             var title = jQuery.trim(row.find('input[name="title[]"]').val());
-                            var split = row.find('input[name="split[]"]').is(':checked') ? 1 : 0;
+                            var isDone = row.find('input[name="isDone[]"]').is(':checked') ? 1 : 0;
                             var tasks = parseInt(row.find('input[name="tasks[]"]').val(), 10);
                             var phaseId = parseInt(row.find('input[name="id[]"]').val(), 10);
 
@@ -355,7 +355,7 @@ jQuery(document).ready(function() {
                                     title: title,
                                     order: key,
                                     tasks: isNaN(tasks) ? 0 : tasks,
-                                    split: split,
+                                    isDone: isDone,
                                     projectId: ko.toJS(myViewModel.project().id())
                                 };
 
