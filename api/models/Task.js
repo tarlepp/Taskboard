@@ -41,9 +41,16 @@ module.exports = {
         },
         isDone: {
             type:       'boolean',
-            required:   false,
+            required:   true,
             defaultsTo: 0
         }
+    },
+
+    // Lifecycle Callbacks
+    beforeCreate: function(values, cb) {
+        values.isDone = false;
+
+        cb();
     }
 
     // TODO: add history data collection on create/update/delete

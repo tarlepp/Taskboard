@@ -21,11 +21,25 @@ module.exports = {
         var projectId = parseInt(req.param('projectId'), 10);
         var sprintId = parseInt(req.param('sprintId'), 10);
 
-        res.view({
-            layout: "layout_ajax",
-            projectId: projectId,
-            sprintId: sprintId
-        });
+        // Fetch project milestones
+        Milestone
+            .find()
+            .where({
+                projectId: projectId
+            })
+            .sort('deadline ASC')
+            .done(function(error, milestones) {
+                if (error) {
+                    res.send(error, 500);
+                } else {
+                    res.view({
+                        layout: "layout_ajax",
+                        projectId: projectId,
+                        sprintId: sprintId,
+                        milestones: milestones
+                    });
+                }
+            });
     },
 
     /**
@@ -41,6 +55,12 @@ module.exports = {
 
         var storyId = parseInt(req.param('id'), 10);
 
+        var data = {
+            layout: "layout_ajax",
+            story: false,
+            milestones: false
+        };
+
         // Fetch story data
         Story
             .findOne(storyId)
@@ -50,12 +70,28 @@ module.exports = {
                 } else if (!story) {
                     res.send("Story not found.", 404);
                 } else {
-                    res.view({
-                        layout: "layout_ajax",
-                        story: story
-                    });
+                    data.story = story;
+
+                    // Fetch project milestones
+                    Milestone
+                        .find()
+                        .where({
+                            projectId: data.story.projectId
+                        })
+                        .sort('deadline ASC')
+                        .done(function(error, milestones) {
+                            if (error) {
+                                res.send(error, 500);
+                            } else {
+                                data.milestones = milestones;
+
+                                res.view(data);
+                            }
+                        });
                 }
             });
+
+
     },
 
     /**

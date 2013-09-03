@@ -52,7 +52,7 @@ module.exports = {
         },
         isDone: {
             type:       'boolean',
-            required:   false,
+            required:   true,
             defaultsTo: 0
         },
 
@@ -63,6 +63,8 @@ module.exports = {
 
     // Lifecycle Callbacks
     beforeCreate: function(values, cb) {
+        values.isDone = false;
+
         Story
             .findOne({
                 projectId: values.projectId,
