@@ -28,21 +28,10 @@ module.exports = {
         },
 
         deadlineObject: function() {
-            return this.deadline ? new Date(this.deadline) : this.deadline;
+            return (this.deadline && this.deadline != '0000-00-00') ? new Date(this.deadline) : null;
         },
         deadlineFormatted: function() {
-            return this.deadline == null ? '' : this.deadlineObject().format('isoDate');
-        },
-        stories: function() {
-            Story
-                .find()
-                .where({
-                    milestoneId: this.id
-                })
-                .sort('title ASC')
-                .exec(function(error, stories) {
-                    return stories;
-                });
+            return (this.deadline && this.deadline != '0000-00-00') ?  this.deadlineObject().format('isoDate') : '';
         }
     }
 };
