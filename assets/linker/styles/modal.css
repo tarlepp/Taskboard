@@ -65,3 +65,16 @@
 .modal-content #projectMilestones {
     margin-top: -15px;
 }
+
+.modal-body .nav.nav-tabs {
+    position: relative;
+    top: -10px;
+}
+
+.modal-body .nav > li > a {
+    padding: 5px 15px;
+}
+
+.modal-body .tab-pane .table thead th {
+    padding-top: 0;
+}

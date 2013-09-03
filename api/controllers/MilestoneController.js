@@ -127,6 +127,11 @@ module.exports = {
         }
 
         var milestoneId = parseInt(req.param('id'), 10);
+        var data = {
+            layout: "layout_ajax",
+            milestone: false,
+            stories: false
+        };
 
         // Fetch story data
         Milestone
@@ -137,6 +142,8 @@ module.exports = {
                 } else if (!milestone) {
                     res.send("Milestone not found.", 404);
                 } else {
+                    data.milestone = milestone;
+
                     // Find all user stories which are attached to milestone
                     Story
                         .find()
@@ -145,13 +152,63 @@ module.exports = {
                         })
                         .sort('title ASC')
                         .done(function(error, stories) {
-                            res.view({
-                                layout: "layout_ajax",
-                                milestone: milestone,
-                                stories: stories
-                            });
+                            data.stories = stories;
+
+                            fetchTasks();
                         });
                 }
             });
+
+        /**
+         * Function to fetch tasks of stories
+         */
+        function fetchTasks() {
+            // We have no stories, so make view
+            if (data.stories.length === 0) {
+                makeView();
+            } else {
+                // Iterate milestones
+                jQuery.each(data.stories, function(key, /** sails.model.story */story) {
+                    // Initialize milestone stories property
+                    story.tasks = false;
+
+                    // Find all user stories which are attached to current milestone
+                    Task
+                        .find()
+                        .where({
+                            storyId: story.id
+                        })
+                        .sort('title ASC')
+                        .done(function(error, tasks) {
+                            // Add tasks to story data
+                            story.tasks = tasks;
+
+                            // Call view
+                            makeView();
+                        });
+                });
+            }
+        }
+
+        /**
+         * Function to make actual view for milestone edit
+         */
+        function makeView() {
+            if (data.stories.length > 0) {
+                var show = true;
+
+                jQuery.each(data.stories, function(key, /** sails.model.story */story) {
+                    if (story.tasks === false) {
+                        show = false;
+                    }
+                });
+
+                if (show) {
+                    res.view(data);
+                }
+            } else {
+                res.view(data);
+            }
+        }
     }
 };
