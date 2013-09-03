@@ -38,6 +38,11 @@ module.exports = {
         description: {
             type:       'text',
             defaultsTo: ''
+        },
+        isDone: {
+            type:       'boolean',
+            required:   false,
+            defaultsTo: 0
         }
     }
 

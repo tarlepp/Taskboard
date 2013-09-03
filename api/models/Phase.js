@@ -33,8 +33,8 @@ module.exports = {
             required:   true,
             defaultsTo: 0
         },
-        // If true, then in case of story splitting move phase tasks to new story
-        split: {
+        // If false, then in case of story splitting move phase tasks to new story
+        isDone: {
             type:       'boolean',
             required:   true,
             defaultsTo: 0

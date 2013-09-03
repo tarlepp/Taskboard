@@ -50,6 +50,11 @@ module.exports = {
             type:       'integer',
             defaultsTo: 0
         },
+        isDone: {
+            type:       'boolean',
+            required:   false,
+            defaultsTo: 0
+        },
 
         estimateFormatted: function() {
             return (parseInt(this.estimate, 10) === -1) ? '???' : this.estimate;
