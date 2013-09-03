@@ -123,7 +123,7 @@ module.exports = {
                         Phase
                             .find()
                             .where({
-                                split: 1,
+                                isDone: 0,
                                 projectId: projectId
                             })
                             .done(function(error, /** sails.model.phase[] */phases) {
