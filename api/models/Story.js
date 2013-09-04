@@ -62,6 +62,14 @@ module.exports = {
     },
 
     // Lifecycle Callbacks
+
+    /**
+     * Before create callback. Basically we want to make sure that isDone bit is set to false
+     * and calculate story priority according to same project and sprint stories.
+     *
+     * @param   {sails.model.story} values
+     * @param   {Function}          cb
+     */
     beforeCreate: function(values, cb) {
         values.isDone = false;
 

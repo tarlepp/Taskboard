@@ -175,7 +175,7 @@ module.exports = {
                                     if (phaseIds.length > 0) {
                                         changeTasks(phaseIds);
                                     } else {
-                                        res.send(data);
+                                        finalizeClone();
                                     }
                                 }
                             });
@@ -206,7 +206,7 @@ module.exports = {
                         data.taskCnt = tasks.length;
 
                         if (tasks.length === 0) {
-                            res.send(data);
+                            finalizeClone();
                         }
 
                         jQuery.each(tasks, function(key, /** sails.model.task */task) {
@@ -218,20 +218,38 @@ module.exports = {
                                     id: task.id
                                 },{
                                     storyId: data.story.id
-                                }, function(err, task) {
+                                }, function(error, task) {
                                     // Error handling
-                                    if (err) {
+                                    if (error) {
                                         res.send(error, 500);
                                     } else {
                                         data.tasks.push(task[0]);
 
                                         if (data.taskCnt === data.tasks.length) {
-                                            res.send(data);
+                                            finalizeClone();
                                         }
                                     }
                                 });
                         });
                     }
+                });
+        }
+
+        /**
+         * Private function to finalize
+         */
+        function finalizeClone() {
+            // Update story data
+            Story
+                .update(
+                    {id: storyId},
+                    {isDone: true},
+                    function(error, /** sails.model.story[] */stories) {
+                        if (error) {
+                            res.send(error, 500);
+                        } else {
+                            res.send(data);
+                        }
                 });
         }
     }

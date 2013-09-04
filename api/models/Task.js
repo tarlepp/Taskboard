@@ -51,7 +51,7 @@ module.exports = {
     // Lifecycle Callbacks
 
     /**
-     * Before create callback.
+     * Before create callback. Basically we just want to make sure that isDone bit is set to false.
      *
      * @param   {sails.model.task}  values
      * @param   {Function}          cb
