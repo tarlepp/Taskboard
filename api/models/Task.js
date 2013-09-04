@@ -84,6 +84,58 @@ module.exports = {
     },
 
     /**
+     * Before destroy callback. In this we want to check 'isDone' bit for all task which
+     * are attached to same user story as task which is going to be deleted.
+     *
+     * If all task are done (isDone === true) we can update current story as done. Note
+     * that if story hasn't any task it cannot be "done".
+     *
+     * @param   {Number}    taskId
+     * @param   {Function}  cb
+     */
+    beforeDestroy: function(taskId, cb) {
+        Task
+            .findOne(taskId)
+            .done(function(error, /** sails.model.task */task) {
+                if (error) {
+                    cb(error)
+                } else {
+                    Task
+                        .find()
+                        .where({storyId: task.storyId})
+                        .where({id: {'!': task.id}})
+                        .done(function(error, /** sails.model.task[] */tasks) {
+                            var isDone = true;
+
+                            if (_.size(tasks) > 0) {
+                                // Iterate story tasks
+                                jQuery.each(tasks, function(key, /** sails.model.task */task) {
+                                    if (!task.isDone) {
+                                        isDone = false;
+                                    }
+                                });
+                            } else { // If there are no tasks, story cannot be done
+                                isDone = false;
+                            }
+
+                            // Update story data
+                            Story
+                                .update(
+                                    {id: task.storyId},
+                                    {isDone: isDone},
+                                    function(error, /** sails.model.story[] */stories) {
+                                        if (error) {
+                                            cb(error);
+                                        } else {
+                                            cb();
+                                        }
+                                });
+                        });
+                }
+            });
+    },
+
+    /**
      * After task creation we can set current story automatic to not done status (isDone = false).
      *
      * @param   {sails.model.task}  values
@@ -120,6 +172,7 @@ module.exports = {
             .done(function(error, /** sails.model.task[] */tasks) {
                 var isDone = true;
 
+                // Iterate story tasks
                 jQuery.each(tasks, function(key, /** sails.model.task */task) {
                     if (!task.isDone) {
                         isDone = false;
