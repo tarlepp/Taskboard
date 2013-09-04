@@ -24,7 +24,7 @@ var sails = {
             description: '',
             order: '',
             tasks: '',
-            split: '',
+            isDone: '',
             id: '',
             createdAt: '',
             updatedAt: ''
@@ -37,6 +37,7 @@ var sails = {
             estimate: '',
             priority: '',
             vfCase: '',
+            isDone: '',
             id: '',
             createdAt: '',
             updatedAt: ''
@@ -48,6 +49,7 @@ var sails = {
             typeId: '',
             title: '',
             description: '',
+            isDone: '',
             id: '',
             createdAt: '',
             updatedAt: ''
