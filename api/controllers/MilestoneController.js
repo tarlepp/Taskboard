@@ -66,6 +66,13 @@ module.exports = {
                         .done(function(error, stories) {
                             // Add stories to milestone data
                             milestone.stories = stories;
+                            milestone.doneStories = _.reduce(stories, function(memo, story) { return (story.isDone) ? memo + 1 : memo; }, 0);
+
+                            if (milestone.doneStories > 0) {
+                                milestone.progress = Math.round(milestone.doneStories / stories.length * 100);
+                            } else {
+                                milestone.progress = 0;
+                            }
 
                             // Call view
                             makeView();

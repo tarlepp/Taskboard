@@ -110,6 +110,21 @@ ul.dropdown-menu .divider {
     margin: 5px 0;
 }
 
+.dropdown-menu > li > a.text-success {
+    color: #468847;
+}
+
+.dropdown-menu > li > a.text-danger {
+    color: #b94a48;
+}
+
+.dropdown-menu > li > a.text-success:hover,
+.dropdown-menu > li > a.text-success:focus,
+.dropdown-menu > li > a.text-danger:hover
+.dropdown-menu > li > a.text-danger:focus {
+    color: #ffffff;
+}
+
 #navigation .dropdown-menu:before,
 .dropdown-menu.with-tick:before,
 .actionMenu .dropdown-menu:before {

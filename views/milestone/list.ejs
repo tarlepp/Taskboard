@@ -36,13 +36,13 @@
                 <%= milestone.title %>
             </td>
             <td>
-                <% if (milestone.stories.length > 0) { %>
                 <div class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                        <span class="sr-only">60% Complete</span>
+                    <div class="progress-bar" role="progressbar" aria-valuenow="<%= milestone.progress %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= milestone.progress %>%;">
+                    <% if (milestone.progress > 0) { %>
+                        <span ><%= milestone.progress %>% Complete</span>
+                    <% } %>
                     </div>
                 </div>
-                <% } %>
             </td>
             <td>
                 <%= milestone.deadlineFormatted() %>
@@ -56,9 +56,9 @@
                     <ul class="dropdown-menu with-tick story-list text-left">
                         <li class="dropdown-header"><span class="text-info">Attached stories</span></li>
                         <% _.each(milestone.stories, function(story) { %>
-                        <li>
-                            <a href="javascript: void(0);" data-story-id="<%= story.id %>">
-                                <%= story.title %> (<%= story.estimate %>)
+                        <li style="white-space: nowrap">
+                            <a href="javascript: void(0);" data-story-id="<%= story.id %>" class="<%= (story.isDone) ? 'text-success' : 'text-danger' %>">
+                                <%= story.title %> (<%= (story.estimate == -1) ? '???' : story.estimate %>)
                             </a>
                         </li>
                         <% }) %>
