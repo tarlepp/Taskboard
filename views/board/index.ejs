@@ -67,8 +67,12 @@
                                             delay: 100
                                         },
                                         position: {
-                                            at: 'center right',
-                                            my: 'center left'
+                                            at: 'right center',
+                                            my: 'left center',
+                                            adjust: {
+                                                screen: true
+                                            },
+                                            viewport: jQuery(window)
                                         }
                                     }
                                 }
@@ -79,11 +83,15 @@
                         data-qtipopts="{ style: { classes: 'qtip-green' } }"
                         data-bind="
                             qtip: {
-                                text: 'Add a new task to story<br />' + title(),
+                                text: 'Add new task to story,
                                 options: {
                                     position: {
-                                        at: 'center right',
-                                        my: 'center left'
+                                        at: 'right center',
+                                        my: 'left center',
+                                        adjust: {
+                                            screen: true
+                                        },
+                                        viewport: jQuery(window)
                                     }
                                 }
                             }
@@ -128,13 +136,17 @@
                     title: title(),
                     text: descriptionTooltip(),
                     options: {
-                        position: {
-                            at: 'bottom center',
-                            my: 'top center'
-                        },
                         hide: {
                             fixed: true,
                             delay: 100
+                        },
+                        position: {
+                            at: 'right center',
+                            my: 'left center',
+                            adjust: {
+                                screen: true
+                            },
+                            viewport: jQuery(window)
                         }
                     }
                 },
@@ -154,9 +166,17 @@
                     title: title(),
                     text: descriptionTooltip() ? descriptionTooltip() : '<em>No description...</em>',
                     options: {
+                        hide: {
+                            fixed: true,
+                            delay: 100
+                        },
                         position: {
-                            at: 'bottom center',
-                            my: 'top center'
+                            at: 'right center',
+                            my: 'left center',
+                            adjust: {
+                                screen: true
+                            },
+                            viewport: jQuery(window)
                         }
                     }
                 },

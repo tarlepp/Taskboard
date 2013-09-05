@@ -321,11 +321,12 @@ ko.bindingHandlers.qtip = {
                                 width: width
                             },
                             position: {
-                                my: 'top left',
-                                at: 'bottom center',
+                                my: 'left top',
+                                at: 'center bottom',
                                 adjust: {
                                     screen: true
-                                }
+                                },
+                                viewport: jQuery(window)
                             }
                         },
                         options

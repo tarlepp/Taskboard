@@ -23,12 +23,12 @@ function createQtipDiv(el) {
             text = el.data('tooltipContent');
         }
 
-        createQtip(el, title, text, 'auto', 'top left', 'bottom center', true, 100);
+        createQtip(el, title, text, 'auto', 'left top', 'center bottom', true, 100);
     }
 }
 
 function createQtipTitle(el) {
-    createQtip(el, '', el.attr('title'), 'auto', 'top left', 'bottom center', false, 50);
+    createQtip(el, '', el.attr('title'), 'auto', 'left top', 'center bottom', false, 50);
 }
 
 function createQtip(element, tipTitle, tipText, tipWidth, tipMy, tipAt, tipFixed, tipDelay) {
@@ -58,7 +58,11 @@ function createQtip(element, tipTitle, tipText, tipWidth, tipMy, tipAt, tipFixed
         },
         position: {
             my: tipMy,
-            at: tipAt
+            at: tipAt,
+            adjust: {
+                screen: true
+            },
+            viewport: jQuery(window)
         }
     });
 }
