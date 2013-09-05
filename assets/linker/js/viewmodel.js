@@ -307,14 +307,12 @@ ko.bindingHandlers.qtip = {
                                 text: textValue
                             },
                             show: {
-                                when: {
-                                    event: 'mouseenter'
-                                }
+                                event: 'mouseenter',
+                                delay: 50,
+                                solo: true
                             },
                             hide: {
-                                when: {
-                                    event: 'mouseleave'
-                                }
+                                event: 'click mouseleave'
                             },
                             style: {
                                 classes: 'qtip-bootstrap',
