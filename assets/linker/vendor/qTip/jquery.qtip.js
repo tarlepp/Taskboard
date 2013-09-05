@@ -6,8 +6,8 @@
  * Released under the MIT, GPL licenses
  * http://jquery.org/license
  *
- * Date: Tue Jul 16 2013 09:01 UTC+0000
- * Plugins: tips viewport
+ * Date: Thu Sep 5 2013 04:30 UTC+0000
+ * Plugins: tips viewport imagemap svg modal
  * Styles: css3
  */
 /*global window: false, jQuery: false, console: false, define: false */
@@ -2650,7 +2650,613 @@ $.extend(TRUE, QTIP.defaults, {
 	}
 
 	return adjusted;
-};;}));
+};;PLUGINS.polys = {
+	// POLY area coordinate calculator
+	//	Special thanks to Ed Cradock for helping out with this.
+	//	Uses a binary search algorithm to find suitable coordinates.
+	polygon: function(baseCoords, corner) {
+		var result = {
+			width: 0, height: 0,
+			position: {
+				top: 1e10, right: 0,
+				bottom: 0, left: 1e10
+			},
+			adjustable: FALSE
+		},
+		i = 0, next,
+		coords = [],
+		compareX = 1, compareY = 1,
+		realX = 0, realY = 0,
+		newWidth, newHeight;
+
+		// First pass, sanitize coords and determine outer edges
+		i = baseCoords.length; while(i--) {
+			next = [ parseInt(baseCoords[--i], 10), parseInt(baseCoords[i+1], 10) ];
+
+			if(next[0] > result.position.right){ result.position.right = next[0]; }
+			if(next[0] < result.position.left){ result.position.left = next[0]; }
+			if(next[1] > result.position.bottom){ result.position.bottom = next[1]; }
+			if(next[1] < result.position.top){ result.position.top = next[1]; }
+
+			coords.push(next);
+		}
+
+		// Calculate height and width from outer edges
+		newWidth = result.width = Math.abs(result.position.right - result.position.left);
+		newHeight = result.height = Math.abs(result.position.bottom - result.position.top);
+
+		// If it's the center corner...
+		if(corner.abbrev() === 'c') {
+			result.position = {
+				left: result.position.left + (result.width / 2),
+				top: result.position.top + (result.height / 2)
+			};
+		}
+		else {
+			// Second pass, use a binary search algorithm to locate most suitable coordinate
+			while(newWidth > 0 && newHeight > 0 && compareX > 0 && compareY > 0)
+			{
+				newWidth = Math.floor(newWidth / 2);
+				newHeight = Math.floor(newHeight / 2);
+
+				if(corner.x === LEFT){ compareX = newWidth; }
+				else if(corner.x === RIGHT){ compareX = result.width - newWidth; }
+				else{ compareX += Math.floor(newWidth / 2); }
+
+				if(corner.y === TOP){ compareY = newHeight; }
+				else if(corner.y === BOTTOM){ compareY = result.height - newHeight; }
+				else{ compareY += Math.floor(newHeight / 2); }
+
+				i = coords.length; while(i--)
+				{
+					if(coords.length < 2){ break; }
+
+					realX = coords[i][0] - result.position.left;
+					realY = coords[i][1] - result.position.top;
+
+					if((corner.x === LEFT && realX >= compareX) ||
+					(corner.x === RIGHT && realX <= compareX) ||
+					(corner.x === CENTER && (realX < compareX || realX > (result.width - compareX))) ||
+					(corner.y === TOP && realY >= compareY) ||
+					(corner.y === BOTTOM && realY <= compareY) ||
+					(corner.y === CENTER && (realY < compareY || realY > (result.height - compareY)))) {
+						coords.splice(i, 1);
+					}
+				}
+			}
+			result.position = { left: coords[0][0], top: coords[0][1] };
+		}
+
+		return result;
+	},
+
+	rect: function(ax, ay, bx, by, corner) {
+		return {
+			width: Math.abs(bx - ax),
+			height: Math.abs(by - ay),
+			position: {
+				left: Math.min(ax, bx),
+				top: Math.min(ay, by)
+			}
+		};
+	},
+
+	_angles: {
+		tc: 3 / 2, tr: 7 / 4, tl: 5 / 4, 
+		bc: 1 / 2, br: 1 / 4, bl: 3 / 4, 
+		rc: 2, lc: 1, c: 0
+	},
+	ellipse: function(cx, cy, rx, ry, corner) {
+		var c = PLUGINS.polys._angles[ corner.abbrev() ],
+			rxc = rx * Math.cos( c * Math.PI ),
+			rys = ry * Math.sin( c * Math.PI );
+
+		return {
+			width: (rx * 2) - Math.abs(rxc),
+			height: (ry * 2) - Math.abs(rys),
+			position: {
+				left: cx + rxc,
+				top: cy + rys
+			},
+			adjustable: FALSE
+		};
+	},
+	circle: function(cx, cy, r, corner) {
+		return PLUGINS.polys.ellipse(cx, cy, r, r, corner);
+	}
+};;PLUGINS.imagemap = function(api, area, corner, adjustMethod)
+{
+	if(!area.jquery) { area = $(area); }
+
+	var shape = area.attr('shape').toLowerCase().replace('poly', 'polygon'),
+		image = $('img[usemap="#'+area.parent('map').attr('name')+'"]'),
+		coordsString = area.attr('coords'),
+		coordsArray = coordsString.split(','),
+		imageOffset, coords, i, next;
+
+	// If we can't find the image using the map...
+	if(!image.length) { return FALSE; }
+
+	// Pass coordinates string if polygon
+	if(shape === 'polygon') {
+		result = PLUGINS.polys.polygon(coordsArray, corner);
+	}
+
+	// Otherwise parse the coordinates and pass them as arguments
+	else if(PLUGINS.polys[shape]) {
+		for(i = -1, len = coordsArray.length, coords = []; ++i < len;) {
+			coords.push( parseInt(coordsArray[i], 10) );
+		}
+
+		result = PLUGINS.polys[shape].apply(
+			this, coords.concat(corner)
+		);
+	}
+
+	// If no shapre calculation method was found, return false
+	else { return FALSE; }
+
+	// Make sure we account for padding and borders on the image
+	imageOffset = image.offset();
+	imageOffset.left += Math.ceil((image.outerWidth(FALSE) - image.width()) / 2);
+	imageOffset.top += Math.ceil((image.outerHeight(FALSE) - image.height()) / 2);
+
+	// Add image position to offset coordinates
+	result.position.left += imageOffset.left;
+	result.position.top += imageOffset.top;
+
+	return result;
+};;PLUGINS.svg = function(api, svg, corner, adjustMethod)
+{
+	var doc = $(document),
+		elem = svg[0],
+		result = {},
+		name, box, position, dimensions;
+
+	// Ascend the parentNode chain until we find an element with getBBox()
+	while(!elem.getBBox) { elem = elem.parentNode; }
+	if(!elem.getBBox || !elem.parentNode) { return FALSE; }
+
+	// Determine which shape calculation to use
+	switch(elem.nodeName) {
+		case 'rect':
+			position = PLUGINS.svg.toPixel(elem, elem.x.baseVal.value, elem.y.baseVal.value);
+			dimensions = PLUGINS.svg.toPixel(elem,
+				elem.x.baseVal.value + elem.width.baseVal.value,
+				elem.y.baseVal.value + elem.height.baseVal.value
+			);
+
+			result = PLUGINS.polys.rect(
+				position[0], position[1],
+				dimensions[0], dimensions[1],
+				corner
+			);
+		break;
+
+		case 'ellipse':
+		case 'circle':
+			position = PLUGINS.svg.toPixel(elem,
+				elem.cx.baseVal.value,
+				elem.cy.baseVal.value
+			);
+
+			result = PLUGINS.polys.ellipse(
+				position[0], position[1],
+				(elem.rx || elem.r).baseVal.value, 
+				(elem.ry || elem.r).baseVal.value,
+				corner
+			);
+		break;
+
+		case 'line':
+		case 'polygon':
+		case 'polyline':
+			points = elem.points || [
+				{ x: elem.x1.baseVal.value, y: elem.y1.baseVal.value },
+				{ x: elem.x2.baseVal.value, y: elem.y2.baseVal.value }
+			];
+
+			for(result = [], i = -1, len = points.numberOfItems || points.length; ++i < len;) {
+				next = points.getItem ? points.getItem(i) : points[i];
+				result.push.apply(result, PLUGINS.svg.toPixel(elem, next.x, next.y));
+			}
+
+			result = PLUGINS.polys.polygon(result, corner);
+		break;
+
+		// Unknown shape... use bounding box as fallback
+		default: 
+			box = elem.getBBox();
+			mtx = elem.getScreenCTM();
+			root = elem.farthestViewportElement || elem;
+
+			// Return if no createSVGPoint method is found
+			if(!root.createSVGPoint) { return FALSE; }
+
+			// Create our point var
+			point = root.createSVGPoint();
+
+			// Adjust top and left
+			point.x = box.x;
+			point.y = box.y;
+			tPoint = point.matrixTransform(mtx);
+			result.position = {
+				left: tPoint.x, top: tPoint.y
+			};
+
+			// Adjust width and height
+			point.x += box.width;
+			point.y += box.height;
+			tPoint = point.matrixTransform(mtx);
+			result.width = tPoint.x - result.position.left;
+			result.height = tPoint.y - result.position.top;
+		break;
+	}
+
+	// Adjust by scroll offset
+	result.position.left += doc.scrollLeft();
+	result.position.top += doc.scrollTop();
+
+	return result;
+};
+
+PLUGINS.svg.toPixel = function(elem, x, y) {
+	var mtx = elem.getScreenCTM(),
+		root = elem.farthestViewportElement || elem,
+		result, point;
+
+	// Create SVG point
+	if(!root.createSVGPoint) { return FALSE; }
+	point = root.createSVGPoint();
+
+	point.x = x; point.y = y;
+	result = point.matrixTransform(mtx);
+	return [ result.x, result.y ];
+};;var MODAL, OVERLAY,
+	MODALCLASS = 'qtip-modal',
+	MODALSELECTOR = '.'+MODALCLASS;
+
+OVERLAY = function()
+{
+	var self = this,
+		focusableElems = {},
+		current, onLast,
+		prevState, elem;
+
+	// Modified code from jQuery UI 1.10.0 source
+	// http://code.jquery.com/ui/1.10.0/jquery-ui.js
+	function focusable(element) {
+		// Use the defined focusable checker when possible
+		if($.expr[':'].focusable) { return $.expr[':'].focusable; }
+
+		var isTabIndexNotNaN = !isNaN($.attr(element, 'tabindex')),
+			nodeName = element.nodeName && element.nodeName.toLowerCase(),
+			map, mapName, img;
+
+		if('area' === nodeName) {
+			map = element.parentNode;
+			mapName = map.name;
+			if(!element.href || !mapName || map.nodeName.toLowerCase() !== 'map') {
+				return false;
+			}
+			img = $('img[usemap=#' + mapName + ']')[0];
+			return !!img && img.is(':visible');
+		}
+		return (/input|select|textarea|button|object/.test( nodeName ) ?
+				!element.disabled :
+				'a' === nodeName ? 
+					element.href || isTabIndexNotNaN : 
+					isTabIndexNotNaN
+			);
+	}
+
+	// Focus inputs using cached focusable elements (see update())
+	function focusInputs(blurElems) {
+		// Blurring body element in IE causes window.open windows to unfocus!
+		if(focusableElems.length < 1 && blurElems.length) { blurElems.not('body').blur(); }
+
+		// Focus the inputs
+		else { focusableElems.first().focus(); }
+	}
+
+	// Steal focus from elements outside tooltip
+	function stealFocus(event) {
+		if(!elem.is(':visible')) { return; }
+
+		var target = $(event.target),
+			tooltip = current.tooltip,
+			container = target.closest(SELECTOR),
+			targetOnTop;
+
+		// Determine if input container target is above this
+		targetOnTop = container.length < 1 ? FALSE :
+			(parseInt(container[0].style.zIndex, 10) > parseInt(tooltip[0].style.zIndex, 10));
+
+		// If we're showing a modal, but focus has landed on an input below
+		// this modal, divert focus to the first visible input in this modal
+		// or if we can't find one... the tooltip itself
+		if(!targetOnTop && target.closest(SELECTOR)[0] !== tooltip[0]) {
+			focusInputs(target);
+		}
+
+		// Detect when we leave the last focusable element...
+		onLast = event.target === focusableElems[focusableElems.length - 1];
+	}
+
+	$.extend(self, {
+		init: function() {
+			// Create document overlay
+			elem = self.elem = $('<div />', {
+				id: 'qtip-overlay',
+				html: '<div></div>',
+				mousedown: function() { return FALSE; }
+			})
+			.hide();
+
+			// Update position on window resize or scroll
+			function resize() {
+				var win = $(this);
+				elem.css({
+					height: win.height(),
+					width: win.width()
+				});
+			}
+			$(window).bind('resize'+MODALSELECTOR, resize);
+			resize(); // Fire it initially too
+
+			// Make sure we can't focus anything outside the tooltip
+			$(document.body).bind('focusin'+MODALSELECTOR, stealFocus);
+
+			// Apply keyboard "Escape key" close handler
+			$(document).bind('keydown'+MODALSELECTOR, function(event) {
+				if(current && current.options.show.modal.escape && event.keyCode === 27) {
+					current.hide(event);
+				}
+			});
+
+			// Apply click handler for blur option
+			elem.bind('click'+MODALSELECTOR, function(event) {
+				if(current && current.options.show.modal.blur) {
+					current.hide(event);
+				}
+			});
+
+			return self;
+		},
+
+		update: function(api) {
+			// Update current API reference
+			current = api;
+
+			// Update focusable elements if enabled
+			if(api.options.show.modal.stealfocus !== FALSE) {
+				focusableElems = api.tooltip.find('*').filter(function() {
+					return focusable(this);
+				});
+			}
+			else { focusableElems = []; }
+		},
+
+		toggle: function(api, state, duration) {
+			var docBody = $(document.body),
+				tooltip = api.tooltip,
+				options = api.options.show.modal,
+				effect = options.effect,
+				type = state ? 'show': 'hide',
+				visible = elem.is(':visible'),
+				visibleModals = $(MODALSELECTOR).filter(':visible:not(:animated)').not(tooltip),
+				zindex;
+
+			// Set active tooltip API reference
+			self.update(api);
+
+			// If the modal can steal the focus...
+			// Blur the current item and focus anything in the modal we an
+			if(state && options.stealfocus !== FALSE) {
+				focusInputs( $(':focus') );
+			}
+
+			// Toggle backdrop cursor style on show
+			elem.toggleClass('blurs', options.blur);
+
+			// Set position and append to body on show
+			if(state) {
+				elem.css({ left: 0, top: 0 })
+					.appendTo(document.body);
+			}
+
+			// Prevent modal from conflicting with show.solo, and don't hide backdrop is other modals are visible
+			if((elem.is(':animated') && visible === state && prevState !== FALSE) || (!state && visibleModals.length)) {
+				return self;
+			}
+
+			// Stop all animations
+			elem.stop(TRUE, FALSE);
+
+			// Use custom function if provided
+			if($.isFunction(effect)) {
+				effect.call(elem, state);
+			}
+
+			// If no effect type is supplied, use a simple toggle
+			else if(effect === FALSE) {
+				elem[ type ]();
+			}
+
+			// Use basic fade function
+			else {
+				elem.fadeTo( parseInt(duration, 10) || 90, state ? 1 : 0, function() {
+					if(!state) { elem.hide(); }
+				});
+			}
+
+			// Reset position and detach from body on hide
+			if(!state) {
+				elem.queue(function(next) {
+					elem.css({ left: '', top: '' });
+					if(!$(MODALSELECTOR).length) { elem.detach(); }
+					next();
+				});
+			}
+
+			// Cache the state
+			prevState = state;
+
+			// If the tooltip is destroyed, set reference to null
+			if(current.destroyed) { current = NULL; }
+
+			return self;
+		}
+	});	
+
+	self.init();
+};
+OVERLAY = new OVERLAY();
+
+function Modal(api, options) {
+	this.options = options;
+	this._ns = '-modal';
+
+	this.init( (this.qtip = api) );
+}
+
+$.extend(Modal.prototype, {
+	init: function(qtip) {
+		var tooltip = qtip.tooltip;
+
+		// If modal is disabled... return
+		if(!this.options.on) { return this; }
+
+		// Set overlay reference
+		qtip.elements.overlay = OVERLAY.elem;
+
+		// Add unique attribute so we can grab modal tooltips easily via a SELECTOR, and set z-index
+		tooltip.addClass(MODALCLASS).css('z-index', PLUGINS.modal.zindex + $(MODALSELECTOR).length);
+		
+		// Apply our show/hide/focus modal events
+		qtip._bind(tooltip, ['tooltipshow', 'tooltiphide'], function(event, api, duration) {
+			var oEvent = event.originalEvent;
+
+			// Make sure mouseout doesn't trigger a hide when showing the modal and mousing onto backdrop
+			if(event.target === tooltip[0]) {
+				if(oEvent && event.type === 'tooltiphide' && /mouse(leave|enter)/.test(oEvent.type) && $(oEvent.relatedTarget).closest(overlay[0]).length) {
+					try { event.preventDefault(); } catch(e) {}
+				}
+				else if(!oEvent || (oEvent && !oEvent.solo)) {
+					this.toggle(event, event.type === 'tooltipshow', duration);
+				}
+			}
+		}, this._ns, this);
+
+		// Adjust modal z-index on tooltip focus
+		qtip._bind(tooltip, 'tooltipfocus', function(event, api) {
+			// If focus was cancelled before it reached us, don't do anything
+			if(event.isDefaultPrevented() || event.target !== tooltip[0]) { return; }
+
+			var qtips = $(MODALSELECTOR),
+
+			// Keep the modal's lower than other, regular qtips
+			newIndex = PLUGINS.modal.zindex + qtips.length,
+			curIndex = parseInt(tooltip[0].style.zIndex, 10);
+
+			// Set overlay z-index
+			OVERLAY.elem[0].style.zIndex = newIndex - 1;
+
+			// Reduce modal z-index's and keep them properly ordered
+			qtips.each(function() {
+				if(this.style.zIndex > curIndex) {
+					this.style.zIndex -= 1;
+				}
+			});
+
+			// Fire blur event for focused tooltip
+			qtips.filter('.' + CLASS_FOCUS).qtip('blur', event.originalEvent);
+
+			// Set the new z-index
+			tooltip.addClass(CLASS_FOCUS)[0].style.zIndex = newIndex;
+
+			// Set current
+			OVERLAY.update(api);
+
+			// Prevent default handling
+			try { event.preventDefault(); } catch(e) {}
+		}, this._ns, this);
+
+		// Focus any other visible modals when this one hides
+		qtip._bind(tooltip, 'tooltiphide', function(event) {
+			if(event.target === tooltip[0]) {
+				$(MODALSELECTOR).filter(':visible').not(tooltip).last().qtip('focus', event);
+			}
+		}, this._ns, this);
+	},
+
+	toggle: function(event, state, duration) {
+		// Make sure default event hasn't been prevented
+		if(event && event.isDefaultPrevented()) { return this; }
+
+		// Toggle it
+		OVERLAY.toggle(this.qtip, !!state, duration);
+	},
+
+	destroy: function() {
+		// Remove modal class
+		this.qtip.tooltip.removeClass(MODALCLASS);
+
+		// Remove bound events
+		this.qtip._unbind(this.qtip.tooltip, this._ns);
+
+		// Delete element reference
+		OVERLAY.toggle(this.qtip, FALSE);
+		delete this.qtip.elements.overlay;
+	}
+});
+
+
+MODAL = PLUGINS.modal = function(api) {
+	return new Modal(api, api.options.show.modal);
+};
+
+// Setup sanitiztion rules
+MODAL.sanitize = function(opts) {
+	if(opts.show) { 
+		if(typeof opts.show.modal !== 'object') { opts.show.modal = { on: !!opts.show.modal }; }
+		else if(typeof opts.show.modal.on === 'undefined') { opts.show.modal.on = TRUE; }
+	}
+};
+
+// Base z-index for all modal tooltips (use qTip core z-index as a base)
+MODAL.zindex = QTIP.zindex - 200;
+
+// Plugin needs to be initialized on render
+MODAL.initialize = 'render';
+
+// Setup option set checks
+CHECKS.modal = {
+	'^show.modal.(on|blur)$': function() {
+		// Initialise
+		this.destroy();
+		this.init();
+		
+		// Show the modal if not visible already and tooltip is visible
+		this.qtip.elems.overlay.toggle(
+			this.qtip.tooltip[0].offsetWidth > 0
+		);
+	}
+};
+
+// Extend original api defaults
+$.extend(TRUE, QTIP.defaults, {
+	show: {
+		modal: {
+			on: FALSE,
+			effect: TRUE,
+			blur: TRUE,
+			stealfocus: TRUE,
+			escape: TRUE
+		}
+	}
+});
+;}));
 }( window, document ));
 
 
