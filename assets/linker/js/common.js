@@ -262,33 +262,34 @@ function initWysiwyg(context) {
         // Determine textarea id, which we are used in wysiwyg
         var textareaId = textarea.prop("id") + "wysiwyg";
 
-        var qtipopts = "{ position: { at: 'top center', my: 'bottom center' } }";
+        // Make valid JSON string for qTip options.
+        var qtipopts = '{ "position": { "at": "top center", "my": "bottom center" } }';
 
         // Actual editor HTML content
         var editor = jQuery(''
             + '<div>'
                 + '<div class="btn-toolbar" data-role="editor-toolbar" data-target="#' + textareaId + '">'
                     + '<div class="btn-group">'
-                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options="' + qtipopts + '" data-edit="bold" title="Bold (Ctrl/Cmd+B)"><i class="icon-bold"></i></button>'
-                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options="' + qtipopts + '" data-edit="italic" title="Italic (Ctrl/Cmd+I)"><i class="icon-italic"></i></button>'
-                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options="' + qtipopts + '" data-edit="strikethrough" title="Strikethrough"><i class="icon-strikethrough"></i></button>'
-                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options="' + qtipopts + '" data-edit="underline" title="Underline (Ctrl/Cmd+U)"><i class="icon-underline"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options=\'' + qtipopts + '\' data-edit="bold" title="Bold (Ctrl/Cmd+B)"><i class="icon-bold"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options=\'' + qtipopts + '\' data-edit="italic" title="Italic (Ctrl/Cmd+I)"><i class="icon-italic"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options=\'' + qtipopts + '\' data-edit="strikethrough" title="Strikethrough"><i class="icon-strikethrough"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options=\'' + qtipopts + '\' data-edit="underline" title="Underline (Ctrl/Cmd+U)"><i class="icon-underline"></i></button>'
                     + '</div>'
                     + '<div class="btn-group">'
-                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="insertunorderedlist" title="Bullet list"><i class="icon-list-ul"></i></button>'
-                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="insertorderedlist" title="Number list"><i class="icon-list-ol"></i></button>'
-                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="outdent" title="Reduce indent (Shift+Tab)"><i class="icon-indent-left"></i></button>'
-                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="indent" title="Indent (Tab)"><i class="icon-indent-right"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options=\'' + qtipopts + '\' data-edit="insertunorderedlist" title="Bullet list"><i class="icon-list-ul"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options=\'' + qtipopts + '\' data-edit="insertorderedlist" title="Number list"><i class="icon-list-ol"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options=\'' + qtipopts + '\' data-edit="outdent" title="Reduce indent (Shift+Tab)"><i class="icon-indent-left"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options=\'' + qtipopts + '\' data-edit="indent" title="Indent (Tab)"><i class="icon-indent-right"></i></button>'
                     + '</div>'
                     + '<div class="btn-group">'
-                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="justifyleft" title="Align Left (Ctrl/Cmd+L)"><i class="icon-align-left"></i></button>'
-                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="justifycenter" title="Center (Ctrl/Cmd+E)"><i class="icon-align-center"></i></button>'
-                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)"><i class="icon-align-right"></i></button>'
-                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><i class="icon-align-justify"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options=\'' + qtipopts + '\' data-edit="justifyleft" title="Align Left (Ctrl/Cmd+L)"><i class="icon-align-left"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options=\'' + qtipopts + '\' data-edit="justifycenter" title="Center (Ctrl/Cmd+E)"><i class="icon-align-center"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options=\'' + qtipopts + '\' data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)"><i class="icon-align-right"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-qtip-options=\'' + qtipopts + '\' data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><i class="icon-align-justify"></i></button>'
                     + '</div>'
                     + '<div class="btn-group">'
                         + '<div class="btn-group">'
-                            + '<button type="button" class="btn btn-default btn-editor tooltipTitle dropdown-toggle" data-toggle="dropdown" title="Hyperlink"><i class="icon-link"></i></button>'
+                            + '<button type="button" class="btn btn-default btn-editor tooltipTitle dropdown-toggle" data-toggle="dropdown" data-qtip-options=\'' + qtipopts + '\' title="Hyperlink"><i class="icon-link"></i></button>'
                             + '<div class="dropdown-menu col-md-6">'
                                 + '<div class="input-group">'
                                     + '<input class="form-control" placeholder="URL" type="text" data-edit="createLink"/>'
@@ -298,7 +299,7 @@ function initWysiwyg(context) {
                                 + '</div>'
                             + '</div>'
                         + '</div>'
-                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="unlink" title="Remove Hyperlink"><i class="icon-cut"></i></button>'
+                        + '<button type="button" class="btn btn-default btn-editor tooltipTitle" data-edit="unlink" data-qtip-options=\'' + qtipopts + '\' title="Remove Hyperlink"><i class="icon-cut"></i></button>'
                     + '</div>'
                 + '</div>'
                 + '<div id="' + textareaId + '" class="editor"></div>'
@@ -438,7 +439,7 @@ function createQtip(element, tipTitle, tipText, tipWidth, tipMy, tipAt, tipFixed
     element.qtip({
         metadata: {
             type: 'html5',      // Use HTML5 data-* attributes
-            name: 'qtip-options'    // Grab the metadata from the data-qtip-options HTML5 attribute
+            name: 'qtipOptions'    // Grab the metadata from the data-qtip-options HTML5 attribute
         },
         content: {
             title: tipTitle,
@@ -453,7 +454,8 @@ function createQtip(element, tipTitle, tipText, tipWidth, tipMy, tipAt, tipFixed
         },
         show: {
             ready: true,
-            solo: true
+            solo: true,
+            delay: 40
         },
         hide: {
             fixed: tipFixed,
