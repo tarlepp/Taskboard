@@ -111,10 +111,12 @@
                         sortable: {
                             template: taskTemplate,
                             data: tasks,
-                            afterMove: myDropCallback,
+                            beforeMove: taskDraggableBeforeMoveCallback,
+                            afterMove: taskDraggableAfterMoveCallback,
                             connectClass: 'myClass',
                             options: {
-                                cursor: 'move'
+                                cursor: 'move',
+                                start: taskDraggableStartCallback
                             }
                         }
                      ">

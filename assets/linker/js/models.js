@@ -317,7 +317,14 @@ function PhaseStory(phase, tasks) {
         return self.tasks().length > 5 ? 'task-template-small' : 'task-template-normal';
     };
 
-    self.myDropCallback = function(arg, event, ui) {
+    self.taskDraggableStartCallback = function(event, ui) {
+        jQuery('.qtip.qtip-bootstrap').qtip('hide');
+    };
+
+    self.taskDraggableBeforeMoveCallback = function(arg, event, ui) {
+    };
+
+    self.taskDraggableAfterMoveCallback = function(arg, event, ui) {
         var context = ko.contextFor(this);
         var phase = ko.toJS(context.$data);
 
