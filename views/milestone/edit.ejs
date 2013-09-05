@@ -79,10 +79,16 @@
                     <%= story.title %>
                 </td>
                 <td class="text-right">
-                    <%= story.estimate %>
+                    <%= (story.estimate == -1) ? '???' : story.estimate %>
                 </td>
                 <td>
-
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="<%= story.progress %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= story.progress %>%;">
+                            <% if (story.progress > 0) { %>
+                            <span ><%= story.progress %>% Complete</span>
+                            <% } %>
+                        </div>
+                    </div>
                 </td>
                 <td class="text-right">
                     <%= story.tasks.length %>

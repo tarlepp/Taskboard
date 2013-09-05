@@ -190,6 +190,14 @@ module.exports = {
                             // Add tasks to story data
                             story.tasks = tasks;
 
+                            story.doneTasks = _.reduce(tasks, function(memo, task) { return (task.isDone) ? memo + 1 : memo; }, 0);
+
+                            if (story.doneTasks > 0) {
+                                story.progress = Math.round(story.doneTasks / tasks.length * 100);
+                            } else {
+                                story.progress = 0;
+                            }
+
                             // Call view
                             makeView();
                         });
