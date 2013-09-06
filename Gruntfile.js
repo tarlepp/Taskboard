@@ -31,6 +31,7 @@ module.exports = function (grunt) {
         'linker/vendor/bootstrap/css/bootstrap.css',
         'linker/vendor/bootstrap/css/bootstrap-theme.css',
         'linker/vendor/bootstrap-datepicker/datepicker.css',
+        'linker/vendor/bootstrap-select/bootstrap-select.css',
         'linker/vendor/qTip/jquery.qtip.css',
         'linker/vendor/font-awesome/css/font-awesome.css',
 
@@ -75,6 +76,7 @@ module.exports = function (grunt) {
         'linker/vendor/qTip/jquery.qtip.js',
         'linker/vendor/bootstrap/js/bootstrap.js',
         'linker/vendor/bootstrap-datepicker/bootstrap-datepicker.js',
+        'linker/vendor/bootstrap-select/bootstrap-select.js',
         'linker/vendor/twitter-bootstrap-hover-dropdown.js',
         'linker/vendor/bootstrap-wysiwyg.js',
         'linker/vendor/bootbox.js',
