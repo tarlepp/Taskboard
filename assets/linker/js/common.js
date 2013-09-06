@@ -232,7 +232,11 @@ function createBootboxDialog(title, content, buttons, trigger) {
 
     // Generic modal init
     modal.on('shown.bs.modal', function() {
+        // Initialize wysiwyg for textareas
         initWysiwyg(modal);
+
+        // Initialize
+        initSelect();
 
         // Initialize possible modal context tooltips
         initTooltips(modal);
@@ -243,6 +247,12 @@ function createBootboxDialog(title, content, buttons, trigger) {
 
     // Return bootbox dialog
     return modal;
+}
+
+function initSelect(context) {
+    jQuery('select[data-select]', context).each(function() {
+        jQuery(this).selectpicker();
+    });
 }
 
 /**

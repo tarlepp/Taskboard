@@ -9,8 +9,10 @@
     <div class="form-group required">
         <label class="col-lg-3 control-label" for="formProjectEditManagerId">Project manager</label>
         <div class="col-lg-9">
-            <select id="formProjectEditManagerId" name="managerId" class="form-control required">
-                <option value="#">-- select --</option>
+            <select id="formProjectEditManagerId" name="managerId" class="form-control required show-tick show-menu-arrow"
+                data-select="true"
+                data-live-search="true"
+            >
                 <% _.each(users, function(user) { %>
                 <option value="<%= user.id %>" <%if (user.id === project.managerId) { %>selected="selected"<% } %>><%= user.fullName() %></option>
                 <% }) %>

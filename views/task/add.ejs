@@ -12,7 +12,9 @@
     <div class="form-group">
         <label class="col-lg-3 control-label" for="formTaskNewTypeId">Type</label>
         <div class="col-lg-9">
-            <select id="formTaskNewTypeId" name="typeId" class="form-control">
+            <select id="formTaskNewTypeId" name="typeId" class="form-control show-tick show-menu-arrow"
+                data-select="true"
+            >
                 <% _.each(types, function(type) { %>
                 <option value="<%= type.id %>"><%= type.title %></option>
                 <% }) %>
@@ -23,8 +25,11 @@
     <div class="form-group">
         <label class="col-lg-3 control-label" for="formTaskNewOwner">Owner</label>
         <div class="col-lg-9">
-            <select id="formTaskNewOwner" name="userId" class="form-control">
-                <option value="0">-- select --</option>
+            <select id="formTaskNewOwner" name="userId" class="form-control show-tick show-menu-arrow"
+                data-select="true"
+                data-live-search="true"
+            >
+                <option value="0" class="select-dummy-option">No specified owner</option>
                 <% _.each(users, function(user) { %>
                 <option value="<%= user.id %>"><%= user.fullName() %></option>
                 <% }) %>

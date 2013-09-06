@@ -20,8 +20,11 @@
     <div class="form-group">
         <label class="col-lg-3 control-label" for="formStoryNewMilestone">Milestone</label>
         <div class="col-lg-9">
-            <select id="formStoryNewMilestone" name="milestoneId" class="form-control">
-                <option value="0">-- select --</option>
+            <select id="formStoryNewMilestone" name="milestoneId" class="form-control show-tick show-menu-arrow"
+                data-select="true"
+                data-live-search="true"
+            >
+                <option value="0" class="select-dummy-option">No specified milestone</option>
                 <% _.each(milestones, function(milestone) { %>
                 <option value="<%= milestone.id %>" <%if (milestone.id === story.milestoneId) { %>selected="selected"<% } %>><%= milestone.title %></option>
                 <% }) %>

@@ -176,3 +176,55 @@ div[data-role="editor-toolbar"] {
     -ms-user-select: none;
     user-select: none;
 }
+
+.bootstrap-select.form-control {
+    width: 100%;
+    padding: 0;
+}
+
+.bootstrap-select.form-control button {
+    padding: 0;
+    line-height: 30px;
+}
+
+.bootstrap-select.btn-group.open .dropdown-toggle {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-color: #66afe9;
+    outline: 0;
+    outline: 0 !important;
+    outline-offset: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+.bootstrap-select .btn {
+    background-color: #ffffff;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+
+.bootstrap-select .btn:focus {
+    border-color: #66afe9;
+    outline: 0;
+    outline: 0 !important;
+    outline-offset: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+.bootstrap-select ul.dropdown-menu > li > a {
+    font-size: 16px;
+    padding: 3px 15px;
+}
+
+.bootstrap-select ul.dropdown-menu > li > a i {
+    left: auto;
+    top: 3px;
+}
+
+.select-dummy-option {
+    font-style: italic;
+}
