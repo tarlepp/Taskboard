@@ -26,8 +26,8 @@ module.exports = {
             defaultsTo: 0,
             required:   true
         },
-        // Relation to Phase model, note that this is just default phase for story tasks
-        phaseId: {
+        // Relation to type model, note that this is just default type for story tasks
+        typeId: {
             type:       'integer',
             defaultsTo: 0,
             required:   true
