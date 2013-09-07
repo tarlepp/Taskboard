@@ -16,7 +16,7 @@
                 data-select="true"
             >
                 <% _.each(types, function(type) { %>
-                <option value="<%= type.id %>"><%= type.title %></option>
+                <option value="<%= type.id %>" <%if (type.id === story.typeId) { %>selected="selected"<% } %>><%= type.title %></option>
                 <% }) %>
             </select>
         </div>

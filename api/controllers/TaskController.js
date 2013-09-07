@@ -25,6 +25,7 @@ module.exports = {
             storyId: parseInt(req.param('storyId'), 10),
             phaseId: false,
             types: false,
+            story: false,
             users: false
         };
 
@@ -41,6 +42,19 @@ module.exports = {
                     res.send(error, 500);
                 } else {
                     data.phaseId = (phases.length > 0) ? phases[0].id : 0;
+
+                    makeView();
+                }
+            });
+
+        // Fetch story
+        Story
+            .findOne(data.storyId)
+            .done(function(error, story) {
+                if (error) {
+                    res.send(error, 500);
+                } else {
+                    data.story = story;
 
                     makeView();
                 }
