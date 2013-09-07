@@ -36,6 +36,19 @@
     </div>
 
     <div class="form-group">
+        <label class="col-lg-3 control-label" for="formStoryNewType">Default type for tasks</label>
+        <div class="col-lg-9">
+            <select id="formStoryNewType" name="typeId" class="form-control show-tick show-menu-arrow"
+                data-select="true"
+            >
+                <% _.each(types, function(type) { %>
+                <option value="<%= type.id %>"><%= type.title %></option>
+                <% }) %>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
         <label class="col-lg-3 control-label" for="formStoryNewDescription">Description</label>
         <div class="col-lg-9">
             <textarea id="formStoryNewDescription" name="description" class="form-control" data-wysiwyg="true" placeholder="enter user story description"></textarea>

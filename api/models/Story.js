@@ -23,8 +23,7 @@ module.exports = {
         // Relation to Milestone model
         milestoneId: {
             type:       'integer',
-            defaultsTo: 0,
-            required:   true
+            defaultsTo: 0
         },
         // Relation to type model, note that this is just default type for story tasks
         typeId: {
@@ -49,7 +48,6 @@ module.exports = {
         },
         priority: {
             type:       'integer',
-            required:   true,
             defaultsTo: 0
         },
         vfCase: {

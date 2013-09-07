@@ -21,6 +21,15 @@ module.exports = {
         var projectId = parseInt(req.param('projectId'), 10);
         var sprintId = parseInt(req.param('sprintId'), 10);
 
+        // Required view data
+        var data = {
+            layout: "layout_ajax",
+            projectId: projectId,
+            sprintId: sprintId,
+            milestones: false,
+            types: false
+        };
+
         // Fetch project milestones
         Milestone
             .find()
@@ -32,14 +41,42 @@ module.exports = {
                 if (error) {
                     res.send(error, 500);
                 } else {
-                    res.view({
-                        layout: "layout_ajax",
-                        projectId: projectId,
-                        sprintId: sprintId,
-                        milestones: milestones
-                    });
+                    data.milestones = milestones;
+
+                    makeView();
                 }
             });
+
+        // Fetch task types
+        Type
+            .find()
+            .sort('order ASC')
+            .done(function(error, types) {
+                if (error) {
+                    res.send(error, 500);
+                } else {
+                    data.types = types;
+
+                    makeView();
+                }
+            });
+
+        /**
+         * Private function to make actual view with specified data.
+         */
+        function makeView() {
+            var ready = true;
+
+            jQuery.each(data, function(key, data) {
+                if (data === false) {
+                    ready = false;
+                }
+            });
+
+            if (ready) {
+                res.view(data);
+            }
+        }
     },
 
     /**
