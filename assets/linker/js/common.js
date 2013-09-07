@@ -207,9 +207,7 @@ function createBootboxDialog(title, content, buttons, trigger) {
         label: "Close",
         className: "btn-default pull-left",
         callback: function() {
-            if (trigger) {
-                jQuery('body').trigger(trigger);
-            }
+            handleEventTrigger(trigger);
         }
     });
 
@@ -478,4 +476,20 @@ function createQtip(element, tipTitle, tipText, tipWidth, tipMy, tipAt, tipFixed
             viewport: jQuery(window)
         }
     });
+}
+
+/**
+ * Function to handle event trigger. Note that this will need some work later on
+ * with more complicated cases of real usage.
+ *
+ * @param   {String|Object|void}    trigger
+ */
+function handleEventTrigger(trigger) {
+    if (trigger) {
+        if (_.isObject(trigger)) {
+            jQuery('body').trigger(trigger.trigger, trigger.parameters);
+        } else {
+            jQuery('body').trigger(trigger);
+        }
+    }
 }

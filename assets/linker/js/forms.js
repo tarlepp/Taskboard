@@ -540,6 +540,7 @@ function initMilestoneList(modal) {
  * @param   {Boolean}   edit    Are we editing existing milestone or not
  */
 function initMilestoneForm(context, edit) {
+    var body = jQuery('body');
     var inputTitle = jQuery('input[name="title"]', context);
     var containerDeadline = jQuery('.deadline', context);
 
@@ -558,5 +559,19 @@ function initMilestoneForm(context, edit) {
 
             containerDeadline.closest('.input-group').addClass('has-error');
         }
+    });
+
+    // User clicks milestone action menu link
+    jQuery('ul.milestone-actions', context).on('click', 'a', function() {
+        // Hide current modal
+        context.modal('hide');
+
+        var element = jQuery(this);
+        var storyId = element.data('storyId');
+        var milestoneId = element.data('milestoneId');
+        var action = element.data('action');
+
+        // Trigger milestone action event
+        body.trigger(action, [storyId, {trigger: 'milestoneEdit', parameters: [milestoneId]}]);
     });
 }

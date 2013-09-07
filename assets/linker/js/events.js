@@ -794,9 +794,7 @@ jQuery(document).ready(function() {
 
                                 modal.modal('hide');
 
-                                if (trigger) {
-                                    body.trigger(trigger)
-                                }
+                                handleEventTrigger(trigger);
                             })
                             .fail(function(jqXhr, textStatus, error) {
                                 handleAjaxError(jqXhr, textStatus, error);
@@ -834,7 +832,6 @@ jQuery(document).ready(function() {
                             inputType: "select",
                             options: options,
                             callback: function(result) {
-                                console.log(result);
                                 if (result !== null) {
                                     jQuery.ajax({
                                         type: 'POST',
@@ -903,19 +900,17 @@ jQuery(document).ready(function() {
                                         url: "/story/" + storyId,
                                         dataType: 'json'
                                     })
-                                        .done(function() {
-                                            makeMessage("User story deleted successfully.", "success", {});
+                                    .done(function() {
+                                        makeMessage("User story deleted successfully.", "success", {});
 
-                                            // Remove user story from knockout models.
-                                            myViewModel.deleteStory(storyId);
+                                        // Remove user story from knockout models.
+                                        myViewModel.deleteStory(storyId);
 
-                                            if (trigger) {
-                                                body.trigger(trigger)
-                                            }
-                                        })
-                                        .fail(function(jqXhr, textStatus, error) {
-                                            handleAjaxError(jqXhr, textStatus, error);
-                                        });
+                                        handleEventTrigger(trigger);
+                                    })
+                                    .fail(function(jqXhr, textStatus, error) {
+                                        handleAjaxError(jqXhr, textStatus, error);
+                                    });
                                 } else {
                                     body.trigger('storyEdit', [storyId, trigger]);
                                 }
@@ -938,6 +933,123 @@ jQuery(document).ready(function() {
         })
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
+        });
+    });
+
+    /**
+     * User story edit event, this opens a modal bootbox dialog with user story edit
+     * form on it.
+     */
+    body.on('storyDelete', function(event, storyId, trigger) {
+        trigger = trigger || false;
+
+        // Make confirm box
+        bootbox.confirm({
+            title: 'Are you sure? Really?',
+            message: 'Are you sure of story delete?',
+            buttons: {
+                'cancel': {
+                    className: 'btn-default pull-left'
+                },
+                'confirm': {
+                    label: 'Delete',
+                    className: 'btn-danger pull-right'
+                }
+            },
+            callback: function(result) {
+                if (result) {
+                    jQuery.ajax({
+                        type: "DELETE",
+                        url: "/story/" + storyId,
+                        dataType: 'json'
+                    })
+                    .done(function() {
+                        makeMessage("User story deleted successfully.", "success", {});
+
+                        // Remove user story from knockout models.
+                        myViewModel.deleteStory(storyId);
+
+                        handleEventTrigger(trigger);
+                    })
+                    .fail(function(jqXhr, textStatus, error) {
+                        handleAjaxError(jqXhr, textStatus, error);
+                    });
+                } else {
+                    handleEventTrigger(trigger);
+                }
+            }
+        });
+    });
+
+    body.on('storySplit', function(event, storyId, trigger) {
+        trigger = trigger || false;
+
+        var options = [];
+
+        options.push({value: 0, text: 'Project backlog'});
+
+        // Iterate project sprints and add those to option lists
+        jQuery.each(myViewModel.sprints(), function(key, sprint) {
+            options.push({value: sprint.id(), text: sprint.formattedTitle()});
+        });
+
+        // Make prompt box
+        var prompt = bootbox.prompt({
+            title: "Select sprint where to add new story",
+            buttons: {
+                'cancel': {
+                    label: 'close',
+                    className: 'btn-default pull-left'
+                },
+                'confirm': {
+                    label: 'Split story',
+                    className: 'btn-primary pull-right'
+                }
+            },
+            inputType: "select",
+            options: options,
+            callback: function(result) {
+                if (result !== null) {
+                    jQuery.ajax({
+                        type: 'POST',
+                        url: "/Story/split",
+                        data: {
+                            storyId: storyId,
+                            sprintId: result,
+                            projectId: myViewModel.project().id()
+                        },
+                        dataType: 'json'
+                    })
+                    .done(function(data) {
+                        var newStoryId = false;
+
+                        // Add story to current stories IF we story sprintId is same as current sprint id
+                        if (myViewModel.sprint() && data.story.sprintId === myViewModel.sprint().id()) {
+                            // Add created story to knockout model data.
+                            myViewModel.stories.push(new Story(data.story));
+
+                            // Update task data
+                            myViewModel.updateTasks(data.tasks, storyId, data.story.id);
+                        }
+
+                        makeMessage("User story splitted successfully.", "success", {});
+
+                        prompt.modal('hide');
+
+                        handleEventTrigger(trigger);
+                    })
+                    .fail(function(jqXhr, textStatus, error) {
+                        handleAjaxError(jqXhr, textStatus, error);
+                    });
+                    return false;
+                } else {
+                    prompt.modal('hide');
+
+                    handleEventTrigger(trigger);
+                }
+
+                return false;
+            }
         });
     });
 
