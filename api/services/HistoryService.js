@@ -30,3 +30,20 @@ exports.write = function(objectName, object) {
         .done(function(error, data) {
         });
 };
+
+/**
+ * Method removes all history data of specified object.
+ *
+ * @param   {String}    objectName  Name of the object eg. Task
+ * @param   {Number}    objectId    ID of the object
+ */
+exports.remove = function(objectName, objectId) {
+    // Remove all history rows
+    History
+        .destroy({
+            objectId: objectId,
+            objectName: objectName
+        })
+        .done(function(error, data) {
+        });
+};
