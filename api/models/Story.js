@@ -98,5 +98,45 @@ module.exports = {
 
                 cb();
             });
+    },
+
+    /**
+     * After create callback
+     *
+     * @param   {sails.model.story} values
+     * @param   {Function}          cb
+     */
+    afterCreate: function(values, cb) {
+        HistoryService.write('Story', values);
+
+        cb();
+    },
+
+    /**
+     * After update callback
+     *
+     * @param   {sails.model.story} values
+     * @param   {Function}          cb
+     */
+    afterUpdate: function(values, cb) {
+        HistoryService.write('Story', values);
+
+        cb();
+    },
+
+    /**
+     * Before destroy callback
+     *
+     * @param   {Object}    terms
+     * @param   {Function}  cb
+     */
+    beforeDestroy: function(terms, cb) {
+        Story
+            .findOne(terms)
+            .done(function(error, story) {
+                HistoryService.remove('Story', story.id);
+
+                cb();
+            });
     }
 };

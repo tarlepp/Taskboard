@@ -22,5 +22,47 @@ module.exports = {
             type:       'string',
             required:   true
         }
+    },
+
+    // Life cycle callbacks
+
+    /**
+     * After create callback.
+     *
+     * @param   {sails.model.type}  values
+     * @param   {Function}          cb
+     */
+    afterCreate: function(values, cb) {
+        HistoryService.write('Type', values);
+
+        cb();
+    },
+
+    /**
+     * After update callback.
+     *
+     * @param   {sails.model.type}  values
+     * @param   {Function}          cb
+     */
+    afterUpdate: function(values, cb) {
+        HistoryService.write('Type', values);
+
+        cb();
+    },
+
+    /**
+     * Before destroy callback.
+     *
+     * @param   {Object}    terms
+     * @param   {Function}  cb
+     */
+    beforeDestroy: function(terms, cb) {
+        Type
+            .findOne(terms)
+            .done(function(error, type) {
+                HistoryService.remove('Type', type.id);
+
+                cb();
+            });
     }
 };

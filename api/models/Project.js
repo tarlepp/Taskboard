@@ -43,5 +43,47 @@ module.exports = {
         dateEndFormatted: function() {
             return this.dateEndObject().format('isoDate');
         }
+    },
+
+    // Life cycle callbacks
+
+    /**
+     * After create callback.
+     *
+     * @param   {sails.model.project}   values
+     * @param   {Function}              cb
+     */
+    afterCreate: function(values, cb) {
+        HistoryService.write('Project', values);
+
+        cb();
+    },
+
+    /**
+     * After update callback.
+     *
+     * @param   {sails.model.project}   values
+     * @param   {Function}              cb
+     */
+    afterUpdate: function(values, cb) {
+        HistoryService.write('Project', values);
+
+        cb();
+    },
+
+    /**
+     * Before destroy callback.
+     *
+     * @param   {Object}    terms
+     * @param   {Function}  cb
+     */
+    beforeDestroy: function(terms, cb) {
+        Project
+            .findOne(terms)
+            .done(function(error, project) {
+                HistoryService.remove('Project', project.id);
+
+                cb();
+            });
     }
 };

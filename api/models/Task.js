@@ -105,6 +105,8 @@ module.exports = {
                 if (error) {
                     cb(error)
                 } else {
+                    HistoryService.remove('Task', task.id);
+
                     Task
                         .find()
                         .where({storyId: task.storyId})
@@ -147,6 +149,8 @@ module.exports = {
      * @param   {Function}          cb
      */
     afterCreate: function(values, cb) {
+        HistoryService.write('Task', values);
+
         // Update story data
         Story
             .update(
@@ -171,6 +175,8 @@ module.exports = {
      * @param   {Function}          cb
      */
     afterUpdate: function(values, cb) {
+        HistoryService.write('Task', values);
+
         Task
             .find()
             .where({storyId: values.storyId})

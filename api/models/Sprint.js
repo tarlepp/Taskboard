@@ -49,12 +49,49 @@ module.exports = {
         }
     },
 
-    beforeDestroy: function(criteria, cb) {
-        // TODO: what if criteria is not sprintId?
+    // Life cycle callbacks
+
+    /**
+     * After create callback.
+     *
+     * @param   {sails.model.sprint}    values
+     * @param   {Function}              cb
+     */
+    afterCreate: function(values, cb) {
+        HistoryService.write('Sprint', values);
+
+        cb();
+    },
+
+    /**
+     * After update callback.
+     *
+     * @param   {sails.model.sprint}    values
+     * @param   {Function}              cb
+     */
+    afterUpdate: function(values, cb) {
+        HistoryService.write('Sprint', values);
+
+        cb();
+    },
+
+    /**
+     * Before destroy callback.
+     *
+     * @param   {Object}    terms
+     * @param   {Function}  cb
+     */
+    beforeDestroy: function(terms, cb) {
+        // Remove history data
+        Sprint
+            .findOne(terms)
+            .done(function(error, sprint) {
+                HistoryService.remove('Sprint', sprint.id);
+            });
 
         // Update all stories sprint id to 0 which belongs to delete sprint
         Story.update(
-            {sprintId: criteria},
+            terms,
             {sprintId: 0},
             function(err, stories) {
                 if (err) {

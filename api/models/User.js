@@ -41,5 +41,47 @@ module.exports = {
 
             return obj;
         }
+    },
+
+    // Life cycle callbacks
+
+    /**
+     * After create callback.
+     *
+     * @param   {sails.model.user}  values
+     * @param   {Function}          cb
+     */
+    afterCreate: function(values, cb) {
+        HistoryService.write('User', values);
+
+        cb();
+    },
+
+    /**
+     * After update callback.
+     *
+     * @param   {sails.model.user}  values
+     * @param   {Function}          cb
+     */
+    afterUpdate: function(values, cb) {
+        HistoryService.write('User', values);
+
+        cb();
+    },
+
+    /**
+     * Before destroy callback.
+     *
+     * @param   {Object}    terms
+     * @param   {Function}  cb
+     */
+    beforeDestroy: function(terms, cb) {
+        User
+            .findOne(terms)
+            .done(function(error, user) {
+                HistoryService.remove('User', user.id);
+
+                cb();
+            });
     }
 };
