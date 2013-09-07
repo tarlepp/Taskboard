@@ -36,7 +36,7 @@
     </div>
 
     <div class="form-group">
-        <label class="col-lg-3 control-label" for="formStoryNewType">Default type for tasks</label>
+        <label class="col-lg-3 control-label" for="formStoryNewType">Task type</label>
         <div class="col-lg-9">
             <select id="formStoryNewType" name="typeId" class="form-control show-tick show-menu-arrow"
                 data-select="true"
@@ -45,6 +45,9 @@
                 <option value="<%= type.id %>"><%= type.title %></option>
                 <% }) %>
             </select>
+            <p class="help-block">
+                This is the default type for new tasks to this story.
+            </p>
         </div>
     </div>
 

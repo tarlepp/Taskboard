@@ -235,3 +235,7 @@ div[data-role="editor-toolbar"] {
 .select-dummy-option {
     font-style: italic;
 }
+
+.help-block {
+    margin-bottom: 0;
+}

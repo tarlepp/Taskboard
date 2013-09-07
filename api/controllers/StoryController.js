@@ -95,7 +95,8 @@ module.exports = {
         var data = {
             layout: "layout_ajax",
             story: false,
-            milestones: false
+            milestones: false,
+            types: false
         };
 
         // Fetch story data
@@ -109,24 +110,57 @@ module.exports = {
                 } else {
                     data.story = story;
 
-                    // Fetch project milestones
-                    Milestone
-                        .find()
-                        .where({
-                            projectId: data.story.projectId
-                        })
-                        .sort('deadline ASC')
-                        .done(function(error, milestones) {
-                            if (error) {
-                                res.send(error, 500);
-                            } else {
-                                data.milestones = milestones;
-
-                                res.view(data);
-                            }
-                        });
+                    makeView();
                 }
             });
+
+        // Fetch project milestones
+        Milestone
+            .find()
+            .where({
+                projectId: data.story.projectId
+            })
+            .sort('deadline ASC')
+            .done(function(error, milestones) {
+                if (error) {
+                    res.send(error, 500);
+                } else {
+                    data.milestones = milestones;
+
+                    makeView();
+                }
+            });
+
+        // Fetch task types
+        Type
+            .find()
+            .sort('order ASC')
+            .done(function(error, types) {
+                if (error) {
+                    res.send(error, 500);
+                } else {
+                    data.types = types;
+
+                    makeView();
+                }
+            });
+
+        /**
+         * Private function to make actual view with specified data.
+         */
+        function makeView() {
+            var ready = true;
+
+            jQuery.each(data, function(key, data) {
+                if (data === false) {
+                    ready = false;
+                }
+            });
+
+            if (ready) {
+                res.view(data);
+            }
+        }
     },
 
     /**
