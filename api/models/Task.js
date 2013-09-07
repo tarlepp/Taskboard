@@ -70,17 +70,22 @@ module.exports = {
      * @param   {Function}          cb
      */
     beforeUpdate: function(values, cb) {
-        Phase
-            .findOne(values.phaseId)
-            .done(function(error, /** sails.model.phase */phase) {
-                if (error) {
-                    cb(error)
-                } else {
-                    values.isDone = (!phase) ? 0 : phase.isDone;
+        if (!values.phaseId) {
+            values.isDone = 0;
+            cb();
+        } else {
+            Phase
+                .findOne(values.phaseId)
+                .done(function(error, /** sails.model.phase */phase) {
+                    if (error) {
+                        cb(error)
+                    } else {
+                        values.isDone = (!phase) ? 0 : phase.isDone;
 
-                    cb();
-                }
-            });
+                        cb();
+                    }
+                });
+        }
     },
 
     /**
