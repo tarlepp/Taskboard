@@ -1,67 +1,81 @@
+<ul class="nav nav-tabs">
+    <li class="active">
+        <a href="#basic" data-toggle="tab">Basic</a>
+    </li>
+    <li>
+        <a href="#advanced" data-toggle="tab">Advanced</a>
+    </li>
+</ul>
+
 <form id="formStoryNew" class="form-horizontal">
     <input type="hidden" name="projectId" value="<%= projectId %>" />
     <input type="hidden" name="sprintId" value="<%= sprintId %>" />
 
-    <div class="form-group required">
-        <label class="col-lg-3 control-label" for="formStoryNewTitle">Title</label>
-        <div class="col-lg-9">
-            <input id="formStoryNewTitle" name="title" type="text" placeholder="enter story name" class="form-control" required="required" />
-        </div>
-    </div>
-
-    <div class="form-group required">
-        <label class="col-lg-3 control-label" for="formStoryNewEstimate">Estimate</label>
-        <div class="col-lg-9">
-            <div class="col-lg-2">
-                <input class="form-control sliderValue" type="text" readonly="readonly" value="" />
+    <div class="tab-content">
+        <div class="tab-pane active" id="basic">
+            <div class="form-group required">
+                <label class="col-lg-3 control-label" for="formStoryNewTitle">Title</label>
+                <div class="col-lg-9">
+                    <input id="formStoryNewTitle" name="title" type="text" placeholder="enter story name" class="form-control" required="required" />
+                </div>
             </div>
-            <div class="col-lg-10 estimateSlider"></div>
-            <input id="formStoryNewEstimate" name="estimate" type="hidden" value="-1" />
-        </div>
-    </div>
 
-    <div class="form-group">
-        <label class="col-lg-3 control-label" for="formStoryNewMilestone">Milestone</label>
-        <div class="col-lg-9">
-            <select id="formStoryNewMilestone" name="milestoneId" class="form-control show-tick show-menu-arrow"
-                data-select="true"
-                data-live-search="true"
-            >
-                <option value="0" class="select-dummy-option">No specified milestone</option>
-                <% _.each(milestones, function(milestone) { %>
-                <option value="<%= milestone.id %>"><%= milestone.title %></option>
-                <% }) %>
-            </select>
-        </div>
-    </div>
+            <div class="form-group required">
+                <label class="col-lg-3 control-label" for="formStoryNewEstimate">Estimate</label>
+                <div class="col-lg-9">
+                    <div class="col-lg-2">
+                        <input class="form-control sliderValue" type="text" readonly="readonly" value="" />
+                    </div>
+                    <div class="col-lg-10 estimateSlider"></div>
+                    <input id="formStoryNewEstimate" name="estimate" type="hidden" value="-1" />
+                </div>
+            </div>
 
-    <div class="form-group">
-        <label class="col-lg-3 control-label" for="formStoryNewType">Task type</label>
-        <div class="col-lg-9">
-            <select id="formStoryNewType" name="typeId" class="form-control show-tick show-menu-arrow"
-                data-select="true"
-            >
-                <% _.each(types, function(type) { %>
-                <option value="<%= type.id %>"><%= type.title %></option>
-                <% }) %>
-            </select>
-            <p class="help-block">
-                This is the default type for new tasks to this story.
-            </p>
+            <div class="form-group">
+                <label class="col-lg-3 control-label" for="formStoryNewDescription">Description</label>
+                <div class="col-lg-9">
+                    <textarea id="formStoryNewDescription" name="description" class="form-control" data-wysiwyg="true" placeholder="enter user story description"></textarea>
+                </div>
+            </div>
         </div>
-    </div>
+        <div class="tab-pane" id="advanced">
+            <div class="form-group">
+                <label class="col-lg-3 control-label" for="formStoryNewMilestone">Milestone</label>
+                <div class="col-lg-9">
+                    <select id="formStoryNewMilestone" name="milestoneId" class="form-control show-tick show-menu-arrow"
+                            data-select="true"
+                            data-live-search="true"
+                            >
+                        <option value="0" class="select-dummy-option">No specified milestone</option>
+                        <% _.each(milestones, function(milestone) { %>
+                        <option value="<%= milestone.id %>"><%= milestone.title %></option>
+                        <% }) %>
+                    </select>
+                </div>
+            </div>
 
-    <div class="form-group">
-        <label class="col-lg-3 control-label" for="formStoryNewDescription">Description</label>
-        <div class="col-lg-9">
-            <textarea id="formStoryNewDescription" name="description" class="form-control" data-wysiwyg="true" placeholder="enter user story description"></textarea>
-        </div>
-    </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label" for="formStoryNewType">Task type</label>
+                <div class="col-lg-9">
+                    <select id="formStoryNewType" name="typeId" class="form-control show-tick show-menu-arrow"
+                            data-select="true"
+                            >
+                        <% _.each(types, function(type) { %>
+                        <option value="<%= type.id %>"><%= type.title %></option>
+                        <% }) %>
+                    </select>
+                    <p class="help-block">
+                        This is the default type for new tasks to this story.
+                    </p>
+                </div>
+            </div>
 
-    <div class="form-group">
-        <label class="col-lg-3 control-label" for="formStoryNewVfCase">ValueFrame case</label>
-        <div class="col-lg-2">
-            <input id="formStoryNewVfCase" name="vfCase" type="text" placeholder="case #" class="vfCase form-control" />
+            <div class="form-group">
+                <label class="col-lg-3 control-label" for="formStoryNewVfCase">ValueFrame case</label>
+                <div class="col-lg-2">
+                    <input id="formStoryNewVfCase" name="vfCase" type="text" placeholder="case #" class="vfCase form-control" />
+                </div>
+            </div>
         </div>
     </div>
 </form>

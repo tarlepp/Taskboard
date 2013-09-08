@@ -232,8 +232,21 @@ div[data-role="editor-toolbar"] {
     top: 3px;
 }
 
+
+.dropdown-menu > li > a.select-dummy-option,
 .select-dummy-option {
-    font-style: italic;
+    color: #999999;
+}
+
+.dropdown-menu > li > a.select-dummy-option i {
+    color: #333333;
+}
+
+.dropdown-menu > li > a.select-dummy-option:focus,
+.dropdown-menu > li > a.select-dummy-option:hover,
+.dropdown-menu > li > a.select-dummy-option:focus i,
+.dropdown-menu > li > a.select-dummy-option:hover i {
+    color: #ffffff;
 }
 
 .help-block {
