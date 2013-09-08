@@ -558,6 +558,8 @@ function initMilestoneForm(context, edit) {
             makeMessage(isValid, 'error', {});
 
             containerDeadline.closest('.input-group').addClass('has-error');
+        } else {
+            containerDeadline.bootstrapDP('hide');
         }
     });
 
