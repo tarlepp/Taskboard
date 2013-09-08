@@ -54,6 +54,28 @@
     top: 8px;
 }
 
+#navigation .bootstrap-select {
+    width: 230px;
+    margin-bottom: 0;
+    border-radius: 4px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#navigation .bootstrap-select .btn:focus {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#navigation .bootstrap-select.btn-group.open .dropdown-toggle {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#navigation .bootstrap-select.btn-group.show-tick .dropdown-menu li.selected a i.check-mark {
+    right: 10px;
+}
+
 #navigation select {
     width: auto;
     font-size: 16px;
@@ -110,6 +132,10 @@ ul.dropdown-menu .divider {
     margin: 5px 0;
 }
 
+.dropdown-menu > li > a.text-muted {
+    color: #999999;
+}
+
 .dropdown-menu > li > a.text-success {
     color: #468847;
 }
@@ -118,6 +144,8 @@ ul.dropdown-menu .divider {
     color: #b94a48;
 }
 
+.dropdown-menu > li > a.text-muted:hover,
+.dropdown-menu > li > a.text-muted:focus,
 .dropdown-menu > li > a.text-success:hover,
 .dropdown-menu > li > a.text-success:focus,
 .dropdown-menu > li > a.text-danger:hover

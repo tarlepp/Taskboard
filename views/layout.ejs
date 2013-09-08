@@ -43,15 +43,16 @@
         <ul id="navigation" class="nav navbar-nav" style="display: none;">
             <li>
                 <div class="input-group">
-                    <select id="selectProject" class="form-control"
-                            data-bind="
-                                    options: sortedProjects,
-                                    optionsText: 'title',
-                                    optionsValue: 'id',
-                                    optionsCaption: '--select project--',
-                                    value: selectedProjectId(),
-                                    changeProject: 'id'
-                                "
+                    <select id="selectProject" class="form-control show-tick show-menu-arrow"
+                        data-select="true"
+                        data-bind="
+                                options: sortedProjects,
+                                optionsText: 'title',
+                                optionsValue: 'id',
+                                optionsCaption: 'Choose project to show',
+                                value: selectedProjectId(),
+                                changeProject: 'id'
+                            "
                     ></select>
                     <span class="input-group-addon dropdown">
                         <div data-bind="visible: !project()">
@@ -138,17 +139,17 @@
                 </div>
 
                 <div class="input-group" data-bind="visible: project()">
-                    <select id="selectSprint" class="form-control"
+                    <select id="selectSprint" class="form-control show-tick show-menu-arrow"
                         data-bind="
                             options: sortedSprints,
                             optionsText: 'formattedTitle',
                             optionsValue: 'id',
-                            optionsCaption: '-- select sprint --',
+                            optionsCaption: 'Choose sprint to show',
                             value: selectedSprintId(),
                             changeSprint: 'id'
                         "
-                        data-text-choose-sprint="-- select sprint --"
-                        data-text-no-data="-- No sprint data --"
+                        data-text-choose-sprint="Choose sprint to show"
+                        data-text-no-data="No sprint data to show"
                     ></select>
                     <span class="input-group-addon dropdown">
                         <div data-bind="visible: !sprint()">

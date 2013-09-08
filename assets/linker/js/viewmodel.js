@@ -17,6 +17,9 @@ ko.bindingHandlers.changeProject = {
         var elementProject = jQuery(element);
         var elementSprint = jQuery('#selectSprint');
 
+        elementProject.selectpicker();
+        elementSprint.selectpicker();
+
         // Actual change event is triggered
         elementProject.change(function() {
             initContainer.phases = false;
@@ -168,6 +171,18 @@ ko.bindingHandlers.changeProject = {
                     });
             }
         });
+    },
+    update:function (element, valueAccessor) {
+        jQuery(element).find('option').each(function() {
+            var option = jQuery(this);
+
+            if (option.text() == 'Choose project to show') {
+                option.addClass('select-dummy-option text-muted');
+            }
+        });
+
+
+        jQuery(element).selectpicker('refresh');
     }
 };
 
@@ -250,6 +265,18 @@ ko.bindingHandlers.changeSprint = {
                     });
             }
         });
+    },
+    update:function (element, valueAccessor) {
+        jQuery(element).find('option').each(function() {
+            var option = jQuery(this);
+
+            if (option.text() == 'Choose sprint to show') {
+                option.addClass('select-dummy-option text-muted');
+            }
+        });
+
+
+        jQuery(element).selectpicker('refresh');
     }
 };
 
