@@ -8,6 +8,16 @@ var sails = {
         status: '',
         message: ''
     },
+    helper: {
+        history: {
+            objectId: '',
+            objectName: '',
+            objectData: '',
+            id: '',
+            createdAt: '',
+            updatedAt: ''
+        }
+    },
     model: {
         milestone: {
             projectId: '',
