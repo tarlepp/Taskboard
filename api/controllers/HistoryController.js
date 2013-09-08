@@ -36,7 +36,10 @@ module.exports = {
 
                 // Remove duplicate rows
                 jQuery.each(data, function(key, row) {
-                    if (key === 0 || row.objectData !== data[key - 1].objectData) {
+                    if (key === 0
+                        || row.objectData !== data[key - 1].objectData
+                        || row.message !== data[key - 1].message
+                    ) {
                         histories.push(row);
                     }
                 });
