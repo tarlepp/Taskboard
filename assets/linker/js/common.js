@@ -241,6 +241,17 @@ function createBootboxDialog(title, content, buttons, trigger) {
 
         // Dropdown hover init
         jQuery('[data-hover="dropdown"]', modal).dropdownHover();
+
+        // Dynamic data loading for tab content
+        jQuery('a[data-toggle="tab"]', modal).on('show.bs.tab', function (e) {
+            var contentId  = jQuery(e.target).attr("href");
+            var contentUrl = jQuery(e.target).attr("data-href");
+
+            if (contentUrl) {
+                // Load data content
+                jQuery(contentId).load(contentUrl);
+            }
+        })
     });
 
     // Return bootbox dialog
