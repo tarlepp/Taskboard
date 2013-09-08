@@ -18,6 +18,7 @@ Maybe sails are lifted on http://wunder.sytes.net:1337/ or maybe not...
 - Twitter Bootstrap Hover Dropdown Plugin (https://github.com/CWSpear/twitter-bootstrap-hover-dropdown)
 - bootstrap-datepicker (https://github.com/eternicode/bootstrap-datepicker/)
 - bootstrap-wysiwyg (http://mindmup.github.io/bootstrap-wysiwyg/)
+- bootstrap-select (https://github.com/silviomoreto/bootstrap-select)
 - Bootbox.js (http://bootboxjs.com/)
 - Knockout (http://knockoutjs.com/)
 - Knockout-Bootstrap (http://billpull.github.io/knockout-bootstrap/)
@@ -25,10 +26,11 @@ Maybe sails are lifted on http://wunder.sytes.net:1337/ or maybe not...
 - trunk8 (http://jrvis.com/trunk8/)
 - JSON5 – Modern JSON (http://json5.org/)
 - Font Awesome (http://fortawesome.github.io/Font-Awesome/)
+- objectDiff.js (https://github.com/NV/objectDiff.js)
 - <em>This list will be updated</em>
 
 ### Installation
-Todo, write this...
+Todo, write this... Really do this...
 
 #### Requirements
 - node.js (http://nodejs.org/)
