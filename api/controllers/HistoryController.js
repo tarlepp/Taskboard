@@ -15,10 +15,15 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     index: function(req, res) {
+        if (!req.isAjax) {
+            res.send('Only AJAX request allowed', 403);
+        }
+
         var objectId = req.param('objectId');
         var objectName = req.param('objectName');
         var data = [];
 
+        // Fetch history rows
         History
             .find()
             .where({
@@ -99,6 +104,7 @@ module.exports = {
                             var valueNew = false;
                             var objectIdNew = false;
                             var objectIdOld = false;
+                            var columnType = false;
 
                             /**
                              * Magic happens here, we can assume that attributes which ends with 'Id'
@@ -116,6 +122,7 @@ module.exports = {
                                 // Store actual id values
                                 objectIdNew = value.added;
                                 objectIdOld = value.removed;
+                                columnType = 'relation';
 
                                 // Fetch new value
                                 global[object]
@@ -139,6 +146,15 @@ module.exports = {
                                 valueOld = value.removed.length == 0 ? 'empty' : value.removed;
                                 valueNew = value.added.length == 0 ? 'empty' : value.added;
 
+                                // Determine column type
+                                if (valueOld === true && valueNew === false
+                                    || valueOld === false && valueNew === true
+                                ) {
+                                    columnType = 'boolean';
+                                } else {
+                                    columnType = 'normal';
+                                }
+
                                 checkData();
                             }
 
@@ -154,6 +170,7 @@ module.exports = {
                                 // Add data to history row object
                                 historyRow.data.push({
                                     column: column,
+                                    type: columnType,
                                     valueNew: valueNew,
                                     valueOld: valueOld,
                                     valueIdOld: objectIdOld,

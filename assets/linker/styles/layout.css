@@ -254,3 +254,15 @@ ul, ol {
 .dropdown-menu > li > a.text-danger:hover {
     color: #ffffff;
 }
+
+.history {
+    margin-bottom: 20px;
+}
+
+.history h4 {
+    border-bottom: 1px solid #dddddd;
+}
+
+.history ul {
+    margin-left: 5px;
+}

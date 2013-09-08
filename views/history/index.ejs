@@ -1,24 +1,30 @@
-<!-- This is just proof-of-concept at this point -->
-<% _.each(data, function(row) { %>
-    <div>
-        <h1>
-            <%= row.message %>
-            <span class="pull-right">
-                <%= row.stamp %>
-            </span>
-        </h1>
+<% if (_.size(data) === 0) { %>
+    <p class="text-center">
+        <em class="text-muted">No history data for this object... come back later...</em>
+    </p>
+<% } else { %>
+    <% _.each(data, function(row) { %>
+        <div class="history">
+            <h4 class="text-infotr">
+                <%= row.message %>
+                <span class="pull-right text-muted text-small">
+                    <%= row.stamp %>
+                </span>
+            </h4>
 
-        <% if (row.data) { %>
-        <div>
-            <ul>
-            <% _.each(row.data, function(value, key) { %>
+            <% if (row.data) { %>
+            <ul class="list-unstyled">
+                <% _.each(row.data, function(value, key) { %>
                 <li>
-                    Changed column <em><%= value.column %></em> value from <code><%= value.valueOld %></code> to <code><%= value.valueNew %></code>
+                    <% if (value.type == 'relation' || value.type == 'boolean') { %>
+                    Changed column <span class="text-info"><%= value.column %></span> value from <span class="text-info"><%= value.valueOld %></span> to <span class="text-info"><%= value.valueNew %></span>.
+                    <% } else { %>
+                    Changed column <span class="text-info"><%= value.column %></span> value.
+                    <% } %>
                 </li>
-            <% }); %>
+                <% }); %>
             </ul>
+            <% } %>
         </div>
-
-        <% } %>
-    </div>
-<% }); %>
+    <% }); %>
+<% } %>
