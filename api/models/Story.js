@@ -17,8 +17,7 @@ module.exports = {
         // Relation to Sprint model
         sprintId: {
             type:       'integer',
-            defaultsTo: 0,
-            required:   true
+            defaultsTo: 0
         },
         // Relation to Milestone model
         milestoneId: {
