@@ -225,7 +225,10 @@ function createBootboxDialog(title, content, buttons, trigger) {
         message: content,
         title: title,
         buttons: buttonsToShow,
-        show: false
+        show: false,
+        onEscape: function() {
+            modal.modal('hide');
+        }
     });
 
     // Generic modal init
