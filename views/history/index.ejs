@@ -1,0 +1,24 @@
+<!-- This is just proof-of-concept at this point -->
+<% _.each(data, function(row) { %>
+    <div>
+        <h1>
+            <%= row.message %>
+            <span class="pull-right">
+                <%= row.stamp %>
+            </span>
+        </h1>
+
+        <% if (row.data) { %>
+        <div>
+            <ul>
+            <% _.each(row.data, function(value, key) { %>
+                <li>
+                    Changed column <em><%= value.column %></em> value from <code><%= value.valueOld %></code> to <code><%= value.valueNew %></code>
+                </li>
+            <% }); %>
+            </ul>
+        </div>
+
+        <% } %>
+    </div>
+<% }); %>
