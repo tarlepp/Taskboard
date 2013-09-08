@@ -62,25 +62,24 @@ module.exports = {
 
             // Iterate history data
             jQuery.each(histories, function(key, history) {
-                var historyRow;
+                var dateObject = DateService.convertUTCDateToLocalDate(new Date(history.createdAt));
+
+                var historyRow = {
+                    stamp: dateObject.format('isoDate') + " " + dateObject.format('isoTime'),
+                    data: []
+                };
 
                 // First record, assume that object is created at this point
                 if (key === 0) {
-                    historyRow = {
-                        message: 'Object created',
-                        stamp: history.createdAt,
-                        data: []
-                    };
+                    historyRow.message = 'Object created';
 
                     data.push(historyRow);
 
                     makeView();
                 } else { // Otherwise we have some object data updated
-                    historyRow = {
-                        message: 'Object updated',
-                        stamp: history.createdAt,
-                        data: []
-                    };
+                    if (history.message) {
+                        historyRow.message = history.message;
+                    }
 
                     // Calculate object difference to previous one
                     var diff = objectDiff.diff(JSON.parse(histories[key - 1].objectData), JSON.parse(history.objectData));

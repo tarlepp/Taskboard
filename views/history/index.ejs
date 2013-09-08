@@ -1,19 +1,24 @@
 <% if (_.size(data) === 0) { %>
-    <p class="text-center">
-        <em class="text-muted">No history data for this object... come back later...</em>
+    <p class="text-center text-muted">
+        No history data for this object...
     </p>
 <% } else { %>
     <% _.each(data, function(row) { %>
         <div class="history">
-            <h4 class="text-infotr">
-                <%= row.message %>
-                <span class="pull-right text-muted text-small">
-                    <%= row.stamp %>
-                </span>
+            <h4 class="">
+                <%= row.stamp %>
+
             </h4>
 
             <% if (row.data) { %>
             <ul class="list-unstyled">
+
+                <% if (row.message) { %>
+                <li>
+                    <%= row.message %>
+                </li>
+                <% } %>
+
                 <% _.each(row.data, function(value, key) { %>
                 <li>
                     <% if (value.type == 'relation' || value.type == 'boolean') { %>
