@@ -34,6 +34,11 @@ module.exports = {
             return this.lastName + ' ' + this.firstName;
         },
 
+        // ObjectTitle
+        objectTitle: function() {
+            return this.lastName + ' ' + this.firstName;
+        },
+
         // Override toJSON instance method to remove password value
         toJSON: function() {
             var obj = this.toObject();

@@ -21,6 +21,10 @@ module.exports = {
         class: {
             type:       'string',
             required:   true
+        },
+
+        objectTitle: function() {
+            return this.title;
         }
     },
 

@@ -27,6 +27,10 @@ module.exports = {
             type:       'date'
         },
 
+        objectTitle: function() {
+            return this.title;
+        },
+
         deadlineObject: function() {
             return (this.deadline && this.deadline != '0000-00-00') ? new Date(this.deadline) : null;
         },

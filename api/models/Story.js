@@ -62,6 +62,10 @@ module.exports = {
 
         estimateFormatted: function() {
             return (parseInt(this.estimate, 10) === -1) ? '???' : this.estimate;
+        },
+
+        objectTitle: function() {
+            return this.title;
         }
     },
 

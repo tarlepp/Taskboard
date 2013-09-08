@@ -42,6 +42,10 @@ module.exports = {
         },
         dateEndFormatted: function() {
             return this.dateEndObject().format('isoDate');
+        },
+
+        objectTitle: function() {
+            return this.title;
         }
     },
 

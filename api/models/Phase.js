@@ -36,6 +36,10 @@ module.exports = {
             type:       'boolean',
             required:   true,
             defaultsTo: 0
+        },
+
+        objectTitle: function() {
+            return this.title;
         }
     },
 

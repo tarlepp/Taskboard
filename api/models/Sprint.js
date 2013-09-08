@@ -46,6 +46,10 @@ module.exports = {
         },
         durationDays: function() {
             return this.dateEndObject().getDate() - this.dateStartObject().getDate();
+        },
+
+        objectTitle: function() {
+            return this.title;
         }
     },
 
