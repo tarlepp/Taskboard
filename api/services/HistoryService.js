@@ -11,7 +11,7 @@
  * @param   {String}    objectName  Name of the object eg. Task
  * @param   {Object}    object      Actual object
  */
-exports.write = function(objectName, object) {
+exports.write = function(objectName, object, message) {
     var objectId = object.id;
     var objectData = _.clone(object);
 
@@ -25,7 +25,8 @@ exports.write = function(objectName, object) {
         .create({
             objectId: objectId,
             objectName: objectName,
-            objectData: JSON.stringify(objectData)
+            objectData: JSON.stringify(objectData),
+            message: message
         })
         .done(function(error, data) {
         });

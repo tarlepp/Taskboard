@@ -20,6 +20,9 @@ module.exports = {
         objectData: {
             type:       'text',
             required:   true
+        },
+        message: {
+            type:       'text'
         }
     },
 
