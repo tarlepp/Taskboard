@@ -21,10 +21,20 @@
 
                 <% _.each(row.data, function(value, key) { %>
                 <li>
-                    <% if (value.type == 'relation' || value.type == 'boolean') { %>
-                    Changed column <span class="text-info"><%= value.column %></span> value from <span class="text-info"><%= value.valueOld %></span> to <span class="text-info"><%= value.valueNew %></span>.
+                    <% if (value.changeType == 'insert') { %>
+                        <% if (value.columnType == 'relation' || value.columnType == 'boolean') { %>
+                            Added column <span class="text-info"><%= value.column %></span> with value <span class="text-info"><%= value.valueNew %></span>.
+                        <% } else { %>
+                            Added column <span class="text-info"><%= value.column %></span>.
+                        <% } %>
+                    <% } else if (value.changeType == 'delete') { %>
+                        Removed column <span class="text-info"><%= value.column %></span>.
                     <% } else { %>
-                    Changed column <span class="text-info"><%= value.column %></span> value.
+                        <% if (value.columnType == 'relation' || value.columnType == 'boolean') { %>
+                            Changed column <span class="text-info"><%= value.column %></span> value from <span class="text-info"><%= value.valueOld %></span> to <span class="text-info"><%= value.valueNew %></span>.
+                        <% } else { %>
+                            Changed column <span class="text-info"><%= value.column %></span> value.
+                        <% } %>
                     <% } %>
                 </li>
                 <% }); %>

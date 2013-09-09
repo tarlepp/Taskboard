@@ -5,7 +5,7 @@
  * @description ::  Contains logic for handling requests.
  */
 var jQuery = require('jquery');
-var objectDiff = require('objectdiff');
+var JsonDiffPatch = require('jsondiffpatch');
 
 module.exports = {
     /**
@@ -84,29 +84,43 @@ module.exports = {
                         historyRow.message = history.message;
                     }
 
+                    // Determine previous and current rows as JSON objects
+                    var previousRow = JSON.parse(histories[key - 1].objectData);
+                    var currentRow = JSON.parse(history.objectData);
+
                     // Calculate object difference to previous one
-                    var diff = objectDiff.diff(JSON.parse(histories[key - 1].objectData), JSON.parse(history.objectData));
+                    var difference = JsonDiffPatch.diff(previousRow, currentRow);
 
-                    // Initialize attribute change count
-                    var changeCount = 0;
+                    // No difference between objects
+                    if (typeof difference == 'undefined') {
+                        dataCount--;
+                    } else { // Otherwise make data row
+                        var changeCount = _.size(difference);
 
-                    // First calculate how many attribute(s) have been changed
-                    jQuery.each(diff.value, function(column, value) {
-                        if (value.changed != 'equal') {
-                            changeCount++;
-                        }
-                    });
-
-                    // Iterate each attributes, note that this contains also attributes that have not been changed
-                    jQuery.each(diff.value, function(column, value) {
-                        // Attribute value has been changed
-                        if (value.changed != 'equal') {
-                            // Initialize values
-                            var valueOld = false;
-                            var valueNew = false;
-                            var objectIdNew = false;
+                        // Iterate each difference
+                        jQuery.each(difference, function(column, value) {
+                            var valueOld    = false;
                             var objectIdOld = false;
-                            var columnType = false;
+                            var valueNew    = false;
+                            var objectIdNew = false;
+                            var columnType  = false;
+                            var changeType  = '';
+
+                            if (value.length === 3) {
+                                changeType = "delete";
+                            } else if (value.length == 2) {
+                                changeType = "update";
+
+                                valueOld    = value[0];
+                                objectIdOld = value[0];
+                                valueNew    = value[1];
+                                objectIdNew = value[1];
+                            } else {
+                                changeType = "insert";
+
+                                valueNew    = value[0];
+                                objectIdNew = value[0];
+                            }
 
                             /**
                              * Magic happens here, we can assume that attributes which ends with 'Id'
@@ -118,36 +132,40 @@ module.exports = {
                              * Note that fetching old and new value must be done at in same process
                              * otherwise this doesn't work right.
                              */
-                            if (value.changed != 'equal' && column.match(/Id$/) !== null) {
+                            if (column.match(/Id$/) !== null) {
                                 var object = column.charAt(0).toUpperCase() + column.slice(1, -2);
 
-                                // Store actual id values
-                                objectIdNew = value.added;
-                                objectIdOld = value.removed;
                                 columnType = 'relation';
 
-                                // Fetch new value
-                                global[object]
-                                    .findOne(objectIdNew)
-                                    .done(function(error, objectData) {
-                                        // Store real new value
-                                        valueNew = (!objectData) ? "none" : objectData.objectTitle();
+                                // Only fetch possible relation data if change type is insert or update
+                                if (changeType != 'delete') {
+                                    // Fetch new value
+                                    global[object]
+                                        .findOne(objectIdNew)
+                                        .done(function(error, objectData) {
+                                            // Store real new value
+                                            valueNew = (!objectData) ? "none" : objectData.objectTitle();
 
-                                        // Fetch old value
-                                        global[object]
-                                            .findOne(objectIdOld)
-                                            .done(function(error, objectData) {
-                                                // Store real old value
-                                                valueOld = (!objectData) ? "none" : objectData.objectTitle();
+                                            // Fetch old value only in update
+                                            if (changeType == 'update') {
+                                                // Fetch old value
+                                                global[object]
+                                                    .findOne(objectIdOld)
+                                                    .done(function(error, objectData) {
+                                                        // Store real old value
+                                                        valueOld = (!objectData) ? "none" : objectData.objectTitle();
 
-                                                // Make necessary checks if we can show page or not
+                                                        // Make necessary checks if we can show page or not
+                                                        checkData();
+                                                    });
+                                            } else {
                                                 checkData();
-                                            });
-                                    });
+                                            }
+                                        });
+                                } else {
+                                    checkData();
+                                }
                             } else { // No relation
-                                valueOld = value.removed.length == 0 ? 'empty' : value.removed;
-                                valueNew = value.added.length == 0 ? 'empty' : value.added;
-
                                 // Determine column type
                                 if (valueOld === true && valueNew === false
                                     || valueOld === false && valueNew === true
@@ -172,7 +190,8 @@ module.exports = {
                                 // Add data to history row object
                                 historyRow.data.push({
                                     column: column,
-                                    type: columnType,
+                                    columnType: columnType,
+                                    changeType: changeType,
                                     valueNew: valueNew,
                                     valueOld: valueOld,
                                     valueIdOld: objectIdOld,
@@ -191,8 +210,8 @@ module.exports = {
                                     makeView();
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             });
 
