@@ -54,14 +54,16 @@
     top: 8px;
 }
 
+.navbar .nav > li {
+    z-index: 10000;
+}
+
 #navigation .bootstrap-select {
     width: 230px;
     margin-bottom: 0;
-    border-radius: 4px;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
 }
 
+#navigation .bootstrap-select .btn,
 #navigation .bootstrap-select .btn:focus {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;

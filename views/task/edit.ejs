@@ -20,8 +20,9 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label" for="formTaskEditTypeId">Type</label>
                 <div class="col-lg-9">
-                    <select id="formTaskEditTypeId" name="typeId" class="form-control show-tick show-menu-arrow"
+                    <select id="formTaskEditTypeId" name="typeId" class="in-modal show-tick show-menu-arrow"
                         data-select="true"
+                        data-container="body"
                     >
                         <% _.each(types, function(type) { %>
                         <option value="<%= type.id %>" <%if (type.id === task.typeId) { %>selected="selected"<% } %>><%= type.title %></option>
@@ -33,8 +34,9 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label" for="formTaskEditOwner">Owner</label>
                 <div class="col-lg-9">
-                    <select id="formTaskEditOwner" name="userId" class="form-control show-tick show-menu-arrow"
+                    <select id="formTaskEditOwner" name="userId" class="in-modal show-tick show-menu-arrow"
                         data-select="true"
+                        data-container="body"
                         data-live-search="true"
                     >
                         <option value="0" class="select-dummy-option">No specified owner</option>

@@ -40,10 +40,11 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label" for="formStoryNewMilestone">Milestone</label>
                 <div class="col-lg-9">
-                    <select id="formStoryNewMilestone" name="milestoneId" class="form-control show-tick show-menu-arrow"
-                            data-select="true"
-                            data-live-search="true"
-                            >
+                    <select id="formStoryNewMilestone" name="milestoneId" class="in-modal show-tick show-menu-arrow"
+                        data-select="true"
+                        data-container="body"
+                        data-live-search="true"
+                    >
                         <option value="0" class="select-dummy-option">No specified milestone</option>
                         <% _.each(milestones, function(milestone) { %>
                         <option value="<%= milestone.id %>" <%if (milestone.id === story.milestoneId) { %>selected="selected"<% } %>><%= milestone.title %></option>
@@ -54,9 +55,10 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label" for="formStoryNewType">Task type</label>
                 <div class="col-lg-9">
-                    <select id="formStoryNewType" name="typeId" class="form-control show-tick show-menu-arrow"
-                            data-select="true"
-                            >
+                    <select id="formStoryNewType" name="typeId" class="in-modal show-tick show-menu-arrow"
+                        data-select="true"
+                        data-container="body"
+                    >
                         <% _.each(types, function(type) { %>
                         <option value="<%= type.id %>" <%if (type.id === story.typeId) { %>selected="selected"<% } %>><%= type.title %></option>
                         <% }) %>

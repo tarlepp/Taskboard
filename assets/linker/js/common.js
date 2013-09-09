@@ -487,7 +487,8 @@ function createQtip(element, tipTitle, tipText, tipWidth, tipMy, tipAt, tipFixed
         position: {
             my: tipMy,
             at: tipAt,
-            viewport: jQuery(window)
+            viewport: jQuery(window),
+            container: jQuery('body')
         }
     });
 }

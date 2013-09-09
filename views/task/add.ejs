@@ -12,8 +12,9 @@
     <div class="form-group">
         <label class="col-lg-3 control-label" for="formTaskNewTypeId">Type</label>
         <div class="col-lg-9">
-            <select id="formTaskNewTypeId" name="typeId" class="form-control show-tick show-menu-arrow"
+            <select id="formTaskNewTypeId" name="typeId" class="in-modal show-tick show-menu-arrow"
                 data-select="true"
+                data-container="body"
             >
                 <% _.each(types, function(type) { %>
                 <option value="<%= type.id %>" <%if (type.id === story.typeId) { %>selected="selected"<% } %>><%= type.title %></option>
@@ -25,8 +26,9 @@
     <div class="form-group">
         <label class="col-lg-3 control-label" for="formTaskNewOwner">Owner</label>
         <div class="col-lg-9">
-            <select id="formTaskNewOwner" name="userId" class="form-control show-tick show-menu-arrow"
+            <select id="formTaskNewOwner" name="userId" class="in-modal show-tick show-menu-arrow"
                 data-select="true"
+                data-container="body"
                 data-live-search="true"
             >
                 <option value="0" class="select-dummy-option">No specified owner</option>
