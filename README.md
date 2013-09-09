@@ -26,7 +26,7 @@ Maybe sails are lifted on http://wunder.sytes.net:1337/ or maybe not...
 - trunk8 (http://jrvis.com/trunk8/)
 - JSON5 – Modern JSON (http://json5.org/)
 - Font Awesome (http://fortawesome.github.io/Font-Awesome/)
-- objectDiff.js (https://github.com/NV/objectDiff.js)
+- JsonDiffPatch (https://github.com/benjamine/JsonDiffPatch)
 - <em>This list will be updated</em>
 
 ### Installation
