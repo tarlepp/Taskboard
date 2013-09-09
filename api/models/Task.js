@@ -86,6 +86,8 @@ module.exports = {
                         cb();
                     }
                 });
+        } else {
+            cb();
         }
     },
 
