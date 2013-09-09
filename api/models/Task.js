@@ -74,10 +74,7 @@ module.exports = {
      * @param   {Function}          cb
      */
     beforeUpdate: function(values, cb) {
-        if (!values.phaseId) {
-            values.isDone = 0;
-            cb();
-        } else {
+        if (values.phaseId) {
             Phase
                 .findOne(values.phaseId)
                 .done(function(error, /** sails.model.phase */phase) {
