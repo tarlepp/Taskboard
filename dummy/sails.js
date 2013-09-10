@@ -18,6 +18,71 @@ var sails = {
             updatedAt: ''
         }
     },
+    json: {
+        type: {
+            title: '',
+            order: '',
+            class: '',
+            id: '',
+            createdAt: '',
+            updatedAt: ''
+        },
+        user: {
+            username: '',
+            firstName: '',
+            lastName: '',
+            email: '',
+            id: '',
+            createdAt: '',
+            updatedAt: ''
+        },
+        project: {
+            managerId: '',
+            title: '',
+            description: '',
+            dateStart: '',
+            dateEnd: '',
+            id: '',
+            createdAt: '',
+            updatedAt: ''
+        },
+        phase: {
+            projectId: '',
+            title: '',
+            description: '',
+            order: '',
+            tasks: '',
+            isDone: '',
+            id: '',
+            createdAt: '',
+            updatedAt: ''
+        },
+        sprint: {
+            projectId: '',
+            title: '',
+            description: '',
+            dateStart: '',
+            dateEnd: '',
+            id: '',
+            createdAt: '',
+            updatedAt: ''
+        },
+        story: {
+            projectId: '',
+            sprintId: '',
+            milestoneId: '',
+            typeId: '',
+            title: '',
+            description: '',
+            estimate: '',
+            priority: '',
+            vfCase: '',
+            isDone: '',
+            id: '',
+            createdAt: '',
+            updatedAt: ''
+        }
+    },
     model: {
         milestone: {
             projectId: '',
