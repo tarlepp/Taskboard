@@ -12,7 +12,8 @@
         </p>
     </div>
 
-    <div id="board" data-bind="if: $root.phases().length">
+
+    <div id="board" data-bind="if: $root.sprint()">
         <table class="table table-bordered">
             <thead>
                 <tr id="boardHeader">
@@ -32,7 +33,7 @@
                         "
                     >
                         <button data-bind="
-                            click: addNewStory.bind($data, $root.project().id(), $root.getSprintId())
+                            click: addNewStory.bind($data, $root.project().id, $root.getSprintId())
                         ">+</button>
                     </td>
 
@@ -49,7 +50,7 @@
                     <!-- /ko -->
                 </tr>
             </thead>
-            <tbody data-bind="foreach: $root.sortedStories">
+            <tbody data-bind="foreach: $root.sortedStories()">
 
                 <tr data-bind="attr: {'id': storyRowId()}">
                     <th>
@@ -102,27 +103,35 @@
                         ">+</button>
                     </td>
 
-                    <!-- ko foreach: sortedPhases -->
+                    <!-- ko foreach: $root.sortedPhases -->
                     <td class="myClass" data-bind="
                         attr: {
                             'data-phase-id': id(),
-                            'data-phase-title': title()
+                            'data-phase-title': title(),
+                            'data-story-id': $parent.id(),
+                            'data-story-title': $parent.title()
                         },
                         sortable: {
-                            template: taskTemplate,
-                            data: tasks,
-                            beforeMove: taskDraggableBeforeMoveCallback,
-                            afterMove: taskDraggableAfterMoveCallback,
+                            data: $root.getTasks(id(), $parent.id()),
+                            template: $root.getTaskTemplate(id(), $parent.id()),
+                            beforeMove: $root.taskDraggableBeforeMoveCallback,
+                            afterMove: $root.taskDraggableAfterMoveCallback,
                             connectClass: 'myClass',
                             options: {
                                 cursor: 'move',
-                                start: taskDraggableStartCallback
+                                start: $root.taskDraggableStartCallback
                             }
                         }
-                     ">
+                    ">
                     </td>
                     <!-- /ko -->
-
+                </tr>
+            </tbody>
+            <tbody data-bind="if: !$root.sortedStories().length > 0">
+                <tr>
+                    <td colspan="100%" class="text-center text-muted">
+                        <h4>No user stories in this sprint</h4>
+                    </td>
                 </tr>
             </tbody>
         </table>

@@ -3,6 +3,9 @@
  *
  * @author  Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
+var selectedProjectId;
+var selectedSprintId;
+
 var sails = {
     serverError: {
         status: '',

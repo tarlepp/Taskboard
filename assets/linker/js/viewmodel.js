@@ -6,172 +6,32 @@
  */
 ko.bindingHandlers.changeProject = {
     /**
-     * Init function for project change event.
+     * Init function for project change.
      *
-     * @param   {String}        element             Name of the current element
-     * @param                   valueAccessor
-     * @param                   allBindingsAccessor
-     * @param   {myViewModel}   viewModel
+     * @param   {String}    element             Name of the current element
+     * @param               valueAccessor
+     * @param               allBindingsAccessor
+     * @param   {ViewModel} viewModel
      */
     init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
         var elementProject = jQuery(element);
-        var elementSprint = jQuery('#selectSprint');
-
-        elementProject.selectpicker();
-        elementSprint.selectpicker();
 
         // Actual change event is triggered
         elementProject.change(function() {
-            initContainer.phases = false;
-
-            jQuery('body').trigger('initializeCheck');
-
             var projectId = parseInt(elementProject.val(), 10);
-
-            // Reset used data
-            viewModel.phases([]);
-            viewModel.stories([]);
-            viewModel.sprints([]);
-            viewModel.backlog([]);
-            viewModel.project(null);
-            viewModel.sprint(null);
 
             // Seems like a real project
             if (!isNaN(projectId)) {
-                // Iterate all projects
-                jQuery.each(viewModel.projects(), function(key, project) {
-                    // Current project is selected, add it to knockout bindings
-                    if (projectId == project.id()) {
-                        viewModel.project(project);
-                    }
-                });
-
-                if (viewModel.storeUrl() === true) {
-                    var url = window.location.href;
-
-                    if (url.indexOf("#") != -1) {
-                        url = url.substr(0, url.indexOf("#"));
-                    }
-
-                    if (url.charAt(url.length - 1) != '/') {
-                        url += '/';
-                    }
-
-                    if (url.indexOf("board/") == -1) {
-                        url += 'board/' + projectId +'/';
-                    } else {
-                        url = url.substr(0, url.indexOf("board/")) + 'board/' + projectId +'/';
-                    }
-
-                    history.pushState({}, '', url);
-                } else {
-                    viewModel.storeUrl(true);
-                }
-
-                viewModel.selectedProjectId(projectId);
-
-                createCookie('projectId', projectId, 30);
-
-                // TODO: this cannot work like this
-                var sprintId = readCookie('sprintId_' + projectId);
-
-                if (sprintId > 0) {
-                    viewModel.selectedSprintId(sprintId);
-                }
-
-                // Specify parameters to fetch backlog story data
-                var parameters = {
-                    projectId: projectId,
-                    sprintId: 0,
-                    sort: 'priority ASC'
-                };
-
-                // Fetch project backlog story JSON data
-                jQuery.getJSON("/story/", parameters)
-                    .done(function(/** models.rest.story[] */stories) {
-                        // Map fetched JSON data to story objects
-                        var storyObjects = ko.utils.arrayMap(stories, function(/** models.rest.story */story) {
-                            return new Story(story);
-                        });
-
-                        // Assign stories to backlog
-                        viewModel.backlog(storyObjects);
-                    })
-                    .fail(function(jqXhr, textStatus, error) {
-                        viewModel.backlog([]);
-
-                        handleAjaxError(jqXhr, textStatus, error);
-                    });
-
-                // Specify parameters to fetch project sprint data
-                parameters = {
-                    projectId: projectId,
-                    sort: 'dateStart ASC'
-                };
-
-                // Fetch project sprint data
-                jQuery.getJSON("/sprint/", parameters)
-                    .done(function(/** models.rest.sprint[] */sprints) {
-                        // Map fetched JSON data to sprint objects
-                        var mappedData = ko.utils.arrayMap(sprints, function(/** models.rest.sprint */sprint) {
-                            return new Sprint(sprint);
-                        });
-
-                        viewModel.sprints(mappedData);
-
-                        // Set project specified min/max sprint dates
-                        viewModel.updateProjectSprintDates();
-
-                        if (mappedData.length > 0) {
-                            elementSprint.find('option').each(function() {
-                                if (jQuery(this).val() == '') {
-                                    jQuery(this).text(elementSprint.data('textChooseSprint'));
-                                }
-                            });
-
-                            if (viewModel.selectedSprintId() > 0) {
-                                jQuery('#selectSprint').trigger('change');
-                            }
-                        } else {
-                            elementSprint.find('option').each(function() {
-                                if (jQuery(this).val() == '') {
-                                    jQuery(this).text(elementSprint.data('textNoData'));
-                                }
-                            });
-                        }
-                    })
-                    .fail(function(jqXhr, textStatus, error) {
-                        viewModel.sprints([]);
-
-                        handleAjaxError(jqXhr, textStatus, error);
-                    });
-
-                // Specify parameters to fetch project phase data
-                parameters = {
-                    projectId: projectId,
-                    sort: 'order ASC'
-                };
-
-                // Fetch project phase data
-                jQuery.getJSON("/phase/", parameters)
-                    .done(function(/** models.rest.phase[] */phases) {
-                        // Map fetched JSON data to sprint objects
-                        var mappedData = ko.utils.arrayMap(phases, function(/** models.rest.phase */phase) {
-                            return new Phase(phase);
-                        });
-
-                        viewModel.phases(mappedData);
-
-                        jQuery('body').trigger('initializeCheck', 'phases');
-                    })
-                    .fail(function(jqXhr, textStatus, error) {
-                        viewModel.phases([]);
-
-                        handleAjaxError(jqXhr, textStatus, error);
-                    });
+                viewModel.initProject(projectId);
             }
         });
     },
+    /**
+     * Update function for project change
+     *
+     * @param   {String}    element         Name of the current element
+     * @param               valueAccessor
+     */
     update:function (element, valueAccessor) {
         jQuery(element).find('option').each(function() {
             var option = jQuery(this);
@@ -180,7 +40,6 @@ ko.bindingHandlers.changeProject = {
                 option.addClass('select-dummy-option text-muted');
             }
         });
-
 
         jQuery(element).selectpicker('refresh');
     }
@@ -194,79 +53,31 @@ ko.bindingHandlers.changeProject = {
  */
 ko.bindingHandlers.changeSprint = {
     /**
-     * Init function for sprint change event.
+     * Init function for sprint change.
      *
-     * @param   {String}                    element             Name of the current element
-     * @param                               valueAccessor
-     * @param                               allBindingsAccessor
-     * @param   {models.knockout.viewModel} viewModel
+     * @param   {String}    element             Name of the current element
+     * @param               valueAccessor
+     * @param               allBindingsAccessor
+     * @param   {ViewModel} viewModel
      */
     init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
         var elementSprint = jQuery(element);
 
-        // Actual change event is triggered
         elementSprint.change(function() {
             var sprintId = parseInt(elementSprint.val(), 10);
 
-            // Reset used child data
-            viewModel.sprint(null);
-            viewModel.stories([]);
-
-            // NaN:s are not for us
             if (!isNaN(sprintId)) {
-                // Iterate current project sprints
-                jQuery.each(viewModel.sprints(), function(key, sprint) {
-                    // Founded selected sprint, associate it to knockout bindings
-                    if (sprintId == sprint.id()) {
-                        viewModel.sprint(sprint);
-                    }
-                });
-
-                // TODO: not always push url to history...
-
-                var url = window.location.href;
-
-                if (url.charAt(url.length - 1) != '/') {
-                    url += '/';
-                }
-
-                if (url.indexOf("sprint/") == -1) {
-                    url += 'sprint/' + sprintId +'/';
-                } else {
-                    url = url.substr(0, url.indexOf("sprint/")) + 'sprint/' + sprintId +'/';
-                }
-
-                history.pushState({}, '', url);
-
-                viewModel.selectedSprintId(sprintId);
-
-                createCookie('sprintId_' + viewModel.selectedProjectId(), sprintId, 30);
-
-                // Specify parameters to fetch project sprint story data
-                var parameters = {
-                    sprintId: sprintId,
-                    sort: 'priority ASC'
-                };
-
-                // Fetch sprint story data
-                jQuery.getJSON("/story/", parameters)
-                    .done(function(/** models.rest.story[] */stories) {
-                        // Map fetched JSON data to story objects
-                        var mappedData = ko.utils.arrayMap(stories, function(/** models.rest.story */story) {
-                            return new Story(story);
-                        });
-
-                        viewModel.stories(mappedData);
-                    })
-                    .fail(function(jqXhr, textStatus, error) {
-                        viewModel.stories([]);
-
-                        handleAjaxError(jqXhr, textStatus, error);
-                    });
+                viewModel.initSprint(sprintId);
             }
         });
     },
-    update:function (element, valueAccessor) {
+    /**
+     * Update function for sprint change
+     *
+     * @param   {String}    element         Name of the current element
+     * @param               valueAccessor
+     */
+    update: function (element, valueAccessor) {
         jQuery(element).find('option').each(function() {
             var option = jQuery(this);
 
@@ -274,7 +85,6 @@ ko.bindingHandlers.changeSprint = {
                 option.addClass('select-dummy-option text-muted');
             }
         });
-
 
         jQuery(element).selectpicker('refresh');
     }
@@ -398,87 +208,73 @@ ko.bindingHandlers.trunk8 = {
 };
 
 /**
- * Actual TaskBoard knockout view model object. This contains all
- * necessary data for application.
+ * Actual TaskBoard knockout view model object. This contains all necessary data for application.
  *
- * Note that this object is accessible via myViewModel variable in
- * all javascript code.
+ * Note that this object is accessible via myViewModel variable in all javascript code.
  *
  * @constructor
  */
 function ViewModel() {
     var self = this;
+    var body = jQuery('body');
 
     // Specify used observable data
-    self.projects   = ko.observableArray([]);
-    self.phases     = ko.observableArray([]);
+
+    // Generic observable data
     self.users      = ko.observableArray([]);
-    self.sprints    = ko.observableArray([]);
-    self.stories    = ko.observableArray([]);
     self.types      = ko.observableArray([]);
-    self.backlog    = ko.observableArray([]);
+
+    // Project related observable data
+    self.projects   = ko.observableArray([]);
+    self.phases     = ko.observableArray([]);   // This is updated when ever user changes project
+    self.sprints    = ko.observableArray([]);   // This is updated when ever user changes project
+    self.stories    = ko.observableArray([]);   // This is updated when ever user changes sprint
+    self.tasks      = ko.observableArray([]);   // This is updated when ever user changes sprint
+
+    // Selected project and sprint
     self.project    = ko.observable();
     self.sprint     = ko.observable();
 
+    // Selected id values
     self.selectedProjectId = ko.observable(selectedProjectId);
     self.selectedSprintId = ko.observable(selectedSprintId);
-    self.storeUrl = ko.observable(true);
 
-    // Fetch user data from server
-    jQuery.getJSON("/user")
-        .done(function(data) {
-            // Map fetched JSON data to user objects
-            var mappedData = ko.utils.arrayMap(data, function(/** models.rest.user */user) {
-                return new User(user);
-            });
-
-            self.users(mappedData);
-
-            jQuery('body').trigger('initializeCheck', 'users');
-        })
-        .fail(function(jqXhr, textStatus, error) {
-            handleAjaxError(jqXhr, textStatus, error);
+    // Fetch types
+    socket.get('/Type', function(types) {
+        var mappedTypes = ko.utils.arrayMap(types, function(/** sails.json.type */type) {
+            return new Type(type);
         });
 
-    // Fetch task type data from server
-    jQuery.getJSON("/type", {sort: 'order ASC'})
-        .done(function(data) {
-            // Map fetched JSON data to task type objects
-            var mappedData = ko.utils.arrayMap(data, function(/** models.rest.type */type) {
-                return new Type(type);
-            });
+        self.types(mappedTypes);
 
-            self.types(mappedData);
+        body.trigger('initializeCheck', 'types');
+    });
 
-            jQuery('body').trigger('initializeCheck', 'types');
-        })
-        .fail(function(jqXhr, textStatus, error) {
-            handleAjaxError(jqXhr, textStatus, error);
+    // Fetch users
+    socket.get('/User', function(users) {
+        var mappedUsers = ko.utils.arrayMap(users, function(/** sails.json.user */user) {
+            return new User(user);
         });
 
-    // Fetch project data from server
-    jQuery.getJSON("/project")
-        .done(function(data) {
-            // Map fetched JSON data to project objects
-            var mappedData = ko.utils.arrayMap(data, function(/** models.rest.project */project) {
-                return new Project(project);
-            });
+        self.users(mappedUsers);
 
-            self.projects(mappedData);
+        body.trigger('initializeCheck', 'users');
+    });
 
-            if (self.selectedProjectId() > 0) {
-                jQuery.each(myViewModel.projects(), function(key, project) {
-                    if (project.id() === self.selectedProjectId()) {
-                        jQuery('#selectProject').trigger('change');
-                    }
-                });
-            }
-
-            jQuery('body').trigger('initializeCheck', 'projects');
-        })
-        .fail(function(jqXhr, textStatus, error) {
-            handleAjaxError(jqXhr, textStatus, error);
+    // Fetch projects
+    socket.get('/Project', function(projects) {
+        var mappedProjects = ko.utils.arrayMap(projects, function(/** sails.json.project */project) {
+            return new Project(project);
         });
+
+        self.projects(mappedProjects);
+
+        body.trigger('initializeCheck', 'projects');
+
+        if (self.selectedProjectId() > 0) {
+            self.initProject(self.selectedProjectId());
+        }
+    });
 
     // Sorted project objects
     self.sortedProjects = ko.computed(function() {
@@ -509,6 +305,164 @@ function ViewModel() {
     });
 
     /**
+     * Project initialize method. This method is called when ever user changes project selection.
+     *
+     * @param   {Number}    projectId
+     */
+    self.initProject = function(projectId) {
+        // Reset project specified data
+        self.resetProject();
+
+        // Search project
+        var project = _.find(self.projects(), function(project) { return project.id() === projectId; });
+
+        // We have a real project
+        if (typeof project !== 'undefined') {
+            self.project(project);
+
+            // Fetch project phases
+            socket.get('/Phase', {projectId: projectId}, function(phases) {
+                var mappedPhases = ko.utils.arrayMap(phases, function(/** sails.json.phase */phase) {
+                    return new Phase(phase);
+                });
+
+                self.phases(mappedPhases);
+
+                body.trigger('initializeCheck', 'phases');
+            });
+
+            // Fetch project sprints
+            socket.get('/Sprint', {projectId: projectId}, function(sprints) {
+                var mappedSprints = ko.utils.arrayMap(sprints, function(/** sails.json.sprint */sprint) {
+                    return new Sprint(sprint);
+                });
+
+                self.sprints(mappedSprints);
+
+                // We have some sprint selected already
+                if (self.selectedSprintId() > 0) {
+                    self.initSprint(self.selectedSprintId());
+                }
+            });
+        }
+    };
+
+    /**
+     * Sprint initialize method. This method is called when ever user changes project selection.
+     *
+     * @param   {Number}    sprintId
+     */
+    self.initSprint = function(sprintId) {
+        // Reset sprint data
+        self.resetSprint();
+
+        // Search sprint
+        var sprint = _.find(self.sprints(), function(sprint) { return sprint.id() === sprintId; });
+
+        // We have a real sprint
+        if (typeof sprint !== 'undefined') {
+            self.sprint(sprint);
+
+            // Fetch project stories
+            socket.get('/Story', {sprintId: sprintId}, function(stories) {
+                var storyIds = [];
+
+                var mappedStories = ko.utils.arrayMap(stories, function(/** sails.json.story */story) {
+                    storyIds.push({storyId: story.id});
+
+                    return new Story(story);
+                });
+
+                self.stories(mappedStories);
+
+                body.trigger('initializeCheck', 'stories');
+
+                if (_.size(storyIds) > 0) {
+                    // Fetch stories task data
+                    socket.get('/Task', {where: {or: storyIds}}, function(tasks) {
+                        var mappedTasks = ko.utils.arrayMap(tasks, function(/** sails.json.task */task) {
+                            return new Task(task);
+                        });
+
+                        self.tasks(mappedTasks);
+                    });
+                }
+            });
+        }
+    };
+
+    /**
+     * Method to reset all projects related data.
+     *
+     * Note that method also calls sprint reset.
+     */
+    self.resetProject = function() {
+        // Reset project related data
+        self.phases([]);
+        self.sprints([]);
+        self.project(false);
+
+        self.resetSprint();
+    };
+
+    /**
+     * Method to reset all sprint related data.
+     */
+    self.resetSprint = function() {
+        // Reset sprint related data
+        self.stories([]);
+        self.tasks([]);
+        self.sprint(false);
+    };
+
+    /**
+     * Method returns used task template in board cell, used template is changed
+     * if cell contains more than five tasks.
+     *
+     * @param   {Number}    phaseId Phase id
+     * @param   {Number}    storyId Story id
+     *
+     * @returns {string}
+     */
+    self.getTaskTemplate = function(phaseId, storyId) {
+        return (_.size(self.getTasks(phaseId, storyId)) > 5) ? 'task-template-small' : 'task-template-normal';
+    };
+
+    /**
+     * Method returns tasks for asked story and phase.
+     *
+     * @param   {Number}    phaseId Phase id
+     * @param   {Number}    storyId Story id
+     *
+     * @returns {Array}
+     */
+    self.getTasks = function(phaseId, storyId) {
+        return _.filter(self.tasks(), function(task) {
+            return (task.storyId() == storyId && task.phaseId() == phaseId);
+        });
+    };
+
+    // TODO refactor these
+    self.taskDraggableStartCallback = function(event, ui) {
+        jQuery('.qtip.qtip-bootstrap').qtip('hide');
+    };
+
+    self.taskDraggableBeforeMoveCallback = function(arg, event, ui) {
+    };
+
+    self.taskDraggableAfterMoveCallback = function(arg, event, ui) {
+        var context = ko.contextFor(this);
+        var phase = ko.toJS(context.$data);
+
+        // Update task data
+        socket.put('/Task/' + arg.item.id(), {phaseId: phase.id}, function(response) {
+            var updatedTask = new Task(response);
+
+            self.tasks.replace(arg.item, updatedTask);
+        });
+    };
+
+    /**
      * Getter for current sprint ID.
      *
      * @returns {Number}
@@ -535,50 +489,49 @@ function ViewModel() {
     };
 
     /**
-     * Method removes specified task from knockout bindings.
+     * Method to process all socket messages. Basically this will update specified
+     * knockout bindings according to message type.
      *
-     * Note: this doesn't seem to be very sensible, but it works :D
+     * todo implement missing types and models
      *
-     * @param   {number}    taskId      Task ID
-     * @param   {number}    phaseId     Phase ID
-     * @param   {number}    storyId     Story ID
-     *
-     * @returns {void}
+     * @param   {String}    model   Name of the model
+     * @param   {String}    type    Message type
+     * @param   {Number}    id      Object data id
+     * @param   {{}}        data    Object data
      */
-    self.deleteTask = function(taskId, phaseId, storyId) {
-        // Iterate each story
-        jQuery.each(myViewModel.stories(), function(storyKey, story) {
-            if (ko.toJS(story.id()) === storyId) {
-                // Iterate each phase
-                jQuery.each(story.phases(), function(phaseKey, phase) {
-                    if (ko.toJS(phase.id()) === phaseId) {
-                        // Iterate phase tasks
-                        jQuery.each(phase.tasks(), function(taskKey, task) {
-                            if (ko.toJS(task.id()) === taskId) {
-                                phase.tasks.remove(task);
-                            }
-                        });
+    self.processSocketMessage = function(model, type, id, data) {
+        // Update event
+        if (type === 'update') {
+            // Switch model
+            switch (model) {
+                case 'task':
+                    var task = _.find(self.tasks(), function(task) { return task.id() === id; });
+
+                    if (typeof task != 'undefined') {
+                        self.tasks.replace(task, new Task(data));
                     }
-                });
+                    break;
             }
-        });
+        } else {
+            console.log("implement type " + type);
+        }
     };
 
     /**
-     * Method deletes specified phase from knockout model bindings.
-     *
-     * @param   {number}    phaseId Phase ID
-     *
-     * @returns {void}
+     * Method to trigger new project adding dialog.
      */
-    self.deletePhase = function(phaseId) {
-        jQuery.each(myViewModel.phases(), function(key, phase) {
-            if (phase.id() && ko.toJS(phase.id()) === phaseId) {
-                myViewModel.phases.remove(phase);
-            }
-        });
+    self.addNewProject = function() {
+        jQuery('body').trigger('projectAdd');
+    };
 
-        // TODO: delete phase from story phases
+    /**
+     * Method to trigger new story add dialog.
+     *
+     * @param   {Number}    projectId   Project ID
+     * @param   {Number}    sprintId    Sprint ID
+     */
+    self.addNewStory = function(projectId, sprintId) {
+        jQuery('body').trigger('storyAdd', [projectId, sprintId]);
     };
 
     /**
@@ -645,93 +598,6 @@ function ViewModel() {
      */
     self.milestoneList = function() {
         jQuery('body').trigger('milestoneList', myViewModel.project().id());
-    };
-
-    /**
-     * Method removes specified story from knockout bindings.
-     *
-     * @param   {number}    storyId Story ID
-     *
-     * @returns {void}
-     */
-    self.deleteStory = function(storyId) {
-        // Iterate each story
-        jQuery.each(myViewModel.stories(), function(storyKey, story) {
-            if (story && ko.toJS(story.id()) === storyId) {
-                myViewModel.stories.remove(story);
-            }
-        });
-    };
-
-    /**
-     * Method updates project sprint min / max dates according to current
-     * project sprint data.
-     */
-    self.updateProjectSprintDates = function() {
-        var valuesStart = [];
-        var valuesEnd = [];
-
-        // Map fetched JSON data to sprint objects
-        jQuery.each(self.sprints(), function(index, /** models.knockout.sprint */sprint) {
-            var dateStart = ko.toJS(sprint.dateStartObject());
-            var dateEnd = ko.toJS(sprint.dateEndObject());
-
-            valuesStart.push(dateStart.getTime());
-            valuesEnd.push(dateEnd.getTime());
-        });
-
-        // Set project specified min/max sprint dates
-        myViewModel.project().sprintDateMin(new Date(Math.max.apply(Math, valuesStart)));
-        myViewModel.project().sprintDateMax(new Date(Math.max.apply(Math, valuesEnd)));
-    };
-
-    /**
-     * Update task data after story splitting.
-     *
-     * Please exam if this can be done some other way...
-     *
-     * @param   {Array}     tasks
-     * @param   {Number}    storyIdOld
-     * @param   {Number}    storyIdNew
-     */
-    self.updateTasks = function(tasks, storyIdOld, storyIdNew) {
-        jQuery.each(self.stories(), function(index, /** models.knockout.story */story) {
-            if (ko.toJS(story.id()) === storyIdOld) {
-                // Iterate each phase
-                jQuery.each(story.phases(), function(phaseKey, phase) {
-                    jQuery.each(phase.tasks(), function(taskKey, task) {
-                        jQuery.each(tasks, function(newTaskKey, newTask) {
-                            if (ko.toJS(task.id()) === newTask.id) {
-                                phase.tasks.remove(task);
-                            }
-                        });
-                    });
-                });
-            }
-        });
-    };
-
-    /**
-     * Generic nl2br method
-     *
-     * @param   {string}    value
-     *
-     * @returns {string}
-     */
-    self.nl2br = function(value) {
-        return (value === null) ? '' : value.nl2br();
-    };
-
-    /**
-     * Method returns specified number of words from given value.
-     *
-     * @param   {string}    value
-     * @param   {number}    number
-     *
-     * @returns {string}
-     */
-    self.words = function(value, number) {
-        return value.split(/\s+/,number).join(" ");
     };
 }
 

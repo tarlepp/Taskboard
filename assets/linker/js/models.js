@@ -7,7 +7,7 @@
 /**
  * Object to present project.
  *
- * @param   {models.rest.project}    data
+ * @param   {sails.json.project}  data
  * @constructor
  */
 function Project(data) {
@@ -20,17 +20,6 @@ function Project(data) {
     self.description    = ko.observable(data.description);
     self.dateStart      = ko.observable(data.dateStart);
     self.dateEnd        = ko.observable(data.dateEnd);
-    self.manager        = ko.observable(null);
-    self.sprints        = ko.observableArray([]);
-    self.sprintDateMin  = ko.observable(null);
-    self.sprintDateMax  = ko.observable(null);
-
-    // Iterate users and set manager
-    jQuery.each(myViewModel.users(), function(index, user) {
-        if (self.managerId() === user.id()) {
-            self.manager(user);
-        }
-    });
 
     self.dateStartObject = ko.computed(function() {
         return new Date(self.dateStart());
@@ -43,20 +32,20 @@ function Project(data) {
     self.dateStartFormatted = ko.computed(function() {
         var date = new Date(self.dateStart());
 
-        return date.format('yyyy-mm-dd');
+        return date.format('isoDate');
     });
 
     self.dateEndFormatted = ko.computed(function() {
         var date = new Date(self.dateEnd());
 
-        return date.format('yyyy-mm-dd');
+        return date.format('isoDate');
     });
 }
 
 /**
  * Object to present project phases.
  *
- * @param   {models.rest.phase}    data
+ * @param   {sails.json.phase}    data
  * @constructor
  */
 function Phase(data) {
@@ -84,36 +73,10 @@ function Phase(data) {
     /**
      * Task count for current phase
      *
-     * @todo    Is there any other way to get task count for each phase?
+     * @return  {Number}
      */
     self.cntTask = ko.computed(function() {
-        var output = '';
-        var phaseId = self.id();
-
-        // We may have some stories
-        if (myViewModel.stories()) {
-            // Oh, yes we have stories
-            if (myViewModel.stories().length > 0) {
-                output = 0;
-
-                // Iterate each story
-                jQuery.each(myViewModel.stories(), function(storyKey, story) {
-                    // Iterate each phase
-                    jQuery.each(story.phases(), function(phaseKey, phase) {
-                        /**
-                         * Why phase.id() doesn't work?
-                         *
-                         * Workaround is to use ko.toJS, but this is not the *proper* way to do this.
-                         */
-                        if (ko.toJS(phase.id()) === phaseId) {
-                            output += phase.tasks().length;
-                        }
-                    });
-                });
-            }
-        }
-
-        return output;
+        return _.size(_.filter(myViewModel.tasks(), function(task) { return task.phaseId() === self.id(); }));
     });
 
     /**
@@ -160,7 +123,7 @@ function Phase(data) {
 /**
  * Object to present sprint.
  *
- * @param   {models.rest.sprint}    data
+ * @param   {sails.json.sprint}     data
  * @constructor
  */
 function Sprint(data) {
@@ -172,7 +135,6 @@ function Sprint(data) {
     self.description    = ko.observable(data.description);
     self.dateStart      = ko.observable(data.dateStart);
     self.dateEnd        = ko.observable(data.dateEnd);
-    self.stories        = ko.observableArray([]);
 
     self.dateStartObject = ko.computed(function() {
         return new Date(self.dateStart());
@@ -200,7 +162,7 @@ function Sprint(data) {
 /**
  * Object to present story.
  *
- * @param   {models.rest.story}    data
+ * @param   {sails.json.story}    data
  * @constructor
  */
 function Story(data) {
@@ -215,43 +177,6 @@ function Story(data) {
     self.estimate       = ko.observable(data.estimate);
     self.priority       = ko.observable(data.priority);
     self.vfCase         = ko.observable(data.vfCase);
-    self.phases         = ko.observableArray([]);
-
-    // Specify parameters to fetch task data
-    var parameters = {
-        storyId: self.id()
-    };
-
-    // Fetch story task JSON data
-    jQuery.getJSON("/task/", parameters, function(/** models.rest.task[] */tasks) {
-        // Map fetched JSON data to task objects
-        var tasksObjects = ko.utils.arrayMap(tasks, function(/** models.rest.task */task) {
-            return new Task(task);
-        });
-
-        var phases = ko.utils.arrayMap(myViewModel.phases(), function(phase) {
-            var phaseTasks = [];
-
-            ko.utils.arrayForEach(tasksObjects, function(task) {
-                var taskPhaseId = parseInt(task.phaseId(), 10);
-
-                if (phase.id() === taskPhaseId) {
-                    phaseTasks.push(task);
-                }
-            });
-
-            return new PhaseStory(phase, phaseTasks);
-        });
-
-        self.phases(phases);
-    });
-
-    // Sorted phases
-    self.sortedPhases = ko.computed(function() {
-        return self.phases().sort(function(a, b) {
-            return a.order() > b.order() ? 1 : -1;
-        });
-    });
 
     // Formatted story title
     self.formattedTitle = ko.computed(function() {
@@ -297,58 +222,9 @@ function Story(data) {
 }
 
 /**
- * Object to present story phase.
- *
- * @param   {models.rest.phase|models.rest.phaseStory}  phase   Phase data
- * @param   {models.knockout.task[]}                    tasks   Task data for current phase
- * @constructor
- */
-function PhaseStory(phase, tasks) {
-    var self = this;
-
-    // Initialize object data
-    self.id             = ko.observable(phase.id);
-    self.title          = ko.observable(phase.title);
-    self.description    = ko.observable(phase.description);
-    self.order          = ko.observable(phase.order);
-    self.tasks          = ko.observableArray(tasks);
-
-    self.taskTemplate = function() {
-        return self.tasks().length > 5 ? 'task-template-small' : 'task-template-normal';
-    };
-
-    self.taskDraggableStartCallback = function(event, ui) {
-        jQuery('.qtip.qtip-bootstrap').qtip('hide');
-    };
-
-    self.taskDraggableBeforeMoveCallback = function(arg, event, ui) {
-    };
-
-    self.taskDraggableAfterMoveCallback = function(arg, event, ui) {
-        var context = ko.contextFor(this);
-        var phase = ko.toJS(context.$data);
-
-        jQuery.ajax({
-            type: 'PUT',
-            url: "/task/" + arg.item.id(),
-            data: {
-                phaseId: phase.id
-            },
-            dataType: 'json'
-        })
-        .done(function (task) {
-            // Todo: update task model data
-        })
-        .fail(function (jqXhr, textStatus, error) {
-            handleAjaxError(jqXhr, textStatus, error);
-        });
-    };
-}
-
-/**
  * Object to present task.
  *
- * @param   {models.rest.task}  data
+ * @param   {sails.json.task}  data
  * @constructor
  */
 function Task(data) {
@@ -362,19 +238,6 @@ function Task(data) {
     self.typeId         = ko.observable(data.typeId);
     self.title          = ko.observable(data.title);
     self.description    = ko.observable(data.description);
-    self.user           = ko.observable(null);
-
-    // Iterate users and set manager
-    jQuery.each(myViewModel.users(), function(index, user) {
-        if (self.userId() === user.id()) {
-            self.user(user);
-        }
-    });
-
-    // Fix tasks that have not yet phase id defined
-    if (self.phaseId() === null || self.phaseId() === 0) {
-        self.phaseId(myViewModel.phases()[0].id());
-    }
 
     // Task class determination, basically task type
     self.taskClass = ko.computed(function() {
@@ -402,7 +265,7 @@ function Task(data) {
 /**
  * Object to present user.
  *
- * @param   {models.rest.user}    data
+ * @param   {sails.json.user}    data
  * @constructor
  */
 function User(data) {
@@ -410,21 +273,21 @@ function User(data) {
 
     // Initialize object data
     self.id         = ko.observable(data.id);
-    self.name       = ko.observable(data.name);
-    self.firstname  = ko.observable(data.firstname);
-    self.surname    = ko.observable(data.surname);
+    self.username   = ko.observable(data.username);
+    self.firstName  = ko.observable(data.firstName);
+    self.lastName   = ko.observable(data.lastName);
     self.email      = ko.observable(data.email);
 
     // Make formatted fullname
-    self.fullname = ko.computed(function() {
-        return self.firstname() + " " + self.surname();
+    self.fullName = ko.computed(function() {
+        return self.firstName() + " " + self.lastName();
     });
 }
 
 /**
  * Object to present task type.
  *
- * @param   {models.rest.type}    data
+ * @param   {sails.json.type}    data
  * @constructor
  */
 function Type(data) {

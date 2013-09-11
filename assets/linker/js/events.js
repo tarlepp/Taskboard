@@ -12,34 +12,6 @@ var initNavigation = {
     projects: false
 };
 
-// Back / forward button pressed, this needs works
-window.onpopstate = function(event) {
-    var url = window.location.href;
-    var matches;
-
-    event.preventDefault();
-
-    var projectId = 0;
-    var sprintId = 0;
-
-    matches = url.match('/board/([0-9])?/sprint/([0-9])?/');
-
-    if (matches !== null && matches[1] && matches[2]) {
-        projectId = matches[1];
-        sprintId = matches[2];
-    } else {
-        matches = (url.match('/board/([0-9])?/'));
-
-        if (matches !== null && matches[1]) {
-            projectId = matches[1];
-        }
-    }
-
-    myViewModel.selectedProjectId(projectId);
-    myViewModel.selectedSprintId(sprintId);
-    myViewModel.storeUrl(false);
-};
-
 jQuery(document).ready(function() {
     var body = jQuery('body');
 
