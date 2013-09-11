@@ -19,6 +19,14 @@ var sails = {
         }
     },
     json: {
+        history: {
+            objectId: '',
+            objectName: '',
+            objectData: '',
+            id: '',
+            createdAt: '',
+            updatedAt: ''
+        },
         type: {
             title: '',
             order: '',
@@ -77,6 +85,18 @@ var sails = {
             estimate: '',
             priority: '',
             vfCase: '',
+            isDone: '',
+            id: '',
+            createdAt: '',
+            updatedAt: ''
+        },
+        task: {
+            storyId: '',
+            userId: '',
+            phaseId: '',
+            typeId: '',
+            title: '',
+            description: '',
             isDone: '',
             id: '',
             createdAt: '',
