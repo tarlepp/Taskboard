@@ -500,20 +500,37 @@ function ViewModel() {
      * @param   {{}}        data    Object data
      */
     self.processSocketMessage = function(model, type, id, data) {
-        // Update event
-        if (type === 'update') {
-            // Switch model
-            switch (model) {
-                case 'task':
-                    var task = _.find(self.tasks(), function(task) { return task.id() === id; });
+        switch (type) {
+            // Update events
+            case 'update':
+                switch (model) {
+                    case 'project':
+                        var project = _.find(self.projects(), function(project) { return project.id() === id; });
 
-                    if (typeof task != 'undefined') {
-                        self.tasks.replace(task, new Task(data));
-                    }
-                    break;
-            }
-        } else {
-            console.log("implement type " + type);
+                        if (typeof project != 'undefined') {
+                            self.projects.replace(project, new Project(data));
+                        }
+                        break;
+                    case 'task':
+                        var task = _.find(self.tasks(), function(task) { return task.id() === id; });
+
+                        if (typeof task != 'undefined') {
+                            self.tasks.replace(task, new Task(data));
+                        }
+                        break;
+                }
+                break;
+            // Create events
+            case 'create':
+                switch (model) {
+                    case 'project':
+                        self.projects.push(new Project(data));
+                        break;
+                }
+                break;
+            default:
+                console.log("implement type " + type);
+                break;
         }
     };
 

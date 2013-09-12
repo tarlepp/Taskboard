@@ -105,25 +105,16 @@ jQuery(document).ready(function() {
 
                     // Validate form and try to create new project
                     if (validateForm(formItems, modal)) {
-                        // Make POST query to server
-                        jQuery.ajax({
-                            type: 'POST',
-                            url: "/project/",
-                            data: formItems,
-                            dataType: 'json'
-                        })
-                        .done(function(/** models.rest.project */project) {
-                            // Add new project to knockout data
-                            myViewModel.projects.push(new Project(project));
+                        // Create new project
+                        socket.post('/Project', formItems, function(/** sails.json.project */data) {
+                            if (handleSocketError(project)) {
+                                makeMessage('Project created successfully.', 'success', {});
 
-                            makeMessage('Project created successfully.', 'success', {});
+                                modal.modal('hide');
 
-                            modal.modal('hide');
-
-                            // TODO should this new project to be selected automatically?
-                        })
-                        .fail(function(jqXhr, textStatus, error) {
-                            handleAjaxError(jqXhr, textStatus, error);
+                                // Update client bindings
+                                myViewModel.projects.push(new Project(data));
+                            }
                         });
                     }
 
@@ -163,30 +154,20 @@ jQuery(document).ready(function() {
 
                         // Validate form and try to update project data
                         if (validateForm(formItems, modal)) {
-                            jQuery.ajax({
-                                type: 'PUT',
-                                url: "/project/" + ko.toJS(myViewModel.project().id()),
-                                data: formItems,
-                                dataType: 'json'
-                            })
-                            .done(function(/** models.rest.project */projectData) {
-                                var updatedProject = new Project(projectData);
+                            // Update project data
+                            socket.put('/Project/'  + ko.toJS(myViewModel.project().id()), formItems, function(/** sails.json.project */data) {
+                                if (handleSocketError(data)) {
+                                    makeMessage('Project updated successfully.', 'success', {});
 
-                                // Iterate current knockout model projects
-                                jQuery.each(myViewModel.projects(), function(index, project) {
-                                    if (project.id() === myViewModel.project().id()) {
-                                        // Replace old project model with new one
-                                        myViewModel.projects.replace(project, updatedProject);
-                                        myViewModel.project(updatedProject);
+                                    modal.modal('hide');
+
+                                    // Update client bindings
+                                    var project = _.find(myViewModel.projects(), function(project) { return project.id() === data.id; });
+
+                                    if (typeof project != 'undefined') {
+                                        myViewModel.projects.replace(project, new Project(data));
                                     }
-                                });
-
-                                makeMessage('Project updated successfully.', 'success', {});
-
-                                modal.modal('hide');
-                            })
-                            .fail(function(jqXhr, textStatus, error) {
-                                handleAjaxError(jqXhr, textStatus, error);
+                                }
                             });
                         }
 
