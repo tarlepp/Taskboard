@@ -107,7 +107,7 @@ jQuery(document).ready(function() {
                     if (validateForm(formItems, modal)) {
                         // Create new project
                         socket.post('/Project', formItems, function(/** sails.json.project */data) {
-                            if (handleSocketError(project)) {
+                            if (handleSocketError(data)) {
                                 makeMessage('Project created successfully.', 'success', {});
 
                                 modal.modal('hide');
@@ -446,31 +446,20 @@ jQuery(document).ready(function() {
 
                         // Validate form and try to create new sprint
                         if (validateForm(formItems, modal)) {
-                            // Make POST query to server
-                            jQuery.ajax({
-                                type: 'POST',
-                                url: "/sprint/",
-                                data: formItems,
-                                dataType: 'json'
-                            })
-                            .done(function(/** models.rest.sprint */sprint) {
-                                makeMessage('New sprint added to project successfully.', 'success', {});
+                            // Create new sprint
+                            socket.post('/Sprint', formItems, function(/** sails.json.sprint */data) {
+                                if (handleSocketError(data)) {
+                                    makeMessage('New sprint added to project successfully.', 'success', {});
 
-                                // Add inserted sprint to knockout model data
-                                myViewModel.sprints.push(new Sprint(sprint));
+                                    modal.modal('hide');
 
-                                // Update current project sprint dates
-                                myViewModel.updateProjectSprintDates();
+                                    // Update client bindings
+                                    myViewModel.sprints.push(new Sprint(data));
 
-                                // Remove modal
-                                modal.modal('hide');
-
-                                if (trigger) {
-                                    body.trigger(trigger)
+                                    if (trigger) {
+                                        body.trigger(trigger)
+                                    }
                                 }
-                            })
-                            .fail(function(jqXhr, textStatus, error) {
-                                handleAjaxError(jqXhr, textStatus, error);
                             });
                         }
 
@@ -518,40 +507,26 @@ jQuery(document).ready(function() {
 
                         // Validate form and try to create new sprint
                         if (validateForm(formItems, modal)) {
-                            // Make POST query to server
-                            jQuery.ajax({
-                                type: 'PUT',
-                                url: "/sprint/" + sprintId,
-                                data: formItems,
-                                dataType: 'json'
-                            })
-                            .done(function(/** models.rest.sprint */sprint) {
-                                makeMessage('Sprint saved successfully.', 'success', {});
+                            // Update sprint data
+                            socket.put('/Sprint/' + sprintId, formItems, function(/** sails.json.sprint */data) {
+                                if (handleSocketError(data)) {
+                                    makeMessage('Sprint saved successfully.', 'success', {});
 
-                                var sprintObject = new Sprint(sprint);
+                                    modal.modal('hide');
 
-                                // Update knockout sprint data array
-                                jQuery.each(myViewModel.sprints(), function(key, sprint){
-                                    if (sprint.id() === sprintId) {
-                                        myViewModel.sprints.replace(sprint, sprintObject);
+                                    // Update client bindings
+                                    var sprint = _.find(myViewModel.sprints(), function(sprint) {
+                                        return sprint.id() === data.id;
+                                    });
+
+                                    if (typeof sprint !== 'undefined') {
+                                        myViewModel.sprints.replace(sprint, new Sprint(data));
                                     }
-                                });
 
-                                // Update currently selected sprint
-                                myViewModel.sprint(sprintObject);
-
-                                // Update current project sprint dates
-                                myViewModel.updateProjectSprintDates();
-
-                                // Remove modal
-                                modal.modal('hide');
-
-                                if (trigger) {
-                                    body.trigger(trigger)
+                                    if (trigger) {
+                                        body.trigger(trigger)
+                                    }
                                 }
-                            })
-                            .fail(function(jqXhr, textStatus, error) {
-                                handleAjaxError(jqXhr, textStatus, error);
                             });
                         }
 
@@ -587,7 +562,7 @@ jQuery(document).ready(function() {
         trigger = (trigger && trigger.event) ? trigger : false;
 
         bootbox.confirm({
-            title: 'Are you sure? Really?',
+            title: 'danger - danger - danger',
             message: 'Are you sure of sprint delete? Existing user stories in this sprint are moved to project backlog.',
             buttons: {
                 'cancel': {
@@ -600,35 +575,29 @@ jQuery(document).ready(function() {
             },
             callback: function(result) {
                 if (result) {
-                    jQuery.ajax({
-                        type: "DELETE",
-                        url: "/sprint/" + sprintId,
-                        dataType: 'json'
-                    })
-                        .done(function() {
+                    // Delete sprint data
+                    socket.delete('/Sprint/' + sprintId, function(data) {
+                        if (handleSocketError(data)) {
                             makeMessage("Sprint deleted successfully.", "success", {});
 
-                            // Remove sprint from current sprint list
-                            jQuery.each(myViewModel.sprints(), function(key, sprint) {
-                                if (sprint.id() === sprintId) {
-                                    myViewModel.sprints.remove(sprint);
-                                }
+                            var sprint = _.find(myViewModel.sprints(), function(sprint) {
+                                return sprint.id() === data.id;
                             });
 
-                            // If sprint is currently select, remove it and sprint stories
-                            if (myViewModel.sprint().id() === sprintId) {
-                                // Reset used child data
-                                myViewModel.sprint(null);
-                                myViewModel.stories([]);
+                            if (typeof sprint !== 'undefined') {
+                                myViewModel.sprints.remove(sprint);
+                            }
+
+                            // If sprint is currently selected => reset sprint data
+                            if (myViewModel.sprint().id() === data.id) {
+                                myViewModel.resetSprint();
                             }
 
                             if (trigger) {
                                 body.trigger(trigger.event, trigger.parameters)
                             }
-                        })
-                        .fail(function(jqXhr, textStatus, error) {
-                            handleAjaxError(jqXhr, textStatus, error);
-                        });
+                        }
+                    });
                 } else {
                     if (trigger) {
                         body.trigger(trigger.event, trigger.parameters)
