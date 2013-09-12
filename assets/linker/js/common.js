@@ -80,7 +80,7 @@ function initTooltips(context) {
 /**
  * Method parses sails.js error object to human readable format.
  *
- * @param   {sails.serverError}    errorObject
+ * @param   {sails.error.generic}   errorObject
  *
  * @returns {string}
  */
@@ -88,18 +88,34 @@ function parseSailsError(errorObject) {
     var message = "";
 
     try {
-        var object = JSON5.parse(errorObject.message);
+        /**
+         * Parse sails error message to real JSON object.
+         *
+         * todo: remove replace when sails.js is fixed https://github.com/balderdashy/sails/issues/826
+         *
+         * @type {sails.error.validation}
+         */
+        var object = JSON5.parse(errorObject.message.replace("[ [Object] ]", "[]"));
 
-        jQuery.each(object, function(column, errors) {
-            var rules = [];
+        if (object.ValidationError) {
+            var columns = [];
 
-            jQuery.each(errors, function(i, error) {
-                rules.push(error.rule);
+            jQuery.each(object.ValidationError, function(column, errors) {
+                if (_.size(errors) > 0) {
+                    var rules = [];
+
+                    jQuery.each(errors, function(i, error) {
+                        rules.push(error.rule);
+                    });
+
+                    columns.push("\n" + column + ": " + rules.join(", "));
+                } else {
+                    columns.push(column);
+                }
+
+                message += "Validation errors with column: " + columns.join(", ");
             });
-
-            message += "\n" + column + ": " + rules.join(", ");
-        });
-
+        }
     } catch (exception) {
         message = errorObject;
     }
@@ -506,6 +522,31 @@ function handleEventTrigger(trigger) {
         } else {
             jQuery('body').trigger(trigger);
         }
+    }
+}
+
+/**
+ *
+ * @param   {sails.error.socket}    error
+ * @param   {Boolean}               showMessage
+ */
+function handleSocketError(error, showMessage) {
+    showMessage = showMessage || true;
+
+    if (error.errors && error.status) {
+        if (showMessage) {
+            var message = '';
+
+            _.each(error.errors, function(error) {
+                message += parseSailsError(error);
+            });
+
+            makeMessage(message, 'error', {});
+        }
+
+        return false;
+    } else {
+        return true;
     }
 }
 
