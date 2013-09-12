@@ -7,9 +7,18 @@ var selectedProjectId;
 var selectedSprintId;
 
 var sails = {
-    serverError: {
-        status: '',
-        message: ''
+    error: {
+        socket: {
+            status: '',
+            errors: ''
+        },
+        generic: {
+            message: '',
+            stack: ''
+        },
+        validation: {
+            ValidationError: []
+        }
     },
     helper: {
         history: {
