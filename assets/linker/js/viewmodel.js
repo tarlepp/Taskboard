@@ -559,6 +559,9 @@ function ViewModel() {
                     case 'story':
                         self.stories.push(new Story(data));
                         break;
+                    case 'task':
+                        self.tasks.push(new Task(data));
+                        break;
                     default:
                         console.log("implement create for " + model);
                         break;
@@ -586,6 +589,13 @@ function ViewModel() {
 
                         if (typeof story !== 'undefined') {
                             self.stories.remove(story);
+                        }
+                        break;
+                    case 'task':
+                        var task = _.find(self.tasks(), function(task) { return task.id() === id; });
+
+                        if (typeof task !== 'undefined') {
+                            self.tasks.remove(task);
                         }
                         break;
                     default:
@@ -683,6 +693,10 @@ function ViewModel() {
     };
 }
 
+/**
+ *
+ * @type {ViewModel}
+ */
 var myViewModel = new ViewModel();
 
 ko.applyBindings(myViewModel);

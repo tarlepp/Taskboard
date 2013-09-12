@@ -990,22 +990,16 @@ jQuery(document).ready(function() {
 
                         // Validate current form items and try to create new task
                         if (validateForm(formItems, modal)) {
-                            jQuery.ajax({
-                                type: 'POST',
-                                url: "/task/",
-                                data: formItems,
-                                dataType: 'json'
-                            })
-                            .done(function(/** models.rest.task */task) {
-                                makeMessage("Task created successfully.", "success", {});
+                            // Create new task
+                            socket.post('/Task', formItems, function(/** sails.json.task */data) {
+                                if (handleSocketError(data)) {
+                                    makeMessage('Task created successfully.', 'success', {});
 
-                                // Add new task to current story first phase tasks
-                                story.phases()[0].tasks.push(new Task(task));
+                                    modal.modal('hide');
 
-                                modal.modal('hide');
-                            })
-                            .fail(function(jqXhr, textStatus, error) {
-                                handleAjaxError(jqXhr, textStatus, error);
+                                    // Update client bindings
+                                    myViewModel.tasks.push(new Task(data));
+                                }
                             });
                         }
 
@@ -1047,38 +1041,22 @@ jQuery(document).ready(function() {
 
                         // Validate current form items and try to update task data
                         if (validateForm(formItems, modal)) {
-                            jQuery.ajax({
-                                type: "PUT",
-                                url: "/task/" + task.id(),
-                                data: formItems,
-                                dataType: 'json'
-                            })
-                            .done(function(/** models.rest.task */task) {
-                                makeMessage("Task updated successfully.", "success", {});
+                            // Update task data
+                            socket.put('/Task/'  + task.id(), formItems, function(/** sails.json.task */data) {
+                                if (handleSocketError(data)) {
+                                    makeMessage("Task updated successfully.", "success", {});
 
-                                var taskObject = new Task(task);
+                                    modal.modal('hide');
 
-                                // Update knockout model data
-                                jQuery.each(myViewModel.stories(), function(storyKey, /** models.knockout.story */story) {
-                                    if (ko.toJS(story.id()) === taskObject.storyId()) {
-                                        // Iterate each phase
-                                        jQuery.each(story.phases(), function(phaseKey, /** models.knockout.phase */phase) {
-                                            if (ko.toJS(phase.id()) === taskObject.phaseId()) {
-                                                // Iterate phase tasks
-                                                jQuery.each(phase.tasks(), function(taskKey, /** models.knockout.task */task) {
-                                                    if (ko.toJS(task.id()) === taskObject.id()) {
-                                                        phase.tasks.replace(task, taskObject);
-                                                    }
-                                                });
-                                            }
-                                        });
+                                    // Update client bindings
+                                    var task = _.find(myViewModel.tasks(), function(task) {
+                                        return task.id() === data.id;
+                                    });
+
+                                    if (typeof task !== 'undefined') {
+                                        myViewModel.tasks.replace(task, new Task(data));
                                     }
-                                });
-
-                                modal.modal('hide');
-                            })
-                            .fail(function(jqXhr, textStatus, error) {
-                                handleAjaxError(jqXhr, textStatus, error);
+                                }
                             });
                         }
 
@@ -1103,19 +1081,20 @@ jQuery(document).ready(function() {
                             },
                             callback: function(result) {
                                 if (result) {
-                                    jQuery.ajax({
-                                        type: "DELETE",
-                                        url: "/task/" + task.id(),
-                                        dataType: 'json'
-                                    })
-                                        .done(function() {
+                                    // Delete task data
+                                    socket.delete('/Task/' + task.id(), function(data) {
+                                        if (handleSocketError(data)) {
                                             makeMessage("Task deleted successfully.", "success", {});
 
-                                            myViewModel.deleteTask(task.id(), task.phaseId(), task.storyId());
-                                        })
-                                        .fail(function(jqXhr, textStatus, error) {
-                                            handleAjaxError(jqXhr, textStatus, error);
-                                        });
+                                            var task = _.find(myViewModel.tasks(), function(task) {
+                                                return task.id() === data.id;
+                                            });
+
+                                            if (typeof task !== 'undefined') {
+                                                myViewModel.tasks.remove(task);
+                                            }
+                                        }
+                                    });
                                 } else {
                                     body.trigger('taskEdit', [task]);
                                 }
