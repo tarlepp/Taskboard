@@ -155,19 +155,24 @@ jQuery(document).ready(function() {
                         // Validate form and try to update project data
                         if (validateForm(formItems, modal)) {
                             // Update project data
-                            socket.put('/Project/'  + ko.toJS(myViewModel.project().id()), formItems, function(/** sails.json.project */data) {
-                                if (handleSocketError(data)) {
-                                    makeMessage('Project updated successfully.', 'success', {});
+                            socket.put(
+                                '/Project/'  + ko.toJS(myViewModel.project().id()),
+                                formItems,
+                                function(/** sails.json.project */data) {
+                                    if (handleSocketError(data)) {
+                                        makeMessage('Project updated successfully.', 'success', {});
 
-                                    modal.modal('hide');
+                                        modal.modal('hide');
 
-                                    // Update client bindings
-                                    var project = _.find(myViewModel.projects(), function(project) { return project.id() === data.id; });
+                                        // Update client bindings
+                                        var project = _.find(myViewModel.projects(), function(project) {
+                                            return project.id() === data.id;
+                                        });
 
-                                    if (typeof project != 'undefined') {
-                                        myViewModel.projects.replace(project, new Project(data));
+                                        if (typeof project !== 'undefined') {
+                                            myViewModel.projects.replace(project, new Project(data));
+                                        }
                                     }
-                                }
                             });
                         }
 
@@ -284,6 +289,7 @@ jQuery(document).ready(function() {
                     callback: function() {
                         var errors = false;
                         var lines = jQuery("#projectPhases", modal).find("tbody tr");
+                        var phases = [];
 
                         lines.each(function(key) {
                             var row = jQuery(this);
@@ -301,9 +307,6 @@ jQuery(document).ready(function() {
                             } else {
                                 row.removeClass('has-error');
 
-                                var type = '';
-                                var url = '';
-
                                 var phaseData = {
                                     title: title,
                                     order: key,
@@ -313,63 +316,61 @@ jQuery(document).ready(function() {
                                 };
 
                                 if (isNaN(phaseId)) {
-                                    type = 'POST';
-                                    url = ''
+                                    socket.post('/Phase', phaseData, function(/** sails.json.phase */data) {
+                                        if (handleSocketError(data)) {
+                                            // Update client bindings
+                                            myViewModel.phases.push(new Phase(data));
+
+                                            phases.push(true);
+
+                                            checkData();
+                                        } else {
+                                            errors = true;
+                                        }
+                                    });
                                 } else {
-                                    type = 'PUT';
-                                    url = phaseId;
+                                    // Update project data
+                                    socket.put('/Phase/'  + phaseId, phaseData, function(/** sails.json.phase */data) {
+                                        if (handleSocketError(data)) {
+                                            // Update client bindings
+                                            var phase = _.find(myViewModel.phases(), function(phase) {
+                                                return phase.id() === data.id;
+                                            });
+
+                                            if (typeof phase !== 'undefined') {
+                                                myViewModel.phases.replace(phase, new Phase(data));
+                                            }
+
+                                            phases.push(true);
+
+                                            checkData();
+                                        } else {
+                                            errors = true;
+                                        }
+                                    });
                                 }
-
-                                jQuery.ajax({
-                                    type: type,
-                                    url: "/phase/" + url,
-                                    data: phaseData,
-                                    dataType: 'json'
-                                })
-                                .done(function(/** models.rest.phase */phase) {
-                                    var phaseObject = new Phase(phase);
-                                    var phaseStoryObject = new PhaseStory(phase, []);
-
-                                    switch (type) {
-                                        case 'POST':
-                                            myViewModel.phases.push(phaseObject);
-
-                                            jQuery.each(myViewModel.stories(), function(key, story) {
-                                                story.phases.push(phaseStoryObject);
-                                            });
-                                            break;
-                                        case 'PUT':
-                                            jQuery.each(myViewModel.phases(), function(key, phase) {
-                                                if (ko.toJS(phase.id()) === phaseObject.id()) {
-                                                    // Replace old phase model with new one
-                                                    myViewModel.phases.replace(phase, phaseObject);
-                                                }
-                                            });
-
-                                            // In this we need just to update order information
-                                            jQuery.each(myViewModel.stories(), function(key, story) {
-                                                jQuery.each(story.phases(), function(phaseKey, phase) {
-                                                    if (ko.toJS(phase.id()) === phaseObject.id()) {
-                                                        phase.order(phaseObject.order());
-                                                        phase.title(phaseObject.title());
-                                                        phase.description(phaseObject.description());
-                                                    }
-                                                });
-                                            });
-                                            break;
-                                    }
-                                })
-                                .fail(function(jqXhr, textStatus, error) {
-                                    errors = true;
-
-                                    handleAjaxError(jqXhr, textStatus, error);
-                                });
                             }
                         });
 
-                        // All went just like in strömsö
-                        if (errors === false) {
-                            makeMessage('Project phases saved successfully.', 'success', {});
+                        function checkData() {
+                            var ready = true;
+
+                            if (lines.length === phases.length) {
+                                jQuery.each(phases, function(key, value) {
+                                    if (value !== true) {
+                                        ready = false;
+                                    }
+                                });
+                            } else {
+                                ready = false;
+                            }
+
+                            if (ready && errors === false) {
+                                makeMessage('Project phases saved successfully.', 'success', {});
+
+                                modal.modal('hide');
+                                body.trigger('phasesEdit');
+                            }
                         }
 
                         return false;

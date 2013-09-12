@@ -511,12 +511,22 @@ function ViewModel() {
                             self.projects.replace(project, new Project(data));
                         }
                         break;
+                    case 'phase':
+                        var phase = _.find(self.phases(), function(phase) { return phase.id() === id; });
+
+                        if (typeof phase !== 'undefined') {
+                            self.phases.replace(phase, new Phase(data));
+                        }
+                        break;
                     case 'task':
                         var task = _.find(self.tasks(), function(task) { return task.id() === id; });
 
                         if (typeof task != 'undefined') {
                             self.tasks.replace(task, new Task(data));
                         }
+                        break;
+                    default:
+                        console.log("implement update for " + model);
                         break;
                 }
                 break;
@@ -525,6 +535,27 @@ function ViewModel() {
                 switch (model) {
                     case 'project':
                         self.projects.push(new Project(data));
+                        break;
+                    case 'phase':
+                        self.phases.push(new Phase(data));
+                        break;
+                    default:
+                        console.log("implement create for " + model);
+                        break;
+                }
+                break;
+            // Destroy events
+            case 'destroy':
+                switch (model) {
+                    case 'phase':
+                        var phase = _.find(self.phases(), function(phase) { return phase.id() === id; });
+
+                        if (typeof phase !== 'undefined') {
+                            self.phases.remove(phase);
+                        }
+                        break;
+                    default:
+                        console.log("implement destroy for " + model);
                         break;
                 }
                 break;

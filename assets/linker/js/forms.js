@@ -337,51 +337,51 @@ function initProjectPhases(modal) {
         if (isNaN(phaseId)) {
             row.remove();
         } else { // Otherwise we have a real phase
-            // Specify parameters to fetch phase task data
-            var parameters = {
-                phaseId: phaseId
-            };
-
-            // Fetch tasks for current phase
-            jQuery.getJSON("/task/", parameters)
-            .done(function(/** models.task[] */tasks) {
-                var body = jQuery('body');
-
-                // Phase doesn't contain any tasks so delete is possible
-                if (tasks.length === 0) {
+            // Fetch tasks that are attached to this phase
+            socket.get('/Task', {phaseId: phaseId}, function(tasks) {
+                if (_.size(tasks) === 0) {
                     modal.modal('hide');
 
+                    var body = jQuery('body');
+
                     // Show confirm modal to user
-                    bootbox.confirm(
-                        "Are you sure of phase delete?",
-                        function(result) {
+                    bootbox.confirm({
+                        title: "danger - danger - danger",
+                        message: "Are you sure of phase delete?",
+                        buttons: {
+                            'cancel': {
+                                className: 'btn-default pull-left'
+                            },
+                            'confirm': {
+                                label: 'Delete',
+                                    className: 'btn-danger pull-right'
+                            }
+                        },
+                        callback: function(result) {
                             if (result) {
-                                jQuery.ajax({
-                                    type: "DELETE",
-                                    url: "/phase/" + phaseId,
-                                    dataType: 'json'
-                                })
-                                .done(function() {
-                                    makeMessage("Phase deleted successfully.", "success", {});
+                                socket.delete('/Phase/' + phaseId, function(data) {
+                                    if (handleSocketError(data)) {
+                                        makeMessage("Phase deleted successfully.", "success", {});
 
-                                    myViewModel.deletePhase(phaseId);
+                                        var phase = _.find(myViewModel.phases(), function(phase) {
+                                            return phase.id() === data.id;
+                                        });
 
-                                    body.trigger('phasesEdit');
-                                })
-                                .fail(function(jqXhr, textStatus, error) {
-                                    handleAjaxError(jqXhr, textStatus, error);
+                                        if (typeof phase !== 'undefined') {
+                                            myViewModel.phases.remove(phase);
+                                        }
+
+                                        body.trigger('phasesEdit');
+                                    }
                                 });
                             } else {
                                 body.trigger('phasesEdit');
                             }
                         }
-                    );
+                    });
                 } else {
                     makeMessage("Cannot delete phase, because it contains tasks.", "error", {});
                 }
-            })
-            .fail(function(jqXhr, textStatus, error) {
-                handleAjaxError(jqXhr, textStatus, error);
             });
         }
     });
