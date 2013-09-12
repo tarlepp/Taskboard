@@ -525,6 +525,13 @@ function ViewModel() {
                             self.sprints.replace(sprint, new Sprint(data));
                         }
                         break;
+                    case 'story':
+                        var story = _.find(self.stories(), function(story) { return story.id() === id; });
+
+                        if (typeof story !== 'undefined') {
+                            self.stories.replace(story, new Story(data));
+                        }
+                        break;
                     case 'task':
                         var task = _.find(self.tasks(), function(task) { return task.id() === id; });
 
@@ -549,6 +556,9 @@ function ViewModel() {
                     case 'sprint':
                         self.sprints.push(new Sprint(data));
                         break;
+                    case 'story':
+                        self.stories.push(new Story(data));
+                        break;
                     default:
                         console.log("implement create for " + model);
                         break;
@@ -569,6 +579,13 @@ function ViewModel() {
 
                         if (typeof sprint !== 'undefined') {
                             self.sprints.remove(sprint);
+                        }
+                        break;
+                    case 'story':
+                        var story = _.find(self.stories(), function(story) { return story.id() === id; });
+
+                        if (typeof story !== 'undefined') {
+                            self.stories.remove(story);
                         }
                         break;
                     default:

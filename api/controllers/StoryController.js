@@ -183,7 +183,8 @@ module.exports = {
         }
 
         var data = {
-            story: false,
+            storyOld: false,
+            storyNew: false,
             tasks: [],
             taskCnt: 0
         };
@@ -222,7 +223,9 @@ module.exports = {
                     if (error) {
                         res.send(error, 500);
                     } else  {
-                        data.story = story;
+                        // TODO: send socket message about story creation
+
+                        data.storyNew = story;
 
                         // Fetch phases which tasks are wanted to move to new story
                         Phase
@@ -279,19 +282,19 @@ module.exports = {
                         }
 
                         jQuery.each(tasks, function(key, /** sails.model.task */task) {
-                            task.storyId = data.story.id;
-
                             // Update existing task data, basically just change story id to new one
                             Task
                                 .update({
                                     id: task.id
                                 },{
-                                    storyId: data.story.id
+                                    storyId: data.storyNew.id
                                 }, function(error, task) {
                                     // Error handling
                                     if (error) {
                                         res.send(error, 500);
                                     } else {
+                                        // TODO: send socket message about task update
+
                                         data.tasks.push(task[0]);
 
                                         if (data.taskCnt === data.tasks.length) {
@@ -314,9 +317,12 @@ module.exports = {
                     {id: storyId},
                     {isDone: true},
                     function(error, /** sails.model.story[] */stories) {
+                        data.storyOld = stories[0];
+
                         if (error) {
                             res.send(error, 500);
                         } else {
+                            // TODO: send socket message about story update
                             res.send(data);
                         }
                 });
