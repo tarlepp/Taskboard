@@ -551,13 +551,19 @@ function ViewModel() {
                         self.projects.push(new Project(data));
                         break;
                     case 'phase':
-                        self.phases.push(new Phase(data));
+                        if (self.project().id() === data.projectId) {
+                            self.phases.push(new Phase(data));
+                        }
                         break;
                     case 'sprint':
-                        self.sprints.push(new Sprint(data));
+                        if (self.project().id() === data.projectId) {
+                            self.sprints.push(new Sprint(data));
+                        }
                         break;
                     case 'story':
-                        self.stories.push(new Story(data));
+                        if (self.sprint().id() === data.sprintId) {
+                            self.stories.push(new Story(data));
+                        }
                         break;
                     case 'task':
                         self.tasks.push(new Task(data));
