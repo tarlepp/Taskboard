@@ -239,6 +239,10 @@ function ViewModel() {
     self.selectedProjectId = ko.observable(selectedProjectId);
     self.selectedSprintId = ko.observable(selectedSprintId);
 
+    self.loading = ko.observableArray([]);
+
+    self.loading.push(true);
+
     // Fetch types
     socket.get('/Type', function(types) {
         var mappedTypes = ko.utils.arrayMap(types, function(/** sails.json.type */type) {
@@ -248,7 +252,11 @@ function ViewModel() {
         self.types(mappedTypes);
 
         body.trigger('initializeCheck', 'types');
+
+        self.loading.pop();
     });
+
+    self.loading.push(true);
 
     // Fetch users
     socket.get('/User', function(users) {
@@ -259,7 +267,11 @@ function ViewModel() {
         self.users(mappedUsers);
 
         body.trigger('initializeCheck', 'users');
+
+        self.loading.pop();
     });
+
+    self.loading.push(true);
 
     // Fetch projects
     socket.get('/Project', function(projects) {
@@ -274,6 +286,8 @@ function ViewModel() {
         if (self.selectedProjectId() > 0) {
             self.initProject(self.selectedProjectId());
         }
+
+        self.loading.pop();
     });
 
     // Sorted project objects
@@ -320,6 +334,8 @@ function ViewModel() {
         if (typeof project !== 'undefined') {
             self.project(project);
 
+            self.loading.push(true);
+
             // Fetch project phases
             socket.get('/Phase', {projectId: projectId}, function(phases) {
                 var mappedPhases = ko.utils.arrayMap(phases, function(/** sails.json.phase */phase) {
@@ -329,7 +345,11 @@ function ViewModel() {
                 self.phases(mappedPhases);
 
                 body.trigger('initializeCheck', 'phases');
+
+                self.loading.pop();
             });
+
+            self.loading.push(true);
 
             // Fetch project sprints
             socket.get('/Sprint', {projectId: projectId}, function(sprints) {
@@ -343,6 +363,8 @@ function ViewModel() {
                 if (self.selectedSprintId() > 0) {
                     self.initSprint(self.selectedSprintId());
                 }
+
+                self.loading.pop();
             });
         }
     };
@@ -363,6 +385,8 @@ function ViewModel() {
         if (typeof sprint !== 'undefined') {
             self.sprint(sprint);
 
+            self.loading.push(true);
+
             // Fetch project stories
             socket.get('/Story', {sprintId: sprintId}, function(stories) {
                 var storyIds = [];
@@ -377,7 +401,11 @@ function ViewModel() {
 
                 body.trigger('initializeCheck', 'stories');
 
+                self.loading.pop();
+
                 if (_.size(storyIds) > 0) {
+                    self.loading.push(true);
+
                     // Fetch stories task data
                     socket.get('/Task', {where: {or: storyIds}}, function(tasks) {
                         var mappedTasks = ko.utils.arrayMap(tasks, function(/** sails.json.task */task) {
@@ -385,6 +413,8 @@ function ViewModel() {
                         });
 
                         self.tasks(mappedTasks);
+
+                        self.loading.pop();
                     });
                 }
             });

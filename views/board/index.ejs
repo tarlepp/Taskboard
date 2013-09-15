@@ -1,4 +1,12 @@
-<div id="boardContent" style="display: none;">
+<div data-bind="if: loading().length">
+    <div id="loading" class="panel panel-info">
+        <div class="panel-body text-info">
+            Loading data...
+        </div>
+    </div>
+</div>
+
+<div id="boardContent" style="display: none;" data-bind="css: loading().length > 0 ? 'loading' : ''">
 
     <div class="alert alert-danger"
         data-bind="visible: $root.phases().length === 0 && $root.project()"
@@ -11,7 +19,6 @@
             You can setup project phases within <em>project settings menu</em>.
         </p>
     </div>
-
 
     <div id="board" data-bind="if: $root.sprint()">
         <table class="table table-bordered">
