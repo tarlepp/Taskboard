@@ -110,22 +110,22 @@ module.exports = {
                 } else {
                     data.story = story;
 
-                    makeView();
-                }
-            });
+                    // Fetch project milestones
+                    Milestone
+                        .find()
+                        .where({
+                            projectId: data.story.projectId
+                        })
+                        .sort('deadline ASC')
+                        .done(function(error, milestones) {
+                            if (error) {
+                                res.send(error, 500);
+                            } else {
+                                data.milestones = milestones;
 
-        // Fetch project milestones
-        Milestone
-            .find()
-            .where({
-                projectId: data.story.projectId
-            })
-            .sort('deadline ASC')
-            .done(function(error, milestones) {
-                if (error) {
-                    res.send(error, 500);
-                } else {
-                    data.milestones = milestones;
+                                makeView();
+                            }
+                        });
 
                     makeView();
                 }
@@ -144,6 +144,8 @@ module.exports = {
                     makeView();
                 }
             });
+
+
 
         /**
          * Private function to make actual view with specified data.
