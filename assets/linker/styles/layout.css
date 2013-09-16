@@ -229,7 +229,8 @@ td.actionMenu {
     border-radius: 4px;
 }
 
-.actionMenu a.dropdown-toggle:hover {
+.actionMenu a.dropdown-toggle:hover,
+.actionMenu a.dropdown-toggle:focus {
     text-decoration: none;
     background-color: #e5e5e5;
     border: 1px solid #c5c5c5;

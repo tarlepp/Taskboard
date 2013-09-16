@@ -394,7 +394,13 @@ function initProjectPhases(modal) {
  * @param   {jQuery}    modal   Current modal content
  * @param   {Boolean}   edit    Are we editing existing sprint or not
  */
-function initSprintForm(modal, edit) {
+function initSprintForm(modal, edit, parameters) {
+    parameters = parameters || {};
+
+    if (parameters.activeTab) {
+        jQuery('#' + parameters.activeTab + 'Tab').click();
+    }
+
     var inputTitle = jQuery('input[name="title"]', modal);
 
     inputTitle.focus().val(inputTitle.val());
@@ -484,6 +490,31 @@ function initSprintForm(modal, edit) {
             containerEnd.bootstrapDP('hide');
             containerEnd.closest('.input-group').removeClass('has-error');
         }
+    });
+}
+
+/**
+ * Function initializes sprint backlog view to use.
+ *
+ * @param   {jQuery}    modal       Current modal content
+ * @param   {string}    contentId   Backlog div id
+ */
+function initSprintBacklog(modal, contentId) {
+    var body = jQuery('body');
+
+    modal.find(contentId).find('[data-hover="dropdown"]').dropdownHover();
+
+    // User clicks milestone action menu link
+    jQuery('ul.dropdown-actions', modal).on('click', 'a', function() {
+        // Hide current modal
+        modal.modal('hide');
+
+        var element = jQuery(this);
+        var storyId = element.data('storyId');
+        var action = element.data('action');
+
+        // Trigger milestone action event
+        body.trigger(action, [storyId, 'sprintBacklog']);
     });
 }
 

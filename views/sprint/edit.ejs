@@ -1,9 +1,12 @@
 <ul class="nav nav-tabs">
     <li class="active">
-        <a href="#basic" data-toggle="tab">Basic</a>
+        <a id="basicTab" href="#basic" data-toggle="tab">Basic</a>
     </li>
     <li>
-        <a href="#history" data-toggle="tab" data-href="/History?objectName=Sprint&objectId=<%= sprint.id %>">History</a>
+        <a id="backlogTab" href="#backlog" data-toggle="tab" data-callback="initSprintBacklog" data-href="/Sprint/Backlog?id=<%= sprint.id %>">Backlog</a>
+    </li>
+    <li>
+        <a id="historyTab" href="#history" data-toggle="tab" data-href="/History?objectName=Sprint&objectId=<%= sprint.id %>">History</a>
     </li>
 </ul>
 
@@ -55,6 +58,8 @@
             </div>
         </form>
     </div>
-    <div class="tab-pane" id="history">
-    </div>
+
+    <div class="tab-pane" id="backlog"></div>
+
+    <div class="tab-pane" id="history"></div>
 </div>

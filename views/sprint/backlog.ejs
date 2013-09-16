@@ -1,0 +1,60 @@
+<table id="sprintBacklog" class="table table-striped table-hover table-condensed">
+    <thead>
+    <tr>
+        <th></th>
+        <th class="col-md-5">Story</th>
+        <th class="col-md-1">Estimate</th>
+        <th class="col-md-4">Progress</th>
+        <th class="col-md-1 text-right">Tasks</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% _.each(stories, function(story) { %>
+    <tr>
+        <td class="actionMenu">
+            <div class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" href="#">
+                    <i class="icon icon-chevron-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-actions">
+                    <li>
+                        <a href="javascript: void(0);" data-story-id="<%= story.id %>" data-sprint-id="<%= story.sprintId %>" data-action="storyEdit">
+                            <i class="icon icon-wrench"></i> Edit story
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript: void(0);" data-story-id="<%= story.id %>" data-sprint-id="<%= story.sprintId %>" data-action="storySplit">
+                            <i class="icon icon-code-fork"></i> Split story
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="javascript: void(0);" data-story-id="<%= story.id %>" data-sprint-id="<%= story.sprintId %>" data-action="storyDelete" class="text-danger">
+                            <i class="icon icon-remove"></i> Delete story
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </td>
+        <td>
+            <%= story.title %>
+        </td>
+        <td class="text-right">
+            <%= (story.estimate == -1) ? '???' : story.estimate %>
+        </td>
+        <td>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<%= story.progress %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= story.progress %>%;">
+                    <% if (story.progress > 0) { %>
+                    <span ><%= story.progress %>% Complete</span>
+                    <% } %>
+                </div>
+            </div>
+        </td>
+        <td class="text-right">
+            <%= story.tasks.length %>
+        </td>
+    </tr>
+    <% }); %>
+    </tbody>
+</table>

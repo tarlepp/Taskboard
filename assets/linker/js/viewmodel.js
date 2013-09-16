@@ -717,6 +717,13 @@ function ViewModel() {
         jQuery('body').trigger('sprintDelete', myViewModel.sprint().id());
     };
 
+    /**
+     * Method opens sprint backlog
+     */
+    self.sprintBacklog = function() {
+        jQuery('body').trigger('sprintBacklog', myViewModel.sprint().id());
+    };
+
     self.usersOpen = function() {
         console.log('Implement users');
     };

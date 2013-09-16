@@ -491,9 +491,10 @@ jQuery(document).ready(function() {
      *
      * After PUT query knockout data is updated.
      */
-    body.on('sprintEdit', function(event, sprintId, trigger) {
+    body.on('sprintEdit', function(event, sprintId, trigger, parameters) {
         sprintId = sprintId || myViewModel.sprint().id();
         trigger = trigger || false;
+        parameters = parameters || {};
 
         jQuery.get('/Sprint/edit', {id: sprintId}, function(content) {
             var title = "Edit sprint";
@@ -547,7 +548,7 @@ jQuery(document).ready(function() {
 
             // Make form init when dialog is opened.
             modal.on('shown.bs.modal', function() {
-                initSprintForm(modal, true);
+                initSprintForm(modal, true, parameters);
             });
 
             // Open bootbox modal
@@ -605,6 +606,16 @@ jQuery(document).ready(function() {
                 }
             }
         });
+    });
+
+    body.on('sprintBacklog', function(event, sprintId, trigger) {
+        trigger = (trigger && trigger.event) ? trigger : false;
+
+        var parameters = {
+            activeTab: 'backlog'
+        };
+
+        body.trigger('sprintEdit', [sprintId, trigger, parameters]);
     });
 
     /**
