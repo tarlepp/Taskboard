@@ -12,28 +12,30 @@
     <% _.each(stories, function(story) { %>
     <tr>
         <td class="actionMenu">
-            <div class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" href="#">
-                    <i class="icon icon-chevron-down"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-actions">
-                    <li>
-                        <a href="javascript: void(0);" data-story-id="<%= story.id %>" data-sprint-id="<%= story.sprintId %>" data-action="storyEdit">
-                            <i class="icon icon-wrench"></i> Edit story
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript: void(0);" data-story-id="<%= story.id %>" data-sprint-id="<%= story.sprintId %>" data-action="storySplit">
-                            <i class="icon icon-code-fork"></i> Split story
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="javascript: void(0);" data-story-id="<%= story.id %>" data-sprint-id="<%= story.sprintId %>" data-action="storyDelete" class="text-danger">
-                            <i class="icon icon-remove"></i> Delete story
-                        </a>
-                    </li>
-                </ul>
+            <a class="actionMenu-toggle" href="#" data-popover="true">
+                <i class="icon icon-chevron-down"></i>
+            </a>
+            <div class="hidden">
+                <div class="actionMenu">
+                    <ul class="actionMenu-actions">
+                        <li>
+                            <a href="javascript: void(0);" data-story-id="<%= story.id %>" data-sprint-id="<%= story.sprintId %>" data-action="storyEdit">
+                                <i class="icon icon-wrench"></i> Edit story
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);" data-story-id="<%= story.id %>" data-sprint-id="<%= story.sprintId %>" data-action="storySplit">
+                                <i class="icon icon-code-fork"></i> Split story
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="javascript: void(0);" data-story-id="<%= story.id %>" data-sprint-id="<%= story.sprintId %>" data-action="storyDelete" class="text-danger">
+                                <i class="icon icon-remove"></i> Delete story
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </td>
         <td>

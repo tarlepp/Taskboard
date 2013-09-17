@@ -105,10 +105,6 @@
     text-decoration: none;
 }
 
-ul.dropdown-menu.story-list {
-    left: 20px;
-}
-
 ul.dropdown-menu li {
     text-align: left;
 }
@@ -156,8 +152,7 @@ ul.dropdown-menu .divider {
 }
 
 #navigation .dropdown-menu:before,
-.dropdown-menu.with-tick:before,
-.actionMenu .dropdown-menu:before {
+.dropdown-menu.with-tick:before {
     position: absolute;
     top: -7px;
     left: 7px;
@@ -170,8 +165,7 @@ ul.dropdown-menu .divider {
 }
 
 #navigation .dropdown-menu:after,
-.dropdown-menu.with-tick:after,
-.actionMenu .dropdown-menu:after {
+.dropdown-menu.with-tick:after {
     position: absolute;
     top: -6px;
     left: 8px;
@@ -218,7 +212,7 @@ td.actionMenu {
     white-space: nowrap;
 }
 
-.actionMenu a.dropdown-toggle {
+.actionMenu a.actionMenu-toggle {
     font-size: 10px;
     line-height: 10px;
     background-color: #f5f5f5;
@@ -229,26 +223,16 @@ td.actionMenu {
     border-radius: 4px;
 }
 
-.actionMenu a.dropdown-toggle:hover,
-.actionMenu a.dropdown-toggle:focus {
+.actionMenu a.actionMenu-toggle:hover,
+.actionMenu a.actionMenu-toggle:focus {
     text-decoration: none;
     background-color: #e5e5e5;
     border: 1px solid #c5c5c5;
 }
 
-.actionMenu a.dropdown-toggle i {
+.actionMenu a.actionMenu-toggle i {
     margin: 0;
     padding: 0;
-}
-
-.actionMenu ul.dropdown-menu {
-    left: -5px;
-    min-width: 0;
-    z-index: 2000;
-}
-
-.actionMenu .dropdown-menu > li > a {
-    padding-left: 15px;
 }
 
 @media (min-width: 1200px) {
@@ -296,4 +280,88 @@ ul, ol {
 
 .history ul {
     margin-left: 5px;
+}
+
+.popover.actionMenu {
+    z-index: 3000;
+    padding: 0;;
+}
+
+.popover.actionMenu .popover-content {
+    padding: 0;
+    position: relative
+}
+
+.popover.actionMenu .actionMenu-actions {
+    list-style-type: none;
+    padding: 6px 0;
+    margin: 0;
+}
+
+.popover.actionMenu .actionMenu-actions .divider {
+    height: 1px;
+    margin: 5px 0;
+    overflow: hidden;
+    background-color: #e5e5e5;
+}
+
+.popover.actionMenu .actionMenu-actions > li > a {
+    display: block;
+    padding: 3px 15px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.428571429;
+    color: #333333;
+    white-space: nowrap;
+}
+
+.popover.actionMenu .actionMenu-actions > li > a.text-muted {
+    color: #999999;
+}
+
+.popover.actionMenu .actionMenu-actions > li > a.text-success {
+    color: #468847;
+}
+
+.popover.actionMenu .actionMenu-actions > li > a.text-danger {
+    color: #b94a48;
+}
+
+.popover.actionMenu .actionMenu-actions > li > a i {
+    position: relative;
+    left: -5px;
+    width: 15px;
+    text-align: center;
+    display: inline-block;
+}
+
+.popover.actionMenu .actionMenu-actions > li > a:hover,
+.popover.actionMenu .actionMenu-actions > li > a:focus {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #428bca;
+}
+
+.popover.actionMenu .actionMenu-actions > .active > a,
+.popover.actionMenu .actionMenu-actions > .active > a:hover,
+.popover.actionMenu .actionMenu-actions > .active > a:focus {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #428bca;
+    outline: 0;
+}
+
+.popover.actionMenu .actionMenu-actions > .disabled > a,
+.popover.actionMenu .actionMenu-actions > .disabled > a:hover,
+.popover.actionMenu .actionMenu-actions > .disabled > a:focus {
+    color: #999999;
+}
+
+.popover.actionMenu .actionMenu-actions > .disabled > a:hover,
+.popover.actionMenu .actionMenu-actions > .disabled > a:focus {
+    text-decoration: none;
+    cursor: not-allowed;
+    background-color: transparent;
+    background-image: none;
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }

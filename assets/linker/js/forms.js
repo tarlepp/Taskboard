@@ -501,17 +501,25 @@ function initSprintForm(modal, edit, parameters) {
  */
 function initSprintBacklog(modal, contentId) {
     var body = jQuery('body');
+    var container = modal.find(contentId);
 
-    modal.find(contentId).find('[data-hover="dropdown"]').dropdownHover();
+    // Initialize action menu for stories
+    initActionMenu(container);
 
-    // User clicks milestone action menu link
-    jQuery('ul.dropdown-actions', modal).on('click', 'a', function() {
-        // Hide current modal
-        modal.modal('hide');
-
+    // User clicks action menu link
+    body.on('click', 'ul.actionMenu-actions a', function() {
         var element = jQuery(this);
         var storyId = element.data('storyId');
         var action = element.data('action');
+        var selector = element.data('selector');
+
+        // We have popover selector, so hide it
+        if (selector) {
+            jQuery(selector).popover('hide');
+        }
+
+        // Hide current modal
+        modal.modal('hide');
 
         // Trigger milestone action event
         body.trigger(action, [storyId, 'sprintBacklog']);

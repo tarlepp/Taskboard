@@ -249,45 +249,135 @@ function createBootboxDialog(title, content, buttons, trigger) {
 
     // Generic modal init
     modal.on('shown.bs.modal', function() {
-        // Initialize wysiwyg for textareas
-        initWysiwyg(modal);
-
-        // Initialize
-        initSelect();
-
-        // Initialize possible modal context tooltips
-        initTooltips(modal);
-
-        // Dropdown hover init
-        jQuery('[data-hover="dropdown"]', modal).dropdownHover();
-
-        // Dynamic data loading for tab content
-        jQuery('a[data-toggle="tab"]', modal).on('show.bs.tab', function(event) {
-            var element = jQuery(event.target);
-
-            var contentId  = element.attr("href");
-            var contentUrl = element.data("href");
-            var callback = element.data("callback");
-
-            if (contentUrl) {
-                // Load data content
-                jQuery(contentId).load(contentUrl, function() {
-                    // Dispatch callback function with default parameters
-                    if (typeof callback !== 'undefined') {
-                        dispatch(callback, [modal, contentId]);
-                    }
-                });
-            }
-        })
+        initWysiwyg(modal);     // Initialize wysiwyg for textareas
+        initSelect(modal);      // Initialize select list
+        initTooltips(modal);    // Initialize possible modal context tooltips
+        initDropdown(modal);    // Initialize dropdown menus
+        initTabs(modal);        // Initialize tabs
+        initActionMenu(modal);  // Initialize custom action menus
     });
 
     // Return bootbox dialog
     return modal;
 }
 
+/**
+ * Function initializes bootstrap look-a-like select list in specified content.
+ * Basically this just changes basic <select> to <div>.
+ *
+ * @param   {jQuery}    context
+ */
 function initSelect(context) {
     jQuery('select[data-select]', context).each(function() {
         jQuery(this).selectpicker();
+    });
+}
+
+/**
+ * Function initializes dropdown menu hover actions in specified content.
+ *
+ * @param   {jQuery}    context
+ */
+function initDropdown(context) {
+    jQuery('[data-hover="dropdown"]', context).dropdownHover();
+}
+
+/**
+ * Function initializes dynamic data load for bootstrap tabs in specified content.
+ *
+ * @param   {jQuery}    context
+ */
+function initTabs(context) {
+    // Dynamic data loading for tab content
+    jQuery('a[data-toggle="tab"]', context).on('show.bs.tab', function(event) {
+        var element = jQuery(event.target);
+
+        var contentId = element.attr("href");
+        var contentUrl = element.data("href");
+        var callback = element.data("callback");
+
+        // We have url defined, so fetch tab content via AJAX call.
+        if (contentUrl) {
+            // Load data content
+            jQuery(contentId).load(contentUrl, function() {
+                // Dispatch callback function with default parameters
+                if (typeof callback !== 'undefined') {
+                    dispatch(callback, [context, contentId]);
+                }
+            });
+        } else if (typeof callback !== 'undefined') { // Dispatch callback function with default parameters
+            dispatch(callback, [context, contentId]);
+        }
+    });
+}
+
+/**
+ * Function initialize action menus for specified context.
+ *
+ * @todo    explain this better, this is like magic :D
+ *
+ * @param   {jQuery}    context
+ * @param   {{}}        parameters
+ */
+function initActionMenu(context, parameters) {
+    parameters = parameters || {};
+
+    var body = jQuery('body');
+
+    // Remove all action menu listeners, this prevents firing events to multiple listeners
+    body.off('click', 'ul.actionMenu-actions a');
+
+    // Specify popover content mouse over JavaScript functions, this is like magic :D
+    var mouseOver = "clearTimeout(timeoutObj); " +
+        " jQuery(this).on('mouseleave', function() { jQuery(selector).popover('hide'); });" +
+        " jQuery(this).on('click', 'a', function() { jQuery(this).data('selector', selector); }); ";
+
+    // Used default parameters for popover
+    var defaultParameters = {
+        container: 'body',
+        trigger: 'manual',
+        placement: 'bottomLeft',
+        animation: false,
+        html: true,
+        template:
+            '<div class="popover actionMenu" onmouseover="' + mouseOver + '">' +
+                '<div class="arrow"></div>' +
+                '<h3 class="popover-title"></h3>' +
+                '<div class="popover-content"></div>' +
+            '</div>'
+    };
+
+    // Iterate each actionMenu-toggle selectors
+    context.find('.actionMenu-toggle').each(function(event) {
+        var element = jQuery(this);
+
+        // Create popover
+        element.popover(jQuery.extend(
+            {},
+            defaultParameters,
+            {
+                content: function() {
+                    return element.next('div').html();
+                }
+            },
+            parameters
+        )).on('mouseenter', function(event) {
+            // Create global selector string, which is used in actual popover content
+            selector = element.getSelector().join(" ");
+
+            element.popover('show');
+        }).on('mouseleave', function(event) {
+            // Create global timeout for popover hide, note that this is used in actual popover content
+            timeoutObj = setTimeout(function(){
+                element.popover('hide');
+            }, 100);
+        }).on('click', function(event) {
+            if (body.find('.popover.actionMenu').length === 0) {
+                element.popover('show');
+            } else {
+                element.popover('hide');
+            }
+        });
     });
 }
 
