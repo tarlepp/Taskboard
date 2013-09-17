@@ -1,0 +1,212 @@
+/* ===================================================
+ * popover-extra-placements.css v0.1
+ * http://twitter.github.com/bootstrap-popover-extra-placements
+ * ===================================================
+ * Copyright 2012 Daniel Kleehammer
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ========================================================== */
+
+
+/*************************
+ *   Top Positions
+ *************************/
+
+/** Top Left **/
+.popover.topLeft {
+    margin-top: -10px;
+}
+
+.popover.topLeft .arrow {
+    bottom: -11px;
+    left: 25%;
+    margin-left: -11px;
+    border-top-color: #999999;
+    border-top-color: rgba(0, 0, 0, 0.25);
+    border-bottom-width: 0;
+}
+
+.popover.topLeft .arrow:after {
+    bottom: 1px;
+    margin-left: -10px;
+    border-top-color: #ffffff;
+    border-bottom-width: 0;
+    content: " ";
+}
+
+/** Top Right **/
+.popover.topRight {
+    margin-top: -10px;
+}
+
+.popover.topRight .arrow {
+    bottom: -11px;
+    left: 75%;
+    margin-left: -11px;
+    border-top-color: #999999;
+    border-top-color: rgba(0, 0, 0, 0.25);
+    border-bottom-width: 0;
+}
+
+.popover.topRight .arrow:after {
+    bottom: 1px;
+    margin-left: -10px;
+    border-top-color: #ffffff;
+    border-bottom-width: 0;
+    content: " ";
+}
+
+/*************************
+ *   Right Positions
+ *************************/
+
+/** Right Top **/
+.popover.rightTop {
+    margin-left: 10px;
+}
+
+.popover.rightTop .arrow {
+    top: 25%;
+    left: -11px;
+    margin-top: -11px;
+    border-right-color: #999999;
+    border-right-color: rgba(0, 0, 0, 0.25);
+    border-left-width: 0;
+}
+
+.popover.rightTop .arrow:after {
+    bottom: -10px;
+    left: 1px;
+    border-right-color: #ffffff;
+    border-left-width: 0;
+    content: " ";
+}
+
+/** Right Bottom **/
+.popover.rightBottom {
+    margin-left: 10px;
+}
+
+.popover.rightBottom .arrow {
+    top: 75%;
+    left: -11px;
+    margin-top: -11px;
+    border-right-color: #999999;
+    border-right-color: rgba(0, 0, 0, 0.25);
+    border-left-width: 0;
+}
+
+.popover.rightBottom .arrow:after {
+    bottom: -10px;
+    left: 1px;
+    border-right-color: #ffffff;
+    border-left-width: 0;
+    content: " ";
+}
+
+/*************************
+ *   Bottom Positions
+ *************************/
+
+/** Bottom Left **/
+.popover.bottomLeft {
+    margin-top: 10px;
+}
+
+.popover.bottomLeft .arrow {
+    top: -11px;
+    left: 25%;
+    margin-left: -11px;
+    border-bottom-color: #999999;
+    border-bottom-color: rgba(0, 0, 0, 0.25);
+    border-top-width: 0;
+}
+
+.popover.bottomLeft .arrow:after {
+    top: 1px;
+    margin-left: -10px;
+    border-bottom-color: #ffffff;
+    border-top-width: 0;
+    content: " ";
+}
+
+/** Bottom Right **/
+.popover.bottomRight {
+    margin-top: 10px;
+}
+
+.popover.bottomRight .arrow {
+    top: -11px;
+    left: 75%;
+    margin-left: -11px;
+    border-bottom-color: #999999;
+    border-bottom-color: rgba(0, 0, 0, 0.25);
+    border-top-width: 0;
+}
+
+.popover.bottomRight .arrow:after {
+    top: 1px;
+    margin-left: -10px;
+    border-bottom-color: #ffffff;
+    border-top-width: 0;
+    content: " ";
+}
+
+/*************************
+ *   Left Positions
+ *************************/
+
+/** Left Top **/
+.popover.leftTop {
+    margin-left: -10px;
+}
+
+.popover.leftTop .arrow {
+    top: 25%;
+    right: -11px;
+    margin-top: -11px;
+    border-left-color: #999999;
+    border-left-color: rgba(0, 0, 0, 0.25);
+    border-right-width: 0;
+}
+
+.popover.leftTop .arrow:after {
+    right: 1px;
+    bottom: -10px;
+    border-left-color: #ffffff;
+    border-right-width: 0;
+    content: " ";
+}
+
+
+/** Left Bottom **/
+.popover.leftBottom {
+    margin-left: -10px;
+}
+
+.popover.leftBottom .arrow {
+    top: 75%;
+    right: -11px;
+    margin-top: -11px;
+    border-left-color: #999999;
+    border-left-color: rgba(0, 0, 0, 0.25);
+    border-right-width: 0;
+}
+
+.popover.leftBottom .arrow:after {
+    right: 1px;
+    bottom: -10px;
+    border-left-color: #ffffff;
+    border-right-width: 0;
+    content: " ";
+}
