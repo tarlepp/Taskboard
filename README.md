@@ -1,5 +1,5 @@
 # taskboard
-### a Sails application to mimic "scrum" taskboard.
+### a Sails application to mimic "scrum-ban" taskboard.
 
 This needs a lots of work...
 
@@ -11,7 +11,7 @@ Maybe sails are lifted on http://wunder.sytes.net:1337/ or maybe not...
 - Sails.js (http://sailsjs.org/)
 - jQuery (http://www.jquery.com/)
 - jQueryUI (http://www.jqueryui.com/)
-- jQuery Autosize (http://www.jacklmoore.com/autosize/)
+- jQuery Selectorator (https://github.com/ngs/jquery-selectorator)
 - qTip2 (http://craigsworks.com/projects/qtip2/)
 - noty (http://needim.github.com/noty/)
 - Twitter Bootstrap (https://github.com/twitter/bootstrap/)
@@ -19,6 +19,7 @@ Maybe sails are lifted on http://wunder.sytes.net:1337/ or maybe not...
 - bootstrap-datepicker (https://github.com/eternicode/bootstrap-datepicker/)
 - bootstrap-wysiwyg (http://mindmup.github.io/bootstrap-wysiwyg/)
 - bootstrap-select (https://github.com/silviomoreto/bootstrap-select)
+- bootstrap-popover-extra-placements (https://github.com/dkleehammer/bootstrap-popover-extra-placements)
 - Bootbox.js (http://bootboxjs.com/)
 - Knockout (http://knockoutjs.com/)
 - Knockout-Bootstrap (http://billpull.github.io/knockout-bootstrap/)
