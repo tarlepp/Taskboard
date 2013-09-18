@@ -109,6 +109,7 @@ ul.dropdown-menu li {
     text-align: left;
 }
 
+ul.actionMenu-actions li.actionMenu-header,
 ul.dropdown-menu li.dropdown-header,
 ul.dropdown-menu li.nav-header {
     padding: 3px 15px;
@@ -208,33 +209,6 @@ ul.dropdown-menu .divider {
     color: #428bca;
 }
 
-td.actionMenu {
-    white-space: nowrap;
-}
-
-.actionMenu a.actionMenu-toggle {
-    font-size: 10px;
-    line-height: 10px;
-    background-color: #f5f5f5;
-    border: 1px solid #d5d5d5;
-    padding: 3px 4px;
-    position: relative;
-    top: -2px;
-    border-radius: 4px;
-}
-
-.actionMenu a.actionMenu-toggle:hover,
-.actionMenu a.actionMenu-toggle:focus {
-    text-decoration: none;
-    background-color: #e5e5e5;
-    border: 1px solid #c5c5c5;
-}
-
-.actionMenu a.actionMenu-toggle i {
-    margin: 0;
-    padding: 0;
-}
-
 @media (min-width: 1200px) {
     .container {
         max-width: 100%;
@@ -298,16 +272,29 @@ ul, ol {
     margin: 0;
 }
 
-.popover.actionMenu .actionMenu-actions .divider {
+.popover.actionMenu .actionMenu-actions .divider,
+.popover.actionMenu .actionMenu-actions .divider:hover {
     height: 1px;
     margin: 5px 0;
     overflow: hidden;
     background-color: #e5e5e5;
 }
 
+.popover.actionMenu ul.actionMenu-actions li.actionMenu-header {
+    padding-left: 15px;
+}
+
+.popover.actionMenu ul.actionMenu-actions li.actionMenu-header:hover {
+    background-color: transparent;
+}
+
+.popover.actionMenu .actionMenu-actions > li {
+    padding-left: 20px;
+}
+
 .popover.actionMenu .actionMenu-actions > li > a {
     display: block;
-    padding: 3px 15px;
+    padding: 3px 15px 3px 0;
     clear: both;
     font-weight: normal;
     line-height: 1.428571429;
@@ -329,36 +316,45 @@ ul, ol {
 
 .popover.actionMenu .actionMenu-actions > li > a i {
     position: relative;
-    left: -5px;
+    left: -10px;
     width: 15px;
+    margin-right: -5px;
     text-align: center;
     display: inline-block;
 }
 
-.popover.actionMenu .actionMenu-actions > li > a:hover,
-.popover.actionMenu .actionMenu-actions > li > a:focus {
+.popover.actionMenu .actionMenu-actions > li:hover,
+.popover.actionMenu .actionMenu-actions > li:focus {
     color: #ffffff;
     text-decoration: none;
     background-color: #428bca;
 }
 
-.popover.actionMenu .actionMenu-actions > .active > a,
-.popover.actionMenu .actionMenu-actions > .active > a:hover,
-.popover.actionMenu .actionMenu-actions > .active > a:focus {
+.popover.actionMenu .actionMenu-actions > li:hover a,
+.popover.actionMenu .actionMenu-actions > li:focus a,
+.popover.actionMenu .actionMenu-actions > li a:hover,
+.popover.actionMenu .actionMenu-actions > li a:focus {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.popover.actionMenu .actionMenu-actions > .active a,
+.popover.actionMenu .actionMenu-actions > .active a:hover,
+.popover.actionMenu .actionMenu-actions > .active a:focus {
     color: #ffffff;
     text-decoration: none;
     background-color: #428bca;
     outline: 0;
 }
 
-.popover.actionMenu .actionMenu-actions > .disabled > a,
-.popover.actionMenu .actionMenu-actions > .disabled > a:hover,
-.popover.actionMenu .actionMenu-actions > .disabled > a:focus {
+.popover.actionMenu .actionMenu-actions > .disabled a,
+.popover.actionMenu .actionMenu-actions > .disabled a:hover,
+.popover.actionMenu .actionMenu-actions > .disabled a:focus {
     color: #999999;
 }
 
-.popover.actionMenu .actionMenu-actions > .disabled > a:hover,
-.popover.actionMenu .actionMenu-actions > .disabled > a:focus {
+.popover.actionMenu .actionMenu-actions > .disabled a:hover,
+.popover.actionMenu .actionMenu-actions > .disabled a:focus {
     text-decoration: none;
     cursor: not-allowed;
     background-color: transparent;
