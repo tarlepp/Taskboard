@@ -18,12 +18,17 @@ a.icon:focus {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    margin: 0 0 5px 0;
+    margin: 0 0 10px 0;
+    text-shadow: 1px 1px 3px rgba(51, 51, 51, .3);
 }
 
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
     font-family: 'Yanone Kaffeesatz', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+small {
+    font-size: 80%;
 }
 
 i, em {
@@ -48,7 +53,11 @@ i, em {
 
 .table th {
     font-weight: normal;
-    text-shadow: 1px 1px 3px rgba(51, 51, 51, .5);
+}
+
+.text-shadow,
+.nav-tabs > li.active > a {
+    text-shadow: 1px 1px 3px rgba(51, 51, 51, .3);
 }
 
 .table .progress {

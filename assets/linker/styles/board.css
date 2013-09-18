@@ -125,6 +125,7 @@ div.task h3 {
     margin: 5px;
     text-align: center;
     font-weight: normal;
+    text-shadow: none;
     transform-style: preserve-3d;
     -webkit-backface-vivbility: hidden;
     -webkit-transform: translate3d(0,0,0);
@@ -270,5 +271,27 @@ li.list-group-item.ui-sortable-helper {
     padding-left: 15px;
 }
 
+.progressTotal {
+    margin-bottom: 5px;
+}
+
+.progressTotal .progress {
+    height: 25px;
+    margin-bottom: 10px;
+    line-height: 25px;
+}
+
+.progressTotal .col-md-2 {
+    padding-right: 0;
+    padding-left: 5px;
+}
+
+.progressTotal .col-md-10 {
+    padding-left: 5px;
+}
+
+.progressTotal .progress .progress-bar {
+    font-size: 14px;
+}
 
 

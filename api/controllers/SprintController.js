@@ -71,10 +71,20 @@ module.exports = {
 
         var data = {
             layout: "layout_ajax",
-            stories: false
+            stories: false,
+            sprint: {
+                progressStory: 0,
+                progressTask: 0,
+                cntStoryDone: 0,
+                cntStoryNotDone: 0,
+                cntStoryTotal: 0,
+                cntTaskDone: 0,
+                cntTaskNotDone: 0,
+                cntTaskTotal: 0
+            }
         };
 
-        // Fetch story data
+        // Fetch story data for current sprint
         Story
             .find()
             .where({sprintId: sprintId})
@@ -99,12 +109,22 @@ module.exports = {
             if (data.stories.length === 0) {
                 makeView();
             } else {
-                // Iterate milestones
+                data.sprint.cntStoryTotal = data.stories.length;
+                data.sprint.cntStoryDone = _.reduce(data.stories, function(memo, story) { return (story.isDone) ? memo + 1 : memo; }, 0);
+                data.sprint.cntStoryNotDone = data.sprint.cntStoryTotal - data.sprint.cntStoryDone;
+
+                if (data.sprint.cntStoryDone > 0) {
+                    data.sprint.progressStory = Math.round(data.sprint.cntStoryDone / data.sprint.cntStoryTotal * 100);
+                } else {
+                    data.sprint.progressStory = 0;
+                }
+
+                // Iterate stories
                 jQuery.each(data.stories, function(key, /** sails.model.story */story) {
-                    // Initialize milestone stories property
+                    // Initialize story tasks property
                     story.tasks = false;
 
-                    // Find all user stories which are attached to current milestone
+                    // Find all tasks which are attached to current user story
                     Task
                         .find()
                         .where({
@@ -114,7 +134,6 @@ module.exports = {
                         .done(function(error, tasks) {
                             // Add tasks to story data
                             story.tasks = tasks;
-
                             story.doneTasks = _.reduce(tasks, function(memo, task) { return (task.isDone) ? memo + 1 : memo; }, 0);
 
                             if (story.doneTasks > 0) {
@@ -122,6 +141,10 @@ module.exports = {
                             } else {
                                 story.progress = 0;
                             }
+
+                            // Add task counts to sprint
+                            data.sprint.cntTaskTotal += story.tasks.length;
+                            data.sprint.cntTaskDone += story.doneTasks;
 
                             // Call view
                             makeView();
@@ -139,12 +162,21 @@ module.exports = {
 
                 // Check that we all tasks for story
                 jQuery.each(data.stories, function(key, /** sails.model.story */story) {
+                    // All tasks are not yet fetched
                     if (story.tasks === false) {
                         show = false;
                     }
                 });
 
                 if (show) {
+                    data.sprint.cntTaskNotDone = data.sprint.cntTaskTotal - data.sprint.cntTaskDone;
+
+                    if (data.sprint.cntTaskDone > 0) {
+                        data.sprint.progressTask = Math.round(data.sprint.cntTaskDone / data.sprint.cntTaskTotal * 100);
+                    } else {
+                        data.sprint.progressTask = 0;
+                    }
+
                     res.view(data);
                 }
             } else {
