@@ -540,6 +540,83 @@ function initSprintBacklog(modal, contentId) {
         // Trigger story add
         body.trigger('storyAdd', [projectId, sprintId, 'sprintBacklog']);
     });
+
+
+    jQuery("#sprintBacklog tbody", container).sortable({
+        axis: 'y',
+        helper: function(e, tr) {
+            var helper = tr.clone();
+
+            return helper.addClass('sortable');
+        },
+        start: function(event, ui) {
+        },
+        stop: function(event, ui) {
+            var table = jQuery("#sprintBacklog", container);
+            var rows = table.find('tbody tr');
+            var errors = false;
+            var update = [];
+
+            rows.fadeTo(0, 0.5);
+
+            // Iterate each row
+            rows.each(function(index) {
+                var storyId = jQuery(this).data('storyId');
+
+                // Update story data via socket
+                socket.put('/Story/' + storyId, {priority: index + 1}, function(story) {
+                    if (handleSocketError(story)) {
+                        update.push(true);
+
+                        myViewModel.processSocketMessage('story', 'update', story.id, story);
+                    } else {
+                        update.push(false);
+
+                        errors = true;
+                    }
+
+                    // Check if all is done
+                    checkUpdate();
+                });
+            });
+
+            // Function to make sure that we have updated all rows.
+            function checkUpdate() {
+                if (update.length == rows.length) {
+                    var message = "";
+                    var type = "success";
+
+                    if (errors) {
+                        type = "error";
+                        message = "Error in stories priority update"
+                    } else {
+                        message = "Stories priorities changed successfully";
+                    }
+
+                    makeMessage(message, type, {});
+
+                    rows.fadeTo(0, 1);
+                }
+            }
+        }
+    });
+
+    /*
+    $("#sprintBacklog tbody tr", container).draggable({
+       // appendTo:"body",
+        helper:"clone"
+    });
+    $("#sprintBacklog tbody", container).droppable({
+        activeClass:"ui-state-default",
+        hoverClass:"ui-state-hover",
+        accept:":not(.ui-sortable-helper)",
+        drop:function (event, ui) {
+            $('.placeholder').remove();
+            row = ui.draggable;
+            $(this).append(row);
+        }
+    });
+    */
 }
 
 /**

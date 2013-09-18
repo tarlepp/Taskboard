@@ -54,7 +54,7 @@
     </thead>
     <tbody>
     <% _.each(stories, function(story) { %>
-    <tr>
+    <tr data-story-id="<%= story.id %>">
         <td>
             <a class="actionMenu-toggle btn btn-icon btn-default" href="#" data-popover="true">
                 <i class="icon icon-chevron-down"></i>
@@ -82,16 +82,16 @@
                 </div>
             </div>
         </td>
-        <td>
+        <td class="col-md-6 cursor-move">
             <%= story.title %>
         </td>
-        <td class="text-right">
+        <td class="col-md-1 text-right">
             <%= (story.estimate == -1) ? '???' : story.estimate %>
         </td>
-        <td class="text-right">
+        <td class="col-md-1 text-right">
             <%= story.tasks.length %>
         </td>
-        <td>
+        <td class="col-md-4">
             <div class="progress">
                 <div class="progress-bar" role="progressbar" aria-valuenow="<%= story.progress %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= story.progress %>%;">
                     <% if (story.progress > 0) { %>

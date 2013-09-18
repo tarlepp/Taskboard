@@ -367,12 +367,14 @@ ul, ol {
 }
 
 .btn-icon {
-    font-size: 12px;
-    padding: 0 3px 0 4px;
+    position: relative;
+    top: -1px;
     width: 20px;
-    line-height: 20px;
+    font-size: 10px;
     text-align: center;
     color: #666666;
+    margin: 0;
+    padding: 0;
 }
 
 .btn-icon i {
