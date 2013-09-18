@@ -100,6 +100,9 @@
                     case 'bottomRight':
                         tp = {top: pos.top + pos.height, left: pos.left + pos.width / 2 - (actualWidth * .75)};
                         break;
+                    case 'bottomLeftFixed':
+                        tp = {top: pos.top + pos.height, left: pos.left - 8};
+                        break;
 
                     // extend placements (left)
                     case 'leftTop':

@@ -140,6 +140,28 @@
     content: " ";
 }
 
+.popover.bottomLeftFixed {
+    margin-top: 6px;
+}
+
+.popover.bottomLeftFixed .arrow {
+    top: -8px;
+    left: 20px;
+    margin-left: -11px;
+    border-width: 7px;
+    border-bottom-color: #999999;
+    border-bottom-color: rgba(0, 0, 0, 0.25);
+    border-top-width: 0;
+}
+
+.popover.bottomLeftFixed .arrow:after {
+    top: 1px;
+    margin-left: -10px;
+    border-bottom-color: #ffffff;
+    border-top-width: 0;
+    content: " ";
+}
+
 /** Bottom Right **/
 .popover.bottomRight {
     margin-top: 10px;
