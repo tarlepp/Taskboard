@@ -272,7 +272,9 @@ function createBootboxDialog(title, content, buttons, trigger) {
  */
 function initSelect(context) {
     jQuery('select[data-select]', context).each(function() {
-        jQuery(this).selectpicker();
+        jQuery(this).selectpicker({
+            container: 'body'
+        });
     });
 }
 
