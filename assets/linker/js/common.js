@@ -68,6 +68,9 @@ jQuery(document).ready(function() {
  * @param   {jQuery}    context
  */
 function initTooltips(context) {
+    // Hide all existing tooltips
+    jQuery(".qtip.qtip-bootstrap").qtip("hide");
+
     context.on('mouseover', '.tooltipDiv', function() {
         createQtipDiv(jQuery(this));
     });

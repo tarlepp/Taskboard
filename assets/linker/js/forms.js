@@ -504,7 +504,7 @@ function initSprintBacklog(modal, contentId) {
     var container = modal.find(contentId);
 
     // Initialize action menu for stories
-    initActionMenu(container);
+    initActionMenu(container, {});
 
     // User clicks action menu link
     body.on('click', 'ul.actionMenu-actions a', function() {
@@ -523,6 +523,22 @@ function initSprintBacklog(modal, contentId) {
 
         // Trigger milestone action event
         body.trigger(action, [storyId, 'sprintBacklog']);
+    });
+
+    // Remove 'add new' click listeners, this prevents firing this event multiple times
+    body.off('click', '[data-add-new-story="true"]');
+
+    // User wants to add new story to current sprint
+    body.on('click', '[data-add-new-story="true"]', function() {
+        var element = jQuery(this);
+        var sprintId = element.data('sprintId');
+        var projectId = element.data('projectId');
+
+        // Hide current modal
+        modal.modal('hide');
+
+        // Trigger story add
+        body.trigger('storyAdd', [projectId, sprintId, 'sprintBacklog']);
     });
 }
 

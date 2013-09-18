@@ -73,6 +73,7 @@ module.exports = {
             layout: "layout_ajax",
             stories: false,
             sprint: {
+                data: false,
                 progressStory: 0,
                 progressTask: 0,
                 cntStoryDone: 0,
@@ -83,6 +84,19 @@ module.exports = {
                 cntTaskTotal: 0
             }
         };
+
+        // Fetch sprint data
+        Sprint
+            .findOne(sprintId)
+            .done(function(error, sprint) {
+                if (error) {
+                    res.send(error, 500);
+                } else if (!sprint) {
+                    res.send("Sprint not found.", 404);
+                } else {
+                    data.sprint.data = sprint;
+                }
+            });
 
         // Fetch story data for current sprint
         Story
