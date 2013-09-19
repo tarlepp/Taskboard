@@ -1,9 +1,12 @@
 <ul class="nav nav-tabs">
     <li class="active">
-        <a href="#basic" data-toggle="tab">Basic</a>
+        <a id="basicTab" href="#basic" data-toggle="tab">Basic</a>
     </li>
     <li>
-        <a href="#history" data-toggle="tab" data-href="/History?objectName=Project&objectId=<%= project.id %>">History</a>
+        <a id="milestonesTab" href="#milestones" data-toggle="tab" data-callback="initProjectMilestones" data-href="/Project/Milestones?id=<%= project.id %>">Milestones</a>
+    </li>
+    <li>
+        <a id="historyTab" href="#history" data-toggle="tab" data-href="/History?objectName=Project&objectId=<%= project.id %>">History</a>
     </li>
 </ul>
 
@@ -67,6 +70,8 @@
             </div>
         </form>
     </div>
-    <div class="tab-pane" id="history">
-    </div>
+
+    <div class="tab-pane" id="milestones"></div>
+
+    <div class="tab-pane" id="history"></div>
 </div>

@@ -33,6 +33,7 @@ module.exports = {
                 }
             });
     },
+
     /**
      * Project edit action.
      *
@@ -100,6 +101,103 @@ module.exports = {
             }
         }
     },
+
+    /**
+     * Project milestones action
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    milestones: function(req, res) {
+        if (!req.isAjax) {
+            res.send('Only AJAX request allowed', 403);
+        }
+
+        var projectId = parseInt(req.param('id'), 10);
+
+        var data = {
+            layout: "layout_ajax",
+            milestones: false
+        };
+
+        // Fetch milestone data
+        Milestone
+            .find()
+            .where({
+                projectId: projectId
+            })
+            .sort('deadline ASC')
+            .sort('title ASC')
+            .done(function(error, milestones) {
+                if (error) {
+                    res.send(error, 500);
+                } else {
+                    data.milestones = milestones;
+
+                    fetchStories();
+                }
+            });
+
+        /**
+         * Function to fetch attached milestone stories.
+         */
+        function fetchStories() {
+            // We have no milestones, so make view
+            if (data.milestones.length === 0) {
+                makeView();
+            } else {
+                // Iterate milestones
+                jQuery.each(data.milestones, function(key, /** sails.model.milestone */milestone) {
+                    // Initialize milestone stories property
+                    milestone.stories = false;
+
+                    // Find all user stories which are attached to current milestone
+                    Story
+                        .find()
+                        .where({
+                            milestoneId: milestone.id
+                        })
+                        .sort('title ASC')
+                        .done(function(error, stories) {
+                            // Add stories to milestone data
+                            milestone.stories = stories;
+                            milestone.doneStories = _.reduce(stories, function(memo, story) { return (story.isDone) ? memo + 1 : memo; }, 0);
+
+                            if (milestone.doneStories > 0) {
+                                milestone.progress = Math.round(milestone.doneStories / stories.length * 100);
+                            } else {
+                                milestone.progress = 0;
+                            }
+
+                            // Call view
+                            makeView();
+                        });
+                });
+            }
+        }
+
+        /**
+         * Function to make actual view for project milestone list.
+         */
+        function makeView() {
+            if (data.milestones.length > 0) {
+                var show = true;
+
+                jQuery.each(data.milestones, function(key, /** sails.model.milestone */milestone) {
+                    if (milestone.stories === false) {
+                        show = false;
+                    }
+                });
+
+                if (show) {
+                    res.view(data);
+                }
+            } else {
+                res.view(data);
+            }
+        }
+    },
+
     /**
      * Project planning action.
      *

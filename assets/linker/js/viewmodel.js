@@ -697,6 +697,13 @@ function ViewModel() {
     };
 
     /**
+     * Method opens project milestone list dialog
+     */
+    self.projectMilestones = function() {
+        jQuery('body').trigger('projectMilestones');
+    };
+
+    /**
      * Method opens sprint add
      */
     self.sprintAdd = function() {
@@ -726,13 +733,6 @@ function ViewModel() {
 
     self.usersOpen = function() {
         console.log('Implement users');
-    };
-
-    /**
-     * Method opens project milestone list dialog
-     */
-    self.milestoneList = function() {
-        jQuery('body').trigger('milestoneList', myViewModel.project().id());
     };
 }
 

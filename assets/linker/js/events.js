@@ -141,8 +141,12 @@ jQuery(document).ready(function() {
      * Project edit event, this opens a modal bootbox dialog with project edit
      * form on it.
      */
-    body.on('projectEdit', function() {
-        jQuery.get('/Project/edit', {id: ko.toJS(myViewModel.project().id())}, function(content) {
+    body.on('projectEdit', function(event, projectId, trigger, parameters) {
+        projectId = projectId || myViewModel.project().id();
+        trigger = trigger || false;
+        parameters = parameters || {};
+
+        jQuery.get('/Project/edit', {id: projectId}, function(content) {
             var title = 'Edit project';
             var buttons = [
                 {
@@ -155,24 +159,18 @@ jQuery(document).ready(function() {
                         // Validate form and try to update project data
                         if (validateForm(formItems, modal)) {
                             // Update project data
-                            socket.put(
-                                '/Project/'  + ko.toJS(myViewModel.project().id()),
-                                formItems,
-                                function(/** sails.json.project */data) {
-                                    if (handleSocketError(data)) {
-                                        makeMessage('Project updated successfully.', 'success', {});
+                            socket.put('/Project/'  + projectId, formItems, function(/** sails.json.project */project) {
+                                if (handleSocketError(project)) {
+                                    makeMessage('Project updated successfully.', 'success', {});
 
-                                        modal.modal('hide');
+                                    modal.modal('hide');
 
-                                        // Update client bindings
-                                        var project = _.find(myViewModel.projects(), function(project) {
-                                            return project.id() === data.id;
-                                        });
+                                    myViewModel.processSocketMessage('project', 'update', project.id, project);
+                                }
 
-                                        if (typeof project !== 'undefined') {
-                                            myViewModel.projects.replace(project, new Project(data));
-                                        }
-                                    }
+                                if (trigger) {
+                                    body.trigger(trigger)
+                                }
                             });
                         }
 
@@ -196,7 +194,7 @@ jQuery(document).ready(function() {
 
             // Make form init when dialog is opened.
             modal.on('shown.bs.modal', function() {
-                initProjectForm(modal, true);
+                initProjectForm(modal, true, parameters);
             });
 
             modal.modal('show');
@@ -209,6 +207,30 @@ jQuery(document).ready(function() {
     // TODO
     body.on('projectBacklog', function() {
         console.log("Implement project backlog.");
+    });
+
+    /**
+     * Project milestones event. This will open project edit modal dialog and activates
+     * 'Milestones' tab to be opened.
+     *
+     * User can edit existing milestones, add new ones, show stories attached to milestones
+     * and edit stories which are attached to milestone.
+     *
+     * Also progress bars are shown about milestones statuses.
+     */
+    body.on('projectMilestones', function(event, projectId, trigger) {
+        // If projectId parameter not given select current project id
+        if (!projectId) {
+            projectId = myViewModel.selectedProjectId();
+        }
+
+        trigger = (trigger && trigger.event) ? trigger : false;
+
+        var parameters = {
+            activeTab: 'milestones'
+        };
+
+        body.trigger('projectEdit', [projectId, trigger, parameters]);
     });
 
     /**
@@ -1121,52 +1143,6 @@ jQuery(document).ready(function() {
             // Make form init when dialog is opened.
             modal.on('shown.bs.modal', function() {
                 initTaskForm(modal, true);
-            });
-
-            // Open bootbox modal
-            modal.modal('show');
-        })
-        .fail(function(jqXhr, textStatus, error) {
-            handleAjaxError(jqXhr, textStatus, error);
-        });
-    });
-
-    /**
-     * Project milestone list event. This opens a modal dialog which contains all current project
-     * milestones. User can edit existing milestones, add new ones, change existing milestones, add
-     * stories to milestones and edit stories which are attached to milestone.
-     */
-    body.on('milestoneList', function(event, projectId) {
-        // If projectId parameter not given select current project id
-        if (!projectId) {
-            projectId = myViewModel.selectedProjectId();
-        }
-
-        // Fetch milestone list data from server
-        jQuery.get('/Milestone/list', {projectId: projectId}, function(content) {
-            var title = "Project milestones";
-
-            // Specify modal buttons
-            var buttons = [
-                {
-                    label: "Add new milestone",
-                    className: "btn-primary pull-right",
-                    callback: function() {
-                        modal.modal('hide');
-
-                        jQuery('body').trigger('milestoneAdd', [projectId, 'milestoneList']);
-
-                        return false;
-                    }
-                }
-            ];
-
-            // Create bootbox modal
-            var modal = createBootboxDialog (title, content, buttons, false);
-
-            // Make init when dialog is opened.
-            modal.on('shown.bs.modal', function() {
-                initMilestoneList(modal);
             });
 
             // Open bootbox modal

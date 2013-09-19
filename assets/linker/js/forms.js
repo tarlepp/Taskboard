@@ -1,10 +1,17 @@
 /**
  * Function to initialize project form.
  *
- * @param   {jQuery}    modal   Current modal content
- * @param   {bool}      edit    Are we editing or not
+ * @param   {jQuery}    modal       Current modal content
+ * @param   {bool}      edit        Are we editing or not
+ * @param   {{}}        parameters  Parameters
  */
-function initProjectForm(modal, edit) {
+function initProjectForm(modal, edit, parameters) {
+    parameters = parameters || {};
+
+    if (parameters.activeTab) {
+        jQuery('#' + parameters.activeTab + 'Tab').click();
+    }
+
     var inputTitle = jQuery('input[name="title"]', modal);
 
     inputTitle.focus().val(inputTitle.val());
@@ -29,8 +36,8 @@ function initProjectForm(modal, edit) {
     }
 
     if (edit) {
-        dateMin = new Date(myViewModel.project().sprintDateMin());
-        dateMax = new Date(myViewModel.project().sprintDateMax());
+      //  dateMin = new Date(myViewModel.project().sprintDateMin());
+      //  dateMax = new Date(myViewModel.project().sprintDateMax());
     }
 
     containerStart.bootstrapDP({
@@ -86,6 +93,22 @@ function initProjectForm(modal, edit) {
             containerEnd.closest('.control-group').removeClass('error');
         }
     });
+}
+
+/**
+ * Function initializes project milestones view to use.
+ *
+ * @param   {jQuery}    modal       Current modal content
+ * @param   {string}    contentId   Backlog div id
+ */
+function initProjectMilestones(modal, contentId) {
+    var body = jQuery('body');
+    var container = modal.find(contentId);
+
+    // Initialize action menu for stories
+    initActionMenu(container, {});
+
+    // TODO add actual functionality
 }
 
 /**

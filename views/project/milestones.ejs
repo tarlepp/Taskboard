@@ -3,9 +3,9 @@
         <thead>
         <tr>
             <th></th>
-            <th class="col-md-5">Milestone</th>
+            <th class="col-md-6">Milestone</th>
+            <th class="col-md-1">Deadline</th>
             <th class="col-md-1 text-right">Stories</th>
-            <th class="col-md-2">Deadline</th>
             <th class="col-md-4">Progress</th>
         </tr>
         </thead>
@@ -37,6 +37,9 @@
             <td>
                 <%= milestone.title %>
             </td>
+            <td class="text-nowrap">
+                <%= milestone.deadlineFormatted() %>
+            </td>
             <td class="text-right">
             <% if (milestone.stories.length > 0) { %>
                 <a class="actionMenu-toggle" href="#" data-popover="true">
@@ -59,9 +62,6 @@
             <% } else { %>
                 <%= milestone.stories.length %>
             <% } %>
-            </td>
-            <td>
-                <%= milestone.deadlineFormatted() %>
             </td>
             <td>
                 <div class="progress">

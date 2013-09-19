@@ -72,10 +72,6 @@
     padding-right: 0;
 }
 
-.modal-content #projectMilestones {
-    margin-top: -15px;
-}
-
 .modal-body .nav.nav-tabs {
     position: relative;
     top: -10px;
