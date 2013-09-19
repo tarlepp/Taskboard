@@ -108,7 +108,25 @@ function initProjectMilestones(modal, contentId) {
     // Initialize action menu for stories
     initActionMenu(container, {});
 
-    // TODO add actual functionality
+    // Remove 'add new' click listeners, this prevents firing this event multiple times
+    body.off('click', '[data-add-new-milestone="true"]');
+
+    // User wants to add new milestone to current sprint
+    body.on('click', '[data-add-new-milestone="true"]', function() {
+        var element = jQuery(this);
+        var projectId = element.data('projectId');
+
+        // Hide current modal
+        modal.modal('hide');
+
+        var trigger = {
+            trigger: 'projectMilestones',
+            parameters: [projectId]
+        };
+
+        // Trigger milestone add
+        body.trigger('milestoneAdd', [projectId, trigger]);
+    });
 }
 
 /**

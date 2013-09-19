@@ -1157,6 +1157,8 @@ jQuery(document).ready(function() {
      * Milestone add event. This opens a modal dialog with milestone add form.
      */
     body.on('milestoneAdd', function(event, projectId, trigger) {
+        trigger = trigger || {};
+
         jQuery.get('/Milestone/add', {projectId: projectId}, function(content) {
             var title = "Add new milestone";
             var buttons = [
@@ -1180,9 +1182,7 @@ jQuery(document).ready(function() {
 
                                 modal.modal('hide');
 
-                                if (trigger) {
-                                    body.trigger(trigger)
-                                }
+                                handleEventTrigger(trigger);
                             })
                             .fail(function(jqXhr, textStatus, error) {
                                 handleAjaxError(jqXhr, textStatus, error);

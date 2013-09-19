@@ -620,8 +620,10 @@ function createQtip(element, tipTitle, tipText, tipWidth, tipMy, tipAt, tipFixed
  */
 function handleEventTrigger(trigger) {
     if (trigger) {
-        if (_.isObject(trigger)) {
-            jQuery('body').trigger(trigger.trigger, trigger.parameters);
+        if (_.isObject(trigger) && typeof trigger.trigger !== 'undefined') {
+            var parameters = trigger.parameters || [];
+
+            jQuery('body').trigger(trigger.trigger, parameters);
         } else {
             jQuery('body').trigger(trigger);
         }
