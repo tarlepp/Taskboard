@@ -693,30 +693,36 @@ function initTaskForm(modal, edit) {
  *
  * @param   {jQuery}    modal   Current modal content
  */
-function initMilestoneList(modal) {
+function initMilestoneStories(modal, contentId) {
     var body = jQuery('body');
-    var trigger = 'milestoneList';
+    var container = modal.find(contentId);
 
-    // User clicks story
-    jQuery('ul.story-list', modal).on('click', 'a', function() {
-        // Hide current modal
-        modal.modal('hide');
+    // Initialize action menu for stories
+    initActionMenu(container, {});
 
-        // Trigger story edit
-        body.trigger('storyEdit', [jQuery(this).data('storyId'), trigger]);
-    });
-
-    // User clicks milestone action menu link
-    jQuery('ul.milestone-actions', modal).on('click', 'a', function() {
-        // Hide current modal
-        modal.modal('hide');
-
+    // User clicks action menu link
+    body.on('click', 'ul.actionMenu-actions a', function() {
         var element = jQuery(this);
+        var storyId = element.data('storyId');
         var milestoneId = element.data('milestoneId');
         var action = element.data('action');
+        var selector = element.data('selector');
+
+        // We have popover selector, so hide it
+        if (selector) {
+            jQuery(selector).popover('hide');
+        }
+
+        // Hide current modal
+        modal.modal('hide');
+
+        var trigger = {
+            trigger: 'milestoneEdit',
+            parameters: [milestoneId]
+        };
 
         // Trigger milestone action event
-        body.trigger(action, [milestoneId, trigger]);
+        body.trigger(action, [storyId, trigger]);
     });
 }
 
