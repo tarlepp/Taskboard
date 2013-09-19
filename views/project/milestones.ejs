@@ -102,7 +102,11 @@
                         <li class="actionMenu-header"><span class="text-info">Attached stories</span></li>
                         <% _.each(milestone.stories, function(story) { %>
                         <li style="white-space: nowrap">
-                            <a href="javascript: void(0);" data-story-id="<%= story.id %>" class="<%= (story.isDone) ? 'text-success' : 'text-danger' %>">
+                            <a href="javascript: void(0);" class="<%= (story.isDone) ? 'text-success' : 'text-danger' %>"
+                               data-project-id="<%= project.id %>"
+                               data-story-id="<%= story.id %>"
+                               data-action="storyEdit"
+                            >
                                 <%= story.title %> (<%= (story.estimate == -1) ? '???' : story.estimate %>)
                             </a>
                         </li>

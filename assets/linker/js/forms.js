@@ -108,6 +108,36 @@ function initProjectMilestones(modal, contentId) {
     // Initialize action menu for stories
     initActionMenu(container, {});
 
+    // User clicks action menu link
+    body.on('click', 'ul.actionMenu-actions a', function() {
+        var element = jQuery(this);
+        var projectId = element.data('projectId');
+        var milestoneId = element.data('milestoneId');
+        var storyId = element.data('storyId');
+        var action = element.data('action');
+        var selector = element.data('selector');
+
+        // We have popover selector, so hide it
+        if (selector) {
+            jQuery(selector).popover('hide');
+        }
+
+        // Hide current modal
+        modal.modal('hide');
+
+        // Specify used trigger to come back to this view
+        var trigger = {
+            trigger: 'projectMilestones',
+            parameters: [projectId]
+        };
+
+        // Determine used main action id
+        var actionId = storyId || milestoneId;
+
+        // Trigger milestone action event
+        body.trigger(action, [actionId, trigger]);
+    });
+
     // Remove 'add new' click listeners, this prevents firing this event multiple times
     body.off('click', '[data-add-new-milestone="true"]');
 
@@ -119,6 +149,7 @@ function initProjectMilestones(modal, contentId) {
         // Hide current modal
         modal.modal('hide');
 
+        // Specify used trigger to come back to this view
         var trigger = {
             trigger: 'projectMilestones',
             parameters: [projectId]
@@ -641,23 +672,6 @@ function initSprintBacklog(modal, contentId) {
             }
         }
     });
-
-    /*
-    $("#sprintBacklog tbody tr", container).draggable({
-       // appendTo:"body",
-        helper:"clone"
-    });
-    $("#sprintBacklog tbody", container).droppable({
-        activeClass:"ui-state-default",
-        hoverClass:"ui-state-hover",
-        accept:":not(.ui-sortable-helper)",
-        drop:function (event, ui) {
-            $('.placeholder').remove();
-            row = ui.draggable;
-            $(this).append(row);
-        }
-    });
-    */
 }
 
 /**

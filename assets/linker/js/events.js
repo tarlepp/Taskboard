@@ -1234,9 +1234,7 @@ jQuery(document).ready(function() {
 
                                 modal.modal('hide');
 
-                                if (trigger) {
-                                    body.trigger(trigger)
-                                }
+                                handleEventTrigger(trigger);
                             })
                             .fail(function(jqXhr, textStatus, error) {
                                 handleAjaxError(jqXhr, textStatus, error);
@@ -1271,14 +1269,14 @@ jQuery(document).ready(function() {
                                         url: "/milestone/" + milestoneId,
                                         dataType: 'json'
                                     })
-                                        .done(function() {
-                                            makeMessage("Milestone deleted successfully.", "success", {});
+                                    .done(function() {
+                                        makeMessage("Milestone deleted successfully.", "success", {});
 
-                                            jQuery('body').trigger(trigger);
-                                        })
-                                        .fail(function(jqXhr, textStatus, error) {
-                                            handleAjaxError(jqXhr, textStatus, error);
-                                        });
+                                        handleEventTrigger(trigger);
+                                    })
+                                    .fail(function(jqXhr, textStatus, error) {
+                                        handleAjaxError(jqXhr, textStatus, error);
+                                    });
                                 } else {
                                     jQuery('body').trigger('milestoneEdit', [milestoneId, trigger]);
                                 }
@@ -1327,13 +1325,13 @@ jQuery(document).ready(function() {
                     .done(function() {
                         makeMessage("Milestone deleted successfully.", "success", {});
 
-                        jQuery('body').trigger(trigger);
+                        handleEventTrigger(trigger);
                     })
                     .fail(function(jqXhr, textStatus, error) {
                         handleAjaxError(jqXhr, textStatus, error);
                     });
                 } else {
-                    jQuery('body').trigger(trigger);
+                    handleEventTrigger(trigger);
                 }
             }
         });
