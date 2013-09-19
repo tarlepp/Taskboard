@@ -285,7 +285,11 @@ ul, ol {
 }
 
 .popover.actionMenu ul.actionMenu-actions li.actionMenu-header {
-    padding-left: 15px;
+    padding: 3px 15px;
+    font-size: 17px;
+    font-weight: normal;
+    line-height: 18px;
+    text-transform: none;
 }
 
 .popover.actionMenu ul.actionMenu-actions li.actionMenu-header:hover {
@@ -301,6 +305,7 @@ ul, ol {
     padding: 3px 15px 3px 0;
     clear: both;
     font-weight: normal;
+    font-size: 14px;
     line-height: 1.428571429;
     color: #333333;
     white-space: nowrap;
