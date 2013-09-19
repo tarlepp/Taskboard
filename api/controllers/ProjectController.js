@@ -186,14 +186,14 @@ module.exports = {
                             milestone.stories = stories;
                             milestone.doneStories = _.reduce(stories, function(memo, story) { return (story.isDone) ? memo + 1 : memo; }, 0);
 
-                            if (milestone.stories.length === milestone.doneStories) {
-                                data.cntMilestonesDone = data.cntMilestonesDone + 1;
-                            }
-
                             data.cntStoriesTotal = data.cntStoriesTotal + milestone.stories.length;
                             data.cntStoriesDone = data.cntStoriesDone + milestone.doneStories;
 
                             if (milestone.doneStories > 0) {
+                                if (milestone.stories.length === milestone.doneStories) {
+                                    data.cntMilestonesDone = data.cntMilestonesDone + 1;
+                                }
+
                                 milestone.progress = Math.round(milestone.doneStories / stories.length * 100);
                             } else {
                                 milestone.progress = 0;
