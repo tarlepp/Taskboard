@@ -117,8 +117,30 @@ module.exports = {
 
         var data = {
             layout: "layout_ajax",
-            milestones: false
+            milestones: false,
+            project: false,
+            progressMilestones: 0,
+            progressStories: 0,
+            cntMilestonesDone: 0,
+            cntMilestonesTotal: 0,
+            cntStoriesDone: 0,
+            cntStoriesTotal: 0
         };
+
+        // Fetch project data.
+        Project
+            .findOne(projectId)
+            .done(function(error, project) {
+                if (error) {
+                    res.send(error, 500);
+                } else if (!project) {
+                    res.send("Project not found.", 404);
+                } else {
+                    data.project = project;
+
+                    makeView();
+                }
+            });
 
         // Fetch milestone data
         Milestone
@@ -133,6 +155,7 @@ module.exports = {
                     res.send(error, 500);
                 } else {
                     data.milestones = milestones;
+                    data.cntMilestonesTotal = milestones.length;
 
                     fetchStories();
                 }
@@ -163,6 +186,13 @@ module.exports = {
                             milestone.stories = stories;
                             milestone.doneStories = _.reduce(stories, function(memo, story) { return (story.isDone) ? memo + 1 : memo; }, 0);
 
+                            if (milestone.stories.length === milestone.doneStories) {
+                                data.cntMilestonesDone = data.cntMilestonesDone + 1;
+                            }
+
+                            data.cntStoriesTotal = data.cntStoriesTotal + milestone.stories.length;
+                            data.cntStoriesDone = data.cntStoriesDone + milestone.doneStories;
+
                             if (milestone.doneStories > 0) {
                                 milestone.progress = Math.round(milestone.doneStories / stories.length * 100);
                             } else {
@@ -180,20 +210,42 @@ module.exports = {
          * Function to make actual view for project milestone list.
          */
         function makeView() {
-            if (data.milestones.length > 0) {
-                var show = true;
+            var ok = true;
 
-                jQuery.each(data.milestones, function(key, /** sails.model.milestone */milestone) {
-                    if (milestone.stories === false) {
-                        show = false;
+            jQuery.each(data, function(key, data) {
+                if (data === false) {
+                    ok = false;
+                }
+            });
+
+            if (ok) {
+                if (data.milestones.length > 0) {
+                    var show = true;
+
+                    jQuery.each(data.milestones, function(key, /** sails.model.milestone */milestone) {
+                        if (milestone.stories === false) {
+                            show = false;
+                        }
+                    });
+
+                    if (show) {
+                        if (data.cntMilestonesDone > 0) {
+                            data.progressMilestones = Math.round(data.cntMilestonesDone / data.cntMilestonesTotal * 100);
+                        } else {
+                            data.progressMilestones = 0;
+                        }
+
+                        if (data.cntStoriesDone > 0) {
+                            data.progressStories = Math.round(data.cntStoriesDone / data.cntStoriesTotal * 100);
+                        } else {
+                            data.progressStories = 0;
+                        }
+
+                        res.view(data);
                     }
-                });
-
-                if (show) {
+                } else {
                     res.view(data);
                 }
-            } else {
-                res.view(data);
             }
         }
     },

@@ -1,78 +1,113 @@
-
-    <table id="projectMilestones" class="table table-striped table-hover table-condensed">
-        <thead>
-        <tr>
-            <th></th>
-            <th class="col-md-6">Milestone</th>
-            <th class="col-md-1">Deadline</th>
-            <th class="col-md-1 text-right">Stories</th>
-            <th class="col-md-4">Progress</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% _.each(milestones, function(milestone) { %>
-        <tr>
-            <td>
-                <a class="actionMenu-toggle btn btn-icon btn-default" href="#" data-popover="true">
-                    <i class="icon icon-chevron-down"></i>
-                </a>
-                <div class="hidden">
-                    <div class="actionMenu">
-                        <ul class="actionMenu-actions">
-                            <li>
-                                <a href="javascript: void(0);" data-milestone-id="<%= milestone.id %>" data-action="milestoneEdit">
-                                    <i class="icon icon-wrench"></i> Edit milestone
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="javascript: void(0);" data-milestone-id="<%= milestone.id %>" data-action="milestoneDelete" class="text-danger">
-                                    <i class="icon icon-remove"></i> Delete milestone
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <%= milestone.title %>
-            </td>
-            <td class="text-nowrap">
-                <%= milestone.deadlineFormatted() %>
-            </td>
-            <td class="text-right">
-            <% if (milestone.stories.length > 0) { %>
-                <a class="actionMenu-toggle" href="#" data-popover="true">
-                    <span><%= milestone.stories.length %></span>
-                </a>
-                <div class="hidden">
-                    <div class="actionMenu">
-                        <ul class="actionMenu-actions">
-                            <li class="actionMenu-header"><span class="text-info">Attached stories</span></li>
-                            <% _.each(milestone.stories, function(story) { %>
-                            <li style="white-space: nowrap">
-                                <a href="javascript: void(0);" data-story-id="<%= story.id %>" class="<%= (story.isDone) ? 'text-success' : 'text-danger' %>">
-                                    <%= story.title %> (<%= (story.estimate == -1) ? '???' : story.estimate %>)
-                                </a>
-                            </li>
-                            <% }) %>
-                        </ul>
-                    </div>
-                </div>
-            <% } else { %>
-                <%= milestone.stories.length %>
-            <% } %>
-            </td>
-            <td>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="<%= milestone.progress %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= milestone.progress %>%;">
-                    <% if (milestone.progress > 0) { %>
-                        <span ><%= milestone.progress %>% Complete</span>
+<div class="progressTotal">
+    <h4>Current progress of milestones</h4>
+    <h4></h4>
+    <div class="row">
+        <div class="col-md-2 text-right text-nowrap">
+            Milestones <small>(<%= cntMilestonesDone %> / <%= cntMilestonesTotal %>)</small>
+        </div>
+        <div class="col-md-10">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<%= progressMilestones %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= progressMilestones %>%;">
+                    <% if (progressMilestones > 0) { %>
+                    <span ><%= progressMilestones %>% Complete</span>
                     <% } %>
-                    </div>
                 </div>
-            </td>
-        </tr>
-        <% }) %>
-        </tbody>
-    </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2 text-right">
+            Stories <small>(<%= cntStoriesDone %> / <%= cntStoriesTotal %>)</small>
+        </div>
+        <div class="col-md-10">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<%= progressStories %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= progressStories %>%;">
+                    <% if (progressStories > 0) { %>
+                    <span ><%= progressStories %>% Complete</span>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4>Project milestones</h4>
+
+<table id="projectMilestones" class="table table-striped table-hover table-condensed">
+    <thead>
+    <tr>
+        <th></th>
+        <th class="col-md-6">Milestone</th>
+        <th class="col-md-1">Deadline</th>
+        <th class="col-md-1 text-right">Stories</th>
+        <th class="col-md-4">Progress</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% _.each(milestones, function(milestone) { %>
+    <tr>
+        <td>
+            <a class="actionMenu-toggle btn btn-icon btn-default" href="#" data-popover="true">
+                <i class="icon icon-chevron-down"></i>
+            </a>
+            <div class="hidden">
+                <div class="actionMenu">
+                    <ul class="actionMenu-actions">
+                        <li>
+                            <a href="javascript: void(0);" data-milestone-id="<%= milestone.id %>" data-action="milestoneEdit">
+                                <i class="icon icon-wrench"></i> Edit milestone
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="javascript: void(0);" data-milestone-id="<%= milestone.id %>" data-action="milestoneDelete" class="text-danger">
+                                <i class="icon icon-remove"></i> Delete milestone
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </td>
+        <td>
+            <%= milestone.title %>
+        </td>
+        <td class="text-nowrap">
+            <%= milestone.deadlineFormatted() %>
+        </td>
+        <td class="text-right">
+        <% if (milestone.stories.length > 0) { %>
+            <a class="actionMenu-toggle" href="#" data-popover="true">
+                <span><%= milestone.stories.length %></span>
+            </a>
+            <div class="hidden">
+                <div class="actionMenu">
+                    <ul class="actionMenu-actions">
+                        <li class="actionMenu-header"><span class="text-info">Attached stories</span></li>
+                        <% _.each(milestone.stories, function(story) { %>
+                        <li style="white-space: nowrap">
+                            <a href="javascript: void(0);" data-story-id="<%= story.id %>" class="<%= (story.isDone) ? 'text-success' : 'text-danger' %>">
+                                <%= story.title %> (<%= (story.estimate == -1) ? '???' : story.estimate %>)
+                            </a>
+                        </li>
+                        <% }) %>
+                    </ul>
+                </div>
+            </div>
+        <% } else { %>
+            <%= milestone.stories.length %>
+        <% } %>
+        </td>
+        <td>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<%= milestone.progress %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= milestone.progress %>%;">
+                <% if (milestone.progress > 0) { %>
+                    <span ><%= milestone.progress %>% Complete</span>
+                <% } %>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <% }) %>
+    </tbody>
+</table>
