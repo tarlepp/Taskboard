@@ -341,7 +341,7 @@ function initActionMenu(context, parameters) {
     var defaultParameters = {
         container: 'body',
         trigger: 'manual',
-        placement: 'bottomLeft',
+        placement: 'bottomLeftFixed',
         animation: false,
         html: true,
         template:
