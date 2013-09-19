@@ -184,7 +184,9 @@ module.exports = {
                         .done(function(error, stories) {
                             // Add stories to milestone data
                             milestone.stories = stories;
-                            milestone.doneStories = _.reduce(stories, function(memo, story) { return (story.isDone) ? memo + 1 : memo; }, 0);
+                            milestone.doneStories = _.reduce(stories, function (memo, story) {
+                                return (story.isDone) ? memo + 1 : memo;
+                            }, 0);
 
                             data.cntStoriesTotal = data.cntStoriesTotal + milestone.stories.length;
                             data.cntStoriesDone = data.cntStoriesDone + milestone.doneStories;
