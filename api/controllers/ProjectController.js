@@ -115,6 +115,27 @@ module.exports = {
 
         var projectId = parseInt(req.param('id'), 10);
 
+        var data = {
+            layout: "layout_ajax",
+            project: false,
+            stories: false
+        };
+
+        // Fetch project data.
+        Project
+            .findOne(projectId)
+            .done(function(error, project) {
+                if (error) {
+                    res.send(error, 500);
+                } else if (!project) {
+                    res.send("Project not found.", 404);
+                } else {
+                    data.project = project;
+
+                    makeView();
+                }
+            });
+
         // Fetch project backlog data
         Story
             .find()
@@ -128,12 +149,29 @@ module.exports = {
                 if (error) {
                     res.send(error, 500);
                 } else {
-                    res.view({
-                        layout: "layout_ajax",
-                        stories: stories
-                    });
+                    data.stories = stories;
+
+                    makeView();
                 }
             });
+
+        /**
+         * Function makes actual view if all necessary data is fetched
+         * from database for template.
+         */
+        function makeView() {
+            var ok = true;
+
+            jQuery.each(data, function(key, data) {
+                if (data === false) {
+                    ok = false;
+                }
+            });
+
+            if (ok) {
+                res.view(data);
+            }
+        }
     },
 
     /**

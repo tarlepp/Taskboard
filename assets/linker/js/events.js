@@ -676,9 +676,7 @@ jQuery(document).ready(function() {
 
                                     modal.modal('hide');
 
-                                    if (trigger) {
-                                        body.trigger(trigger)
-                                    }
+                                    handleEventTrigger(trigger);
 
                                     // Update client bindings
                                     myViewModel.stories.push(new Story(data));
