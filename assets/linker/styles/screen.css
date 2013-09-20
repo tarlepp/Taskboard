@@ -77,9 +77,14 @@ table input[type="text"] {
     font-size: 14px;
 }
 
+.alert {
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
 .alert .close {
-    right: -10px;
-    top: -18px;
+    right: -5px;
+    top: -8px;
     position: relative;
     font-size: 28px;
 }
