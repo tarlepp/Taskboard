@@ -170,7 +170,34 @@ function initProjectBacklog(modal, contentId) {
     var body = jQuery('body');
     var container = modal.find(contentId);
 
-    console.log('initProjectBacklog');
+    // Initialize action menu for stories
+    initActionMenu(container, {});
+
+    // User clicks action menu link
+    body.on('click', 'ul.actionMenu-actions a', function() {
+        var element = jQuery(this);
+        var projectId = element.data('projectId');
+        var storyId = element.data('storyId');
+        var action = element.data('action');
+        var selector = element.data('selector');
+
+        // We have popover selector, so hide it
+        if (selector) {
+            jQuery(selector).popover('hide');
+        }
+
+        // Hide current modal
+        modal.modal('hide');
+
+        // Specify used trigger to come back to this view
+        var trigger = {
+            trigger: 'projectBacklog',
+            parameters: [projectId]
+        };
+
+        // Trigger milestone action event
+        body.trigger(action, [storyId, trigger]);
+    });
 }
 
 /**
