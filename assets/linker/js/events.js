@@ -1211,6 +1211,13 @@ jQuery(document).ready(function() {
     });
 
     body.on('milestoneEdit', function(event, milestoneId, trigger) {
+        if (typeof trigger === 'undefined') {
+            trigger = {
+                trigger: 'projectMilestones',
+                parameters: [myViewModel.project().id()]
+            };
+        }
+
         jQuery.get('/Milestone/edit', {id: milestoneId}, function(content) {
             var title = "Edit milestone";
             var buttons = [
