@@ -204,9 +204,21 @@ jQuery(document).ready(function() {
         });
     });
 
-    // TODO
-    body.on('projectBacklog', function() {
-        console.log("Implement project backlog.");
+    /**
+     * Project milestones event. This will open project edit modal dialog and activates
+     * 'Backlog' tab to be opened.
+     *
+     * User can edit existing backlog stories and add new ones from this UI.
+     */
+    body.on('projectBacklog', function(event, projectId, trigger) {
+        projectId = projectId || myViewModel.selectedProjectId();
+        trigger = trigger || false;
+
+        var parameters = {
+            activeTab: 'backlog'
+        };
+
+        body.trigger('projectEdit', [projectId, trigger, parameters]);
     });
 
     /**
@@ -219,12 +231,8 @@ jQuery(document).ready(function() {
      * Also progress bars are shown about milestones statuses.
      */
     body.on('projectMilestones', function(event, projectId, trigger) {
-        // If projectId parameter not given select current project id
-        if (!projectId) {
-            projectId = myViewModel.selectedProjectId();
-        }
-
-        trigger = (trigger && trigger.event) ? trigger : false;
+        projectId = projectId || myViewModel.selectedProjectId();
+        trigger = trigger || false;
 
         var parameters = {
             activeTab: 'milestones'

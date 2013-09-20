@@ -99,7 +99,7 @@ function initProjectForm(modal, edit, parameters) {
  * Function initializes project milestones view to use.
  *
  * @param   {jQuery}    modal       Current modal content
- * @param   {string}    contentId   Backlog div id
+ * @param   {string}    contentId   Milestone div id
  */
 function initProjectMilestones(modal, contentId) {
     var body = jQuery('body');
@@ -158,6 +158,19 @@ function initProjectMilestones(modal, contentId) {
         // Trigger milestone add
         body.trigger('milestoneAdd', [projectId, trigger]);
     });
+}
+
+/**
+ * Function initializes project backlog view to use.
+ *
+ * @param   {jQuery}    modal       Current modal content
+ * @param   {string}    contentId   Backlog div id
+ */
+function initProjectBacklog(modal, contentId) {
+    var body = jQuery('body');
+    var container = modal.find(contentId);
+
+    console.log('initProjectBacklog');
 }
 
 /**

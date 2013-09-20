@@ -103,6 +103,40 @@ module.exports = {
     },
 
     /**
+     * Project backlog action
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    backlog: function(req, res) {
+        if (!req.isAjax) {
+            res.send('Only AJAX request allowed', 403);
+        }
+
+        var projectId = parseInt(req.param('id'), 10);
+
+        // Fetch project backlog data
+        Story
+            .find()
+            .where({
+                projectId: projectId,
+                sprintId: 0
+            })
+            .sort('priority ASC')
+            .sort('title ASC')
+            .done(function(error, stories) {
+                if (error) {
+                    res.send(error, 500);
+                } else {
+                    res.view({
+                        layout: "layout_ajax",
+                        stories: stories
+                    });
+                }
+            });
+    },
+
+    /**
      * Project milestones action
      *
      * @param   {Request}   req Request object
