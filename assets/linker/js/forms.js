@@ -246,6 +246,7 @@ function initProjectBacklog(modal, contentId) {
                     data: {
                         priority: index + 1
                     },
+                    type: 'PUT',
                     dataType: 'json'
                 })
                 .done(function(/** models.rest.story */story) {
