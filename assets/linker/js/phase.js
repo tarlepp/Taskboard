@@ -1,14 +1,14 @@
 /**
  * /assets/linker/js/phase.js
  *
- * This file contains all Phase specified javascript functions and handlers.
+ * This file contains all phase specified javascript functions and handlers.
  * Basically file is divided into the following sections:
  *  - Event handlers
  *  - Form handlers
  */
 
 /**
- * Project specified global event handlers. These events are following:
+ * Phase specified global event handlers. These events are following:
  *  - phasesEdit
  */
 jQuery(document).ready(function() {
