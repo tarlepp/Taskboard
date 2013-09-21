@@ -3,10 +3,10 @@
         <a id="basicTab" href="#basic" data-toggle="tab">Basic</a>
     </li>
     <li>
-        <a id="backlogTab" href="#backlog" data-toggle="tab" data-callback="initProjectBacklog" data-href="/Project/Backlog?id=<%= project.id %>">Backlog</a>
+        <a id="backlogTab" href="#backlog" data-toggle="tab" data-callback="initProjectTabBacklog" data-href="/Project/Backlog?id=<%= project.id %>">Backlog</a>
     </li>
     <li>
-        <a id="milestonesTab" href="#milestones" data-toggle="tab" data-callback="initProjectMilestones" data-href="/Project/Milestones?id=<%= project.id %>">Milestones</a>
+        <a id="milestonesTab" href="#milestones" data-toggle="tab" data-callback="initProjectTabMilestones" data-href="/Project/Milestones?id=<%= project.id %>">Milestones</a>
     </li>
     <li>
         <a id="historyTab" href="#history" data-toggle="tab" data-href="/History?objectName=Project&objectId=<%= project.id %>">History</a>
@@ -49,6 +49,7 @@
                             data-pair="formProjectEditDateEnd"
                             data-focus="false"
                             data-edit="true"
+                            data-type="project"
                         />
                         <span class="input-group-addon"><i class="icon-calendar"></i></span>
                     </div>
@@ -60,6 +61,7 @@
                             data-pair="formProjectEditDateStart"
                             data-focus="false"
                             data-edit="true"
+                            data-type="project"
                         />
                         <span class="input-group-addon"><i class="icon-calendar"></i></span>
                     </div>

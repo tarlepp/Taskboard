@@ -632,7 +632,7 @@ function handleEventTrigger(trigger) {
 
 /**
  *
- * @param   {sails.error.socket}    error
+ * @param   {sails.error.socket|sails.json.project}    error
  * @param   {Boolean}               showMessage
  */
 function handleSocketError(error, showMessage) {

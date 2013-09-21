@@ -189,14 +189,17 @@ function validateDateRange(context, input, group, label, date, errors) {
     }
 
     if (type == 'project' && edit) {
-        var dateMin = new Date(myViewModel.project().sprintDateMin());
-        var dateMax = new Date(myViewModel.project().sprintDateMax());
+        var sprintFirst = _.min(myViewModel.sprints(), function(sprint) { return sprint.dateStartObject().getTime(); } );
+        var sprintLast = _.max(myViewModel.sprints(), function(sprint) { return sprint.dateEndObject().getTime(); } );
 
-        if (role == 'start' && dateSelf.format('yyyy-mm-dd') > dateMin.format('yyyy-mm-dd')) {
+        var dateMin = sprintFirst ? sprintFirst.dateStartObject() : null;
+        var dateMax = sprintLast ? sprintLast.dateEndObject() : null;
+
+        if (role == 'start' && dateMin && dateSelf.format('yyyy-mm-dd') > dateMin.format('yyyy-mm-dd')) {
             errors.push('Start date overlaps with project sprints. Start date cannot be before ' + dateMin.format('yyyy-mm-dd') + '.');
 
             return false;
-        } else if (role == 'end' && dateSelf.format('yyyy-mm-dd') < dateMax.format('yyyy-mm-dd')) {
+        } else if (role == 'end' && dateMax && dateSelf.format('yyyy-mm-dd') < dateMax.format('yyyy-mm-dd')) {
             errors.push('End date overlaps with project sprints. End date must be at least ' + dateMax.format('yyyy-mm-dd') + '.');
 
             return false;

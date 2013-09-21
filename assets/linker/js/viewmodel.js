@@ -527,7 +527,7 @@ function ViewModel() {
      * @param   {String}    model   Name of the model
      * @param   {String}    type    Message type
      * @param   {Number}    id      Object data id
-     * @param   {{}}        data    Object data
+     * @param   {sails.json.project}        data    Object data
      */
     self.processSocketMessage = function(model, type, id, data) {
         switch (type) {
