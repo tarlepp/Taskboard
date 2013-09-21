@@ -850,6 +850,32 @@ function initMilestoneStories(modal, contentId) {
         // Trigger milestone action event
         body.trigger(action, [storyId, trigger]);
     });
+
+    // Remove 'add new' click listeners, this prevents firing this event multiple times
+    body.off('click', '[data-add-new-story="true"]');
+
+    // User wants to add new story to current sprint
+    body.on('click', '[data-add-new-story="true"]', function() {
+        var element = jQuery(this);
+        var milestoneId = element.data('milestoneId');
+        var projectId = element.data('projectId');
+
+        // Hide current modal
+        modal.modal('hide');
+
+        var trigger = {
+            trigger: 'milestoneEdit',
+            parameters: [milestoneId]
+        };
+
+        // Specify form data
+        var formData = {
+            milestoneId: milestoneId
+        };
+
+        // Trigger story add
+        body.trigger('storyAdd', [projectId, 0, trigger, formData]);
+    });
 }
 
 /**

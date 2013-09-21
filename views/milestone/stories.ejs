@@ -37,7 +37,16 @@
 <table id="milestoneStories" class="table table-striped table-hover table-condensed">
     <thead>
     <tr>
-        <th></th>
+        <th>
+            <a href="javascript: void(0);" class="btn btn-default btn-icon tooltipTitle" title="Add new story to this milestone"
+               data-qtip-options='{ "position": {"my": "center right", "at": "center left"} }'
+               data-add-new-story="true"
+               data-project-id="<%= milestone.data.projectId %>"
+               data-milestone-id="<%= milestone.data.id %>"
+            >
+                <i class="icon icon-plus"></i>
+            </a>
+        </th>
         <th class="col-md-6">Story</th>
         <th class="col-md-1">Estimate</th>
         <th class="col-md-1 text-right">Tasks</th>

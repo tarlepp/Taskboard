@@ -654,10 +654,13 @@ jQuery(document).ready(function() {
      *
      * Note that this events requires projectId and sprintId parameters.
      */
-    body.on('storyAdd', function(event, projectId, sprintId, trigger) {
+    body.on('storyAdd', function(event, projectId, sprintId, trigger, formData) {
         trigger = trigger || false;
+        formData = formData || {};
 
-        jQuery.get('/Story/add', {projectId: projectId, sprintId: sprintId}, function(content) {
+        console.log(formData);
+
+        jQuery.get('/Story/add', {projectId: projectId, sprintId: sprintId, formData: formData}, function(content) {
             var title = "Add new user story";
             var buttons = [
                 {

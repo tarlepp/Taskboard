@@ -20,12 +20,16 @@ module.exports = {
 
         var projectId = parseInt(req.param('projectId'), 10);
         var sprintId = parseInt(req.param('sprintId'), 10);
+        var formData = req.param('formData') || {};
+
+        console.log(formData);
 
         // Required view data
         var data = {
             layout: "layout_ajax",
             projectId: projectId,
             sprintId: sprintId,
+            formData: formData,
             milestones: false,
             types: false
         };
