@@ -28,6 +28,10 @@ var sails = {
             id: '',
             createdAt: '',
             updatedAt: ''
+        },
+        trigger: {
+            trigger: '',
+            parameters: []
         }
     },
     json: {
