@@ -525,9 +525,12 @@ function ViewModel() {
      * todo implement missing types and models
      *
      * @param   {String}    model   Name of the model
-     * @param   {String}    type    Message type
+     * @param   {String}    type    Message type; update, create, destroy
      * @param   {Number}    id      Object data id
-     * @param   {sails.json.project}        data    Object data
+     * @param   {
+     *          sails.json.project|
+     *          sails.json.phase
+     *          }                   data    Object data
      */
     self.processSocketMessage = function(model, type, id, data) {
         switch (type) {

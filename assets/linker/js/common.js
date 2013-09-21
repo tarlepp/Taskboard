@@ -616,24 +616,30 @@ function createQtip(element, tipTitle, tipText, tipWidth, tipMy, tipAt, tipFixed
  * Function to handle event trigger. Note that this will need some work later on
  * with more complicated cases of real usage.
  *
- * @param   {String|Object|void}    trigger
+ * @param   {String|sails.helper.trigger|void}  trigger
  */
 function handleEventTrigger(trigger) {
     if (trigger) {
-        if (_.isObject(trigger) && typeof trigger.trigger !== 'undefined') {
+        if (_.isObject(trigger) && typeof trigger.trigger !== "undefined") {
             var parameters = trigger.parameters || [];
 
-            jQuery('body').trigger(trigger.trigger, parameters);
+            jQuery("body").trigger(trigger.trigger, parameters);
         } else {
-            jQuery('body').trigger(trigger);
+            jQuery("body").trigger(trigger);
         }
     }
 }
 
 /**
+ * Function handles possible socket error.
  *
- * @param   {sails.error.socket|sails.json.project}    error
- * @param   {Boolean}               showMessage
+ * @param   {
+ *          sails.error.socket|
+ *          sails.json.project|
+ *          sails.json.phase|
+ *          sails.json.task
+ *          }                       error
+ * @param   {Boolean}               [showMessage]
  */
 function handleSocketError(error, showMessage) {
     showMessage = showMessage || true;

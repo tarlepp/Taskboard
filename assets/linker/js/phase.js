@@ -1,0 +1,299 @@
+/**
+ * /assets/linker/js/phase.js
+ *
+ * This file contains all Phase specified javascript functions and handlers.
+ * Basically file is divided into the following sections:
+ *  - Event handlers
+ *  - Form handlers
+ */
+
+/**
+ * Project specified global event handlers. These events are following:
+ *  - phasesEdit
+ */
+jQuery(document).ready(function() {
+    var body = jQuery("body");
+
+    /**
+     * Project phases edit event. This opens a modal dialog which contains all current project
+     * phases. User can edit existing phases, add new ones and change phases order simply by
+     * dragging them. All the phases are saved in "same" time.
+     *
+     * todo do we really need project id parameter?
+     * todo optimize save event
+     *
+     * @param   {jQuery.Event}          event       Event object
+     * @param   {Number}                [projectId] Project id, if not given fallback to current project
+     * @param   {sails.helper.trigger}  [trigger]   Trigger to process after actions
+     */
+    body.on("phasesEdit", function(event, projectId, trigger) {
+        projectId = projectId || myViewModel.project().id();
+        trigger = trigger || false;
+
+        jQuery.get("/Phase/edit", {id: projectId})
+        .done(function(content) {
+            var title = "Project phases on board";
+            var buttons = [
+                {
+                    label: "Save",
+                    className: "btn-primary pull-right",
+                    callback: function() {
+                        var errors = false;
+                        var lines = jQuery("#projectPhases", modal).find("tbody tr");
+                        var phases = [];
+
+                        // Iterate each lines
+                        lines.each(function(key) {
+                            var row = jQuery(this);
+                            var title = jQuery.trim(row.find("input[name='title[]']").val());
+                            var isDone = row.find("input[name='isDone[]']").is(":checked") ? 1 : 0;
+                            var tasks = parseInt(row.find("input[name='tasks[]']").val(), 10);
+                            var phaseId = parseInt(row.find("input[name='id[]']").val(), 10);
+
+                            if (title.length == 0) {
+                                makeMessage("Phase name cannot be empty.", "error", {});
+
+                                row.addClass("has-error");
+
+                                errors = true;
+                            } else {
+                                row.removeClass("has-error");
+
+                                var phaseData = {
+                                    title: title,
+                                    order: key,
+                                    tasks: isNaN(tasks) ? 0 : tasks,
+                                    isDone: isDone,
+                                    projectId: projectId
+                                };
+
+                                // Add new phase
+                                if (isNaN(phaseId)) {
+                                    socket.post("/Phase", phaseData, function(/** sails.json.phase */phase) {
+                                        if (handleSocketError(phase)) {
+                                            // Update client bindings
+                                            myViewModel.processSocketMessage("phase", "create", phase.id, phase);
+
+                                            phases.push(true);
+
+                                            checkData();
+                                        } else {
+                                            errors = true;
+                                        }
+                                    });
+                                } else { // Update phase data
+                                    socket.put("/Phase/"  + phaseId, phaseData, function(/** sails.json.phase */phase) {
+                                        if (handleSocketError(phase)) {
+                                            // Update client bindings
+                                            myViewModel.processSocketMessage("phase", "update", phase.id, phase);
+
+                                            phases.push(true);
+
+                                            checkData();
+                                        } else {
+                                            errors = true;
+                                        }
+                                    });
+                                }
+                            }
+                        });
+
+                        /**
+                         * Function checks that we have processed all phases data correctly. If
+                         * all phases are updated function will trigger success message.
+                         */
+                        function checkData() {
+                            var ready = true;
+
+                            if (lines.length === phases.length) {
+                                jQuery.each(phases, function(key, value) {
+                                    if (value !== true) {
+                                        ready = false;
+                                    }
+                                });
+                            } else {
+                                ready = false;
+                            }
+
+                            if (ready && errors === false) {
+                                makeMessage("Project phases saved successfully.", "success", {});
+
+                                modal.modal("hide");
+
+                                handleEventTrigger({trigger: "phasesEdit", parameters: [projectId]});
+                            }
+                        }
+
+                        return false;
+                    }
+                },
+                {
+                    label: "Add new phase",
+                    className: "btn-primary pull-right",
+                    callback: function() {
+                        var newRow = jQuery("#projectPhasesNew", modal).find("tr").clone();
+                        var slider = newRow.find(".slider");
+                        var input = slider.next("input");
+                        var cellValue = slider.parent().next("td");
+
+                        cellValue.html("unlimited");
+
+                        // Init slider
+                        slider.slider({
+                            min: 0,
+                            max: 10,
+                            value: 0,
+                            slide: function(event, ui) {
+                                if (isNaN(ui.value) || ui.value === 0) {
+                                    cellValue.html("unlimited");
+                                } else {
+                                    cellValue.html(ui.value);
+                                }
+
+                                input.val(ui.value);
+                            }
+                        });
+
+                        jQuery("#projectPhases", modal).find("tbody").append(newRow);
+
+                        return false;
+                    }
+                }
+            ];
+
+            // Create bootbox modal
+            var modal = createBootboxDialog(title, content, buttons, trigger);
+
+            // Make form init when dialog is opened.
+            modal.on("shown.bs.modal", function() {
+                initProjectPhases(modal);
+            });
+
+            modal.modal("show");
+        })
+        .fail(function(jqXhr, textStatus, error) {
+            handleAjaxError(jqXhr, textStatus, error);
+        });
+    });
+});
+
+/**
+ * Function initializes project phases admin modal content.
+ *
+ * @param   {jQuery|$}  modal   Current modal content
+ */
+function initProjectPhases(modal) {
+    // Initialize jQuery UI sliders for phase task count
+    jQuery.each(jQuery("#projectPhases", modal).find(".slider"), function() {
+        var slider = jQuery(this);
+        var input = slider.next("input");
+        var currentValue = parseInt(input.val(), 10);
+        var cellValue = slider.parent().next("td");
+
+        if (isNaN(currentValue) || currentValue === 0) {
+            cellValue.html("unlimited");
+        } else {
+            cellValue.html(currentValue);
+        }
+
+        // Initialize slider
+        slider.slider({
+            min: 0,
+            max: 10,
+            value: currentValue,
+            slide: function(event, ui) {
+                if (isNaN(ui.value) || ui.value === 0) {
+                    cellValue.html("unlimited");
+                } else {
+                    cellValue.html(ui.value);
+                }
+
+                input.val(ui.value);
+            }
+        });
+    });
+
+    // Fix for jQuery UI sortable helper
+    var fixHelper = function(e, ui) {
+        ui.children().each(function() {
+            jQuery(this).width(jQuery(this).width());
+        });
+
+        return ui;
+    };
+
+    var sortable = jQuery("#projectPhases").find("tbody");
+
+    // Make phases to be sortable
+    sortable.sortable({
+        helper: fixHelper,
+        axis: 'y',
+        cursor: 'move',
+        stop: function() {
+            // Update order data
+            jQuery.each(sortable.find('tr'), function(key) {
+                var row = jQuery(this);
+                var phaseId = row.data('phaseId');
+
+                row.find('input[name="order['+ phaseId +']"]').val(key);
+            });
+        }
+    })
+    .disableSelection();
+
+    // Phase delete
+    modal.on("click", ".phaseDelete", function() {
+        var row = jQuery(this).closest('tr');
+        var phaseId = parseInt(row.data('phaseId'), 10);
+
+        // Not a "real" phase (row is not yet saved), so just remove whole row
+        if (isNaN(phaseId)) {
+            row.remove();
+        } else { // Otherwise we have a real phase
+            // Fetch tasks that are attached to this phase
+            socket.get("/Task", {phaseId: phaseId}, function(/** sails.json.task */tasks) {
+                if (handleSocketError(tasks, true)) {
+                    // Phase doesn't contain any tasks, so it can be deleted
+                    if (_.size(tasks) === 0) {
+                        modal.modal("hide");
+
+                        var body = jQuery("body");
+
+                        // Show confirm modal to user
+                        bootbox.confirm({
+                            title: "danger - danger - danger",
+                            message: "Are you sure of phase delete?",
+                            buttons: {
+                                cancel: {
+                                    className: "btn-default pull-left"
+                                },
+                                confirm: {
+                                    label: "Delete",
+                                    className: "btn-danger pull-right"
+                                }
+                            },
+                            callback: function(result) {
+                                if (result) {
+                                    socket.delete("/Phase/" + phaseId, function(/** sails.json.phase */data) {
+                                        if (handleSocketError(data)) {
+                                            makeMessage("Phase deleted successfully.", "success", {});
+
+                                            // Update knockout bindings
+                                            myViewModel.processSocketMessage("phase", "destroy", data.id, data);
+
+                                            body.trigger('phasesEdit');
+                                        }
+                                    });
+                                } else {
+                                    body.trigger('phasesEdit');
+                                }
+                            }
+                        });
+                    } else {
+                        makeMessage("Cannot delete phase, because it contains tasks.", "error", {});
+                    }
+                }
+            });
+        }
+    });
+}
