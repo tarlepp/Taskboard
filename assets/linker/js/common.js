@@ -171,24 +171,27 @@ function handleAjaxError(jqXhr, textStatus, error) {
 /**
  * Function to trigger noty message.
  *
- * @param   {string}    text    Message to show
- * @param   {string}    type    Type of message
- * @param   {object}    options Custom options for noty
+ * @param   {String}    text        Message to show
+ * @param   {String}    [type]      Type of message
+ * @param   {{}}        [options]   Custom options for noty
  */
 function makeMessage(text, type, options) {
+    type = type || "success";
     options = options || {};
 
     var timeout = 3000;
 
     switch (type) {
-        case 'success':
+        case "success":
             timeout = 1500;
+            break;
     }
 
+    // Create noty
     noty(jQuery.extend({}, {
         text: text.nl2br(),
         type: type,
-        layout: 'top',
+        layout: "top",
         timeout: timeout
     }, options));
 }
@@ -638,6 +641,7 @@ function handleEventTrigger(trigger) {
  *          sails.json.phase|
  *          sails.json.project|
  *          sails.json.sprint|
+ *          sails.json.story|
  *          sails.json.task
  *          }                       error
  * @param   {Boolean}               [showMessage]

@@ -117,6 +117,40 @@ var sails = {
             id: '',
             createdAt: '',
             updatedAt: ''
+        },
+        storySplit: {
+            storyOld: {
+                projectId: '',
+                sprintId: '',
+                milestoneId: '',
+                typeId: '',
+                title: '',
+                description: '',
+                estimate: '',
+                priority: '',
+                vfCase: '',
+                isDone: '',
+                id: '',
+                createdAt: '',
+                updatedAt: ''
+            },
+            storyNew: {
+                projectId: '',
+                sprintId: '',
+                milestoneId: '',
+                typeId: '',
+                title: '',
+                description: '',
+                estimate: '',
+                priority: '',
+                vfCase: '',
+                isDone: '',
+                id: '',
+                createdAt: '',
+                updatedAt: ''
+            },
+            tasks: [],
+            taskCnt: 0
         }
     },
     model: {
