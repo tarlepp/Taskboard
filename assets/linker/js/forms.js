@@ -1,20 +1,4 @@
 
-
-
-
-/**
- * Function initializes task add/edit form to use. Note that form is
- * located in modal content.
- *
- * @param   {jQuery}    modal   Current modal content
- * @param   {Boolean}   edit    Are we editing existing task or not
- */
-function initTaskForm(modal, edit) {
-    var inputTitle = jQuery('input[name="title"]', modal);
-
-    inputTitle.focus().val(inputTitle.val());
-}
-
 /**
  * Function initializes milestone list to use. Note that milestone list
  * content is in modal parameter.

@@ -531,7 +531,8 @@ function ViewModel() {
      *          sails.json.phase|
      *          sails.json.project|
      *          sails.json.sprint|
-     *          sails.json.story
+     *          sails.json.story|
+     *          sails.json.task
      *          }                   data    Object data
      */
     self.processSocketMessage = function(model, type, id, data) {

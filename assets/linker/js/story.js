@@ -70,7 +70,7 @@ jQuery(document).ready(function() {
 
             // Make form init when dialog is opened.
             modal.on("shown.bs.modal", function() {
-                initStoryForm(modal, false);
+                initStoryForm(modal);
             });
 
             // Open bootbox modal
@@ -146,7 +146,7 @@ jQuery(document).ready(function() {
 
             // Make form init when dialog is opened.
             modal.on("shown.bs.modal", function() {
-                initStoryForm(modal, true);
+                initStoryForm(modal);
             });
 
             // Open bootbox modal
@@ -291,9 +291,8 @@ jQuery(document).ready(function() {
  * Function to initialize story form.
  *
  * @param   {jQuery|$}  modal   Current modal content
- * @param   {Boolean}   [edit]  Are we editing or not
  */
-function initStoryForm(modal, edit) {
+function initStoryForm(modal) {
     var inputTitle = jQuery("input[name='title']", modal);
 
     inputTitle.focus().val(inputTitle.val());

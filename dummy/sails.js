@@ -153,6 +153,23 @@ var sails = {
             taskCnt: 0
         }
     },
+
+    /**
+     * Knockout models.
+     */
+    knockout: {
+        project: new Project(sails.json.project),
+        phase: new Phase(sails.json.phase),
+        sprint: new Sprint(sails.json.sprint),
+        story: new Story(sails.json.story),
+        task: new Task(sails.json.task),
+        type: new Type(sails.json.type),
+        user: new User(sails.json.user)
+    },
+
+    /**
+     * Sails.js models
+     */
     model: {
         milestone: {
             projectId: '',
