@@ -1,3 +1,10 @@
+/**
+ * /assets/linker/js/events.js
+ *
+ * @file Common event listeners and handlers.
+ * @author Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ */
+
 // Init events for container
 var initContainer = {
     users: false,
@@ -13,16 +20,16 @@ var initNavigation = {
 };
 
 jQuery(document).ready(function() {
-    var body = jQuery('body');
+    var body = jQuery("body");
 
     /**
      * Event to check if all initialize methods are done. If all necessary init methods
      * are executed event trigger will un-hide specified dom elements.
      *
-     * @param   {Event}     event       Current event object
-     * @param   {String}    initMethod  Initialize event name
+     * @param   {jQuery.Event}  event       Current event object
+     * @param   {String}        initMethod  Initialize event name
      */
-    body.on('initializeCheck', function(event, initMethod) {
+    body.on("initializeCheck", function(event, initMethod) {
         var initContainerDone = true;
         var initNavigationDone = true;
 
@@ -51,41 +58,67 @@ jQuery(document).ready(function() {
         });
 
         if (initContainerDone) {
-            jQuery('#boardContent').show();
+            jQuery("#boardContent").show();
         } else {
-            jQuery('#boardContent').hide();
+            jQuery("#boardContent").hide();
         }
 
         if (initNavigationDone) {
-            jQuery('#navigation').show();
+            jQuery("#navigation").show();
         } else {
-            jQuery('#navigation').hide();
+            jQuery("#navigation").hide();
         }
     });
 
     // Task open event
-    body.on('dblclick', '.task', function() {
+    body.on("dblclick", ".task", function() {
         var data = ko.dataFor(this);
 
         body.trigger('taskEdit', [data]);
     });
 
     // Story open event
-    body.on('dblclick', '.story', function() {
+    body.on("dblclick", ".story", function() {
         var data = ko.dataFor(this);
 
         body.trigger('storyEdit', [data.id()]);
     });
 
     // Help click event
-    jQuery('#functionHelp').on('click', 'a', function() {
+    jQuery("#functionHelp").on("click", "a", function() {
         var title = "Generic help";
 
         // create bootbox modal
         var modal = createBootboxDialog(title, JST["assets/linker/templates/help_generic.html"](), null, false);
 
         // Add help class and show help modal
-        modal.addClass('modalHelp');
-        modal.modal('show');
+        modal.addClass("modalHelp");
+        modal.modal("show");
     });
 });
+
+/**
+ * Function to handle event trigger. Note that this will need some work later on
+ * with more complicated cases of real usage.
+ *
+ * @todo    How to handle delete events? Basically these triggers are not working
+ *          now because after delete user is triggered to go to model edit view.
+ *          And that model does not exists anymore... Fix this somehow.
+ *
+ * @param   {
+ *          String|
+ *          Boolean|
+ *          sails.helper.trigger
+ *          }                       trigger
+ */
+function handleEventTrigger(trigger) {
+    if (trigger) {
+        if (_.isObject(trigger) && typeof trigger.trigger !== "undefined") {
+            var parameters = trigger.parameters || [];
+
+            jQuery("body").trigger(trigger.trigger, parameters);
+        } else {
+            jQuery("body").trigger(trigger);
+        }
+    }
+}

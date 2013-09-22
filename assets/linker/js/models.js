@@ -1,7 +1,8 @@
 /**
- * models.js
+ * /assets/linker/js/models.js
  *
- * This file contains all used knockout model objects.
+ * @file Contains all used knockout model objects.
+ * @author Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
 /**
