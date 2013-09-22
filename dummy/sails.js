@@ -70,6 +70,15 @@ var sails = {
             createdAt: '',
             updatedAt: ''
         },
+        milestone: {
+            projectId: '',
+            title: '',
+            description: '',
+            deadline: '',
+            id: '',
+            createdAt: '',
+            updatedAt: ''
+        },
         phase: {
             projectId: '',
             title: '',

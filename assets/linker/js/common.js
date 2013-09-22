@@ -639,6 +639,7 @@ function handleEventTrigger(trigger) {
  * @param   {
  *          sails.error.socket|
  *          sails.json.phase|
+ *          sails.json.milestone|
  *          sails.json.project|
  *          sails.json.sprint|
  *          sails.json.story|
