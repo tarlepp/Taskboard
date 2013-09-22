@@ -635,8 +635,9 @@ function handleEventTrigger(trigger) {
  *
  * @param   {
  *          sails.error.socket|
- *          sails.json.project|
  *          sails.json.phase|
+ *          sails.json.project|
+ *          sails.json.sprint|
  *          sails.json.task
  *          }                       error
  * @param   {Boolean}               [showMessage]

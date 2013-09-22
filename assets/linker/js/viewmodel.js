@@ -528,8 +528,9 @@ function ViewModel() {
      * @param   {String}    type    Message type; update, create, destroy
      * @param   {Number}    id      Object data id
      * @param   {
+     *          sails.json.phase|
      *          sails.json.project|
-     *          sails.json.phase
+     *          sails.json.sprint
      *          }                   data    Object data
      */
     self.processSocketMessage = function(model, type, id, data) {
