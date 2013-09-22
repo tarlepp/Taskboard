@@ -11,6 +11,8 @@
  *
  * @param   {
  *          sails.error.socket|
+ *          sails.json.type|
+ *          sails.json.user|
  *          sails.json.phase|
  *          sails.json.milestone|
  *          sails.json.project|

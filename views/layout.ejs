@@ -58,7 +58,7 @@
                         <div data-bind="visible: !project()">
                             <a href="javascript: void(0);" class="tooltipTitle" title="Add new project"
                                data-placement="bottom"
-                               data-bind="click: $root.addNewProject"
+                               data-bind="click: $root.actionProjectAdd"
                             >
                                 <i class="icon-plus"></i>
                             </a>
@@ -75,7 +75,7 @@
                                 <li class="nav-header text-info">Basic functions</li>
                                 <li>
                                     <a href="javascript: void(0);"
-                                       data-bind="click: $root.addNewProject"
+                                       data-bind="click: $root.actionProjectAdd"
                                     >
                                         <i class="icon-plus"></i>
                                         Add new project
@@ -83,7 +83,7 @@
                                 </li>
                                 <li>
                                     <a href="javascript: void(0);"
-                                       data-bind="click: $root.editProject"
+                                       data-bind="click: $root.actionProjectEdit"
                                     >
                                         <i class="icon-wrench"></i>
                                         Edit project
@@ -91,7 +91,7 @@
                                 </li>
                                 <li>
                                     <a href="javascript: void(0);"
-                                       data-bind="click: $root.projectBacklog"
+                                       data-bind="click: $root.actionProjectBacklog"
                                     >
                                         <i class="icon-list-ol"></i>
                                         Project backlog
@@ -101,7 +101,7 @@
                                 <li class="nav-header text-info">Advanced</li>
                                 <li>
                                     <a href="javascript: void(0);"
-                                       data-bind="click: $root.phasesEdit"
+                                       data-bind="click: $root.actionPhasesEdit"
                                     >
                                         <i class="icon-reorder icon-rotate-90"></i>
                                         Edit phases
@@ -109,7 +109,7 @@
                                 </li>
                                 <li>
                                     <a href="javascript: void(0);"
-                                       data-bind="click: $root.projectMilestones"
+                                       data-bind="click: $root.actionProjectMilestones"
                                     >
                                         <i class="icon-gear"></i>
                                         Milestones
@@ -117,7 +117,7 @@
                                 </li>
                                 <li>
                                     <a href="javascript: void(0);"
-                                       data-bind="click: $root.projectPlanning"
+                                       data-bind="click: $root.actionProjectPlanning"
                                     >
                                         <i class="icon-cogs"></i>
                                         Planning view
@@ -127,7 +127,7 @@
                                 <li class="nav-header text-info">Danger zone</li>
                                 <li>
                                     <a href="javascript: void(0);" class="text-danger"
-                                       data-bind="click: $root.deleteProject"
+                                       data-bind="click: $root.actionProjectDelete"
                                     >
                                         <i class="icon-trash"></i>
                                         Delete project
@@ -155,7 +155,7 @@
                         <div data-bind="visible: !sprint()">
                             <a href="javascript: void(0);" class="tooltipTitle" title="Add new sprint"
                                data-placement="bottom"
-                               data-bind="click: $root.sprintAdd"
+                               data-bind="click: $root.actionSprintAdd"
                             >
                                 <i class="icon-plus"></i>
                             </a>
@@ -165,7 +165,7 @@
                                data-toggle="dropdown"
                                data-hover="dropdown"
                                data-delay="100"
-                                    >
+                            >
                                 <i class="icon-wrench"></i>
                             </a>
                             <ul class="dropdown-menu">
@@ -173,7 +173,7 @@
                                 <li>
                                     <a href="javascript: void(0);"
                                        data-placement="bottom"
-                                       data-bind="click: $root.sprintAdd"
+                                       data-bind="click: $root.actionSprintAdd"
                                     >
                                         <i class="icon-plus"></i>
                                         Add new sprint
@@ -181,7 +181,7 @@
                                 </li>
                                 <li>
                                     <a href="javascript: void(0);"
-                                       data-bind="click: $root.sprintEdit"
+                                       data-bind="click: $root.actionSprintEdit"
                                     >
                                         <i class="icon-wrench"></i>
                                         Edit sprint
@@ -189,7 +189,7 @@
                                 </li>
                                 <li>
                                     <a href="javascript: void(0);"
-                                       data-bind="click: $root.sprintBacklog"
+                                       data-bind="click: $root.actionSprintBacklog"
                                     >
                                         <i class="icon-list-ol"></i>
                                         Sprint backlog
@@ -199,7 +199,7 @@
                                 <li class="nav-header text-info">Danger zone</li>
                                 <li>
                                     <a href="javascript: void(0);" class="text-danger"
-                                       data-bind="click: $root.sprintDelete"
+                                       data-bind="click: $root.actionSprintDelete"
                                     >
                                         <i class="icon-trash"></i>
                                         Delete sprint
@@ -310,8 +310,12 @@
 <script src="/linker/vendor/knockout-sortable.js"></script>
 <script src="/linker/js/board.js"></script>
 <script src="/linker/js/common.js"></script>
+<script src="/linker/js/errors.js"></script>
 <script src="/linker/js/events.js"></script>
 <script src="/linker/js/forms.js"></script>
+<script src="/linker/js/helpers.js"></script>
+<script src="/linker/js/inits.js"></script>
+<script src="/linker/js/knockout.js"></script>
 <script src="/linker/js/milestone.js"></script>
 <script src="/linker/js/models.js"></script>
 <script src="/linker/js/phase.js"></script>

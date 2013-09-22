@@ -13,7 +13,7 @@
     >
         <h3>No phases for current project</h3>
         <p>
-            Current project does not have any <a href="javascript: void(0);" class="alert-link" data-bind="click: $root.phasesEdit">phases</a>, please add phases before anything else.
+            Current project does not have any <a href="javascript: void(0);" class="alert-link" data-bind="click: $root.actionPhasesEdit">phases</a>, please add phases before anything else.
         </p>
         <p>
             You can setup project phases within <em>project settings menu</em>.
@@ -40,7 +40,7 @@
                         "
                     >
                         <button data-bind="
-                            click: addNewStory.bind($data, $root.project().id, $root.getSprintId())
+                            click: actionStoryAdd.bind($data, $root.project().id(), $root.sprint().id())
                         ">+</button>
                     </td>
 
