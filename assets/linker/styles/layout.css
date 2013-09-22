@@ -15,6 +15,10 @@
     min-height: 30px;
 }
 
+#footer .navbar.navbar-fixed-bottom {
+    bottom: -1px;
+}
+
 #footer .navbar-inner {
     line-height: 30px;
     font-size: 12px;
