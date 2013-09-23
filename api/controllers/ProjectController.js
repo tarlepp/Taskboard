@@ -193,10 +193,13 @@ module.exports = {
             project: false,
             progressMilestones: 0,
             progressStories: 0,
+            progressTasks: 0,
             cntMilestonesDone: 0,
             cntMilestonesTotal: 0,
             cntStoriesDone: 0,
-            cntStoriesTotal: 0
+            cntStoriesTotal: 0,
+            cntTasksDone: 0,
+            cntTasksTotal: 0
         };
 
         // Fetch project data.
@@ -254,17 +257,16 @@ module.exports = {
                         })
                         .sort('title ASC')
                         .done(function(error, stories) {
-                            // Add stories to milestone data
-                            milestone.stories = stories;
+
                             milestone.doneStories = _.reduce(stories, function (memo, story) {
                                 return (story.isDone) ? memo + 1 : memo;
                             }, 0);
 
-                            data.cntStoriesTotal = data.cntStoriesTotal + milestone.stories.length;
+                            data.cntStoriesTotal = data.cntStoriesTotal + stories.length;
                             data.cntStoriesDone = data.cntStoriesDone + milestone.doneStories;
 
                             if (milestone.doneStories > 0) {
-                                if (milestone.stories.length === milestone.doneStories) {
+                                if (stories.length === milestone.doneStories) {
                                     data.cntMilestonesDone = data.cntMilestonesDone + 1;
                                 }
 
@@ -273,8 +275,38 @@ module.exports = {
                                 milestone.progress = 0;
                             }
 
-                            // Call view
-                            makeView();
+                            var storyIds = _.map(stories, function(story) { return {storyId: story.id}; });
+
+                            if (storyIds.length > 0) {
+                                // Find story tasks
+                                Task
+                                    .find()
+                                    .where({or: storyIds})
+                                    .done(function(error, tasks) {
+                                        data.cntTasksTotal = data.cntTasksTotal + tasks.length;
+                                        data.cntTasksDone = data.cntTasksDone + _.reduce(tasks, function (memo, task) {
+                                            return (task.isDone) ? memo + 1 : memo;
+                                        }, 0);
+
+                                        // Add tasks to milestone data
+                                        milestone.tasks = tasks;
+
+                                        // Add stories to milestone data
+                                        milestone.stories = stories;
+
+                                        // Call view
+                                        makeView();
+                                    });
+                            } else {
+                                // Add tasks to milestone data
+                                milestone.tasks = [];
+
+                                // Add stories to milestone data
+                                milestone.stories = stories;
+
+                                // Call view
+                                makeView();
+                            }
                         });
                 });
             }
@@ -313,6 +345,12 @@ module.exports = {
                             data.progressStories = Math.round(data.cntStoriesDone / data.cntStoriesTotal * 100);
                         } else {
                             data.progressStories = 0;
+                        }
+
+                        if (data.cntTasksDone > 0) {
+                            data.progressTasks = Math.round(data.cntTasksDone / data.cntTasksTotal * 100);
+                        } else {
+                            data.progressTasks = 0;
                         }
 
                         res.view(data);

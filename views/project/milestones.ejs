@@ -30,6 +30,21 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-2 text-right">
+            Tasks <small>(<%= cntTasksDone %> / <%= cntTasksTotal %>)</small>
+        </div>
+        <div class="col-md-10">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<%= progressTasks %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= progressTasks %>%;">
+                    <% if (progressTasks > 0) { %>
+                    <span ><%= progressTasks %>% Complete</span>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <h4>Project milestones</h4>
@@ -46,9 +61,10 @@
                 <i class="icon icon-plus"></i>
             </a>
         </th>
-        <th class="col-md-6">Milestone</th>
+        <th class="col-md-5">Milestone</th>
         <th class="col-md-1">Deadline</th>
         <th class="col-md-1 text-right">Stories</th>
+        <th class="col-md-1 text-right">Tasks</th>
         <th class="col-md-4">Progress</th>
     </tr>
     </thead>
@@ -117,6 +133,9 @@
         <% } else { %>
             <%= milestone.stories.length %>
         <% } %>
+        </td>
+        <td class="text-right">
+            <%= milestone.tasks.length %>
         </td>
         <td>
             <div class="progress">
