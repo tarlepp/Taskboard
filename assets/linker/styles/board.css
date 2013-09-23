@@ -238,10 +238,11 @@ div.story p:last-of-type {
 }
 
 .backlog .list-group-item {
-    padding: 3px 5px;
+    padding: 3px 15px 3px 5px;
     cursor: move;
     font-size: 14px;
     cursor: move;
+    white-space: normal;
 }
 
 li.list-group-item.ui-sortable-helper {
@@ -260,6 +261,8 @@ li.list-group-item.ui-sortable-helper {
 }
 
 .backlog .list-group-item i {
+    position: relative;
+    right: -10px;
     line-height: 20px;
     cursor: pointer;
 }

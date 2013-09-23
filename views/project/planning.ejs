@@ -12,12 +12,12 @@
         <% _.each(stories, function(story) { %>
             <% if(story.sprintId === 0 || story.sprintId === null) { %>
             <li class="list-group-item" data-story-id="<%= story.id %>">
-                <%= story.title %> (<%= story.estimateFormatted() %>)
-
                 <i class="icon icon-wrench pull-right tooltipTitle event" title="Edit story"
                     data-id="<%= story.id %>"
                     data-type="story"
                 ></i>
+
+                <%= story.title %> (<%= story.estimateFormatted() %>)
             </li>
             <% } %>
         <% }) %>
@@ -50,12 +50,12 @@
                         <% _.each(stories, function(story) { %>
                             <% if(story.sprintId === sprint.id) { %>
                             <li class="list-group-item" data-story-id="<%= story.id %>">
-                                <%= story.title %> (<%= story.estimateFormatted() %>)
-
                                 <i class="icon icon-wrench pull-right tooltipTitle event" title="Edit story"
                                     data-id="<%= story.id %>"
                                     data-type="story"
                                 ></i>
+
+                                <%= story.title %> (<%= story.estimateFormatted() %>)
                             </li>
                             <% } %>
                         <% }) %>
