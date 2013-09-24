@@ -537,13 +537,20 @@ module.exports = {
             .where({
                 projectId: projectId
             })
-            .sort('priority ASC')
+            .sort('title ASC')
             .done(function(error, stories) {
                 if (error) {
                     res.send(error, 500);
                 } else {
                     data.stories.data = stories;
                     data.stories.cntTotal = stories.length;
+                    data.stories.cntDone = _.reduce(stories, function (memo, story) {
+                        return (story.isDone) ? memo + 1 : memo;
+                    }, 0);
+
+                    if (data.stories.cntDone > 0) {
+                        data.stories.progress = Math.round(data.stories.cntDone / data.stories.cntTotal * 100);
+                    }
 
                     var storyIds = _.map(stories, function(story) { return {storyId: story.id}; });
 
@@ -554,6 +561,13 @@ module.exports = {
                             .done(function(error, tasks) {
                                 data.tasks.data = tasks;
                                 data.tasks.cntTotal = tasks.length;
+                                data.tasks.cntDone = _.reduce(tasks, function (memo, task) {
+                                    return (task.isDone) ? memo + 1 : memo;
+                                }, 0);
+
+                                if (data.tasks.cntDone > 0) {
+                                    data.tasks.progress = Math.round(data.tasks.cntDone / data.tasks.cntTotal * 100);
+                                }
 
                                 makeView();
                             });
@@ -595,8 +609,38 @@ module.exports = {
             });
 
             if (ok) {
+                makeDetailedStatistics();
+
                 res.view(data);
             }
+        }
+
+        /**
+         * Function makes detailed statistics from fetched data.
+         */
+        function makeDetailedStatistics() {
+            _.each(data.stories.data, function(story) {
+                story.tasks = {
+                    data: [],
+                    cntTotal: 0,
+                    cntDone: 0,
+                    progress: 0
+                };
+
+                story.tasks.data = _.filter(data.tasks.data, function (task) {
+                    return task.storyId === story.id;
+                });
+
+                story.tasks.cntTotal = story.tasks.data.length;
+
+                story.tasks.cntDone = _.reduce(story.tasks.data, function (memo, task) {
+                    return (task.isDone) ? memo + 1 : memo;
+                }, 0);
+
+                if (story.tasks.cntDone > 0) {
+                    story.tasks.progress = Math.round(story.tasks.cntDone / story.tasks.cntTotal * 100);
+                }
+            });
         }
     }
 };

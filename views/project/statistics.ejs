@@ -42,6 +42,8 @@
     <div class="row">
         <div class="col-md-2 text-right text-nowrap">
             <a href="javascript: void(0)" class="tooltipTitle" title="Show detailed information about progress of stories"
+               data-toggle-details='true'
+               data-details='detailedStories'
                data-qtip-options='{ "position": {"my": "center right", "at": "center left"} }'
             >
                 Stories <small>(<%= stories.cntDone %> / <%= stories.cntTotal %>)</small>
@@ -56,6 +58,38 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div id="detailedStories" class="progressDetailed">
+    <% _.each(stories.data, function(story) { %>
+        <div class="row">
+            <div class="col-md-3 text-right trunk8">
+                <span class="tooltipDiv"
+                    data-qtip-options='{ "position": {"my": "center right", "at": "center left"}, "show": {"delay": 0 }, "hide": {"delay": 0 }}'
+                ><%= story.title %>
+
+                <div class="tooltipDivContainer">
+                    <h1><%= story.title %> <small>(<%= story.tasks.cntDone %> / <%= story.tasks.cntTotal %>)</small></h1>
+                    <div>
+                        <%= story.description %>
+                    </div>
+                </div>
+
+
+                </span>
+            </div>
+
+            <div class="col-md-9">
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="<%= story.tasks.progress %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= story.tasks.progress %>%;">
+                        <% if (story.tasks.progress > 0) { %>
+                        <span ><%= story.tasks.progress %>% Complete</span>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% }); %>
     </div>
 
     <div class="row">

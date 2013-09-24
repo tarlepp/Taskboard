@@ -747,4 +747,18 @@ function initProjectTabBacklog(modal, contentId) {
 function initProjectTabStatistics(modal, contentId) {
     var body = jQuery("body");
     var container = modal.find(contentId);
+
+    container.find(".trunk8").trunk8({
+        tooltip: false
+    });
+
+    jQuery("[data-toggle-details='true']", container).on("click", function() {
+        var detailsContainer = jQuery("#" + jQuery(this).data("details"));
+
+        detailsContainer.toggle();
+
+        detailsContainer.find(".trunk8").trunk8({
+            tooltip: false
+        });
+    });
 }
