@@ -734,3 +734,17 @@ function initProjectTabBacklog(modal, contentId) {
         }
     });
 }
+
+/**
+ * Function initializes project statistics tab to use in project edit. Note that
+ * this init can be called multiple times.
+ *
+ * Also note that this init is called dynamic from initTabs() function.
+ *
+ * @param   {jQuery|$}  modal       Current modal content
+ * @param   {String}    contentId   Tab content div id
+ */
+function initProjectTabStatistics(modal, contentId) {
+    var body = jQuery("body");
+    var container = modal.find(contentId);
+}

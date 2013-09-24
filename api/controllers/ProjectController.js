@@ -449,5 +449,154 @@ module.exports = {
                 res.view(data);
             }
         }
+    },
+
+    /**
+     * Project statistics action.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    statistics: function(req, res) {
+        if (!req.isAjax) {
+            res.send('Only AJAX request allowed', 403);
+        }
+
+        var projectId = parseInt(req.param('id'), 10);
+
+        // Specify template data to use
+        var data = {
+            layout: "layout_ajax",
+            project: {
+                data: false
+            },
+            milestones: {
+                data: false,
+                stories: [],
+                progress: 0,
+                cntDone: 0,
+                cntTotal: 0
+            },
+            sprints: {
+                data: false,
+                stories: [],
+                progress: 0,
+                cntDone: 0,
+                cntTotal: 0
+            },
+            stories: {
+                data: false,
+                progress: 0,
+                cntDone: 0,
+                cntTotal: 0
+            },
+            tasks: {
+                data: false,
+                progress: 0,
+                cntDone: 0,
+                cntTotal: 0
+            }
+        };
+
+        // Fetch project data.
+        Project
+            .findOne(projectId)
+            .done(function(error, project) {
+                if (error) {
+                    res.send(error, 500);
+                } else if (!project) {
+                    res.send("Project not found.", 404);
+                } else {
+                    data.project.data = project;
+
+                    makeView();
+                }
+            });
+
+        // Fetch project milestones
+        Milestone
+            .find()
+            .where({
+                projectId: projectId
+            })
+            .sort('title ASC')
+            .done(function(error, milestones) {
+                if (error) {
+                    res.send(error, 500);
+                } else {
+                    data.milestones.data = milestones;
+                    data.milestones.cntTotal = milestones.length;
+
+                    makeView();
+                }
+            });
+
+        // Fetch project stories
+        Story
+            .find()
+            .where({
+                projectId: projectId
+            })
+            .sort('priority ASC')
+            .done(function(error, stories) {
+                if (error) {
+                    res.send(error, 500);
+                } else {
+                    data.stories.data = stories;
+                    data.stories.cntTotal = stories.length;
+
+                    var storyIds = _.map(stories, function(story) { return {storyId: story.id}; });
+
+                    if (storyIds.length > 0) {
+                        Task
+                            .find()
+                            .where({or: storyIds})
+                            .done(function(error, tasks) {
+                                data.tasks.data = tasks;
+                                data.tasks.cntTotal = tasks.length;
+
+                                makeView();
+                            });
+                    } else {
+                        makeView();
+                    }
+                }
+            });
+
+        // Fetch project sprints
+        Sprint
+            .find()
+            .where({
+                projectId: projectId
+            })
+            .sort('dateStart ASC')
+            .done(function(error, sprints) {
+                if (error) {
+                    res.send(error, 500);
+                } else {
+                    data.sprints.data = sprints;
+                    data.sprints.cntTotal = sprints.length;
+
+                    makeView();
+                }
+            });
+
+        /**
+         * Function makes actual view if all necessary data is fetched
+         * from database for template.
+         */
+        function makeView() {
+            var ok = true;
+
+            jQuery.each(data, function(key, data) {
+                if (data.data === false) {
+                    ok = false;
+                }
+            });
+
+            if (ok) {
+                res.view(data);
+            }
+        }
     }
 };

@@ -9,6 +9,9 @@
         <a id="milestonesTab" href="#milestones" data-toggle="tab" data-callback="initProjectTabMilestones" data-href="/Project/Milestones?id=<%= project.id %>">Milestones</a>
     </li>
     <li>
+        <a id="statisticsTab" href="#statistics" data-toggle="tab" data-callback="initProjectTabStatistics" data-href="/Project/Statistics?id=<%= project.id %>">Statistics</a>
+    </li>
+    <li>
         <a id="historyTab" href="#history" data-toggle="tab" data-href="/History?objectName=Project&objectId=<%= project.id %>">History</a>
     </li>
 </ul>
@@ -80,6 +83,8 @@
     <div class="tab-pane" id="backlog"></div>
 
     <div class="tab-pane" id="milestones"></div>
+
+    <div class="tab-pane" id="statistics"></div>
 
     <div class="tab-pane" id="history"></div>
 </div>

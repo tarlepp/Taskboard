@@ -1,0 +1,75 @@
+<div class="progressTotal">
+    <h4>Project progress</h4>
+
+    <div class="row">
+        <div class="col-md-2 text-right text-nowrap">
+            <a href="javascript: void(0)" class="tooltipTitle" title="Show detailed information about progress of milestones"
+               data-qtip-options='{ "position": {"my": "center right", "at": "center left"} }'
+            >
+                Milestones <small>(<%= milestones.cntDone %> / <%= milestones.cntTotal %>)</small>
+            </a>
+        </div>
+        <div class="col-md-10">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<%= milestones.progress %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= milestones.progress %>%;">
+                    <% if (milestones.progress > 0) { %>
+                    <span ><%= milestones.progress %>% Complete</span>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2 text-right text-nowrap">
+            <a href="javascript: void(0)" class="tooltipTitle" title="Show detailed information about progress of sprints"
+               data-qtip-options='{ "position": {"my": "center right", "at": "center left"} }'
+            >
+                Sprints <small>(<%= sprints.cntDone %> / <%= sprints.cntTotal %>)</small>
+            </a>
+        </div>
+        <div class="col-md-10">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<%= sprints.progress %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= sprints.progress %>%;">
+                    <% if (sprints.progress > 0) { %>
+                    <span ><%= sprints.progress %>% Complete</span>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2 text-right text-nowrap">
+            <a href="javascript: void(0)" class="tooltipTitle" title="Show detailed information about progress of stories"
+               data-qtip-options='{ "position": {"my": "center right", "at": "center left"} }'
+            >
+                Stories <small>(<%= stories.cntDone %> / <%= stories.cntTotal %>)</small>
+            </a>
+        </div>
+        <div class="col-md-10">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<%= stories.progress %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= stories.progress %>%;">
+                    <% if (stories.progress > 0) { %>
+                    <span ><%= stories.progress %>% Complete</span>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2 text-right text-nowrap">
+            Tasks <small>(<%= tasks.cntDone %> / <%= tasks.cntTotal %>)</small>
+        </div>
+        <div class="col-md-10">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<%= tasks.progress %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= tasks.progress %>%;">
+                    <% if (tasks.progress > 0) { %>
+                    <span ><%= tasks.progress %>% Complete</span>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

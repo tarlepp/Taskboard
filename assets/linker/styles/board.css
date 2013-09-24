@@ -280,6 +280,10 @@ li.list-group-item.ui-sortable-helper {
     margin-bottom: 5px;
 }
 
+.progressTotal a:hover {
+    text-decoration: none;
+}
+
 .progressTotal .progress {
     height: 25px;
     margin-bottom: 10px;
