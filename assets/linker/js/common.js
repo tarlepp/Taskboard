@@ -97,6 +97,11 @@ function createQtip(element, tipTitle, tipText, tipWidth, tipMy, tipAt, tipFixed
             at: tipAt,
             viewport: jQuery(window),
             container: jQuery("body")
+        },
+        events: {
+            hide: function(event, api) {
+               element.qtip("destroy");
+            }
         }
     });
 }
