@@ -6,6 +6,10 @@ body {
     overflow-y: scroll;
 }
 
+a {
+    cursor: pointer;
+}
+
 *:focus,
 a:focus,
 .btn:focus {
@@ -25,10 +29,6 @@ h1, h2, h3, h4, h5, h6 {
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
     font-family: 'Yanone Kaffeesatz', "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-small {
-    font-size: 80%;
 }
 
 i, em {
@@ -73,8 +73,13 @@ table input[type="text"] {
     top: 2px;
 }
 
+small,
 .text-small {
-    font-size: 14px;
+    font-size: 80%;
+}
+
+.text-medium {
+    font-size: 90%;
 }
 
 .alert {
@@ -137,4 +142,10 @@ table input[type="text"] {
     border-top: 1px solid #dddddd;
     border-bottom: 1px solid #dddddd;
     opacity: .8;
+}
+
+table.text-medium th {
+    font-size: 110%;
+    font-weight: normal;
+    color: #000000;
 }

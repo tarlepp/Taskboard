@@ -537,6 +537,7 @@ module.exports = {
             .where({
                 projectId: projectId
             })
+            .sort('isDone DESC')
             .sort('title ASC')
             .done(function(error, stories) {
                 if (error) {
@@ -641,6 +642,84 @@ module.exports = {
                     story.tasks.progress = Math.round(story.tasks.cntDone / story.tasks.cntTotal * 100);
                 }
             });
+
+            // Sort stories by tasks progress
+            data.stories.data.sort(function(a, b) {
+                if (a.tasks.progress < b.tasks.progress) {
+                    return 1;
+                } else if (a.tasks.progress > b.tasks.progress) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            });
+
+            /**
+             * Iterate fetched sprints and add story data and stories statistics
+             * data to it
+             */
+            _.each(data.sprints.data, function(sprint) {
+                sprint.stories = {
+                    data: [],
+                    cntTotal: 0,
+                    cntDone: 0,
+                    progress: 0
+                };
+
+                sprint.stories.data = _.filter(data.stories.data, function (story) {
+                    return story.sprintId === sprint.id;
+                });
+
+                sprint.stories.cntTotal = sprint.stories.data.length;
+
+                sprint.stories.cntDone = _.reduce(sprint.stories.data, function (memo, story) {
+                    return (story.isDone) ? memo + 1 : memo;
+                }, 0);
+
+                if (sprint.stories.cntDone > 0) {
+                    sprint.stories.progress = Math.round(sprint.stories.cntDone / sprint.stories.cntTotal * 100);
+
+                    if (sprint.stories.cntDone === sprint.stories.cntTotal) {
+                        data.sprints.cntDone = data.sprints.cntDone + 1;
+                    }
+                }
+            });
+
+            // Calculate sprints total progress if
+            if (data.sprints.cntDone > 0) {
+                data.sprints.progress = Math.round(data.sprints.cntDone / data.sprints.cntTotal * 100);
+            }
+
+            _.each(data.milestones.data, function(milestone) {
+                milestone.stories = {
+                    data: [],
+                    cntTotal: 0,
+                    cntDone: 0,
+                    progress: 0
+                };
+
+                milestone.stories.data = _.filter(data.stories.data, function (story) {
+                    return story.milestoneId === milestone.id;
+                });
+
+                milestone.stories.cntTotal = milestone.stories.data.length;
+
+                milestone.stories.cntDone = _.reduce(milestone.stories.data, function (memo, story) {
+                    return (story.isDone) ? memo + 1 : memo;
+                }, 0);
+
+                if (milestone.stories.cntDone > 0) {
+                    milestone.stories.progress = Math.round(milestone.stories.cntDone / milestone.stories.cntTotal * 100);
+
+                    if (milestone.stories.cntDone === milestone.stories.cntTotal) {
+                        data.milestones.cntDone = data.milestones.cntDone + 1;
+                    }
+                }
+            });
+
+            if (data.milestones.cntDone > 0) {
+                data.milestones.progress = Math.round(data.milestones.cntDone / data.milestones.cntTotal * 100);
+            }
         }
     }
 };

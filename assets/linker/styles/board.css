@@ -291,16 +291,19 @@ li.list-group-item.ui-sortable-helper {
 }
 
 .progressTotal .col-md-2,
-.progressTotal .col-md-3 {
+.progressTotal .col-md-3,
+.progressTotal .col-md-4 {
     padding-right: 0;
     padding-left: 5px;
 }
 
-.progressTotal .col-md-3 {
+.progressTotal .col-md-3,
+.progressTotal .col-md-4 {
     font-size: 14px;
     line-height: 26px;
 }
 
+.progressTotal .col-md-8,
 .progressTotal .col-md-9,
 .progressTotal .col-md-10 {
     padding-left: 5px;
@@ -312,10 +315,14 @@ li.list-group-item.ui-sortable-helper {
 
 .progressTotal .progressDetailed {
     display: none;
-    margin: 5px 0 15px 0;
-    padding: 10px 0;
-    border-top: 1px solid #e5e5e5;
+    margin: 0 0 15px 0;
+    padding: 0 0 10px 0;
+    border-top: none;
     border-bottom: 1px solid #e5e5e5;
+}
+
+.progressTotal .progressDetailed .progressDetailed {
+    margin-top: 5px;
 }
 
 .progressTotal .progressDetailed .row:hover {
