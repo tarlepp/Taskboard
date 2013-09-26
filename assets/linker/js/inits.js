@@ -140,8 +140,12 @@ function initTabs(context) {
 
         // We have url defined, so fetch tab content via AJAX call.
         if (contentUrl) {
+            var content = jQuery(contentId);
+
+            content.html(jQuery("#placeholderLoading").clone().html());
+
             // Load data content
-            jQuery(contentId).load(contentUrl, function() {
+            content.load(contentUrl, function() {
                 // Dispatch callback function with default parameters
                 if (typeof callback !== "undefined") {
                     dispatch(callback, [context, contentId]);
