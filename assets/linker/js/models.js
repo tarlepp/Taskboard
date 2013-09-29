@@ -163,10 +163,13 @@ function Sprint(data) {
 /**
  * Object to present story.
  *
- * @param   {sails.json.story}    data
+ * @param   {sails.json.story}  data
+ * @param   {Boolean}           fetchTaskData
  * @constructor
  */
-function Story(data) {
+function Story(data, fetchTaskData) {
+    fetchTaskData = fetchTaskData || true;
+
     var self = this;
 
     // Initialize object data
@@ -178,6 +181,7 @@ function Story(data) {
     self.estimate       = ko.observable(data.estimate);
     self.priority       = ko.observable(data.priority);
     self.vfCase         = ko.observable(data.vfCase);
+    self.tasks          = ko.observableArray([]);
 
     // Formatted story title
     self.formattedTitle = ko.computed(function() {
@@ -210,6 +214,23 @@ function Story(data) {
 
         return description;
     });
+
+    if (fetchTaskData) {
+        myViewModel.loading.push(true);
+
+        // Get story task data via socket
+        socket.get('/Task', {where: {storyId: self.id()}}, function(tasks) {
+            if (handleSocketError(tasks)) {
+                var mappedTasks = ko.utils.arrayMap(tasks, function(/** sails.json.task */task) {
+                    return new Task(task);
+                });
+
+                self.tasks(mappedTasks);
+
+                myViewModel.loading.pop();
+            }
+        });
+    }
 
     /**
      * Method triggers add a new task for current story.
