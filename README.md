@@ -24,6 +24,7 @@ Maybe sails are lifted on http://wunder.sytes.net:1337/ or maybe not...
 - Knockout (http://knockoutjs.com/)
 - Knockout-Bootstrap (http://billpull.github.io/knockout-bootstrap/)
 - knockout-sortable (https://github.com/rniemeyer/knockout-sortable/)
+- Deferred Updates plugin for Knockout (https://github.com/mbest/knockout-deferred-updates)
 - trunk8 (http://jrvis.com/trunk8/)
 - JSON5 – Modern JSON (http://json5.org/)
 - Font Awesome (http://fortawesome.github.io/Font-Awesome/)
