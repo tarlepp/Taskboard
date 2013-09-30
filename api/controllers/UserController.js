@@ -5,5 +5,51 @@
  * @description ::  Contains logic for handling requests.
  */
 module.exports = {
-    // TODO
+    /**
+     * User list action.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    list: function(req, res) {
+        if (!req.isAjax) {
+            res.send('Only AJAX request allowed', 403);
+        }
+
+        res.view({
+            layout: "layout_ajax"
+        });
+    },
+
+    /**
+     * User add action.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    add: function(req, res) {
+        if (!req.isAjax) {
+            res.send('Only AJAX request allowed', 403);
+        }
+
+        res.view({
+            layout: "layout_ajax"
+        });
+    },
+
+    /**
+     * User edit action.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    edit: function(req, res) {
+        if (!req.isAjax) {
+            res.send('Only AJAX request allowed', 403);
+        }
+
+        res.view({
+            layout: "layout_ajax"
+        });
+    }
 };
