@@ -305,6 +305,8 @@ function ViewModel() {
                 output.push(task);
             }
         }
+
+        return output;
     };
 
 
