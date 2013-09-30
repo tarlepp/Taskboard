@@ -157,12 +157,12 @@
                     options: {
                         hide: {
                             fixed: true,
-                            delay: 100,
+                            delay: 50,
                             event: 'click mouseleave'
                         },
                         position: {
-                            at: 'right center',
-                            my: 'left center',
+                            at: 'bottom center',
+                            my: 'top center',
                             adjust: {
                                 screen: true
                             },
@@ -172,7 +172,7 @@
                 },
                 css: taskClass()
             ">
-            <h3 data-bind="html: title, trunk8: {lines: 1}"></h3>
+            <h3 data-bind="html: title"></h3>
         </div>
     </script>
 
@@ -188,12 +188,12 @@
                     options: {
                         hide: {
                             fixed: true,
-                            delay: 100,
+                            delay: 50,
                             event: 'click mouseleave'
                         },
                         position: {
-                            at: 'right center',
-                            my: 'left center',
+                            at: 'bottom center',
+                            my: 'top center',
                             adjust: {
                                 screen: true
                             },
@@ -203,16 +203,12 @@
                 },
                 css: taskClass()
             ">
-            <h3 data-bind="html: title, trunk8: {lines: 1}"></h3>
+            <h3 data-bind="html: title"></h3>
         </div>
     </script>
 
     <script id="story-template" type="text/html">
-        <h3 data-bind="text: formattedTitle"></h3>
-
-        <!-- ko if: description -->
-        <p data-bind="html: description(), trunk8: {lines: 2}"></p>
-        <!-- /ko -->
+        <h3 data-bind="html: formattedTitle"></h3>
     </script>
 
 </div>
