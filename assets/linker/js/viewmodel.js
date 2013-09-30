@@ -205,7 +205,6 @@ function ViewModel() {
         if (typeof sprint !== "undefined") {
             self.sprint(sprint);
 
-
             // Push data to loading state
             self.loading.push(true);
 
@@ -301,7 +300,7 @@ function ViewModel() {
         for (var i = 0; i < self.tasks().length; i++) {
             var task = self.tasks()[i];
 
-            if (task.storyId() == storyId && task.phaseId() == phaseId) {
+            if (task.storyId() === storyId && task.phaseId() === phaseId) {
                 output.push(task);
             }
         }
