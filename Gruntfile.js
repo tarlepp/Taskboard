@@ -84,6 +84,7 @@ module.exports = function (grunt) {
         'linker/vendor/Knockout/knockout-2.2.1.js',
         'linker/vendor/knockout-bootstrap.js',
         'linker/vendor/knockout-sortable.js',
+        'linker/vendor/knockout-deferred-updates.js',
 
         // All of the rest of your app scripts imported here
         'linker/js/**/*.js'
