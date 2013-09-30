@@ -202,7 +202,9 @@ ko.bindingHandlers.qtip = {
  */
 ko.bindingHandlers.trunk8 = {
     /**
-     * This is disabled for now for performance issues
+     * This is disabled for now for performance issues. Try to figure out something
+     * that solves this problem or just don't use this.
+     */
     init: function(element, valueAccessor) {
         var settings = ko.utils.unwrapObservable(valueAccessor()) || {};
         var defaultSettings = {
@@ -220,5 +222,4 @@ ko.bindingHandlers.trunk8 = {
             .addClass("trunk8")                         // Set helper class
         ;
     }
-    */
 };
