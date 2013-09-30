@@ -296,9 +296,15 @@ function ViewModel() {
      * @returns {Array}
      */
     self.getTasks = function(phaseId, storyId) {
-        return _.filter(self.tasks(), function(task) {
-            return (task.storyId() == storyId && task.phaseId() == phaseId);
-        });
+        var output = [];
+
+        for (var i = 0; i < self.tasks().length; i++) {
+            var task = self.tasks()[i];
+
+            if (task.storyId() == storyId && task.phaseId() == phaseId) {
+                output.push(task);
+            }
+        }
     };
 
 
