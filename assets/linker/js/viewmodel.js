@@ -413,11 +413,12 @@ function ViewModel() {
         jQuery("body").trigger("phasesEdit");
     };
 
-    // TODO
+    /**
+     * Method opens user list view.
+     */
     self.usersOpen = function() {
-        console.log('Implement users');
+        jQuery("body").trigger("userList");
     };
-
 
     /**
      * Method to process all socket messages. Basically this will update specified
