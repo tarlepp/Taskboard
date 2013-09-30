@@ -201,7 +201,9 @@ ko.bindingHandlers.qtip = {
  * @type {{init: Function, update: Function}}
  */
 ko.bindingHandlers.trunk8 = {
-    init: function (element, valueAccessor) {
+    /**
+     * This is disabled for now for performance issues
+    init: function(element, valueAccessor) {
         var settings = ko.utils.unwrapObservable(valueAccessor()) || {};
         var defaultSettings = {
             fill: "&hellip;"
@@ -210,11 +212,13 @@ ko.bindingHandlers.trunk8 = {
         jQuery(element).trunk8(jQuery.extend({}, defaultSettings, settings));
     },
 
-    update: function (element, valueAccessor) {
+    update: function(element, valueAccessor) {
+        console.log('ddd');
         jQuery(element)
             .trunk8("update", jQuery(element).html())   // Update trunk8 data
             .prop("title", "")                          // Remove element title
             .addClass("trunk8")                         // Set helper class
         ;
     }
+    */
 };
