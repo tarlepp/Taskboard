@@ -16,9 +16,22 @@ module.exports = {
             res.send('Only AJAX request allowed', 403);
         }
 
-        res.view({
-            layout: "layout_ajax"
-        });
+        // Fetch user data
+        User
+            .find()
+            .sort("lastName ASC")
+            .sort("firstName ASC")
+            .sort("username ASC")
+            .done(function(error, users) {
+                if (error) {
+                    res.send(error, 500);
+                } else {
+                    res.view({
+                        layout: "layout_ajax",
+                        users: users
+                    });
+                }
+            });
     },
 
     /**

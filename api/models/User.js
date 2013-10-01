@@ -9,7 +9,8 @@ module.exports = {
     attributes: {
         username: {
             type:       'string',
-            required:   true
+            required:   true,
+            unique:     true
         },
         firstName: {
             type:       'string',
@@ -24,14 +25,34 @@ module.exports = {
             required:   true,
             unique:     true
         },
+        admin: {
+            type:       'boolean',
+            defaultsTo: false
+        },
         password: {
             type:       'string',
             required:   true
+        },
+        lastLogin: {
+            type:       'datetime',
+            required:   false
         },
 
         // Computed user fullName string
         fullName: function() {
             return this.lastName + ' ' + this.firstName;
+        },
+
+        lastLoginObject: function() {
+            return new Date(this.lastLogin);
+        },
+
+        lastLoginFormatted: function() {
+            if (this.lastLogin === null) {
+                return "unknown";
+            }
+
+            return this.lastLoginObject().format('isoDate') + " " + this.lastLoginObject().format('isoTime');
         },
 
         // ObjectTitle

@@ -128,9 +128,99 @@ jQuery(document).ready(function() {
                 handleAjaxError(jqXhr, textStatus, error);
             });
     });
+
+    /**
+     * User delete event,
+     *
+     * @param   {jQuery.Event}          event   Event object
+     * @param   {Number}                userId  User id
+     * @param   {sails.helper.trigger}  trigger Trigger to process after action,
+     */
+    body.on("userDelete", function(event, userId, trigger) {
+        bootbox.confirm({
+            title: "danger - danger - danger",
+            message: "Are you sure of user delete?",
+            buttons: {
+                cancel: {
+                    label: "Cancel",
+                    className: "btn-default pull-left"
+                },
+                confirm: {
+                    label: "Delete",
+                    className: "btn-danger pull-right"
+                }
+            },
+            callback: function(result) {
+                if (result) {
+                    // Remove user via socket
+                    socket.delete("/User/" + userId, function(/** sails.json.user */user) {
+                        if (handleSocketError(user)) {
+                            makeMessage("User deleted successfully.");
+
+                            handleEventTrigger(trigger);
+                        }
+                    });
+                } else {
+                    handleEventTrigger(trigger);
+                }
+            }
+        });
+    });
 });
 
-function initUserList(modal) {
+function initUserList(context, parameters) {
+    var body = jQuery("body");
+
+    parameters = parameters || {};
+
+    if (parameters.activeTab) {
+        jQuery("#" + parameters.activeTab + "Tab").click();
+    }
+
+    // User clicks action menu link
+    body.on("click", "ul.actionMenu-actions a", function() {
+        var element = jQuery(this);
+        var userId = element.data("userId");
+        var action = element.data("action");
+        var selector = element.data("selector");
+
+        // We have popover selector, so hide it
+        if (selector) {
+            jQuery(selector).popover("hide");
+        }
+
+        // Hide current modal
+        context.modal("hide");
+
+        // Specify trigger to fire after story action
+        var trigger = {
+            trigger: "userList",
+            parameters: []
+        };
+
+        // Trigger story action event
+        body.trigger(action, [userId, trigger]);
+    });
+
+    // Remove 'add new' click listeners, this prevents firing this event multiple times
+    body.off("click", "[data-add-new-user='true']");
+
+    // User wants to add new story to current sprint
+    body.on("click", "[data-add-new-user='true']", function() {
+        var element = jQuery(this);
+
+        // Hide current modal
+        context.modal("hide");
+
+        // Specify trigger to fire after story action
+        var trigger = {
+            trigger: "userList",
+            parameters: []
+        };
+
+        // Trigger story add
+        body.trigger("userAdd", [trigger, {}]);
+    });
 }
 
 function initUserForm(modal) {
