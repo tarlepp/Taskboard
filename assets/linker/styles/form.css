@@ -217,6 +217,7 @@ div[data-role="editor-toolbar"] {
     transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
     border: 1px solid #cccccc;
     border-radius: 4px;
+    color: #333333;
 }
 
 .bootstrap-select .btn:focus {

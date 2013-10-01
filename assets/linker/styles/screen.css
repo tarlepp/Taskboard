@@ -55,6 +55,14 @@ i, em {
     font-weight: normal;
 }
 
+.table thead > tr > th {
+    vertical-align: bottom;
+    border-bottom: none;
+    background-color: #efefef;
+    font-weight: normal;
+    text-shadow: 1px 1px 3px rgba(51, 51, 51, .3);
+}
+
 .text-shadow,
 .nav-tabs > li.active > a {
     text-shadow: 1px 1px 3px rgba(51, 51, 51, .3);
