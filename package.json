@@ -10,7 +10,8 @@
     "optimist": "0.3.4",
     "ejs": "0.8.4",
     "jquery": "~1.8.3",
-    "jsondiffpatch": "0.0.8"
+    "jsondiffpatch": "0.0.8",
+    "bcrypt": "~0.7.7"
   },
   "scripts": {
     "start": "node app.js",
