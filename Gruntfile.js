@@ -69,6 +69,7 @@ module.exports = function (grunt) {
         'linker/vendor/jquery.hotkeys.js',
         'linker/vendor/trunk8.js',
         'linker/vendor/selectorator.js',
+        'linker/vendor/async.js',
         'linker/vendor/jQuery-noty/jquery.noty.js',
         'linker/vendor/jQuery-noty/jquery.noty-default.js',
         'linker/vendor/jQuery-noty/jquery.noty-top.js',
