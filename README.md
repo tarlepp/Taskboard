@@ -14,6 +14,7 @@ Maybe sails are lifted on http://wunder.sytes.net:1337/ or maybe not...
 - jQuery Selectorator (https://github.com/ngs/jquery-selectorator)
 - qTip2 (http://craigsworks.com/projects/qtip2/)
 - noty (http://needim.github.com/noty/)
+- Async.js (https://github.com/caolan/async)
 - Twitter Bootstrap (https://github.com/twitter/bootstrap/)
 - Twitter Bootstrap Hover Dropdown Plugin (https://github.com/CWSpear/twitter-bootstrap-hover-dropdown)
 - bootstrap-datepicker (https://github.com/eternicode/bootstrap-datepicker/)
