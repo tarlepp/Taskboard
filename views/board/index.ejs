@@ -41,7 +41,7 @@
                     >
                         <button data-bind="
                             click: actionStoryAdd.bind($data, $root.project().id(), $root.sprint().id())
-                        ">+</button>
+                        "><icon class="icon-plus"></icon></button>
                     </td>
 
                     <!-- ko foreach: $root.sortedPhases -->
@@ -107,7 +107,7 @@
                     ">
                         <button data-bind="
                             click: addNewTask
-                        ">+</button>
+                        "><icon class="icon-plus"></icon></button>
                     </td>
 
                     <!-- ko foreach: $root.sortedPhases -->
