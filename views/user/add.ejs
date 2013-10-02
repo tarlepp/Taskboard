@@ -1,1 +1,66 @@
-Implement user add content.
+<form id="formUserNew" class="form-horizontal">
+    <fieldset>
+        <legend>Personal information</legend>
+        <div class="form-group required">
+            <label class="col-lg-3 control-label" for="formUserNewFirstName">First name</label>
+            <div class="col-lg-9">
+                <input id="formUserNewFirstName" name="firstName" type="text" class="form-control" placeholder="enter first name" required="required" />
+            </div>
+        </div>
+
+        <div class="form-group required">
+            <label class="col-lg-3 control-label" for="formUserNewLastName">Last name</label>
+            <div class="col-lg-9">
+                <input id="formUserNewLastName" name="lastName" type="text" class="form-control" placeholder="enter last name" required="required" />
+            </div>
+        </div>
+
+        <div class="form-group required">
+            <label class="col-lg-3 control-label" for="formUserNewEmail">Email address</label>
+            <div class="col-lg-9">
+                <input id="formUserNewEmail" name="email" type="email" class="form-control" placeholder="enter email" required="required"
+                    data-validate-type="email,unique"
+                    data-model="User"
+                />
+                <span class="help-block">Email address will not be public.</span>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Login information</legend>
+
+        <div class="form-group required">
+            <label class="col-lg-3 control-label" for="formUserNewUsername">Username</label>
+            <div class="col-lg-3">
+                <input id="formUserNewUsername" name="username" type="text" class="form-control" placeholder="enter username" required="required"
+                   data-validate-type="unique"
+                   data-model="User"
+                />
+                <span class="help-block text-nowrap">Cannot be changed afterwards.</span>
+            </div>
+        </div>
+
+        <div class="form-group required">
+            <label class="col-lg-3 control-label" for="formUserNewPassword">Password</label>
+            <div class="col-lg-5">
+                <input id="formUserNewPassword" name="password" type="password" class="form-control" placeholder="enter password" required="required"
+                    data-password="true"
+                    data-pair="formUserNewPasswordRetype"
+                    data-validate-type="password,length"
+                    data-length-min="10"
+                />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label" for="formUserNewPasswordRetype"></label>
+            <div class="col-lg-5">
+                <input id="formUserNewPasswordRetype" name="password2" type="password" class="form-control" placeholder="re-type password"
+                   data-password="true"
+                   data-pair="formUserNewPassword"
+                   data-validate-type="password"
+                />
+            </div>
+        </div>
+    </fieldset>
+</form>

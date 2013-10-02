@@ -12,10 +12,17 @@
  *  - userList
  *  - userAdd
  *  - userEdit
+ *  - userDelete
  */
 jQuery(document).ready(function() {
     var body = jQuery("body");
 
+    /**
+     * User list event, this opens a modal with list of current users.
+     *
+     * @param   {jQuery.Event}          event       Event object
+     * @param   {sails.helper.trigger}  [trigger]   Trigger to process after actions
+     */
     body.on('userList', function(event, trigger) {
         trigger = trigger || false;
 
@@ -52,11 +59,18 @@ jQuery(document).ready(function() {
             });
     });
 
+    /**
+     * User add event, this opens a modal with user add form on it.
+     *
+     * @param   {jQuery.Event}          event       Event object
+     * @param   {sails.helper.trigger}  [trigger]   Trigger to process after actions
+     * @param   {{}}                    [formData]  Possible form data, simple key/value
+     */
     body.on('userAdd', function(event, trigger, formData) {
         trigger = trigger || false;
         formData = formData || {};
 
-        jQuery.get("/User/add")
+        jQuery.get("/User/add", {formData: formData})
             .done(function(content) {
                 var title = "Add new user";
                 var buttons = [
@@ -64,11 +78,25 @@ jQuery(document).ready(function() {
                         label: "Save",
                         className: "btn-primary pull-right",
                         callback: function () {
-                            console.log("implement user add");
+                            var form = jQuery("#formUserNew", modal);
+                            var formItems = form.serializeJSON();
 
-                            modal.modal("hide");
+                            // Validate current form items and try to update milestone data
+                            if (validateForm(formItems, modal)) {
+                                // Create new user
+                                socket.post("/User", formItems, function(/** sails.json.user */user) {
+                                    if (handleSocketError(user)) {
+                                        makeMessage("User created successfully.");
 
-                            handleEventTrigger(trigger);
+                                        modal.modal("hide");
+
+                                        handleEventTrigger(trigger);
+
+                                        // Update client bindings
+                                        myViewModel.processSocketMessage("user", "create", user.id, user);
+                                    }
+                                });
+                            }
 
                             return false;
                         }
@@ -168,6 +196,12 @@ jQuery(document).ready(function() {
     });
 });
 
+/**
+ * Function to initialize user list view.
+ *
+ * @param   {jQuery|$}  context     Current modal content
+ * @param   {{}}        parameters  Used extra parameters
+ */
 function initUserList(context, parameters) {
     var body = jQuery("body");
 
@@ -223,5 +257,18 @@ function initUserList(context, parameters) {
     });
 }
 
-function initUserForm(modal) {
+/**
+ * Function to initialize user add / edit view.
+ *
+ * @param   {jQuery|$}  context     Current modal content
+ * @param   {{}}        parameters  Used extra parameters
+ */
+function initUserForm(context, parameters) {
+    var body = jQuery("body");
+
+    parameters = parameters || {};
+
+    if (parameters.activeTab) {
+        jQuery("#" + parameters.activeTab + "Tab").click();
+    }
 }

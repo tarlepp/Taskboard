@@ -16,6 +16,7 @@ function validateForm(items, context) {
     var valid = true;
     var errors = [];
     var required = [];
+    var focusSet = false;
 
     if (jQuery.isEmptyObject(items)) {
         valid = false;
@@ -40,39 +41,75 @@ function validateForm(items, context) {
         var value = jQuery.trim(input.val());
         var type = input.data('validateType');
         var method = null;
+        var types = [];
+        var inputHasError = false;
 
-        switch (type) {
-            case 'date':
-                method = 'validateDate';
-                break;
-            case 'daterange':
-                method = 'validateDateRange';
-                break;
+        if (type) {
+            types = type.split(",");
         }
+
 
         if ((input.prop('required') && value == '')
             || (input.getType() == 'select' && value == '#')
         ) {
-            required.push(label);
+            if (label.length > 0) {
+                required.push(label);
+            }
 
             group.addClass('has-error');
 
-            if (input.data('focus') !== false) {
+            if (focusSet === false && input.data('focus') !== false) {
+                focusSet = true;
                 input.focus();
             }
 
-            valid = false;
-        } else if (method && dispatch(method, [context, input, group, label, value, errors]) !== true) {
-            group.addClass('has-error');
-
-            if (input.data('focus') !== false) {
-                input.focus();
-            }
-
+            inputHasError = true;
             valid = false;
         } else {
             group.removeClass('has-error')
         }
+
+        _.each(types, function(type) {
+            switch (type) {
+                case 'date':
+                    method = 'validateDate';
+                    break;
+                case 'daterange':
+                    method = 'validateDateRange';
+                    break;
+                case 'password':
+                    method = "validatePassword";
+                    break;
+                case 'unique':
+                    method = "validateUnique";
+                    break;
+                case 'email':
+                    method = "validateEmail";
+                    break;
+                case "length":
+                    method = "validateLength";
+                    break;
+                default:
+                    throw new Error("Implement '" + type + "' validation!");
+                    break;
+            }
+
+            if (!inputHasError && method && dispatch(method, [context, input, group, label, value, errors]) !== true) {
+                group.addClass('has-error');
+
+                console.log(method +"|"+ label);
+                console.log(dispatch(method, [context, input, group, label, value, errors]));
+
+                if (focusSet === false && input.data('focus') !== false) {
+                    focusSet = true;
+                    input.focus();
+                }
+
+                inputHasError = true;
+                valid = false;
+            }
+        });
+
     });
 
     if (!valid) {
@@ -214,6 +251,137 @@ function validateDateRange(context, input, group, label, date, errors) {
 
             return false;
         }
+    }
+
+    return true;
+}
+
+/**
+ * Method validates that given passwords are same
+ *
+ * @todo    How to avoid double check?
+ *
+ * @param   {jQuery}    context     Current context
+ * @param   {jQuery}    input       Current input field
+ * @param   {jQuery}    group       Input control group
+ * @param   {String}    label       Input label as a text
+ * @param   {String}    password    Password value
+ * @param   {Array}     errors      Array of current errors
+ *
+ * @returns {boolean}
+ */
+function validatePassword(context, input, group, label, password, errors) {
+    var pairValue = jQuery('#' + input.data("pair"), context).val();
+
+    if (password !== pairValue) {
+        errors.push("Given passwords don't match.");
+
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Method validates that given value is unique for specified model
+ *
+ * @todo    How to avoid double check?
+ *
+ * @param   {jQuery}    context     Current context
+ * @param   {jQuery}    input       Current input field
+ * @param   {jQuery}    group       Input control group
+ * @param   {String}    label       Input label as a text
+ * @param   {String}    value       Value to be checked
+ * @param   {Array}     errors      Array of current errors
+ *
+ * @returns {boolean}
+ */
+function validateUnique(context, input, group, label, value, errors) {
+    var model = input.data("model");
+    var search = {};
+
+    search[input.attr("name")] = value;
+
+    // Make AJAX call to
+    var response = jQuery.ajax({
+        async: false,
+        type: "POST",
+        dataType: "json",
+        url: "/Validator/isUnique",
+        data: {
+            model: model,
+            search: search
+        }
+    }).responseText;
+
+    if (response !== "true") {
+        errors.push("Given '" + label + "' value is not unique.");
+    }
+
+    return (response === "true");
+}
+
+/**
+ * Method validates email input.
+ *
+ * @param   {jQuery}    context Current context
+ * @param   {jQuery}    input   Current input field
+ * @param   {jQuery}    group   Input control group
+ * @param   {String}    label   Input label as a text
+ * @param   {String}    email   Actual email address value from input
+ * @param   {Array}     errors  Array of current errors
+ *
+ * @returns {boolean}
+ */
+function validateEmail(context, input, group, label, email, errors) {
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    // Oh nou, not valid email address
+    if (!re.test(email)) {
+        errors.push("Invalid email address.");
+
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Method validates input min / max length.
+ *
+ * @param   {jQuery}    context Current context
+ * @param   {jQuery}    input   Current input field
+ * @param   {jQuery}    group   Input control group
+ * @param   {String}    label   Input label as a text
+ * @param   {String}    value   Actual email address value from input
+ * @param   {Array}     errors  Array of current errors
+ *
+ * @returns {boolean}
+ */
+function validateLength(context, input, group, label, value, errors) {
+    var minLength = input.data("lengthMin");
+    var maxLength = input.data("lengthMax");
+
+    if (minLength && maxLength) {
+        if (!(value.length >= minLength && value.length <= maxLength)) {
+            errors.push(label + " must be at least " + minLength + " and at most " + maxLength + " chars long.");
+
+            return false;
+        }
+    } else if (minLength) {
+        if (!(value.length >= minLength)) {
+            errors.push(label + " must be at least " + minLength + " chars long.");
+
+            return false;
+        }
+    } else if (maxLength) {
+        if (!(value.length <= maxLength)) {
+            errors.push(label + " must be at most " + maxLength + " chars long.");
+
+            return false;
+        }
+    } else {
+        throw new Error("No required length(s) defined.");
     }
 
     return true;

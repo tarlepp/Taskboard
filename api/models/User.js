@@ -4,6 +4,8 @@
  * @module      ::  Model
  * @description ::  Model to represents taskboard user.
  */
+var bcrypt = require('bcrypt');
+
 module.exports = {
     schema: true,
     attributes: {
@@ -31,7 +33,11 @@ module.exports = {
         },
         password: {
             type:       'string',
-            required:   true
+            required:   false
+        },
+        passwordSalt: {
+            type:       'string',
+            required:   false
         },
         lastLogin: {
             type:       'datetime',
@@ -64,12 +70,41 @@ module.exports = {
         toJSON: function() {
             var obj = this.toObject();
             delete obj.password;
+            delete obj.passwordSalt;
 
             return obj;
         }
     },
 
     // Life cycle callbacks
+
+    /**
+     * Before create callback.
+     *
+     * @param   {sails.model.user}  values
+     * @param   {Function}          cb
+     */
+    beforeCreate: function(values, cb) {
+        bcrypt.genSalt(10, function(error, salt) {
+            console.log(error);
+            console.log(salt);
+            if (error) {
+                cb(error);
+            }
+
+            values.passwordSalt = salt;
+
+            bcrypt.hash(values.password, salt, function(error, hash) {
+                if (error) {
+                    cb(error);
+                }
+
+                values.password = hash;
+
+                cb();
+            });
+        });
+    },
 
     /**
      * After create callback.
