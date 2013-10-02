@@ -510,6 +510,9 @@ function ViewModel() {
                     case 'task':
                         self.tasks.push(new Task(data));
                         break;
+                    case 'user':
+                        self.users.push(new User(data));
+                        break;
                     default:
                         console.log("implement create for " + model);
                         break;
