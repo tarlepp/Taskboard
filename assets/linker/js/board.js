@@ -9,6 +9,14 @@
  * Initialize all necessary javascript on document ready event.
  */
 jQuery(document).ready(function() {
+    // Global AJAX setup
+    jQuery.ajaxSetup({
+        error: function(jqXhr, textStatus, error) {
+            handleAjaxError(jqXhr, textStatus, error);
+        },
+        type: "post"
+    });
+
     // Global bootbox settings
     bootbox.setDefaults({
         animate: false
