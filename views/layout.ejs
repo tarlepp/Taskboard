@@ -233,13 +233,28 @@
                     </li>
                 </ul>
             </li>
-            <li id="functionHelp">
+            <li id="functionHelp" class="navbar-icon tooltipTitle" title="Show help"
+                data-qtipopts='{ "position": { "at": "top left", "my": "bottom center" } }'
+            >
                 <a href="javascript: void(0);">
-                    <i class="icon-question-sign tooltipTitle" title="Show help"
-                        data-qtipopts="{ position: { at: 'center center', my: 'center center' } }"
-                    ></i>
+                    <i class="icon-question-sign"></i>
                 </a>
             </li>
+            <li class="navbar-icon tooltipTitle" title="<%= user.fullName() %>"
+                data-qtipopts='{ "position": { "at": "top left", "my": "bottom center" } }'
+            >
+                <a href="javascript: void(0);">
+                    <i class="icon-user"></i>
+                </a>
+            </li>
+            <li class="navbar-icon tooltipTitle" title="Sign out"
+                data-qtipopts='{ "position": { "at": "top left", "my": "bottom center" } }'
+            >
+                <a href="/logout">
+                    <i class="icon-signout text-danger"></i>
+                </a>
+            </li>
+
         </ul>
     </div>
 </div>

@@ -43,7 +43,8 @@ module.exports = {
         // Make view
         res.view({
             projectId: projectId,
-            sprintId: sprintId
+            sprintId: sprintId,
+            user: req.user
         });
     }
 };
