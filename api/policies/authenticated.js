@@ -1,15 +1,12 @@
-/**
- * Allow any authenticated user.
- */
-module.exports = function (req, res, ok) {
+// api/policies/authenticated.js
 
-  // User is allowed, proceed to controller
-  if (req.session.authenticated) {
-    return ok();
-  }
+// We use passport to determine if we're authenticated
+module.exports = function(req, res, next) {
+    // All is ok, continue
+    if (req.isAuthenticated()) {
+        return next();
+    }
 
-  // User is not allowed
-  else {
-    return res.send("You are not permitted to perform this action.", 403);
-  }
+    // User not authenticated => login
+    res.redirect('/login');
 };
