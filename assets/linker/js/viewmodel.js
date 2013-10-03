@@ -16,6 +16,11 @@ function ViewModel() {
     var self = this;
     var body = jQuery("body");
 
+    // Cannot continue...
+    if (typeof selectedProjectId === 'undefined' || typeof selectedSprintId === 'undefined') {
+        return;
+    }
+
     // Specify used observable data
 
     // Base application observable data

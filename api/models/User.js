@@ -6,6 +6,23 @@
  */
 var bcrypt = require('bcrypt');
 
+/**
+ * Generic password hash function.
+ *
+ * @param   {sails.model.user}  values
+ * @param   {Function}          next
+ */
+function hashPassword(values, next) {
+    bcrypt.hash(values.password, 10, function(err, hash) {
+        if (err) {
+            return next(err);
+        }
+
+        values.password = hash;
+        next();
+    });
+}
+
 module.exports = {
     schema: true,
     attributes: {
@@ -32,10 +49,6 @@ module.exports = {
             defaultsTo: false
         },
         password: {
-            type:       'string',
-            required:   false
-        },
-        passwordSalt: {
             type:       'string',
             required:   false
         },
@@ -70,9 +83,19 @@ module.exports = {
         toJSON: function() {
             var obj = this.toObject();
             delete obj.password;
-            delete obj.passwordSalt;
 
             return obj;
+        },
+
+        // Validate password
+        validPassword: function(password, callback) {
+            var obj = this.toObject();
+
+            if (callback) {
+                return bcrypt.compare(password, obj.password, callback);
+            }
+
+            return bcrypt.compareSync(password, obj.password);
         }
     },
 
@@ -82,28 +105,33 @@ module.exports = {
      * Before create callback.
      *
      * @param   {sails.model.user}  values
-     * @param   {Function}          cb
+     * @param   {Function}          next
      */
-    beforeCreate: function(values, cb) {
-        bcrypt.genSalt(10, function(error, salt) {
-            console.log(error);
-            console.log(salt);
-            if (error) {
-                cb(error);
-            }
+    beforeCreate: function(values, next) {
+        hashPassword(values, next);
+    },
 
-            values.passwordSalt = salt;
-
-            bcrypt.hash(values.password, salt, function(error, hash) {
-                if (error) {
-                    cb(error);
-                }
-
-                values.password = hash;
-
-                cb();
-            });
-        });
+    /**
+     * Before update callback.
+     *
+     * @param   {sails.model.user}  values
+     * @param   {Function}          next
+     */
+    beforeUpdate: function(values, next) {
+        if (values.password) {
+            hashPassword(values, next);
+        } else {
+            User
+                .findOne(values.id)
+                .done(function(err, user) {
+                    if (err) {
+                        next(err);
+                    } else {
+                        values.password = user.password;
+                        next();
+                    }
+                });
+        }
     },
 
     /**

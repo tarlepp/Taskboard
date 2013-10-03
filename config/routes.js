@@ -22,7 +22,6 @@
  * For convenience, you can also connect routes directly to views or external URLs.
  */
 module.exports.routes = {
-
     /**
      * Default routes to board controller.
      *
@@ -48,6 +47,18 @@ module.exports.routes = {
     '/board/:projectId/sprint/:sprintId/': {
         controller: 'BoardController',
         action:     'index'
+    },
+    '/logout': {
+        controller: 'auth',
+        action:     'logout'
+    },
+    'get /login': {
+        controller: 'auth',
+        action:     'index'
+    },
+    'post /login': {
+        controller: 'auth',
+        action:     'create'
     }
 
     /*
