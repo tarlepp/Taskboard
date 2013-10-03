@@ -20,6 +20,7 @@ module.exports = {
 
         var model = req.param("model");
         var search = req.param("search");
+        var id = req.param("id");
 
         // Just check that model really exists
         try {
@@ -37,7 +38,15 @@ module.exports = {
                     res.send(error, 500);
                 }
 
-                res.json(!(data.length));
+                var output = false;
+
+                if (data.length === 0) {
+                    output = true;
+                } else if (data[0].id == id) {
+                    output = true;
+                }
+
+                res.json(output);
             });
     }
 };

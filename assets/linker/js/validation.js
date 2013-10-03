@@ -97,9 +97,6 @@ function validateForm(items, context) {
             if (!inputHasError && method && dispatch(method, [context, input, group, label, value, errors]) !== true) {
                 group.addClass('has-error');
 
-                console.log(method +"|"+ label);
-                console.log(dispatch(method, [context, input, group, label, value, errors]));
-
                 if (focusSet === false && input.data('focus') !== false) {
                     focusSet = true;
                     input.focus();
@@ -302,6 +299,8 @@ function validateUnique(context, input, group, label, value, errors) {
 
     search[input.attr("name")] = value;
 
+    var id = input.data("id");
+
     // Make AJAX call to
     var response = jQuery.ajax({
         async: false,
@@ -310,7 +309,8 @@ function validateUnique(context, input, group, label, value, errors) {
         url: "/Validator/isUnique",
         data: {
             model: model,
-            search: search
+            search: search,
+            id: id
         }
     }).responseText;
 

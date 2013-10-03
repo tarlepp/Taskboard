@@ -434,7 +434,8 @@ function ViewModel() {
      *          sails.json.project|
      *          sails.json.sprint|
      *          sails.json.story|
-     *          sails.json.task
+     *          sails.json.task|
+     *          sails.json.user
      *          }                   data    Object data
      */
     self.processSocketMessage = function(model, type, id, data) {
@@ -479,6 +480,14 @@ function ViewModel() {
 
                         if (typeof task != 'undefined') {
                             self.tasks.replace(task, new Task(data));
+                        }
+                        break;
+                    case 'user':
+                        //noinspection JSDuplicatedDeclaration
+                        var user = _.find(self.users(), function(user) { return user.id() === id; });
+
+                        if (typeof user != 'undefined') {
+                            self.users.replace(user, new User(data));
                         }
                         break;
                     default:
