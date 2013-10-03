@@ -7,6 +7,12 @@ This needs a lots of work...
 
 Maybe sails are lifted on http://wunder.sytes.net:1337/ or maybe not...
 
+Use following credentials:
+```
+username: demo
+password: demodemodemo
+```
+
 ### What are we using to do this all:
 - Sails.js (http://sailsjs.org/)
 - jQuery (http://www.jquery.com/)
