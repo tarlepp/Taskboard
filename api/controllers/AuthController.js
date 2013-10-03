@@ -7,10 +7,19 @@
 var passport = require('passport');
 
 module.exports = {
-    index: function(req, res) {
+    /**
+     * Login action, basically this just shows login screen.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    login: function(req, res) {
         var error = req.param("error");
 
-        console.log(error);
+        // If user is already signed in redirect to main page
+        if (req.user) {
+            res.redirect("/");
+        }
 
         res.view({
             layout: "layout_login",
@@ -18,7 +27,25 @@ module.exports = {
         });
     },
 
-    create: function(req, res) {
+    /**
+     * Logout action, just logout user and then redirect to root.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    logout: function(req, res) {
+        req.logout();
+        res.redirect("/");
+    },
+
+    /**
+     * Authentication action, this uses passport local directive to
+     * check if user is valid user or not.
+     *
+     * @param req
+     * @param res
+     */
+    authenticate: function(req, res) {
         passport.authenticate('local', function(err, user, info) {
             if ((err) || (!user)) {
                 res.redirect("/login?error=true");
@@ -31,14 +58,9 @@ module.exports = {
                         layout: "layout_login"
                     });
                 } else {
-                    res.redirect('/');
+                    res.redirect("/");
                 }
             });
         })(req, res);
-    },
-
-    logout: function(req, res) {
-        req.logout();
-        res.redirect('/');
     }
 };
