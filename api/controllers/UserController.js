@@ -13,7 +13,7 @@ module.exports = {
      */
     list: function(req, res) {
         if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
+            res.send("Only AJAX request allowed", 403);
         }
 
         // Fetch user data
@@ -42,7 +42,7 @@ module.exports = {
      */
     add: function(req, res) {
         if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
+            res.send("Only AJAX request allowed", 403);
         }
 
         res.view({
@@ -58,11 +58,25 @@ module.exports = {
      */
     edit: function(req, res) {
         if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
+            res.send("Only AJAX request allowed", 403);
         }
 
-        res.view({
-            layout: "layout_ajax"
-        });
+        var userId = req.param("id");
+
+        // Fetch user data
+        User
+            .findOne(userId)
+            .done(function(error, user) {
+                if (error) {
+                    res.send(error, 500);
+                } else if (!user) {
+                    res.send("User not found.", 404);
+                } else {
+                    res.view({
+                        user: user,
+                        layout: "layout_ajax"
+                    });
+                }
+            });
     }
 };

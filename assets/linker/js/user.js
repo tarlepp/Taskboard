@@ -119,24 +119,54 @@ jQuery(document).ready(function() {
             });
     });
 
+    /**
+     * User edit event, this opens a modal with user edit form on it.
+     *
+     * @param   {jQuery.Event}          event       Event object
+     * @param   {Number}                userId      User id
+     * @param   {sails.helper.trigger}  [trigger]   Trigger to process after actions
+     */
     body.on('userEdit', function(event, userId, trigger) {
         trigger = trigger || false;
 
         jQuery.get("/User/edit?id=" + userId)
             .done(function(content) {
-                var title = "Add new user";
+                var title = "Edit user";
                 var buttons = [
                     {
                         label: "Save",
                         className: "btn-primary pull-right",
                         callback: function () {
-                            console.log("implement user save");
+                            var form = jQuery("#formUserEdit", modal);
+                            var formItems = form.serializeJSON();
 
-                            modal.modal("hide");
+                            // Validate current form items and try to update milestone data
+                            if (validateForm(formItems, modal)) {
+                                // Update user data
+                                socket.put("/User/"  + userId, formItems, function(/** sails.json.user */user) {
+                                    if (handleSocketError(user)) {
+                                        makeMessage("User updated successfully.");
 
-                            handleEventTrigger(trigger);
+                                        modal.modal("hide");
+
+                                        // Trigger specified event
+                                        handleEventTrigger(trigger);
+
+                                        // Update client bindings
+                                        myViewModel.processSocketMessage("user", "update", user.id, user);
+                                    }
+                                });
+                            }
 
                             return false;
+                        }
+                    },
+                    {
+                        label: "Delete",
+                        className: "btn-danger pull-right",
+                        callback: function() {
+                            // Trigger user delete event
+                            body.trigger("userDelete", [userId, {trigger: "userEdit", parameters: [userId, trigger]}]);
                         }
                     }
                 ];

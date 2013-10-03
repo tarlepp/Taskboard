@@ -1,1 +1,95 @@
-Implement user edit content.
+<ul class="nav nav-tabs">
+    <li class="active">
+        <a href="#basic" data-toggle="tab">Basic</a>
+    </li>
+    <li>
+        <a href="#passwordChange" data-toggle="tab">Change password</a>
+    </li>
+    <li>
+        <a href="#history" data-toggle="tab" data-href="/History?objectName=User&objectId=<%= user.id %>">History</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+
+    <div class="tab-pane active" id="basic">
+        <form id="formUserEdit" class="form-horizontal">
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Username</label>
+                <div class="col-lg-3">
+                    <p class="form-control-static"><%= user.username %></p>
+                </div>
+            </div>
+
+            <div class="form-group required">
+                <label class="col-lg-3 control-label" for="formUserEditFirstName">First name</label>
+                <div class="col-lg-9">
+                    <input id="formUserEditFirstName" name="firstName" type="text" class="form-control" placeholder="enter first name" required="required" value="<%= user.firstName %>" />
+                </div>
+            </div>
+
+            <div class="form-group required">
+                <label class="col-lg-3 control-label" for="formUserEditLastName">Last name</label>
+                <div class="col-lg-9">
+                    <input id="formUserEditLastName" name="lastName" type="text" class="form-control" placeholder="enter last name" required="required" value="<%= user.lastName %>" />
+                </div>
+            </div>
+
+            <div class="form-group required">
+                <label class="col-lg-3 control-label" for="formUserEditEmail">Email address</label>
+                <div class="col-lg-9">
+                    <input id="formUserEditEmail" name="email" type="email" class="form-control" placeholder="enter email" required="required" value="<%= user.email %>"
+                        data-validate-type="email,unique"
+                        data-model="User"
+                        data-id="<%= user.id %>"
+                    />
+                    <span class="help-block">Email address will not be public.</span>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="tab-pane" id="passwordChange">
+        <form id="formUserEditPasswordChange" class="form-horizontal">
+            <div class="form-group required">
+                <label class="col-lg-3 control-label" for="formUserEditPasswordCurrent">Current password</label>
+                <div class="col-lg-5">
+                    <input id="formUserEditPasswordCurrent" name="password" type="password" class="form-control" placeholder="enter current password" required="required"
+                        data-password="true"
+                        data-validate-type="passwordCurrent"
+                    />
+
+                    <span class="help-block text-nowrap">To change password you must provide current password</span>
+                </div>
+            </div>
+            <div class="form-group required">
+                <label class="col-lg-3 control-label" for="formUserEditPassword">New password</label>
+                <div class="col-lg-5">
+                    <input id="formUserEditPassword" name="password" type="password" class="form-control" placeholder="enter new password" required="required"
+                        data-password="true"
+                        data-pair="formUserEditPasswordRetype"
+                        data-validate-type="password,length"
+                        data-length-min="10"
+                    />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label" for="formUserEditPasswordRetype"></label>
+                <div class="col-lg-5">
+                    <input id="formUserEditPasswordRetype" name="password2" type="password" class="form-control" placeholder="re-type new password"
+                        data-password="true"
+                        data-pair="formUserEditPassword"
+                        data-validate-type="password"
+                    />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-5 col-lg-offset-3">
+                    <button type="button" class="btn btn-default btn-primary">Change password</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="tab-pane" id="history"></div>
+</div>
