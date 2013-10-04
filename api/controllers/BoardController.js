@@ -40,11 +40,15 @@ module.exports = {
             }
         }
 
+        var fs = require('fs');
+        var packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+
         // Make view
         res.view({
             projectId: projectId,
             sprintId: sprintId,
-            user: req.user
+            user: req.user,
+            packageJson: packageJson
         });
     }
 };

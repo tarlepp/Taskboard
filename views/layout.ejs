@@ -274,22 +274,22 @@
         <div class="navbar-inner">
             <div class="container">
                 <span class="pull-right text-medium">
-                    version 0.5
+                    version <%= packageJson.version %>
                 </span>
                 <ul>
                     <li>
-                        <a href="https://github.com/tarlepp/Taskboard" target="_blank">
+                        <a href="<%= packageJson.homepage %>" target="_blank">
                             <i class="icon-github"></i>GitHub
                         </a>
                     </li>
                     <li>
-                        <a href="https://github.com/tarlepp/Taskboard/issues" target="_blank">
+                        <a href="<%= packageJson.bugs.url %>" target="_blank">
                             <i class="icon-bug"></i>Issues
                         </a>
                     </li>
                     <li>
                         <a href="https://github.com/tarlepp/" target="_blank">
-                            <i class="icon-user"></i>Tarmo Leppänen
+                            <i class="icon-user"></i><%= packageJson.author %>
                         </a>
                     </li>
                 </ul>
