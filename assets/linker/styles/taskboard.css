@@ -141,21 +141,32 @@ div.task h3 {
     padding: 0;
     margin: 5px;
     text-align: center;
-    font-weight: normal;
     text-shadow: none;
+    font-weight: normal;
     transform-style: preserve-3d;
     -webkit-backface-vivbility: hidden;
     -webkit-transform: translate3d(0,0,0);
     -webkit-transform-style: preserve-3d;
 }
 
-div.story h3 {
-    font-size: 16px;
-    font-weight: bold;
+div.story.alert-info h3 {
+    text-shadow: 0 0 1px rgba(58, 135, 173, .3);
 }
 
-div.task h3 {
-    font-weight: normal;
+div.task.alert-warning h3 {
+    text-shadow: 0 0 1px rgba(192, 152, 83, .3);
+}
+
+div.task.alert-success h3 {
+    text-shadow: 0 0 1px rgba(70, 136, 71, .3);
+}
+
+div.task.alert-danger h3 {
+    text-shadow: 0 0 1px rgba(185, 74, 72, .3);
+}
+
+div.story h3 {
+    font-size: 16px;
 }
 
 div.task.small {
