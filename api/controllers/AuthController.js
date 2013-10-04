@@ -21,9 +21,13 @@ module.exports = {
             res.redirect("/");
         }
 
+        var fs = require('fs');
+        var packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+
         res.view({
             layout: "layout_login",
-            error: error
+            error: error,
+            packageJson: packageJson
         });
     },
 
