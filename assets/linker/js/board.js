@@ -36,7 +36,7 @@ jQuery(document).ready(function() {
      * it is just triggered again and again and again...
      */
     function makeBrowserError() {
-        var message = "Please use <em><a href='https://www.google.com/chrome/' target='_blank'>Google Chrome browser</a></em>, otherwise we can not guarantee user experience.";
+        var message = "Please use <a href='https://www.google.com/chrome/' target='_blank'>Google Chrome</a> as browser, otherwise we can not guarantee proper user experience...";
 
         makeMessage(message, "error", {
             timeout: 0,
