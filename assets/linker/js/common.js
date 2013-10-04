@@ -33,7 +33,7 @@ function createQtipDiv(element) {
     var content = _.unescape(element.find(".tooltipDivContainer div").clone().html());
 
     // Create actual tooltip
-    createQtip(element, title, content, "auto", "top left", "bottom center", true, 100);
+    createQtip(element, title, content, "auto", "top left", "bottom center", true, 50);
 }
 
 /**
