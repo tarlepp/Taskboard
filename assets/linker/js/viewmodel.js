@@ -38,6 +38,9 @@ function ViewModel() {
     self.project    = ko.observable();
     self.sprint     = ko.observable();
 
+    // Observables for different logic contexts
+    self.moveInProcess = ko.observable(false);
+
     // Selected id values, todo: are these really needed?
     self.selectedProjectId = ko.observable(selectedProjectId);
     self.selectedSprintId = ko.observable(selectedSprintId);
@@ -316,6 +319,8 @@ function ViewModel() {
 
     // TODO refactor these
     self.taskDraggableStartCallback = function(event, ui) {
+        self.moveInProcess(true);
+
         jQuery('.qtip.qtip-bootstrap').qtip('hide');
     };
 
@@ -323,6 +328,8 @@ function ViewModel() {
     };
 
     self.taskDraggableAfterMoveCallback = function(arg, event, ui) {
+        self.moveInProcess(false);
+
         var context = ko.contextFor(this);
         var phase = ko.toJS(context.$data);
 
