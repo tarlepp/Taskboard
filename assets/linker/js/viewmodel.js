@@ -327,10 +327,12 @@ function ViewModel() {
         var phase = ko.toJS(context.$data);
 
         // Update task data
-        socket.put('/Task/' + arg.item.id(), {phaseId: phase.id}, function(response) {
+        socket.put('/Task/' + arg.item.id(), {phaseId: phase.id}, function(/** sails.json.task */response) {
             var updatedTask = new Task(response);
+            var story = _.find(self.stories(), function(story) { return story.id() === response.storyId; });
 
             self.tasks.replace(arg.item, updatedTask);
+            self.stories.replace(story, _.clone(story));
         });
     };
 
@@ -428,8 +430,6 @@ function ViewModel() {
     /**
      * Method to process all socket messages. Basically this will update specified
      * knockout bindings according to message type.
-     *
-     * todo implement missing types and models
      *
      * @param   {String}    model   Name of the model
      * @param   {String}    type    Message type; update, create, destroy
