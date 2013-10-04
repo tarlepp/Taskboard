@@ -67,6 +67,7 @@ module.exports = function (grunt) {
         'linker/vendor/underscore.js',
         'linker/vendor/jquery-2.0.3.min.js',
         'linker/vendor/jquery.hotkeys.js',
+        'linker/vendor/trunk8.js',
         'linker/vendor/selectorator.js',
         'linker/vendor/async.js',
         'linker/vendor/jQuery-noty/jquery.noty.js',
