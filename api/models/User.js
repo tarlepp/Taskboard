@@ -4,7 +4,10 @@
  * @module      ::  Model
  * @description ::  Model to represents taskboard user.
  */
-var bcrypt = require('bcrypt');
+var bcrypt = require("bcrypt");
+var gravatar = require("gravatar");
+var http = require("http");
+var async = require("async");
 
 /**
  * Generic password hash function.
@@ -72,6 +75,10 @@ module.exports = {
             }
 
             return this.lastLoginObject().format('isoDate') + " " + this.lastLoginObject().format('isoTime');
+        },
+
+        gravatarImage: function() {
+            return gravatar.url(this.email, {s: '25', r: 'pg', d: '404'});
         },
 
         // ObjectTitle

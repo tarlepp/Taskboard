@@ -1,7 +1,7 @@
 {
   "name": "taskboard",
   "private": true,
-  "version": "0.5",
+  "version": "0.0.3",
   "description": "a Sails application to mimic 'scrum-ban' taskboard.",
   "dependencies": {
     "sails": "0.9.4",
@@ -13,7 +13,9 @@
     "jsondiffpatch": "0.0.8",
     "bcrypt": "~0.7.7",
     "passport": "~0.1.17",
-    "passport-local": "~0.1.6"
+    "passport-local": "~0.1.6",
+    "gravatar": "~1.0.6",
+    "async": "~0.2.9"
   },
   "scripts": {
     "start": "node app.js",

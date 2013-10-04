@@ -218,6 +218,7 @@
                 <a href="javascript: void(0);" class="dropdown-toggle"
                     data-toggle="dropdown"
                     data-hover="dropdown"
+                    data-delay="50"
                 >
                     Settings
                     <b class="caret"></b>
@@ -234,21 +235,24 @@
                 </ul>
             </li>
             <li id="functionHelp" class="navbar-icon tooltipTitle" title="Show help"
-                data-qtipopts='{ "position": { "at": "top left", "my": "bottom center" } }'
+                data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
             >
                 <a href="javascript: void(0);">
                     <i class="icon-question-sign"></i>
                 </a>
             </li>
-            <li class="navbar-icon tooltipTitle" title="<%= user.fullName() %>"
-                data-qtipopts='{ "position": { "at": "top left", "my": "bottom center" } }'
+            <li class="navbar-icon navbar-user tooltipTitle" title="<%= user.fullName() %>"
+                data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
             >
                 <a href="javascript: void(0);">
-                    <i class="icon-user"></i>
+                    <i id="user-icon" class="icon-user" style="display: none;"></i>
+                    <img src="<%= user.gravatarImage() %>" onerror="this.style.display = 'none'; document.getElementById('user-icon').style.display = '';" />
+
+                    <span><%= user.username %></span>
                 </a>
             </li>
             <li class="navbar-icon tooltipTitle" title="Sign out"
-                data-qtipopts='{ "position": { "at": "top left", "my": "bottom center" } }'
+                data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
             >
                 <a href="/logout">
                     <i class="icon-signout text-danger"></i>
