@@ -6,6 +6,25 @@
  */
 
 /**
+ * Basic truncate text for task post-it. This is simply replacement for trunk8
+ * library - not so fancy but fast as hell.
+ *
+ * @type {{update: Function, defaultLength: number}}
+ */
+ko.bindingHandlers.truncatedText = {
+    update: function (element, valueAccessor, allBindingsAccessor) {
+        var value = ko.utils.unwrapObservable(valueAccessor());
+        var length = ko.utils.unwrapObservable(allBindingsAccessor().length) || ko.bindingHandlers.truncatedText.defaultLength;
+        var truncatedValue = value.length > length ? value.substring(0, Math.min(value.length, length)) + "..." : value;
+
+        ko.bindingHandlers.text.update(element, function() {
+            return truncatedValue;
+        });
+    },
+    defaultLength: 15
+};
+
+/**
  * Project change binding handler, this is activated when
  * user changes project selection.
  *
@@ -132,8 +151,13 @@ ko.bindingHandlers.qtip = {
 
         if (!jQuery.isEmptyObject(settings)) {
             var textValue = ko.utils.unwrapObservable(settings.text);
+            var title = ko.utils.unwrapObservable(settings.title);
 
-            if (textValue) {
+            if (textValue || title.length > 15) {
+                if (!textValue) {
+                    textValue = "<em>No description...</em>";
+                }
+
                 try {
                     jQuery(element).qtip("api").hide();
                     jQuery(element).qtip("api").destroy();
