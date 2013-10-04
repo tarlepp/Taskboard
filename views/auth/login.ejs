@@ -1,12 +1,20 @@
 <form class="form-signin" action="/login" method="post">
     <h2 class="form-signin-heading">Please sign in</h2>
 
-    <% if(error) { %>
-    <div class="alert alert-danger">Invalid credentials</div>
-    <% } %>
-
     <input type="text" name="username" class="form-control" placeholder="enter username" autofocus autocomplete="off" />
     <input type="password" name="password" class="form-control" placeholder="enter password" />
 
     <input type="submit" value="Sign in" class="btn btn-lg btn-primary btn-block" />
 </form>
+
+<script>
+    document.onreadystatechange = function() {
+        var state = document.readyState;
+
+        if (state == "complete") {
+        <% if(error) { %>
+            makeMessage("Invalid credentials", "error");
+        <% } %>
+        }
+    }
+</script>
