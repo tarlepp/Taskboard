@@ -114,6 +114,23 @@
     font-size: 20px;
 }
 
+#navigation-static li.navbar-user img {
+    position: relative;
+    height: 30px;
+    top: -12px;
+    margin: 0 0 -20px 0;
+    padding: 0;
+    border-radius: 3px;
+}
+
+#navigation-static li.navbar-user span {
+    position: relative;
+    top: -1px;
+    font-size: 18px;
+    line-height: 18px;
+    margin-left: 3px;
+}
+
 ul.dropdown-menu li {
     text-align: left;
 }
