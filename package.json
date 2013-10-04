@@ -1,7 +1,7 @@
 {
   "name": "taskboard",
   "private": true,
-  "version": "0.0.5",
+  "version": "0.5.0",
   "description": "a Sails application to mimic 'scrum-ban' taskboard.",
   "dependencies": {
     "sails": "0.9.4",
