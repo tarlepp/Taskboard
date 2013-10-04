@@ -146,7 +146,7 @@ ko.bindingHandlers.qtip = {
         }
     },
 
-    update: function (element, valueAccessor) {
+    update: function(element, valueAccessor) {
         var settings = ko.utils.unwrapObservable(valueAccessor()) || {};
 
         if (!jQuery.isEmptyObject(settings)) {
@@ -197,6 +197,17 @@ ko.bindingHandlers.qtip = {
                                     screen: true
                                 },
                                 viewport: jQuery(window)
+                            },
+                            events: {
+                                show: function(event, api) {
+                                    // Move is in process, we don't want to show tooltip
+                                    if (myViewModel.moveInProcess()) {
+                                        try {
+                                            event.preventDefault();
+                                        } catch(error) {
+                                        }
+                                    }
+                                }
                             }
                         },
                         options
