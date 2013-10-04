@@ -244,7 +244,7 @@
             <li class="navbar-icon navbar-user tooltipTitle" title="<%= user.fullName() %>"
                 data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
             >
-                <a href="javascript: void(0);">
+                <a href="javascript: void(0);" data-user-id="<%= user.id %>">
                     <i id="user-icon" class="icon-user" style="display: none;"></i>
                     <img src="<%= user.gravatarImage() %>" onerror="this.style.display = 'none'; document.getElementById('user-icon').style.display = '';" />
 

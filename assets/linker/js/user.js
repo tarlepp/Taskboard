@@ -18,6 +18,15 @@ jQuery(document).ready(function() {
     var body = jQuery("body");
 
     /**
+     * Current user wants to modify his/hers information in application.
+     */
+    body.on("click", "#navigation-static li.navbar-user a", function(event) {
+        event.preventDefault();
+
+        body.trigger("userEdit", [jQuery(this).data("userId")]);
+    });
+
+    /**
      * User list event, this opens a modal with list of current users.
      *
      * @param   {jQuery.Event}          event       Event object
