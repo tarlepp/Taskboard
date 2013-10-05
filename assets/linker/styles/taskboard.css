@@ -20,9 +20,8 @@
     font-size: 22px
 }
 
-#board .table th,
 #board .table td {
-    padding: 5px;
+    padding: 5px 5px 0 5px;
 }
 
 #board .table th {
@@ -50,6 +49,7 @@
 #board tbody th,
 #board tbody td {
     background-color: #ffffff;
+    text-align: center;
 }
 
 #board .table td.addTask,
@@ -120,7 +120,7 @@ div.story,
 div.task {
     position: relative;
     padding: 5px 0;
-    margin: 0 7px 7px 0;
+    margin: 0 5px 8px 0;
     text-align: center;
     box-shadow: 2px 2px 3px rgba(0,0,0,0.1);
     -webkit-user-select: none;
