@@ -291,7 +291,7 @@ function ViewModel() {
      * @returns {string}
      */
     self.getTaskTemplate = function(phaseId, storyId) {
-        return (_.size(self.getTasks(phaseId, storyId)) > 5) ? 'task-template-small' : 'task-template-normal';
+        return (_.size(self.getTasks(phaseId, storyId)) > 6) ? 'task-template-small' : 'task-template-normal';
     };
 
     /**
