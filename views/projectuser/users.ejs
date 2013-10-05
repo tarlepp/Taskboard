@@ -17,7 +17,7 @@
             <th>
                 <a href="javascript: void(0);" class="btn btn-default btn-icon tooltipTitle" title="Add new user to this project"
                    data-qtip-options='{ "position": {"my": "center right", "at": "center left"} }'
-                   data-add-new-person="true"
+                   data-add-new-user="true"
                    data-project-id="<%= project.id %>"
                 >
                     <i class="icon icon-plus"></i>
@@ -45,8 +45,9 @@
                 <% } else { %>
                 <a href="javascript: void(0);" class="btn btn-default btn-danger btn-icon tooltipTitle" title="Remove this user from project"
                     data-qtip-options='{ "position": {"my": "center right", "at": "center left"} }'
-                    data-add-new-person="true"
+                    data-remove-user="true"
                     data-project-id="<%= project.id %>"
+                    data-user-id="<%= user.id %>"
                 >
                     <i class="icon icon-remove"></i>
                 </a>
