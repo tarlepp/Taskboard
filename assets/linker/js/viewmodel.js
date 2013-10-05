@@ -373,6 +373,11 @@ function ViewModel() {
         body.trigger("projectMilestones", [self.project().id()]);
     };
 
+    // Method opens project users dialog
+    self.actionProjectUsers = function() {
+        body.trigger("projectUsers", [self.project().id()]);
+    };
+
     // TODO
     self.actionProjectDelete = function() {
         console.log("Implement project delete");

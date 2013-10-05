@@ -205,6 +205,30 @@ jQuery(document).ready(function() {
     });
 
     /**
+     * Project users event. This will open project edit modal dialog and activates Users tab to
+     * be opened. Note that this just fires projectEdit event with specified parameters.
+     *
+     * User can attach and de-attach users to / from project and change user roles if needed.
+     *
+     * todo do we really need project id parameter?
+     *
+     * @param   {jQuery.Event}          event       Event object
+     * @param   {Number}                projectId   Project id, if not given fallback to current project
+     * @param   {sails.helper.trigger}  trigger     Trigger to process after actions
+     */
+    body.on("projectUsers", function(event, projectId, trigger) {
+        projectId = projectId || myViewModel.project().id();
+        trigger = trigger || false;
+
+        // Used parameters for form init
+        var parameters = {
+            activeTab: "users"
+        };
+
+        body.trigger("projectEdit", [projectId, trigger, parameters]);
+    });
+
+    /**
      * Project planning event, this opens a modal bootbox dialog with project backlog view on it.
      * In this dialog user can prioritize user stories and assign them to existing sprints or move
      * them back to backlog.
@@ -262,6 +286,64 @@ jQuery(document).ready(function() {
         })
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
+        });
+    });
+
+    /**
+     * Project user de-attach event,
+     *
+     * @param   {jQuery.Event}          event       Event object
+     * @param   {Number}                projectId   Project id
+     * @param   {Number}                userId      User id
+     * @param   {sails.helper.trigger}  trigger     Trigger to process after action,
+     */
+    body.on("projectUserDeAttach", function(event, projectId, userId, trigger) {
+        bootbox.confirm({
+            title: "danger - danger - danger",
+            message: "Are you sure of user de-attach from project?",
+            buttons: {
+                cancel: {
+                    label: "Cancel",
+                    className: "btn-default pull-left"
+                },
+                confirm: {
+                    label: "Delete",
+                    className: "btn-danger pull-right"
+                }
+            },
+            callback: function(result) {
+                if (result) {
+                    var data = {
+                        projectId: projectId,
+                        userId: userId
+                    };
+
+                    // Fetch project user object.
+                    socket.get("/ProjectUser", data, function(/** sails.json.projectUser */projectUser) {
+                        if (handleSocketError(projectUser)) {
+                            // User founded
+                            if (projectUser.length === 1 && projectUser[0].id) {
+                                // De-attach user from this project
+                                socket.delete("/ProjectUser/" + projectUser[0].id, function(/** sails.json.projectUser */projectUser) {
+                                    if (handleSocketError(projectUser)) {
+                                        makeMessage("User de-attached successfully from project");
+                                    }
+
+                                    handleEventTrigger(trigger);
+                                });
+                            } else {
+                                makeMessage("Project user not found", "error");
+
+                                handleEventTrigger(trigger);
+                            }
+                        } else {
+                            handleEventTrigger(trigger);
+                        }
+                    });
+                } else {
+                    handleEventTrigger(trigger);
+                }
+            }
         });
     });
 });
@@ -775,4 +857,38 @@ function initProjectTabStatistics(modal, contentId) {
 function initProjectTabUsers(modal, contentId) {
     var body = jQuery("body");
     var container = modal.find(contentId);
+
+    // Remove 'add new' click listeners, this prevents firing this event multiple times
+    body.off("click", "[data-add-new-user='true']");
+
+    // User wants to add new user to project
+    body.on("click", "[data-add-new-user='true']", function() {
+        var element = jQuery(this);
+        var projectId = element.data("projectId");
+
+        // Hide current modal
+        //modal.modal("hide");
+
+        console.log("attach new user. " + projectId);
+    });
+
+    // Remove 'add new' click listeners, this prevents firing this event multiple times
+    body.off("click", "[data-remove-user='true']");
+
+    // User wants to add new user to project
+    body.on("click", "[data-remove-user='true']", function() {
+        var element = jQuery(this);
+        var userId = element.data("userId");
+        var projectId = element.data("projectId");
+
+        // Hide current modal
+        modal.modal("hide");
+
+        var trigger = {
+            trigger: "projectEdit",
+            parameters: [projectId, null, {activeTab: "users"}]
+        };
+
+        body.trigger("projectUserDeAttach", [projectId, userId, trigger]);
+    });
 }

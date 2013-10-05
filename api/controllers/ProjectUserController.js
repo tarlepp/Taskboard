@@ -14,7 +14,7 @@ module.exports = {
      * @param   {Request}   req Request object
      * @param   {Response}  res Response object
      */
-    index: function(req, res) {
+    users: function(req, res) {
         if (!req.isAjax) {
             res.send("Only AJAX request allowed", 403);
         }
