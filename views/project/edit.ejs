@@ -3,6 +3,9 @@
         <a id="basicTab" href="#basic" data-toggle="tab">Basic</a>
     </li>
     <li>
+        <a id="usersTab" href="#users" data-toggle="tab" data-callback="initProjectTabUsers" data-href="/ProjectUser/?projectId=<%= project.id %>">Users</a>
+    </li>
+    <li>
         <a id="backlogTab" href="#backlog" data-toggle="tab" data-callback="initProjectTabBacklog" data-href="/Project/Backlog?id=<%= project.id %>">Backlog</a>
     </li>
     <li>
@@ -79,6 +82,8 @@
             </div>
         </form>
     </div>
+
+    <div class="tab-pane" id="users"></div>
 
     <div class="tab-pane" id="backlog"></div>
 
