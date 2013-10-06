@@ -191,7 +191,8 @@ jQuery(document).ready(function() {
                 }
             },
             inputType: "select",
-            options: options,
+            inputOptions: options,
+            show: false,
             callback: function(result) {
                 if (result !== null) {
                     jQuery.ajax({
@@ -240,6 +241,14 @@ jQuery(document).ready(function() {
                 return false;
             }
         });
+
+        // Initialize prompt select
+        prompt.on("shown.bs.modal", function() {
+            initSelectPrompt(prompt);
+        });
+
+        // Open bootbox prompt modal
+        prompt.modal("show");
     });
 
     /**
