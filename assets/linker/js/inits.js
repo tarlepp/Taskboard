@@ -87,13 +87,42 @@ function initWysiwyg(context) {
  * Basically this just changes basic <select> to <div>.
  *
  * @param   {jQuery|$}  context
+ * @param   {Boolean}   [forceAll]  Force select conversion for all selects
  */
-function initSelect(context) {
-    jQuery("select[data-select]", context).each(function() {
+function initSelect(context, forceAll) {
+    forceAll = forceAll || false;
+
+    var selector = "select[data-select]";
+
+    if (forceAll) {
+        selector = "select";
+    }
+
+    jQuery(selector, context).each(function() {
         jQuery(this).selectpicker({
             container: "body"
         });
     });
+}
+
+/**
+ * Function initializes bootstrap look-a-like select list for bootbox select prompt.
+ * Basically just add some data attributes and CSS classes.
+ *
+ * @param   {jQuery|$}  context
+ */
+function initSelectPrompt(context) {
+    context.find("select").each(function() {
+        var select = jQuery(this);
+
+        select.attr("data-select", "true");
+        select.attr("data-container", "body");
+        select.attr("data-live-search", "true");
+
+        select.addClass("in-modal show-tick show-menu-arrow");
+    });
+
+    initSelect(context);
 }
 
 /**

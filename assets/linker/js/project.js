@@ -363,6 +363,7 @@ jQuery(document).ready(function() {
                     },
                     inputType: "select",
                     inputOptions: options,
+                    show: false,
                     callback: function(result) {
                         if (result !== null) {
                             var values = result.split("|");
@@ -392,6 +393,14 @@ jQuery(document).ready(function() {
                         return false;
                     }
                 });
+
+                // Initialize prompt select
+                prompt.on("shown.bs.modal", function() {
+                    initSelectPrompt(prompt);
+                });
+
+                // Open bootbox prompt modal
+                prompt.modal("show");
             }
         }
     });
