@@ -371,7 +371,7 @@ window.bootbox = window.bootbox || (function init($, undefined) {
                     throw new Error("prompt with select requires options");
                 }
 
-                if (!inputOptions[0].value || !inputOptions[0].text) {
+                if (typeof inputOptions[0].value === "undefined" || typeof inputOptions[0].text === "undefined") {
                     throw new Error("given options in wrong format");
                 }
 
