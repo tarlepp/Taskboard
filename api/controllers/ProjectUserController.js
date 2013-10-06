@@ -147,5 +147,80 @@ module.exports = {
                 res.view(data);
             }
         }
+    },
+
+    /**
+     * This actions fetches available users for specified project. These users can be
+     * attached to specified project.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    availableUsers: function(req, res) {
+        if (!req.isAjax) {
+            res.send('Only AJAX request allowed', 403);
+        }
+
+        var projectId = parseInt(req.param('projectId'), 10);
+        var userIds = [];
+
+        // Fetch project data
+        Project
+            .findOne(projectId)
+            .done(function(error, project) {
+                if (error) {
+                    res.send(error, 500);
+                } else if (!project) {
+                    res.send("Project not found.", 404);
+                } else {
+                    // Add project manager to "used" users
+                    userIds.push({id: {"!": project.managerId}});
+
+                    // Fetch current attached users
+                    fetchCurrentUsers();
+                }
+            });
+
+        /**
+         * Private function to fetch all users who are already attached
+         * to specified project.
+         */
+        function fetchCurrentUsers() {
+            ProjectUser
+                .find()
+                .where({projectId: projectId})
+                .done(function(error, users) {
+                    if (error) {
+                        res.send(error, 500);
+                    } else {
+                        // Iterate users and add those to "used" users
+                        _.each(users, function(projectUser) {
+                            userIds.push({id: {"!": projectUser.userId}});
+                        });
+
+                        // And finally fetch available users
+                        fetchAvailableUsers();
+                    }
+                });
+        }
+
+        /**
+         * Private function to fetch all available users for
+         * specified project.
+         */
+        function fetchAvailableUsers() {
+            User
+                .find()
+                .where({
+                    and: userIds
+                })
+                .done(function(error, users) {
+                    if (error) {
+                        res.send(error, 500);
+                    } else {
+                        res.send(users);
+                    }
+                });
+        }
     }
 };

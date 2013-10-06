@@ -290,6 +290,113 @@ jQuery(document).ready(function() {
     });
 
     /**
+     * Project user attach event,
+     *
+     * @param   {jQuery.Event}          event       Event object
+     * @param   {Number}                projectId   Project id
+     * @param   {Number}                userId      User id
+     * @param   {sails.helper.trigger}  trigger     Trigger to process after action,
+     */
+    body.on("projectUserAttach", function(event, projectId, trigger) {
+        var options = [];
+
+        // Fetch available users
+        jQuery.ajax({
+            type: "GET",
+            url: "/ProjectUser/availableUsers/",
+            data: { projectId: projectId },
+            dataType: "json"
+        })
+        .done(function(/** sails.json.user[] */users) {
+            // Define groups to use
+            var groups = [
+                {type: -1, name: "Manager"},
+                {type: 1, name: "User"},
+                {type: 0, name: "Viewer"}
+            ];
+
+            // Iterate users
+            _.each(users, function(user) {
+                // Iterate groups
+                for (var i = 0; i < groups.length; i++) {
+                    var group = groups[i];
+
+                    // Add new user option
+                    options.push({
+                        value: group.type + "|" + user.id,
+                        text: user.lastName + " " + user.firstName,
+                        group: group.name
+                    });
+                }
+            });
+
+            // Make actual prompt
+            makePrompt();
+        })
+        .fail(function(jqXhr, textStatus, error) {
+            handleAjaxError(jqXhr, textStatus, error);
+        });
+
+        /**
+         * Function to make actual prompt with user select with roles. If there
+         * are no available users prompt is not shown and warning is shown to
+         * user.
+         */
+        function makePrompt() {
+            if (options.length === 0) {
+                makeMessage("There is no users to attach to this project", "error");
+
+                handleEventTrigger(trigger);
+            } else {
+                // Make prompt box
+                var prompt = bootbox.prompt({
+                    title: "Select user who you want to attach to this project",
+                    buttons: {
+                        cancel: {
+                            label: "Cancel",
+                            className: "btn-default pull-left"
+                        },
+                        confirm: {
+                            label: "Attach user",
+                            className: "btn-primary pull-right"
+                        }
+                    },
+                    inputType: "select",
+                    inputOptions: options,
+                    callback: function(result) {
+                        if (result !== null) {
+                            var values = result.split("|");
+
+                            var data = {
+                                projectId: projectId,
+                                userId: values[1],
+                                role: values[0]
+                            };
+
+                            // Attach user to project
+                            socket.post("/ProjectUser/", data, function(/** sails.json.projectUser */projectUser) {
+                                if (handleSocketError(projectUser)) {
+                                    makeMessage("User attached successfully to project");
+                                }
+
+                                prompt.modal("hide");
+
+                                handleEventTrigger(trigger);
+                            });
+                        } else {
+                            prompt.modal("hide");
+
+                            handleEventTrigger(trigger);
+                        }
+
+                        return false;
+                    }
+                });
+            }
+        }
+    });
+
+    /**
      * Project user de-attach event,
      *
      * @param   {jQuery.Event}          event       Event object
@@ -867,12 +974,17 @@ function initProjectTabUsers(modal, contentId) {
         var projectId = element.data("projectId");
 
         // Hide current modal
-        //modal.modal("hide");
+        modal.modal("hide");
 
-        console.log("attach new user. " + projectId);
+        var trigger = {
+            trigger: "projectEdit",
+            parameters: [projectId, null, {activeTab: "users"}]
+        };
+
+        body.trigger("projectUserAttach", [projectId, trigger]);
     });
 
-    // Remove 'add new' click listeners, this prevents firing this event multiple times
+    // Remove 'de-attach' click listeners, this prevents firing this event multiple times
     body.off("click", "[data-remove-user='true']");
 
     // User wants to add new user to project
