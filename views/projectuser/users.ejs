@@ -58,7 +58,19 @@
             <td class="text-nowrap">
                 <a href="mailto: <%= user.email %>"><%= user.email %></a>
             </td>
-            <td class="text-nowrap"><%= user.roleText %> <% if (user.main) { %><span class="text-medium text-muted">(primary)</span><% } %></td>
+            <td class="text-nowrap">
+                <% if (user.main) { %>
+                    <%= user.roleText %> <span class="text-medium text-muted">(primary)</span>
+                <% } else { %>
+                    <a href="javascript: void(0)" class="change-role tooltipTitle" title="Change user role"
+                        data-qtip-options='{ "position": {"my": "center left", "at": "center right"} }'
+                        data-project-id="<%= project.id %>"
+                        data-user-id="<%= user.id %>"
+                        data-role-id="<%= user.role %>"
+                    >
+                        <%= user.roleText %>
+                    </a>
+                <% } %>
             </td>
         </tr>
     <% }); %>

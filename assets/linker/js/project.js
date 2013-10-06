@@ -462,6 +462,79 @@ jQuery(document).ready(function() {
             }
         });
     });
+
+    body.on("projectUserRoleChange", function(event, projectId, userId, roleId, trigger) {
+        var options = [
+            {value: -1, text: "Manager"},
+            {value: 1, text: "User"},
+            {value: 0, text: "Viewer"}
+        ];
+
+        // Make prompt box
+        var prompt = bootbox.prompt({
+            title: "Select new role for user in this project",
+            buttons: {
+                cancel: {
+                    label: "Cancel",
+                    className: "btn-default pull-left"
+                },
+                confirm: {
+                    label: "Change role",
+                    className: "btn-primary pull-right"
+                }
+            },
+            inputType: "select",
+            inputOptions: options,
+            show: false,
+            callback: function(result) {
+                prompt.modal("hide");
+
+                if (result !== null) {
+                    var data = {
+                        projectId: projectId,
+                        userId: userId
+                    };
+
+                    // Fetch project user object.
+                    socket.get("/ProjectUser", data, function(/** sails.json.projectUser */projectUser) {
+                        if (handleSocketError(projectUser)) {
+                            // User founded
+                            if (projectUser.length === 1 && projectUser[0].id) {
+                                // Change user role
+                                socket.put("/ProjectUser/" + projectUser[0].id, {role: result}, function(/** sails.json.projectUser */projectUser) {
+                                    if (handleSocketError(projectUser)) {
+                                        makeMessage("User role changed successfully");
+                                    }
+
+                                    handleEventTrigger(trigger);
+                                });
+                            } else {
+                                makeMessage("Project user not found", "error");
+
+                                handleEventTrigger(trigger);
+                            }
+                        } else {
+                            handleEventTrigger(trigger);
+                        }
+                    });
+                } else {
+                    handleEventTrigger(trigger);
+                }
+
+                return false;
+            }
+        });
+
+        // Initialize prompt select
+        prompt.on("shown.bs.modal", function() {
+            prompt.find("select").val(roleId);
+
+            initSelectPrompt(prompt);
+        });
+
+        // Open bootbox prompt modal
+        prompt.modal("show");
+    });
 });
 
 /**
@@ -996,7 +1069,7 @@ function initProjectTabUsers(modal, contentId) {
     // Remove 'de-attach' click listeners, this prevents firing this event multiple times
     body.off("click", "[data-remove-user='true']");
 
-    // User wants to add new user to project
+    // User wants to de-attach this user from project
     body.on("click", "[data-remove-user='true']", function() {
         var element = jQuery(this);
         var userId = element.data("userId");
@@ -1011,5 +1084,26 @@ function initProjectTabUsers(modal, contentId) {
         };
 
         body.trigger("projectUserDeAttach", [projectId, userId, trigger]);
+    });
+
+    // Remove 'role change' click listeners, this prevents firing this event multiple times
+    body.off("click", "a.change-role");
+
+    // User wants to change user role in project
+    body.on("click", "a.change-role", function() {
+        var element = jQuery(this);
+        var userId = element.data("userId");
+        var projectId = element.data("projectId");
+        var roleId = element.data("roleId");
+
+        // Hide current modal
+        modal.modal("hide");
+
+        var trigger = {
+            trigger: "projectEdit",
+            parameters: [projectId, null, {activeTab: "users"}]
+        };
+
+        body.trigger("projectUserRoleChange", [projectId, userId, roleId, trigger]);
     });
 }
