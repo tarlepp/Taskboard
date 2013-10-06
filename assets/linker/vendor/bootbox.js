@@ -29,11 +29,13 @@ window.bootbox = window.bootbox || (function init($, undefined) {
             "<form class='bootbox-form'></form>",
         inputs: {
             text:
-                "<input class='bootbox-input form-control' autocomplete='off' type='text' />",
+                "<input class='bootbox-input bootbox-input-text form-control' autocomplete=off type=text />",
             email:
-                "<input class='bootbox-input-email form-control' autocomplete='off' type='email' />",
+                "<input class='bootbox-input bootbox-input-email form-control' autocomplete='off' type='email' />",
             select:
-                "<select class='bootbox-select form-control'></select>"
+                "<select class='bootbox-input bootbox-input-select form-control'></select>",
+            checkbox:
+                "<div class='checkbox'><label><input class='bootbox-input bootbox-input-checkbox' type='checkbox' /></label></div>"
         }
     };
 
@@ -279,6 +281,7 @@ window.bootbox = window.bootbox || (function init($, undefined) {
         var form;
         var input;
         var shouldShow;
+        var inputOptions;
 
         // we have to create our form first otherwise
         // its value is undefined when gearing up our options
@@ -289,8 +292,7 @@ window.bootbox = window.bootbox || (function init($, undefined) {
         defaults = {
             buttons: createLabels("cancel", "confirm"),
             value: "",
-            inputType: "text",
-            placeholder: ""
+            inputType: "text"
         };
 
         options = validateButtons(
@@ -313,7 +315,29 @@ window.bootbox = window.bootbox || (function init($, undefined) {
         };
 
         options.buttons.confirm.callback = function() {
-            return options.callback(input.val());
+            var value;
+
+            switch (options.inputType) {
+                case "text":
+                case "email":
+                case "select":
+                    value = input.val();
+                    break;
+
+                case "checkbox":
+                    var checkedItems = input.find("input:checked");
+
+                    // we assume that checkboxes are always multiple,
+                    // hence we default to an empty array
+                    value = [];
+
+                    each(checkedItems, function(_, item) {
+                        value.push($(item).val());
+                    });
+                    break;
+            }
+
+            return options.callback(value);
         };
 
         options.show = false;
@@ -331,39 +355,91 @@ window.bootbox = window.bootbox || (function init($, undefined) {
             throw new Error("invalid prompt type");
         }
 
-        // create the input
+        // create the input based on the supplied type
         input = $(templates.inputs[options.inputType]);
 
         switch (options.inputType) {
-            case 'text':
-            case 'email':
+            case "text":
+            case "email":
                 input.val(options.value);
                 break;
-            case 'select':
-                if (typeof options.options !== 'object' || options.options.length === 0) {
+
+            case "select":
+                inputOptions = options.inputOptions || [];
+
+                if (!inputOptions.length) {
                     throw new Error("prompt with select requires options");
                 }
 
-                if (typeof options.options[0].value === "undefined" || typeof options.options[0].text === "undefined") {
+                if (!inputOptions[0].value || !inputOptions[0].text) {
                     throw new Error("given options in wrong format");
                 }
 
-                // Create options for select
-                for (var i = 0; i < options.options.length; i++) {
-                    var option = options.options[i];
+                // Initialize groups
+                var groups = {};
 
-                    input.append(new Option(option.text, option.value));
+                each(inputOptions, function(_, option) {
+                    // We have groups defined
+                    if (option.group) {
+                        // Group has not yet been initialized
+                        if (typeof groups[option.group] === "undefined") {
+                            groups[option.group] = jQuery('<optgroup/>').attr("label", option.group);
+                        }
+
+                        // Add option to specified group
+                        groups[option.group].append("<option value='" + option.value + "'>" + option.text + "</option>");
+                    } else {
+                        input.append("<option value='" + option.value + "'>" + option.text + "</option>");
+                    }
+                });
+
+                // Iterate groups, and add contents to select
+                for (var group in groups) {
+                    input.append(groups[group]);
                 }
 
-                // Set selected option
-                input.find("option").filter(function() {
-                    return $(this).val() == options.value;
-                }).prop('selected', true);
+                // safe to set a select's value as per a normal input
+                input.val(options.value);
+                break;
+
+            case "checkbox":
+                var values   = $.isArray(options.value) ? options.value : [options.value];
+                inputOptions = options.inputOptions || [];
+
+                if (!inputOptions.length) {
+                    throw new Error("prompt with checkbox requires options");
+                }
+
+                if (!inputOptions[0].value || !inputOptions[0].text) {
+                    throw new Error("given options in wrong format");
+                }
+
+                // checkboxes have to nest within a containing element, so
+                // they break the rules a bit and we end up re-assigning
+                // our 'input' element to this container instead
+                input = $("<div/>");
+
+                each(inputOptions, function(_, option) {
+                    var checkbox = $(templates.inputs[options.inputType]);
+
+                    checkbox.find("input").attr("value", option.value);
+                    checkbox.find("label").append(option.text);
+
+                    // we've ensured values is an array so we can always iterate over it
+                    each(values, function(_, value) {
+                        if (value === option.value) {
+                            checkbox.find("input").prop("checked", true);
+                        }
+                    });
+
+                    input.append(checkbox);
+                });
                 break;
         }
 
-        // add placeholder value
-        input.prop("placeholder", options.placeholder);
+        if (options.placeholder) {
+            input.attr("placeholder", options.placeholder);
+        }
 
         // now place it in our form
         form.append(input);
@@ -554,7 +630,17 @@ window.bootbox = window.bootbox || (function init($, undefined) {
 
     };
 
-    exports.setDefaults = function(values) {
+    exports.setDefaults = function() {
+        var values = {};
+
+        if (arguments.length === 2) {
+            // allow passing of single key/value...
+            values[arguments[0]] = arguments[1];
+        } else if (arguments.length === 1) {
+            // ... and as an object too
+            values = arguments[0];
+        }
+
         $.extend(defaults, values);
     };
 
@@ -612,6 +698,11 @@ window.bootbox = window.bootbox || (function init($, undefined) {
             OK      : "OK",
             CANCEL  : "Annuleren",
             CONFIRM : "Accepteren"
+        },
+        no : {
+            OK      : "OK",
+            CANCEL  : "Avbryt",
+            CONFIRM : "OK"
         },
         pl : {
             OK      : "OK",
