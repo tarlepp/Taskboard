@@ -6,6 +6,19 @@
     </div>
 </div>
 
+<div id="warningContent" style="display: none;"
+    data-bind="style: {display: $root.noProjectData() === true ? 'block' : 'none' }"
+>
+    <div class="alert alert-danger">
+        <h3>You don't have any projects</h3>
+        <p>
+            Currently there is no projects where you're project manager or contributor.
+            Please <a href="javascript: void(0);" class="alert-link" data-bind="click: $root.actionProjectAdd">add new project</a> to continue.
+        </p>
+    </div>
+</div>
+
+
 <div id="boardContent" style="display: none;" data-bind="css: loading().length > 0 ? 'loading' : ''">
 
     <div class="alert alert-danger"

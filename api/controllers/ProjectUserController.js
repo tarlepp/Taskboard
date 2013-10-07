@@ -4,7 +4,8 @@
  * @module      :: Controller
  * @description :: Contains logic for handling requests.
  */
-var jQuery = require('jquery');
+var jQuery = require("jquery");
+var async = require("async");
 
 module.exports = {
     /**
@@ -222,5 +223,106 @@ module.exports = {
                     }
                 });
         }
+    },
+
+    /**
+     * This actions fetches available users for specified project. These users can be
+     * attached to specified project.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    OwnProjects: function(req, res) {
+        var projectIds = [];
+
+        // Make parallel call
+        async.parallel([
+            /**
+             * First fetch all projects where current user is a contributor in
+             * some role.
+             *
+             * @param   {Function}  callback
+             */
+                function(callback) {
+                ProjectUser
+                    .find()
+                    .where({
+                        userId: req.user.id
+                    })
+                    .done(function(error, /** sails.json.projectUser[] */projectUsers) {
+                        if (error) {
+                            return callback(error)
+                        } else {
+                            _.each(projectUsers, function(/** sails.json.projectUser */projectUser) {
+                                projectIds.push({id: projectUser.projectId})
+                            });
+
+                            callback();
+                        }
+                    });
+            },
+
+            /**
+             * Then fetch project id(s) where current user is a primary manager.
+             *
+             * @param   {Function}  callback
+             */
+                function(callback) {
+                Project
+                    .find()
+                    .where({
+                        managerId: req.user.id
+                    })
+                    .done(function(error, /** sails.json.project[] */projects) {
+                        if (error) {
+                            return callback(error)
+                        } else {
+                            _.each(projects, function(/** sails.json.project */project) {
+                                projectIds.push({id: project.id})
+                            });
+
+                            callback();
+                        }
+                    });
+            }
+        ],
+            /**
+             * Callback function which is called when all parallel jobs are processed.
+             *
+             * @param error
+             */
+            function(error) {
+                if (error) {
+                    res.send(error, 500);
+                }
+
+                var where = null;
+
+                // Admin user has all projects
+                if (req.user.admin) {
+                    where = {};
+                } else if (projectIds.length > 0) { // Current user has "some" project(s)
+                    where = {
+                        or: projectIds
+                    };
+                } else { // Otherwise just send empty data
+                    res.json([]);
+                }
+
+                // Fetch project data
+                Project
+                    .find()
+                    .where({
+                        or: projectIds
+                    })
+                    .done(function(error, /** sails.json.project[] */projects) {
+                        if (error) {
+                            res.send(error, 500);
+                        } else {
+                            res.json(projects);
+                        }
+                    });
+            }
+        );
     }
 };
