@@ -4,7 +4,7 @@
  * @module      ::  Controller
  * @description ::  Contains logic for handling requests.
  */
-var jQuery = require('jquery');
+var jQuery = require("jquery");
 
 module.exports = {
     /**

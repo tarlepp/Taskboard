@@ -17,7 +17,10 @@ function ViewModel() {
     var body = jQuery("body");
 
     // Cannot continue...
-    if (typeof selectedProjectId === 'undefined' || typeof selectedSprintId === 'undefined') {
+    if (typeof selectedProjectId === 'undefined'
+        || typeof selectedSprintId === 'undefined'
+        || typeof loggedUserId === 'undefined'
+    ) {
         return;
     }
 
@@ -47,6 +50,8 @@ function ViewModel() {
 
     // Loading observable, just push something to this if you're loading data, and afterwards just pop it out - simple
     self.loading = ko.observableArray([]);
+
+    self.noProjectData = ko.observable(false);
 
 
     // Push data to loading state
@@ -91,8 +96,12 @@ function ViewModel() {
     self.loading.push(true);
 
     // Get project data via socket
-    socket.get("/Project", function(projects) {
+    socket.get("/ProjectUser/OwnProjects/", function(projects) {
         if (handleSocketError(projects)) {
+            if (!projects || projects.length === 0) {
+                self.noProjectData(true);
+            }
+
             var mappedProjects = ko.utils.arrayMap(projects, function(/** sails.json.project */project) {
                 return new Project(project);
             });

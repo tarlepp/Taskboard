@@ -5,6 +5,7 @@
  */
 var selectedProjectId;
 var selectedSprintId;
+var loggedUserId;
 
 var sails = {
     error: {
