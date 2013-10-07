@@ -243,7 +243,7 @@ module.exports = {
              *
              * @param   {Function}  callback
              */
-                function(callback) {
+            function(callback) {
                 ProjectUser
                     .find()
                     .where({
@@ -267,7 +267,7 @@ module.exports = {
              *
              * @param   {Function}  callback
              */
-                function(callback) {
+            function(callback) {
                 Project
                     .find()
                     .where({
@@ -324,5 +324,99 @@ module.exports = {
                     });
             }
         );
+    },
+
+    /**
+     * Method returns user role in specified project. Successfully output is always
+     * json which contains user role:
+     *
+     *  -3 = User is administrator
+     *  -2 = Project manager (primary)
+     *  -1 = Project manager
+     *   0 = Only view rights
+     *   1 = Normal user
+     *
+     * false if nothing matches.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     *
+     * @constructor
+     */
+    GetRole: function(req, res) {
+        var projectId = parseInt(req.param("projectId"), 10);
+
+        // Admin user, always return -3
+        if (req.user.admin) {
+            res.json(-3);
+        } else { // Otherwise fetch user role
+            async.parallel({
+                    /**
+                     * Function to fetch possible Project object for signed in user and
+                     * specified project. User must be project manager.
+                     *
+                     * Note that this query may return undefined.
+                     *
+                     * @param   {Function}  callback
+                     */
+                    primary: function(callback) {
+                        Project
+                            .findOne({
+                                id: projectId,
+                                managerId: req.user.id
+                            })
+                            .done(function(error, /** sails.json.project */project) {
+                                if (error) {
+                                    callback(error, null);
+                                } else {
+                                    callback(null, project)
+                                }
+                            });
+                    },
+
+                    /**
+                     * Function to fetch possible ProjectUser object for signed in user
+                     * and specified project.
+                     *
+                     * Note that this query may return undefined.
+                     *
+                     * @param   {Function}  callback
+                     */
+                    contributor: function(callback) {
+                        ProjectUser
+                            .findOne({
+                                projectId: projectId,
+                                userId: req.user.id
+                            })
+                            .done(function(error, /** sails.json.projectUser */projectUser) {
+                                if (error) {
+                                    callback(error, null);
+                                } else {
+                                    callback(null, projectUser)
+                                }
+                            });
+                    }
+                },
+
+                /**
+                 * Callback function which is been called after all parallel jobs are
+                 * processed.
+                 *
+                 * @param   {{}}    error
+                 * @param   {{}}    results
+                 */
+                function(error, results) {
+                    var output = false;
+
+                    if (results.primary) {
+                        output = -2;
+                    } else if (results.contributor) {
+                        output = results.contributor.role;
+                    }
+
+                    res.json(output);
+                }
+            );
+        }
     }
 };

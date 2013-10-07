@@ -41,6 +41,17 @@ function ViewModel() {
     self.project    = ko.observable();
     self.sprint     = ko.observable();
 
+    /**
+     * User role in current project
+     *
+     *  -3 = User is administrator
+     *  -2 = Project manager (primary)
+     *  -1 = Project manager
+     *   0 = Only view rights
+     *   1 = Normal user
+     */
+    self.role = ko.observable(0);
+
     // Observables for different logic contexts
     self.moveInProcess = ko.observable(false);
 
@@ -203,6 +214,22 @@ function ViewModel() {
 
                 self.loading.pop();
             });
+
+
+            // Push data to loading state
+            self.loading.push(true);
+
+            // Get user role in this project
+            socket.get("/ProjectUser/GetRole", {projectId: projectId}, function(role) {
+                console.log(role);
+
+                if (handleSocketError(role)) {
+
+                    self.role(role);
+                }
+
+                self.loading.pop();
+            });
         }
     };
 
@@ -275,6 +302,7 @@ function ViewModel() {
         self.phases([]);
         self.sprints([]);
         self.project(false);
+        self.role(0);
 
         self.resetSprint();
     };
