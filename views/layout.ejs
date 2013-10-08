@@ -109,6 +109,8 @@
                                 </li>
                                 <li class="divider"></li>
                                 <li class="nav-header text-info">Advanced</li>
+
+                                <!-- ko if: $root.role() < 0 -->
                                 <li>
                                     <a href="javascript: void(0);"
                                        data-bind="click: $root.actionPhasesEdit"
@@ -117,6 +119,8 @@
                                         Edit phases
                                     </a>
                                 </li>
+                                <!-- /ko -->
+
                                 <li>
                                     <a href="javascript: void(0);"
                                         data-bind="click: $root.actionProjectUsers"
@@ -133,6 +137,7 @@
                                         Planning view
                                     </a>
                                 </li>
+                                <!-- ko if: $root.role() < 0 -->
                                 <li class="divider"></li>
                                 <li class="nav-header text-info">Danger zone</li>
                                 <li>
@@ -143,6 +148,7 @@
                                         Delete project
                                     </a>
                                 </li>
+                                <!-- /ko -->
                             </ul>
                         </div>
                     </span>
@@ -162,10 +168,15 @@
                         data-text-no-data="No sprint data to show"
                     ></select>
                     <span class="input-group-addon dropdown">
-                        <div data-bind="visible: !sprint()">
+                        <div
+                            data-bind="visible: !sprint()"
+                        >
                             <a href="javascript: void(0);" class="tooltipTitle" title="Add new sprint"
-                               data-placement="bottom"
-                               data-bind="click: $root.actionSprintAdd"
+                                data-placement="bottom"
+                                data-bind="
+                                    click: $root.actionSprintAdd,
+                                    visible: $root.role() < 0
+                                "
                             >
                                 <i class="icon-plus"></i>
                             </a>
@@ -180,6 +191,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="nav-header text-info">Basic functions</li>
+                                <!-- ko if: $root.role() < 0 -->
                                 <li>
                                     <a href="javascript: void(0);"
                                        data-placement="bottom"
@@ -189,6 +201,7 @@
                                         Add new sprint
                                     </a>
                                 </li>
+                                <!-- /ko -->
                                 <li>
                                     <a href="javascript: void(0);"
                                        data-bind="click: $root.actionSprintEdit"
@@ -205,6 +218,7 @@
                                         Sprint backlog
                                     </a>
                                 </li>
+                                <!-- ko if: $root.role() < 0 -->
                                 <li class="divider"></li>
                                 <li class="nav-header text-info">Danger zone</li>
                                 <li>
@@ -215,6 +229,7 @@
                                         Delete sprint
                                     </a>
                                 </li>
+                                <!-- /ko -->
                             </ul>
                         </div>
                     </span>
@@ -223,7 +238,10 @@
         </ul>
 
         <ul id="navigation-static" class="nav navbar-nav pull-right">
-            <li class="dropdown">
+
+            <li class="dropdown" style="display: none;"
+                data-bind="visible: $root.role() === -3"
+            >
                 <a href="javascript: void(0);" class="dropdown-toggle"
                     data-toggle="dropdown"
                     data-hover="dropdown"
@@ -243,6 +261,7 @@
                     </li>
                 </ul>
             </li>
+
             <li id="functionHelp" class="navbar-icon tooltipTitle" title="Show help"
                 data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
             >
