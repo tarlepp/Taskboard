@@ -312,9 +312,7 @@ module.exports = {
                 // Fetch project data
                 Project
                     .find()
-                    .where({
-                        or: projectIds
-                    })
+                    .where(where)
                     .done(function(error, /** sails.json.project[] */projects) {
                         if (error) {
                             res.send(error, 500);
