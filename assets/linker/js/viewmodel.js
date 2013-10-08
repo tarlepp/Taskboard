@@ -354,30 +354,76 @@ function ViewModel() {
     };
 
 
-    // TODO refactor these
+    /**
+     * Task draggable start callback function, basically we want to tell knockout that
+     * we are moving some task in the board and hide all tooltips.
+     *
+     * @param   {jQuery.Event}  event   Event object
+     * @param   {Object}        ui      UI object
+     */
     self.taskDraggableStartCallback = function(event, ui) {
         self.moveInProcess(true);
 
         jQuery('.qtip.qtip-bootstrap').qtip('hide');
     };
 
+    /**
+     * Task draggable before move callback function, basically we want to prevent
+     * move for users who are only viewers in current project.
+     *
+     * @param   {knockout.sortable.arg} arg     Knockout sortable binding handler arguments
+     * @param   {jQuery.Event}          event   Event object
+     * @param   {Object}                ui      UI object
+     */
     self.taskDraggableBeforeMoveCallback = function(arg, event, ui) {
+        if (self.role() === 0) {
+            self.moveInProcess(false);
+
+            arg.cancelDrop = true;
+
+            // Update task data
+            self.tasks.replace(arg.item, _.clone(arg.item));
+
+            makeMessage("You're not allowed to move tasks in this project.", "error");
+        }
     };
 
+    /**
+     * Task draggable after move callback function, basically we want to prevent
+     * move for users who are only viewers in current project. This is basically
+     * done already but I want to be sure...
+     *
+     * If user has proper role to move tasks, method will update task data over
+     * socket and after that
+     *
+     * @param   {knockout.sortable.arg} arg     Knockout sortable binding handler arguments
+     * @param   {jQuery.Event}          event   Event object
+     * @param   {Object}                ui      UI object
+     */
     self.taskDraggableAfterMoveCallback = function(arg, event, ui) {
         self.moveInProcess(false);
 
-        var context = ko.contextFor(this);
-        var phase = ko.toJS(context.$data);
+        // User don't have necessary role to move tasks
+        if (self.role() === 0) {
+            makeMessage("You're not allowed to move tasks in this project.", "error");
+        } else { // Otherwise proceed to update task data
+            var context = ko.contextFor(this);
+            var phase = ko.toJS(context.$data);
 
-        // Update task data
-        socket.put('/Task/' + arg.item.id(), {phaseId: phase.id}, function(/** sails.json.task */response) {
-            var updatedTask = new Task(response);
-            var story = _.find(self.stories(), function(story) { return story.id() === response.storyId; });
+            // Update task data
+            socket.put('/Task/' + arg.item.id(), {phaseId: phase.id}, function(/** sails.json.task */response) {
+                if (handleSocketError(response, true)) {
+                    // Find task story
+                    var story = _.find(self.stories(), function(story) { return story.id() === response.storyId; });
 
-            self.tasks.replace(arg.item, updatedTask);
-            self.stories.replace(story, _.clone(story));
-        });
+                    // Update task data
+                    self.tasks.replace(arg.item, new Task(response));
+
+                    // Replace story also, this will trigger re-rendering of cells
+                    self.stories.replace(story, _.clone(story));
+                }
+            });
+        }
     };
 
 

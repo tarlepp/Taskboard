@@ -7,6 +7,20 @@ var selectedProjectId;
 var selectedSprintId;
 var loggedUserId;
 
+var knockout = {
+    sortable: {
+        arg: {
+            item: "",
+            sourceParent: "",
+            sourceParentNode: "",
+            sourceIndex: "",
+            targetParent: "",
+            targetIndex: "",
+            cancelDrop: ""
+        }
+    }
+};
+
 var sails = {
     error: {
         socket: {
