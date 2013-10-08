@@ -384,7 +384,7 @@ function ViewModel() {
             // Update task data
             self.tasks.replace(arg.item, _.clone(arg.item));
 
-            makeMessage("You're not allowed to move tasks in this project.", "error");
+            makeMessage("Insufficient rights to move tasks in this project.", "error");
         }
     };
 
@@ -405,7 +405,7 @@ function ViewModel() {
 
         // User don't have necessary role to move tasks
         if (self.role() === 0) {
-            makeMessage("You're not allowed to move tasks in this project.", "error");
+            makeMessage("Insufficient rights to move tasks in this project.", "error");
         } else { // Otherwise proceed to update task data
             var context = ko.contextFor(this);
             var phase = ko.toJS(context.$data);
@@ -463,7 +463,11 @@ function ViewModel() {
 
     // TODO
     self.actionProjectDelete = function() {
-        console.log("Implement project delete");
+        if (self.role() < -1) {
+            body.trigger("projectDelete", [self.project().id()]);
+        } else {
+            makeMessage("Insufficient rights to delete project.", "error");
+        }
     };
 
     /**#@-*/
@@ -475,7 +479,11 @@ function ViewModel() {
 
     // Method opens sprint add
     self.actionSprintAdd = function() {
-        body.trigger("sprintAdd");
+        if (self.role() < 0) {
+            body.trigger("sprintAdd");
+        } else {
+            makeMessage("Insufficient rights to add new sprint to this project.", "error");
+        }
     };
 
     // Method opens sprint edit
@@ -485,7 +493,11 @@ function ViewModel() {
 
     //Method opens sprint delete
     self.actionSprintDelete = function() {
-        body.trigger('sprintDelete', [self.sprint().id()]);
+        if (self.role() < 0) {
+            body.trigger('sprintDelete', [self.sprint().id()]);
+        } else {
+            makeMessage("Insufficient rights to delete sprints in this project.", "error");
+        }
     };
 
     // Method opens sprint backlog
@@ -503,7 +515,11 @@ function ViewModel() {
      * @param   {Number}    sprintId    Sprint ID
      */
     self.actionStoryAdd = function(projectId, sprintId) {
-        jQuery("body").trigger("storyAdd", [projectId, sprintId]);
+        if (self.role() === 0) {
+            makeMessage("Insufficient rights to add new story to this project.", "error");
+        } else {
+            jQuery("body").trigger("storyAdd", [projectId, sprintId]);
+        }
     };
 
     /**
@@ -512,14 +528,22 @@ function ViewModel() {
      * Note that this needs project data.
      */
     self.actionPhasesEdit = function() {
-        jQuery("body").trigger("phasesEdit");
+        if (self.role() < 0) {
+            jQuery("body").trigger("phasesEdit");
+        } else {
+            makeMessage("Insufficient rights to edit project phases.", "error");
+        }
     };
 
     /**
      * Method opens user list view.
      */
     self.usersOpen = function() {
-        jQuery("body").trigger("userList");
+        if (self.role() === -3) {
+            jQuery("body").trigger("userList");
+        } else {
+            makeMessage("Insufficient rights to list taskboard users.", "error");
+        }
     };
 
     /**
@@ -617,7 +641,12 @@ function ViewModel() {
                         }
                         break;
                     case 'task':
-                        self.tasks.push(new Task(data));
+                        //noinspection JSDuplicatedDeclaration
+                        var story = _.find(self.stories(), function(story) { return story.id() === data.storyId; });
+
+                        if (typeof story !== 'undefined') {
+                            self.tasks.push(new Task(data));
+                        }
                         break;
                     case 'user':
                         self.users.push(new User(data));

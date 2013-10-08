@@ -239,7 +239,11 @@ function Story(data, fetchTaskData) {
      * @param   {jQuery}                event   Event data
      */
     self.addNewTask = function(data, event) {
-        jQuery('body').trigger('taskAdd', [data]);
+        if (myViewModel.role() === 0) {
+            makeMessage("Insufficient rights to add new tasks to this project.", "error");
+        } else {
+            jQuery('body').trigger('taskAdd', [data]);
+        }
     };
 }
 
