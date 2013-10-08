@@ -1,9 +1,9 @@
 # taskboard
-### a Sails application to mimic "scrum-ban" taskboard.
+## a Sails application to mimic "scrum-ban" taskboard.
 
 This needs a lots of work...
 
-### Demo
+## Demo
 
 Maybe sails are lifted on http://wunder.sytes.net:1337/ or maybe not...
 
@@ -13,7 +13,7 @@ username: demo
 password: demodemodemo
 ```
 
-### What are we using to do this all:
+## What are we using to do this all:
 - Sails.js (http://sailsjs.org/)
 - jQuery (http://www.jquery.com/)
 - jQueryUI (http://www.jqueryui.com/)
@@ -38,15 +38,46 @@ password: demodemodemo
 - JsonDiffPatch (https://github.com/benjamine/JsonDiffPatch)
 - <em>This list will be updated</em>
 
-### Installation
+## Installation
 Todo, write this... Really do this...
 
-#### Requirements
+### Requirements
 - node.js (http://nodejs.org/)
 - Sails.js (http://sailsjs.org/)
 
-#### Windows environment
+### Windows environment
 If you have problems with <em>npm install</em> make sure that you have installed all required software. More info at:
 
 https://github.com/TooTallNate/node-gyp/wiki/Visual-Studio-2010-Setup
+
+## Application
+
+### User profiles
+At a basic level taskboard users have basically following roles in projects.
+- Manager (primary or normal)
+- User (viewer or normal)
+
+Above there users there is Taskboard administrator users.
+
+#### Administrator
+- Full access to all projects
+- Taskboard settings
+- Users
+
+#### Manager (Primary)
+- Project admin
+
+#### Manager (normal)
+- Project user admin
+- Phases admin
+- Milestone admin
+- Sprint admin
+
+#### User (normal)
+- Story admin
+- Task admin
+- Task move at board
+
+#### User (viewer)
+- No rights to modify any data, only view
 
