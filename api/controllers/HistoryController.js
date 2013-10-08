@@ -135,6 +135,11 @@ module.exports = {
                             if (column.match(/Id$/) !== null) {
                                 var object = column.charAt(0).toUpperCase() + column.slice(1, -2);
 
+                                // In project object managerId refers to User object
+                                if (object == "Manager") {
+                                    object = "User";
+                                }
+
                                 columnType = 'relation';
 
                                 // Only fetch possible relation data if change type is insert or update
