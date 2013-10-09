@@ -5,6 +5,7 @@
  * @description ::  Contains logic for handling requests.
  */
 var jQuery = require("jquery");
+var async = require("async");
 
 module.exports = {
     /**
@@ -47,59 +48,56 @@ module.exports = {
 
         var projectId = parseInt(req.param('id'), 10);
 
-        // Specify template data to use
-        var data = {
-            layout: "layout_ajax",
-            project: false,
-            users: false
-        };
-
-        // Fetch project data.
-        Project
-            .findOne(projectId)
-            .done(function(error, project) {
-                if (error) {
+        async.parallel(
+            {
+                authorized: function(callback) {
+                    AuthService.hasAccessToProject(req.user, projectId, callback);
+                },
+                layout: function(callback) {
+                    callback(null, "layout_ajax");
+                },
+                project: function(callback) {
+                    Project
+                        .findOne(projectId)
+                        .done(function(error, project) {
+                            if (error) {
+                                callback(error, null);
+                            } else if (!project) {
+                                callback("Project not found.", 404);
+                            } else {
+                                callback(null, project);
+                            }
+                        });
+                },
+                users: function(callback) {
+                    User
+                        .find()
+                        .sort('lastName ASC')
+                        .done(function(error, users) {
+                            if (error) {
+                                callback(error, null);
+                            } else {
+                                callback(null, users);
+                            }
+                        });
+                }
+            },
+            /**
+             * Callback function which is been called after all parallel jobs are processed.
+             *
+             * @param   {{}}    error
+             * @param   {{}}    data
+             */
+            function(error, data) {
+                if (!data.authorized) {
+                    res.send("Insufficient rights to access this project.", 403);
+                } else if (error) {
                     res.send(error, 500);
-                } else if (!project) {
-                    res.send("Project not found.", 404);
                 } else {
-                    data.project = project;
-
-                    makeView();
+                    res.view(data);
                 }
-            });
-
-        // Fetch all users
-        User
-            .find()
-            .sort('lastName ASC')
-            .done(function(error, users) {
-                if (error) {
-                    res.send(error, 500);
-                } else {
-                    data.users = users;
-
-                    makeView();
-                }
-            });
-
-        /**
-         * Function makes actual view if all necessary data is fetched
-         * from database for template.
-         */
-        function makeView() {
-            var ok = true;
-
-            jQuery.each(data, function(key, data) {
-                if (data === false) {
-                    ok = false;
-                }
-            });
-
-            if (ok) {
-                res.view(data);
             }
-        }
+        );
     },
 
     /**
@@ -114,6 +112,11 @@ module.exports = {
         }
 
         var projectId = parseInt(req.param('id'), 10);
+
+        // No right to this project
+        if (!AuthService.hasAccessToProject(req.user, projectId)) {
+            res.send("Insufficient rights to access this project.", 403);
+        }
 
         var data = {
             layout: "layout_ajax",
@@ -186,6 +189,11 @@ module.exports = {
         }
 
         var projectId = parseInt(req.param('id'), 10);
+
+        // No right to this project
+        if (!AuthService.hasAccessToProject(req.user, projectId)) {
+            res.send("Insufficient rights to access this project.", 403);
+        }
 
         var data = {
             layout: "layout_ajax",
@@ -375,6 +383,11 @@ module.exports = {
 
         var projectId = parseInt(req.param('id'), 10);
 
+        // No right to this project
+        if (!AuthService.hasAccessToProject(req.user, projectId)) {
+            res.send("Insufficient rights to access this project.", 403);
+        }
+
         // Specify template data to use
         var data = {
             layout: "layout_ajax",
@@ -463,6 +476,22 @@ module.exports = {
         }
 
         var projectId = parseInt(req.param('id'), 10);
+
+        // No right to this project
+        /*
+        if (!AuthService.hasAccessToProject(req.user, projectId)) {
+            res.send("Insufficient rights to access this project.", 403);
+        }
+        */
+
+        /*
+        AuthService.hasAccessToProject(req.user, projectId, function(hasRight) {
+            console.log("jeeeeeee");
+            console.log("hasRight");
+        });
+        */
+
+
 
         // Specify template data to use
         var data = {
