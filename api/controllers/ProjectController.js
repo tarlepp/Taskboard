@@ -89,10 +89,10 @@ module.exports = {
              * @param   {{}}    data
              */
             function(error, data) {
-                if (!data.authorized) {
-                    res.send("Insufficient rights to access this project.", 403);
-                } else if (error) {
+                if (error) {
                     res.send(error, 500);
+                } else if (!data.authorized) {
+                    res.send("Insufficient rights to access this project.", 403);
                 } else {
                     res.view(data);
                 }
