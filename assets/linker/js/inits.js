@@ -173,12 +173,17 @@ function initTabs(context) {
 
             content.html(jQuery("#placeholderLoading").clone().html());
 
-            // Load data content
-            content.load(contentUrl, function() {
-                // Dispatch callback function with default parameters
+            jQuery.ajax({
+                url: contentUrl,
+                context: document.body
+            }).done(function(result) {
+                content.html(content);
+
                 if (typeof callback !== "undefined") {
                     dispatch(callback, [context, contentId]);
                 }
+            }).fail(function(jqXhr, textStatus, error) {
+                content.html(handleAjaxError(jqXhr, textStatus, error, true));
             });
         } else if (typeof callback !== "undefined") { // Dispatch callback function with default parameters
             dispatch(callback, [context, contentId]);
