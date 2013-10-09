@@ -177,7 +177,7 @@ function initTabs(context) {
                 url: contentUrl,
                 context: document.body
             }).done(function(result) {
-                content.html(content);
+                content.html(result);
 
                 if (typeof callback !== "undefined") {
                     dispatch(callback, [context, contentId]);
