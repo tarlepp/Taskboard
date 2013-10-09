@@ -58,8 +58,11 @@ function handleSocketError(error, showMessage) {
  * @param   {XMLHttpRequest}    jqXhr
  * @param   {String}            textStatus
  * @param   {String}            error
+ * @param   {Boolean}           [returnMessage]
  */
-function handleAjaxError(jqXhr, textStatus, error) {
+function handleAjaxError(jqXhr, textStatus, error, returnMessage) {
+    returnMessage = returnMessage || false;
+
     var message = "";
     var errorMessage = "";
 
@@ -92,6 +95,8 @@ function handleAjaxError(jqXhr, textStatus, error) {
     }
 
     makeMessage(message, "error");
+
+    return returnMessage ? message : "";
 }
 
 /**
