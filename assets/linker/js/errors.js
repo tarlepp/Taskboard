@@ -76,7 +76,9 @@ function handleAjaxError(jqXhr, textStatus, error, returnMessage) {
         errorMessage = jqXhr.responseText;
     }
 
-    if (jqXhr.status === 0) {
+    if (jqXhr.responseJSON && jqXhr.responseJSON.status && jqXhr.responseJSON.message) {
+        message = jqXhr.responseJSON.message;
+    } else if (jqXhr.status === 0) {
         message = "Not connect. Verify Network. " + errorMessage;
     } else if (jqXhr.status == 403) {
         message = "Forbidden [403]. " + errorMessage;
