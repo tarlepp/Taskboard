@@ -4,7 +4,8 @@
  * @module      :: Controller
  * @description :: Contains logic for handling requests.
  */
-var jQuery = require('jquery');
+var jQuery = require("jquery");
+var async = require("async");
 
 module.exports = {
     /**
@@ -15,14 +16,23 @@ module.exports = {
      */
     add: function(req, res) {
         if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
+            res.send("Only AJAX request allowed", 403);
         }
 
-        var projectId = parseInt(req.param('projectId'), 10);
+        var projectId = parseInt(req.param("projectId"), 10);
 
-        res.view({
-            layout: "layout_ajax",
-            projectId: projectId
+        // Check if user has access to specified project
+        AuthService.hasAccessToProject(req.user, projectId, function(error, hasRight) {
+            if (error) {
+                res.send(error, error.status ? error.status : 500);
+            } else if (!hasRight) {
+                res.send("Insufficient rights to access this project.", 403);
+            } else {
+                res.view({
+                    layout: "layout_ajax",
+                    projectId: projectId
+                });
+            }
         });
     },
 
@@ -34,26 +44,51 @@ module.exports = {
      */
     edit: function(req, res) {
         if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
+            res.send("Only AJAX request allowed", 403);
         }
 
-        var milestoneId = parseInt(req.param('id'), 10);
+        var milestoneId = parseInt(req.param("id"), 10);
 
-        // Fetch milestone data
-        Milestone
-            .findOne(milestoneId)
-            .done(function(error, milestone) {
-                if (error) {
-                    res.send(error, 500);
-                } else if (!milestone) {
-                    res.send("Milestone not found.", 404);
-                } else {
-                    res.view({
-                        layout: "layout_ajax",
-                        milestone: milestone
-                    });
+        async.parallel(
+            {
+                /**
+                 * This will check that current user has privileges to specified sprint.
+                 * Credentials are determined via external service.
+                 *
+                 * @param   {Function}  callback
+                 */
+                authorized: function(callback) {
+                    AuthService.hasAccessToMilestone(req.user, milestoneId, callback);
+                },
+
+                /**
+                 * Fetch milestone data.
+                 *
+                 * @param   {Function}  callback
+                 */
+                milestone: function(callback) {
+                    DataService.getMilestone(milestoneId, callback);
                 }
-            });
+            },
+
+            /**
+             * Callback function which is been called after all parallel jobs are processed.
+             *
+             * @param   {{}}    error
+             * @param   {{}}    data
+             */
+                function(error, data) {
+                if (error) {
+                    res.send(error, error.status ? error.status : 500);
+                } else if (!data.authorized) {
+                    res.send("Insufficient rights to access this milestone.", 403);
+                } else {
+                    data.layout = "layout_ajax";
+
+                    res.view(data);
+                }
+            }
+        );
     },
 
     /**
@@ -64,10 +99,10 @@ module.exports = {
      */
     stories: function(req, res) {
         if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
+            res.send("Only AJAX request allowed", 403);
         }
 
-        var milestoneId = parseInt(req.param('id'), 10);
+        var milestoneId = parseInt(req.param("id"), 10);
 
         var data = {
             layout: "layout_ajax",
@@ -83,22 +118,47 @@ module.exports = {
             stories: false
         };
 
-        // Fetch story data
-        Milestone
-            .findOne(milestoneId)
-            .done(function(error, milestone) {
+        async.parallel(
+            {
+                /**
+                 * This will check that current user has privileges to specified sprint.
+                 * Credentials are determined via external service.
+                 *
+                 * @param   {Function}  callback
+                 */
+                authorized: function(callback) {
+                    AuthService.hasAccessToMilestone(req.user, milestoneId, callback);
+                },
+
+                /**
+                 * Fetch milestone data.
+                 *
+                 * @param   {Function}  callback
+                 */
+                milestone: function(callback) {
+                    DataService.getMilestone(milestoneId, callback);
+                }
+            },
+
+            /**
+             * Callback function which is been called after all parallel jobs are processed.
+             *
+             * @param   {{}}    error
+             * @param   {{}}    results
+             */
+            function(error, results) {
                 if (error) {
-                    res.send(error, 500);
-                } else if (!milestone) {
-                    res.send("Milestone not found.", 404);
+                    res.send(error, error.status ? error.status : 500);
+                } else if (!results.authorized) {
+                    res.send("Insufficient rights to access this milestone.", 403);
                 } else {
-                    data.milestone.data = milestone;
+                    data.milestone.data = results.milestone;
 
                     // Find all user stories which are attached to milestone
                     Story
                         .find()
                         .where({
-                            milestoneId: milestoneId
+                            milestoneId: data.milestone.data.id
                         })
                         .sort('title ASC')
                         .done(function(error, stories) {
@@ -107,7 +167,8 @@ module.exports = {
                             fetchTasks();
                         });
                 }
-            });
+            }
+        );
 
         /**
          * Function to fetch tasks of stories

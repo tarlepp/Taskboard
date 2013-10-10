@@ -154,3 +154,53 @@ exports.hasAccessToSprint = function(user, sprintId, next) {
         }
     );
 };
+
+/**
+ * Method checks if specified user has access to specified milestone or not.
+ *
+ * @param   {sails.req.user}    user        Signed in user object
+ * @param   {Number}            milestoneId Milestone id to check
+ * @param   {Function}          next        Main callback function, which is called after checks
+ */
+exports.hasAccessToMilestone = function(user, milestoneId, next) {
+    /**
+     * Make waterfall jobs to check if user has access to specified sprint or not:
+     *
+     *  1)  Fetch milestone data (check that milestone exists)
+     *  2)  Call AuthService.hasAccessToProject to check actual project right
+     *
+     * After these jobs call specified callback function with result data.
+     */
+    async.waterfall(
+        [
+            /**
+             * Check that sprint exists.
+             *
+             * @param   {Function}  callback
+             */
+            function(callback) {
+                DataService.getMilestone(milestoneId, callback);
+            },
+
+            /**
+             * Check that user has access to sprint project.
+             *
+             * @param   {sails.model.milestone} milestone   Milestone data
+             * @param   {Function}              callback
+             */
+            function(milestone, callback) {
+                AuthService.hasAccessToProject(user, milestone.projectId, callback);
+            }
+        ],
+
+        /**
+         * Callback function which is been called after all parallel jobs are processed.
+         *
+         * @param   {Error|String}  error
+         * @param   {Boolean}       results
+         */
+        function(error, results) {
+            next(error, results);
+        }
+    );
+};
