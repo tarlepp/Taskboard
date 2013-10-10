@@ -22,14 +22,28 @@ var knockout = {
 };
 
 var sails = {
+    req: {
+        user: {
+            username: "",
+            firstName: "",
+            lastName: "",
+            email: "",
+            admin: "",
+            password: "",
+            lastLogin: "",
+            id: "",
+            createdAt: "",
+            updatedAt: ""
+        }
+    },
     error: {
         socket: {
-            status: '',
-            errors: ''
+            status: "",
+            errors: ""
         },
         generic: {
-            message: '',
-            stack: ''
+            message: "",
+            stack: ""
         },
         validation: {
             ValidationError: []
@@ -37,149 +51,149 @@ var sails = {
     },
     helper: {
         history: {
-            objectId: '',
-            objectName: '',
-            objectData: '',
-            id: '',
-            createdAt: '',
-            updatedAt: ''
+            objectId: "",
+            objectName: "",
+            objectData: "",
+            id: "",
+            createdAt: "",
+            updatedAt: ""
         },
         trigger: {
-            trigger: '',
+            trigger: "",
             parameters: []
         }
     },
     json: {
         history: {
-            objectId: '',
-            objectName: '',
-            objectData: '',
-            id: '',
-            createdAt: '',
-            updatedAt: ''
+            objectId: "",
+            objectName: "",
+            objectData: "",
+            id: "",
+            createdAt: "",
+            updatedAt: ""
         },
         type: {
-            title: '',
-            order: '',
-            class: '',
-            id: '',
-            createdAt: '',
-            updatedAt: ''
+            title: "",
+            order: "",
+            class: "",
+            id: "",
+            createdAt: "",
+            updatedAt: ""
         },
         user: {
-            username: '',
-            firstName: '',
-            lastName: '',
-            email: '',
-            id: '',
-            createdAt: '',
-            updatedAt: ''
+            username: "",
+            firstName: "",
+            lastName: "",
+            email: "",
+            id: "",
+            createdAt: "",
+            updatedAt: ""
         },
         project: {
-            managerId: '',
-            title: '',
-            description: '',
-            dateStart: '',
-            dateEnd: '',
-            id: '',
-            createdAt: '',
-            updatedAt: ''
+            managerId: "",
+            title: "",
+            description: "",
+            dateStart: "",
+            dateEnd: "",
+            id: "",
+            createdAt: "",
+            updatedAt: ""
         },
         projectUser: {
-            projectId: '',
-            userId: '',
-            role: '',
-            id: '',
-            createdAt: '',
-            updatedAt: ''
+            projectId: "",
+            userId: "",
+            role: "",
+            id: "",
+            createdAt: "",
+            updatedAt: ""
         },
         milestone: {
-            projectId: '',
-            title: '',
-            description: '',
-            deadline: '',
-            id: '',
-            createdAt: '',
-            updatedAt: ''
+            projectId: "",
+            title: "",
+            description: "",
+            deadline: "",
+            id: "",
+            createdAt: "",
+            updatedAt: ""
         },
         phase: {
-            projectId: '',
-            title: '',
-            description: '',
-            order: '',
-            tasks: '',
-            isDone: '',
-            id: '',
-            createdAt: '',
-            updatedAt: ''
+            projectId: "",
+            title: "",
+            description: "",
+            order: "",
+            tasks: "",
+            isDone: "",
+            id: "",
+            createdAt: "",
+            updatedAt: ""
         },
         sprint: {
-            projectId: '',
-            title: '',
-            description: '',
-            dateStart: '',
-            dateEnd: '',
-            id: '',
-            createdAt: '',
-            updatedAt: ''
+            projectId: "",
+            title: "",
+            description: "",
+            dateStart: "",
+            dateEnd: "",
+            id: "",
+            createdAt: "",
+            updatedAt: ""
         },
         story: {
-            projectId: '',
-            sprintId: '',
-            milestoneId: '',
-            typeId: '',
-            title: '',
-            description: '',
-            estimate: '',
-            priority: '',
-            vfCase: '',
-            isDone: '',
-            id: '',
-            createdAt: '',
-            updatedAt: ''
+            projectId: "",
+            sprintId: "",
+            milestoneId: "",
+            typeId: "",
+            title: "",
+            description: "",
+            estimate: "",
+            priority: "",
+            vfCase: "",
+            isDone: "",
+            id: "",
+            createdAt: "",
+            updatedAt: ""
         },
         task: {
-            storyId: '',
-            userId: '',
-            phaseId: '',
-            typeId: '',
-            title: '',
-            description: '',
-            isDone: '',
-            id: '',
-            createdAt: '',
-            updatedAt: ''
+            storyId: "",
+            userId: "",
+            phaseId: "",
+            typeId: "",
+            title: "",
+            description: "",
+            isDone: "",
+            id: "",
+            createdAt: "",
+            updatedAt: ""
         },
         storySplit: {
             storyOld: {
-                projectId: '',
-                sprintId: '',
-                milestoneId: '',
-                typeId: '',
-                title: '',
-                description: '',
-                estimate: '',
-                priority: '',
-                vfCase: '',
-                isDone: '',
-                id: '',
-                createdAt: '',
-                updatedAt: ''
+                projectId: "",
+                sprintId: "",
+                milestoneId: "",
+                typeId: "",
+                title: "",
+                description: "",
+                estimate: "",
+                priority: "",
+                vfCase: "",
+                isDone: "",
+                id: "",
+                createdAt: "",
+                updatedAt: ""
             },
             storyNew: {
-                projectId: '',
-                sprintId: '',
-                milestoneId: '',
-                typeId: '',
-                title: '',
-                description: '',
-                estimate: '',
-                priority: '',
-                vfCase: '',
-                isDone: '',
-                id: '',
-                createdAt: '',
-                updatedAt: ''
+                projectId: "",
+                sprintId: "",
+                milestoneId: "",
+                typeId: "",
+                title: "",
+                description: "",
+                estimate: "",
+                priority: "",
+                vfCase: "",
+                isDone: "",
+                id: "",
+                createdAt: "",
+                updatedAt: ""
             },
             tasks: [],
             taskCnt: 0
@@ -204,49 +218,49 @@ var sails = {
      */
     model: {
         milestone: {
-            projectId: '',
-            title: '',
-            description: '',
-            deadline: '',
-            id: '',
-            createdAt: '',
-            updatedAt: ''
+            projectId: "",
+            title: "",
+            description: "",
+            deadline: "",
+            id: "",
+            createdAt: "",
+            updatedAt: ""
         },
         phase: {
-            projectId: '',
-            title: '',
-            description: '',
-            order: '',
-            tasks: '',
-            isDone: '',
-            id: '',
-            createdAt: '',
-            updatedAt: ''
+            projectId: "",
+            title: "",
+            description: "",
+            order: "",
+            tasks: "",
+            isDone: "",
+            id: "",
+            createdAt: "",
+            updatedAt: ""
         },
         story: {
-            projectId: '',
-            sprintId: '',
-            title: '',
-            description: '',
-            estimate: '',
-            priority: '',
-            vfCase: '',
-            isDone: '',
-            id: '',
-            createdAt: '',
-            updatedAt: ''
+            projectId: "",
+            sprintId: "",
+            title: "",
+            description: "",
+            estimate: "",
+            priority: "",
+            vfCase: "",
+            isDone: "",
+            id: "",
+            createdAt: "",
+            updatedAt: ""
         },
         task: {
-            storyId: '',
-            userId: '',
-            phaseId: '',
-            typeId: '',
-            title: '',
-            description: '',
-            isDone: '',
-            id: '',
-            createdAt: '',
-            updatedAt: ''
+            storyId: "",
+            userId: "",
+            phaseId: "",
+            typeId: "",
+            title: "",
+            description: "",
+            isDone: "",
+            id: "",
+            createdAt: "",
+            updatedAt: ""
         }
     }
 };
