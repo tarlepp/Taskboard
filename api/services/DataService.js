@@ -18,8 +18,9 @@ exports.getProject = function(projectId, callback) {
             if (error) {
                 callback(error, null);
             } else if (!project) {
-                var err = new Error("Project not found.");
+                var err = new Error();
 
+                err.message = "Project not found.";
                 err.status = 404;
 
                 callback(err, null);
@@ -42,8 +43,9 @@ exports.getSprint = function(sprintId, callback) {
             if (error) {
                 callback(error, null);
             } else if (!project) {
-                var err = new Error("Sprint not found.");
+                var err = new Error();
 
+                err.message = "Sprint not found.";
                 err.status = 404;
 
                 callback(err, null);
