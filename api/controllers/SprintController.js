@@ -4,7 +4,8 @@
  * @module      ::  Controller
  * @description ::  Contains logic for handling requests.
  */
-var jQuery = require('jquery');
+var jQuery = require("jquery");
+var async = require("async");
 
 module.exports = {
     /**
@@ -15,14 +16,23 @@ module.exports = {
      */
     add: function(req, res) {
         if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
+            res.send("Only AJAX request allowed", 403);
         }
 
-        var projectId = parseInt(req.param('projectId'), 10);
+        var projectId = parseInt(req.param("projectId"), 10);
 
-        res.view({
-            layout: "layout_ajax",
-            projectId: projectId
+        // Check if user has access to specified project
+        AuthService.hasAccessToProject(req.user, projectId, function(error, hasRight) {
+            if (error) {
+                res.send(error, error.status ? error.status : 500);
+            } else if (!hasRight) {
+                res.send("Insufficient rights to access this project.", 403);
+            } else {
+                res.view({
+                    layout: "layout_ajax",
+                    projectId: projectId
+                });
+            }
         });
     },
 
@@ -34,26 +44,51 @@ module.exports = {
      */
     edit: function(req, res) {
         if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
+            res.send("Only AJAX request allowed", 403);
         }
 
-        var sprintId = parseInt(req.param('id'), 10);
+        var sprintId = parseInt(req.param("id"), 10);
 
-        // Fetch sprint data
-        Sprint
-            .findOne(sprintId)
-            .done(function(error, sprint) {
-                if (error) {
-                    res.send(error, 500);
-                } else if (!sprint) {
-                    res.send("Sprint not found.", 404);
-                } else {
-                    res.view({
-                        layout: "layout_ajax",
-                        sprint: sprint
-                    });
+        async.parallel(
+            {
+                /**
+                 * This will check that current user has privileges to specified sprint.
+                 * Credentials are determined via external service.
+                 *
+                 * @param   {Function}  callback
+                 */
+                authorized: function(callback) {
+                    AuthService.hasAccessToSprint(req.user, sprintId, callback);
+                },
+
+                /**
+                 * Fetch sprint data.
+                 *
+                 * @param   {Function}  callback
+                 */
+                sprint: function(callback) {
+                    DataService.getSprint(sprintId, callback);
                 }
-            });
+            },
+
+            /**
+             * Callback function which is been called after all parallel jobs are processed.
+             *
+             * @param   {{}}    error
+             * @param   {{}}    data
+             */
+            function(error, data) {
+                if (error) {
+                    res.send(error, error.status ? error.status : 500);
+                } else if (!data.authorized) {
+                    res.send("Insufficient rights to access this sprint.", 403);
+                } else {
+                    data.layout = "layout_ajax";
+
+                    res.view(data);
+                }
+            }
+        );
     },
 
     /**
@@ -64,10 +99,10 @@ module.exports = {
      */
     backlog: function(req, res) {
         if (!req.isAjax) {
-        //    res.send('Only AJAX request allowed', 403);
+            res.send("Only AJAX request allowed", 403);
         }
 
-        var sprintId = parseInt(req.param('id'), 10);
+        var sprintId = parseInt(req.param("id"), 10);
 
         var data = {
             layout: "layout_ajax",
@@ -85,33 +120,51 @@ module.exports = {
             }
         };
 
-        // Fetch sprint data
-        Sprint
-            .findOne(sprintId)
-            .done(function(error, sprint) {
-                if (error) {
-                    res.send(error, 500);
-                } else if (!sprint) {
-                    res.send("Sprint not found.", 404);
-                } else {
-                    data.sprint.data = sprint;
-                }
-            });
+        async.parallel(
+            {
+                /**
+                 * This will check that current user has privileges to specified sprint.
+                 * Credentials are determined via external service.
+                 *
+                 * @param   {Function}  callback
+                 */
+                authorized: function(callback) {
+                    AuthService.hasAccessToSprint(req.user, sprintId, callback);
+                },
 
-        // Fetch story data for current sprint
-        Story
-            .find()
-            .where({sprintId: sprintId})
-            .sort('priority ASC')
-            .done(function(error, stories) {
+                /**
+                 * Fetch sprint data.
+                 *
+                 * @param   {Function}  callback
+                 */
+                sprint: function(callback) {
+                    DataService.getSprint(sprintId, callback);
+                },
+
+                stories: function(callback) {
+                    DataService.getStories({sprintId: sprintId}, callback);
+                }
+            },
+
+            /**
+             * Callback function which is been called after all parallel jobs are processed.
+             *
+             * @param   {{}}    error
+             * @param   {{}}    results
+             */
+            function(error, results) {
                 if (error) {
-                    res.send(error, 500);
+                    res.send(error, error.status ? error.status : 500);
+                } else if (!results.authorized) {
+                    res.send("Insufficient rights to access this sprint.", 403);
                 } else {
-                    data.stories = stories;
+                    data.sprint.data = results.sprint;
+                    data.stories = results.stories;
 
                     fetchTaskData();
                 }
-            });
+            }
+        );
 
         /**
          * Function to fetch task data for each story
@@ -144,7 +197,7 @@ module.exports = {
                         .where({
                             storyId: story.id
                         })
-                        .sort('title ASC')
+                        .sort("title ASC")
                         .done(function(error, tasks) {
                             // Add tasks to story data
                             story.tasks = tasks;
