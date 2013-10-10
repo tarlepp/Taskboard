@@ -16,23 +16,39 @@ module.exports = {
      */
     add: function(req, res) {
         if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
+            res.send("Only AJAX request allowed", 403);
         }
 
-        // Fetch all users
-        User
-            .find()
-            .sort('lastName ASC')
-            .done(function(error, users) {
-                if (error) {
-                    res.send(error, 500);
-                } else {
-                    res.view({
-                        layout: "layout_ajax",
-                        users: users
-                    });
+        async.parallel(
+            {
+                /**
+                 * Fetch taskboard user data.
+                 *
+                 * @param   {Function}  callback
+                 */
+                users: function(callback) {
+                    DataService.getUsers(callback);
                 }
-            });
+            },
+
+            /**
+             * Callback function which is been called after all parallel jobs are processed.
+             *
+             * @param   {{}}    error
+             * @param   {{}}    data
+             */
+                function(error, data) {
+                if (error) {
+                    res.send(error, error.status ? error.status : 500);
+                } else if (!data.authorized) {
+                    res.send("Insufficient rights to access this project.", 403);
+                } else {
+                    data.layout = "layout_ajax";
+
+                    res.view(data);
+                }
+            }
+        );
     },
 
     /**
@@ -43,45 +59,42 @@ module.exports = {
      */
     edit: function(req, res) {
         if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
+            res.send("Only AJAX request allowed", 403);
         }
 
-        var projectId = parseInt(req.param('id'), 10);
+        var projectId = parseInt(req.param("id"), 10);
 
         async.parallel(
             {
+                /**
+                 * This will check that current user has privileges to specified project.
+                 * Credentials are determined via external service.
+                 *
+                 * @param   {Function}  callback
+                 */
                 authorized: function(callback) {
                     AuthService.hasAccessToProject(req.user, projectId, callback);
                 },
-                layout: function(callback) {
-                    callback(null, "layout_ajax");
-                },
+
+                /**
+                 * Fetch project data.
+                 *
+                 * @param   {Function}  callback
+                 */
                 project: function(callback) {
-                    Project
-                        .findOne(projectId)
-                        .done(function(error, project) {
-                            if (error) {
-                                callback(error, null);
-                            } else if (!project) {
-                                callback("Project not found.", 404);
-                            } else {
-                                callback(null, project);
-                            }
-                        });
+                    DataService.getProject(projectId, callback);
                 },
+
+                /**
+                 * Fetch taskboard user data.
+                 *
+                 * @param   {Function}  callback
+                 */
                 users: function(callback) {
-                    User
-                        .find()
-                        .sort('lastName ASC')
-                        .done(function(error, users) {
-                            if (error) {
-                                callback(error, null);
-                            } else {
-                                callback(null, users);
-                            }
-                        });
+                    DataService.getUsers({}, callback);
                 }
             },
+
             /**
              * Callback function which is been called after all parallel jobs are processed.
              *
@@ -90,10 +103,12 @@ module.exports = {
              */
             function(error, data) {
                 if (error) {
-                    res.send(error, 500);
+                    res.send(error, error.status ? error.status : 500);
                 } else if (!data.authorized) {
                     res.send("Insufficient rights to access this project.", 403);
                 } else {
+                    data.layout = "layout_ajax";
+
                     res.view(data);
                 }
             }
@@ -108,73 +123,63 @@ module.exports = {
      */
     backlog: function(req, res) {
         if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
+            res.send("Only AJAX request allowed", 403);
         }
 
-        var projectId = parseInt(req.param('id'), 10);
+        var projectId = parseInt(req.param("id"), 10);
 
-        // No right to this project
-        if (!AuthService.hasAccessToProject(req.user, projectId)) {
-            res.send("Insufficient rights to access this project.", 403);
-        }
+        async.parallel(
+            {
+                /**
+                 * This will check that current user has privileges to specified project.
+                 * Credentials are determined via external service.
+                 *
+                 * @param   {Function}  callback
+                 */
+                authorized: function(callback) {
+                    AuthService.hasAccessToProject(req.user, projectId, callback);
+                },
 
-        var data = {
-            layout: "layout_ajax",
-            project: false,
-            stories: false
-        };
+                /**
+                 * Fetch project data.
+                 *
+                 * @param   {Function}  callback
+                 */
+                project: function(callback) {
+                    DataService.getProject(projectId, callback);
+                },
 
-        // Fetch project data.
-        Project
-            .findOne(projectId)
-            .done(function(error, project) {
+                /**
+                 * Fetch project stories that are in backlog.
+                 *
+                 * @param   {Function}  callback
+                 */
+                stories: function(callback) {
+                    DataService.getStories({
+                        projectId: projectId,
+                        sprintId: 0
+                    }, callback);
+                }
+            },
+
+            /**
+             * Callback function which is been called after all parallel jobs are processed.
+             *
+             * @param   {{}}    error
+             * @param   {{}}    data
+             */
+            function(error, data) {
                 if (error) {
-                    res.send(error, 500);
-                } else if (!project) {
-                    res.send("Project not found.", 404);
+                    res.send(error, error.status ? error.status : 500);
+                } else if (!data.authorized) {
+                    res.send("Insufficient rights to access this project.", 403);
                 } else {
-                    data.project = project;
+                    data.layout = "layout_ajax";
 
-                    makeView();
+                    res.view(data);
                 }
-            });
-
-        // Fetch project backlog data
-        Story
-            .find()
-            .where({
-                projectId: projectId,
-                sprintId: 0
-            })
-            .sort('priority ASC')
-            .sort('title ASC')
-            .done(function(error, stories) {
-                if (error) {
-                    res.send(error, 500);
-                } else {
-                    data.stories = stories;
-
-                    makeView();
-                }
-            });
-
-        /**
-         * Function makes actual view if all necessary data is fetched
-         * from database for template.
-         */
-        function makeView() {
-            var ok = true;
-
-            jQuery.each(data, function(key, data) {
-                if (data === false) {
-                    ok = false;
-                }
-            });
-
-            if (ok) {
-                res.view(data);
             }
-        }
+        );
     },
 
     /**
@@ -185,15 +190,10 @@ module.exports = {
      */
     milestones: function(req, res) {
         if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
+            res.send("Only AJAX request allowed", 403);
         }
 
-        var projectId = parseInt(req.param('id'), 10);
-
-        // No right to this project
-        if (!AuthService.hasAccessToProject(req.user, projectId)) {
-            res.send("Insufficient rights to access this project.", 403);
-        }
+        var projectId = parseInt(req.param("id"), 10);
 
         var data = {
             layout: "layout_ajax",
@@ -210,39 +210,59 @@ module.exports = {
             cntTasksTotal: 0
         };
 
-        // Fetch project data.
-        Project
-            .findOne(projectId)
-            .done(function(error, project) {
-                if (error) {
-                    res.send(error, 500);
-                } else if (!project) {
-                    res.send("Project not found.", 404);
-                } else {
-                    data.project = project;
+        async.parallel(
+            {
+                /**
+                 * This will check that current user has privileges to specified project.
+                 * Credentials are determined via external service.
+                 *
+                 * @param   {Function}  callback
+                 */
+                authorized: function(callback) {
+                    AuthService.hasAccessToProject(req.user, projectId, callback);
+                },
 
-                    makeView();
+                /**
+                 * Fetch project data.
+                 *
+                 * @param   {Function}  callback
+                 */
+                project: function(callback) {
+                    DataService.getProject(projectId, callback);
+                },
+
+                /**
+                 * Fetch project milestone data.
+                 *
+                 * @param   {Function}  callback
+                 */
+                milestones: function(callback) {
+                    DataService.getMilestones({
+                        projectId: projectId
+                    }, callback);
                 }
-            });
+            },
 
-        // Fetch milestone data
-        Milestone
-            .find()
-            .where({
-                projectId: projectId
-            })
-            .sort('deadline ASC')
-            .sort('title ASC')
-            .done(function(error, milestones) {
+            /**
+             * Callback function which is been called after all parallel jobs are processed.
+             *
+             * @param   {{}}    error
+             * @param   {{}}    results
+             */
+            function(error, results) {
                 if (error) {
-                    res.send(error, 500);
+                    res.send(error, error.status ? error.status : 500);
+                } else if (!results.authorized) {
+                    res.send("Insufficient rights to access this project.", 403);
                 } else {
-                    data.milestones = milestones;
-                    data.cntMilestonesTotal = milestones.length;
+                    data.project = results.project;
+                    data.milestones = results.milestones;
+                    data.cntMilestonesTotal = data.milestones.length;
 
                     fetchStories();
                 }
-            });
+            }
+        );
 
         /**
          * Function to fetch attached milestone stories.
@@ -263,7 +283,7 @@ module.exports = {
                         .where({
                             milestoneId: milestone.id
                         })
-                        .sort('title ASC')
+                        .sort("title ASC")
                         .done(function(error, stories) {
 
                             milestone.doneStories = _.reduce(stories, function (memo, story) {
@@ -378,90 +398,73 @@ module.exports = {
      */
     planning: function(req, res) {
         if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
+            res.send("Only AJAX request allowed", 403);
         }
 
-        var projectId = parseInt(req.param('id'), 10);
+        var projectId = parseInt(req.param("id"), 10);
 
-        // No right to this project
-        if (!AuthService.hasAccessToProject(req.user, projectId)) {
-            res.send("Insufficient rights to access this project.", 403);
-        }
+        async.parallel(
+            {
+                /**
+                 * This will check that current user has privileges to specified project.
+                 * Credentials are determined via external service.
+                 *
+                 * @param   {Function}  callback
+                 */
+                authorized: function(callback) {
+                    AuthService.hasAccessToProject(req.user, projectId, callback);
+                },
 
-        // Specify template data to use
-        var data = {
-            layout: "layout_ajax",
-            project: false,
-            stories: false,
-            sprints: false
-        };
+                /**
+                 * Fetch project data.
+                 *
+                 * @param   {Function}  callback
+                 */
+                project: function(callback) {
+                    DataService.getProject(projectId, callback);
+                },
 
-        // Fetch project data.
-        Project
-            .findOne(projectId)
-            .done(function(error, project) {
+                /**
+                 * Fetch project story data
+                 *
+                 * @param   {Function}  callback
+                 */
+                stories: function(callback) {
+                    DataService.getStories({
+                        projectId: projectId
+                    }, callback);
+                },
+
+                /**
+                 * Fetch project sprint data
+                 *
+                 * @param   {Function}  callback
+                 */
+                sprints: function(callback) {
+                    DataService.getSprints({
+                        projectId: projectId
+                    }, callback);
+                }
+            },
+
+            /**
+             * Callback function which is been called after all parallel jobs are processed.
+             *
+             * @param   {{}}    error
+             * @param   {{}}    data
+             */
+            function(error, data) {
                 if (error) {
-                    res.send(error, 500);
-                } else if (!project) {
-                    res.send("Project not found.", 404);
+                    res.send(error, error.status ? error.status : 500);
+                } else if (!data.authorized) {
+                    res.send("Insufficient rights to access this project.", 403);
                 } else {
-                    data.project = project;
+                    data.layout = "layout_ajax";
 
-                    makeView();
+                    res.view(data);
                 }
-            });
-
-        // Fetch project stories
-        Story
-            .find()
-            .where({
-                projectId: projectId
-            })
-            .sort('priority ASC')
-            .done(function(error, stories) {
-                if (error) {
-                    res.send(error, 500);
-                } else {
-                    data.stories = stories;
-
-                    makeView();
-                }
-            });
-
-        // Fetch project sprints
-        Sprint
-            .find()
-            .where({
-                projectId: projectId
-            })
-            .sort('dateStart ASC')
-            .done(function(error, sprints) {
-                if (error) {
-                    res.send(error, 500);
-                } else {
-                    data.sprints = sprints;
-
-                    makeView();
-                }
-            });
-
-        /**
-         * Function makes actual view if all necessary data is fetched
-         * from database for template.
-         */
-        function makeView() {
-            var ok = true;
-
-            jQuery.each(data, function(key, data) {
-                if (data === false) {
-                    ok = false;
-                }
-            });
-
-            if (ok) {
-                res.view(data);
             }
-        }
+        );
     },
 
     /**
@@ -476,22 +479,6 @@ module.exports = {
         }
 
         var projectId = parseInt(req.param('id'), 10);
-
-        // No right to this project
-        /*
-        if (!AuthService.hasAccessToProject(req.user, projectId)) {
-            res.send("Insufficient rights to access this project.", 403);
-        }
-        */
-
-        /*
-        AuthService.hasAccessToProject(req.user, projectId, function(hasRight) {
-            console.log("jeeeeeee");
-            console.log("hasRight");
-        });
-        */
-
-
 
         // Specify template data to use
         var data = {
@@ -527,103 +514,123 @@ module.exports = {
             }
         };
 
-        // Fetch project data.
-        Project
-            .findOne(projectId)
-            .done(function(error, project) {
-                if (error) {
-                    res.send(error, 500);
-                } else if (!project) {
-                    res.send("Project not found.", 404);
-                } else {
-                    data.project.data = project;
+        async.parallel(
+            {
+                /**
+                 * This will check that current user has privileges to specified project.
+                 * Credentials are determined via external service.
+                 *
+                 * @param   {Function}  callback
+                 */
+                authorized: function(callback) {
+                    AuthService.hasAccessToProject(req.user, projectId, callback);
+                },
 
-                    makeView();
+                /**
+                 * Fetch project data.
+                 *
+                 * @param   {Function}  callback
+                 */
+                project: function(callback) {
+                    DataService.getProject(projectId, callback);
+                },
+
+                /**
+                 * Fetch project milestones.
+                 *
+                 * @param   {Function}  callback
+                 */
+                milestones: function(callback) {
+                    DataService.getMilestones({
+                        projectId: projectId
+                    }, callback);
+                },
+
+                /**
+                 * Fetch project sprint data
+                 *
+                 * @param   {Function}  callback
+                 */
+                sprints: function(callback) {
+                    DataService.getSprints({
+                        projectId: projectId
+                    }, callback);
                 }
-            });
+            },
 
-        // Fetch project milestones
-        Milestone
-            .find()
-            .where({
-                projectId: projectId
-            })
-            .sort('title ASC')
-            .done(function(error, milestones) {
+            /**
+             * Callback function which is been called after all parallel jobs are processed.
+             *
+             * @param   {{}}    error
+             * @param   {{}}    results
+             */
+            function(error, results) {
                 if (error) {
-                    res.send(error, 500);
+                    res.send(error, error.status ? error.status : 500);
+                } else if (!results.authorized) {
+                    res.send("Insufficient rights to access this project.", 403);
                 } else {
-                    data.milestones.data = milestones;
-                    data.milestones.cntTotal = milestones.length;
+                    data.project.data = results.project;
 
-                    makeView();
+                    data.milestones.data = results.milestones;
+                    data.milestones.cntTotal = results.milestones.length;
+
+                    data.sprints.data = results.sprints;
+                    data.sprints.cntTotal = results.sprints.length;
+
+                    fetchStories();
                 }
-            });
+            }
+        );
 
-        // Fetch project stories
-        Story
-            .find()
-            .where({
-                projectId: projectId
-            })
-            .sort('isDone DESC')
-            .sort('title ASC')
-            .done(function(error, stories) {
-                if (error) {
-                    res.send(error, 500);
-                } else {
-                    data.stories.data = stories;
-                    data.stories.cntTotal = stories.length;
-                    data.stories.cntDone = _.reduce(stories, function (memo, story) {
-                        return (story.isDone) ? memo + 1 : memo;
-                    }, 0);
-
-                    if (data.stories.cntDone > 0) {
-                        data.stories.progress = Math.round(data.stories.cntDone / data.stories.cntTotal * 100);
-                    }
-
-                    var storyIds = _.map(stories, function(story) { return {storyId: story.id}; });
-
-                    if (storyIds.length > 0) {
-                        Task
-                            .find()
-                            .where({or: storyIds})
-                            .done(function(error, tasks) {
-                                data.tasks.data = tasks;
-                                data.tasks.cntTotal = tasks.length;
-                                data.tasks.cntDone = _.reduce(tasks, function (memo, task) {
-                                    return (task.isDone) ? memo + 1 : memo;
-                                }, 0);
-
-                                if (data.tasks.cntDone > 0) {
-                                    data.tasks.progress = Math.round(data.tasks.cntDone / data.tasks.cntTotal * 100);
-                                }
-
-                                makeView();
-                            });
+        function fetchStories() {
+            // Fetch project stories
+            Story
+                .find()
+                .where({
+                    projectId: projectId
+                })
+                .sort('isDone DESC')
+                .sort('title ASC')
+                .done(function(error, stories) {
+                    if (error) {
+                        res.send(error, 500);
                     } else {
-                        makeView();
+                        data.stories.data = stories;
+                        data.stories.cntTotal = stories.length;
+                        data.stories.cntDone = _.reduce(stories, function (memo, story) {
+                            return (story.isDone) ? memo + 1 : memo;
+                        }, 0);
+
+                        if (data.stories.cntDone > 0) {
+                            data.stories.progress = Math.round(data.stories.cntDone / data.stories.cntTotal * 100);
+                        }
+
+                        var storyIds = _.map(stories, function(story) { return {storyId: story.id}; });
+
+                        if (storyIds.length > 0) {
+                            Task
+                                .find()
+                                .where({or: storyIds})
+                                .done(function(error, tasks) {
+                                    data.tasks.data = tasks;
+                                    data.tasks.cntTotal = tasks.length;
+                                    data.tasks.cntDone = _.reduce(tasks, function (memo, task) {
+                                        return (task.isDone) ? memo + 1 : memo;
+                                    }, 0);
+
+                                    if (data.tasks.cntDone > 0) {
+                                        data.tasks.progress = Math.round(data.tasks.cntDone / data.tasks.cntTotal * 100);
+                                    }
+
+                                    makeView();
+                                });
+                        } else {
+                            makeView();
+                        }
                     }
-                }
-            });
-
-        // Fetch project sprints
-        Sprint
-            .find()
-            .where({
-                projectId: projectId
-            })
-            .sort('dateStart ASC')
-            .done(function(error, sprints) {
-                if (error) {
-                    res.send(error, 500);
-                } else {
-                    data.sprints.data = sprints;
-                    data.sprints.cntTotal = sprints.length;
-
-                    makeView();
-                }
-            });
+                });
+        }
 
         /**
          * Function makes actual view if all necessary data is fetched
