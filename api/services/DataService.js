@@ -30,6 +30,30 @@ exports.getProject = function(projectId, callback) {
 };
 
 /**
+ * Service to fetch single sprint data from database.
+ *
+ * @param   {Number}    sprintId    Sprint id
+ * @param   {Function}  callback    Callback function to call after query
+ */
+exports.getSprint = function(sprintId, callback) {
+    Sprint
+        .findOne(sprintId)
+        .done(function(error, project) {
+            if (error) {
+                callback(error, null);
+            } else if (!project) {
+                var err = new Error("Sprint not found.");
+
+                err.status = 404;
+
+                callback(err, null);
+            } else {
+                callback(null, project);
+            }
+        });
+};
+
+/**
  * Service to fetch milestone data from database.
  *
  * @param   {{}}        where       Used query conditions
