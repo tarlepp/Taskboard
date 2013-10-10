@@ -54,7 +54,7 @@ exports.hasAccessToProject = function(user, projectId, next) {
                         id: projectId,
                         managerId: user.id
                     })
-                    .done(function(error, /** sails.json.project */project) {
+                    .done(function(error, /** sails.model.project */project) {
                         if (error) {
                             callback(error, null);
                         } else {
@@ -76,7 +76,7 @@ exports.hasAccessToProject = function(user, projectId, next) {
                         projectId: projectId,
                         userId: user.id
                     })
-                    .done(function(error, /** sails.json.projectUser */projectUser) {
+                    .done(function(error, /** sails.model.projectUser */projectUser) {
                         if (error) {
                             callback(error, null);
                         } else {
@@ -135,7 +135,7 @@ exports.hasAccessToSprint = function(user, sprintId, next) {
             /**
              * Check that user has access to sprint project.
              *
-             * @param   {sails.json.sprint}     sprint      Sprint data
+             * @param   {sails.model.sprint}    sprint      Sprint data
              * @param   {Function}              callback
              */
             function(sprint, callback) {
