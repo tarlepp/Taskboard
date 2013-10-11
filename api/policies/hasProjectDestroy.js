@@ -24,5 +24,5 @@ module.exports = function hasProjectDestroy(request, response, next) {
 
             next();
         }
-    })
+    });
 };
