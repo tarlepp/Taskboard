@@ -27,21 +27,19 @@ module.exports = {
                  * @param   {Function}  callback
                  */
                 users: function(callback) {
-                    DataService.getUsers(callback);
+                    DataService.getUsers({}, callback);
                 }
             },
 
             /**
              * Callback function which is been called after all parallel jobs are processed.
              *
-             * @param   {{}}    error
-             * @param   {{}}    data
+             * @param   {Error|String}  error
+             * @param   {{}}            data
              */
-                function(error, data) {
+            function(error, data) {
                 if (error) {
                     res.send(error, error.status ? error.status : 500);
-                } else if (!data.authorized) {
-                    res.send("Insufficient rights to access this project.", 403);
                 } else {
                     data.layout = "layout_ajax";
 
@@ -67,16 +65,6 @@ module.exports = {
         async.parallel(
             {
                 /**
-                 * This will check that current user has privileges to specified project.
-                 * Credentials are determined via external service.
-                 *
-                 * @param   {Function}  callback
-                 */
-                authorized: function(callback) {
-                    AuthService.hasAccessToProject(req.user, projectId, callback);
-                },
-
-                /**
                  * Fetch project data.
                  *
                  * @param   {Function}  callback
@@ -98,14 +86,12 @@ module.exports = {
             /**
              * Callback function which is been called after all parallel jobs are processed.
              *
-             * @param   {{}}    error
-             * @param   {{}}    data
+             * @param   {Error|String}  error
+             * @param   {{}}            data
              */
             function(error, data) {
                 if (error) {
                     res.send(error, error.status ? error.status : 500);
-                } else if (!data.authorized) {
-                    res.send("Insufficient rights to access this project.", 403);
                 } else {
                     data.layout = "layout_ajax";
 
@@ -131,16 +117,6 @@ module.exports = {
         async.parallel(
             {
                 /**
-                 * This will check that current user has privileges to specified project.
-                 * Credentials are determined via external service.
-                 *
-                 * @param   {Function}  callback
-                 */
-                authorized: function(callback) {
-                    AuthService.hasAccessToProject(req.user, projectId, callback);
-                },
-
-                /**
                  * Fetch project data.
                  *
                  * @param   {Function}  callback
@@ -165,14 +141,12 @@ module.exports = {
             /**
              * Callback function which is been called after all parallel jobs are processed.
              *
-             * @param   {{}}    error
-             * @param   {{}}    data
+             * @param   {Error|String}  error
+             * @param   {{}}            data
              */
             function(error, data) {
                 if (error) {
                     res.send(error, error.status ? error.status : 500);
-                } else if (!data.authorized) {
-                    res.send("Insufficient rights to access this project.", 403);
                 } else {
                     data.layout = "layout_ajax";
 
@@ -213,16 +187,6 @@ module.exports = {
         async.parallel(
             {
                 /**
-                 * This will check that current user has privileges to specified project.
-                 * Credentials are determined via external service.
-                 *
-                 * @param   {Function}  callback
-                 */
-                authorized: function(callback) {
-                    AuthService.hasAccessToProject(req.user, projectId, callback);
-                },
-
-                /**
                  * Fetch project data.
                  *
                  * @param   {Function}  callback
@@ -246,14 +210,12 @@ module.exports = {
             /**
              * Callback function which is been called after all parallel jobs are processed.
              *
-             * @param   {{}}    error
-             * @param   {{}}    results
+             * @param   {Error|String}  error
+             * @param   {{}}            results
              */
             function(error, results) {
                 if (error) {
                     res.send(error, error.status ? error.status : 500);
-                } else if (!results.authorized) {
-                    res.send("Insufficient rights to access this project.", 403);
                 } else {
                     data.project = results.project;
                     data.milestones = results.milestones;
@@ -406,16 +368,6 @@ module.exports = {
         async.parallel(
             {
                 /**
-                 * This will check that current user has privileges to specified project.
-                 * Credentials are determined via external service.
-                 *
-                 * @param   {Function}  callback
-                 */
-                authorized: function(callback) {
-                    AuthService.hasAccessToProject(req.user, projectId, callback);
-                },
-
-                /**
                  * Fetch project data.
                  *
                  * @param   {Function}  callback
@@ -450,14 +402,12 @@ module.exports = {
             /**
              * Callback function which is been called after all parallel jobs are processed.
              *
-             * @param   {{}}    error
-             * @param   {{}}    data
+             * @param   {Error|String}  error
+             * @param   {{}}            data
              */
             function(error, data) {
                 if (error) {
                     res.send(error, error.status ? error.status : 500);
-                } else if (!data.authorized) {
-                    res.send("Insufficient rights to access this project.", 403);
                 } else {
                     data.layout = "layout_ajax";
 
@@ -517,16 +467,6 @@ module.exports = {
         async.parallel(
             {
                 /**
-                 * This will check that current user has privileges to specified project.
-                 * Credentials are determined via external service.
-                 *
-                 * @param   {Function}  callback
-                 */
-                authorized: function(callback) {
-                    AuthService.hasAccessToProject(req.user, projectId, callback);
-                },
-
-                /**
                  * Fetch project data.
                  *
                  * @param   {Function}  callback
@@ -561,14 +501,12 @@ module.exports = {
             /**
              * Callback function which is been called after all parallel jobs are processed.
              *
-             * @param   {{}}    error
-             * @param   {{}}    results
+             * @param   {Error|String}  error
+             * @param   {{}}            results
              */
             function(error, results) {
                 if (error) {
                     res.send(error, error.status ? error.status : 500);
-                } else if (!results.authorized) {
-                    res.send("Insufficient rights to access this project.", 403);
                 } else {
                     data.project.data = results.project;
 
