@@ -6,13 +6,24 @@
 var async = require("async");
 
 /**
- * Method checks if specified user has access to specified project or not.
+ * Method checks if specified user has access to specified project or not. By default method calls
+ * specified callback with simple true/false value but optionally method calls callback with user
+ * role value in specified project, Possible roles are following:
  *
- * @param   {sails.req.user}    user        Signed in user object
- * @param   {Number}            projectId   Project id to check
- * @param   {Function}          next        Main callback function, which is called after checks
+ *  -3  = Administrator
+ *  -2  = Project manager primary
+ *  -1  = Project manager (contributor)
+ *   0  = Viewer
+ *   1  = User
+ *
+ * @param   {sails.req.user}    user            Signed in user object
+ * @param   {Number}            projectId       Project id to check
+ * @param   {Function}          next            Main callback function, which is called after checks
+ * @param   {Boolean}           [returnRole]    Return role in callback not just boolean value
  */
-exports.hasAccessToProject = function(user, projectId, next) {
+exports.hasProjectAccess = function(user, projectId, next, returnRole) {
+    returnRole = returnRole || false;
+
     /**
      * Make parallel jobs to determine if user has access to specified project or not.
      *
@@ -100,9 +111,75 @@ exports.hasAccessToProject = function(user, projectId, next) {
                 output = true
             }
 
+            // We want to return role
+            if (returnRole && output) {
+                if (user.admin) {
+                    output = -3;
+                } else if (results.primary) {
+                    output = -2;
+                } else {
+                    output = results.contributor.role;
+                }
+            }
+
             next(error, output);
         }
     );
+};
+
+/**
+ * Method checks if specified user has update access to specified project or not.
+ *
+ * @param   {sails.req.user}    user            Signed in user object
+ * @param   {Number}            projectId       Project id to check
+ * @param   {Function}          next            Main callback function, which is called after checks
+ */
+exports.hasProjectUpdate = function(user, projectId, next) {
+    /**
+     * Get user role in specified project with main right service method. User has
+     * update rights to project if he/she is at least project manager. Basically
+     * following roles grants user update right to project:
+     *
+     *  -3  = Administrator
+     *  -2  = Project manager primary
+     *  -1  = Project manager (contributor)
+     */
+    AuthService.hasProjectAccess(user, projectId, function(error, role) {
+        var output = false;
+
+        if (role !== false && role < 0) {
+            output = true;
+        }
+
+        next(error, output);
+    }, true);
+};
+
+/**
+ * Method checks if specified user has destroy access to specified project or not.
+ *
+ * @param   {sails.req.user}    user            Signed in user object
+ * @param   {Number}            projectId       Project id to check
+ * @param   {Function}          next            Main callback function, which is called after checks
+ */
+exports.hasProjectUpdate = function(user, projectId, next) {
+    /**
+     * Get user role in specified project with main right service method. User has
+     * destroy rights to project if he/she is at least project manager (primary).
+     * Basically following roles grants user destroy right to project:
+     *
+     *  -3  = Administrator
+     *  -2  = Project manager primary
+     */
+    AuthService.hasProjectAccess(user, projectId, function(error, role) {
+        var output = false;
+
+        if (role !== false && role < -1) {
+            output = true;
+        }
+
+        next(error, output);
+    }, true);
 };
 
 /**
@@ -139,7 +216,7 @@ exports.hasAccessToSprint = function(user, sprintId, next) {
              * @param   {Function}              callback
              */
             function(sprint, callback) {
-                AuthService.hasAccessToProject(user, sprint.projectId, callback);
+                AuthService.hasProjectAccess(user, sprint.projectId, callback);
             }
         ],
 
@@ -189,7 +266,7 @@ exports.hasAccessToMilestone = function(user, milestoneId, next) {
              * @param   {Function}              callback
              */
             function(milestone, callback) {
-                AuthService.hasAccessToProject(user, milestone.projectId, callback);
+                AuthService.hasProjectAccess(user, milestone.projectId, callback);
             }
         ],
 

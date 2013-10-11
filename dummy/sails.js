@@ -7,6 +7,17 @@ var selectedProjectId;
 var selectedSprintId;
 var loggedUserId;
 
+/**
+ * AuthService methods
+ *
+ * @type {{hasProjectAccess: Function, hasProjectDestroy: Function}}
+ */
+var AuthService = {
+    hasProjectAccess: function(user, projectId, next, returnRole) {},
+    hasProjectUpdate: function(user, projectId, next) {},
+    hasProjectDestroy: function(user, projectId, next) {}
+};
+
 var knockout = {
     sortable: {
         arg: {
