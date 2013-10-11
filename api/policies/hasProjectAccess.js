@@ -31,5 +31,5 @@ module.exports = function hasProjectAccess(request, response, next) {
 
             next();
         }
-    })
+    });
 };
