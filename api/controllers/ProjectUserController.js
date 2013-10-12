@@ -346,7 +346,7 @@ module.exports = {
 
         // Admin user, always return -3
         if (req.user.admin) {
-            res.json(-3);
+            res.json(200, -3);
         } else { // Otherwise fetch user role
             async.parallel({
                     /**
@@ -412,7 +412,7 @@ module.exports = {
                         output = results.contributor.role;
                     }
 
-                    res.json(output);
+                    res.json(200, output);
                 }
             );
         }
