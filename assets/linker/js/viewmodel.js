@@ -388,7 +388,7 @@ function ViewModel() {
      * done already but I want to be sure...
      *
      * If user has proper role to move tasks, method will update task data over
-     * socket and after that
+     * socket and after that update knockout bindings automatic.
      *
      * @param   {knockout.sortable.arg} arg     Knockout sortable binding handler arguments
      * @param   {jQuery.Event}          event   Event object
