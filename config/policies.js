@@ -73,5 +73,22 @@ module.exports.policies = {
         add:        ["authenticated", "hasMilestoneAdmin"],
         edit:       ["authenticated", "hasMilestoneAccess"],
         stories:    ["authenticated", "hasMilestoneAccess"]
+    },
+
+    // Story controller policies
+    "Story": {
+        // By default do not allow nothing
+        "*":        false,
+
+        // Default handling for blueprints
+        find:       ["authenticated", "hasStoryAccess"],
+        create:     ["authenticated", "hasStoryAdmin"],
+        update:     ["authenticated", "hasStoryAdmin"],
+        destroy:    ["authenticated", "hasStoryAdmin"],
+
+        // Custom actions
+        add:        ["authenticated", "hasStoryAdmin"],
+        edit:       ["authenticated", "hasStoryAccess"],
+        split:      ["authenticated", "hasStoryAdmin"]
     }
 };

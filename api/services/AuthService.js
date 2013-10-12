@@ -345,3 +345,84 @@ exports.hasMilestoneAdmin = function(user, milestoneId, next) {
         next(error, output);
     }, true);
 };
+
+/**
+ * Method checks if specified user has access to specified story or not.
+ *
+ * @param   {sails.req.user}    user            Signed in user object
+ * @param   {Number}            storyId         Story id to check
+ * @param   {Function}          next            Main callback function, which is called after checks
+ * @param   {Boolean}           [returnRole]    Return role in callback not just boolean value
+ */
+exports.hasStoryAccess = function(user, storyId, next, returnRole) {
+    returnRole = returnRole || false;
+
+    /**
+     * Make waterfall jobs to check if user has access to specified story or not:
+     *
+     *  1)  Fetch story data (check that story exists)
+     *  2)  Call AuthService.hasAccessToProject to check actual project right
+     */
+    async.waterfall(
+        [
+            /**
+             * Check that milestone exists.
+             *
+             * @param   {Function}  callback
+             */
+                function(callback) {
+                DataService.getStory(storyId, callback);
+            },
+
+            /**
+             * Check that user has access to story project
+             *
+             * @param   {sails.model.story} story       Story data
+             * @param   {Function}          callback
+             */
+            function(story, callback) {
+                AuthService.hasProjectAccess(user, story.projectId, callback, returnRole);
+            }
+        ],
+
+        /**
+         * Callback function which is been called after all jobs are processed.
+         *
+         * @param   {Error|String}  error
+         * @param   {Boolean}       results
+         */
+        function(error, results) {
+            next(error, results);
+        }
+    );
+};
+
+/**
+ * Method checks if specified user has admin access to specified story or not.
+ *
+ * @param   {sails.req.user}    user    Signed in user object
+ * @param   {Number}            storyId Story id to check
+ * @param   {Function}          next    Main callback function, which is called after checks
+ */
+exports.hasStoryAdmin = function(user, storyId, next) {
+    /**
+     * Get user role in specified story with main right service method. User has
+     * admin rights to story if he/she has greater than view rights to project.
+     *
+     * Basically following project roles grants user admin rights to story
+     *
+     *  -3  = Administrator
+     *  -2  = Project manager primary
+     *  -1  = Project manager (contributor)
+     *   1  = Normal user (contributor)
+     */
+    AuthService.hasStoryAccess(user, storyId, function(error, role) {
+        var output = false;
+
+        if (role !== false && role !== 0) {
+            output = true;
+        }
+
+        next(error, output);
+    }, true);
+};

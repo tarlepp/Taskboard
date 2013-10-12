@@ -4,7 +4,7 @@
  * @module      ::  Controller
  * @description ::  Contains logic for handling requests.
  */
-var jQuery = require('jquery');
+var jQuery = require("jquery");
 
 module.exports = {
     /**
@@ -15,14 +15,12 @@ module.exports = {
      */
     add: function(req, res) {
         if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
+            res.send("Only AJAX request allowed", 403);
         }
 
-        var projectId = parseInt(req.param('projectId'), 10);
-        var sprintId = parseInt(req.param('sprintId'), 10);
-        var formData = req.param('formData') || {};
-
-        console.log(formData);
+        var projectId = parseInt(req.param("projectId"), 10);
+        var sprintId = parseInt(req.param("sprintId"), 10);
+        var formData = req.param("formData") || {};
 
         // Required view data
         var data = {
