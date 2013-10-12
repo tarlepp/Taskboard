@@ -21,19 +21,11 @@ module.exports = {
 
         var projectId = parseInt(req.param("projectId"), 10);
 
-        // Check if user has access to specified project
-        AuthService.hasAccessToProject(req.user, projectId, function(error, hasRight) {
-            if (error) {
-                res.send(error, error.status ? error.status : 500);
-            } else if (!hasRight) {
-                res.send("Insufficient rights to access this project.", 403);
-            } else {
-                res.view({
-                    layout: "layout_ajax",
-                    projectId: projectId
-                });
-            }
+        res.view({
+            layout: "layout_ajax",
+            projectId: projectId
         });
+
     },
 
     /**
@@ -49,46 +41,17 @@ module.exports = {
 
         var sprintId = parseInt(req.param("id"), 10);
 
-        async.parallel(
-            {
-                /**
-                 * This will check that current user has privileges to specified sprint.
-                 * Credentials are determined via external service.
-                 *
-                 * @param   {Function}  callback
-                 */
-                authorized: function(callback) {
-                    AuthService.hasAccessToSprint(req.user, sprintId, callback);
-                },
-
-                /**
-                 * Fetch sprint data.
-                 *
-                 * @param   {Function}  callback
-                 */
-                sprint: function(callback) {
-                    DataService.getSprint(sprintId, callback);
-                }
-            },
-
-            /**
-             * Callback function which is been called after all parallel jobs are processed.
-             *
-             * @param   {{}}    error
-             * @param   {{}}    data
-             */
-            function(error, data) {
-                if (error) {
-                    res.send(error, error.status ? error.status : 500);
-                } else if (!data.authorized) {
-                    res.send("Insufficient rights to access this sprint.", 403);
-                } else {
-                    data.layout = "layout_ajax";
-
-                    res.view(data);
-                }
+        // Fetch single sprint data
+        DataService.getSprint(sprintId, function(error, sprint) {
+            if (error) {
+                res.send(error, error.status ? error.status : 500);
+            } else {
+                res.view({
+                    layout: "layout_ajax",
+                    sprint: sprint
+                });
             }
-        );
+        });
     },
 
     /**
@@ -123,16 +86,6 @@ module.exports = {
         async.parallel(
             {
                 /**
-                 * This will check that current user has privileges to specified sprint.
-                 * Credentials are determined via external service.
-                 *
-                 * @param   {Function}  callback
-                 */
-                authorized: function(callback) {
-                    AuthService.hasAccessToSprint(req.user, sprintId, callback);
-                },
-
-                /**
                  * Fetch sprint data.
                  *
                  * @param   {Function}  callback
@@ -141,6 +94,11 @@ module.exports = {
                     DataService.getSprint(sprintId, callback);
                 },
 
+                /**
+                 * Fetch sprint stories data.
+                 *
+                 * @param   {Function}  callback
+                 */
                 stories: function(callback) {
                     DataService.getStories({sprintId: sprintId}, callback);
                 }
@@ -149,14 +107,12 @@ module.exports = {
             /**
              * Callback function which is been called after all parallel jobs are processed.
              *
-             * @param   {{}}    error
-             * @param   {{}}    results
+             * @param   {Error|String}  error
+             * @param   {{}}            results
              */
             function(error, results) {
                 if (error) {
                     res.send(error, error.status ? error.status : 500);
-                } else if (!results.authorized) {
-                    res.send("Insufficient rights to access this sprint.", 403);
                 } else {
                     data.sprint.data = results.sprint;
                     data.stories = results.stories;
