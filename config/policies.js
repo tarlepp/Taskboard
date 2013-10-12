@@ -121,5 +121,22 @@ module.exports.policies = {
         // Custom actions
         add:        ["authenticated", "hasTaskAdmin"],
         edit:       ["authenticated", "hasTaskAccess"]
+    },
+
+    // User controller policies
+    "User": {
+        // By default do not allow nothing
+        "*":        false,
+
+        // Default handling for blueprints
+        find:       ["authenticated"],
+        create:     ["authenticated", "hasUserAdmin"],
+        update:     ["authenticated", "hasUserAdminOrItself"],
+        destroy:    ["authenticated", "hasUserAdmin"],
+
+        // Custom actions
+        list:       ["authenticated", "hasUserAdmin"],
+        add:        ["authenticated", "hasUserAdmin"],
+        edit:       ["authenticated", "hasUserAdminOrItself"]
     }
 };
