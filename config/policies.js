@@ -105,5 +105,21 @@ module.exports.policies = {
         add:        ["authenticated", "hasStoryAdmin"],
         edit:       ["authenticated", "hasStoryAccess"],
         split:      ["authenticated", "hasStoryAdmin"]
+    },
+
+    // Task controller policies
+    "Task": {
+        // By default do not allow nothing
+        "*":        false,
+
+        // Default handling for blueprints
+        find:       ["authenticated", "hasTaskAccess"],
+        create:     ["authenticated", "hasTaskAdmin"],
+        update:     ["authenticated", "hasTaskAdmin"],
+        destroy:    ["authenticated", "hasTaskAdmin"],
+
+        // Custom actions
+        add:        ["authenticated", "hasTaskAdmin"],
+        edit:       ["authenticated", "hasTaskAccess"]
     }
 };

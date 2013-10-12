@@ -106,6 +106,31 @@ exports.getStory = function(storyId, callback) {
 };
 
 /**
+ * Service to fetch single task data from database.
+ *
+ * @param   {Number}    taskId      Task id
+ * @param   {Function}  callback    Callback function to call after query
+ */
+exports.getTask = function(taskId, callback) {
+    Task
+        .findOne(taskId)
+        .done(function(error, /** sails.model.task */ task) {
+            if (error) {
+                callback(error, null);
+            } else if (!task) {
+                var err = new Error();
+
+                err.message = "Task not found.";
+                err.status = 404;
+
+                callback(err, null);
+            } else {
+                callback(null, task);
+            }
+        });
+};
+
+/**
  * Service to fetch milestone data from database.
  *
  * @param   {{}}        where       Used query conditions
