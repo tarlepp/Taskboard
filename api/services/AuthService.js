@@ -128,17 +128,17 @@ exports.hasProjectAccess = function(user, projectId, next, returnRole) {
 };
 
 /**
- * Method checks if specified user has update access to specified project or not.
+ * Method checks if specified user has administrator access to specified project or not.
  *
  * @param   {sails.req.user}    user            Signed in user object
  * @param   {Number}            projectId       Project id to check
  * @param   {Function}          next            Main callback function, which is called after checks
  */
-exports.hasProjectUpdate = function(user, projectId, next) {
+exports.hasProjectAdmin = function(user, projectId, next) {
     /**
-     * Get user role in specified project with main right service method. User has
-     * update rights to project if he/she is at least project manager. Basically
-     * following roles grants user update right to project:
+     * Get user role in specified project with main right service method. User
+     * has administrator rights to project if he/she is at least project manager.
+     * Basically following roles grants user administrator right to project:
      *
      *  -3  = Administrator
      *  -2  = Project manager primary
@@ -148,33 +148,6 @@ exports.hasProjectUpdate = function(user, projectId, next) {
         var output = false;
 
         if (role !== false && role < 0) {
-            output = true;
-        }
-
-        next(error, output);
-    }, true);
-};
-
-/**
- * Method checks if specified user has destroy access to specified project or not.
- *
- * @param   {sails.req.user}    user            Signed in user object
- * @param   {Number}            projectId       Project id to check
- * @param   {Function}          next            Main callback function, which is called after checks
- */
-exports.hasProjectDestroy = function(user, projectId, next) {
-    /**
-     * Get user role in specified project with main right service method. User has
-     * destroy rights to project if he/she is at least project manager (primary).
-     * Basically following roles grants user destroy right to project:
-     *
-     *  -3  = Administrator
-     *  -2  = Project manager primary
-     */
-    AuthService.hasProjectAccess(user, projectId, function(error, role) {
-        var output = false;
-
-        if (role !== false && role < -1) {
             output = true;
         }
 

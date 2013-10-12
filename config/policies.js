@@ -29,8 +29,8 @@ module.exports.policies = {
         // Default handling for blueprints
         find:       ["authenticated"], // Todo: try to figure out how to restrict access to all projects
         create:     ["authenticated"], // Todo: it is really good that every user can add new project?
-        update:     ["authenticated", "hasProjectUpdate"],
-        destroy:    ["authenticated", "hasProjectDestroy"],
+        update:     ["authenticated", "hasProjectAdmin"],
+        destroy:    ["authenticated", "hasProjectAdmin"],
 
         // Custom actions
         add:        ["authenticated"],
@@ -39,6 +39,21 @@ module.exports.policies = {
         milestones: ["authenticated", "hasProjectAccess"],
         planning:   ["authenticated", "hasProjectAccess"],
         statistics: ["authenticated", "hasProjectAccess"]
+    },
+
+    // Phase controller policies
+    "Phase": {
+        // By default do not allow nothing
+        "*":        false,
+
+        // Default handling for blueprints
+        find:       ["authenticated"],
+        create:     ["authenticated", "hasProjectAdmin"],
+        update:     ["authenticated", "hasProjectAdmin"],
+        destroy:    ["authenticated", "hasProjectAdmin"],
+
+        // Custom actions
+        edit:       ["authenticated", "hasProjectAdmin"]
     },
 
     // Sprint controller policies
