@@ -48,13 +48,30 @@ module.exports.policies = {
 
         // Default handling for blueprints
         find:       ["authenticated", "hasSprintAccess"],
-        create:     ["authenticated", "hasSprintCreate"],
-        update:     ["authenticated", "hasSprintUpdate"],
-        destroy:    ["authenticated", "hasSprintDestroy"],
+        create:     ["authenticated", "hasSprintAdmin"],
+        update:     ["authenticated", "hasSprintAdmin"],
+        destroy:    ["authenticated", "hasSprintAdmin"],
 
         // Custom actions
-        add:        ["authenticated", "hasProjectAccess"],
+        add:        ["authenticated", "hasSprintAdmin"],
         edit:       ["authenticated", "hasSprintAccess"],
         backlog:    ["authenticated", "hasSprintAccess"]
+    },
+
+    // Milestone controller policies
+    "Milestone": {
+        // By default do not allow nothing
+        "*":        false,
+
+        // Default handling for blueprints
+        find:       ["authenticated", "hasMilestoneAccess"],
+        create:     ["authenticated", "hasMilestoneAdmin"],
+        update:     ["authenticated", "hasMilestoneAdmin"],
+        destroy:    ["authenticated", "hasMilestoneAdmin"],
+
+        // Custom actions
+        add:        ["authenticated", "hasMilestoneAdmin"],
+        edit:       ["authenticated", "hasMilestoneAccess"],
+        stories:    ["authenticated", "hasMilestoneAccess"]
     }
 };

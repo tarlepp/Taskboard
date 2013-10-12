@@ -21,18 +21,9 @@ module.exports = {
 
         var projectId = parseInt(req.param("projectId"), 10);
 
-        // Check if user has access to specified project
-        AuthService.hasAccessToProject(req.user, projectId, function(error, hasRight) {
-            if (error) {
-                res.send(error, error.status ? error.status : 500);
-            } else if (!hasRight) {
-                res.send("Insufficient rights to access this project.", 403);
-            } else {
-                res.view({
-                    layout: "layout_ajax",
-                    projectId: projectId
-                });
-            }
+        res.view({
+            layout: "layout_ajax",
+            projectId: projectId
         });
     },
 
@@ -49,46 +40,17 @@ module.exports = {
 
         var milestoneId = parseInt(req.param("id"), 10);
 
-        async.parallel(
-            {
-                /**
-                 * This will check that current user has privileges to specified sprint.
-                 * Credentials are determined via external service.
-                 *
-                 * @param   {Function}  callback
-                 */
-                authorized: function(callback) {
-                    AuthService.hasAccessToMilestone(req.user, milestoneId, callback);
-                },
-
-                /**
-                 * Fetch milestone data.
-                 *
-                 * @param   {Function}  callback
-                 */
-                milestone: function(callback) {
-                    DataService.getMilestone(milestoneId, callback);
-                }
-            },
-
-            /**
-             * Callback function which is been called after all parallel jobs are processed.
-             *
-             * @param   {{}}    error
-             * @param   {{}}    data
-             */
-                function(error, data) {
-                if (error) {
-                    res.send(error, error.status ? error.status : 500);
-                } else if (!data.authorized) {
-                    res.send("Insufficient rights to access this milestone.", 403);
-                } else {
-                    data.layout = "layout_ajax";
-
-                    res.view(data);
-                }
+        // Fetch milestone data
+        DataService.getMilestone(milestoneId, function(error, milestone) {
+            if (error) {
+                res.send(error, error.status ? error.status : 500);
+            } else {
+                res.view({
+                    layout: "layout_ajax",
+                    milestone: milestone
+                });
             }
-        );
+        });
     },
 
     /**
@@ -118,57 +80,27 @@ module.exports = {
             stories: false
         };
 
-        async.parallel(
-            {
-                /**
-                 * This will check that current user has privileges to specified sprint.
-                 * Credentials are determined via external service.
-                 *
-                 * @param   {Function}  callback
-                 */
-                authorized: function(callback) {
-                    AuthService.hasAccessToMilestone(req.user, milestoneId, callback);
-                },
+        // Fetch milestone data
+        DataService.getMilestone(milestoneId, function(error, milestone) {
+            if (error) {
+                res.send(error, error.status ? error.status : 500);
+            } else {
+                data.milestone.data = milestone;
 
-                /**
-                 * Fetch milestone data.
-                 *
-                 * @param   {Function}  callback
-                 */
-                milestone: function(callback) {
-                    DataService.getMilestone(milestoneId, callback);
-                }
-            },
+                // Find all user stories which are attached to milestone
+                Story
+                    .find()
+                    .where({
+                        milestoneId: data.milestone.data.id
+                    })
+                    .sort('title ASC')
+                    .done(function(error, stories) {
+                        data.stories = stories;
 
-            /**
-             * Callback function which is been called after all parallel jobs are processed.
-             *
-             * @param   {{}}    error
-             * @param   {{}}    results
-             */
-            function(error, results) {
-                if (error) {
-                    res.send(error, error.status ? error.status : 500);
-                } else if (!results.authorized) {
-                    res.send("Insufficient rights to access this milestone.", 403);
-                } else {
-                    data.milestone.data = results.milestone;
-
-                    // Find all user stories which are attached to milestone
-                    Story
-                        .find()
-                        .where({
-                            milestoneId: data.milestone.data.id
-                        })
-                        .sort('title ASC')
-                        .done(function(error, stories) {
-                            data.stories = stories;
-
-                            fetchTasks();
-                        });
-                }
+                        fetchTasks();
+                    });
             }
-        );
+        });
 
         /**
          * Function to fetch tasks of stories
