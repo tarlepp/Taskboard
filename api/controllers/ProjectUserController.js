@@ -232,7 +232,7 @@ module.exports = {
      * @param   {Request}   req Request object
      * @param   {Response}  res Response object
      */
-    OwnProjects: function(req, res) {
+    ownProjects: function(req, res) {
         var projectIds = [];
 
         // Make parallel call
