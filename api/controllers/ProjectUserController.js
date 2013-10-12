@@ -24,23 +24,38 @@ module.exports = {
         var data = {
             layout: "layout_ajax",
             users: false,
-            project: false
+            project: false,
+            role: false,
+            signedIn: req.user
         };
 
-        // Fetch project data
-        Project
-            .findOne(projectId)
-            .done(function(error, /** sails.json.project */project) {
-                if (error) {
-                    res.send(error, 500);
-                } else if (!project) {
-                    res.send("Project not found.", 404);
-                } else {
-                    data.project = project;
-
-                    fetchProjectUsers();
+        async.parallel(
+            {
+                project: function(callback) {
+                    Project
+                        .findOne(projectId)
+                        .done(function(error, /** sails.json.project */project) {
+                            if (error) {
+                                callback(error, null)
+                            } else if (!project) {
+                                callback("Project not found", null);
+                            } else {
+                                callback(null, project);
+                            }
+                        });
+                },
+                role: function(callback) {
+                    AuthService.hasProjectAccess(req.user, projectId, callback, true);
                 }
-            });
+            },
+
+            function callback(error, results) {
+                data.project = results.project;
+                data.role = results.role;
+
+                fetchProjectUsers();
+            }
+        );
 
         /**
          * Function to fetch project user data. Also note that this will add selected
