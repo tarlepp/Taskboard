@@ -236,45 +236,16 @@ exports.hasSprintAccess = function(user, sprintId, next, returnRole) {
 };
 
 /**
- * Method checks if specified user has create access to sprints in specified project or not.
- * Note that this check is only based to given project id and nothing else.
- *
- * @param   {sails.req.user}    user        Signed in user object
- * @param   {Number}            projectId   Project id to check
- * @param   {Function}          next        Main callback function, which is called after checks
- */
-exports.hasSprintCreate = function(user, projectId, next) {
-    /**
-     * Get user role in specified project with main right service method. User has
-     * create rights to sprint if he/she is at least project manager on project.
-     * Basically following roles grants user create new sprint, if user is project:
-     *
-     *  -3  = Administrator
-     *  -2  = Project manager primary
-     *  -1  = Project manager (contributor)
-     */
-    AuthService.hasProjectAccess(user, projectId, function(error, role) {
-        var output = false;
-
-        if (role !== false && role < 0) {
-            output = true;
-        }
-
-        next(error, output);
-    }, true);
-};
-
-/**
- * Method checks if specified user has update access to specified sprint or not.
+ * Method checks if specified user has admin access to specified sprint or not.
  *
  * @param   {sails.req.user}    user        Signed in user object
  * @param   {Number}            sprintId    Sprint id to check
  * @param   {Function}          next        Main callback function, which is called after checks
  */
-exports.hasSprintUpdate = function(user, sprintId, next) {
+exports.hasSprintAdmin = function(user, sprintId, next) {
     /**
      * Get user role in specified sprint project with main right service method. User has
-     * update rights to sprint if he/she is at least project manager on sprint project.
+     * administrator rights to sprint if he/she is at least project manager on sprint project.
      *
      * Basically following project roles grants user update right to sprint:
      *
@@ -294,44 +265,18 @@ exports.hasSprintUpdate = function(user, sprintId, next) {
 };
 
 /**
- * Method checks if specified user has destroy access to specified sprint or not.
- *
- * @param   {sails.req.user}    user        Signed in user object
- * @param   {Number}            sprintId    Sprint id to check
- * @param   {Function}          next        Main callback function, which is called after checks
- */
-exports.hasSprintDestroy = function(user, sprintId, next) {
-    /**
-     * Get user role in specified sprint project with main right service method. User has
-     * destroy rights to sprint if he/she is at least project manager (primary) at sprint
-     * project.
-     *
-     * Basically following project roles grants user destroy right to sprint:
-     *
-     *  -3  = Administrator
-     *  -2  = Project manager primary
-     */
-    AuthService.hasSprintAccess(user, sprintId, function(error, role) {
-        var output = false;
-
-        if (role !== false && role < -1) {
-            output = true;
-        }
-
-        next(error, output);
-    }, true);
-};
-
-/**
  * Method checks if specified user has access to specified milestone or not.
  *
- * @param   {sails.req.user}    user        Signed in user object
- * @param   {Number}            milestoneId Milestone id to check
- * @param   {Function}          next        Main callback function, which is called after checks
+ * @param   {sails.req.user}    user            Signed in user object
+ * @param   {Number}            milestoneId     Milestone id to check
+ * @param   {Function}          next            Main callback function, which is called after checks
+ * @param   {Boolean}           [returnRole]    Return role in callback not just boolean value
  */
-exports.hasAccessToMilestone = function(user, milestoneId, next) {
+exports.hasMilestoneAccess = function(user, milestoneId, next, returnRole) {
+    returnRole = returnRole || false;
+
     /**
-     * Make waterfall jobs to check if user has access to specified sprint or not:
+     * Make waterfall jobs to check if user has access to specified milestone or not:
      *
      *  1)  Fetch milestone data (check that milestone exists)
      *  2)  Call AuthService.hasAccessToProject to check actual project right
@@ -341,7 +286,7 @@ exports.hasAccessToMilestone = function(user, milestoneId, next) {
     async.waterfall(
         [
             /**
-             * Check that sprint exists.
+             * Check that milestone exists.
              *
              * @param   {Function}  callback
              */
@@ -350,18 +295,18 @@ exports.hasAccessToMilestone = function(user, milestoneId, next) {
             },
 
             /**
-             * Check that user has access to sprint project.
+             * Check that user has access to milestone project.
              *
              * @param   {sails.model.milestone} milestone   Milestone data
              * @param   {Function}              callback
              */
             function(milestone, callback) {
-                AuthService.hasProjectAccess(user, milestone.projectId, callback);
+                AuthService.hasProjectAccess(user, milestone.projectId, callback, returnRole);
             }
         ],
 
         /**
-         * Callback function which is been called after all parallel jobs are processed.
+         * Callback function which is been called after all jobs are processed.
          *
          * @param   {Error|String}  error
          * @param   {Boolean}       results
@@ -370,4 +315,33 @@ exports.hasAccessToMilestone = function(user, milestoneId, next) {
             next(error, results);
         }
     );
+};
+
+/**
+ * Method checks if specified user has admin access to specified milestone or not.
+ *
+ * @param   {sails.req.user}    user        Signed in user object
+ * @param   {Number}            milestoneId Milestone id to check
+ * @param   {Function}          next        Main callback function, which is called after checks
+ */
+exports.hasMilestoneAdmin = function(user, milestoneId, next) {
+    /**
+     * Get user role in specified milestone project with main right service method. User has
+     * update rights to milestone if he/she is at least project manager on milestone project.
+     *
+     * Basically following project roles grants user update right to milestone:
+     *
+     *  -3  = Administrator
+     *  -2  = Project manager primary
+     *  -1  = Project manager (contributor)
+     */
+    AuthService.hasMilestoneAccess(user, milestoneId, function(error, role) {
+        var output = false;
+
+        if (role !== false && role < 0) {
+            output = true;
+        }
+
+        next(error, output);
+    }, true);
 };
