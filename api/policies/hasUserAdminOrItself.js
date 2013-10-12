@@ -19,6 +19,6 @@ module.exports = function hasUserAdmin(request, response, next) {
 
         next();
     } else {
-        response.send("Insufficient rights to access this user.", 403);
+        response.send("Weird. You're not the one you present.", 403);
     }
 };

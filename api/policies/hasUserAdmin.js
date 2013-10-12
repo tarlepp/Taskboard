@@ -17,6 +17,6 @@ module.exports = function hasUserAdmin(request, response, next) {
 
         next();
     } else {
-        response.send("Insufficient rights to admin users.", 403);
+        response.send("You're not administrator user.", 403);
     }
 };
