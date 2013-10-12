@@ -341,7 +341,7 @@ module.exports = {
      *
      * @constructor
      */
-    GetRole: function(req, res) {
+    getRole: function(req, res) {
         var projectId = parseInt(req.param("projectId"), 10);
 
         // Admin user, always return -3
@@ -363,7 +363,7 @@ module.exports = {
                                 id: projectId,
                                 managerId: req.user.id
                             })
-                            .done(function(error, /** sails.json.project */project) {
+                            .done(function(error, /** sails.model.project */project) {
                                 if (error) {
                                     callback(error, null);
                                 } else {
@@ -386,7 +386,7 @@ module.exports = {
                                 projectId: projectId,
                                 userId: req.user.id
                             })
-                            .done(function(error, /** sails.json.projectUser */projectUser) {
+                            .done(function(error, /** sails.model.projectUser */projectUser) {
                                 if (error) {
                                     callback(error, null);
                                 } else {

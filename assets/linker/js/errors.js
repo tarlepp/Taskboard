@@ -27,7 +27,7 @@ function handleSocketError(error, showMessage) {
     showMessage = showMessage || true;
 
     // We have an error!
-    if ((error.status && error.status !== 200) || (error.errors && error.status)) {
+    if (error && ((error.status && error.status !== 200) || (error.errors && error.status))) {
         if (showMessage) {
             var message = '';
 
