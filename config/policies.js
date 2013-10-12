@@ -138,5 +138,23 @@ module.exports.policies = {
         list:       ["authenticated", "hasUserAdmin"],
         add:        ["authenticated", "hasUserAdmin"],
         edit:       ["authenticated", "hasUserAdminOrItself"]
+    },
+
+    // ProjectUser controller policies
+    "ProjectUser": {
+        // By default do not allow nothing
+        "*":        false,
+
+        // Default handling for blueprints
+        find:       ["authenticated"],
+        create:     ["authenticated", "hasProjectAdmin"],
+        update:     ["authenticated", "hasProjectAdmin"],
+        destroy:    ["authenticated", "hasProjectAdmin"],
+
+        // Custom actions
+        users:          ["authenticated", "hasProjectAccess"],
+        availableUsers: ["authenticated", "hasProjectAccess"],
+        ownProjects:    ["authenticated"],
+        getRole:        ["authenticated", "hasProjectAccess"]
     }
 };
