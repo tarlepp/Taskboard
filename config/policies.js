@@ -39,5 +39,22 @@ module.exports.policies = {
         milestones: ["authenticated", "hasProjectAccess"],
         planning:   ["authenticated", "hasProjectAccess"],
         statistics: ["authenticated", "hasProjectAccess"]
+    },
+
+    // Sprint controller policies
+    "Sprint": {
+        // By default do not allow nothing
+        "*":        false,
+
+        // Default handling for blueprints
+        find:       ["authenticated", "hasSprintAccess"],
+        create:     ["authenticated", "hasSprintCreate"],
+        update:     ["authenticated", "hasSprintUpdate"],
+        destroy:    ["authenticated", "hasSprintDestroy"],
+
+        // Custom actions
+        add:        ["authenticated", "hasProjectAccess"],
+        edit:       ["authenticated", "hasSprintAccess"],
+        backlog:    ["authenticated", "hasSprintAccess"]
     }
 };

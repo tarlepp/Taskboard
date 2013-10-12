@@ -15,7 +15,11 @@ var loggedUserId;
 var AuthService = {
     hasProjectAccess: function(user, projectId, next, returnRole) {},
     hasProjectUpdate: function(user, projectId, next) {},
-    hasProjectDestroy: function(user, projectId, next) {}
+    hasProjectDestroy: function(user, projectId, next) {},
+    hasSprintAccess: function(user, sprintId, next, returnRole) {},
+    hasSprintCreate: function(user, projectId, next) {},
+    hasSprintUpdate: function(user, sprintId, next) {},
+    hasSprintDestroy: function(user, sprintId, next) {}
 };
 
 var knockout = {

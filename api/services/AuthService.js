@@ -162,7 +162,7 @@ exports.hasProjectUpdate = function(user, projectId, next) {
  * @param   {Number}            projectId       Project id to check
  * @param   {Function}          next            Main callback function, which is called after checks
  */
-exports.hasProjectUpdate = function(user, projectId, next) {
+exports.hasProjectDestroy = function(user, projectId, next) {
     /**
      * Get user role in specified project with main right service method. User has
      * destroy rights to project if he/she is at least project manager (primary).
@@ -185,11 +185,14 @@ exports.hasProjectUpdate = function(user, projectId, next) {
 /**
  * Method checks if specified user has access to specified sprint or not.
  *
- * @param   {sails.req.user}    user        Signed in user object
- * @param   {Number}            sprintId    Sprint id to check
- * @param   {Function}          next        Main callback function, which is called after checks
+ * @param   {sails.req.user}    user            Signed in user object
+ * @param   {Number}            sprintId        Sprint id to check
+ * @param   {Function}          next            Main callback function, which is called after checks
+ * @param   {Boolean}           [returnRole]    Return role in callback not just boolean value
  */
-exports.hasAccessToSprint = function(user, sprintId, next) {
+exports.hasSprintAccess = function(user, sprintId, next, returnRole) {
+    returnRole = returnRole || false;
+
     /**
      * Make waterfall jobs to check if user has access to specified sprint or not:
      *
@@ -216,7 +219,7 @@ exports.hasAccessToSprint = function(user, sprintId, next) {
              * @param   {Function}              callback
              */
             function(sprint, callback) {
-                AuthService.hasProjectAccess(user, sprint.projectId, callback);
+                AuthService.hasProjectAccess(user, sprint.projectId, callback, returnRole);
             }
         ],
 
@@ -230,6 +233,93 @@ exports.hasAccessToSprint = function(user, sprintId, next) {
             next(error, results);
         }
     );
+};
+
+/**
+ * Method checks if specified user has create access to sprints in specified project or not.
+ * Note that this check is only based to given project id and nothing else.
+ *
+ * @param   {sails.req.user}    user        Signed in user object
+ * @param   {Number}            projectId   Project id to check
+ * @param   {Function}          next        Main callback function, which is called after checks
+ */
+exports.hasSprintCreate = function(user, projectId, next) {
+    /**
+     * Get user role in specified project with main right service method. User has
+     * create rights to sprint if he/she is at least project manager on project.
+     * Basically following roles grants user create new sprint, if user is project:
+     *
+     *  -3  = Administrator
+     *  -2  = Project manager primary
+     *  -1  = Project manager (contributor)
+     */
+    AuthService.hasProjectAccess(user, projectId, function(error, role) {
+        var output = false;
+
+        if (role !== false && role < 0) {
+            output = true;
+        }
+
+        next(error, output);
+    }, true);
+};
+
+/**
+ * Method checks if specified user has update access to specified sprint or not.
+ *
+ * @param   {sails.req.user}    user        Signed in user object
+ * @param   {Number}            sprintId    Sprint id to check
+ * @param   {Function}          next        Main callback function, which is called after checks
+ */
+exports.hasSprintUpdate = function(user, sprintId, next) {
+    /**
+     * Get user role in specified sprint project with main right service method. User has
+     * update rights to sprint if he/she is at least project manager on sprint project.
+     *
+     * Basically following project roles grants user update right to sprint:
+     *
+     *  -3  = Administrator
+     *  -2  = Project manager primary
+     *  -1  = Project manager (contributor)
+     */
+    AuthService.hasSprintAccess(user, sprintId, function(error, role) {
+        var output = false;
+
+        if (role !== false && role < 0) {
+            output = true;
+        }
+
+        next(error, output);
+    }, true);
+};
+
+/**
+ * Method checks if specified user has destroy access to specified sprint or not.
+ *
+ * @param   {sails.req.user}    user        Signed in user object
+ * @param   {Number}            sprintId    Sprint id to check
+ * @param   {Function}          next        Main callback function, which is called after checks
+ */
+exports.hasSprintDestroy = function(user, sprintId, next) {
+    /**
+     * Get user role in specified sprint project with main right service method. User has
+     * destroy rights to sprint if he/she is at least project manager (primary) at sprint
+     * project.
+     *
+     * Basically following project roles grants user destroy right to sprint:
+     *
+     *  -3  = Administrator
+     *  -2  = Project manager primary
+     */
+    AuthService.hasSprintAccess(user, sprintId, function(error, role) {
+        var output = false;
+
+        if (role !== false && role < -1) {
+            output = true;
+        }
+
+        next(error, output);
+    }, true);
 };
 
 /**
