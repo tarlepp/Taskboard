@@ -14,6 +14,7 @@
 <table id="projectBacklog" class="table table-striped table-hover table-condensed">
     <thead>
         <tr>
+            <% if (role !== 0) { %>
             <th>
                 <a href="javascript: void(0);" class="btn btn-default btn-icon tooltipTitle" title="Add new user to this project"
                    data-qtip-options='{ "position": {"my": "center right", "at": "center left"} }'
@@ -23,6 +24,7 @@
                     <i class="icon icon-plus"></i>
                 </a>
             </th>
+            <% } %>
             <th class="col-md-9">Full name</th>
             <th class="col-md-2">Username</th>
             <th class="col-md-1">Email</th>
@@ -32,6 +34,7 @@
     <tbody>
     <% _.each(users, function(user) { %>
         <tr>
+            <% if (role !== 0) { %>
             <td>
                 <% if (user.main) { %>
                 <div class="tooltipTitle" title="You cannot remove primary project manager"
@@ -53,15 +56,24 @@
                 </a>
                 <% } %>
             </td>
-            <td><%= user.fullName() %></td>
-            <td class="text-nowrap"><%= user.username %></td>
+            <% } %>
+            <td>
+                <%= user.fullName() %>
+            </td>
+            <td class="text-nowrap">
+                <% if (signedIn.admin) { %>
+                    <a href="javascript: void(0);"> <%= user.username %></a>
+                <% } else { %>
+                    <%= user.username %>
+                <% } %>
+            </td>
             <td class="text-nowrap">
                 <a href="mailto: <%= user.email %>"><%= user.email %></a>
             </td>
             <td class="text-nowrap">
                 <% if (user.main) { %>
                     <%= user.roleText %> <span class="text-medium text-muted">(primary)</span>
-                <% } else { %>
+                <% } else if (role !== 0) { %>
                     <a href="javascript: void(0)" class="change-role tooltipTitle" title="Change user role"
                         data-qtip-options='{ "position": {"my": "center left", "at": "center right"} }'
                         data-project-id="<%= project.id %>"
@@ -70,6 +82,8 @@
                     >
                         <%= user.roleText %>
                     </a>
+                <% } else { %>
+                    <%= user.roleText %>
                 <% } %>
             </td>
         </tr>
