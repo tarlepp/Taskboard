@@ -378,9 +378,6 @@ function ViewModel() {
 
             arg.cancelDrop = true;
 
-            // Update task data
-            self.tasks.replace(arg.item, _.clone(arg.item));
-
             makeMessage("Insufficient rights to move tasks in this project.", "error");
         }
     };
@@ -410,14 +407,7 @@ function ViewModel() {
             // Update task data
             socket.put('/Task/' + arg.item.id(), {phaseId: phase.id}, function(/** sails.json.task */response) {
                 if (handleSocketError(response, true)) {
-                    // Find task story
-                    var story = _.find(self.stories(), function(story) { return story.id() === response.storyId; });
-
-                    // Update task data
-                    self.tasks.replace(arg.item, new Task(response));
-
-                    // Replace story also, this will trigger re-rendering of cells
-                    self.stories.replace(story, _.clone(story));
+                    // all was ok, nice!
                 }
             });
         }
