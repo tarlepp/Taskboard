@@ -81,6 +81,31 @@ exports.getMilestone = function(milestoneId, callback) {
 };
 
 /**
+ * Service to fetch single story data from database.
+ *
+ * @param   {Number}    storyId     Story id
+ * @param   {Function}  callback    Callback function to call after query
+ */
+exports.getStory = function(storyId, callback) {
+    Story
+        .findOne(storyId)
+        .done(function(error, /** sails.model.story */ story) {
+            if (error) {
+                callback(error, null);
+            } else if (!story) {
+                var err = new Error();
+
+                err.message = "Story not found.";
+                err.status = 404;
+
+                callback(err, null);
+            } else {
+                callback(null, story);
+            }
+        });
+};
+
+/**
  * Service to fetch milestone data from database.
  *
  * @param   {{}}        where       Used query conditions
