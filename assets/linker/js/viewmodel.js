@@ -219,17 +219,30 @@ function ViewModel() {
             // Push data to loading state
             self.loading.push(true);
 
+            jQuery.ajax({
+                url: "/ProjectUser/getRole",
+                data: {projectId: projectId}
+            }).success(function(role) {
+                self.role(role);
+
+                self.loading.pop();
+            }).fail(function() {
+                self.loading.pop();
+            });
+
             // Get user role in this project
-            socket.get("/ProjectUser/GetRole", {projectId: projectId}, function(role) {
-                console.log(role);
+            /**
+             * Weird, after updating to sails 0.9.7 this doesn't work anymore...
+            socket.get("/ProjectUser/getRole", {projectId: projectId}, function(role) {
+                console.log("role is: " + role);
 
                 if (handleSocketError(role)) {
-
                     self.role(role);
                 }
 
                 self.loading.pop();
             });
+            */
         }
     };
 
