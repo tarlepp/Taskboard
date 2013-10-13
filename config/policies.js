@@ -156,5 +156,17 @@ module.exports.policies = {
         availableUsers: ["authenticated", "hasProjectAccess"],
         ownProjects:    ["authenticated"],
         getRole:        ["authenticated", "hasProjectAccess"]
+    },
+
+    // Type controller policies
+    "Type": {
+        // By default do not allow nothing
+        "*":        false,
+
+        // Default handling for blueprints
+        find:       ["authenticated"],
+        create:     ["authenticated", "isAdministrator"],
+        update:     ["authenticated", "isAdministrator"],
+        destroy:    ["authenticated", "isAdministrator"]
     }
 };
