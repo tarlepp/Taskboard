@@ -60,7 +60,7 @@
                 </div>
             </div>
         </td>
-        <td class="col-md-9 <% if (role !== 0) { %>cursor-move<% } %>">
+        <td class="col-md-9 <% if (role < 0) { %>cursor-move<% } %>">
             <%= story.title %>
         </td>
         <td class="col-md-2 text-nowrap">
