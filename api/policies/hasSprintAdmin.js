@@ -7,7 +7,7 @@
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function to call if all is ok
  */
-module.exports = function hasMilestoneAdmin(request, response, next) {
+module.exports = function hasSprintAdmin(request, response, next) {
     sails.log.verbose(" POLICY - api/policies/hasSprintAdmin.js");
 
     var sprintId = parseInt(request.param("id"), 10);
@@ -28,7 +28,7 @@ module.exports = function hasMilestoneAdmin(request, response, next) {
         });
     } else if (!isNaN(projectId)) {
         // Check that current user has update access to specified project
-        AuthService.hasProjectUpdate(request.user, projectId, function(error, hasRight) {
+        AuthService.hasProjectAdmin(request.user, projectId, function(error, hasRight) {
             if (error) { // Error occurred
                 response.send(error, error.status ? error.status : 500);
             } else if (!hasRight) { // No admin rights
