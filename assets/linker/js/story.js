@@ -28,9 +28,14 @@ jQuery(document).ready(function() {
      */
     body.on("storyAdd", function(event, projectId, sprintId, trigger, formData) {
         projectId = projectId || myViewModel.project().id();
-        sprintId = sprintId || myViewModel.sprint().id();
         trigger = trigger || false;
         formData = formData || {};
+
+        if (typeof sprintId === "undefined") {
+            if (myViewModel.sprint().id()) {
+                sprintId = myViewModel.sprint().id();
+            }
+        }
 
         jQuery.get("/Story/add", {projectId: projectId, sprintId: sprintId, formData: formData})
         .done(function(content) {
