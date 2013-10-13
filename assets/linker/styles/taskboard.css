@@ -267,9 +267,7 @@ div.story p:last-of-type {
 
 .backlog .list-group-item {
     padding: 3px 15px 3px 5px;
-    cursor: move;
     font-size: 14px;
-    cursor: move;
     white-space: normal;
 }
 

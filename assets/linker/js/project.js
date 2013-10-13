@@ -711,102 +711,104 @@ function initProjectPlanning(modal) {
         modal.modal("hide");
     });
 
-    // Make sortable
-    jQuery(".sortable", modal).sortable({
-        connectWith: ".sortable",
-        zIndex:"5000",
-        helper: "clone",
-        cursor: "move",
-        stop: function(event, ui) {
-            modal.find('ul').fadeTo(0, 0.5);
+    if (myViewModel.role < 0) {
+        // Make sortable
+        jQuery(".sortable", modal).sortable({
+            connectWith: ".sortable",
+            zIndex:"5000",
+            helper: "clone",
+            cursor: "move",
+            stop: function(event, ui) {
+                modal.find('ul').fadeTo(0, 0.5);
 
-            var list = ui.item.closest("ul");
-            var sprintId = parseInt(list.data("sprintId"));
-            var items = list.find("li");
-            var stories = [];
+                var list = ui.item.closest("ul");
+                var sprintId = parseInt(list.data("sprintId"));
+                var items = list.find("li");
+                var stories = [];
 
-            // Iterate current list data
-            jQuery.each(items, function(key, item) {
-                var storyId = jQuery(item).data("storyId");
-                var data = {
-                    priority: key + 1,
-                    sprintId: sprintId
-                };
+                // Iterate current list data
+                jQuery.each(items, function(key, item) {
+                    var storyId = jQuery(item).data("storyId");
+                    var data = {
+                        priority: key + 1,
+                        sprintId: sprintId
+                    };
 
-                // Update user story priority and sprint id data
-                jQuery.ajax({
-                    type: "PUT",
-                    url: "/Story/" + storyId,
-                    data: data,
-                    dataType: "json"
-                })
-                .done(function(/** sails.json.story */story) {
-                    stories.push(story);
+                    // Update user story priority and sprint id data
+                    jQuery.ajax({
+                        type: "PUT",
+                        url: "/Story/" + storyId,
+                        data: data,
+                        dataType: "json"
+                    })
+                    .done(function(/** sails.json.story */story) {
+                        stories.push(story);
 
-                    // Check if we have processed all data
-                    checkData();
-                })
-                .fail(function(jqXhr, textStatus, error) {
-                    handleAjaxError(jqXhr, textStatus, error);
+                        // Check if we have processed all data
+                        checkData();
+                    })
+                    .fail(function(jqXhr, textStatus, error) {
+                        handleAjaxError(jqXhr, textStatus, error);
+                    });
+
+                    /**
+                     * This is weird... this doesn't work and causes all socket communication to
+                     * fail after these put calls. Gotta be sails.js bug or am I missing something?
+                     */
+                    // socket.put("/Story/" + storyId, data, function(/** sails.json.story */story) {
+                    //     console.log("put");
+                    //     if (handleSocketError(story)) {
+                    //         console.log("asdfasdf");
+                    //     }
+                    // });
                 });
 
                 /**
-                 * This is weird... this doesn't work and causes all socket communication to
-                 * fail after these put calls. Gotta be sails.js bug or am I missing something?
+                 * This function updates actual knockout data models after all
+                 * story updates are done to the server successfully.
+                 *
+                 * Note that sprint must be selected otherwise there is no need
+                 * to update knockout model data.
+                 *
+                 * Function checks that we have processed all story updates. This will
+                 * also
                  */
-                // socket.put("/Story/" + storyId, data, function(/** sails.json.story */story) {
-                //     console.log("put");
-                //     if (handleSocketError(story)) {
-                //         console.log("asdfasdf");
-                //     }
-                // });
-            });
+                function checkData() {
+                    // Check that all is fine
+                    if (stories.length === items.length && myViewModel.sprint()) {
+                        var currentSprintId = myViewModel.sprint().id();
 
-            /**
-             * This function updates actual knockout data models after all
-             * story updates are done to the server successfully.
-             *
-             * Note that sprint must be selected otherwise there is no need
-             * to update knockout model data.
-             *
-             * Function checks that we have processed all story updates. This will
-             * also
-             */
-            function checkData() {
-                // Check that all is fine
-                if (stories.length === items.length && myViewModel.sprint()) {
-                    var currentSprintId = myViewModel.sprint().id();
+                        // Iterate updated models
+                        jQuery.each(stories, function(key, story) {
+                            var storyId = story.id;
+                            var sprintId = story.sprintId;
 
-                    // Iterate updated models
-                    jQuery.each(stories, function(key, story) {
-                        var storyId = story.id;
-                        var sprintId = story.sprintId;
+                            // Check if story exists in current scope
+                            var _story = _.find(myViewModel.stories(), function(story) { return story.id() === storyId; });
 
-                        // Check if story exists in current scope
-                        var _story = _.find(myViewModel.stories(), function(story) { return story.id() === storyId; });
-
-                        // Story exists in current scope update OR delete it
-                        if (typeof _story !== "undefined") {
-                            // Story sprint changed, remove story from current scope
-                            if (sprintId !== currentSprintId) {
-                                myViewModel.stories.remove(_story);
+                            // Story exists in current scope update OR delete it
+                            if (typeof _story !== "undefined") {
+                                // Story sprint changed, remove story from current scope
+                                if (sprintId !== currentSprintId) {
+                                    myViewModel.stories.remove(_story);
+                                }
+                            } else if (sprintId === currentSprintId) {
+                                myViewModel.stories.push(new Story(story));
                             }
-                        } else if (sprintId === currentSprintId) {
-                            myViewModel.stories.push(new Story(story));
-                        }
-                    });
+                        });
 
-                    makeMessage("User stories priorities changed successfully.", "success", {});
+                        makeMessage("User stories priorities changed successfully.", "success", {});
 
-                    modal.find('ul').fadeTo(0, 1);
-                } else if (stories.length === items.length) {
-                    makeMessage("User stories priorities changed successfully.", "success", {});
+                        modal.find('ul').fadeTo(0, 1);
+                    } else if (stories.length === items.length) {
+                        makeMessage("User stories priorities changed successfully.", "success", {});
 
-                    modal.find('ul').fadeTo(0, 1);
+                        modal.find('ul').fadeTo(0, 1);
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 }
 
 /**
