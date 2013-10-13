@@ -940,7 +940,7 @@ function initProjectTabBacklog(modal, contentId) {
         body.trigger("storyAdd", [projectId, 0, trigger]);
     });
 
-    if (myViewModel.role() !== 0) {
+    if (myViewModel.role() < 0) {
         // User changes story priority order
         jQuery("#projectBacklog tbody", container).sortable({
             axis: "y",

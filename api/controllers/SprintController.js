@@ -41,17 +41,30 @@ module.exports = {
 
         var sprintId = parseInt(req.param("id"), 10);
 
-        // Fetch single sprint data
-        DataService.getSprint(sprintId, function(error, sprint) {
-            if (error) {
-                res.send(error, error.status ? error.status : 500);
-            } else {
-                res.view({
-                    layout: "layout_ajax",
-                    sprint: sprint
-                });
+        async.parallel(
+            {
+                // Fetch single sprint data
+                sprint: function(callback) {
+                    DataService.getSprint(sprintId, callback);
+                },
+
+                // Determine user role in this sprint
+                role: function(callback) {
+                    AuthService.hasSprintAccess(req.user, sprintId, callback, true);
+                }
+            },
+            function (error, data) {
+                if (error) {
+                    res.send(error, error.status ? error.status : 500);
+                } else {
+                    data.layout = "layout_ajax";
+
+                    console.log(data);
+
+                    res.view(data);
+                }
             }
-        });
+        );
     },
 
     /**
@@ -70,6 +83,7 @@ module.exports = {
         var data = {
             layout: "layout_ajax",
             stories: false,
+            role: 0,
             sprint: {
                 data: false,
                 progressStory: 0,
@@ -85,22 +99,19 @@ module.exports = {
 
         async.parallel(
             {
-                /**
-                 * Fetch sprint data.
-                 *
-                 * @param   {Function}  callback
-                 */
+                // Fetch sprint data.
                 sprint: function(callback) {
                     DataService.getSprint(sprintId, callback);
                 },
 
-                /**
-                 * Fetch sprint stories data.
-                 *
-                 * @param   {Function}  callback
-                 */
+                // Fetch sprint stories data.
                 stories: function(callback) {
                     DataService.getStories({sprintId: sprintId}, callback);
+                },
+
+                // Determine user role in this sprint
+                role: function(callback) {
+                    AuthService.hasSprintAccess(req.user, sprintId, callback, true);
                 }
             },
 
@@ -116,6 +127,7 @@ module.exports = {
                 } else {
                     data.sprint.data = results.sprint;
                     data.stories = results.stories;
+                    data.role = results.role;
 
                     fetchTaskData();
                 }
