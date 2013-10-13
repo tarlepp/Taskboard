@@ -363,35 +363,24 @@ module.exports = {
 
         async.parallel(
             {
-                /**
-                 * Fetch project data.
-                 *
-                 * @param   {Function}  callback
-                 */
+                // Fetch project data.
                 project: function(callback) {
                     DataService.getProject(projectId, callback);
                 },
 
-                /**
-                 * Fetch project story data
-                 *
-                 * @param   {Function}  callback
-                 */
+                // Fetch project story data
                 stories: function(callback) {
-                    DataService.getStories({
-                        projectId: projectId
-                    }, callback);
+                    DataService.getStories({projectId: projectId}, callback);
                 },
 
-                /**
-                 * Fetch project sprint data
-                 *
-                 * @param   {Function}  callback
-                 */
+                // Fetch project sprint data
                 sprints: function(callback) {
-                    DataService.getSprints({
-                        projectId: projectId
-                    }, callback);
+                    DataService.getSprints({projectId: projectId}, callback);
+                },
+
+                // Fetch user role
+                role: function(callback) {
+                    AuthService.hasProjectAccess(req.user, projectId, callback, true);
                 }
             },
 
