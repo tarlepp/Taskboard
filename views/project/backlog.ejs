@@ -14,7 +14,7 @@
     <thead>
     <tr>
         <th>
-            <a href="javascript: void(0);" class="btn btn-default btn-icon tooltipTitle" title="Add new story to project backlog"
+            <a href="javascript: void(0);" class="btn btn-default btn-icon tooltipTitle <% if (role === 0) { %>disabled<% } %>" title="Add new story to project backlog"
                data-qtip-options='{ "position": {"my": "center right", "at": "center left"} }'
                data-add-new-story="true"
                data-project-id="<%= project.id %>"
@@ -42,6 +42,8 @@
                                 <i class="icon icon-wrench"></i> Edit story
                             </a>
                         </li>
+
+                        <% if (role !== 0) { %>
                         <li>
                             <a href="javascript: void(0);" data-story-id="<%= story.id %>" data-project-id="<%= story.projectId %>" data-action="storySplit">
                                 <i class="icon icon-code-fork"></i> Split story
@@ -53,11 +55,12 @@
                                 <i class="icon icon-remove"></i> Delete story
                             </a>
                         </li>
+                        <% } %>
                     </ul>
                 </div>
             </div>
         </td>
-        <td class="col-md-9 cursor-move">
+        <td class="col-md-9 <% if (role !== 0) { %>cursor-move<% } %>">
             <%= story.title %>
         </td>
         <td class="col-md-2 text-nowrap">

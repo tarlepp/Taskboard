@@ -116,20 +116,17 @@ module.exports = {
 
         async.parallel(
             {
-                /**
-                 * Fetch project data.
-                 *
-                 * @param   {Function}  callback
-                 */
+                // Fetch user role
+                role: function(callback) {
+                    AuthService.hasProjectAccess(req.user, projectId, callback, true);
+                },
+
+                // Fetch project data.
                 project: function(callback) {
                     DataService.getProject(projectId, callback);
                 },
 
-                /**
-                 * Fetch project stories that are in backlog.
-                 *
-                 * @param   {Function}  callback
-                 */
+                // Fetch project stories that are in backlog.
                 stories: function(callback) {
                     DataService.getStories({
                         projectId: projectId,
@@ -171,6 +168,7 @@ module.exports = {
 
         var data = {
             layout: "layout_ajax",
+            role: 0,
             milestones: false,
             project: false,
             progressMilestones: 0,
@@ -186,20 +184,17 @@ module.exports = {
 
         async.parallel(
             {
-                /**
-                 * Fetch project data.
-                 *
-                 * @param   {Function}  callback
-                 */
+                // Fetch user role
+                role: function(callback) {
+                    AuthService.hasProjectAccess(req.user, projectId, callback, true);
+                },
+
+                // Fetch project data.
                 project: function(callback) {
                     DataService.getProject(projectId, callback);
                 },
 
-                /**
-                 * Fetch project milestone data.
-                 *
-                 * @param   {Function}  callback
-                 */
+                // Fetch project milestone data.
                 milestones: function(callback) {
                     DataService.getMilestones({
                         projectId: projectId
@@ -217,6 +212,7 @@ module.exports = {
                 if (error) {
                     res.send(error, error.status ? error.status : 500);
                 } else {
+                    data.role = results.role;
                     data.project = results.project;
                     data.milestones = results.milestones;
                     data.cntMilestonesTotal = data.milestones.length;

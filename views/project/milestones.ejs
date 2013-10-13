@@ -52,7 +52,7 @@
     <thead>
     <tr>
         <th>
-            <a href="javascript: void(0);" class="btn btn-default btn-icon tooltipTitle" title="Add new milestone"
+            <a href="javascript: void(0);" class="btn btn-default btn-icon tooltipTitle <% if (role > -1) { %>disabled<% } %>" title="Add new milestone"
                data-qtip-options='{ "position": {"my": "center right", "at": "center left"} }'
                data-add-new-milestone="true"
                data-project-id="<%= project.id %>"
@@ -86,6 +86,7 @@
                                 <i class="icon icon-wrench"></i> Edit milestone
                             </a>
                         </li>
+                        <% if (role < 0) { %>
                         <li class="divider"></li>
                         <li>
                             <a href="javascript: void(0);" class="text-danger"
@@ -96,6 +97,7 @@
                                 <i class="icon icon-remove"></i> Delete milestone
                             </a>
                         </li>
+                        <% } %>
                     </ul>
                 </div>
             </div>
