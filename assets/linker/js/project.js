@@ -940,70 +940,72 @@ function initProjectTabBacklog(modal, contentId) {
         body.trigger("storyAdd", [projectId, 0, trigger]);
     });
 
-    // User changes story priority order
-    jQuery("#projectBacklog tbody", container).sortable({
-        axis: "y",
-        helper: function(e, tr) {
-            var helper = tr.clone();
+    if (myViewModel.role() !== 0) {
+        // User changes story priority order
+        jQuery("#projectBacklog tbody", container).sortable({
+            axis: "y",
+            helper: function(e, tr) {
+                var helper = tr.clone();
 
-            return helper.addClass("sortable");
-        },
-        stop: function() {
-            var table = jQuery("#projectBacklog", container);
-            var rows = table.find("tbody tr");
-            var errors = false;
-            var update = [];
+                return helper.addClass("sortable");
+            },
+            stop: function() {
+                var table = jQuery("#projectBacklog", container);
+                var rows = table.find("tbody tr");
+                var errors = false;
+                var update = [];
 
-            rows.fadeTo(0, 0.5);
+                rows.fadeTo(0, 0.5);
 
-            // Iterate each row
-            rows.each(function(index) {
-                var storyId = jQuery(this).data("storyId");
+                // Iterate each row
+                rows.each(function(index) {
+                    var storyId = jQuery(this).data("storyId");
 
-                // Hmm. this is weird, how cat it be that this is faster than sockets?
-                jQuery.ajax({
-                    url: "/Story/" + storyId,
-                    data: {
-                        priority: index + 1
-                    },
-                    type: "PUT",
-                    dataType: "json"
-                })
-                .done(function() {
-                    update.push(true);
+                    // Hmm. this is weird, how cat it be that this is faster than sockets?
+                    jQuery.ajax({
+                        url: "/Story/" + storyId,
+                        data: {
+                            priority: index + 1
+                        },
+                        type: "PUT",
+                        dataType: "json"
+                    })
+                    .done(function() {
+                        update.push(true);
 
-                    // Check if all is done
-                    checkUpdate();
-                })
-                .fail(function(jqXhr, textStatus, error) {
-                    update.push(false);
+                        // Check if all is done
+                        checkUpdate();
+                    })
+                    .fail(function(jqXhr, textStatus, error) {
+                        update.push(false);
 
-                    errors = true;
+                        errors = true;
 
-                    handleAjaxError(jqXhr, textStatus, error);
+                        handleAjaxError(jqXhr, textStatus, error);
+                    });
                 });
-            });
 
-            // Function to make sure that we have updated all rows.
-            function checkUpdate() {
-                if (update.length == rows.length) {
-                    var message = "";
-                    var type = "success";
+                // Function to make sure that we have updated all rows.
+                function checkUpdate() {
+                    if (update.length == rows.length) {
+                        var message = "";
+                        var type = "success";
 
-                    if (errors) {
-                        type = "error";
-                        message = "Error in stories priority update"
-                    } else {
-                        message = "Stories priorities changed successfully";
+                        if (errors) {
+                            type = "error";
+                            message = "Error in stories priority update"
+                        } else {
+                            message = "Stories priorities changed successfully";
+                        }
+
+                        makeMessage(message, type, {});
+
+                        rows.fadeTo(0, 1);
                     }
-
-                    makeMessage(message, type, {});
-
-                    rows.fadeTo(0, 1);
                 }
             }
-        }
-    });
+        });
+    }
 }
 
 /**
