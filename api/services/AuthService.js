@@ -480,3 +480,13 @@ exports.hasTaskAdmin = function(user, taskId, next) {
         next(error, output);
     }, true);
 };
+
+/**
+ * Method checks if specified user is administrator or not.
+ *
+ * @param   {sails.req.user}    user    Signed in user object
+ * @param   {Function}          next    Main callback function, which is called after checks
+ */
+exports.isAdministrator = function(user, next) {
+    next(null, user.admin);
+};
