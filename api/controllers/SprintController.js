@@ -59,8 +59,6 @@ module.exports = {
                 } else {
                     data.layout = "layout_ajax";
 
-                    console.log(data);
-
                     res.view(data);
                 }
             }
