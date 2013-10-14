@@ -21,10 +21,24 @@ module.exports = {
 
         var projectId = parseInt(req.param("projectId"), 10);
 
-        res.view({
-            layout: "layout_ajax",
-            projectId: projectId
-        });
+        async.parallel(
+            {
+                // Determine user role in this project
+                role: function(callback) {
+                    AuthService.hasProjectAccess(req.user, projectId, callback, true);
+                }
+            },
+            function (error, data) {
+                if (error) {
+                    res.send(error, error.status ? error.status : 500);
+                } else {
+                    data.layout = "layout_ajax";
+                    data.projectId = projectId;
+
+                    res.view(data);
+                }
+            }
+        );
     },
 
     /**
@@ -40,17 +54,28 @@ module.exports = {
 
         var milestoneId = parseInt(req.param("id"), 10);
 
-        // Fetch milestone data
-        DataService.getMilestone(milestoneId, function(error, milestone) {
-            if (error) {
-                res.send(error, error.status ? error.status : 500);
-            } else {
-                res.view({
-                    layout: "layout_ajax",
-                    milestone: milestone
-                });
+        async.parallel(
+            {
+                // Determine user role in this milestone
+                role: function(callback) {
+                    AuthService.hasMilestoneAccess(req.user, milestoneId, callback, true);
+                },
+
+                // Fetch milestone data
+                milestone: function(callback) {
+                    DataService.getMilestone(milestoneId, callback)
+                }
+            },
+            function (error, data) {
+                if (error) {
+                    res.send(error, error.status ? error.status : 500);
+                } else {
+                    data.layout = "layout_ajax";
+
+                    res.view(data);
+                }
             }
-        });
+        );
     },
 
     /**
@@ -68,6 +93,7 @@ module.exports = {
 
         var data = {
             layout: "layout_ajax",
+            role: 0,
             milestone: {
                 data: false,
                 progressStory: 0,
@@ -80,27 +106,40 @@ module.exports = {
             stories: false
         };
 
-        // Fetch milestone data
-        DataService.getMilestone(milestoneId, function(error, milestone) {
-            if (error) {
-                res.send(error, error.status ? error.status : 500);
-            } else {
-                data.milestone.data = milestone;
+        async.parallel(
+            {
+                // Determine user role in this milestone
+                role: function(callback) {
+                    AuthService.hasMilestoneAccess(req.user, milestoneId, callback, true);
+                },
 
-                // Find all user stories which are attached to milestone
-                Story
-                    .find()
-                    .where({
-                        milestoneId: data.milestone.data.id
-                    })
-                    .sort('title ASC')
-                    .done(function(error, stories) {
-                        data.stories = stories;
+                // Fetch milestone data
+                milestone: function(callback) {
+                    DataService.getMilestone(milestoneId, callback)
+                }
+            },
+            function (error, results) {
+                if (error) {
+                    res.send(error, error.status ? error.status : 500);
+                } else {
+                    data.role = results.role;
+                    data.milestone.data = results.milestone;
 
-                        fetchTasks();
-                    });
+                    // Find all user stories which are attached to milestone
+                    Story
+                        .find()
+                        .where({
+                            milestoneId: data.milestone.data.id
+                        })
+                        .sort('title ASC')
+                        .done(function(error, stories) {
+                            data.stories = stories;
+
+                            fetchTasks();
+                        });
+                }
             }
-        });
+        );
 
         /**
          * Function to fetch tasks of stories
