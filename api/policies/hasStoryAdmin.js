@@ -50,9 +50,9 @@ module.exports = function hasStoryAdmin(request, response, next) {
                     sails.log.verbose("          OK");
 
                     next();
+                } else {
+                    response.send("Insufficient rights to admin story." , 403);
                 }
-
-                response.send("Insufficient rights to admin story.", 403);
             }
         }, true);
     } else if (!isNaN(projectId)) { // Check that current user has access to specified project
@@ -65,9 +65,9 @@ module.exports = function hasStoryAdmin(request, response, next) {
                     sails.log.verbose("          OK");
 
                     next();
+                } else {
+                    response.send("Insufficient rights to admin story.", 403);
                 }
-
-                response.send("Insufficient rights to admin story.", 403);
             }
         }, true);
     } else {
