@@ -117,9 +117,6 @@ jQuery(document).ready(function() {
                                     modal.modal("hide");
 
                                     handleEventTrigger(trigger);
-
-                                    // Update client bindings
-                                    myViewModel.processSocketMessage("story", "update", story.id, story);
                                 }
                             });
                         }
@@ -288,9 +285,6 @@ jQuery(document).ready(function() {
                             makeMessage("User story deleted successfully.");
 
                             handleEventTrigger(trigger);
-
-                            // Update client bindings
-                            myViewModel.processSocketMessage("story", "destroy", story.id, story)
                         }
                     });
                 } else {
