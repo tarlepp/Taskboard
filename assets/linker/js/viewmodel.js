@@ -550,6 +550,8 @@ function ViewModel() {
      *          }                   data    Object data
      */
     self.processSocketMessage = function(model, type, id, data) {
+        console.log("Processing socket message for: '" + model + "' type: '" + type + "' id: '" + id + "'");
+
         switch (type) {
             // Update events
             case 'update':
