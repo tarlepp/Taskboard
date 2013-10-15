@@ -71,9 +71,6 @@ jQuery(document).ready(function() {
                                 if (isNaN(phaseId)) {
                                     socket.post("/Phase", phaseData, function(/** sails.json.phase */phase) {
                                         if (handleSocketError(phase)) {
-                                            // Update client bindings
-                                            myViewModel.processSocketMessage("phase", "create", phase.id, phase);
-
                                             phases.push(true);
 
                                             checkData();
@@ -84,9 +81,6 @@ jQuery(document).ready(function() {
                                 } else { // Update phase data
                                     socket.put("/Phase/"  + phaseId, phaseData, function(/** sails.json.phase */phase) {
                                         if (handleSocketError(phase)) {
-                                            // Update client bindings
-                                            myViewModel.processSocketMessage("phase", "update", phase.id, phase);
-
                                             phases.push(true);
 
                                             checkData();
@@ -277,9 +271,6 @@ function initProjectPhases(modal) {
                                     socket.delete("/Phase/" + phaseId, function(/** sails.json.phase */data) {
                                         if (handleSocketError(data)) {
                                             makeMessage("Phase deleted successfully.", "success", {});
-
-                                            // Update knockout bindings
-                                            myViewModel.processSocketMessage("phase", "destroy", data.id, data);
 
                                             body.trigger('phasesEdit');
                                         }

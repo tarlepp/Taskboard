@@ -50,9 +50,6 @@ jQuery(document).ready(function() {
                                     modal.modal("hide");
 
                                     handleEventTrigger(trigger);
-
-                                    // Update client bindings
-                                    myViewModel.processSocketMessage("task", "create", task.id, task);
                                 }
                             });
                         }
@@ -109,9 +106,6 @@ jQuery(document).ready(function() {
                                     modal.modal("hide");
 
                                     handleEventTrigger(trigger);
-
-                                    // Update client bindings
-                                    myViewModel.processSocketMessage("task", "update", task.id, task);
                                 }
                             });
                         }
@@ -144,9 +138,6 @@ jQuery(document).ready(function() {
                                             makeMessage("Task deleted successfully.");
 
                                             handleEventTrigger(trigger);
-
-                                            // Update client bindings
-                                            myViewModel.processSocketMessage("task", "destroy", task.id, task);
                                         }
                                     });
                                 } else {

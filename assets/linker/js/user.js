@@ -100,9 +100,6 @@ jQuery(document).ready(function() {
                                         modal.modal("hide");
 
                                         handleEventTrigger(trigger);
-
-                                        // Update client bindings
-                                        myViewModel.processSocketMessage("user", "create", user.id, user);
                                     }
                                 });
                             }
@@ -160,9 +157,6 @@ jQuery(document).ready(function() {
 
                                         // Trigger specified event
                                         handleEventTrigger(trigger);
-
-                                        // Update client bindings
-                                        myViewModel.processSocketMessage("user", "update", user.id, user);
                                     }
                                 });
                             }

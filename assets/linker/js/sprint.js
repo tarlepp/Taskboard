@@ -121,9 +121,6 @@ jQuery(document).ready(function() {
                                     modal.modal("hide");
 
                                     handleEventTrigger(trigger);
-
-                                    // Update client bindings
-                                    myViewModel.processSocketMessage("sprint", "update", data.id, data);
                                 }
                             });
                         }
