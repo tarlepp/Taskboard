@@ -17,17 +17,24 @@
     "gravatar": "~1.0.6",
     "async": "~0.2.9"
   },
+  "devDependencies": {
+    "supertest": "~0.8.0",
+    "mocha": "~1.13.0",
+    "should": "~2.0.1",
+    "chai": "~1.8.1"
+  },
   "scripts": {
     "start": "node app.js",
-    "debug": "node debug app.js"
+    "debug": "node debug app.js",
+      "test": "mocha"
   },
   "main": "app.js",
   "repository": {
-      "type": "git",
-      "url": "https://github.com/tarlepp/Taskboard.git"
+    "type": "git",
+    "url": "https://github.com/tarlepp/Taskboard.git"
   },
   "bugs": {
-      "url": "https://github.com/tarlepp/Taskboard/issues"
+    "url": "https://github.com/tarlepp/Taskboard/issues"
   },
   "homepage": "https://github.com/tarlepp/Taskboard",
   "author": "Tarmo Leppänen",
