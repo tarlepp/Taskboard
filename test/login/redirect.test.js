@@ -1,4 +1,5 @@
 var request = require("supertest");
+var should = require('chai').should();
 var sails = require("sails");
 
 describe("not logged in user", function() {
@@ -6,9 +7,9 @@ describe("not logged in user", function() {
 
     global.sails = sails;
 
-    before(function (done) {
+    before(function(done) {
         sails.lift(function () {
-            setTimeout(done, 5000);
+            setTimeout(done, 2000);
         });
     });
 
@@ -21,7 +22,13 @@ describe("not logged in user", function() {
             request(sails.express.server)
                 .get('/board')
                 .expect(302)
-                .expect('Location', '/login', done);
+                .expect('Location', '/login')
+                .end(function(error, result) {
+                    should.not.exist(error);
+                    should.exist(result);
+
+                    done();
+                });
         });
     });
 
@@ -30,7 +37,12 @@ describe("not logged in user", function() {
             request(sails.express.server)
                 .get('/foobar')
                 .expect(404)
-                .expect('Location', '/foobar', done);
+                .end(function(error, result) {
+                    should.not.exist(error);
+                    should.exist(result);
+
+                    done();
+                });
         });
     });
 });

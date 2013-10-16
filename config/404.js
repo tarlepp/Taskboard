@@ -6,25 +6,34 @@
  * For more information on 404/notfound handling in Sails/Express, check out:
  * http://expressjs.com/faq.html#404-handling
  */
-module.exports[404] = function pageNotFound(req, res, express404Handler) {
-
-    var statusCode = 404;
-    var result = {
-        status: statusCode
-    };
-
-    // If the user-agent wants a JSON response, send json
-    if (req.wantsJSON) {
-        return res.json(result, result.statusCode);
+module.exports[404] = function pageNotFound(req, res, defaultNotFoundBehavior) {
+    // If the user-agent wants a JSON response,
+    // the views hook is disabled,
+    // or the 404 view doesn't exist,
+    // send JSON
+    if (req.wantsJSON || !sails.config.hooks.views || !res.view || !sails.hooks.views.middleware[404]) {
+        return res.json({
+            status: 404
+        }, 404);
     }
 
-    // Otherwise, serve the `views/404.*` page
-    var view = '404';
+    res.status(404);
 
-    res.render(view, result, function (err) {
-        if (err) {
-            return express404Handler();
+    var view = "404";
+    var fs = require("fs");
+    var packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
+    var data = {
+        status: 404,
+        packageJson: packageJson
+    };
+
+    // Otherwise, serve the `views/404.*` page
+    res.render(view, data, function(error) {
+        // 404 page render failed, weird...
+        if (error) {
+            return defaultNotFoundBehavior();
         }
-        res.render(view);
+
+        res.render(view, data);
     });
 };
