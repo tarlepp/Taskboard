@@ -593,6 +593,11 @@ function ViewModel() {
 
                         if (typeof task != 'undefined') {
                             self.tasks.replace(task, new Task(data));
+
+                            //noinspection JSDuplicatedDeclaration
+                            var story = _.find(self.stories(), function(story) { return story.id() === data.storyId; });
+
+                            self.stories.replace(story, _.clone(story));
                         }
                         break;
                     case 'user':
@@ -635,6 +640,8 @@ function ViewModel() {
 
                         if (typeof story !== 'undefined') {
                             self.tasks.push(new Task(data));
+
+                            self.stories.replace(story, _.clone(story));
                         }
                         break;
                     case 'user':
@@ -678,6 +685,11 @@ function ViewModel() {
 
                         if (typeof task !== 'undefined') {
                             self.tasks.remove(task);
+
+                            //noinspection JSDuplicatedDeclaration
+                            var story = _.find(self.stories(), function(story) { return story.id() === task.storyId(); });
+
+                            self.stories.replace(story, _.clone(story));
                         }
                         break;
                     default:
