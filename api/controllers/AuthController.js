@@ -24,6 +24,10 @@ module.exports = {
         var fs = require('fs');
         var packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
+        if (error) {
+            res.status(401);
+        }
+
         res.view({
             layout: "layout_login",
             error: error,
@@ -52,6 +56,7 @@ module.exports = {
     authenticate: function(req, res) {
         passport.authenticate('local', function(err, user, info) {
             if ((err) || (!user)) {
+
                 res.redirect("/login?error=true");
                 return;
             }
