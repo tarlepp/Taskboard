@@ -240,7 +240,7 @@
         <ul id="navigation-static" class="nav navbar-nav pull-right">
 
             <li class="dropdown" style="display: none;"
-                data-bind="visible: $root.role() === -3"
+                data-bind="visible: <% if (user.admin) { %>1<% } else { %>0<% } %>"
             >
                 <a href="javascript: void(0);" class="dropdown-toggle"
                     data-toggle="dropdown"
