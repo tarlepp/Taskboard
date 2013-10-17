@@ -361,6 +361,11 @@ function ViewModel() {
     self.taskDraggableStartCallback = function(event, ui) {
         self.moveInProcess(true);
 
+        // This is to prevent canceled draggable
+        setTimeout(function() {
+            self.moveInProcess(false);
+        }, 5000);
+
         jQuery('.qtip.qtip-bootstrap').qtip('hide');
     };
 
