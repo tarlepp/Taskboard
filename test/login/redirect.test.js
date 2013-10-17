@@ -1,20 +1,24 @@
 var request = require("supertest");
 var should = require('chai').should();
-var sails = require("sails");
+var sailsHelper = require("./../helpers/sailsHelper");
 
 describe("not logged in user", function() {
-    this.timeout(10000);
-
-    global.sails = sails;
+    var sails;
 
     before(function(done) {
-        sails.lift(function () {
-            setTimeout(done, 2000);
+        sailsHelper.build(function(error, _sails) {
+            if (error || !_sails) {
+                return done(error || 'Sails could not be instantiated.');
+            }
+
+            sails = _sails;
+
+            return done();
         });
     });
 
-    after(function (done) {
-        sails.lower(done);
+    after(function(done) {
+        sailsHelper.teardown(sails, done);
     });
 
     describe("accessing to '/board/'", function() {
