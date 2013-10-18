@@ -193,6 +193,46 @@ exports.getStories = function(where, callback) {
 };
 
 /**
+ * Service to fetch task data from database.
+ *
+ * @param   {{}}        where       Used query conditions
+ * @param   {Function}  callback    Callback function to call after query
+ */
+exports.getTasks = function(where, callback) {
+    Task
+        .find()
+        .where(where)
+        .sort("title ASC")
+        .done(function(error, tasks) {
+            if (error) {
+                callback(error, null);
+            } else {
+                callback(null, tasks);
+            }
+        });
+};
+
+/**
+ * Service to fetch phase data from database.
+ *
+ * @param   {{}}        where       Used query conditions
+ * @param   {Function}  callback    Callback function to call after query
+ */
+exports.getPhases = function(where, callback) {
+    Phase
+        .find()
+        .where(where)
+        .sort("title ASC")
+        .done(function(error, phases) {
+            if (error) {
+                callback(error, null);
+            } else {
+                callback(null, phases);
+            }
+        });
+};
+
+/**
  * Service to fetch user data from database.
  *
  * @param   {{}}        where       Used query conditions
@@ -208,6 +248,26 @@ exports.getUsers = function(where, callback) {
                 callback(error, null);
             } else {
                 callback(null, users);
+            }
+        });
+};
+
+/**
+ * Service to fetch type data from database.
+ *
+ * @param   {{}}        where       Used query conditions
+ * @param   {Function}  callback    Callback function to call after query
+ */
+exports.getTypes = function(where, callback) {
+    Type
+        .find()
+        .where(where)
+        .sort("order ASC")
+        .done(function(error, types) {
+            if (error) {
+                callback(error, null);
+            } else {
+                callback(null, types);
             }
         });
 };
