@@ -5,6 +5,7 @@
  * @description ::  Contains logic for handling requests.
  */
 var jQuery = require("jquery");
+var async = require("async");
 
 module.exports = {
     /**
@@ -330,6 +331,84 @@ module.exports = {
                             res.send(data);
                         }
                 });
+        }
+    },
+
+    /**
+     * Story tasks
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    tasks: function(req, res) {
+        if (!req.isAjax) {
+            res.send('Only AJAX request allowed', 403);
+        }
+
+        var storyId = parseInt(req.param('id'), 10);
+
+        async.parallel(
+            {
+                // Fetch user role in this story
+                role: function(callback) {
+                    AuthService.hasStoryAccess(req.user, storyId, callback, true);
+                },
+
+                // Fetch story data
+                story: function(callback) {
+                    DataService.getStory(storyId, callback);
+                },
+
+                // Fetch task data for story
+                tasks: function(callback) {
+                    DataService.getTasks({storyid: storyId}, callback);
+                },
+
+                // Fetch user data
+                users: function(callback) {
+                    DataService.getUsers({}, callback);
+                },
+
+                // Fetch types
+                types: function(callback) {
+                    DataService.getTypes({}, callback);
+                }
+            },
+
+            /**
+             * Callback function which is been called after all parallel jobs are processed.
+             *
+             * @param   {Error|String}  error
+             * @param   {{}}            data
+             */
+            function(error, data) {
+                if (error) {
+                    res.send(error, error.status ? error.status : 500);
+                } else {
+                    DataService.getPhases({projectId: data.story.projectId}, function(error, phases) {
+                        if (error) {
+                            res.send(error, error.status ? error.status : 500);
+                        } else {
+                            data.phases = phases;
+
+                            makeView(data);
+                        }
+                    });
+                }
+            }
+        );
+
+        function makeView(data) {
+            data.layout = "layout_ajax";
+
+            // Add relation data to each tasks
+            _.each(data.tasks, function(task) {
+                task.type = _.find(data.types, function(type) { return type.id === task.typeId; });
+                task.user = _.find(data.users, function(user) { return user.id === task.userId; });
+                task.phase = _.find(data.phases, function(phase) { return phase.id === task.phaseId; });
+            });
+
+            res.view(data);
         }
     }
 };
