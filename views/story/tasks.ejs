@@ -1,0 +1,75 @@
+
+
+<h4>Story tasks</h4>
+
+<table id="storyTasks" class="table table-striped table-hover table-condensed">
+    <thead>
+        <tr>
+            <th>
+                <a href="javascript: void(0);" class="btn btn-default btn-icon tooltipTitle <% if (role === 0) { %>disabled<% } %>" title="Add new task"
+                   data-qtip-options='{ "position": {"my": "center right", "at": "center left"} }'
+                   data-add-new-task="true"
+                   data-story-id="<%= story.id %>"
+                >
+                    <i class="icon icon-plus"></i>
+                </a>
+            </th>
+            <th class="col-md-6">Task</th>
+            <th class="col-md-3">Owner</th>
+            <th class="col-md-1 text-center">Type</th>
+            <th class="col-md-2 text-right">Duration</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% _.each(tasks, function(task) { %>
+        <tr>
+            <td>
+                <a class="actionMenu-toggle btn btn-icon btn-default" href="javascript: void(0);" data-popover="true">
+                    <i class="icon icon-chevron-down"></i>
+                </a>
+                <div class="hidden">
+                    <div class="actionMenu">
+                        <ul class="actionMenu-actions">
+                            <li>
+                                <a href="javascript: void(0);"
+                                    data-task-id="<%= task.id %>"
+                                    data-story-id="<%= story.id %>"
+                                    data-action="taskEdit"
+                                >
+                                    <i class="icon icon-wrench"></i> Edit task
+                                </a>
+                            </li>
+                            <% if (role !== 0) { %>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="javascript: void(0);" class="text-danger"
+                                    data-task-id="<%= task.id %>"
+                                    data-story-id="<%= story.id %>"
+                                    data-action="taskDelete"
+                                >
+                                    <i class="icon icon-remove"></i> Delete task
+                                </a>
+                            </li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+            </td>
+            <td><%= task.title %></td>
+            <td>
+                <% if (task.user) { %>
+                    <%= task.user.fullName() %>
+                <% } else { %>
+                    <em>nobody</em>
+                <% } %>
+            </td>
+            <td class="text-center <%= task.type.classText %>">
+                <%= task.type.title %>
+            </td>
+            <td class="text-right">
+                <small><em>not yet...</em></small>
+            </td>
+        </tr>
+    <% }); %>
+    </tbody>
+</table>

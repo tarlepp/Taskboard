@@ -79,13 +79,13 @@ jQuery(document).ready(function() {
      * Task edit event, this opens a modal bootbox dialog with task edit form on it.
      *
      * @param   {jQuery.Event}          event       Event object
-     * @prop    {sails.knockout.task}   task        Task object
+     * @prop    {Number}                taskId      Task id
      * @param   {sails.helper.trigger}  [trigger]   Trigger to process after actions
      */
-    body.on("taskEdit", function(event, task, trigger) {
+    body.on("taskEdit", function(event, taskId, trigger) {
         trigger = trigger || false;
 
-        jQuery.get("/Task/edit", {id: task.id()})
+        jQuery.get("/Task/edit", {id: taskId})
         .done(function(content) {
             var title = "Edit task";
             var buttons = [
@@ -99,7 +99,7 @@ jQuery(document).ready(function() {
                         // Validate current form items and try to update task data
                         if (validateForm(formItems, modal)) {
                             // Update task data
-                            socket.put("/Task/"  + task.id(), formItems, function(/** sails.json.task */task) {
+                            socket.put("/Task/"  + taskId, formItems, function(/** sails.json.task */task) {
                                 if (handleSocketError(task)) {
                                     makeMessage("Task updated successfully.");
 
@@ -117,34 +117,8 @@ jQuery(document).ready(function() {
                     label: "Delete",
                     className: "btn-danger pull-right",
                     callback: function() {
-                        bootbox.confirm({
-                            title: "danger - danger - danger",
-                            message: "Are you sure of task delete?",
-                            buttons: {
-                                cancel: {
-                                    label: "Cancel",
-                                    className: "btn-default pull-left"
-                                },
-                                confirm: {
-                                    label: "Delete",
-                                    className: "btn-danger pull-right"
-                                }
-                            },
-                            callback: function(result) {
-                                if (result) {
-                                    // Delete task
-                                    socket.delete("/Task/" + task.id(), function(task) {
-                                        if (handleSocketError(task)) {
-                                            makeMessage("Task deleted successfully.");
-
-                                            handleEventTrigger(trigger);
-                                        }
-                                    });
-                                } else {
-                                    body.trigger('taskEdit', [task, trigger]);
-                                }
-                            }
-                        });
+                        // Trigger story delete event
+                        body.trigger("taskDelete", [taskId, {trigger: "taskEdit", parameters: [taskId, trigger]}]);
                     }
                 }
             ];
@@ -162,6 +136,47 @@ jQuery(document).ready(function() {
         })
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
+        });
+    });
+
+    /**
+     * Task delete event, this opens a modal bootbox confirm about task delete.
+     *
+     * @param   {jQuery.Event}          event       Event object
+     * @param   {Number}                taskId      Task id
+     * @param   {sails.helper.trigger}  [trigger]   Trigger to process after actions
+     */
+    body.on("taskDelete", function(event, taskId, trigger) {
+        trigger = trigger || false;
+
+        // Make confirm box
+        bootbox.confirm({
+            title: "danger - danger - danger",
+            message: "Are you sure of task delete?",
+            buttons: {
+                cancel: {
+                    label: "Cancel",
+                    className: "btn-default pull-left"
+                },
+                confirm: {
+                    label: "Delete",
+                    className: "btn-danger pull-right"
+                }
+            },
+            callback: function(result) {
+                if (result) {
+                    // Delete task
+                    socket.delete("/Task/" + taskId, function(task) {
+                        if (handleSocketError(task)) {
+                            makeMessage("Task deleted successfully.");
+
+                            handleEventTrigger(trigger);
+                        }
+                    });
+                } else {
+                    handleEventTrigger(trigger);
+                }
+            }
         });
     });
 });

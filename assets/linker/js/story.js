@@ -89,12 +89,14 @@ jQuery(document).ready(function() {
     /**
      * User story edit event, this opens a modal bootbox dialog with user story edit form on it.
      *
-     * @param   {jQuery.Event}          event       Event object
-     * @param   {Number}                storyId     Story id
-     * @param   {sails.helper.trigger}  [trigger]   Trigger to process after actions
+     * @param   {jQuery.Event}          event           Event object
+     * @param   {Number}                storyId         Story id
+     * @param   {sails.helper.trigger}  [trigger]       Trigger to process after actions
+     * @param   {{}}                    [parameters]    Init parameters, this is passed to form init function
      */
-    body.on("storyEdit", function(event, storyId, trigger) {
+    body.on("storyEdit", function(event, storyId, trigger, parameters) {
         trigger = trigger || false;
+        parameters = parameters || {};
 
         jQuery.get("/Story/edit", {id: storyId})
         .done(function(content) {
@@ -148,7 +150,7 @@ jQuery(document).ready(function() {
 
             // Make form init when dialog is opened.
             modal.on("shown.bs.modal", function() {
-                initStoryForm(modal);
+                initStoryForm(modal, parameters);
             });
 
             // Open bootbox modal
@@ -293,14 +295,38 @@ jQuery(document).ready(function() {
             }
         });
     });
+
+    /**
+     * Story tasks event. This will open story edit modal dialog and activates tasks tab to
+     * be opened. Note that this just fires storyEdit event with specified parameters.
+     *
+     * @param   {jQuery.Event}          event       Event object
+     * @param   {Number}                storyId     Story id
+     * @param   {sails.helper.trigger}  trigger     Trigger to process after actions
+     */
+    body.on("storyTasks", function(event, storyId, trigger) {
+        // Used parameters for form init
+        var parameters = {
+            activeTab: "tasks"
+        };
+
+        body.trigger("storyEdit", [storyId, trigger, parameters]);
+    });
 });
 
 /**
  * Function to initialize story form.
  *
- * @param   {jQuery|$}  modal   Current modal content
+ * @param   {jQuery|$}  modal       Current modal content
+ * @param   {{}}        parameters  Parameters
  */
-function initStoryForm(modal) {
+function initStoryForm(modal, parameters) {
+    parameters = parameters || {};
+
+    if (parameters.activeTab) {
+        jQuery("#" + parameters.activeTab + "Tab", modal).click();
+    }
+
     var inputTitle = jQuery("input[name='title']", modal);
 
     inputTitle.focus().val(inputTitle.val());
@@ -336,5 +362,71 @@ function initStoryForm(modal) {
                 show.val(values[ui.value]);
             }
         }
+    });
+}
+
+/**
+ * Function initializes story tasks tab to use in task edit modal. Note that
+ * this init can be called multiple times.
+ *
+ * Also note that this init is called dynamic from initTabs() function.
+ *
+ * @param   {jQuery|$}  modal       Current modal content
+ * @param   {String}    contentId   Tab content div id
+ */
+function initStoryTabTasks(modal, contentId) {
+    var body = jQuery("body");
+    var container = modal.find(contentId);
+
+    // Initialize action menu for stories
+    initActionMenu(container, {});
+
+    // Remove 'add new' click listeners, this prevents firing this event multiple times
+    body.off("click", "[data-add-new-task='true']");
+
+    // User wants to add new user to project
+    body.on("click", "[data-add-new-task='true']", function() {
+        var element = jQuery(this);
+        var storyId = element.data("storyId");
+
+        // Hide current modal
+        modal.modal("hide");
+
+        // Specify used trigger to come back to this view
+        var trigger = {
+            trigger: "storyEdit",
+            parameters: [storyId, null, {activeTab: "tasks"}]
+        };
+
+        // Find specified story object
+        var story = _.find(myViewModel.stories(), function(story) { return story.id() === storyId; });
+
+        body.trigger("taskAdd", [story, trigger]);
+    });
+
+    // User clicks action menu link
+    body.on("click", "ul.actionMenu-actions a", function() {
+        var element = jQuery(this);
+        var storyId = element.data("storyId");
+        var taskId = element.data("taskId");
+        var action = element.data("action");
+        var selector = element.data("selector");
+
+        // We have popover selector, so hide it
+        if (selector) {
+            jQuery(selector).popover("hide");
+        }
+
+        // Hide current modal
+        modal.modal("hide");
+
+        // Specify used trigger to come back to this view
+        var trigger = {
+            trigger: "storyEdit",
+            parameters: [storyId, null, {activeTab: "tasks"}]
+        };
+
+        // Trigger milestone action event
+        body.trigger(action, [taskId, trigger]);
     });
 }
