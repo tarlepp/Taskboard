@@ -283,7 +283,7 @@ jQuery(document).ready(function() {
                         if (handleSocketError(story)) {
                             makeMessage("User story deleted successfully.");
 
-                            handleEventTrigger(trigger);
+                            handleEventTrigger(trigger, "storyEdit");
                         }
                     });
                 } else {

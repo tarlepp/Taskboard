@@ -109,15 +109,32 @@ jQuery(document).ready(function() {
  *          String|
  *          Boolean|
  *          sails.helper.trigger
- *          }                       trigger
+ *          }                       trigger         Event to trigger
+ * @param   {String}                [ignoreTrigger] Trigger to ignore
  */
-function handleEventTrigger(trigger) {
+function handleEventTrigger(trigger, ignoreTrigger) {
+    ignoreTrigger = ignoreTrigger || "";
+
     if (trigger) {
         if (_.isObject(trigger) && typeof trigger.trigger !== "undefined") {
-            var parameters = trigger.parameters || [];
+            if (trigger.trigger == ignoreTrigger) {
+                // Current trigger has parameters, so we may have chained events
+                if (trigger.parameters) {
+                    _.each(trigger.parameters, function(param) {
+                        // Yeah, we found trigger in the parameters, so fire that event
+                        if (_.isObject(param) && typeof param.trigger !== "undefined") {
+                            var parameters = param.parameters || [];
 
-            jQuery("body").trigger(trigger.trigger, parameters);
-        } else {
+                            jQuery("body").trigger(param.trigger, parameters);
+                        }
+                    });
+                }
+            } else {
+                var parameters = trigger.parameters || [];
+
+                jQuery("body").trigger(trigger.trigger, parameters);
+            }
+        } else if (trigger != ignoreTrigger) {
             jQuery("body").trigger(trigger);
         }
     }

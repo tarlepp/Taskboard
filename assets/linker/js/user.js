@@ -218,7 +218,7 @@ jQuery(document).ready(function() {
                         if (handleSocketError(user)) {
                             makeMessage("User deleted successfully.");
 
-                            handleEventTrigger(trigger);
+                            handleEventTrigger(trigger, "userEdit");
                         }
                     });
                 } else {

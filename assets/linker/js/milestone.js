@@ -171,7 +171,7 @@ jQuery(document).ready(function() {
                         if (handleSocketError(milestone)) {
                             makeMessage("Milestone deleted successfully.");
 
-                            handleEventTrigger(trigger);
+                            handleEventTrigger(trigger, "milestoneEdit");
                         }
                     });
                 } else {

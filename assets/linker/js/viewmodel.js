@@ -673,6 +673,10 @@ function ViewModel() {
                         var sprint = _.find(self.sprints(), function(sprint) { return sprint.id() === id; });
 
                         if (typeof sprint !== 'undefined') {
+                            if (myViewModel.sprint().id() === sprint.id) {
+                                myViewModel.resetSprint();
+                            }
+
                             self.sprints.remove(sprint);
                         }
                         break;

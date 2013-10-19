@@ -183,15 +183,7 @@ jQuery(document).ready(function() {
                         if (handleSocketError(sprint)) {
                             makeMessage("Sprint deleted successfully.", "success", {});
 
-                            handleEventTrigger(trigger);
-
-                            // Update client bindings
-                            myViewModel.processSocketMessage("sprint", "destroy", sprint.id, sprint);
-
-                            // If sprint is currently selected => reset sprint data
-                            if (myViewModel.sprint().id() === sprint.id) {
-                                myViewModel.resetSprint();
-                            }
+                            handleEventTrigger(trigger, "sprintEdit");
                         }
                     });
                 } else {
