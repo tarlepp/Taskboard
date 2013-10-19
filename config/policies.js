@@ -103,8 +103,9 @@ module.exports.policies = {
 
         // Custom actions
         add:        ["authenticated", "hasStoryAdmin"],
+        split:      ["authenticated", "hasStoryAdmin"],
         edit:       ["authenticated", "hasStoryAccess"],
-        split:      ["authenticated", "hasStoryAdmin"]
+        tasks:      ["authenticated", "hasStoryAccess"]
     },
 
     // Task controller policies

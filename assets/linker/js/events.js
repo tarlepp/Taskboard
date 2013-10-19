@@ -74,7 +74,7 @@ jQuery(document).ready(function() {
     body.on("dblclick", ".task", function() {
         var data = ko.dataFor(this);
 
-        body.trigger('taskEdit', [data]);
+        body.trigger('taskEdit', [data.id()]);
     });
 
     // Story open event
