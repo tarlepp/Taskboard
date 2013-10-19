@@ -56,8 +56,8 @@ module.exports = {
     authenticate: function(req, res) {
         passport.authenticate('local', function(error, user, info) {
             if ((error) || (!user)) {
-
                 res.redirect("/login?error=true");
+
                 return;
             }
 
@@ -67,7 +67,8 @@ module.exports = {
                         layout: "layout_login"
                     });
                 } else {
-                    LoggerService.userSignIn(user);
+                    // Write user sign in log
+                    LoggerService.userSignIn(user, req);
 
                     res.redirect("/");
                 }
