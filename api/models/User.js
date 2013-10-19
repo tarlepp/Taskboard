@@ -127,7 +127,7 @@ module.exports = {
     beforeUpdate: function(values, next) {
         if (values.password) {
             hashPassword(values, next);
-        } else {
+        } else if (values.id) {
             User
                 .findOne(values.id)
                 .done(function(err, user) {
@@ -138,6 +138,8 @@ module.exports = {
                         next();
                     }
                 });
+        } else {
+            next();
         }
     },
 
