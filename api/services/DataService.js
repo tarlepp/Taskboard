@@ -131,6 +131,31 @@ exports.getTask = function(taskId, callback) {
 };
 
 /**
+ * Service to fetch single user data from database.
+ *
+ * @param   {Number}    userId      User id
+ * @param   {Function}  callback    Callback function to call after query
+ */
+exports.getUser = function(userId, callback) {
+    User
+        .findOne(userId)
+        .done(function(error, /** sails.model.user */ user) {
+            if (error) {
+                callback(error, null);
+            } else if (!user) {
+                var err = new Error();
+
+                err.message = "User not found.";
+                err.status = 404;
+
+                callback(err, null);
+            } else {
+                callback(null, user);
+            }
+        });
+};
+
+/**
  * Service to fetch milestone data from database.
  *
  * @param   {{}}        where       Used query conditions
@@ -268,6 +293,26 @@ exports.getTypes = function(where, callback) {
                 callback(error, null);
             } else {
                 callback(null, types);
+            }
+        });
+};
+
+/**
+ * Service to fetch specified user sign in data from database.
+ *
+ * @param   {Number}    userId      User id
+ * @param   {Function}  callback    Callback function to call after query
+ */
+exports.getUserSignInData = function(userId, callback) {
+    UserLogin
+        .find()
+        .where({userId: userId})
+        .sort("stamp DESC")
+        .done(function(error, data) {
+            if (error) {
+                callback(error, null);
+            } else {
+                callback(null, data);
             }
         });
 };
