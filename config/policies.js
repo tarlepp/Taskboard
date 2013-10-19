@@ -138,7 +138,8 @@ module.exports.policies = {
         // Custom actions
         list:       ["authenticated", "hasUserAdmin"],
         add:        ["authenticated", "hasUserAdmin"],
-        edit:       ["authenticated", "hasUserAdminOrItself"]
+        edit:       ["authenticated", "hasUserAdminOrItself"],
+        history:    ["authenticated", "hasUserAdminOrItself"]
     },
 
     // ProjectUser controller policies

@@ -4,6 +4,9 @@
  * @module      ::  Controller
  * @description ::  Contains logic for handling requests.
  */
+var async = require("async");
+var moment = require("moment-timezone");
+
 module.exports = {
     /**
      * User list action.
@@ -78,5 +81,51 @@ module.exports = {
                     });
                 }
             });
+    },
+
+    /**
+     * User sign in history action.
+     *
+     * @todo    refactor timestamp to be current user timezone, this needs some thinking...
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    history: function(req, res) {
+        if (!req.isAjax) {
+            res.send("Only AJAX request allowed", 403);
+        }
+
+        var userId = req.param("id");
+
+        async.parallel(
+            {
+                // Fetch single user data
+                user: function(callback) {
+                    DataService.getUser(userId, callback);
+                },
+
+                // Fetch user sign in data
+                history: function(callback) {
+                    DataService.getUserSignInData(userId, callback);
+                }
+            },
+            function (error, data) {
+                if (error) {
+                    res.send(error, error.status ? error.status : 500);
+                } else {
+                    data.layout = "layout_ajax";
+
+                    // Iterate sign in rows and make formatted stamp
+                    _.each(data.history, function(row) {
+                        var stamp = moment(row.stamp);
+
+                        row.stampFormatted = stamp.format('YYYY-MM-DD HH:mm:ss');
+                    });
+
+                    res.view(data);
+                }
+            }
+        );
     }
 };
