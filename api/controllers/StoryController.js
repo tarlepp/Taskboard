@@ -408,6 +408,17 @@ module.exports = {
                 task.phase = _.find(data.phases, function(phase) { return phase.id === task.phaseId; });
             });
 
+            data.cntTaskTotal = data.tasks.length;
+            data.cntTaskDone = _.reduce(data.tasks, function (memo, task) {
+                return (task.isDone) ? memo + 1 : memo;
+            }, 0);
+
+            if (data.cntTaskDone> 0) {
+                data.progressTask = Math.round(data.cntTaskDone  / data.cntTaskTotal * 100);
+            } else {
+                data.progressTask = 0;
+            }
+
             res.view(data);
         }
     }
