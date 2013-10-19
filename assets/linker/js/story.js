@@ -58,9 +58,6 @@ jQuery(document).ready(function() {
                                     modal.modal("hide");
 
                                     handleEventTrigger(trigger);
-
-                                    // Update client bindings
-                                    myViewModel.processSocketMessage("story", "create", story.id, story);
                                 }
                             });
                         }
