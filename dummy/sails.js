@@ -278,6 +278,18 @@ var sails = {
             id: "",
             createdAt: "",
             updatedAt: ""
+        },
+        user: {
+            username: "",
+            firstName: "",
+            lastName: "",
+            email: "",
+            admin: "",
+            password: "",
+            lastLogin: "",
+            id: "",
+            createdAt: "",
+            updatedAt: ""
         }
     }
 };

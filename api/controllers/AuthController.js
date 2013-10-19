@@ -54,19 +54,21 @@ module.exports = {
      * @param res
      */
     authenticate: function(req, res) {
-        passport.authenticate('local', function(err, user, info) {
-            if ((err) || (!user)) {
+        passport.authenticate('local', function(error, user, info) {
+            if ((error) || (!user)) {
 
                 res.redirect("/login?error=true");
                 return;
             }
 
-            req.logIn(user, function(err) {
-                if (err) {
+            req.logIn(user, function(error) {
+                if (error) {
                     res.view({
                         layout: "layout_login"
                     });
                 } else {
+                    LoggerService.userSignIn(user);
+
                     res.redirect("/");
                 }
             });
