@@ -15,7 +15,9 @@
     "passport": "~0.1.17",
     "passport-local": "~0.1.6",
     "gravatar": "~1.0.6",
-    "async": "~0.2.9"
+    "async": "~0.2.9",
+    "moment": "~2.3.1",
+    "moment-timezone": "~0.0.3"
   },
   "devDependencies": {
     "supertest": "~0.8.0",
