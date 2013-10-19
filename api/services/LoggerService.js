@@ -10,8 +10,9 @@
  * sign in action.
  *
  * @param   {sails.model.user}  user    User data
+ * @param   {Request}           request Current request
  */
-exports.userSignIn = function(user) {
+exports.userSignIn = function(user, request) {
     var currentTime = new Date();
 
     // Update user row
@@ -24,4 +25,15 @@ exports.userSignIn = function(user) {
             },
             function(error, user) {}
     );
+
+    // Create new login row
+    UserLogin
+        .create({
+            userId: user.id,
+            ip: request.connection.remoteAddress,
+            agent: request.headers["user-agent"],
+            stamp: currentTime
+        })
+        .done(function(error, userLogin) {
+        });
 };
