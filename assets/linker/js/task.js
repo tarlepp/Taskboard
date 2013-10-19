@@ -164,13 +164,14 @@ jQuery(document).ready(function() {
                 }
             },
             callback: function(result) {
+                console.log(trigger);
                 if (result) {
                     // Delete task
                     socket.delete("/Task/" + taskId, function(task) {
                         if (handleSocketError(task)) {
                             makeMessage("Task deleted successfully.");
 
-                            handleEventTrigger(trigger);
+                            handleEventTrigger(trigger, "taskEdit");
                         }
                     });
                 } else {
