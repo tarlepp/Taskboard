@@ -1,15 +1,33 @@
 <ul class="nav nav-tabs">
     <li class="active">
-        <a id="basicTab" href="#basic" data-toggle="tab">Basic</a>
+        <a id="basicTab" href="#basic"
+            data-toggle="tab"
+        >Basic</a>
     </li>
     <li>
-        <a id="passwordChangeTab" href="#passwordChange" data-toggle="tab">Change password</a>
+        <a id="passwordChangeTab" href="#passwordChange"
+            data-toggle="tab"
+        >Change password</a>
     </li>
     <li>
-        <a id="signInHistoryTab" href="#signInHistory" data-toggle="tab" data-href="/User/history?id=<%= user.id %>">Sign in history</a>
+        <a id="projectsTab" href="#projects"
+            data-toggle="tab"
+            data-href="/User/projects?id=<%= user.id %>"
+            data-callback="initUserTabProjects"
+        >Projects</a>
     </li>
     <li>
-        <a id="historyTab" href="#history" data-toggle="tab" data-href="/History?objectName=User&objectId=<%= user.id %>">History</a>
+        <a id="signInHistoryTab" href="#signInHistory"
+            data-toggle="tab"
+            data-href="/User/history?id=<%= user.id %>"
+            data-callback="initUserTabSignInHistory"
+        >Sign in history</a>
+    </li>
+    <li>
+        <a id="historyTab" href="#history"
+            data-toggle="tab"
+            data-href="/History?objectName=User&objectId=<%= user.id %>"
+        >History</a>
     </li>
 </ul>
 
@@ -93,6 +111,8 @@
             </div>
         </form>
     </div>
+
+    <div class="tab-pane" id="projects"></div>
 
     <div class="tab-pane" id="signInHistory"></div>
 
