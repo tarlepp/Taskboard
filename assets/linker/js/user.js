@@ -305,3 +305,37 @@ function initUserForm(context, parameters) {
         jQuery("#" + parameters.activeTab + "Tab").click();
     }
 }
+
+/**
+ * Function initializes sign in history tab to use in user edit modal. Note that
+ * this init can be called multiple times.
+ *
+ * Also note that this init is called dynamic from initTabs() function.
+ *
+ * @param   {jQuery|$}  modal       Current modal content
+ * @param   {String}    contentId   Tab content div id
+ */
+function initUserTabSignInHistory(modal, contentId) {
+    var body = jQuery("body");
+    var container = modal.find(contentId);
+
+    // Initialize action menu for stories
+    initActionMenu(container, {});
+}
+
+/**
+ * Function initializes projects tab to use in user edit modal. Note that
+ * this init can be called multiple times.
+ *
+ * Also note that this init is called dynamic from initTabs() function.
+ *
+ * @param   {jQuery|$}  modal       Current modal content
+ * @param   {String}    contentId   Tab content div id
+ */
+function initUserTabProjects(modal, contentId) {
+    var body = jQuery("body");
+    var container = modal.find(contentId);
+
+    // Initialize action menu for stories
+    initActionMenu(container, {});
+}

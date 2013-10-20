@@ -156,6 +156,26 @@ exports.getUser = function(userId, callback) {
 };
 
 /**
+ * Service to fetch project data from database.
+ *
+ * @param   {{}}        where       Used query conditions
+ * @param   {Function}  callback    Callback function to call after query
+ */
+exports.getProjects = function(where, callback) {
+    Project
+        .find()
+        .where(where)
+        .sort("title ASC")
+        .done(function(error, /** sails.model.project[] */ projects) {
+            if (error) {
+                callback(error, null);
+            } else {
+                callback(null, projects);
+            }
+        });
+};
+
+/**
  * Service to fetch milestone data from database.
  *
  * @param   {{}}        where       Used query conditions

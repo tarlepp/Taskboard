@@ -127,5 +127,81 @@ module.exports = {
                 }
             }
         );
+    },
+
+    /**
+     * User projects action. Basically this action will show all projects that current user
+     * is affected to in some role.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    projects: function(req, res) {
+        if (!req.isAjax) {
+            res.send("Only AJAX request allowed", 403);
+        }
+
+        var userId = req.param("id");
+
+        async.parallel(
+            {
+                // Fetch single user data
+                user: function(callback) {
+                    DataService.getUser(userId, callback);
+                },
+
+                // Fetch user sign in data
+                projects: function(callback) {
+                    DataService.getProjects({}, callback);
+                }
+            },
+            function (error, data) {
+                if (error) {
+                    res.send(error, error.status ? error.status : 500);
+                } else {
+                    async.filter(
+                        data.projects,
+                        function(project, callback) {
+                            AuthService.hasProjectAccess(data.user, project.id, function(error, role) {
+                                if (role !== false) {
+                                    project.role = role;
+                                    project.roleText = "Unknown";
+
+                                    switch (project.role) {
+                                        case -3:
+                                            project.roleText = "Administrator";
+                                            break;
+                                        case -2:
+                                            project.roleText = "Manager (Primary)";
+                                            break;
+                                        case -1:
+                                            project.roleText = "Manager";
+                                            break;
+                                        case 0:
+                                            project.roleText = "Viewer";
+                                            break;
+                                        case 1:
+                                            project.roleText = "User";
+                                            break;
+                                    }
+
+                                    callback(true);
+                                } else {
+                                    callback(false);
+                                }
+                            }, true);
+                        },
+                        function(projects) {
+                            data.projects = projects;
+                            data.moment = moment;
+                            data.currentUser = req.user;
+                            data.layout = "layout_ajax";
+
+                            res.view(data);
+                        }
+                    );
+                }
+            }
+        );
     }
 };

@@ -139,7 +139,8 @@ module.exports.policies = {
         list:       ["authenticated", "hasUserAdmin"],
         add:        ["authenticated", "hasUserAdmin"],
         edit:       ["authenticated", "hasUserAdminOrItself"],
-        history:    ["authenticated", "hasUserAdminOrItself"]
+        history:    ["authenticated", "hasUserAdminOrItself"],
+        projects:   ["authenticated", "hasUserAdminOrItself"]
     },
 
     // ProjectUser controller policies
