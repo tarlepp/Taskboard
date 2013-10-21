@@ -47,7 +47,6 @@ var sails = {
             email: "",
             admin: "",
             password: "",
-            lastLogin: "",
             id: "",
             createdAt: "",
             updatedAt: ""
@@ -286,7 +285,6 @@ var sails = {
             email: "",
             admin: "",
             password: "",
-            lastLogin: "",
             id: "",
             createdAt: "",
             updatedAt: ""

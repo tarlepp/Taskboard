@@ -55,10 +55,6 @@ module.exports = {
             type:       'string',
             required:   false
         },
-        lastLogin: {
-            type:       'datetime',
-            required:   false
-        },
 
         // Computed user fullName string
         fullName: function() {
@@ -67,14 +63,6 @@ module.exports = {
 
         lastLoginObject: function() {
             return new Date(this.lastLogin);
-        },
-
-        lastLoginFormatted: function() {
-            if (this.lastLogin === null) {
-                return "unknown";
-            }
-
-            return this.lastLoginObject().format('isoDate') + " " + this.lastLoginObject().format('isoTime');
         },
 
         gravatarImage: function() {
