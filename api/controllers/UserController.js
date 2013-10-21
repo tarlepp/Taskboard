@@ -5,7 +5,7 @@
  * @description ::  Contains logic for handling requests.
  */
 var async = require("async");
-var moment = require("moment-timezone");
+var moment = require("moment");
 
 module.exports = {
     /**
@@ -29,10 +29,40 @@ module.exports = {
                 if (error) {
                     res.send(error, 500);
                 } else {
-                    res.view({
-                        layout: "layout_ajax",
-                        users: users
-                    });
+                    // Map user
+                    async.map(
+                        users,
+                        function(user, callback) {
+                            // Fetch user last sign in record
+                            UserLogin
+                                .findOne({
+                                    userId: user.id
+                                })
+                                .sort("stamp DESC")
+                                .limit(1)
+                                .done(function(error, loginData) {
+                                    if (error) {
+                                        callback(error, null);
+                                    } else {
+                                        // Add last login to user data
+                                        user.lastLogin = (!loginData) ? null : loginData.stamp;
+
+                                        callback(null, user);
+                                    }
+                                });
+                        },
+                        function(error, users) {
+                            if (error) {
+                                res.send(error, error.status ? error.status : 500);
+                            } else {
+                                res.view({
+                                    layout: "layout_ajax",
+                                    users: users,
+                                    moment: moment
+                                });
+                            }
+                        }
+                    );
                 }
             });
     },

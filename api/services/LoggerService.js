@@ -15,17 +15,6 @@
 exports.userSignIn = function(user, request) {
     var currentTime = new Date();
 
-    // Update user row
-    User
-        .update(
-            {id: user.id},
-            {
-                id: user.id,
-                lastLogin: currentTime
-            },
-            function(error, user) {}
-    );
-
     // Create new login row
     UserLogin
         .create({

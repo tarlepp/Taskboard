@@ -13,7 +13,7 @@
         <th class="col-md-4">Fullname</th>
         <th class="col-md-4">Email</th>
         <th class="col-md-1">Admin</th>
-        <th class="col-md-2 text-right">Last login</th>
+        <th class="col-md-2 text-right">Last sign in</th>
     </tr>
     </thead>
     <tbody>
@@ -60,7 +60,11 @@
             <% if (user.admin) { %>Yes<% } else { %>No <% } %>
         </td>
         <td class="text-right text-nowrap">
-            <%= user.lastLoginFormatted() %>
+            <% if (user.lastLogin !== null) { %>
+                <%= user.lastLogin %>
+            <% } else { %>
+                <em>unknown</em>
+            <% } %>
         </td>
     </tr>
     <% }) %>
