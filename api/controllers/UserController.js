@@ -5,7 +5,7 @@
  * @description ::  Contains logic for handling requests.
  */
 var async = require("async");
-var moment = require("moment");
+var moment = require("moment-timezone");
 
 module.exports = {
     /**
@@ -46,6 +46,13 @@ module.exports = {
                                     } else {
                                         // Add last login to user data
                                         user.lastLogin = (!loginData) ? null : loginData.stamp;
+
+                                        if (user.lastLogin !== null) {
+                                            moment.lang('fi');
+
+                                            user.lastLogin = DateService.convertDateObjectToUtc(user.lastLogin);
+                                            user.lastLogin.tz("Europe/Mariehamn");
+                                        }
 
                                         callback(null, user);
                                     }
@@ -148,10 +155,13 @@ module.exports = {
 
                     // Iterate sign in rows and make formatted stamp
                     _.each(data.history, function(row) {
-                        var stamp = moment(row.stamp);
+                        moment.lang('fi');
 
-                        row.stampFormatted = stamp.format('YYYY-MM-DD HH:mm:ss');
+                        row.stamp = DateService.convertDateObjectToUtc(row.stamp);
+                        row.stamp.tz("Europe/Mariehamn");
                     });
+
+                    data.moment = moment;
 
                     res.view(data);
                 }

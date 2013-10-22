@@ -61,7 +61,29 @@
         </td>
         <td class="text-right text-nowrap">
             <% if (user.lastLogin !== null) { %>
-                <%= user.lastLogin %>
+                <span class="tooltipDiv">
+                    <%= user.lastLogin.fromNow() %>
+
+                    <div class="tooltipDivContainer">
+                        <h1>Last sign in data</h1>
+                        <div>
+                            <table class="dateTimeTooltip">
+                                <tr>
+                                    <th>Local time</th>
+                                    <td><%= user.lastLogin.format("L LT") %></td>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <td><%= user.lastLogin.format("ZZ") %></td>
+                                </tr>
+                                <tr>
+                                    <th>UTC time</th>
+                                    <td><%= user.lastLogin.utc().format("L LT") %></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </span>
             <% } else { %>
                 <em>unknown</em>
             <% } %>

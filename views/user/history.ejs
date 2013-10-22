@@ -10,7 +10,29 @@
     <% _.each(history, function(row) { %>
         <tr>
             <td class="text-nowrap">
-                <small><%= row.stampFormatted %></small>
+                <small class="tooltipDiv">
+                    <%= row.stamp.format("L LT") %>
+
+                    <div class="tooltipDivContainer">
+                        <h1>Sign in data</h1>
+                        <div>
+                            <table class="dateTimeTooltip">
+                                <tr>
+                                    <th>Local time</th>
+                                    <td><%= row.stamp.format("L LT") %></td>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <td><%= row.stamp.format("ZZ") %></td>
+                                </tr>
+                                <tr>
+                                    <th>UTC time</th>
+                                    <td><%= row.stamp.utc().format("L LT") %></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </small>
             </td>
             <td class="text-nowrap">
                 <small><%= row.ip %></small>
