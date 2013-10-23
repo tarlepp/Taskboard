@@ -6,6 +6,7 @@
 "use strict";
 
 var moment = require("moment-timezone");
+var fs = require("fs");
 
 /**
  * Method converts UTC date object to local date object
@@ -46,4 +47,24 @@ exports.convertDateObjectToUtc = function(date) {
             )
         )
     );
+};
+
+/**
+ * Method returns available timezones. Data is read from moment-timezone.json and parsed to array of
+ * objects which can be used easily every where in application!
+ *
+ * @returns {Array}
+ */
+exports.getTimezones = function() {
+    var timezoneData = JSON.parse(fs.readFileSync('node_modules/moment-timezone/moment-timezone.json', 'utf8'));
+    var timezones = [];
+
+    _.each(timezoneData.links, function(value, key) {
+        timezones.push({
+            key: key,
+            name: value
+        });
+    });
+
+    return _.uniq(_.sortBy(timezones, "name"), false, function(timezone) { return timezone.name; } );
 };
