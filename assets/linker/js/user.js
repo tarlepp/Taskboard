@@ -143,8 +143,9 @@ jQuery(document).ready(function() {
                         label: "Save",
                         className: "btn-primary pull-right",
                         callback: function () {
-                            var form = jQuery("#formUserEdit", modal);
-                            var formItems = form.serializeJSON();
+                            var formBasic = jQuery("#formUserEdit_1", modal);
+                            var formRegion = jQuery("#formUserEdit_2", modal);
+                            var formItems = jQuery.extend({}, formBasic.serializeJSON(), formRegion.serializeJSON());
 
                             // Validate current form items and try to update milestone data
                             if (validateForm(formItems, modal)) {
