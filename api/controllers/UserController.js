@@ -6,8 +6,59 @@
  */
 var async = require("async");
 var moment = require("moment-timezone");
+var languages = require("./../../config/i18n.js");
 
 module.exports = {
+    /**
+     * User add action.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    add: function(req, res) {
+        if (!req.isAjax) {
+            res.send("Only AJAX request allowed", 403);
+        }
+
+        res.view({
+            languages: languages.i18n.locales,
+            timezones: DateService.getTimezones(),
+            layout: "layout_ajax"
+        });
+    },
+
+    /**
+     * User edit action.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    edit: function(req, res) {
+        if (!req.isAjax) {
+            res.send("Only AJAX request allowed", 403);
+        }
+
+        var userId = req.param("id");
+
+        // Fetch user data
+        User
+            .findOne(userId)
+            .done(function(error, user) {
+                if (error) {
+                    res.send(error, 500);
+                } else if (!user) {
+                    res.send("User not found.", 404);
+                } else {
+                    res.view({
+                        user: user,
+                        languages: languages.i18n.locales,
+                        timezones: DateService.getTimezones(),
+                        layout: "layout_ajax"
+                    });
+                }
+            });
+    },
+
     /**
      * User list action.
      *
@@ -48,10 +99,10 @@ module.exports = {
                                         user.lastLogin = (!loginData) ? null : loginData.stamp;
 
                                         if (user.lastLogin !== null) {
-                                            moment.lang('fi');
+                                            moment.lang(req.user.language);
 
                                             user.lastLogin = DateService.convertDateObjectToUtc(user.lastLogin);
-                                            user.lastLogin.tz("Europe/Mariehamn");
+                                            user.lastLogin.tz(req.user.timezone);
                                         }
 
                                         callback(null, user);
@@ -65,57 +116,12 @@ module.exports = {
                                 res.view({
                                     layout: "layout_ajax",
                                     users: users,
-                                    moment: moment
+                                    moment: moment,
+                                    currentUser: req.user
                                 });
                             }
                         }
                     );
-                }
-            });
-    },
-
-    /**
-     * User add action.
-     *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
-     */
-    add: function(req, res) {
-        if (!req.isAjax) {
-            res.send("Only AJAX request allowed", 403);
-        }
-
-        res.view({
-            layout: "layout_ajax"
-        });
-    },
-
-    /**
-     * User edit action.
-     *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
-     */
-    edit: function(req, res) {
-        if (!req.isAjax) {
-            res.send("Only AJAX request allowed", 403);
-        }
-
-        var userId = req.param("id");
-
-        // Fetch user data
-        User
-            .findOne(userId)
-            .done(function(error, user) {
-                if (error) {
-                    res.send(error, 500);
-                } else if (!user) {
-                    res.send("User not found.", 404);
-                } else {
-                    res.view({
-                        user: user,
-                        layout: "layout_ajax"
-                    });
                 }
             });
     },
@@ -153,15 +159,16 @@ module.exports = {
                 } else {
                     data.layout = "layout_ajax";
 
+                    moment.lang(req.user.language);
+
                     // Iterate sign in rows and make formatted stamp
                     _.each(data.history, function(row) {
-                        moment.lang('fi');
-
                         row.stamp = DateService.convertDateObjectToUtc(row.stamp);
-                        row.stamp.tz("Europe/Mariehamn");
+                        row.stamp.tz(req.user.timezone);
                     });
 
                     data.moment = moment;
+                    data.currentUser = req.user;
 
                     res.view(data);
                 }

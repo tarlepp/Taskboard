@@ -30,35 +30,45 @@ module.exports = {
     schema: true,
     attributes: {
         username: {
-            type:       'string',
+            type:       "string",
             required:   true,
             unique:     true
         },
         firstName: {
-            type:       'string',
+            type:       "string",
             required:   true
         },
         lastName: {
-            type:       'string',
+            type:       "string",
             required:   true
         },
         email: {
-            type:       'email',
+            type:       "email",
             required:   true,
             unique:     true
         },
         admin: {
-            type:       'boolean',
+            type:       "boolean",
             defaultsTo: false
         },
         password: {
-            type:       'string',
+            type:       "string",
             required:   false
+        },
+        language: {
+            type:       "string",
+            defaultsTo: "fi",
+            required:   true
+        },
+        timezone: {
+            type:       "string",
+            defaultsTo: "Europe/Mariehamn",
+            required:   true
         },
 
         // Computed user fullName string
         fullName: function() {
-            return this.lastName + ' ' + this.firstName;
+            return this.lastName + " " + this.firstName;
         },
 
         lastLoginObject: function() {
@@ -66,12 +76,12 @@ module.exports = {
         },
 
         gravatarImage: function() {
-            return gravatar.url(this.email, {s: '25', r: 'pg', d: '404'});
+            return gravatar.url(this.email, {s: "25", r: "pg", d: "404"});
         },
 
         // ObjectTitle
         objectTitle: function() {
-            return this.lastName + ' ' + this.firstName;
+            return this.lastName + " " + this.firstName;
         },
 
         // Override toJSON instance method to remove password value
@@ -138,7 +148,7 @@ module.exports = {
      * @param   {Function}          cb
      */
     afterCreate: function(values, cb) {
-        HistoryService.write('User', values);
+        HistoryService.write("User", values);
 
         cb();
     },
@@ -150,7 +160,7 @@ module.exports = {
      * @param   {Function}          cb
      */
     afterUpdate: function(values, cb) {
-        HistoryService.write('User', values);
+        HistoryService.write("User", values);
 
         cb();
     },
@@ -165,7 +175,7 @@ module.exports = {
         User
             .findOne(terms)
             .done(function(error, user) {
-                HistoryService.remove('User', user.id);
+                HistoryService.remove("User", user.id);
 
                 cb();
             });

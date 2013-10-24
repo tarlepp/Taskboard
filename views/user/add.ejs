@@ -1,66 +1,110 @@
 <form id="formUserNew" class="form-horizontal">
-    <fieldset>
-        <legend>Personal information</legend>
-        <div class="form-group required">
-            <label class="col-lg-3 control-label" for="formUserNewFirstName">First name</label>
-            <div class="col-lg-9">
-                <input id="formUserNewFirstName" name="firstName" type="text" class="form-control" placeholder="enter first name" required="required" />
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a id="passwordChangeTab" href="#passwordChange"
+                data-toggle="tab"
+            >Login information</a>
+        </li>
+        <li>
+            <a id="basicTab" href="#basic"
+                data-toggle="tab"
+            >Personal information</a>
+        </li>
+        <li>
+            <a id="languageAndRegionTab" href="#languageAndRegion"
+                data-toggle="tab"
+            >Language and region</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane" id="basic">
+            <div class="form-group required">
+                <label class="col-lg-3 control-label" for="formUserNewFirstName">First name</label>
+                <div class="col-lg-9">
+                    <input id="formUserNewFirstName" name="firstName" type="text" class="form-control" placeholder="enter first name" required="required" />
+                </div>
+            </div>
+            <div class="form-group required">
+                <label class="col-lg-3 control-label" for="formUserNewLastName">Last name</label>
+                <div class="col-lg-9">
+                    <input id="formUserNewLastName" name="lastName" type="text" class="form-control" placeholder="enter last name" required="required" />
+                </div>
+            </div>
+            <div class="form-group required">
+                <label class="col-lg-3 control-label" for="formUserNewEmail">Email address</label>
+                <div class="col-lg-9">
+                    <input id="formUserNewEmail" name="email" type="email" class="form-control" placeholder="enter email" required="required"
+                        data-validate-type="email,unique"
+                        data-model="User"
+                    />
+                    <span class="help-block">Email address will not be public.</span>
+                </div>
             </div>
         </div>
 
-        <div class="form-group required">
-            <label class="col-lg-3 control-label" for="formUserNewLastName">Last name</label>
-            <div class="col-lg-9">
-                <input id="formUserNewLastName" name="lastName" type="text" class="form-control" placeholder="enter last name" required="required" />
+        <div class="tab-pane" id="languageAndRegion">
+            <div class="form-group required">
+                <label class="col-lg-3 control-label" for="formUserNewLanguage">Language</label>
+                <div class="col-lg-3">
+                    <select id="formUserNewLanguage" name="language" class="in-modal show-tick show-menu-arrow"
+                        data-select="true"
+                        data-container="body"
+                    >
+                        <% _.each(languages, function(language) { %>
+                        <option value="<%= language %>"><%= language %></option>
+                        <% }) %>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group required">
+                <label class="col-lg-3 control-label" for="formUserNewTimezone">Timezone</label>
+                <div class="col-lg-9">
+                    <select id="formUserNewTimezone" name="language" class="in-modal show-tick show-menu-arrow"
+                        data-select="true"
+                        data-container="body"
+                        data-live-search="true"
+                    >
+                        <% _.each(timezones, function(timezone) { %>
+                        <option value="<%= timezone.key %>"><%= timezone.name %></option>
+                        <% }) %>
+                    </select>
+                </div>
             </div>
         </div>
 
-        <div class="form-group required">
-            <label class="col-lg-3 control-label" for="formUserNewEmail">Email address</label>
-            <div class="col-lg-9">
-                <input id="formUserNewEmail" name="email" type="email" class="form-control" placeholder="enter email" required="required"
-                    data-validate-type="email,unique"
-                    data-model="User"
-                />
-                <span class="help-block">Email address will not be public.</span>
+        <div class="tab-pane active" id="passwordChange">
+            <div class="form-group required">
+                <label class="col-lg-3 control-label" for="formUserNewUsername">Username</label>
+                <div class="col-lg-3">
+                    <input id="formUserNewUsername" name="username" type="text" class="form-control" placeholder="enter username" required="required"
+                       data-validate-type="unique"
+                       data-model="User"
+                    />
+                    <span class="help-block text-nowrap">Cannot be changed afterwards.</span>
+                </div>
+            </div>
+            <div class="form-group required">
+                <label class="col-lg-3 control-label" for="formUserNewPassword">Password</label>
+                <div class="col-lg-5">
+                    <input id="formUserNewPassword" name="password" type="password" class="form-control" placeholder="enter password" required="required"
+                        data-password="true"
+                        data-pair="formUserNewPasswordRetype"
+                        data-validate-type="password,length"
+                        data-length-min="10"
+                    />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label" for="formUserNewPasswordRetype"></label>
+                <div class="col-lg-5">
+                    <input id="formUserNewPasswordRetype" name="password2" type="password" class="form-control" placeholder="re-type password"
+                       data-password="true"
+                       data-pair="formUserNewPassword"
+                       data-validate-type="password"
+                    />
+                </div>
             </div>
         </div>
-    </fieldset>
-
-    <fieldset>
-        <legend>Login information</legend>
-
-        <div class="form-group required">
-            <label class="col-lg-3 control-label" for="formUserNewUsername">Username</label>
-            <div class="col-lg-3">
-                <input id="formUserNewUsername" name="username" type="text" class="form-control" placeholder="enter username" required="required"
-                   data-validate-type="unique"
-                   data-model="User"
-                />
-                <span class="help-block text-nowrap">Cannot be changed afterwards.</span>
-            </div>
-        </div>
-
-        <div class="form-group required">
-            <label class="col-lg-3 control-label" for="formUserNewPassword">Password</label>
-            <div class="col-lg-5">
-                <input id="formUserNewPassword" name="password" type="password" class="form-control" placeholder="enter password" required="required"
-                    data-password="true"
-                    data-pair="formUserNewPasswordRetype"
-                    data-validate-type="password,length"
-                    data-length-min="10"
-                />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-lg-3 control-label" for="formUserNewPasswordRetype"></label>
-            <div class="col-lg-5">
-                <input id="formUserNewPasswordRetype" name="password2" type="password" class="form-control" placeholder="re-type password"
-                   data-password="true"
-                   data-pair="formUserNewPassword"
-                   data-validate-type="password"
-                />
-            </div>
-        </div>
-    </fieldset>
+    </div>
 </form>

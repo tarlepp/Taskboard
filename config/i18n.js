@@ -1,9 +1,7 @@
 module.exports.i18n = {
-
     // Which locales are supported?
-    locales: ['en', 'es'],
+    locales: ['en', 'fi'],
 
     // Where are your locale translations located?
     localesDirectory: '/config/locales'
-
 };
