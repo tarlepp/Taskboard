@@ -711,7 +711,7 @@ function initProjectPlanning(modal) {
         modal.modal("hide");
     });
 
-    if (myViewModel.role < 0) {
+    if (myViewModel.role() < 0) {
         // Make sortable
         jQuery(".sortable", modal).sortable({
             connectWith: ".sortable",
@@ -754,13 +754,18 @@ function initProjectPlanning(modal) {
                     /**
                      * This is weird... this doesn't work and causes all socket communication to
                      * fail after these put calls. Gotta be sails.js bug or am I missing something?
+                     *
+                     * Checked this 2013-10-30 with same results, doh
                      */
-                    // socket.put("/Story/" + storyId, data, function(/** sails.json.story */story) {
-                    //     console.log("put");
-                    //     if (handleSocketError(story)) {
-                    //         console.log("asdfasdf");
-                    //     }
-                    // });
+                     //socket.put("/Story/" + storyId, data, function(/** sails.json.story */story) {
+                     //    console.log("put");
+                     //    if (handleSocketError(story)) {
+                     //        stories.push(story);
+                     //
+                     //        // Check if we have processed all data
+                     //        checkData();
+                     //    }
+                     //});
                 });
 
                 /**
