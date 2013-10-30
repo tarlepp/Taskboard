@@ -529,13 +529,11 @@ function ViewModel() {
 
     /**
      * Method opens user list view.
+     *
+     * Note that this action is allowed only for administrator users.
      */
     self.usersOpen = function() {
-        if (self.role() === -3) {
-            jQuery("body").trigger("userList");
-        } else {
-            makeMessage("Insufficient rights to list taskboard users.", "error");
-        }
+        jQuery("body").trigger("userList");
     };
 
     /**
