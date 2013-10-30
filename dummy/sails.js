@@ -7,23 +7,6 @@ var selectedProjectId;
 var selectedSprintId;
 var loggedUserId;
 
-/**
- * AuthService methods
- *
- * @type {{hasProjectAccess: Function, hasProjectDestroy: Function}}
- */
-var AuthService = {
-    hasProjectAccess:   function(user, projectId, next, returnRole) {},
-    hasProjectUpdate:   function(user, projectId, next) {},
-    hasProjectDestroy:  function(user, projectId, next) {},
-    hasSprintAccess:    function(user, sprintId, next, returnRole) {},
-    hasSprintAdmin:     function(user, sprintId, next) {},
-    hasMilestoneAccess: function(user, milestoneId, next, returnRole) {},
-    hasMilestoneAdmin:  function(user, milestoneId, next) {},
-    hasStoryAccess:     function(user, storyId, next, returnRole) {},
-    hasStoryAdmin:      function(user, storyId, next) {}
-};
-
 var knockout = {
     sortable: {
         arg: {

@@ -343,7 +343,7 @@ exports.hasStoryAccess = function(user, storyId, next, returnRole) {
              *
              * @param   {Function}  callback
              */
-                function(callback) {
+            function(callback) {
                 DataService.getStory(storyId, callback);
             },
 
