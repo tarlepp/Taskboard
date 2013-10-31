@@ -228,7 +228,8 @@ module.exports = {
                     if (error) {
                         res.send(error, 500);
                     } else  {
-                        // TODO: send socket message about story creation
+                        // Send socket message about new story
+                        Story.publishCreate(story.toJSON());
 
                         data.storyNew = story;
 
@@ -298,7 +299,8 @@ module.exports = {
                                     if (error) {
                                         res.send(error, 500);
                                     } else {
-                                        // TODO: send socket message about task update
+                                        // Send socket message about task update
+                                        Task.publishUpdate(task[0].id, task[0].toJSON());
 
                                         data.tasks.push(task[0]);
 
@@ -327,7 +329,9 @@ module.exports = {
                         if (error) {
                             res.send(error, 500);
                         } else {
-                            // TODO: send socket message about story update
+                            // Send socket message about story update
+                            Story.publishUpdate(stories[0].id, stories[0].toJSON());
+
                             res.send(data);
                         }
                 });
