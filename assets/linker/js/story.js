@@ -6,6 +6,7 @@
  *  - Event handlers
  *  - Form handlers
  */
+"use strict";
 
 /**
  * Story specified global event handlers. These events are following:
@@ -206,29 +207,12 @@ jQuery(document).ready(function() {
                         },
                         dataType: "json"
                     })
-                    .done(function(/** sails.json.storySplit */ data) {
+                    .done(function() {
                         makeMessage("User story splitted successfully.");
 
                         prompt.modal("hide");
 
                         handleEventTrigger(trigger);
-
-                        // Try to find original story from current scope
-                        var story = _.find(myViewModel.stories(), function(story) {
-                            return story.id() === data.storyOld.id;
-                        });
-
-                        // Client binding updates
-
-                        // Original story in current scope, so update it
-                        if (typeof story !== "undefined") {
-                            myViewModel.processSocketMessage("story", "update", data.storyOld.id, data.storyOld);
-                        }
-
-                        // If new story sprint is same as current add it to current scope
-                        if (data.storyNew.sprintId === myViewModel.sprint().id()) {
-                            myViewModel.processSocketMessage("story", "create", data.storyNew.id, data.storyNew);
-                        }
                     })
                     .fail(function(jqXhr, textStatus, error) {
                         handleAjaxError(jqXhr, textStatus, error);
@@ -314,8 +298,8 @@ jQuery(document).ready(function() {
 /**
  * Function to initialize story form.
  *
- * @param   {jQuery|$}  modal       Current modal content
- * @param   {{}}        parameters  Parameters
+ * @param   {jQuery|$}  modal           Current modal content
+ * @param   {{}}        [parameters]    Parameters
  */
 function initStoryForm(modal, parameters) {
     parameters = parameters || {};
