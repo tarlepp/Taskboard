@@ -5,9 +5,32 @@
 <% } else { %>
     <% _.each(data, function(row) { %>
         <div class="history">
-            <h4 class="">
-                <%= row.stamp %>
+            <h4>
+                <span class="tooltipDiv">
+                    <%= row.stamp.format("L LT") %>
 
+                    <div class="tooltipDivContainer">
+                        <div>
+                            <table class="dateTimeTooltip">
+                                <tr>
+                                    <th>Local time</th>
+                                    <td><%= row.stamp.format("L LT") %></td>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <td><%= row.stamp.format("ZZ") %></td>
+                                </tr>
+                                <tr>
+                                    <th>UTC time</th>
+                                    <td><%= row.stamp.utc().format("L LT") %></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </span>
+                <small class="pull-right">
+                    Add user info here
+                </small>
             </h4>
 
             <% if (row.data) { %>
