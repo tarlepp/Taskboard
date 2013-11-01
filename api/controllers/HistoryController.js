@@ -4,8 +4,9 @@
  * @module      ::  Controller
  * @description ::  Contains logic for handling requests.
  */
-var jQuery = require('jquery');
-var JsonDiffPatch = require('jsondiffpatch');
+var jQuery = require("jquery");
+var JsonDiffPatch = require("jsondiffpatch");
+var moment = require("moment-timezone");
 
 module.exports = {
     /**
@@ -16,11 +17,11 @@ module.exports = {
      */
     index: function(req, res) {
         if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
+            res.send(403, "Only AJAX request allowed");
         }
 
-        var objectId = req.param('objectId');
-        var objectName = req.param('objectName');
+        var objectId = req.param("objectId");
+        var objectName = req.param("objectName");
         var data = [];
 
         // Fetch history rows
@@ -30,7 +31,7 @@ module.exports = {
                 objectName: objectName,
                 objectId: objectId
             })
-            .sort('id ASC')
+            .sort("id ASC")
             .done(function(error, data) {
                 var histories = [];
 
@@ -65,16 +66,16 @@ module.exports = {
 
             // Iterate history data
             jQuery.each(histories, function(key, history) {
-                var dateObject = DateService.convertUTCDateToLocalDate(new Date(history.createdAt));
+                var dateObject = DateService.convertDateObjectToUtc(history.createdAt);
 
                 var historyRow = {
-                    stamp: dateObject.format('isoDate') + " " + dateObject.format('isoTime'),
+                    stamp: dateObject.tz(req.user.timezone),
                     data: []
                 };
 
                 // First record, assume that object is created at this point
                 if (key === 0) {
-                    historyRow.message = 'Object created';
+                    historyRow.message = "Object created";
 
                     data.push(historyRow);
 
@@ -92,7 +93,7 @@ module.exports = {
                     var difference = JsonDiffPatch.diff(previousRow, currentRow);
 
                     // No difference between objects
-                    if (typeof difference == 'undefined') {
+                    if (typeof difference == "undefined") {
                         dataCount--;
                     } else { // Otherwise make data row
                         var changeCount = _.size(difference);
