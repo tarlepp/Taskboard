@@ -71,10 +71,10 @@
             <%= project.roleText %>
         </td>
         <td class="text-nowrap">
-            <%= moment(project.dateStart).format("YYYY-MM-DD") %>
+            <%= project.dateStart.format(currentUser.momentFormatDate) %>
         </td>
         <td class="text-nowrap">
-            <%= moment(project.dateEnd).format("YYYY-MM-DD") %>
+            <%= project.dateEnd.format(currentUser.momentFormatDate) %>
         </td>
     </tr>
     <% }); %>
