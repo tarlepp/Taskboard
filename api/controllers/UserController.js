@@ -102,7 +102,7 @@ module.exports = {
                                             moment.lang(req.user.language);
 
                                             user.lastLogin = DateService.convertDateObjectToUtc(user.lastLogin);
-                                            user.lastLogin.tz(req.user.timezone);
+                                            user.lastLogin.tz(req.user.momentTimezone);
                                         }
 
                                         callback(null, user);
@@ -128,8 +128,6 @@ module.exports = {
 
     /**
      * User sign in history action.
-     *
-     * @todo    refactor timestamp to be current user timezone, this needs some thinking...
      *
      * @param   {Request}   req Request object
      * @param   {Response}  res Response object
@@ -164,10 +162,9 @@ module.exports = {
                     // Iterate sign in rows and make formatted stamp
                     _.each(data.history, function(row) {
                         row.stamp = DateService.convertDateObjectToUtc(row.stamp);
-                        row.stamp.tz(req.user.timezone);
+                        row.stamp.tz(req.user.momentTimezone);
                     });
 
-                    data.moment = moment;
                     data.currentUser = req.user;
 
                     res.view(data);
