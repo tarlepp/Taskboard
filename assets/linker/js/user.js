@@ -305,6 +305,56 @@ function initUserForm(context, parameters) {
     if (parameters.activeTab) {
         jQuery("#" + parameters.activeTab + "Tab").click();
     }
+
+    // On key up event in date format inputs update date and time values
+    jQuery("[data-change-dates='true']").keyup(function() {
+        populateDateTimeFormats();
+    });
+
+    // On change event in language / timezone update date and time values
+    jQuery("select[data-change-dates='true']").change(function() {
+        populateDateTimeFormats();
+    });
+
+    // Updated times
+    timedUpdate();
+}
+
+function timedUpdate () {
+    populateDateTimeFormats();
+
+    setTimeout(timedUpdate, 1000);
+}
+
+function populateDateTimeFormats() {
+    // Set language for moment
+    moment.lang(jQuery("select[name='language']").val());
+
+    // Create new UTC time
+    var now = moment().utc();
+
+    // Try to change timezone
+    try {
+        now.tz(jQuery("select[name='momentTimezone'] :selected").text());
+    } catch (error) {
+        console.log("no good");
+        console.log(jQuery("select[name='momentTimezone'] :selected").text());
+
+        try {
+            now.tz(jQuery("select[name='momentTimezone'] :selected").val());
+        } catch (error) {
+            console.log("no good");
+            console.log(jQuery("select[name='momentTimezone'] :selected").val());
+
+            // Weird what to do...
+            return;
+        }
+    }
+
+    // Update actual time and date values
+    jQuery("#momentFormatDateShow").html(now.format(jQuery("#formUserEditMomentFormatDate").val()));
+    jQuery("#momentFormatTimeShow").html(now.format(jQuery("#formUserEditMomentFormatTime").val()));
+    jQuery("#momentFormatDateTimeShow").html(now.format(jQuery("#formUserEditMomentFormatDateTime").val()));
 }
 
 /**
