@@ -29,27 +29,27 @@ module.exports = {
             required:   true
         },
 
-        dateStartObject: function() {
-            return new Date(this.dateStart);
-        },
-        dateEndObject: function() {
-            return new Date(this.dateEnd);
-        },
-        dateStartFormatted: function() {
-            return this.dateStartObject().format('isoDate');
-        },
-        dateEndFormatted: function() {
-            return this.dateEndObject().format('isoDate');
-        },
-        durationDates: function() {
-            return this.dateStartFormatted() + " - " + this.dateEndFormatted();
-        },
-        durationDays: function() {
-            return this.dateEndObject().getDate() - this.dateStartObject().getDate();
-        },
-
         objectTitle: function() {
             return this.title;
+        },
+        durationDays: function() {
+            return this.dateStartObject().diff(this.dateEndObject(), "days");
+        },
+        dateStartObject: function() {
+            return (this.dateStart && this.dateStart != '0000-00-00')
+                ? DateService.convertDateObjectToUtc(this.dateStart) : null;
+        },
+        dateEndObject: function() {
+            return (this.dateEnd && this.dateEnd != '0000-00-00')
+                ? DateService.convertDateObjectToUtc(this.dateEnd) : null;
+        },
+        createdAtObject: function () {
+            return (this.createdAt && this.createdAt != '0000-00-00')
+                ? DateService.convertDateObjectToUtc(this.createdAt) : null;
+        },
+        updatedAtObject: function () {
+            return (this.updatedAt && this.updatedAt != '0000-00-00')
+                ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         }
     },
 

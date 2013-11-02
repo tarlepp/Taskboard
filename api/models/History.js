@@ -26,10 +26,12 @@ module.exports = {
         }
     },
 
-    createdAtObject: function() {
-        return (this.createdAt && this.createdAt != '0000-00-00') ? new Date(this.createdAt) : null;
+    createdAtObject: function () {
+        return (this.createdAt && this.createdAt != '0000-00-00')
+            ? DateService.convertDateObjectToUtc(this.createdAt) : null;
     },
-    createdAtFormatted: function() {
-        return (this.createdAt && this.createdAt != '0000-00-00') ?  this.createdAtObject().format('isoDate') : '';
+    updatedAtObject: function () {
+        return (this.updatedAt && this.updatedAt != '0000-00-00')
+            ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
     }
 };
