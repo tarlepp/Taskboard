@@ -62,9 +62,16 @@ module.exports = {
         estimateFormatted: function() {
             return (parseInt(this.estimate, 10) === -1) ? '???' : this.estimate;
         },
-
         objectTitle: function() {
             return this.title;
+        },
+        createdAtObject: function () {
+            return (this.createdAt && this.createdAt != '0000-00-00')
+                ? DateService.convertDateObjectToUtc(this.createdAt) : null;
+        },
+        updatedAtObject: function () {
+            return (this.updatedAt && this.updatedAt != '0000-00-00')
+                ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         }
     },
 

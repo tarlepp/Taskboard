@@ -85,11 +85,6 @@ module.exports = {
         fullName: function() {
             return this.lastName + " " + this.firstName;
         },
-
-        lastLoginObject: function() {
-            return new Date(this.lastLogin);
-        },
-
         gravatarImage: function() {
             return gravatar.url(this.email, {s: "25", r: "pg", d: "404"});
         },
@@ -97,6 +92,14 @@ module.exports = {
         // ObjectTitle
         objectTitle: function() {
             return this.lastName + " " + this.firstName;
+        },
+        createdAtObject: function () {
+            return (this.createdAt && this.createdAt != '0000-00-00')
+                ? DateService.convertDateObjectToUtc(this.createdAt) : null;
+        },
+        updatedAtObject: function () {
+            return (this.updatedAt && this.updatedAt != '0000-00-00')
+                ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         },
 
         // Override toJSON instance method to remove password value

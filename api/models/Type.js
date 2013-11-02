@@ -29,6 +29,14 @@ module.exports = {
 
         objectTitle: function() {
             return this.title;
+        },
+        createdAtObject: function () {
+            return (this.createdAt && this.createdAt != '0000-00-00')
+                ? DateService.convertDateObjectToUtc(this.createdAt) : null;
+        },
+        updatedAtObject: function () {
+            return (this.updatedAt && this.updatedAt != '0000-00-00')
+                ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         }
     },
 
