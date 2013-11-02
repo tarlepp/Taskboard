@@ -60,7 +60,22 @@ module.exports = {
             defaultsTo: "fi",
             required:   true
         },
-        timezone: {
+        momentFormatDate: {
+            type:       "string",
+            defaultsTo: "L",
+            required:   true
+        },
+        momentFormatTime: {
+            type:       "string",
+            defaultsTo: "LT",
+            required:   true
+        },
+        momentFormatDateTime: {
+            type:       "string",
+            defaultsTo: "L LT",
+            required:   true
+        },
+        momentTimezone: {
             type:       "string",
             defaultsTo: "Europe/Mariehamn",
             required:   true
