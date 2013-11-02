@@ -203,6 +203,8 @@ module.exports = {
                 if (error) {
                     res.send(error, error.status ? error.status : 500);
                 } else {
+                    moment.lang(req.user.language);
+
                     async.filter(
                         data.projects,
                         function(project, callback) {
@@ -210,6 +212,12 @@ module.exports = {
                                 if (role !== false) {
                                     project.role = role;
                                     project.roleText = "Unknown";
+
+                                    project.dateStart = DateService.convertDateObjectToUtc(project.dateStart);
+                                    project.dateStart.tz(req.user.momentTimezone);
+
+                                    project.dateEnd = DateService.convertDateObjectToUtc(project.dateEnd);
+                                    project.dateEnd.tz(req.user.momentTimezone);
 
                                     switch (project.role) {
                                         case -3:
@@ -237,7 +245,6 @@ module.exports = {
                         },
                         function(projects) {
                             data.projects = projects;
-                            data.moment = moment;
                             data.currentUser = req.user;
                             data.layout = "layout_ajax";
 
