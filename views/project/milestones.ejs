@@ -106,7 +106,19 @@
             <%= milestone.title %>
         </td>
         <td class="text-nowrap">
-            <%= milestone.deadlineFormatted() %>
+            <% if (milestone.deadlineObject()) { %>
+                <span class="tooltipDiv">
+                    <%= milestone.deadlineObject().format(currentUser.momentFormatDate) %>
+
+                    <div class="tooltipDivContainer">
+                        <div>
+                            <%= milestone.deadlineObject().fromNow() %>
+                        </div>
+                    </div>
+                </span>
+            <% } else { %>
+                <em>no deadline</em>
+            <% } %>
         </td>
         <td class="text-right">
         <% if (milestone.stories.length > 0) { %>

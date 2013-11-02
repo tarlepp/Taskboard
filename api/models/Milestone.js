@@ -32,10 +32,7 @@ module.exports = {
         },
 
         deadlineObject: function() {
-            return (this.deadline && this.deadline != '0000-00-00') ? new Date(this.deadline) : null;
-        },
-        deadlineFormatted: function() {
-            return (this.deadline && this.deadline != '0000-00-00') ?  this.deadlineObject().format('isoDate') : '';
+            return (this.deadline && this.deadline != '0000-00-00') ? DateService.convertDateObjectToUtc(this.deadline) : null;
         }
     },
 

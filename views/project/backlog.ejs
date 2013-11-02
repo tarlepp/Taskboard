@@ -64,7 +64,30 @@
             <%= story.title %>
         </td>
         <td class="col-md-2 text-nowrap">
-            <%= story.createdAt.format('isoDate') %>
+            <span class="tooltipDiv">
+                <%= story.createdAt.format(currentUser.momentFormatDate) %>
+
+                <div class="tooltipDivContainer">
+                    <div>
+                        <table class="dateTimeTooltip">
+                            <tr>
+                                <th>Local time</th>
+                                <td><%= story.createdAt.format(currentUser.momentFormatDateTime) %></td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td class="text-muted">
+                                    <%= story.createdAt.tz() %> (<%= story.createdAt.format("ZZ") %>)
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>UTC time</th>
+                                <td><%= story.createdAt.utc().format(currentUser.momentFormatDateTime) %></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </span>
         </td>
         <td class="col-md-1 text-right">
             <%= (story.estimate == -1) ? '???' : story.estimate %>
