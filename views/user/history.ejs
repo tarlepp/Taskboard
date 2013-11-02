@@ -11,22 +11,24 @@
         <tr>
             <td class="text-nowrap">
                 <small class="tooltipDiv">
-                    <%= row.stamp.format("L LT") %>
+                    <%= row.stamp.format(currentUser.momentFormatDateTime) %>
 
                     <div class="tooltipDivContainer">
                         <div>
                             <table class="dateTimeTooltip">
                                 <tr>
                                     <th>Local time</th>
-                                    <td><%= row.stamp.format("L LT") %></td>
+                                    <td><%= row.stamp.format(currentUser.momentFormatDateTime) %></td>
                                 </tr>
                                 <tr>
                                     <th></th>
-                                    <td><%= row.stamp.format("ZZ") %></td>
+                                    <td class="text-muted">
+                                        <%= row.stamp.tz() %> (<%= row.stamp.format("ZZ") %>)
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th>UTC time</th>
-                                    <td><%= row.stamp.utc().format("L LT") %></td>
+                                    <td><%= row.stamp.utc().format(currentUser.momentFormatDateTime) %></td>
                                 </tr>
                             </table>
                         </div>
