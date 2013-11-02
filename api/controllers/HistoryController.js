@@ -69,7 +69,7 @@ module.exports = {
                 var dateObject = DateService.convertDateObjectToUtc(history.createdAt);
 
                 var historyRow = {
-                    stamp: dateObject.tz(req.user.timezone),
+                    stamp: dateObject.tz(req.user.momentTimezone),
                     data: []
                 };
 
@@ -244,6 +244,7 @@ module.exports = {
                     // Make view
                     res.view({
                         layout: 'layout_ajax',
+                        currentUser: req.user,
                         data: data
                     });
                 }
