@@ -6,6 +6,7 @@
  */
 var jQuery = require("jquery");
 var async = require("async");
+var moment = require("moment-timezone");
 
 module.exports = {
     /**
@@ -146,6 +147,12 @@ module.exports = {
                     res.send(error, error.status ? error.status : 500);
                 } else {
                     data.layout = "layout_ajax";
+                    data.currentUser = req.user;
+
+                    _.each(data.stories, function(story) {
+                        story.createdAt = DateService.convertDateObjectToUtc(story.createdAt);
+                        story.createdAt.tz(req.user.momentTimezone);
+                    });
 
                     res.view(data);
                 }
@@ -216,6 +223,12 @@ module.exports = {
                     data.project = results.project;
                     data.milestones = results.milestones;
                     data.cntMilestonesTotal = data.milestones.length;
+
+                    _.each(data.milestones, function(milestone) {
+                        if (milestone.deadlineObject()) {
+                            milestone.deadlineObject().tz(req.user.momentTimezone);
+                        }
+                    });
 
                     fetchStories();
                 }
@@ -311,6 +324,8 @@ module.exports = {
             });
 
             if (ok) {
+                data.currentUser = req.user;
+
                 if (data.milestones.length > 0) {
                     var show = true;
 
