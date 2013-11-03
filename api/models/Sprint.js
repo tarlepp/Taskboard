@@ -33,7 +33,7 @@ module.exports = {
             return this.title;
         },
         durationDays: function() {
-            return this.dateStartObject().diff(this.dateEndObject(), "days");
+            return this.dateEndObject().diff(this.dateStartObject(), "days");
         },
         dateStartObject: function() {
             return (this.dateStart && this.dateStart != '0000-00-00')

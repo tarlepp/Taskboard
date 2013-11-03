@@ -51,6 +51,17 @@
                                     <th class="text-nowrap text-right">Stories:</th>
                                     <td class="text-nowrap"><%= milestone.stories.cntDone %> / <%= milestone.stories.cntTotal %></td>
                                 </tr>
+                                <tr>
+                                    <th class="text-nowrap text-right">Deadline:</th>
+                                    <td class="text-nowrap">
+                                    <% if (milestone.deadlineObject()) { %>
+                                        <%= milestone.deadlineObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDate) %>,
+                                        <%= milestone.deadlineObject().tz(currentUser.momentTimezone).fromNow() %>
+                                    <% } else { %>
+                                        <em>no deadline</em>
+                                    <% } %>
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     </div>
@@ -166,7 +177,11 @@
                             <table class="text-medium">
                                 <tr>
                                     <td class="text-nowrap text-right">Duration:</td>
-                                    <td class="text-nowrap"><%= sprint.durationDates() %></td>
+                                    <td class="text-nowrap">
+                                        <%= sprint.dateStartObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDate) %>
+                                        -
+                                        <%= sprint.dateEndObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDate) %>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th class="text-nowrap text-right"></th>
