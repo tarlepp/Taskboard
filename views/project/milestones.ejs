@@ -108,11 +108,11 @@
         <td class="text-nowrap">
             <% if (milestone.deadlineObject()) { %>
                 <span class="tooltipDiv">
-                    <%= milestone.deadlineObject().format(currentUser.momentFormatDate) %>
+                    <%= milestone.deadlineObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDate) %>
 
                     <div class="tooltipDivContainer">
                         <div>
-                            <%= milestone.deadlineObject().fromNow() %>
+                            <%= milestone.deadlineObject().tz(currentUser.momentTimezone).fromNow() %>
                         </div>
                     </div>
                 </span>
