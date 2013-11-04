@@ -359,7 +359,7 @@ module.exports = {
      */
     planning: function(req, res) {
         if (!req.isAjax) {
-            res.send("Only AJAX request allowed", 403);
+            res.send(403, "Only AJAX request allowed");
         }
 
         var projectId = parseInt(req.param("id"), 10);
@@ -395,9 +395,10 @@ module.exports = {
              */
             function(error, data) {
                 if (error) {
-                    res.send(error, error.status ? error.status : 500);
+                    res.send(error.status ? error.status : 500, error);
                 } else {
                     data.layout = "layout_ajax";
+                    data.currentUser = req.user;
 
                     res.view(data);
                 }

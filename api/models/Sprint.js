@@ -33,15 +33,15 @@ module.exports = {
             return this.title;
         },
         durationDays: function() {
-            return this.dateEndObject().diff(this.dateStartObject(), "days");
+            return this.dateEndObject().diff(this.dateStartObject(), "days") + 1;
         },
         dateStartObject: function() {
             return (this.dateStart && this.dateStart != '0000-00-00')
-                ? DateService.convertDateObjectToUtc(this.dateStart) : null;
+                ? DateService.convertDateObjectToUtc(this.dateStart, true) : null;
         },
         dateEndObject: function() {
             return (this.dateEnd && this.dateEnd != '0000-00-00')
-                ? DateService.convertDateObjectToUtc(this.dateEnd) : null;
+                ? DateService.convertDateObjectToUtc(this.dateEnd, true) : null;
         },
         createdAtObject: function () {
             return (this.createdAt && this.createdAt != '0000-00-00')

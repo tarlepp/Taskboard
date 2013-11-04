@@ -31,22 +31,25 @@ exports.convertUTCDateToLocalDate = function(date) {
  * Method converts given date object to real UTC date object. This is required
  * for moment.js library to work.
  *
- * @param   {Date}  date    Date object convert
+ * @param   {Date}      date        Date object convert
+ * @param   {Boolean}   [noTime]    Set true if you're handling only dates
  *
  * @returns {Date}
  */
-exports.convertDateObjectToUtc = function(date) {
+exports.convertDateObjectToUtc = function(date, noTime) {
+    noTime = noTime || false;
+
     return moment(new Date(
             Date.UTC(
                 date.getFullYear(),
                 date.getMonth(),
                 date.getDate(),
-                date.getHours(),
-                date.getMinutes(),
-                date.getSeconds()
+                noTime ? 0 : date.getHours(),
+                noTime ? 0 : date.getMinutes(),
+                noTime ? 0 : date.getSeconds()
             )
         )
-    );
+    ).tz("Etc/Universal");
 };
 
 /**

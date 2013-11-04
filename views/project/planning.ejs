@@ -40,7 +40,7 @@
                         <%= sprint.title %>
 
                         <span class="pull-right text-small">
-                            <%= sprint.durationDates() %> (<%= sprint.durationDays() %> days)
+                            <%= sprint.dateStartObject().format(currentUser.momentFormatDate) %> - <%= sprint.dateEndObject().format(currentUser.momentFormatDate) %> (<%= sprint.durationDays() %> days)
                         </span>
                     </a>
                 </div>
