@@ -58,6 +58,7 @@ module.exports = {
                     res.send(error, error.status ? error.status : 500);
                 } else {
                     data.layout = "layout_ajax";
+                    data.currentUser = req.user;
 
                     res.view(data);
                 }
