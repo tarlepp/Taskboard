@@ -25,7 +25,7 @@
                 <label class="col-lg-3 control-label" for="formSprintEditDateEnd" style="display: none;"></label>
                 <div class="col-lg-9">
                     <div class="input-group date dateStart">
-                        <input id="formSprintEditDateStart" name="dateStart" type="text" value="<%= sprint.dateStartFormatted() %>" class="dateInput form-control" size="16" required="required"
+                        <input id="formSprintEditDateStart" name="dateStart" type="text" value="<%= sprint.dateStartObject().format('YYYY-MM-DD') %>" class="dateInput form-control" size="16" required="required"
                             data-validate-type="daterange"
                             data-role="start"
                             data-pair="formSprintEditDateEnd"
@@ -37,7 +37,7 @@
                     </div>
                     <span class="separator">&mdash;</span>
                     <div class="input-group date dateEnd">
-                        <input id="formSprintEditDateEnd" name="dateEnd" type="text" value="<%= sprint.dateEndFormatted() %>" class="dateInput form-control" size="16" required="required"
+                        <input id="formSprintEditDateEnd" name="dateEnd" type="text" value="<%= sprint.dateEndObject().format('YYYY-MM-DD') %>" class="dateInput form-control" size="16" required="required"
                             data-validate-type="daterange"
                             data-role="end"
                             data-pair="formSprintEditDateStart"
