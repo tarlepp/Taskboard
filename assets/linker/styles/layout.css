@@ -70,6 +70,18 @@
     top: 8px;
 }
 
+.navbar {
+    background-image: -webkit-gradient(linear, left 0%, left 100%, from(#ffffff), to(#f8f8f8));
+    background-image: -webkit-linear-gradient(top, #ffffff, 0%, #f8f8f8, 100%);
+    background-image: -moz-linear-gradient(top, #ffffff 0%, #f8f8f8 100%);
+    background-image: linear-gradient(to bottom, #ffffff 0%, #f8f8f8 100%);
+    background-repeat: repeat-x;
+    border-radius: 4px;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff8f8f8', GradientType=0);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 5px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 5px rgba(0, 0, 0, 0.075);
+}
+
 .navbar .nav > li {
     z-index: 10000;
 }
@@ -437,4 +449,86 @@ table.dateTimeTooltip th {
 
 table.dateTimeTooltip td {
     padding-left: 5px;
+}
+
+.btn:active,
+.btn.active {
+    background-image: none;
+}
+
+.btn-default {
+    background: linear-gradient(to bottom, #ffffff 0%, #e6e6e6 100%) repeat-x;
+    border-color: #ccc;
+}
+
+.btn-default:hover,
+.btn-default:active,
+.btn-default.active {
+    background: #e6e6e6 none;
+}
+
+.btn-primary {
+    background: linear-gradient(to bottom, #428bca 0%, #3071a9 100%) repeat-x;
+    border-color: #2d6ca2;
+}
+
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary.active {
+    background: #3276b1 none;
+}
+
+.btn-success {
+    background: linear-gradient(to bottom, #5cb85c 0%, #47a447 100%) repeat-x;
+    border-color: #419641;
+}
+
+.btn-success:hover,
+.btn-success:active,
+.btn-success.active {
+    background: #47a447 none;
+}
+
+.btn-warning {
+    background: linear-gradient(to bottom, #f0ad4e 0%, #ec971f 100%) repeat-x;
+    border-color: #eb9316;
+}
+
+.btn-warning:hover,
+.btn-warning:active,
+.btn-warning.active {
+    background: #ec971f none;
+}
+
+.btn-danger {
+    background: linear-gradient(to bottom, #d9534f 0%, #c9302c 100%) repeat-x;
+    border-color: #c12e2a;
+}
+
+.btn-danger:hover,
+.btn-danger:active,
+.btn-danger.active {
+    background: #c9302c none;
+}
+
+
+.btn-info {
+    background: linear-gradient(to bottom, #5bc0de 0%, #31b0d5 100%) repeat-x;
+    border-color: #2aabd2;
+}
+
+.btn-info:hover,
+.btn-info:active,
+.btn-info.active {
+    background: #31b0d5 none;
+}
+
+div.bootstrap-select .btn-default,
+div.bootstrap-select .btn-default:hover,
+div.bootstrap-select .btn-default:focus,
+div.bootstrap-select .btn-default:active,
+div.bootstrap-select .btn-default.active,
+div.bootstrap-select.open .dropdown-toggle.btn-default
+{
+    background: #ffffff none;
 }
