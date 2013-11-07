@@ -14,10 +14,6 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     isUnique: function(req, res) {
-        if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
-        }
-
         var model = req.param("model");
         var search = req.param("search");
         var id = req.param("id");

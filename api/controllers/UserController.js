@@ -16,14 +16,10 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     add: function(req, res) {
-        if (!req.isAjax) {
-            res.send("Only AJAX request allowed", 403);
-        }
-
         res.view({
             languages: languages.i18n.locales,
             timezones: DateService.getTimezones(),
-            layout: "layout_ajax"
+            layout: req.isAjax ? "layout_ajax" : "layout"
         });
     },
 
@@ -34,10 +30,6 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     edit: function(req, res) {
-        if (!req.isAjax) {
-            res.send("Only AJAX request allowed", 403);
-        }
-
         var userId = req.param("id");
 
         // Fetch user data
@@ -53,7 +45,7 @@ module.exports = {
                         user: user,
                         languages: languages.i18n.locales,
                         timezones: DateService.getTimezones(),
-                        layout: "layout_ajax"
+                        layout: req.isAjax ? "layout_ajax" : "layout"
                     });
                 }
             });
@@ -66,10 +58,6 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     list: function(req, res) {
-        if (!req.isAjax) {
-            res.send("Only AJAX request allowed", 403);
-        }
-
         // Fetch user data
         User
             .find()
@@ -114,7 +102,7 @@ module.exports = {
                                 res.send(error, error.status ? error.status : 500);
                             } else {
                                 res.view({
-                                    layout: "layout_ajax",
+                                    layout: req.isAjax ? "layout_ajax" : "layout",
                                     users: users,
                                     moment: moment,
                                     currentUser: req.user
@@ -133,10 +121,6 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     history: function(req, res) {
-        if (!req.isAjax) {
-            res.send("Only AJAX request allowed", 403);
-        }
-
         var userId = req.param("id");
 
         async.parallel(
@@ -155,7 +139,7 @@ module.exports = {
                 if (error) {
                     res.send(error, error.status ? error.status : 500);
                 } else {
-                    data.layout = "layout_ajax";
+                    data.layout = req.isAjax ? "layout_ajax" : "layout";
 
                     moment.lang(req.user.language);
 
@@ -181,10 +165,6 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     projects: function(req, res) {
-        if (!req.isAjax) {
-            res.send("Only AJAX request allowed", 403);
-        }
-
         var userId = req.param("id");
 
         async.parallel(
@@ -246,7 +226,7 @@ module.exports = {
                         function(projects) {
                             data.projects = projects;
                             data.currentUser = req.user;
-                            data.layout = "layout_ajax";
+                            data.layout = req.isAjax ? "layout_ajax" : "layout";
 
                             res.view(data);
                         }

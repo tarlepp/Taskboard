@@ -16,13 +16,9 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     users: function(req, res) {
-        if (!req.isAjax) {
-            res.send("Only AJAX request allowed", 403);
-        }
-
         var projectId = req.param("projectId");
         var data = {
-            layout: "layout_ajax",
+            layout: req.isAjax ? "layout_ajax" : "layout",
             users: false,
             project: false,
             role: false,
@@ -173,10 +169,6 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     availableUsers: function(req, res) {
-        if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
-        }
-
         var projectId = parseInt(req.param('projectId'), 10);
         var userIds = [];
 
@@ -234,7 +226,7 @@ module.exports = {
                     if (error) {
                         res.send(error, 500);
                     } else {
-                        res.send(users);
+                        res.json(users);
                     }
                 });
         }

@@ -15,17 +15,13 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     add: function(req, res) {
-        if (!req.isAjax) {
-            res.send("Only AJAX request allowed", 403);
-        }
-
         var projectId = parseInt(req.param("projectId"), 10);
         var sprintId = parseInt(req.param("sprintId"), 10);
         var formData = req.param("formData") || {};
 
         // Required view data
         var data = {
-            layout: "layout_ajax",
+            layout: req.isAjax ? "layout_ajax" : "layout",
             projectId: projectId,
             sprintId: sprintId,
             formData: formData,
@@ -89,14 +85,10 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     edit: function(req, res) {
-        if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
-        }
-
         var storyId = parseInt(req.param('id'), 10);
 
         var data = {
-            layout: "layout_ajax",
+            layout: req.isAjax ? "layout_ajax" : "layout",
             story: false,
             milestones: false,
             types: false
@@ -175,10 +167,6 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     split: function(req, res) {
-        if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
-        }
-
         var storyId = parseInt(req.param('storyId'), 10);
         var sprintId = parseInt(req.param('sprintId'), 10);
         var projectId = parseInt(req.param('projectId'), 10);
@@ -345,10 +333,6 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     tasks: function(req, res) {
-        if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
-        }
-
         var storyId = parseInt(req.param('id'), 10);
 
         async.parallel(
@@ -403,7 +387,7 @@ module.exports = {
         );
 
         function makeView(data) {
-            data.layout = "layout_ajax";
+            data.layout = req.isAjax ? "layout_ajax" : "layout";
 
             // Add relation data to each tasks
             _.each(data.tasks, function(task) {

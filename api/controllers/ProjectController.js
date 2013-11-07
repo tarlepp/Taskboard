@@ -15,10 +15,6 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     add: function(req, res) {
-        if (!req.isAjax) {
-            res.send("Only AJAX request allowed", 403);
-        }
-
         async.parallel(
             {
                 /**
@@ -41,7 +37,7 @@ module.exports = {
                 if (error) {
                     res.send(error, error.status ? error.status : 500);
                 } else {
-                    data.layout = "layout_ajax";
+                    data.layout = req.isAjax ? "layout_ajax" : "layout";
 
                     res.view(data);
                 }
@@ -56,10 +52,6 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     edit: function(req, res) {
-        if (!req.isAjax) {
-            res.send("Only AJAX request allowed", 403);
-        }
-
         var projectId = parseInt(req.param("id"), 10);
 
         async.parallel(
@@ -93,7 +85,7 @@ module.exports = {
                 if (error) {
                     res.send(error, error.status ? error.status : 500);
                 } else {
-                    data.layout = "layout_ajax";
+                    data.layout = req.isAjax ? "layout_ajax" : "layout";
 
                     res.view(data);
                 }
@@ -108,10 +100,6 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     backlog: function(req, res) {
-        if (!req.isAjax) {
-            res.send("Only AJAX request allowed", 403);
-        }
-
         var projectId = parseInt(req.param("id"), 10);
 
         async.parallel(
@@ -145,7 +133,7 @@ module.exports = {
                 if (error) {
                     res.send(error, error.status ? error.status : 500);
                 } else {
-                    data.layout = "layout_ajax";
+                    data.layout = req.isAjax ? "layout_ajax" : "layout";
                     data.currentUser = req.user;
 
                     res.view(data);
@@ -161,14 +149,10 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     milestones: function(req, res) {
-        if (!req.isAjax) {
-            res.send("Only AJAX request allowed", 403);
-        }
-
         var projectId = parseInt(req.param("id"), 10);
 
         var data = {
-            layout: "layout_ajax",
+            layout: req.isAjax ? "layout_ajax" : "layout",
             role: 0,
             milestones: false,
             project: false,
@@ -358,10 +342,6 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     planning: function(req, res) {
-        if (!req.isAjax) {
-            res.send(403, "Only AJAX request allowed");
-        }
-
         var projectId = parseInt(req.param("id"), 10);
 
         async.parallel(
@@ -397,7 +377,7 @@ module.exports = {
                 if (error) {
                     res.send(error.status ? error.status : 500, error);
                 } else {
-                    data.layout = "layout_ajax";
+                    data.layout = req.isAjax ? "layout_ajax" : "layout";
                     data.currentUser = req.user;
 
                     res.view(data);
@@ -413,15 +393,11 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     statistics: function(req, res) {
-        if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
-        }
-
         var projectId = parseInt(req.param('id'), 10);
 
         // Specify template data to use
         var data = {
-            layout: "layout_ajax",
+            layout: req.isAjax ? "layout_ajax" : "layout",
             project: {
                 data: false
             },

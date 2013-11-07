@@ -14,15 +14,11 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     edit: function(req, res) {
-        if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
-        }
-
         var projectId = parseInt(req.param('id'), 10);
 
         // Specify template data to use
         var data = {
-            layout: "layout_ajax",
+            layout: req.isAjax ? "layout_ajax" : "layout",
             project: false,
             phases: false
         };
