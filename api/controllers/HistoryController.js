@@ -16,10 +16,6 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     index: function(req, res) {
-        if (!req.isAjax) {
-            res.send(403, "Only AJAX request allowed");
-        }
-
         var objectId = req.param("objectId");
         var objectName = req.param("objectName");
         var data = [];
@@ -243,7 +239,7 @@ module.exports = {
 
                     // Make view
                     res.view({
-                        layout: 'layout_ajax',
+                        layout: req.isAjax ? "layout_ajax" : "layout",
                         currentUser: req.user,
                         data: data
                     });

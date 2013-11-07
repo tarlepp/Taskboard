@@ -14,13 +14,9 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     add: function(req, res) {
-        if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
-        }
-
         // Specify template data
         var data = {
-            layout: "layout_ajax",
+            layout: req.isAjax ? "layout_ajax" : "layout",
             projectId: parseInt(req.param('projectId'), 10),
             storyId: parseInt(req.param('storyId'), 10),
             phaseId: false,
@@ -113,15 +109,11 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     edit: function(req, res) {
-        if (!req.isAjax) {
-            res.send('Only AJAX request allowed', 403);
-        }
-
         var taskId = parseInt(req.param('id'), 10);
 
         // Specify template data
         var data = {
-            layout: "layout_ajax",
+            layout: req.isAjax ? "layout_ajax" : "layout",
             task: false,
             types: false,
             users: false
