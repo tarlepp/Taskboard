@@ -1,0 +1,34 @@
+{
+    "name": "cookie",
+    "version": "1.0.0",
+    "description": "A tiny JavaScript library that simplifies cookies.",
+    "github": "https://github.com/js-coder/cookie.js",
+    "licenses": [
+        {
+            "type" : "MIT",
+            "url" : "http://github.com/js-coder/cookie.js/raw/master/license"
+        }
+    ],
+    "scripts": {
+        "test": "grunt test"
+    },
+    "jam": {
+        "include": [
+            "cookie.js",
+            "README.md",
+            "LICENSE"
+        ],
+        "main": "cookie.js"
+    },
+    "repository": {
+        "type" : "git",
+        "url" : "http://github.com/js-coder/cookie.js.git"
+    },
+    "bugs": {
+        "url" : "http://github.com/js-coder/cookie.js/issues"
+    },
+    "devDependencies": {
+        "grunt": "~0.3",
+        "grunt-mocha": "~0.1"
+    }
+}
