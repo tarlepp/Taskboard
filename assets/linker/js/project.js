@@ -959,57 +959,65 @@ function initProjectTabBacklog(modal, contentId) {
             stop: function() {
                 var table = jQuery("#projectBacklog", container);
                 var rows = table.find("tbody tr");
-                var errors = false;
-                var update = [];
+                var storyIds = [];
 
                 rows.fadeTo(0, 0.5);
 
-                // Iterate each row
+                // Get used story id and priority values
                 rows.each(function(index) {
                     var storyId = jQuery(this).data("storyId");
 
-                    // Hmm. this is weird, how cat it be that this is faster than sockets?
-                    jQuery.ajax({
-                        url: "/Story/" + storyId,
-                        data: {
-                            priority: index + 1
-                        },
-                        type: "PUT",
-                        dataType: "json"
-                    })
-                    .done(function() {
-                        update.push(true);
-
-                        // Check if all is done
-                        checkUpdate();
-                    })
-                    .fail(function(jqXhr, textStatus, error) {
-                        update.push(false);
-
-                        errors = true;
-
-                        handleAjaxError(jqXhr, textStatus, error);
-                    });
+                    if (storyId) {
+                        storyIds.push({storyId: storyId, priority: index + 1});
+                    }
                 });
 
-                // Function to make sure that we have updated all rows.
-                function checkUpdate() {
-                    if (update.length == rows.length) {
+                // Make necessary updates
+                async.map(
+                    storyIds,
+                    function (item, callback) {
+                        // This is weird, why this is faster than socket.put() call? possible bug in sails.js?
+                        jQuery.ajax({
+                            url: "/Story/" + item.storyId,
+                            data: {
+                                priority: item.priority
+                            },
+                            type: "PUT",
+                            dataType: "json"
+                        })
+                        .done(function() {
+                            callback(null, item.storyId);
+                        })
+                        .fail(function(jqXhr, textStatus, error) {
+                            var errorMessage = {
+                                jqXhr: jqXhr,
+                                textStatus: textStatus,
+                                error: error
+                            };
+
+                            callback(errorMessage, null);
+                        });
+                    },
+                    function(error, results) {
+                        if (error) {
+                            handleAjaxError(error.jqXhr, error.textStatus, error.error);
+                        }
+
                         var message = "";
                         var type = "success";
 
-                        if (errors) {
+                        if (error) {
                             type = "error";
-                            message = "Error in stories priority update"
+                            message = "Error in stories priority update";
                         } else {
                             message = "Stories priorities changed successfully";
                         }
 
-                        makeMessage(message, type, {});
+                        makeMessage(message, type);
 
                         rows.fadeTo(0, 1);
                     }
-                }
+                );
             }
         });
     }
