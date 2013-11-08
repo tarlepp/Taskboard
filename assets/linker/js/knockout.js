@@ -48,6 +48,13 @@ ko.bindingHandlers.changeProject = {
 
             // Seems like a real project
             if (!isNaN(projectId)) {
+                cookie.set('projectId', projectId,
+                    {
+                        expires: 31,
+                        path: "/"
+                    }
+                );
+
                 viewModel.initProject(projectId);
             }
         });
@@ -93,6 +100,13 @@ ko.bindingHandlers.changeSprint = {
             var sprintId = parseInt(elementSprint.val(), 10);
 
             if (!isNaN(sprintId)) {
+                cookie.set('sprintId_' + viewModel.project().id(), sprintId,
+                    {
+                        expires: 31,
+                        path: "/"
+                    }
+                );
+
                 viewModel.initSprint(sprintId);
             }
         });

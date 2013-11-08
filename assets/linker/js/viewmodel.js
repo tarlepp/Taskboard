@@ -206,8 +206,14 @@ function ViewModel() {
 
                     self.sprints(mappedSprints);
 
-                    // We have some sprint selected already
+                    var sprintId = parseInt(cookie.get("sprintId_" + projectId));
+
+                    if (sprintId > 0) {
+                        self.selectedSprintId(sprintId);
+                    }
+
                     if (self.selectedSprintId() > 0) {
+                        console.log('jee');
                         self.initSprint(self.selectedSprintId());
                     }
                 }
