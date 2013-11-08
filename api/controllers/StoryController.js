@@ -140,8 +140,6 @@ module.exports = {
                 }
             });
 
-
-
         /**
          * Private function to make actual view with specified data.
          */
@@ -287,8 +285,13 @@ module.exports = {
                                     if (error) {
                                         res.send(error, 500);
                                     } else {
-                                        // Send socket message about task update
-                                        Task.publishUpdate(task[0].id, task[0].toJSON());
+                                        /**
+                                         * Send socket message about task update, this is a small hack.
+                                         * First we must publish destroy for "existing" task and after
+                                         * that publish create for the same task.
+                                         */
+                                        Task.publishDestroy(task[0].id);
+                                        Task.publishCreate(task[0].toJSON());
 
                                         data.tasks.push(task[0]);
 
@@ -317,7 +320,7 @@ module.exports = {
                         if (error) {
                             res.send(error, 500);
                         } else {
-                            // Send socket message about story update
+                            // Send socket message about old story update
                             Story.publishUpdate(stories[0].id, stories[0].toJSON());
 
                             res.send(data);
