@@ -21,26 +21,6 @@ function Project(data) {
     self.description    = ko.observable(data.description);
     self.dateStart      = ko.observable(data.dateStart);
     self.dateEnd        = ko.observable(data.dateEnd);
-
-    self.dateStartObject = ko.computed(function() {
-        return new Date(self.dateStart());
-    });
-
-    self.dateEndObject = ko.computed(function() {
-        return new Date(self.dateEnd());
-    });
-
-    self.dateStartFormatted = ko.computed(function() {
-        var date = new Date(self.dateStart());
-
-        return date.format('isoDate');
-    });
-
-    self.dateEndFormatted = ko.computed(function() {
-        var date = new Date(self.dateEnd());
-
-        return date.format('isoDate');
-    });
 }
 
 /**
@@ -138,15 +118,15 @@ function Sprint(data) {
     self.dateEnd        = ko.observable(data.dateEnd);
 
     self.dateStartObject = ko.computed(function() {
-        return new Date(self.dateStart());
+        return moment(self.dateStart());
     });
 
     self.dateEndObject = ko.computed(function() {
-        return new Date(self.dateEnd());
+        return moment(self.dateEnd());
     });
 
     self.formattedDuration = ko.computed(function() {
-        return self.dateStartObject().format('isoDate') + " - " + self.dateEndObject().format('isoDate');
+        return self.dateStartObject().format(userObject.momentFormatDate) + " - " + self.dateEndObject().format(userObject.momentFormatDate);
     });
 
     // Make formatted sprint title
@@ -156,7 +136,7 @@ function Sprint(data) {
 
     // Sprint duration as in days
     self.duration = ko.computed(function() {
-        return self.dateStartObject().getDate() - self.dateEndObject().getDate();
+        return self.dateEndObject().diff(self.dateStartObject(), "days") + 1;
     });
 }
 

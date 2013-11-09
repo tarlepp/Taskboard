@@ -211,11 +211,11 @@ function validateDateRange(context, input, group, label, date, errors) {
 
     var dateBitsSelf = date.split('-');
     var dateBitsPair = pair.split('-');
-    var dateSelf = new Date(+dateBitsSelf[0], +dateBitsSelf[1] - 1, +dateBitsSelf[2]);
-    var datePair = new Date(+dateBitsPair[0], +dateBitsPair[1] - 1, +dateBitsPair[2]);
+    var dateSelf = moment(dateBitsSelf, "YYYY-MM-DD");
+    var datePair = moment(dateBitsPair, "YYYY-MM-DD");
 
-    if ((role == 'start' && dateSelf.format('yyyy-mm-dd') > datePair.format('yyyy-mm-dd'))
-        || (role == 'end' && dateSelf.format('yyyy-mm-dd') < datePair.format('yyyy-mm-dd'))
+    if ((role == 'start' && dateSelf > datePair)
+        || (role == 'end' && dateSelf < datePair)
         ) {
         errors.push("Invalid date range.");
 
@@ -223,18 +223,18 @@ function validateDateRange(context, input, group, label, date, errors) {
     }
 
     if (type == 'project' && edit) {
-        var sprintFirst = _.min(myViewModel.sprints(), function(sprint) { return sprint.dateStartObject().getTime(); } );
-        var sprintLast = _.max(myViewModel.sprints(), function(sprint) { return sprint.dateEndObject().getTime(); } );
+        var sprintFirst = _.min(myViewModel.sprints(), function(sprint) { return sprint.dateStartObject().seconds(); } );
+        var sprintLast = _.max(myViewModel.sprints(), function(sprint) { return sprint.dateEndObject().seconds(); } );
 
         var dateMin = sprintFirst ? sprintFirst.dateStartObject() : null;
         var dateMax = sprintLast ? sprintLast.dateEndObject() : null;
 
-        if (role == 'start' && dateMin && dateSelf.format('yyyy-mm-dd') > dateMin.format('yyyy-mm-dd')) {
-            errors.push('Start date overlaps with project sprints. Start date cannot be before ' + dateMin.format('yyyy-mm-dd') + '.');
+        if (role == 'start' && dateMin && dateSelf > dateMin) {
+            errors.push('Start date overlaps with project sprints. Start date cannot be before ' + dateMin.format(userObject.momentFormatDate) + '.');
 
             return false;
-        } else if (role == 'end' && dateMax && dateSelf.format('yyyy-mm-dd') < dateMax.format('yyyy-mm-dd')) {
-            errors.push('End date overlaps with project sprints. End date must be at least ' + dateMax.format('yyyy-mm-dd') + '.');
+        } else if (role == 'end' && dateMax && dateSelf < dateMax) {
+            errors.push('End date overlaps with project sprints. End date must be at least ' + dateMax.format(userObject.momentFormatDate) + '.');
 
             return false;
         }

@@ -213,7 +213,6 @@ function ViewModel() {
                     }
 
                     if (self.selectedSprintId() > 0) {
-                        console.log('jee');
                         self.initSprint(self.selectedSprintId());
                     }
                 }
