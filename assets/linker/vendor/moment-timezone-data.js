@@ -1,4 +1,4589 @@
 moment.tz.add({
+    "links": {
+        "Africa/Asmera": "Africa/Asmara",
+        "Africa/Timbuktu": "Africa/Bamako",
+        "America/Argentina/ComodRivadavia": "America/Argentina/Catamarca",
+        "America/Atka": "America/Adak",
+        "America/Buenos_Aires": "America/Argentina/Buenos_Aires",
+        "America/Catamarca": "America/Argentina/Catamarca",
+        "America/Coral_Harbour": "America/Atikokan",
+        "America/Cordoba": "America/Argentina/Cordoba",
+        "America/Ensenada": "America/Tijuana",
+        "America/Fort_Wayne": "America/Indiana/Indianapolis",
+        "America/Indianapolis": "America/Indiana/Indianapolis",
+        "America/Jujuy": "America/Argentina/Jujuy",
+        "America/Knox_IN": "America/Indiana/Knox",
+        "America/Kralendijk": "America/Curacao",
+        "America/Louisville": "America/Kentucky/Louisville",
+        "America/Lower_Princes": "America/Curacao",
+        "America/Marigot": "America/Guadeloupe",
+        "America/Mendoza": "America/Argentina/Mendoza",
+        "America/Porto_Acre": "America/Rio_Branco",
+        "America/Rosario": "America/Argentina/Cordoba",
+        "America/Shiprock": "America/Denver",
+        "America/St_Barthelemy": "America/Guadeloupe",
+        "America/Virgin": "America/St_Thomas",
+        "Antarctica/South_Pole": "Antarctica/McMurdo",
+        "Arctic/Longyearbyen": "Europe/Oslo",
+        "Asia/Ashkhabad": "Asia/Ashgabat",
+        "Asia/Calcutta": "Asia/Kolkata",
+        "Asia/Chungking": "Asia/Chongqing",
+        "Asia/Dacca": "Asia/Dhaka",
+        "Asia/Istanbul": "Europe/Istanbul",
+        "Asia/Katmandu": "Asia/Kathmandu",
+        "Asia/Macao": "Asia/Macau",
+        "Asia/Saigon": "Asia/Ho_Chi_Minh",
+        "Asia/Tel_Aviv": "Asia/Jerusalem",
+        "Asia/Thimbu": "Asia/Thimphu",
+        "Asia/Ujung_Pandang": "Asia/Makassar",
+        "Asia/Ulan_Bator": "Asia/Ulaanbaatar",
+        "Atlantic/Faeroe": "Atlantic/Faroe",
+        "Atlantic/Jan_Mayen": "Europe/Oslo",
+        "Australia/ACT": "Australia/Sydney",
+        "Australia/Canberra": "Australia/Sydney",
+        "Australia/LHI": "Australia/Lord_Howe",
+        "Australia/NSW": "Australia/Sydney",
+        "Australia/North": "Australia/Darwin",
+        "Australia/Queensland": "Australia/Brisbane",
+        "Australia/South": "Australia/Adelaide",
+        "Australia/Tasmania": "Australia/Hobart",
+        "Australia/Victoria": "Australia/Melbourne",
+        "Australia/West": "Australia/Perth",
+        "Australia/Yancowinna": "Australia/Broken_Hill",
+        "Brazil/Acre": "America/Rio_Branco",
+        "Brazil/DeNoronha": "America/Noronha",
+        "Brazil/East": "America/Sao_Paulo",
+        "Brazil/West": "America/Manaus",
+        "Canada/Atlantic": "America/Halifax",
+        "Canada/Central": "America/Winnipeg",
+        "Canada/East-Saskatchewan": "America/Regina",
+        "Canada/Eastern": "America/Toronto",
+        "Canada/Mountain": "America/Edmonton",
+        "Canada/Newfoundland": "America/St_Johns",
+        "Canada/Pacific": "America/Vancouver",
+        "Canada/Saskatchewan": "America/Regina",
+        "Canada/Yukon": "America/Whitehorse",
+        "Chile/Continental": "America/Santiago",
+        "Chile/EasterIsland": "Pacific/Easter",
+        "Cuba": "America/Havana",
+        "Egypt": "Africa/Cairo",
+        "Eire": "Europe/Dublin",
+        "Etc/GMT+0": "Etc/GMT",
+        "Etc/GMT-0": "Etc/GMT",
+        "Etc/GMT0": "Etc/GMT",
+        "Etc/Greenwich": "Etc/GMT",
+        "Etc/Universal": "Etc/UTC",
+        "Etc/Zulu": "Etc/UTC",
+        "Europe/Belfast": "Europe/London",
+        "Europe/Bratislava": "Europe/Prague",
+        "Europe/Busingen": "Europe/Zurich",
+        "Europe/Guernsey": "Europe/London",
+        "Europe/Isle_of_Man": "Europe/London",
+        "Europe/Jersey": "Europe/London",
+        "Europe/Ljubljana": "Europe/Belgrade",
+        "Europe/Mariehamn": "Europe/Helsinki",
+        "Europe/Nicosia": "Asia/Nicosia",
+        "Europe/Podgorica": "Europe/Belgrade",
+        "Europe/San_Marino": "Europe/Rome",
+        "Europe/Sarajevo": "Europe/Belgrade",
+        "Europe/Skopje": "Europe/Belgrade",
+        "Europe/Tiraspol": "Europe/Chisinau",
+        "Europe/Vatican": "Europe/Rome",
+        "Europe/Zagreb": "Europe/Belgrade",
+        "GB": "Europe/London",
+        "GB-Eire": "Europe/London",
+        "GMT": "Etc/GMT",
+        "GMT+0": "Etc/GMT",
+        "GMT-0": "Etc/GMT",
+        "GMT0": "Etc/GMT",
+        "Greenwich": "Etc/GMT",
+        "Hongkong": "Asia/Hong_Kong",
+        "Iceland": "Atlantic/Reykjavik",
+        "Iran": "Asia/Tehran",
+        "Israel": "Asia/Jerusalem",
+        "Jamaica": "America/Jamaica",
+        "Japan": "Asia/Tokyo",
+        "Kwajalein": "Pacific/Kwajalein",
+        "Libya": "Africa/Tripoli",
+        "Mexico/BajaNorte": "America/Tijuana",
+        "Mexico/BajaSur": "America/Mazatlan",
+        "Mexico/General": "America/Mexico_City",
+        "NZ": "Pacific/Auckland",
+        "NZ-CHAT": "Pacific/Chatham",
+        "Navajo": "America/Denver",
+        "PRC": "Asia/Shanghai",
+        "Pacific/Ponape": "Pacific/Pohnpei",
+        "Pacific/Samoa": "Pacific/Pago_Pago",
+        "Pacific/Truk": "Pacific/Chuuk",
+        "Pacific/Yap": "Pacific/Chuuk",
+        "Poland": "Europe/Warsaw",
+        "Portugal": "Europe/Lisbon",
+        "ROC": "Asia/Taipei",
+        "ROK": "Asia/Seoul",
+        "Singapore": "Asia/Singapore",
+        "Turkey": "Europe/Istanbul",
+        "UCT": "Etc/UCT",
+        "US/Alaska": "America/Anchorage",
+        "US/Aleutian": "America/Adak",
+        "US/Arizona": "America/Phoenix",
+        "US/Central": "America/Chicago",
+        "US/East-Indiana": "America/Indiana/Indianapolis",
+        "US/Eastern": "America/New_York",
+        "US/Hawaii": "Pacific/Honolulu",
+        "US/Indiana-Starke": "America/Indiana/Knox",
+        "US/Michigan": "America/Detroit",
+        "US/Mountain": "America/Denver",
+        "US/Pacific": "America/Los_Angeles",
+        "US/Samoa": "Pacific/Pago_Pago",
+        "UTC": "Etc/UTC",
+        "Universal": "Etc/UTC",
+        "W-SU": "Europe/Moscow",
+        "Zulu": "Etc/UTC"
+    },
+    "meta": {
+        "Africa/Abidjan": {
+            "lat": 5.3167,
+            "lon": -3.9667,
+            "rules": ""
+        },
+        "Africa/Accra": {
+            "lat": 5.55,
+            "lon": 0.2167,
+            "rules": "Ghana"
+        },
+        "Africa/Addis_Ababa": {
+            "lat": 9.0333,
+            "lon": 38.7,
+            "rules": ""
+        },
+        "Africa/Algiers": {
+            "lat": 36.7833,
+            "lon": 3.05,
+            "rules": "Algeria"
+        },
+        "Africa/Asmara": {
+            "lat": 15.3333,
+            "lon": 38.8833,
+            "rules": ""
+        },
+        "Africa/Bamako": {
+            "lat": 12.65,
+            "lon": -8,
+            "rules": ""
+        },
+        "Africa/Bangui": {
+            "lat": 4.3667,
+            "lon": 18.5833,
+            "rules": ""
+        },
+        "Africa/Banjul": {
+            "lat": 13.4667,
+            "lon": -15.35,
+            "rules": ""
+        },
+        "Africa/Bissau": {
+            "lat": 11.85,
+            "lon": -14.4167,
+            "rules": ""
+        },
+        "Africa/Blantyre": {
+            "lat": -14.2167,
+            "lon": 35,
+            "rules": ""
+        },
+        "Africa/Brazzaville": {
+            "lat": -3.7333,
+            "lon": 15.2833,
+            "rules": ""
+        },
+        "Africa/Bujumbura": {
+            "lat": -2.6167,
+            "lon": 29.3667,
+            "rules": ""
+        },
+        "Africa/Cairo": {
+            "lat": 30.05,
+            "lon": 31.25,
+            "rules": "Egypt"
+        },
+        "Africa/Casablanca": {
+            "lat": 33.65,
+            "lon": -6.4167,
+            "rules": "Morocco"
+        },
+        "Africa/Ceuta": {
+            "lat": 35.8833,
+            "lon": -4.6833,
+            "rules": "Spain SpainAfrica EU"
+        },
+        "Africa/Conakry": {
+            "lat": 9.5167,
+            "lon": -12.2833,
+            "rules": ""
+        },
+        "Africa/Dakar": {
+            "lat": 14.6667,
+            "lon": -16.5667,
+            "rules": ""
+        },
+        "Africa/Dar_es_Salaam": {
+            "lat": -5.2,
+            "lon": 39.2833,
+            "rules": ""
+        },
+        "Africa/Djibouti": {
+            "lat": 11.6,
+            "lon": 43.15,
+            "rules": ""
+        },
+        "Africa/Douala": {
+            "lat": 4.05,
+            "lon": 9.7,
+            "rules": ""
+        },
+        "Africa/El_Aaiun": {
+            "lat": 27.15,
+            "lon": -12.8,
+            "rules": ""
+        },
+        "Africa/Freetown": {
+            "lat": 8.5,
+            "lon": -12.75,
+            "rules": "SL"
+        },
+        "Africa/Gaborone": {
+            "lat": -23.35,
+            "lon": 25.9167,
+            "rules": ""
+        },
+        "Africa/Harare": {
+            "lat": -16.1667,
+            "lon": 31.05,
+            "rules": ""
+        },
+        "Africa/Johannesburg": {
+            "lat": -25.75,
+            "lon": 28,
+            "rules": "SA"
+        },
+        "Africa/Juba": {
+            "lat": 4.85,
+            "lon": 31.6,
+            "rules": "Sudan"
+        },
+        "Africa/Kampala": {
+            "lat": 0.3167,
+            "lon": 32.4167,
+            "rules": ""
+        },
+        "Africa/Khartoum": {
+            "lat": 15.6,
+            "lon": 32.5333,
+            "rules": "Sudan"
+        },
+        "Africa/Kigali": {
+            "lat": -0.05,
+            "lon": 30.0667,
+            "rules": ""
+        },
+        "Africa/Kinshasa": {
+            "lat": -3.7,
+            "lon": 15.3,
+            "rules": ""
+        },
+        "Africa/Lagos": {
+            "lat": 6.45,
+            "lon": 3.4,
+            "rules": ""
+        },
+        "Africa/Libreville": {
+            "lat": 0.3833,
+            "lon": 9.45,
+            "rules": ""
+        },
+        "Africa/Lome": {
+            "lat": 6.1333,
+            "lon": 1.2167,
+            "rules": ""
+        },
+        "Africa/Luanda": {
+            "lat": -7.2,
+            "lon": 13.2333,
+            "rules": ""
+        },
+        "Africa/Lubumbashi": {
+            "lat": -10.3333,
+            "lon": 27.4667,
+            "rules": ""
+        },
+        "Africa/Lusaka": {
+            "lat": -14.5833,
+            "lon": 28.2833,
+            "rules": ""
+        },
+        "Africa/Malabo": {
+            "lat": 3.75,
+            "lon": 8.7833,
+            "rules": ""
+        },
+        "Africa/Maputo": {
+            "lat": -24.0333,
+            "lon": 32.5833,
+            "rules": ""
+        },
+        "Africa/Maseru": {
+            "lat": -28.5333,
+            "lon": 27.5,
+            "rules": ""
+        },
+        "Africa/Mbabane": {
+            "lat": -25.7,
+            "lon": 31.1,
+            "rules": ""
+        },
+        "Africa/Mogadishu": {
+            "lat": 2.0667,
+            "lon": 45.3667,
+            "rules": ""
+        },
+        "Africa/Monrovia": {
+            "lat": 6.3,
+            "lon": -9.2167,
+            "rules": ""
+        },
+        "Africa/Nairobi": {
+            "lat": -0.7167,
+            "lon": 36.8167,
+            "rules": ""
+        },
+        "Africa/Ndjamena": {
+            "lat": 12.1167,
+            "lon": 15.05,
+            "rules": ""
+        },
+        "Africa/Niamey": {
+            "lat": 13.5167,
+            "lon": 2.1167,
+            "rules": ""
+        },
+        "Africa/Nouakchott": {
+            "lat": 18.1,
+            "lon": -14.05,
+            "rules": ""
+        },
+        "Africa/Ouagadougou": {
+            "lat": 12.3667,
+            "lon": -0.4833,
+            "rules": ""
+        },
+        "Africa/Porto-Novo": {
+            "lat": 6.4833,
+            "lon": 2.6167,
+            "rules": ""
+        },
+        "Africa/Sao_Tome": {
+            "lat": 0.3333,
+            "lon": 6.7333,
+            "rules": ""
+        },
+        "Africa/Tripoli": {
+            "lat": 32.9,
+            "lon": 13.1833,
+            "rules": "Libya"
+        },
+        "Africa/Tunis": {
+            "lat": 36.8,
+            "lon": 10.1833,
+            "rules": "Tunisia"
+        },
+        "Africa/Windhoek": {
+            "lat": -21.4333,
+            "lon": 17.1,
+            "rules": "Namibia"
+        },
+        "America/Adak": {
+            "lat": 51.88,
+            "lon": -175.3419,
+            "rules": "US"
+        },
+        "America/Anchorage": {
+            "lat": 61.2181,
+            "lon": -148.0997,
+            "rules": "US"
+        },
+        "America/Anguilla": {
+            "lat": 18.2,
+            "lon": -62.9333,
+            "rules": ""
+        },
+        "America/Antigua": {
+            "lat": 17.05,
+            "lon": -60.2,
+            "rules": ""
+        },
+        "America/Araguaina": {
+            "lat": -6.8,
+            "lon": -47.8,
+            "rules": "Brazil"
+        },
+        "America/Argentina/Buenos_Aires": {
+            "lat": -33.4,
+            "lon": -57.55,
+            "rules": "Arg"
+        },
+        "America/Argentina/Catamarca": {
+            "lat": -27.5333,
+            "lon": -64.2167,
+            "rules": "Arg"
+        },
+        "America/Argentina/Cordoba": {
+            "lat": -30.6,
+            "lon": -63.8167,
+            "rules": "Arg"
+        },
+        "America/Argentina/Jujuy": {
+            "lat": -23.8167,
+            "lon": -64.7,
+            "rules": "Arg"
+        },
+        "America/Argentina/La_Rioja": {
+            "lat": -28.5667,
+            "lon": -65.15,
+            "rules": "Arg"
+        },
+        "America/Argentina/Mendoza": {
+            "lat": -31.1167,
+            "lon": -67.1833,
+            "rules": "Arg"
+        },
+        "America/Argentina/Rio_Gallegos": {
+            "lat": -50.3667,
+            "lon": -68.7833,
+            "rules": "Arg"
+        },
+        "America/Argentina/Salta": {
+            "lat": -23.2167,
+            "lon": -64.5833,
+            "rules": "Arg"
+        },
+        "America/Argentina/San_Juan": {
+            "lat": -30.4667,
+            "lon": -67.4833,
+            "rules": "Arg"
+        },
+        "America/Argentina/San_Luis": {
+            "lat": -32.6833,
+            "lon": -65.65,
+            "rules": "Arg SanLuis"
+        },
+        "America/Argentina/Tucuman": {
+            "lat": -25.1833,
+            "lon": -64.7833,
+            "rules": "Arg"
+        },
+        "America/Argentina/Ushuaia": {
+            "lat": -53.2,
+            "lon": -67.7,
+            "rules": "Arg"
+        },
+        "America/Aruba": {
+            "lat": 12.5,
+            "lon": -68.0333,
+            "rules": ""
+        },
+        "America/Asuncion": {
+            "lat": -24.7333,
+            "lon": -56.3333,
+            "rules": "Para"
+        },
+        "America/Atikokan": {
+            "lat": 48.7586,
+            "lon": -90.3783,
+            "rules": "Canada"
+        },
+        "America/Bahia": {
+            "lat": -11.0167,
+            "lon": -37.4833,
+            "rules": "Brazil"
+        },
+        "America/Bahia_Banderas": {
+            "lat": 20.8,
+            "lon": -104.75,
+            "rules": "Mexico"
+        },
+        "America/Barbados": {
+            "lat": 13.1,
+            "lon": -58.3833,
+            "rules": "Barb"
+        },
+        "America/Belem": {
+            "lat": -0.55,
+            "lon": -47.5167,
+            "rules": "Brazil"
+        },
+        "America/Belize": {
+            "lat": 17.5,
+            "lon": -87.8,
+            "rules": "Belize"
+        },
+        "America/Blanc-Sablon": {
+            "lat": 51.4167,
+            "lon": -56.8833,
+            "rules": "Canada"
+        },
+        "America/Boa_Vista": {
+            "lat": 2.8167,
+            "lon": -59.3333,
+            "rules": "Brazil"
+        },
+        "America/Bogota": {
+            "lat": 4.6,
+            "lon": -73.9167,
+            "rules": "CO"
+        },
+        "America/Boise": {
+            "lat": 43.6136,
+            "lon": -115.7975,
+            "rules": "US"
+        },
+        "America/Cambridge_Bay": {
+            "lat": 69.1139,
+            "lon": -104.9472,
+            "rules": "NT_YK Canada"
+        },
+        "America/Campo_Grande": {
+            "lat": -19.55,
+            "lon": -53.3833,
+            "rules": "Brazil"
+        },
+        "America/Cancun": {
+            "lat": 21.0833,
+            "lon": -85.2333,
+            "rules": "Mexico"
+        },
+        "America/Caracas": {
+            "lat": 10.5,
+            "lon": -65.0667,
+            "rules": ""
+        },
+        "America/Cayenne": {
+            "lat": 4.9333,
+            "lon": -51.6667,
+            "rules": ""
+        },
+        "America/Cayman": {
+            "lat": 19.3,
+            "lon": -80.6167,
+            "rules": ""
+        },
+        "America/Chicago": {
+            "lat": 41.85,
+            "lon": -86.35,
+            "rules": "US Chicago"
+        },
+        "America/Chihuahua": {
+            "lat": 28.6333,
+            "lon": -105.9167,
+            "rules": "Mexico"
+        },
+        "America/Costa_Rica": {
+            "lat": 9.9333,
+            "lon": -83.9167,
+            "rules": "CR"
+        },
+        "America/Creston": {
+            "lat": 49.1,
+            "lon": -115.4833,
+            "rules": ""
+        },
+        "America/Cuiaba": {
+            "lat": -14.4167,
+            "lon": -55.9167,
+            "rules": "Brazil"
+        },
+        "America/Curacao": {
+            "lat": 12.1833,
+            "lon": -69,
+            "rules": ""
+        },
+        "America/Danmarkshavn": {
+            "lat": 76.7667,
+            "lon": -17.3333,
+            "rules": "EU"
+        },
+        "America/Dawson": {
+            "lat": 64.0667,
+            "lon": -138.5833,
+            "rules": "NT_YK Canada"
+        },
+        "America/Dawson_Creek": {
+            "lat": 59.7667,
+            "lon": -119.7667,
+            "rules": "Canada Vanc"
+        },
+        "America/Denver": {
+            "lat": 39.7392,
+            "lon": -103.0158,
+            "rules": "US Denver"
+        },
+        "America/Detroit": {
+            "lat": 42.3314,
+            "lon": -82.9542,
+            "rules": "US Detroit"
+        },
+        "America/Dominica": {
+            "lat": 15.3,
+            "lon": -60.6,
+            "rules": ""
+        },
+        "America/Edmonton": {
+            "lat": 53.55,
+            "lon": -112.5333,
+            "rules": "Edm Canada"
+        },
+        "America/Eirunepe": {
+            "lat": -5.3333,
+            "lon": -68.1333,
+            "rules": "Brazil"
+        },
+        "America/El_Salvador": {
+            "lat": 13.7,
+            "lon": -88.8,
+            "rules": "Salv"
+        },
+        "America/Fortaleza": {
+            "lat": -2.2833,
+            "lon": -37.5,
+            "rules": "Brazil"
+        },
+        "America/Glace_Bay": {
+            "lat": 46.2,
+            "lon": -58.05,
+            "rules": "Canada Halifax"
+        },
+        "America/Godthab": {
+            "lat": 64.1833,
+            "lon": -50.2667,
+            "rules": "EU"
+        },
+        "America/Goose_Bay": {
+            "lat": 53.3333,
+            "lon": -59.5833,
+            "rules": "Canada StJohns"
+        },
+        "America/Grand_Turk": {
+            "lat": 21.4667,
+            "lon": -70.8667,
+            "rules": "TC"
+        },
+        "America/Grenada": {
+            "lat": 12.05,
+            "lon": -60.25,
+            "rules": ""
+        },
+        "America/Guadeloupe": {
+            "lat": 16.2333,
+            "lon": -60.4667,
+            "rules": ""
+        },
+        "America/Guatemala": {
+            "lat": 14.6333,
+            "lon": -89.4833,
+            "rules": "Guat"
+        },
+        "America/Guayaquil": {
+            "lat": -1.8333,
+            "lon": -78.1667,
+            "rules": ""
+        },
+        "America/Guyana": {
+            "lat": 6.8,
+            "lon": -57.8333,
+            "rules": ""
+        },
+        "America/Halifax": {
+            "lat": 44.65,
+            "lon": -62.4,
+            "rules": "Halifax Canada"
+        },
+        "America/Havana": {
+            "lat": 23.1333,
+            "lon": -81.6333,
+            "rules": "Cuba"
+        },
+        "America/Hermosillo": {
+            "lat": 29.0667,
+            "lon": -109.0333,
+            "rules": "Mexico"
+        },
+        "America/Indiana/Indianapolis": {
+            "lat": 39.7683,
+            "lon": -85.8419,
+            "rules": "US Indianapolis"
+        },
+        "America/Indiana/Knox": {
+            "lat": 41.2958,
+            "lon": -85.375,
+            "rules": "US Starke"
+        },
+        "America/Indiana/Marengo": {
+            "lat": 38.3756,
+            "lon": -85.6553,
+            "rules": "US Marengo"
+        },
+        "America/Indiana/Petersburg": {
+            "lat": 38.4919,
+            "lon": -86.7214,
+            "rules": "US Pike"
+        },
+        "America/Indiana/Tell_City": {
+            "lat": 37.9531,
+            "lon": -85.2386,
+            "rules": "US Perry"
+        },
+        "America/Indiana/Vevay": {
+            "lat": 38.7478,
+            "lon": -84.9328,
+            "rules": "US"
+        },
+        "America/Indiana/Vincennes": {
+            "lat": 38.6772,
+            "lon": -86.4714,
+            "rules": "US Vincennes"
+        },
+        "America/Indiana/Winamac": {
+            "lat": 41.0514,
+            "lon": -85.3969,
+            "rules": "US Pulaski"
+        },
+        "America/Inuvik": {
+            "lat": 68.3497,
+            "lon": -132.2833,
+            "rules": "NT_YK Canada"
+        },
+        "America/Iqaluit": {
+            "lat": 63.7333,
+            "lon": -67.5333,
+            "rules": "NT_YK Canada"
+        },
+        "America/Jamaica": {
+            "lat": 18,
+            "lon": -75.2,
+            "rules": "US"
+        },
+        "America/Juneau": {
+            "lat": 58.3019,
+            "lon": -133.5803,
+            "rules": "US"
+        },
+        "America/Kentucky/Louisville": {
+            "lat": 38.2542,
+            "lon": -84.2406,
+            "rules": "US Louisville"
+        },
+        "America/Kentucky/Monticello": {
+            "lat": 36.8297,
+            "lon": -83.1508,
+            "rules": "US"
+        },
+        "America/Kralendijk": {
+            "lat": 12.1508,
+            "lon": -67.7233,
+            "rules": ""
+        },
+        "America/La_Paz": {
+            "lat": -15.5,
+            "lon": -67.85,
+            "rules": ""
+        },
+        "America/Lima": {
+            "lat": -11.95,
+            "lon": -76.95,
+            "rules": "Peru"
+        },
+        "America/Los_Angeles": {
+            "lat": 34.0522,
+            "lon": -117.7572,
+            "rules": "US CA"
+        },
+        "America/Lower_Princes": {
+            "lat": 18.0514,
+            "lon": -62.9528,
+            "rules": ""
+        },
+        "America/Maceio": {
+            "lat": -8.3333,
+            "lon": -34.2833,
+            "rules": "Brazil"
+        },
+        "America/Managua": {
+            "lat": 12.15,
+            "lon": -85.7167,
+            "rules": "Nic"
+        },
+        "America/Manaus": {
+            "lat": -2.8667,
+            "lon": -59.9833,
+            "rules": "Brazil"
+        },
+        "America/Marigot": {
+            "lat": 18.0667,
+            "lon": -62.9167,
+            "rules": ""
+        },
+        "America/Martinique": {
+            "lat": 14.6,
+            "lon": -60.9167,
+            "rules": ""
+        },
+        "America/Matamoros": {
+            "lat": 25.8333,
+            "lon": -96.5,
+            "rules": "US Mexico"
+        },
+        "America/Mazatlan": {
+            "lat": 23.2167,
+            "lon": -105.5833,
+            "rules": "Mexico"
+        },
+        "America/Menominee": {
+            "lat": 45.1078,
+            "lon": -86.3858,
+            "rules": "US Menominee"
+        },
+        "America/Merida": {
+            "lat": 20.9667,
+            "lon": -88.3833,
+            "rules": "Mexico"
+        },
+        "America/Metlakatla": {
+            "lat": 55.1269,
+            "lon": -130.4236,
+            "rules": "US"
+        },
+        "America/Mexico_City": {
+            "lat": 19.4,
+            "lon": -98.85,
+            "rules": "Mexico"
+        },
+        "America/Miquelon": {
+            "lat": 47.05,
+            "lon": -55.6667,
+            "rules": "Canada"
+        },
+        "America/Moncton": {
+            "lat": 46.1,
+            "lon": -63.2167,
+            "rules": "Canada Moncton"
+        },
+        "America/Monterrey": {
+            "lat": 25.6667,
+            "lon": -99.6833,
+            "rules": "US Mexico"
+        },
+        "America/Montevideo": {
+            "lat": -33.1167,
+            "lon": -55.8167,
+            "rules": "Uruguay"
+        },
+        "America/Montreal": {
+            "lat": 45.5167,
+            "lon": -72.4333,
+            "rules": "Mont Canada"
+        },
+        "America/Montserrat": {
+            "lat": 16.7167,
+            "lon": -61.7833,
+            "rules": ""
+        },
+        "America/Nassau": {
+            "lat": 25.0833,
+            "lon": -76.65,
+            "rules": "Bahamas US"
+        },
+        "America/New_York": {
+            "lat": 40.7142,
+            "lon": -73.9936,
+            "rules": "US NYC"
+        },
+        "America/Nipigon": {
+            "lat": 49.0167,
+            "lon": -87.7333,
+            "rules": "Canada"
+        },
+        "America/Nome": {
+            "lat": 64.5011,
+            "lon": -164.5936,
+            "rules": "US"
+        },
+        "America/Noronha": {
+            "lat": -2.15,
+            "lon": -31.5833,
+            "rules": "Brazil"
+        },
+        "America/North_Dakota/Beulah": {
+            "lat": 47.2642,
+            "lon": -100.2222,
+            "rules": "US"
+        },
+        "America/North_Dakota/Center": {
+            "lat": 47.1164,
+            "lon": -100.7008,
+            "rules": "US"
+        },
+        "America/North_Dakota/New_Salem": {
+            "lat": 46.845,
+            "lon": -100.5892,
+            "rules": "US"
+        },
+        "America/Ojinaga": {
+            "lat": 29.5667,
+            "lon": -103.5833,
+            "rules": "Mexico US"
+        },
+        "America/Panama": {
+            "lat": 8.9667,
+            "lon": -78.4667,
+            "rules": ""
+        },
+        "America/Pangnirtung": {
+            "lat": 66.1333,
+            "lon": -64.2667,
+            "rules": "NT_YK Canada"
+        },
+        "America/Paramaribo": {
+            "lat": 5.8333,
+            "lon": -54.8333,
+            "rules": ""
+        },
+        "America/Phoenix": {
+            "lat": 33.4483,
+            "lon": -111.9267,
+            "rules": "US"
+        },
+        "America/Port-au-Prince": {
+            "lat": 18.5333,
+            "lon": -71.6667,
+            "rules": "Haiti"
+        },
+        "America/Port_of_Spain": {
+            "lat": 10.65,
+            "lon": -60.4833,
+            "rules": ""
+        },
+        "America/Porto_Velho": {
+            "lat": -7.2333,
+            "lon": -62.1,
+            "rules": "Brazil"
+        },
+        "America/Puerto_Rico": {
+            "lat": 18.4683,
+            "lon": -65.8939,
+            "rules": "US"
+        },
+        "America/Rainy_River": {
+            "lat": 48.7167,
+            "lon": -93.4333,
+            "rules": "Canada"
+        },
+        "America/Rankin_Inlet": {
+            "lat": 62.8167,
+            "lon": -91.9169,
+            "rules": "NT_YK Canada"
+        },
+        "America/Recife": {
+            "lat": -7.95,
+            "lon": -33.1,
+            "rules": "Brazil"
+        },
+        "America/Regina": {
+            "lat": 50.4,
+            "lon": -103.35,
+            "rules": "Regina"
+        },
+        "America/Resolute": {
+            "lat": 74.6956,
+            "lon": -93.1708,
+            "rules": "NT_YK Canada"
+        },
+        "America/Rio_Branco": {
+            "lat": -8.0333,
+            "lon": -66.2,
+            "rules": "Brazil"
+        },
+        "America/Santa_Isabel": {
+            "lat": 30.3,
+            "lon": -113.1333,
+            "rules": "CA US Mexico"
+        },
+        "America/Santarem": {
+            "lat": -1.5667,
+            "lon": -53.1333,
+            "rules": "Brazil"
+        },
+        "America/Santiago": {
+            "lat": -32.55,
+            "lon": -69.3333,
+            "rules": "Chile"
+        },
+        "America/Santo_Domingo": {
+            "lat": 18.4667,
+            "lon": -68.1,
+            "rules": "DR US"
+        },
+        "America/Sao_Paulo": {
+            "lat": -22.4667,
+            "lon": -45.3833,
+            "rules": "Brazil"
+        },
+        "America/Scoresbysund": {
+            "lat": 70.4833,
+            "lon": -20.0333,
+            "rules": "C-Eur EU"
+        },
+        "America/Shiprock": {
+            "lat": 36.7856,
+            "lon": -107.3136,
+            "rules": ""
+        },
+        "America/Sitka": {
+            "lat": 57.1764,
+            "lon": -134.6981,
+            "rules": "US"
+        },
+        "America/St_Barthelemy": {
+            "lat": 17.8833,
+            "lon": -61.15,
+            "rules": ""
+        },
+        "America/St_Johns": {
+            "lat": 47.5667,
+            "lon": -51.2833,
+            "rules": "StJohns Canada"
+        },
+        "America/St_Kitts": {
+            "lat": 17.3,
+            "lon": -61.2833,
+            "rules": ""
+        },
+        "America/St_Lucia": {
+            "lat": 14.0167,
+            "lon": -61,
+            "rules": ""
+        },
+        "America/St_Thomas": {
+            "lat": 18.35,
+            "lon": -63.0667,
+            "rules": ""
+        },
+        "America/St_Vincent": {
+            "lat": 13.15,
+            "lon": -60.7667,
+            "rules": ""
+        },
+        "America/Swift_Current": {
+            "lat": 50.2833,
+            "lon": -106.1667,
+            "rules": "Canada Regina Swift"
+        },
+        "America/Tegucigalpa": {
+            "lat": 14.1,
+            "lon": -86.7833,
+            "rules": "Hond"
+        },
+        "America/Thule": {
+            "lat": 76.5667,
+            "lon": -67.2167,
+            "rules": "Thule"
+        },
+        "America/Thunder_Bay": {
+            "lat": 48.3833,
+            "lon": -88.75,
+            "rules": "Canada Mont"
+        },
+        "America/Tijuana": {
+            "lat": 32.5333,
+            "lon": -116.9833,
+            "rules": "CA US Mexico"
+        },
+        "America/Toronto": {
+            "lat": 43.65,
+            "lon": -78.6167,
+            "rules": "Canada Toronto"
+        },
+        "America/Tortola": {
+            "lat": 18.45,
+            "lon": -63.3833,
+            "rules": ""
+        },
+        "America/Vancouver": {
+            "lat": 49.2667,
+            "lon": -122.8833,
+            "rules": "Vanc Canada"
+        },
+        "America/Whitehorse": {
+            "lat": 60.7167,
+            "lon": -134.95,
+            "rules": "NT_YK Canada"
+        },
+        "America/Winnipeg": {
+            "lat": 49.8833,
+            "lon": -96.85,
+            "rules": "Winn Canada"
+        },
+        "America/Yakutat": {
+            "lat": 59.5469,
+            "lon": -138.2728,
+            "rules": "US"
+        },
+        "America/Yellowknife": {
+            "lat": 62.45,
+            "lon": -113.65,
+            "rules": "NT_YK Canada"
+        },
+        "Antarctica/Casey": {
+            "lat": -65.7167,
+            "lon": 110.5167,
+            "rules": ""
+        },
+        "Antarctica/Davis": {
+            "lat": -67.4167,
+            "lon": 77.9667,
+            "rules": ""
+        },
+        "Antarctica/DumontDUrville": {
+            "lat": -65.3333,
+            "lon": 140.0167,
+            "rules": ""
+        },
+        "Antarctica/Macquarie": {
+            "lat": -53.5,
+            "lon": 158.95,
+            "rules": "Aus AT"
+        },
+        "Antarctica/Mawson": {
+            "lat": -66.4,
+            "lon": 62.8833,
+            "rules": ""
+        },
+        "Antarctica/McMurdo": {
+            "lat": -76.1667,
+            "lon": 166.6,
+            "rules": "NZAQ"
+        },
+        "Antarctica/Palmer": {
+            "lat": -63.2,
+            "lon": -63.9,
+            "rules": "ArgAQ ChileAQ"
+        },
+        "Antarctica/Rothera": {
+            "lat": -66.4333,
+            "lon": -67.8667,
+            "rules": ""
+        },
+        "Antarctica/South_Pole": {
+            "lat": -90,
+            "lon": 0,
+            "rules": ""
+        },
+        "Antarctica/Syowa": {
+            "lat": -68.9939,
+            "lon": 39.59,
+            "rules": ""
+        },
+        "Antarctica/Vostok": {
+            "lat": -77.6,
+            "lon": 106.9,
+            "rules": ""
+        },
+        "Arctic/Longyearbyen": {
+            "lat": 78,
+            "lon": 16,
+            "rules": ""
+        },
+        "Asia/Aden": {
+            "lat": 12.75,
+            "lon": 45.2,
+            "rules": ""
+        },
+        "Asia/Almaty": {
+            "lat": 43.25,
+            "lon": 76.95,
+            "rules": "RussiaAsia"
+        },
+        "Asia/Amman": {
+            "lat": 31.95,
+            "lon": 35.9333,
+            "rules": "Jordan"
+        },
+        "Asia/Anadyr": {
+            "lat": 64.75,
+            "lon": 177.4833,
+            "rules": "Russia"
+        },
+        "Asia/Aqtau": {
+            "lat": 44.5167,
+            "lon": 50.2667,
+            "rules": "RussiaAsia"
+        },
+        "Asia/Aqtobe": {
+            "lat": 50.2833,
+            "lon": 57.1667,
+            "rules": "RussiaAsia"
+        },
+        "Asia/Ashgabat": {
+            "lat": 37.95,
+            "lon": 58.3833,
+            "rules": "RussiaAsia"
+        },
+        "Asia/Baghdad": {
+            "lat": 33.35,
+            "lon": 44.4167,
+            "rules": "Iraq"
+        },
+        "Asia/Bahrain": {
+            "lat": 26.3833,
+            "lon": 50.5833,
+            "rules": ""
+        },
+        "Asia/Baku": {
+            "lat": 40.3833,
+            "lon": 49.85,
+            "rules": "RussiaAsia EUAsia Azer"
+        },
+        "Asia/Bangkok": {
+            "lat": 13.75,
+            "lon": 100.5167,
+            "rules": ""
+        },
+        "Asia/Beirut": {
+            "lat": 33.8833,
+            "lon": 35.5,
+            "rules": "Lebanon"
+        },
+        "Asia/Bishkek": {
+            "lat": 42.9,
+            "lon": 74.6,
+            "rules": "RussiaAsia Kyrgyz"
+        },
+        "Asia/Brunei": {
+            "lat": 4.9333,
+            "lon": 114.9167,
+            "rules": ""
+        },
+        "Asia/Choibalsan": {
+            "lat": 48.0667,
+            "lon": 114.5,
+            "rules": "Mongol"
+        },
+        "Asia/Chongqing": {
+            "lat": 29.5667,
+            "lon": 106.5833,
+            "rules": "PRC"
+        },
+        "Asia/Colombo": {
+            "lat": 6.9333,
+            "lon": 79.85,
+            "rules": ""
+        },
+        "Asia/Damascus": {
+            "lat": 33.5,
+            "lon": 36.3,
+            "rules": "Syria"
+        },
+        "Asia/Dhaka": {
+            "lat": 23.7167,
+            "lon": 90.4167,
+            "rules": "Dhaka"
+        },
+        "Asia/Dili": {
+            "lat": -7.45,
+            "lon": 125.5833,
+            "rules": ""
+        },
+        "Asia/Dubai": {
+            "lat": 25.3,
+            "lon": 55.3,
+            "rules": ""
+        },
+        "Asia/Dushanbe": {
+            "lat": 38.5833,
+            "lon": 68.8,
+            "rules": "RussiaAsia"
+        },
+        "Asia/Gaza": {
+            "lat": 31.5,
+            "lon": 34.4667,
+            "rules": "Zion EgyptAsia Jordan Palestine"
+        },
+        "Asia/Harbin": {
+            "lat": 45.75,
+            "lon": 126.6833,
+            "rules": "PRC"
+        },
+        "Asia/Hebron": {
+            "lat": 31.5333,
+            "lon": 35.095,
+            "rules": "Zion EgyptAsia Jordan Palestine"
+        },
+        "Asia/Ho_Chi_Minh": {
+            "lat": 10.75,
+            "lon": 106.6667,
+            "rules": ""
+        },
+        "Asia/Hong_Kong": {
+            "lat": 22.2833,
+            "lon": 114.15,
+            "rules": "HK"
+        },
+        "Asia/Hovd": {
+            "lat": 48.0167,
+            "lon": 91.65,
+            "rules": "Mongol"
+        },
+        "Asia/Irkutsk": {
+            "lat": 52.2667,
+            "lon": 104.3333,
+            "rules": "Russia"
+        },
+        "Asia/Jakarta": {
+            "lat": -5.8333,
+            "lon": 106.8,
+            "rules": ""
+        },
+        "Asia/Jayapura": {
+            "lat": -1.4667,
+            "lon": 140.7,
+            "rules": ""
+        },
+        "Asia/Jerusalem": {
+            "lat": 31.7667,
+            "lon": 35.2333,
+            "rules": "Zion"
+        },
+        "Asia/Kabul": {
+            "lat": 34.5167,
+            "lon": 69.2,
+            "rules": ""
+        },
+        "Asia/Kamchatka": {
+            "lat": 53.0167,
+            "lon": 158.65,
+            "rules": "Russia"
+        },
+        "Asia/Karachi": {
+            "lat": 24.8667,
+            "lon": 67.05,
+            "rules": "Pakistan"
+        },
+        "Asia/Kashgar": {
+            "lat": 39.4833,
+            "lon": 75.9833,
+            "rules": "PRC"
+        },
+        "Asia/Kathmandu": {
+            "lat": 27.7167,
+            "lon": 85.3167,
+            "rules": ""
+        },
+        "Asia/Khandyga": {
+            "lat": 62.6564,
+            "lon": 135.5539,
+            "rules": "Russia"
+        },
+        "Asia/Kolkata": {
+            "lat": 22.5333,
+            "lon": 88.3667,
+            "rules": ""
+        },
+        "Asia/Krasnoyarsk": {
+            "lat": 56.0167,
+            "lon": 92.8333,
+            "rules": "Russia"
+        },
+        "Asia/Kuala_Lumpur": {
+            "lat": 3.1667,
+            "lon": 101.7,
+            "rules": ""
+        },
+        "Asia/Kuching": {
+            "lat": 1.55,
+            "lon": 110.3333,
+            "rules": "NBorneo"
+        },
+        "Asia/Kuwait": {
+            "lat": 29.3333,
+            "lon": 47.9833,
+            "rules": ""
+        },
+        "Asia/Macau": {
+            "lat": 22.2333,
+            "lon": 113.5833,
+            "rules": "Macau PRC"
+        },
+        "Asia/Magadan": {
+            "lat": 59.5667,
+            "lon": 150.8,
+            "rules": "Russia"
+        },
+        "Asia/Makassar": {
+            "lat": -4.8833,
+            "lon": 119.4,
+            "rules": ""
+        },
+        "Asia/Manila": {
+            "lat": 14.5833,
+            "lon": 121,
+            "rules": "Phil"
+        },
+        "Asia/Muscat": {
+            "lat": 23.6,
+            "lon": 58.5833,
+            "rules": ""
+        },
+        "Asia/Nicosia": {
+            "lat": 35.1667,
+            "lon": 33.3667,
+            "rules": "Cyprus EUAsia"
+        },
+        "Asia/Novokuznetsk": {
+            "lat": 53.75,
+            "lon": 87.1167,
+            "rules": "Russia"
+        },
+        "Asia/Novosibirsk": {
+            "lat": 55.0333,
+            "lon": 82.9167,
+            "rules": "Russia"
+        },
+        "Asia/Omsk": {
+            "lat": 55,
+            "lon": 73.4,
+            "rules": "Russia"
+        },
+        "Asia/Oral": {
+            "lat": 51.2167,
+            "lon": 51.35,
+            "rules": "RussiaAsia"
+        },
+        "Asia/Phnom_Penh": {
+            "lat": 11.55,
+            "lon": 104.9167,
+            "rules": ""
+        },
+        "Asia/Pontianak": {
+            "lat": 0.0333,
+            "lon": 109.3333,
+            "rules": ""
+        },
+        "Asia/Pyongyang": {
+            "lat": 39.0167,
+            "lon": 125.75,
+            "rules": ""
+        },
+        "Asia/Qatar": {
+            "lat": 25.2833,
+            "lon": 51.5333,
+            "rules": ""
+        },
+        "Asia/Qyzylorda": {
+            "lat": 44.8,
+            "lon": 65.4667,
+            "rules": "RussiaAsia"
+        },
+        "Asia/Rangoon": {
+            "lat": 16.7833,
+            "lon": 96.1667,
+            "rules": ""
+        },
+        "Asia/Riyadh": {
+            "lat": 24.6333,
+            "lon": 46.7167,
+            "rules": ""
+        },
+        "Asia/Sakhalin": {
+            "lat": 46.9667,
+            "lon": 142.7,
+            "rules": "Russia"
+        },
+        "Asia/Samarkand": {
+            "lat": 39.6667,
+            "lon": 66.8,
+            "rules": "RussiaAsia"
+        },
+        "Asia/Seoul": {
+            "lat": 37.55,
+            "lon": 126.9667,
+            "rules": "ROK"
+        },
+        "Asia/Shanghai": {
+            "lat": 31.2333,
+            "lon": 121.4667,
+            "rules": "Shang PRC"
+        },
+        "Asia/Singapore": {
+            "lat": 1.2833,
+            "lon": 103.85,
+            "rules": ""
+        },
+        "Asia/Taipei": {
+            "lat": 25.05,
+            "lon": 121.5,
+            "rules": "Taiwan"
+        },
+        "Asia/Tashkent": {
+            "lat": 41.3333,
+            "lon": 69.3,
+            "rules": "RussiaAsia"
+        },
+        "Asia/Tbilisi": {
+            "lat": 41.7167,
+            "lon": 44.8167,
+            "rules": "RussiaAsia E-EurAsia"
+        },
+        "Asia/Tehran": {
+            "lat": 35.6667,
+            "lon": 51.4333,
+            "rules": "Iran"
+        },
+        "Asia/Thimphu": {
+            "lat": 27.4667,
+            "lon": 89.65,
+            "rules": ""
+        },
+        "Asia/Tokyo": {
+            "lat": 35.6544,
+            "lon": 139.7447,
+            "rules": "Japan"
+        },
+        "Asia/Ulaanbaatar": {
+            "lat": 47.9167,
+            "lon": 106.8833,
+            "rules": "Mongol"
+        },
+        "Asia/Urumqi": {
+            "lat": 43.8,
+            "lon": 87.5833,
+            "rules": "PRC"
+        },
+        "Asia/Ust-Nera": {
+            "lat": 64.5603,
+            "lon": 143.2267,
+            "rules": "Russia"
+        },
+        "Asia/Vientiane": {
+            "lat": 17.9667,
+            "lon": 102.6,
+            "rules": ""
+        },
+        "Asia/Vladivostok": {
+            "lat": 43.1667,
+            "lon": 131.9333,
+            "rules": "Russia"
+        },
+        "Asia/Yakutsk": {
+            "lat": 62,
+            "lon": 129.6667,
+            "rules": "Russia"
+        },
+        "Asia/Yekaterinburg": {
+            "lat": 56.85,
+            "lon": 60.6,
+            "rules": "Russia"
+        },
+        "Asia/Yerevan": {
+            "lat": 40.1833,
+            "lon": 44.5,
+            "rules": "RussiaAsia"
+        },
+        "Atlantic/Azores": {
+            "lat": 37.7333,
+            "lon": -24.3333,
+            "rules": "Port W-Eur EU"
+        },
+        "Atlantic/Bermuda": {
+            "lat": 32.2833,
+            "lon": -63.2333,
+            "rules": "Bahamas US"
+        },
+        "Atlantic/Canary": {
+            "lat": 28.1,
+            "lon": -14.6,
+            "rules": "EU"
+        },
+        "Atlantic/Cape_Verde": {
+            "lat": 14.9167,
+            "lon": -22.4833,
+            "rules": ""
+        },
+        "Atlantic/Faroe": {
+            "lat": 62.0167,
+            "lon": -5.2333,
+            "rules": "EU"
+        },
+        "Atlantic/Madeira": {
+            "lat": 32.6333,
+            "lon": -15.1,
+            "rules": "Port EU"
+        },
+        "Atlantic/Reykjavik": {
+            "lat": 64.15,
+            "lon": -20.15,
+            "rules": "Iceland"
+        },
+        "Atlantic/South_Georgia": {
+            "lat": -53.7333,
+            "lon": -35.4667,
+            "rules": ""
+        },
+        "Atlantic/St_Helena": {
+            "lat": -14.0833,
+            "lon": -4.3,
+            "rules": ""
+        },
+        "Atlantic/Stanley": {
+            "lat": -50.3,
+            "lon": -56.15,
+            "rules": "Falk"
+        },
+        "Australia/Adelaide": {
+            "lat": -33.0833,
+            "lon": 138.5833,
+            "rules": "Aus AS"
+        },
+        "Australia/Brisbane": {
+            "lat": -26.5333,
+            "lon": 153.0333,
+            "rules": "Aus AQ"
+        },
+        "Australia/Broken_Hill": {
+            "lat": -30.05,
+            "lon": 141.45,
+            "rules": "Aus AN AS"
+        },
+        "Australia/Currie": {
+            "lat": -38.0667,
+            "lon": 143.8667,
+            "rules": "Aus AT"
+        },
+        "Australia/Darwin": {
+            "lat": -11.5333,
+            "lon": 130.8333,
+            "rules": "Aus"
+        },
+        "Australia/Eucla": {
+            "lat": -30.2833,
+            "lon": 128.8667,
+            "rules": "Aus AW"
+        },
+        "Australia/Hobart": {
+            "lat": -41.1167,
+            "lon": 147.3167,
+            "rules": "Aus AT"
+        },
+        "Australia/Lindeman": {
+            "lat": -19.7333,
+            "lon": 149,
+            "rules": "Aus AQ Holiday"
+        },
+        "Australia/Lord_Howe": {
+            "lat": -30.45,
+            "lon": 159.0833,
+            "rules": "LH"
+        },
+        "Australia/Melbourne": {
+            "lat": -36.1833,
+            "lon": 144.9667,
+            "rules": "Aus AV"
+        },
+        "Australia/Perth": {
+            "lat": -30.05,
+            "lon": 115.85,
+            "rules": "Aus AW"
+        },
+        "Australia/Sydney": {
+            "lat": -32.1333,
+            "lon": 151.2167,
+            "rules": "Aus AN"
+        },
+        "CET": {
+            "rules": "C-Eur"
+        },
+        "CST6CDT": {
+            "rules": "US"
+        },
+        "EET": {
+            "rules": "EU"
+        },
+        "EST": {
+            "rules": ""
+        },
+        "EST5EDT": {
+            "rules": "US"
+        },
+        "Etc/GMT": {
+            "rules": ""
+        },
+        "Etc/GMT+1": {
+            "rules": ""
+        },
+        "Etc/GMT+10": {
+            "rules": ""
+        },
+        "Etc/GMT+11": {
+            "rules": ""
+        },
+        "Etc/GMT+12": {
+            "rules": ""
+        },
+        "Etc/GMT+2": {
+            "rules": ""
+        },
+        "Etc/GMT+3": {
+            "rules": ""
+        },
+        "Etc/GMT+4": {
+            "rules": ""
+        },
+        "Etc/GMT+5": {
+            "rules": ""
+        },
+        "Etc/GMT+6": {
+            "rules": ""
+        },
+        "Etc/GMT+7": {
+            "rules": ""
+        },
+        "Etc/GMT+8": {
+            "rules": ""
+        },
+        "Etc/GMT+9": {
+            "rules": ""
+        },
+        "Etc/GMT-1": {
+            "rules": ""
+        },
+        "Etc/GMT-10": {
+            "rules": ""
+        },
+        "Etc/GMT-11": {
+            "rules": ""
+        },
+        "Etc/GMT-12": {
+            "rules": ""
+        },
+        "Etc/GMT-13": {
+            "rules": ""
+        },
+        "Etc/GMT-14": {
+            "rules": ""
+        },
+        "Etc/GMT-2": {
+            "rules": ""
+        },
+        "Etc/GMT-3": {
+            "rules": ""
+        },
+        "Etc/GMT-4": {
+            "rules": ""
+        },
+        "Etc/GMT-5": {
+            "rules": ""
+        },
+        "Etc/GMT-6": {
+            "rules": ""
+        },
+        "Etc/GMT-7": {
+            "rules": ""
+        },
+        "Etc/GMT-8": {
+            "rules": ""
+        },
+        "Etc/GMT-9": {
+            "rules": ""
+        },
+        "Etc/UCT": {
+            "rules": ""
+        },
+        "Etc/UTC": {
+            "rules": ""
+        },
+        "Europe/Amsterdam": {
+            "lat": 52.3667,
+            "lon": 4.9,
+            "rules": "Neth C-Eur EU"
+        },
+        "Europe/Andorra": {
+            "lat": 42.5,
+            "lon": 1.5167,
+            "rules": "EU"
+        },
+        "Europe/Athens": {
+            "lat": 37.9667,
+            "lon": 23.7167,
+            "rules": "Greece EU"
+        },
+        "Europe/Belgrade": {
+            "lat": 44.8333,
+            "lon": 20.5,
+            "rules": "C-Eur EU"
+        },
+        "Europe/Berlin": {
+            "lat": 52.5,
+            "lon": 13.3667,
+            "rules": "C-Eur SovietZone Germany EU"
+        },
+        "Europe/Bratislava": {
+            "lat": 48.15,
+            "lon": 17.1167,
+            "rules": ""
+        },
+        "Europe/Brussels": {
+            "lat": 50.8333,
+            "lon": 4.3333,
+            "rules": "C-Eur Belgium EU"
+        },
+        "Europe/Bucharest": {
+            "lat": 44.4333,
+            "lon": 26.1,
+            "rules": "Romania C-Eur E-Eur EU"
+        },
+        "Europe/Budapest": {
+            "lat": 47.5,
+            "lon": 19.0833,
+            "rules": "C-Eur Hungary EU"
+        },
+        "Europe/Busingen": {
+            "lat": 47.7,
+            "lon": 8.6833,
+            "rules": ""
+        },
+        "Europe/Chisinau": {
+            "lat": 47,
+            "lon": 28.8333,
+            "rules": "Romania C-Eur Russia E-Eur EU"
+        },
+        "Europe/Copenhagen": {
+            "lat": 55.6667,
+            "lon": 12.5833,
+            "rules": "Denmark C-Eur EU"
+        },
+        "Europe/Dublin": {
+            "lat": 53.3333,
+            "lon": -5.75,
+            "rules": "GB-Eire EU"
+        },
+        "Europe/Gibraltar": {
+            "lat": 36.1333,
+            "lon": -4.65,
+            "rules": "GB-Eire EU"
+        },
+        "Europe/Guernsey": {
+            "lat": 49.45,
+            "lon": -1.4667,
+            "rules": ""
+        },
+        "Europe/Helsinki": {
+            "lat": 60.1667,
+            "lon": 24.9667,
+            "rules": "Finland EU"
+        },
+        "Europe/Isle_of_Man": {
+            "lat": 54.15,
+            "lon": -3.5333,
+            "rules": ""
+        },
+        "Europe/Istanbul": {
+            "lat": 41.0167,
+            "lon": 28.9667,
+            "rules": "Turkey EU"
+        },
+        "Europe/Jersey": {
+            "lat": 49.2,
+            "lon": -1.8833,
+            "rules": ""
+        },
+        "Europe/Kaliningrad": {
+            "lat": 54.7167,
+            "lon": 20.5,
+            "rules": "C-Eur Poland Russia"
+        },
+        "Europe/Kiev": {
+            "lat": 50.4333,
+            "lon": 30.5167,
+            "rules": "C-Eur Russia E-Eur EU"
+        },
+        "Europe/Lisbon": {
+            "lat": 38.7167,
+            "lon": -8.8667,
+            "rules": "Port W-Eur EU"
+        },
+        "Europe/Ljubljana": {
+            "lat": 46.05,
+            "lon": 14.5167,
+            "rules": ""
+        },
+        "Europe/London": {
+            "lat": 51.5083,
+            "lon": 0.1253,
+            "rules": "GB-Eire EU"
+        },
+        "Europe/Luxembourg": {
+            "lat": 49.6,
+            "lon": 6.15,
+            "rules": "Lux Belgium C-Eur EU"
+        },
+        "Europe/Madrid": {
+            "lat": 40.4,
+            "lon": -2.3167,
+            "rules": "Spain EU"
+        },
+        "Europe/Malta": {
+            "lat": 35.9,
+            "lon": 14.5167,
+            "rules": "Italy C-Eur Malta EU"
+        },
+        "Europe/Mariehamn": {
+            "lat": 60.1,
+            "lon": 19.95,
+            "rules": ""
+        },
+        "Europe/Minsk": {
+            "lat": 53.9,
+            "lon": 27.5667,
+            "rules": "C-Eur Russia"
+        },
+        "Europe/Monaco": {
+            "lat": 43.7,
+            "lon": 7.3833,
+            "rules": "France EU"
+        },
+        "Europe/Moscow": {
+            "lat": 55.75,
+            "lon": 37.5833,
+            "rules": "Russia"
+        },
+        "Europe/Oslo": {
+            "lat": 59.9167,
+            "lon": 10.75,
+            "rules": "Norway C-Eur EU"
+        },
+        "Europe/Paris": {
+            "lat": 48.8667,
+            "lon": 2.3333,
+            "rules": "France C-Eur EU"
+        },
+        "Europe/Podgorica": {
+            "lat": 42.4333,
+            "lon": 19.2667,
+            "rules": ""
+        },
+        "Europe/Prague": {
+            "lat": 50.0833,
+            "lon": 14.4333,
+            "rules": "C-Eur Czech EU"
+        },
+        "Europe/Riga": {
+            "lat": 56.95,
+            "lon": 24.1,
+            "rules": "C-Eur Russia Latvia EU"
+        },
+        "Europe/Rome": {
+            "lat": 41.9,
+            "lon": 12.4833,
+            "rules": "Italy C-Eur EU"
+        },
+        "Europe/Samara": {
+            "lat": 53.2,
+            "lon": 50.15,
+            "rules": "Russia"
+        },
+        "Europe/San_Marino": {
+            "lat": 43.9167,
+            "lon": 12.4667,
+            "rules": ""
+        },
+        "Europe/Sarajevo": {
+            "lat": 43.8667,
+            "lon": 18.4167,
+            "rules": ""
+        },
+        "Europe/Simferopol": {
+            "lat": 44.95,
+            "lon": 34.1,
+            "rules": "C-Eur Russia E-Eur EU"
+        },
+        "Europe/Skopje": {
+            "lat": 41.9833,
+            "lon": 21.4333,
+            "rules": ""
+        },
+        "Europe/Sofia": {
+            "lat": 42.6833,
+            "lon": 23.3167,
+            "rules": "C-Eur Bulg E-Eur EU"
+        },
+        "Europe/Stockholm": {
+            "lat": 59.3333,
+            "lon": 18.05,
+            "rules": "EU"
+        },
+        "Europe/Tallinn": {
+            "lat": 59.4167,
+            "lon": 24.75,
+            "rules": "C-Eur Russia EU"
+        },
+        "Europe/Tirane": {
+            "lat": 41.3333,
+            "lon": 19.8333,
+            "rules": "Albania EU"
+        },
+        "Europe/Uzhgorod": {
+            "lat": 48.6167,
+            "lon": 22.3,
+            "rules": "C-Eur Russia E-Eur EU"
+        },
+        "Europe/Vaduz": {
+            "lat": 47.15,
+            "lon": 9.5167,
+            "rules": "EU"
+        },
+        "Europe/Vatican": {
+            "lat": 41.9022,
+            "lon": 12.4531,
+            "rules": ""
+        },
+        "Europe/Vienna": {
+            "lat": 48.2167,
+            "lon": 16.3333,
+            "rules": "C-Eur Austria EU"
+        },
+        "Europe/Vilnius": {
+            "lat": 54.6833,
+            "lon": 25.3167,
+            "rules": "C-Eur Russia EU"
+        },
+        "Europe/Volgograd": {
+            "lat": 48.7333,
+            "lon": 44.4167,
+            "rules": "Russia"
+        },
+        "Europe/Warsaw": {
+            "lat": 52.25,
+            "lon": 21,
+            "rules": "C-Eur Poland W-Eur EU"
+        },
+        "Europe/Zagreb": {
+            "lat": 45.8,
+            "lon": 15.9667,
+            "rules": ""
+        },
+        "Europe/Zaporozhye": {
+            "lat": 47.8333,
+            "lon": 35.1667,
+            "rules": "C-Eur Russia E-Eur EU"
+        },
+        "Europe/Zurich": {
+            "lat": 47.3833,
+            "lon": 8.5333,
+            "rules": "Swiss EU"
+        },
+        "HST": {
+            "rules": ""
+        },
+        "Indian/Antananarivo": {
+            "lat": -17.0833,
+            "lon": 47.5167,
+            "rules": ""
+        },
+        "Indian/Chagos": {
+            "lat": -6.6667,
+            "lon": 72.4167,
+            "rules": ""
+        },
+        "Indian/Christmas": {
+            "lat": -9.5833,
+            "lon": 105.7167,
+            "rules": ""
+        },
+        "Indian/Cocos": {
+            "lat": -11.8333,
+            "lon": 96.9167,
+            "rules": ""
+        },
+        "Indian/Comoro": {
+            "lat": -10.3167,
+            "lon": 43.2667,
+            "rules": ""
+        },
+        "Indian/Kerguelen": {
+            "lat": -48.6472,
+            "lon": 70.2175,
+            "rules": ""
+        },
+        "Indian/Mahe": {
+            "lat": -3.3333,
+            "lon": 55.4667,
+            "rules": ""
+        },
+        "Indian/Maldives": {
+            "lat": 4.1667,
+            "lon": 73.5,
+            "rules": ""
+        },
+        "Indian/Mauritius": {
+            "lat": -19.8333,
+            "lon": 57.5,
+            "rules": "Mauritius"
+        },
+        "Indian/Mayotte": {
+            "lat": -11.2167,
+            "lon": 45.2333,
+            "rules": ""
+        },
+        "Indian/Reunion": {
+            "lat": -19.1333,
+            "lon": 55.4667,
+            "rules": ""
+        },
+        "MET": {
+            "rules": "C-Eur"
+        },
+        "MST": {
+            "rules": ""
+        },
+        "MST7MDT": {
+            "rules": "US"
+        },
+        "PST8PDT": {
+            "rules": "US"
+        },
+        "Pacific/Apia": {
+            "lat": -12.1667,
+            "lon": -170.2667,
+            "rules": "WS"
+        },
+        "Pacific/Auckland": {
+            "lat": -35.1333,
+            "lon": 174.7667,
+            "rules": "NZ"
+        },
+        "Pacific/Chatham": {
+            "lat": -42.05,
+            "lon": -175.45,
+            "rules": "Chatham"
+        },
+        "Pacific/Chuuk": {
+            "lat": 7.4167,
+            "lon": 151.7833,
+            "rules": ""
+        },
+        "Pacific/Easter": {
+            "lat": -26.85,
+            "lon": -108.5667,
+            "rules": "Chile"
+        },
+        "Pacific/Efate": {
+            "lat": -16.3333,
+            "lon": 168.4167,
+            "rules": "Vanuatu"
+        },
+        "Pacific/Enderbury": {
+            "lat": -2.8667,
+            "lon": -170.9167,
+            "rules": ""
+        },
+        "Pacific/Fakaofo": {
+            "lat": -8.6333,
+            "lon": -170.7667,
+            "rules": ""
+        },
+        "Pacific/Fiji": {
+            "lat": -17.8667,
+            "lon": 178.4167,
+            "rules": "Fiji"
+        },
+        "Pacific/Funafuti": {
+            "lat": -7.4833,
+            "lon": 179.2167,
+            "rules": ""
+        },
+        "Pacific/Galapagos": {
+            "lat": 0.9,
+            "lon": -88.4,
+            "rules": ""
+        },
+        "Pacific/Gambier": {
+            "lat": -22.8667,
+            "lon": -133.05,
+            "rules": ""
+        },
+        "Pacific/Guadalcanal": {
+            "lat": -8.4667,
+            "lon": 160.2,
+            "rules": ""
+        },
+        "Pacific/Guam": {
+            "lat": 13.4667,
+            "lon": 144.75,
+            "rules": ""
+        },
+        "Pacific/Honolulu": {
+            "lat": 21.3069,
+            "lon": -156.1417,
+            "rules": ""
+        },
+        "Pacific/Johnston": {
+            "lat": 16.75,
+            "lon": -168.4833,
+            "rules": ""
+        },
+        "Pacific/Kiritimati": {
+            "lat": 1.8667,
+            "lon": -156.6667,
+            "rules": ""
+        },
+        "Pacific/Kosrae": {
+            "lat": 5.3167,
+            "lon": 162.9833,
+            "rules": ""
+        },
+        "Pacific/Kwajalein": {
+            "lat": 9.0833,
+            "lon": 167.3333,
+            "rules": ""
+        },
+        "Pacific/Majuro": {
+            "lat": 7.15,
+            "lon": 171.2,
+            "rules": ""
+        },
+        "Pacific/Marquesas": {
+            "lat": -9,
+            "lon": -138.5,
+            "rules": ""
+        },
+        "Pacific/Midway": {
+            "lat": 28.2167,
+            "lon": -176.6333,
+            "rules": ""
+        },
+        "Pacific/Nauru": {
+            "lat": 0.5167,
+            "lon": 166.9167,
+            "rules": ""
+        },
+        "Pacific/Niue": {
+            "lat": -18.9833,
+            "lon": -168.0833,
+            "rules": ""
+        },
+        "Pacific/Norfolk": {
+            "lat": -28.95,
+            "lon": 167.9667,
+            "rules": ""
+        },
+        "Pacific/Noumea": {
+            "lat": -21.7333,
+            "lon": 166.45,
+            "rules": "NC"
+        },
+        "Pacific/Pago_Pago": {
+            "lat": -13.7333,
+            "lon": -169.3,
+            "rules": ""
+        },
+        "Pacific/Palau": {
+            "lat": 7.3333,
+            "lon": 134.4833,
+            "rules": ""
+        },
+        "Pacific/Pitcairn": {
+            "lat": -24.9333,
+            "lon": -129.9167,
+            "rules": ""
+        },
+        "Pacific/Pohnpei": {
+            "lat": 6.9667,
+            "lon": 158.2167,
+            "rules": ""
+        },
+        "Pacific/Port_Moresby": {
+            "lat": -8.5,
+            "lon": 147.1667,
+            "rules": ""
+        },
+        "Pacific/Rarotonga": {
+            "lat": -20.7667,
+            "lon": -158.2333,
+            "rules": "Cook"
+        },
+        "Pacific/Saipan": {
+            "lat": 15.2,
+            "lon": 145.75,
+            "rules": ""
+        },
+        "Pacific/Tahiti": {
+            "lat": -16.4667,
+            "lon": -148.4333,
+            "rules": ""
+        },
+        "Pacific/Tarawa": {
+            "lat": 1.4167,
+            "lon": 173,
+            "rules": ""
+        },
+        "Pacific/Tongatapu": {
+            "lat": -20.8333,
+            "lon": -174.8333,
+            "rules": "Tonga"
+        },
+        "Pacific/Wake": {
+            "lat": 19.2833,
+            "lon": 166.6167,
+            "rules": ""
+        },
+        "Pacific/Wallis": {
+            "lat": -12.7,
+            "lon": -175.8333,
+            "rules": ""
+        },
+        "WET": {
+            "rules": "EU"
+        }
+    },
+    "rules": {
+        "AN": [
+            "1971 1985 9 0 8 2 2 1",
+            "1972 1972 1 27 7 2 2 0",
+            "1973 1981 2 1 0 2 2 0",
+            "1982 1982 3 1 0 2 2 0",
+            "1983 1985 2 1 0 2 2 0",
+            "1986 1989 2 15 0 2 2 0",
+            "1986 1986 9 19 7 2 2 1",
+            "1987 1999 9 0 8 2 2 1",
+            "1990 1995 2 1 0 2 2 0",
+            "1996 2005 2 0 8 2 2 0",
+            "2000 2000 7 0 8 2 2 1",
+            "2001 2007 9 0 8 2 2 1",
+            "2006 2006 3 1 0 2 2 0",
+            "2007 2007 2 0 8 2 2 0",
+            "2008 9999 3 1 0 2 2 0",
+            "2008 9999 9 1 0 2 2 1"
+        ],
+        "AQ": [
+            "1971 1971 9 0 8 2 2 1",
+            "1972 1972 1 0 8 2 2 0",
+            "1989 1991 9 0 8 2 2 1",
+            "1990 1992 2 1 0 2 2 0"
+        ],
+        "AS": [
+            "1971 1985 9 0 8 2 2 1",
+            "1986 1986 9 19 7 2 2 1",
+            "1987 2007 9 0 8 2 2 1",
+            "1972 1972 1 27 7 2 2 0",
+            "1973 1985 2 1 0 2 2 0",
+            "1986 1990 2 15 0 2 2 0",
+            "1991 1991 2 3 7 2 2 0",
+            "1992 1992 2 22 7 2 2 0",
+            "1993 1993 2 7 7 2 2 0",
+            "1994 1994 2 20 7 2 2 0",
+            "1995 2005 2 0 8 2 2 0",
+            "2006 2006 3 2 7 2 2 0",
+            "2007 2007 2 0 8 2 2 0",
+            "2008 9999 3 1 0 2 2 0",
+            "2008 9999 9 1 0 2 2 1"
+        ],
+        "AT": [
+            "1967 1967 9 1 0 2 2 1",
+            "1968 1968 2 0 8 2 2 0",
+            "1968 1985 9 0 8 2 2 1",
+            "1969 1971 2 8 0 2 2 0",
+            "1972 1972 1 0 8 2 2 0",
+            "1973 1981 2 1 0 2 2 0",
+            "1982 1983 2 0 8 2 2 0",
+            "1984 1986 2 1 0 2 2 0",
+            "1986 1986 9 15 0 2 2 1",
+            "1987 1990 2 15 0 2 2 0",
+            "1987 1987 9 22 0 2 2 1",
+            "1988 1990 9 0 8 2 2 1",
+            "1991 1999 9 1 0 2 2 1",
+            "1991 2005 2 0 8 2 2 0",
+            "2000 2000 7 0 8 2 2 1",
+            "2001 9999 9 1 0 2 2 1",
+            "2006 2006 3 1 0 2 2 0",
+            "2007 2007 2 0 8 2 2 0",
+            "2008 9999 3 1 0 2 2 0"
+        ],
+        "AV": [
+            "1971 1985 9 0 8 2 2 1",
+            "1972 1972 1 0 8 2 2 0",
+            "1973 1985 2 1 0 2 2 0",
+            "1986 1990 2 15 0 2 2 0",
+            "1986 1987 9 15 0 2 2 1",
+            "1988 1999 9 0 8 2 2 1",
+            "1991 1994 2 1 0 2 2 0",
+            "1995 2005 2 0 8 2 2 0",
+            "2000 2000 7 0 8 2 2 1",
+            "2001 2007 9 0 8 2 2 1",
+            "2006 2006 3 1 0 2 2 0",
+            "2007 2007 2 0 8 2 2 0",
+            "2008 9999 3 1 0 2 2 0",
+            "2008 9999 9 1 0 2 2 1"
+        ],
+        "AW": [
+            "1974 1974 9 0 8 2 2 1",
+            "1975 1975 2 1 0 2 2 0",
+            "1983 1983 9 0 8 2 2 1",
+            "1984 1984 2 1 0 2 2 0",
+            "1991 1991 10 17 7 2 2 1",
+            "1992 1992 2 1 0 2 2 0",
+            "2006 2006 11 3 7 2 2 1",
+            "2007 2009 2 0 8 2 2 0",
+            "2007 2008 9 0 8 2 2 1"
+        ],
+        "Albania": [
+            "1940 1940 5 16 7 0 0 1 S",
+            "1942 1942 10 2 7 3 0 0",
+            "1943 1943 2 29 7 2 0 1 S",
+            "1943 1943 3 10 7 3 0 0",
+            "1974 1974 4 4 7 0 0 1 S",
+            "1974 1974 9 2 7 0 0 0",
+            "1975 1975 4 1 7 0 0 1 S",
+            "1975 1975 9 2 7 0 0 0",
+            "1976 1976 4 2 7 0 0 1 S",
+            "1976 1976 9 3 7 0 0 0",
+            "1977 1977 4 8 7 0 0 1 S",
+            "1977 1977 9 2 7 0 0 0",
+            "1978 1978 4 6 7 0 0 1 S",
+            "1978 1978 9 1 7 0 0 0",
+            "1979 1979 4 5 7 0 0 1 S",
+            "1979 1979 8 30 7 0 0 0",
+            "1980 1980 4 3 7 0 0 1 S",
+            "1980 1980 9 4 7 0 0 0",
+            "1981 1981 3 26 7 0 0 1 S",
+            "1981 1981 8 27 7 0 0 0",
+            "1982 1982 4 2 7 0 0 1 S",
+            "1982 1982 9 3 7 0 0 0",
+            "1983 1983 3 18 7 0 0 1 S",
+            "1983 1983 9 1 7 0 0 0",
+            "1984 1984 3 1 7 0 0 1 S"
+        ],
+        "Algeria": [
+            "1916 1916 5 14 7 23 2 1 S",
+            "1916 1919 9 1 0 23 2 0",
+            "1917 1917 2 24 7 23 2 1 S",
+            "1918 1918 2 9 7 23 2 1 S",
+            "1919 1919 2 1 7 23 2 1 S",
+            "1920 1920 1 14 7 23 2 1 S",
+            "1920 1920 9 23 7 23 2 0",
+            "1921 1921 2 14 7 23 2 1 S",
+            "1921 1921 5 21 7 23 2 0",
+            "1939 1939 8 11 7 23 2 1 S",
+            "1939 1939 10 19 7 1 0 0",
+            "1944 1945 3 1 1 2 0 1 S",
+            "1944 1944 9 8 7 2 0 0",
+            "1945 1945 8 16 7 1 0 0",
+            "1971 1971 3 25 7 23 2 1 S",
+            "1971 1971 8 26 7 23 2 0",
+            "1977 1977 4 6 7 0 0 1 S",
+            "1977 1977 9 21 7 0 0 0",
+            "1978 1978 2 24 7 1 0 1 S",
+            "1978 1978 8 22 7 3 0 0",
+            "1980 1980 3 25 7 0 0 1 S",
+            "1980 1980 9 31 7 2 0 0"
+        ],
+        "Arg": [
+            "1930 1930 11 1 7 0 0 1 S",
+            "1931 1931 3 1 7 0 0 0",
+            "1931 1931 9 15 7 0 0 1 S",
+            "1932 1940 2 1 7 0 0 0",
+            "1932 1939 10 1 7 0 0 1 S",
+            "1940 1940 6 1 7 0 0 1 S",
+            "1941 1941 5 15 7 0 0 0",
+            "1941 1941 9 15 7 0 0 1 S",
+            "1943 1943 7 1 7 0 0 0",
+            "1943 1943 9 15 7 0 0 1 S",
+            "1946 1946 2 1 7 0 0 0",
+            "1946 1946 9 1 7 0 0 1 S",
+            "1963 1963 9 1 7 0 0 0",
+            "1963 1963 11 15 7 0 0 1 S",
+            "1964 1966 2 1 7 0 0 0",
+            "1964 1966 9 15 7 0 0 1 S",
+            "1967 1967 3 2 7 0 0 0",
+            "1967 1968 9 1 0 0 0 1 S",
+            "1968 1969 3 1 0 0 0 0",
+            "1974 1974 0 23 7 0 0 1 S",
+            "1974 1974 4 1 7 0 0 0",
+            "1988 1988 11 1 7 0 0 1 S",
+            "1989 1993 2 1 0 0 0 0",
+            "1989 1992 9 15 0 0 0 1 S",
+            "1999 1999 9 1 0 0 0 1 S",
+            "2000 2000 2 3 7 0 0 0",
+            "2007 2007 11 30 7 0 0 1 S",
+            "2008 2009 2 15 0 0 0 0",
+            "2008 2008 9 15 0 0 0 1 S"
+        ],
+        "ArgAQ": [
+            "1964 1966 2 1 7 0 0 0",
+            "1964 1966 9 15 7 0 0 1 S",
+            "1967 1967 3 2 7 0 0 0",
+            "1967 1968 9 1 0 0 0 1 S",
+            "1968 1969 3 1 0 0 0 0",
+            "1974 1974 0 23 7 0 0 1 S",
+            "1974 1974 4 1 7 0 0 0"
+        ],
+        "Aus": [
+            "1917 1917 0 1 7 0:1 0 1",
+            "1917 1917 2 25 7 2 0 0",
+            "1942 1942 0 1 7 2 0 1",
+            "1942 1942 2 29 7 2 0 0",
+            "1942 1942 8 27 7 2 0 1",
+            "1943 1944 2 0 8 2 0 0",
+            "1943 1943 9 3 7 2 0 1"
+        ],
+        "Austria": [
+            "1920 1920 3 5 7 2 2 1 S",
+            "1920 1920 8 13 7 2 2 0",
+            "1946 1946 3 14 7 2 2 1 S",
+            "1946 1948 9 1 0 2 2 0",
+            "1947 1947 3 6 7 2 2 1 S",
+            "1948 1948 3 18 7 2 2 1 S",
+            "1980 1980 3 6 7 0 0 1 S",
+            "1980 1980 8 28 7 0 0 0"
+        ],
+        "Azer": [
+            "1997 9999 2 0 8 4 0 1 S",
+            "1997 9999 9 0 8 5 0 0"
+        ],
+        "Bahamas": [
+            "1964 1975 9 0 8 2 0 0 S",
+            "1964 1975 3 0 8 2 0 1 D"
+        ],
+        "Barb": [
+            "1977 1977 5 12 7 2 0 1 D",
+            "1977 1978 9 1 0 2 0 0 S",
+            "1978 1980 3 15 0 2 0 1 D",
+            "1979 1979 8 30 7 2 0 0 S",
+            "1980 1980 8 25 7 2 0 0 S"
+        ],
+        "Belgium": [
+            "1918 1918 2 9 7 0 2 1 S",
+            "1918 1919 9 1 6 23 2 0",
+            "1919 1919 2 1 7 23 2 1 S",
+            "1920 1920 1 14 7 23 2 1 S",
+            "1920 1920 9 23 7 23 2 0",
+            "1921 1921 2 14 7 23 2 1 S",
+            "1921 1921 9 25 7 23 2 0",
+            "1922 1922 2 25 7 23 2 1 S",
+            "1922 1927 9 1 6 23 2 0",
+            "1923 1923 3 21 7 23 2 1 S",
+            "1924 1924 2 29 7 23 2 1 S",
+            "1925 1925 3 4 7 23 2 1 S",
+            "1926 1926 3 17 7 23 2 1 S",
+            "1927 1927 3 9 7 23 2 1 S",
+            "1928 1928 3 14 7 23 2 1 S",
+            "1928 1938 9 2 0 2 2 0",
+            "1929 1929 3 21 7 2 2 1 S",
+            "1930 1930 3 13 7 2 2 1 S",
+            "1931 1931 3 19 7 2 2 1 S",
+            "1932 1932 3 3 7 2 2 1 S",
+            "1933 1933 2 26 7 2 2 1 S",
+            "1934 1934 3 8 7 2 2 1 S",
+            "1935 1935 2 31 7 2 2 1 S",
+            "1936 1936 3 19 7 2 2 1 S",
+            "1937 1937 3 4 7 2 2 1 S",
+            "1938 1938 2 27 7 2 2 1 S",
+            "1939 1939 3 16 7 2 2 1 S",
+            "1939 1939 10 19 7 2 2 0",
+            "1940 1940 1 25 7 2 2 1 S",
+            "1944 1944 8 17 7 2 2 0",
+            "1945 1945 3 2 7 2 2 1 S",
+            "1945 1945 8 16 7 2 2 0",
+            "1946 1946 4 19 7 2 2 1 S",
+            "1946 1946 9 7 7 2 2 0"
+        ],
+        "Belize": [
+            "1918 1942 9 2 0 0 0 0:30 HD",
+            "1919 1943 1 9 0 0 0 0 S",
+            "1973 1973 11 5 7 0 0 1 D",
+            "1974 1974 1 9 7 0 0 0 S",
+            "1982 1982 11 18 7 0 0 1 D",
+            "1983 1983 1 12 7 0 0 0 S"
+        ],
+        "Brazil": [
+            "1931 1931 9 3 7 11 0 1 S",
+            "1932 1933 3 1 7 0 0 0",
+            "1932 1932 9 3 7 0 0 1 S",
+            "1949 1952 11 1 7 0 0 1 S",
+            "1950 1950 3 16 7 1 0 0",
+            "1951 1952 3 1 7 0 0 0",
+            "1953 1953 2 1 7 0 0 0",
+            "1963 1963 11 9 7 0 0 1 S",
+            "1964 1964 2 1 7 0 0 0",
+            "1965 1965 0 31 7 0 0 1 S",
+            "1965 1965 2 31 7 0 0 0",
+            "1965 1965 11 1 7 0 0 1 S",
+            "1966 1968 2 1 7 0 0 0",
+            "1966 1967 10 1 7 0 0 1 S",
+            "1985 1985 10 2 7 0 0 1 S",
+            "1986 1986 2 15 7 0 0 0",
+            "1986 1986 9 25 7 0 0 1 S",
+            "1987 1987 1 14 7 0 0 0",
+            "1987 1987 9 25 7 0 0 1 S",
+            "1988 1988 1 7 7 0 0 0",
+            "1988 1988 9 16 7 0 0 1 S",
+            "1989 1989 0 29 7 0 0 0",
+            "1989 1989 9 15 7 0 0 1 S",
+            "1990 1990 1 11 7 0 0 0",
+            "1990 1990 9 21 7 0 0 1 S",
+            "1991 1991 1 17 7 0 0 0",
+            "1991 1991 9 20 7 0 0 1 S",
+            "1992 1992 1 9 7 0 0 0",
+            "1992 1992 9 25 7 0 0 1 S",
+            "1993 1993 0 31 7 0 0 0",
+            "1993 1995 9 11 0 0 0 1 S",
+            "1994 1995 1 15 0 0 0 0",
+            "1996 1996 1 11 7 0 0 0",
+            "1996 1996 9 6 7 0 0 1 S",
+            "1997 1997 1 16 7 0 0 0",
+            "1997 1997 9 6 7 0 0 1 S",
+            "1998 1998 2 1 7 0 0 0",
+            "1998 1998 9 11 7 0 0 1 S",
+            "1999 1999 1 21 7 0 0 0",
+            "1999 1999 9 3 7 0 0 1 S",
+            "2000 2000 1 27 7 0 0 0",
+            "2000 2001 9 8 0 0 0 1 S",
+            "2001 2006 1 15 0 0 0 0",
+            "2002 2002 10 3 7 0 0 1 S",
+            "2003 2003 9 19 7 0 0 1 S",
+            "2004 2004 10 2 7 0 0 1 S",
+            "2005 2005 9 16 7 0 0 1 S",
+            "2006 2006 10 5 7 0 0 1 S",
+            "2007 2007 1 25 7 0 0 0",
+            "2007 2007 9 8 0 0 0 1 S",
+            "2008 9999 9 15 0 0 0 1 S",
+            "2008 2011 1 15 0 0 0 0",
+            "2012 2012 1 22 0 0 0 0",
+            "2013 2014 1 15 0 0 0 0",
+            "2015 2015 1 22 0 0 0 0",
+            "2016 2022 1 15 0 0 0 0",
+            "2023 2023 1 22 0 0 0 0",
+            "2024 2025 1 15 0 0 0 0",
+            "2026 2026 1 22 0 0 0 0",
+            "2027 2033 1 15 0 0 0 0",
+            "2034 2034 1 22 0 0 0 0",
+            "2035 2036 1 15 0 0 0 0",
+            "2037 2037 1 22 0 0 0 0",
+            "2038 9999 1 15 0 0 0 0"
+        ],
+        "Bulg": [
+            "1979 1979 2 31 7 23 0 1 S",
+            "1979 1979 9 1 7 1 0 0",
+            "1980 1982 3 1 6 23 0 1 S",
+            "1980 1980 8 29 7 1 0 0",
+            "1981 1981 8 27 7 2 0 0"
+        ],
+        "C-Eur": [
+            "1916 1916 3 30 7 23 0 1 S",
+            "1916 1916 9 1 7 1 0 0",
+            "1917 1918 3 15 1 2 2 1 S",
+            "1917 1918 8 15 1 2 2 0",
+            "1940 1940 3 1 7 2 2 1 S",
+            "1942 1942 10 2 7 2 2 0",
+            "1943 1943 2 29 7 2 2 1 S",
+            "1943 1943 9 4 7 2 2 0",
+            "1944 1945 3 1 1 2 2 1 S",
+            "1944 1944 9 2 7 2 2 0",
+            "1945 1945 8 16 7 2 2 0",
+            "1977 1980 3 1 0 2 2 1 S",
+            "1977 1977 8 0 8 2 2 0",
+            "1978 1978 9 1 7 2 2 0",
+            "1979 1995 8 0 8 2 2 0",
+            "1981 9999 2 0 8 2 2 1 S",
+            "1996 9999 9 0 8 2 2 0"
+        ],
+        "CA": [
+            "1948 1948 2 14 7 2 0 1 D",
+            "1949 1949 0 1 7 2 0 0 S",
+            "1950 1966 3 0 8 2 0 1 D",
+            "1950 1961 8 0 8 2 0 0 S",
+            "1962 1966 9 0 8 2 0 0 S"
+        ],
+        "CO": [
+            "1992 1992 4 3 7 0 0 1 S",
+            "1993 1993 3 4 7 0 0 0"
+        ],
+        "CR": [
+            "1979 1980 1 0 8 0 0 1 D",
+            "1979 1980 5 1 0 0 0 0 S",
+            "1991 1992 0 15 6 0 0 1 D",
+            "1991 1991 6 1 7 0 0 0 S",
+            "1992 1992 2 15 7 0 0 0 S"
+        ],
+        "Canada": [
+            "1918 1918 3 14 7 2 0 1 D",
+            "1918 1918 9 27 7 2 0 0 S",
+            "1942 1942 1 9 7 2 0 1 W",
+            "1945 1945 7 14 7 23 1 1 P",
+            "1945 1945 8 30 7 2 0 0 S",
+            "1974 1986 3 0 8 2 0 1 D",
+            "1974 2006 9 0 8 2 0 0 S",
+            "1987 2006 3 1 0 2 0 1 D",
+            "2007 9999 2 8 0 2 0 1 D",
+            "2007 9999 10 1 0 2 0 0 S"
+        ],
+        "Chatham": [
+            "1974 1974 10 1 0 2:45 2 1 D",
+            "1975 1975 1 0 8 2:45 2 0 S",
+            "1975 1988 9 0 8 2:45 2 1 D",
+            "1976 1989 2 1 0 2:45 2 0 S",
+            "1989 1989 9 8 0 2:45 2 1 D",
+            "1990 2006 9 1 0 2:45 2 1 D",
+            "1990 2007 2 15 0 2:45 2 0 S",
+            "2007 9999 8 0 8 2:45 2 1 D",
+            "2008 9999 3 1 0 2:45 2 0 S"
+        ],
+        "Chicago": [
+            "1920 1920 5 13 7 2 0 1 D",
+            "1920 1921 9 0 8 2 0 0 S",
+            "1921 1921 2 0 8 2 0 1 D",
+            "1922 1966 3 0 8 2 0 1 D",
+            "1922 1954 8 0 8 2 0 0 S",
+            "1955 1966 9 0 8 2 0 0 S"
+        ],
+        "Chile": [
+            "1927 1932 8 1 7 0 0 1 S",
+            "1928 1932 3 1 7 0 0 0",
+            "1942 1942 5 1 7 4 1 0",
+            "1942 1942 7 1 7 5 1 1 S",
+            "1946 1946 6 15 7 4 1 1 S",
+            "1946 1946 8 1 7 3 1 0",
+            "1947 1947 3 1 7 4 1 0",
+            "1968 1968 10 3 7 4 1 1 S",
+            "1969 1969 2 30 7 3 1 0",
+            "1969 1969 10 23 7 4 1 1 S",
+            "1970 1970 2 29 7 3 1 0",
+            "1971 1971 2 14 7 3 1 0",
+            "1970 1972 9 9 0 4 1 1 S",
+            "1972 1986 2 9 0 3 1 0",
+            "1973 1973 8 30 7 4 1 1 S",
+            "1974 1987 9 9 0 4 1 1 S",
+            "1987 1987 3 12 7 3 1 0",
+            "1988 1989 2 9 0 3 1 0",
+            "1988 1988 9 1 0 4 1 1 S",
+            "1989 1989 9 9 0 4 1 1 S",
+            "1990 1990 2 18 7 3 1 0",
+            "1990 1990 8 16 7 4 1 1 S",
+            "1991 1996 2 9 0 3 1 0",
+            "1991 1997 9 9 0 4 1 1 S",
+            "1997 1997 2 30 7 3 1 0",
+            "1998 1998 2 9 0 3 1 0",
+            "1998 1998 8 27 7 4 1 1 S",
+            "1999 1999 3 4 7 3 1 0",
+            "1999 2010 9 9 0 4 1 1 S",
+            "2000 2007 2 9 0 3 1 0",
+            "2008 2008 2 30 7 3 1 0",
+            "2009 2009 2 9 0 3 1 0",
+            "2010 2010 3 1 0 3 1 0",
+            "2011 2011 4 2 0 3 1 0",
+            "2011 2011 7 16 0 4 1 1 S",
+            "2012 9999 3 23 0 3 1 0",
+            "2012 9999 8 2 0 4 1 1 S"
+        ],
+        "ChileAQ": [
+            "1972 1986 2 9 0 3 1 0",
+            "1974 1987 9 9 0 4 1 1 S",
+            "1987 1987 3 12 7 3 1 0",
+            "1988 1989 2 9 0 3 1 0",
+            "1988 1988 9 1 0 4 1 1 S",
+            "1989 1989 9 9 0 4 1 1 S",
+            "1990 1990 2 18 7 3 1 0",
+            "1990 1990 8 16 7 4 1 1 S",
+            "1991 1996 2 9 0 3 1 0",
+            "1991 1997 9 9 0 4 1 1 S",
+            "1997 1997 2 30 7 3 1 0",
+            "1998 1998 2 9 0 3 1 0",
+            "1998 1998 8 27 7 4 1 1 S",
+            "1999 1999 3 4 7 3 1 0",
+            "1999 2010 9 9 0 4 1 1 S",
+            "2000 2007 2 9 0 3 1 0",
+            "2008 2008 2 30 7 3 1 0",
+            "2009 2009 2 9 0 3 1 0",
+            "2010 2010 3 1 0 3 1 0",
+            "2011 2011 4 2 0 3 1 0",
+            "2011 2011 7 16 0 4 1 1 S",
+            "2012 9999 3 23 0 3 1 0",
+            "2012 9999 8 2 0 4 1 1 S"
+        ],
+        "Cook": [
+            "1978 1978 10 12 7 0 0 0:30 HS",
+            "1979 1991 2 1 0 0 0 0",
+            "1979 1990 9 0 8 0 0 0:30 HS"
+        ],
+        "Cuba": [
+            "1928 1928 5 10 7 0 0 1 D",
+            "1928 1928 9 10 7 0 0 0 S",
+            "1940 1942 5 1 0 0 0 1 D",
+            "1940 1942 8 1 0 0 0 0 S",
+            "1945 1946 5 1 0 0 0 1 D",
+            "1945 1946 8 1 0 0 0 0 S",
+            "1965 1965 5 1 7 0 0 1 D",
+            "1965 1965 8 30 7 0 0 0 S",
+            "1966 1966 4 29 7 0 0 1 D",
+            "1966 1966 9 2 7 0 0 0 S",
+            "1967 1967 3 8 7 0 0 1 D",
+            "1967 1968 8 8 0 0 0 0 S",
+            "1968 1968 3 14 7 0 0 1 D",
+            "1969 1977 3 0 8 0 0 1 D",
+            "1969 1971 9 0 8 0 0 0 S",
+            "1972 1974 9 8 7 0 0 0 S",
+            "1975 1977 9 0 8 0 0 0 S",
+            "1978 1978 4 7 7 0 0 1 D",
+            "1978 1990 9 8 0 0 0 0 S",
+            "1979 1980 2 15 0 0 0 1 D",
+            "1981 1985 4 5 0 0 0 1 D",
+            "1986 1989 2 14 0 0 0 1 D",
+            "1990 1997 3 1 0 0 0 1 D",
+            "1991 1995 9 8 0 0 2 0 S",
+            "1996 1996 9 6 7 0 2 0 S",
+            "1997 1997 9 12 7 0 2 0 S",
+            "1998 1999 2 0 8 0 2 1 D",
+            "1998 2003 9 0 8 0 2 0 S",
+            "2000 2004 3 1 0 0 2 1 D",
+            "2006 2010 9 0 8 0 2 0 S",
+            "2007 2007 2 8 0 0 2 1 D",
+            "2008 2008 2 15 0 0 2 1 D",
+            "2009 2010 2 8 0 0 2 1 D",
+            "2011 2011 2 15 0 0 2 1 D",
+            "2011 2011 10 13 7 0 2 0 S",
+            "2012 2012 3 1 7 0 2 1 D",
+            "2012 9999 10 1 0 0 2 0 S",
+            "2013 9999 2 8 0 0 2 1 D"
+        ],
+        "Cyprus": [
+            "1975 1975 3 13 7 0 0 1 S",
+            "1975 1975 9 12 7 0 0 0",
+            "1976 1976 4 15 7 0 0 1 S",
+            "1976 1976 9 11 7 0 0 0",
+            "1977 1980 3 1 0 0 0 1 S",
+            "1977 1977 8 25 7 0 0 0",
+            "1978 1978 9 2 7 0 0 0",
+            "1979 1997 8 0 8 0 0 0",
+            "1981 1998 2 0 8 0 0 1 S"
+        ],
+        "Czech": [
+            "1945 1945 3 8 7 2 2 1 S",
+            "1945 1945 10 18 7 2 2 0",
+            "1946 1946 4 6 7 2 2 1 S",
+            "1946 1949 9 1 0 2 2 0",
+            "1947 1947 3 20 7 2 2 1 S",
+            "1948 1948 3 18 7 2 2 1 S",
+            "1949 1949 3 9 7 2 2 1 S"
+        ],
+        "DR": [
+            "1966 1966 9 30 7 0 0 1 D",
+            "1967 1967 1 28 7 0 0 0 S",
+            "1969 1973 9 0 8 0 0 0:30 HD",
+            "1970 1970 1 21 7 0 0 0 S",
+            "1971 1971 0 20 7 0 0 0 S",
+            "1972 1974 0 21 7 0 0 0 S"
+        ],
+        "Denmark": [
+            "1916 1916 4 14 7 23 0 1 S",
+            "1916 1916 8 30 7 23 0 0",
+            "1940 1940 4 15 7 0 0 1 S",
+            "1945 1945 3 2 7 2 2 1 S",
+            "1945 1945 7 15 7 2 2 0",
+            "1946 1946 4 1 7 2 2 1 S",
+            "1946 1946 8 1 7 2 2 0",
+            "1947 1947 4 4 7 2 2 1 S",
+            "1947 1947 7 10 7 2 2 0",
+            "1948 1948 4 9 7 2 2 1 S",
+            "1948 1948 7 8 7 2 2 0"
+        ],
+        "Denver": [
+            "1920 1921 2 0 8 2 0 1 D",
+            "1920 1920 9 0 8 2 0 0 S",
+            "1921 1921 4 22 7 2 0 0 S",
+            "1965 1966 3 0 8 2 0 1 D",
+            "1965 1966 9 0 8 2 0 0 S"
+        ],
+        "Detroit": [
+            "1948 1948 3 0 8 2 0 1 D",
+            "1948 1948 8 0 8 2 0 0 S",
+            "1967 1967 5 14 7 2 0 1 D",
+            "1967 1967 9 0 8 2 0 0 S"
+        ],
+        "Dhaka": [
+            "2009 2009 5 19 7 23 0 1 S",
+            "2009 2009 11 31 7 23:59 0 0"
+        ],
+        "E-Eur": [
+            "1977 1980 3 1 0 0 0 1 S",
+            "1977 1977 8 0 8 0 0 0",
+            "1978 1978 9 1 7 0 0 0",
+            "1979 1995 8 0 8 0 0 0",
+            "1981 9999 2 0 8 0 0 1 S",
+            "1996 9999 9 0 8 0 0 0"
+        ],
+        "E-EurAsia": [
+            "1981 9999 2 0 8 0 0 1 S",
+            "1979 1995 8 0 8 0 0 0",
+            "1996 9999 9 0 8 0 0 0"
+        ],
+        "EU": [
+            "1977 1980 3 1 0 1 1 1 S",
+            "1977 1977 8 0 8 1 1 0",
+            "1978 1978 9 1 7 1 1 0",
+            "1979 1995 8 0 8 1 1 0",
+            "1981 9999 2 0 8 1 1 1 S",
+            "1996 9999 9 0 8 1 1 0"
+        ],
+        "EUAsia": [
+            "1981 9999 2 0 8 1 1 1 S",
+            "1979 1995 8 0 8 1 1 0",
+            "1996 9999 9 0 8 1 1 0"
+        ],
+        "Edm": [
+            "1918 1919 3 8 0 2 0 1 D",
+            "1918 1918 9 27 7 2 0 0 S",
+            "1919 1919 4 27 7 2 0 0 S",
+            "1920 1923 3 0 8 2 0 1 D",
+            "1920 1920 9 0 8 2 0 0 S",
+            "1921 1923 8 0 8 2 0 0 S",
+            "1942 1942 1 9 7 2 0 1 W",
+            "1945 1945 7 14 7 23 1 1 P",
+            "1945 1945 8 0 8 2 0 0 S",
+            "1947 1947 3 0 8 2 0 1 D",
+            "1947 1947 8 0 8 2 0 0 S",
+            "1967 1967 3 0 8 2 0 1 D",
+            "1967 1967 9 0 8 2 0 0 S",
+            "1969 1969 3 0 8 2 0 1 D",
+            "1969 1969 9 0 8 2 0 0 S",
+            "1972 1986 3 0 8 2 0 1 D",
+            "1972 2006 9 0 8 2 0 0 S"
+        ],
+        "Egypt": [
+            "1940 1940 6 15 7 0 0 1 S",
+            "1940 1940 9 1 7 0 0 0",
+            "1941 1941 3 15 7 0 0 1 S",
+            "1941 1941 8 16 7 0 0 0",
+            "1942 1944 3 1 7 0 0 1 S",
+            "1942 1942 9 27 7 0 0 0",
+            "1943 1945 10 1 7 0 0 0",
+            "1945 1945 3 16 7 0 0 1 S",
+            "1957 1957 4 10 7 0 0 1 S",
+            "1957 1958 9 1 7 0 0 0",
+            "1958 1958 4 1 7 0 0 1 S",
+            "1959 1981 4 1 7 1 0 1 S",
+            "1959 1965 8 30 7 3 0 0",
+            "1966 1994 9 1 7 3 0 0",
+            "1982 1982 6 25 7 1 0 1 S",
+            "1983 1983 6 12 7 1 0 1 S",
+            "1984 1988 4 1 7 1 0 1 S",
+            "1989 1989 4 6 7 1 0 1 S",
+            "1990 1994 4 1 7 1 0 1 S",
+            "1995 2010 3 5 8 0 2 1 S",
+            "1995 2005 8 4 8 23 2 0",
+            "2006 2006 8 21 7 23 2 0",
+            "2007 2007 8 1 4 23 2 0",
+            "2008 2008 7 4 8 23 2 0",
+            "2009 2009 7 20 7 23 2 0",
+            "2010 2010 7 11 7 0 0 0",
+            "2010 2010 8 10 7 0 0 1 S",
+            "2010 2010 8 4 8 23 2 0"
+        ],
+        "EgyptAsia": [
+            "1957 1957 4 10 7 0 0 1 S",
+            "1957 1958 9 1 7 0 0 0",
+            "1958 1958 4 1 7 0 0 1 S",
+            "1959 1967 4 1 7 1 0 1 S",
+            "1959 1965 8 30 7 3 0 0",
+            "1966 1966 9 1 7 3 0 0"
+        ],
+        "Falk": [
+            "1937 1938 8 0 8 0 0 1 S",
+            "1938 1942 2 19 0 0 0 0",
+            "1939 1939 9 1 7 0 0 1 S",
+            "1940 1942 8 0 8 0 0 1 S",
+            "1943 1943 0 1 7 0 0 0",
+            "1983 1983 8 0 8 0 0 1 S",
+            "1984 1985 3 0 8 0 0 0",
+            "1984 1984 8 16 7 0 0 1 S",
+            "1985 2000 8 9 0 0 0 1 S",
+            "1986 2000 3 16 0 0 0 0",
+            "2001 2010 3 15 0 2 0 0",
+            "2001 2010 8 1 0 2 0 1 S"
+        ],
+        "Fiji": [
+            "1998 1999 10 1 0 2 0 1 S",
+            "1999 2000 1 0 8 3 0 0",
+            "2009 2009 10 29 7 2 0 1 S",
+            "2010 2010 2 0 8 3 0 0",
+            "2010 9999 9 18 0 2 0 1 S",
+            "2011 2011 2 1 0 3 0 0",
+            "2012 9999 0 18 0 3 0 0"
+        ],
+        "Finland": [
+            "1942 1942 3 3 7 0 0 1 S",
+            "1942 1942 9 3 7 0 0 0",
+            "1981 1982 2 0 8 2 0 1 S",
+            "1981 1982 8 0 8 3 0 0"
+        ],
+        "France": [
+            "1916 1916 5 14 7 23 2 1 S",
+            "1916 1919 9 1 0 23 2 0",
+            "1917 1917 2 24 7 23 2 1 S",
+            "1918 1918 2 9 7 23 2 1 S",
+            "1919 1919 2 1 7 23 2 1 S",
+            "1920 1920 1 14 7 23 2 1 S",
+            "1920 1920 9 23 7 23 2 0",
+            "1921 1921 2 14 7 23 2 1 S",
+            "1921 1921 9 25 7 23 2 0",
+            "1922 1922 2 25 7 23 2 1 S",
+            "1922 1938 9 1 6 23 2 0",
+            "1923 1923 4 26 7 23 2 1 S",
+            "1924 1924 2 29 7 23 2 1 S",
+            "1925 1925 3 4 7 23 2 1 S",
+            "1926 1926 3 17 7 23 2 1 S",
+            "1927 1927 3 9 7 23 2 1 S",
+            "1928 1928 3 14 7 23 2 1 S",
+            "1929 1929 3 20 7 23 2 1 S",
+            "1930 1930 3 12 7 23 2 1 S",
+            "1931 1931 3 18 7 23 2 1 S",
+            "1932 1932 3 2 7 23 2 1 S",
+            "1933 1933 2 25 7 23 2 1 S",
+            "1934 1934 3 7 7 23 2 1 S",
+            "1935 1935 2 30 7 23 2 1 S",
+            "1936 1936 3 18 7 23 2 1 S",
+            "1937 1937 3 3 7 23 2 1 S",
+            "1938 1938 2 26 7 23 2 1 S",
+            "1939 1939 3 15 7 23 2 1 S",
+            "1939 1939 10 18 7 23 2 0",
+            "1940 1940 1 25 7 2 0 1 S",
+            "1941 1941 4 5 7 0 0 2 M",
+            "1941 1941 9 6 7 0 0 1 S",
+            "1942 1942 2 9 7 0 0 2 M",
+            "1942 1942 10 2 7 3 0 1 S",
+            "1943 1943 2 29 7 2 0 2 M",
+            "1943 1943 9 4 7 3 0 1 S",
+            "1944 1944 3 3 7 2 0 2 M",
+            "1944 1944 9 8 7 1 0 1 S",
+            "1945 1945 3 2 7 2 0 2 M",
+            "1945 1945 8 16 7 3 0 0",
+            "1976 1976 2 28 7 1 0 1 S",
+            "1976 1976 8 26 7 1 0 0"
+        ],
+        "GB-Eire": [
+            "1916 1916 4 21 7 2 2 1 BST",
+            "1916 1916 9 1 7 2 2 0 GMT",
+            "1917 1917 3 8 7 2 2 1 BST",
+            "1917 1917 8 17 7 2 2 0 GMT",
+            "1918 1918 2 24 7 2 2 1 BST",
+            "1918 1918 8 30 7 2 2 0 GMT",
+            "1919 1919 2 30 7 2 2 1 BST",
+            "1919 1919 8 29 7 2 2 0 GMT",
+            "1920 1920 2 28 7 2 2 1 BST",
+            "1920 1920 9 25 7 2 2 0 GMT",
+            "1921 1921 3 3 7 2 2 1 BST",
+            "1921 1921 9 3 7 2 2 0 GMT",
+            "1922 1922 2 26 7 2 2 1 BST",
+            "1922 1922 9 8 7 2 2 0 GMT",
+            "1923 1923 3 16 0 2 2 1 BST",
+            "1923 1924 8 16 0 2 2 0 GMT",
+            "1924 1924 3 9 0 2 2 1 BST",
+            "1925 1926 3 16 0 2 2 1 BST",
+            "1925 1938 9 2 0 2 2 0 GMT",
+            "1927 1927 3 9 0 2 2 1 BST",
+            "1928 1929 3 16 0 2 2 1 BST",
+            "1930 1930 3 9 0 2 2 1 BST",
+            "1931 1932 3 16 0 2 2 1 BST",
+            "1933 1933 3 9 0 2 2 1 BST",
+            "1934 1934 3 16 0 2 2 1 BST",
+            "1935 1935 3 9 0 2 2 1 BST",
+            "1936 1937 3 16 0 2 2 1 BST",
+            "1938 1938 3 9 0 2 2 1 BST",
+            "1939 1939 3 16 0 2 2 1 BST",
+            "1939 1939 10 16 0 2 2 0 GMT",
+            "1940 1940 1 23 0 2 2 1 BST",
+            "1941 1941 4 2 0 1 2 2 BDST",
+            "1941 1943 7 9 0 1 2 1 BST",
+            "1942 1944 3 2 0 1 2 2 BDST",
+            "1944 1944 8 16 0 1 2 1 BST",
+            "1945 1945 3 2 1 1 2 2 BDST",
+            "1945 1945 6 9 0 1 2 1 BST",
+            "1945 1946 9 2 0 2 2 0 GMT",
+            "1946 1946 3 9 0 2 2 1 BST",
+            "1947 1947 2 16 7 2 2 1 BST",
+            "1947 1947 3 13 7 1 2 2 BDST",
+            "1947 1947 7 10 7 1 2 1 BST",
+            "1947 1947 10 2 7 2 2 0 GMT",
+            "1948 1948 2 14 7 2 2 1 BST",
+            "1948 1948 9 31 7 2 2 0 GMT",
+            "1949 1949 3 3 7 2 2 1 BST",
+            "1949 1949 9 30 7 2 2 0 GMT",
+            "1950 1952 3 14 0 2 2 1 BST",
+            "1950 1952 9 21 0 2 2 0 GMT",
+            "1953 1953 3 16 0 2 2 1 BST",
+            "1953 1960 9 2 0 2 2 0 GMT",
+            "1954 1954 3 9 0 2 2 1 BST",
+            "1955 1956 3 16 0 2 2 1 BST",
+            "1957 1957 3 9 0 2 2 1 BST",
+            "1958 1959 3 16 0 2 2 1 BST",
+            "1960 1960 3 9 0 2 2 1 BST",
+            "1961 1963 2 0 8 2 2 1 BST",
+            "1961 1968 9 23 0 2 2 0 GMT",
+            "1964 1967 2 19 0 2 2 1 BST",
+            "1968 1968 1 18 7 2 2 1 BST",
+            "1972 1980 2 16 0 2 2 1 BST",
+            "1972 1980 9 23 0 2 2 0 GMT",
+            "1981 1995 2 0 8 1 1 1 BST",
+            "1981 1989 9 23 0 1 1 0 GMT",
+            "1990 1995 9 22 0 1 1 0 GMT"
+        ],
+        "Germany": [
+            "1946 1946 3 14 7 2 2 1 S",
+            "1946 1946 9 7 7 2 2 0",
+            "1947 1949 9 1 0 2 2 0",
+            "1947 1947 3 6 7 3 2 1 S",
+            "1947 1947 4 11 7 2 2 2 M",
+            "1947 1947 5 29 7 3 0 1 S",
+            "1948 1948 3 18 7 2 2 1 S",
+            "1949 1949 3 10 7 2 2 1 S"
+        ],
+        "Ghana": [
+            "1936 1942 8 1 7 0 0 0:20 GHST",
+            "1936 1942 11 31 7 0 0 0 GMT"
+        ],
+        "Greece": [
+            "1932 1932 6 7 7 0 0 1 S",
+            "1932 1932 8 1 7 0 0 0",
+            "1941 1941 3 7 7 0 0 1 S",
+            "1942 1942 10 2 7 3 0 0",
+            "1943 1943 2 30 7 0 0 1 S",
+            "1943 1943 9 4 7 0 0 0",
+            "1952 1952 6 1 7 0 0 1 S",
+            "1952 1952 10 2 7 0 0 0",
+            "1975 1975 3 12 7 0 2 1 S",
+            "1975 1975 10 26 7 0 2 0",
+            "1976 1976 3 11 7 2 2 1 S",
+            "1976 1976 9 10 7 2 2 0",
+            "1977 1978 3 1 0 2 2 1 S",
+            "1977 1977 8 26 7 2 2 0",
+            "1978 1978 8 24 7 4 0 0",
+            "1979 1979 3 1 7 9 0 1 S",
+            "1979 1979 8 29 7 2 0 0",
+            "1980 1980 3 1 7 0 0 1 S",
+            "1980 1980 8 28 7 0 0 0"
+        ],
+        "Guat": [
+            "1973 1973 10 25 7 0 0 1 D",
+            "1974 1974 1 24 7 0 0 0 S",
+            "1983 1983 4 21 7 0 0 1 D",
+            "1983 1983 8 22 7 0 0 0 S",
+            "1991 1991 2 23 7 0 0 1 D",
+            "1991 1991 8 7 7 0 0 0 S",
+            "2006 2006 3 30 7 0 0 1 D",
+            "2006 2006 9 1 7 0 0 0 S"
+        ],
+        "HK": [
+            "1941 1941 3 1 7 3:30 0 1 S",
+            "1941 1941 8 30 7 3:30 0 0",
+            "1946 1946 3 20 7 3:30 0 1 S",
+            "1946 1946 11 1 7 3:30 0 0",
+            "1947 1947 3 13 7 3:30 0 1 S",
+            "1947 1947 11 30 7 3:30 0 0",
+            "1948 1948 4 2 7 3:30 0 1 S",
+            "1948 1951 9 0 8 3:30 0 0",
+            "1952 1952 9 25 7 3:30 0 0",
+            "1949 1953 3 1 0 3:30 0 1 S",
+            "1953 1953 10 1 7 3:30 0 0",
+            "1954 1964 2 18 0 3:30 0 1 S",
+            "1954 1954 9 31 7 3:30 0 0",
+            "1955 1964 10 1 0 3:30 0 0",
+            "1965 1976 3 16 0 3:30 0 1 S",
+            "1965 1976 9 16 0 3:30 0 0",
+            "1973 1973 11 30 7 3:30 0 1 S",
+            "1979 1979 4 8 0 3:30 0 1 S",
+            "1979 1979 9 16 0 3:30 0 0"
+        ],
+        "Haiti": [
+            "1983 1983 4 8 7 0 0 1 D",
+            "1984 1987 3 0 8 0 0 1 D",
+            "1983 1987 9 0 8 0 0 0 S",
+            "1988 1997 3 1 0 1 2 1 D",
+            "1988 1997 9 0 8 1 2 0 S",
+            "2005 2006 3 1 0 0 0 1 D",
+            "2005 2006 9 0 8 0 0 0 S",
+            "2012 9999 2 8 0 2 0 1 D",
+            "2012 9999 10 1 0 2 0 0 S"
+        ],
+        "Halifax": [
+            "1916 1916 3 1 7 0 0 1 D",
+            "1916 1916 9 1 7 0 0 0 S",
+            "1920 1920 4 9 7 0 0 1 D",
+            "1920 1920 7 29 7 0 0 0 S",
+            "1921 1921 4 6 7 0 0 1 D",
+            "1921 1922 8 5 7 0 0 0 S",
+            "1922 1922 3 30 7 0 0 1 D",
+            "1923 1925 4 1 0 0 0 1 D",
+            "1923 1923 8 4 7 0 0 0 S",
+            "1924 1924 8 15 7 0 0 0 S",
+            "1925 1925 8 28 7 0 0 0 S",
+            "1926 1926 4 16 7 0 0 1 D",
+            "1926 1926 8 13 7 0 0 0 S",
+            "1927 1927 4 1 7 0 0 1 D",
+            "1927 1927 8 26 7 0 0 0 S",
+            "1928 1931 4 8 0 0 0 1 D",
+            "1928 1928 8 9 7 0 0 0 S",
+            "1929 1929 8 3 7 0 0 0 S",
+            "1930 1930 8 15 7 0 0 0 S",
+            "1931 1932 8 24 1 0 0 0 S",
+            "1932 1932 4 1 7 0 0 1 D",
+            "1933 1933 3 30 7 0 0 1 D",
+            "1933 1933 9 2 7 0 0 0 S",
+            "1934 1934 4 20 7 0 0 1 D",
+            "1934 1934 8 16 7 0 0 0 S",
+            "1935 1935 5 2 7 0 0 1 D",
+            "1935 1935 8 30 7 0 0 0 S",
+            "1936 1936 5 1 7 0 0 1 D",
+            "1936 1936 8 14 7 0 0 0 S",
+            "1937 1938 4 1 0 0 0 1 D",
+            "1937 1941 8 24 1 0 0 0 S",
+            "1939 1939 4 28 7 0 0 1 D",
+            "1940 1941 4 1 0 0 0 1 D",
+            "1946 1949 3 0 8 2 0 1 D",
+            "1946 1949 8 0 8 2 0 0 S",
+            "1951 1954 3 0 8 2 0 1 D",
+            "1951 1954 8 0 8 2 0 0 S",
+            "1956 1959 3 0 8 2 0 1 D",
+            "1956 1959 8 0 8 2 0 0 S",
+            "1962 1973 3 0 8 2 0 1 D",
+            "1962 1973 9 0 8 2 0 0 S"
+        ],
+        "Holiday": [
+            "1992 1993 9 0 8 2 2 1",
+            "1993 1994 2 1 0 2 2 0"
+        ],
+        "Hond": [
+            "1987 1988 4 1 0 0 0 1 D",
+            "1987 1988 8 0 8 0 0 0 S",
+            "2006 2006 4 1 0 0 0 1 D",
+            "2006 2006 7 1 1 0 0 0 S"
+        ],
+        "Hungary": [
+            "1918 1918 3 1 7 3 0 1 S",
+            "1918 1918 8 29 7 3 0 0",
+            "1919 1919 3 15 7 3 0 1 S",
+            "1919 1919 8 15 7 3 0 0",
+            "1920 1920 3 5 7 3 0 1 S",
+            "1920 1920 8 30 7 3 0 0",
+            "1945 1945 4 1 7 23 0 1 S",
+            "1945 1945 10 3 7 0 0 0",
+            "1946 1946 2 31 7 2 2 1 S",
+            "1946 1949 9 1 0 2 2 0",
+            "1947 1949 3 4 0 2 2 1 S",
+            "1950 1950 3 17 7 2 2 1 S",
+            "1950 1950 9 23 7 2 2 0",
+            "1954 1955 4 23 7 0 0 1 S",
+            "1954 1955 9 3 7 0 0 0",
+            "1956 1956 5 1 0 0 0 1 S",
+            "1956 1956 8 0 8 0 0 0",
+            "1957 1957 5 1 0 1 0 1 S",
+            "1957 1957 8 0 8 3 0 0",
+            "1980 1980 3 6 7 1 0 1 S"
+        ],
+        "Iceland": [
+            "1917 1918 1 19 7 23 0 1 S",
+            "1917 1917 9 21 7 1 0 0",
+            "1918 1918 10 16 7 1 0 0",
+            "1939 1939 3 29 7 23 0 1 S",
+            "1939 1939 10 29 7 2 0 0",
+            "1940 1940 1 25 7 2 0 1 S",
+            "1940 1940 10 3 7 2 0 0",
+            "1941 1941 2 2 7 1 2 1 S",
+            "1941 1941 10 2 7 1 2 0",
+            "1942 1942 2 8 7 1 2 1 S",
+            "1942 1942 9 25 7 1 2 0",
+            "1943 1946 2 1 0 1 2 1 S",
+            "1943 1948 9 22 0 1 2 0",
+            "1947 1967 3 1 0 1 2 1 S",
+            "1949 1949 9 30 7 1 2 0",
+            "1950 1966 9 22 0 1 2 0",
+            "1967 1967 9 29 7 1 2 0"
+        ],
+        "Indianapolis": [
+            "1941 1941 5 22 7 2 0 1 D",
+            "1941 1954 8 0 8 2 0 0 S",
+            "1946 1954 3 0 8 2 0 1 D"
+        ],
+        "Iran": [
+            "1978 1980 2 21 7 0 0 1 D",
+            "1978 1978 9 21 7 0 0 0 S",
+            "1979 1979 8 19 7 0 0 0 S",
+            "1980 1980 8 23 7 0 0 0 S",
+            "1991 1991 4 3 7 0 0 1 D",
+            "1992 1995 2 22 7 0 0 1 D",
+            "1991 1995 8 22 7 0 0 0 S",
+            "1996 1996 2 21 7 0 0 1 D",
+            "1996 1996 8 21 7 0 0 0 S",
+            "1997 1999 2 22 7 0 0 1 D",
+            "1997 1999 8 22 7 0 0 0 S",
+            "2000 2000 2 21 7 0 0 1 D",
+            "2000 2000 8 21 7 0 0 0 S",
+            "2001 2003 2 22 7 0 0 1 D",
+            "2001 2003 8 22 7 0 0 0 S",
+            "2004 2004 2 21 7 0 0 1 D",
+            "2004 2004 8 21 7 0 0 0 S",
+            "2005 2005 2 22 7 0 0 1 D",
+            "2005 2005 8 22 7 0 0 0 S",
+            "2008 2008 2 21 7 0 0 1 D",
+            "2008 2008 8 21 7 0 0 0 S",
+            "2009 2011 2 22 7 0 0 1 D",
+            "2009 2011 8 22 7 0 0 0 S",
+            "2012 2012 2 21 7 0 0 1 D",
+            "2012 2012 8 21 7 0 0 0 S",
+            "2013 2015 2 22 7 0 0 1 D",
+            "2013 2015 8 22 7 0 0 0 S",
+            "2016 2016 2 21 7 0 0 1 D",
+            "2016 2016 8 21 7 0 0 0 S",
+            "2017 2019 2 22 7 0 0 1 D",
+            "2017 2019 8 22 7 0 0 0 S",
+            "2020 2020 2 21 7 0 0 1 D",
+            "2020 2020 8 21 7 0 0 0 S",
+            "2021 2023 2 22 7 0 0 1 D",
+            "2021 2023 8 22 7 0 0 0 S",
+            "2024 2024 2 21 7 0 0 1 D",
+            "2024 2024 8 21 7 0 0 0 S",
+            "2025 2027 2 22 7 0 0 1 D",
+            "2025 2027 8 22 7 0 0 0 S",
+            "2028 2029 2 21 7 0 0 1 D",
+            "2028 2029 8 21 7 0 0 0 S",
+            "2030 2031 2 22 7 0 0 1 D",
+            "2030 2031 8 22 7 0 0 0 S",
+            "2032 2033 2 21 7 0 0 1 D",
+            "2032 2033 8 21 7 0 0 0 S",
+            "2034 2035 2 22 7 0 0 1 D",
+            "2034 2035 8 22 7 0 0 0 S",
+            "2036 2037 2 21 7 0 0 1 D",
+            "2036 2037 8 21 7 0 0 0 S"
+        ],
+        "Iraq": [
+            "1982 1982 4 1 7 0 0 1 D",
+            "1982 1984 9 1 7 0 0 0 S",
+            "1983 1983 2 31 7 0 0 1 D",
+            "1984 1985 3 1 7 0 0 1 D",
+            "1985 1990 8 0 8 1 2 0 S",
+            "1986 1990 2 0 8 1 2 1 D",
+            "1991 2007 3 1 7 3 2 1 D",
+            "1991 2007 9 1 7 3 2 0 S"
+        ],
+        "Italy": [
+            "1916 1916 5 3 7 0 2 1 S",
+            "1916 1916 9 1 7 0 2 0",
+            "1917 1917 3 1 7 0 2 1 S",
+            "1917 1917 8 30 7 0 2 0",
+            "1918 1918 2 10 7 0 2 1 S",
+            "1918 1919 9 1 0 0 2 0",
+            "1919 1919 2 2 7 0 2 1 S",
+            "1920 1920 2 21 7 0 2 1 S",
+            "1920 1920 8 19 7 0 2 0",
+            "1940 1940 5 15 7 0 2 1 S",
+            "1944 1944 8 17 7 0 2 0",
+            "1945 1945 3 2 7 2 0 1 S",
+            "1945 1945 8 15 7 0 2 0",
+            "1946 1946 2 17 7 2 2 1 S",
+            "1946 1946 9 6 7 2 2 0",
+            "1947 1947 2 16 7 0 2 1 S",
+            "1947 1947 9 5 7 0 2 0",
+            "1948 1948 1 29 7 2 2 1 S",
+            "1948 1948 9 3 7 2 2 0",
+            "1966 1968 4 22 0 0 0 1 S",
+            "1966 1969 8 22 0 0 0 0",
+            "1969 1969 5 1 7 0 0 1 S",
+            "1970 1970 4 31 7 0 0 1 S",
+            "1970 1970 8 0 8 0 0 0",
+            "1971 1972 4 22 0 0 0 1 S",
+            "1971 1971 8 0 8 1 0 0",
+            "1972 1972 9 1 7 0 0 0",
+            "1973 1973 5 3 7 0 0 1 S",
+            "1973 1974 8 0 8 0 0 0",
+            "1974 1974 4 26 7 0 0 1 S",
+            "1975 1975 5 1 7 0 2 1 S",
+            "1975 1977 8 0 8 0 2 0",
+            "1976 1976 4 30 7 0 2 1 S",
+            "1977 1979 4 22 0 0 2 1 S",
+            "1978 1978 9 1 7 0 2 0",
+            "1979 1979 8 30 7 0 2 0"
+        ],
+        "Japan": [
+            "1948 1948 4 1 0 2 0 1 D",
+            "1948 1951 8 8 6 2 0 0 S",
+            "1949 1949 3 1 0 2 0 1 D",
+            "1950 1951 4 1 0 2 0 1 D"
+        ],
+        "Jordan": [
+            "1973 1973 5 6 7 0 0 1 S",
+            "1973 1975 9 1 7 0 0 0",
+            "1974 1977 4 1 7 0 0 1 S",
+            "1976 1976 10 1 7 0 0 0",
+            "1977 1977 9 1 7 0 0 0",
+            "1978 1978 3 30 7 0 0 1 S",
+            "1978 1978 8 30 7 0 0 0",
+            "1985 1985 3 1 7 0 0 1 S",
+            "1985 1985 9 1 7 0 0 0",
+            "1986 1988 3 1 5 0 0 1 S",
+            "1986 1990 9 1 5 0 0 0",
+            "1989 1989 4 8 7 0 0 1 S",
+            "1990 1990 3 27 7 0 0 1 S",
+            "1991 1991 3 17 7 0 0 1 S",
+            "1991 1991 8 27 7 0 0 0",
+            "1992 1992 3 10 7 0 0 1 S",
+            "1992 1993 9 1 5 0 0 0",
+            "1993 1998 3 1 5 0 0 1 S",
+            "1994 1994 8 15 5 0 0 0",
+            "1995 1998 8 15 5 0 2 0",
+            "1999 1999 6 1 7 0 2 1 S",
+            "1999 2002 8 5 8 0 2 0",
+            "2000 2001 2 4 8 0 2 1 S",
+            "2002 9999 2 4 8 24 0 1 S",
+            "2003 2003 9 24 7 0 2 0",
+            "2004 2004 9 15 7 0 2 0",
+            "2005 2005 8 5 8 0 2 0",
+            "2006 2011 9 5 8 0 2 0",
+            "2013 9999 9 5 8 0 2 0"
+        ],
+        "Kyrgyz": [
+            "1992 1996 3 7 0 0 2 1 S",
+            "1992 1996 8 0 8 0 0 0",
+            "1997 2005 2 0 8 2:30 0 1 S",
+            "1997 2004 9 0 8 2:30 0 0"
+        ],
+        "LH": [
+            "1981 1984 9 0 8 2 0 1",
+            "1982 1985 2 1 0 2 0 0",
+            "1985 1985 9 0 8 2 0 0:30",
+            "1986 1989 2 15 0 2 0 0",
+            "1986 1986 9 19 7 2 0 0:30",
+            "1987 1999 9 0 8 2 0 0:30",
+            "1990 1995 2 1 0 2 0 0",
+            "1996 2005 2 0 8 2 0 0",
+            "2000 2000 7 0 8 2 0 0:30",
+            "2001 2007 9 0 8 2 0 0:30",
+            "2006 2006 3 1 0 2 0 0",
+            "2007 2007 2 0 8 2 0 0",
+            "2008 9999 3 1 0 2 0 0",
+            "2008 9999 9 1 0 2 0 0:30"
+        ],
+        "Latvia": [
+            "1989 1996 2 0 8 2 2 1 S",
+            "1989 1996 8 0 8 2 2 0"
+        ],
+        "Lebanon": [
+            "1920 1920 2 28 7 0 0 1 S",
+            "1920 1920 9 25 7 0 0 0",
+            "1921 1921 3 3 7 0 0 1 S",
+            "1921 1921 9 3 7 0 0 0",
+            "1922 1922 2 26 7 0 0 1 S",
+            "1922 1922 9 8 7 0 0 0",
+            "1923 1923 3 22 7 0 0 1 S",
+            "1923 1923 8 16 7 0 0 0",
+            "1957 1961 4 1 7 0 0 1 S",
+            "1957 1961 9 1 7 0 0 0",
+            "1972 1972 5 22 7 0 0 1 S",
+            "1972 1977 9 1 7 0 0 0",
+            "1973 1977 4 1 7 0 0 1 S",
+            "1978 1978 3 30 7 0 0 1 S",
+            "1978 1978 8 30 7 0 0 0",
+            "1984 1987 4 1 7 0 0 1 S",
+            "1984 1991 9 16 7 0 0 0",
+            "1988 1988 5 1 7 0 0 1 S",
+            "1989 1989 4 10 7 0 0 1 S",
+            "1990 1992 4 1 7 0 0 1 S",
+            "1992 1992 9 4 7 0 0 0",
+            "1993 9999 2 0 8 0 0 1 S",
+            "1993 1998 8 0 8 0 0 0",
+            "1999 9999 9 0 8 0 0 0"
+        ],
+        "Libya": [
+            "1951 1951 9 14 7 2 0 1 S",
+            "1952 1952 0 1 7 0 0 0",
+            "1953 1953 9 9 7 2 0 1 S",
+            "1954 1954 0 1 7 0 0 0",
+            "1955 1955 8 30 7 0 0 1 S",
+            "1956 1956 0 1 7 0 0 0",
+            "1982 1984 3 1 7 0 0 1 S",
+            "1982 1985 9 1 7 0 0 0",
+            "1985 1985 3 6 7 0 0 1 S",
+            "1986 1986 3 4 7 0 0 1 S",
+            "1986 1986 9 3 7 0 0 0",
+            "1987 1989 3 1 7 0 0 1 S",
+            "1987 1989 9 1 7 0 0 0",
+            "1997 1997 3 4 7 0 0 1 S",
+            "1997 1997 9 4 7 0 0 0",
+            "2013 9999 2 5 8 1 0 1 S",
+            "2013 9999 9 5 8 2 0 0"
+        ],
+        "Louisville": [
+            "1921 1921 4 1 7 2 0 1 D",
+            "1921 1921 8 1 7 2 0 0 S",
+            "1941 1961 3 0 8 2 0 1 D",
+            "1941 1941 8 0 8 2 0 0 S",
+            "1946 1946 5 2 7 2 0 0 S",
+            "1950 1955 8 0 8 2 0 0 S",
+            "1956 1960 9 0 8 2 0 0 S"
+        ],
+        "Lux": [
+            "1916 1916 4 14 7 23 0 1 S",
+            "1916 1916 9 1 7 1 0 0",
+            "1917 1917 3 28 7 23 0 1 S",
+            "1917 1917 8 17 7 1 0 0",
+            "1918 1918 3 15 1 2 2 1 S",
+            "1918 1918 8 15 1 2 2 0",
+            "1919 1919 2 1 7 23 0 1 S",
+            "1919 1919 9 5 7 3 0 0",
+            "1920 1920 1 14 7 23 0 1 S",
+            "1920 1920 9 24 7 2 0 0",
+            "1921 1921 2 14 7 23 0 1 S",
+            "1921 1921 9 26 7 2 0 0",
+            "1922 1922 2 25 7 23 0 1 S",
+            "1922 1922 9 2 0 1 0 0",
+            "1923 1923 3 21 7 23 0 1 S",
+            "1923 1923 9 2 0 2 0 0",
+            "1924 1924 2 29 7 23 0 1 S",
+            "1924 1928 9 2 0 1 0 0",
+            "1925 1925 3 5 7 23 0 1 S",
+            "1926 1926 3 17 7 23 0 1 S",
+            "1927 1927 3 9 7 23 0 1 S",
+            "1928 1928 3 14 7 23 0 1 S",
+            "1929 1929 3 20 7 23 0 1 S"
+        ],
+        "Macau": [
+            "1961 1962 2 16 0 3:30 0 1 S",
+            "1961 1964 10 1 0 3:30 0 0",
+            "1963 1963 2 16 0 0 0 1 S",
+            "1964 1964 2 16 0 3:30 0 1 S",
+            "1965 1965 2 16 0 0 0 1 S",
+            "1965 1965 9 31 7 0 0 0",
+            "1966 1971 3 16 0 3:30 0 1 S",
+            "1966 1971 9 16 0 3:30 0 0",
+            "1972 1974 3 15 0 0 0 1 S",
+            "1972 1973 9 15 0 0 0 0",
+            "1974 1977 9 15 0 3:30 0 0",
+            "1975 1977 3 15 0 3:30 0 1 S",
+            "1978 1980 3 15 0 0 0 1 S",
+            "1978 1980 9 15 0 0 0 0"
+        ],
+        "Malta": [
+            "1973 1973 2 31 7 0 2 1 S",
+            "1973 1973 8 29 7 0 2 0",
+            "1974 1974 3 21 7 0 2 1 S",
+            "1974 1974 8 16 7 0 2 0",
+            "1975 1979 3 15 0 2 0 1 S",
+            "1975 1980 8 15 0 2 0 0",
+            "1980 1980 2 31 7 2 0 1 S"
+        ],
+        "Marengo": [
+            "1951 1951 3 0 8 2 0 1 D",
+            "1951 1951 8 0 8 2 0 0 S",
+            "1954 1960 3 0 8 2 0 1 D",
+            "1954 1960 8 0 8 2 0 0 S"
+        ],
+        "Mauritius": [
+            "1982 1982 9 10 7 0 0 1 S",
+            "1983 1983 2 21 7 0 0 0",
+            "2008 2008 9 0 8 2 0 1 S",
+            "2009 2009 2 0 8 2 0 0"
+        ],
+        "Menominee": [
+            "1946 1946 3 0 8 2 0 1 D",
+            "1946 1946 8 0 8 2 0 0 S",
+            "1966 1966 3 0 8 2 0 1 D",
+            "1966 1966 9 0 8 2 0 0 S"
+        ],
+        "Mexico": [
+            "1939 1939 1 5 7 0 0 1 D",
+            "1939 1939 5 25 7 0 0 0 S",
+            "1940 1940 11 9 7 0 0 1 D",
+            "1941 1941 3 1 7 0 0 0 S",
+            "1943 1943 11 16 7 0 0 1 W",
+            "1944 1944 4 1 7 0 0 0 S",
+            "1950 1950 1 12 7 0 0 1 D",
+            "1950 1950 6 30 7 0 0 0 S",
+            "1996 2000 3 1 0 2 0 1 D",
+            "1996 2000 9 0 8 2 0 0 S",
+            "2001 2001 4 1 0 2 0 1 D",
+            "2001 2001 8 0 8 2 0 0 S",
+            "2002 9999 3 1 0 2 0 1 D",
+            "2002 9999 9 0 8 2 0 0 S"
+        ],
+        "Moncton": [
+            "1933 1935 5 8 0 1 0 1 D",
+            "1933 1935 8 8 0 1 0 0 S",
+            "1936 1938 5 1 0 1 0 1 D",
+            "1936 1938 8 1 0 1 0 0 S",
+            "1939 1939 4 27 7 1 0 1 D",
+            "1939 1941 8 21 6 1 0 0 S",
+            "1940 1940 4 19 7 1 0 1 D",
+            "1941 1941 4 4 7 1 0 1 D",
+            "1946 1972 3 0 8 2 0 1 D",
+            "1946 1956 8 0 8 2 0 0 S",
+            "1957 1972 9 0 8 2 0 0 S",
+            "1993 2006 3 1 0 0:1 0 1 D",
+            "1993 2006 9 0 8 0:1 0 0 S"
+        ],
+        "Mongol": [
+            "1983 1984 3 1 7 0 0 1 S",
+            "1983 1983 9 1 7 0 0 0",
+            "1985 1998 2 0 8 0 0 1 S",
+            "1984 1998 8 0 8 0 0 0",
+            "2001 2001 3 6 8 2 0 1 S",
+            "2001 2006 8 6 8 2 0 0",
+            "2002 2006 2 6 8 2 0 1 S"
+        ],
+        "Mont": [
+            "1917 1917 2 25 7 2 0 1 D",
+            "1917 1917 3 24 7 0 0 0 S",
+            "1919 1919 2 31 7 2:30 0 1 D",
+            "1919 1919 9 25 7 2:30 0 0 S",
+            "1920 1920 4 2 7 2:30 0 1 D",
+            "1920 1922 9 1 0 2:30 0 0 S",
+            "1921 1921 4 1 7 2 0 1 D",
+            "1922 1922 3 30 7 2 0 1 D",
+            "1924 1924 4 17 7 2 0 1 D",
+            "1924 1926 8 0 8 2:30 0 0 S",
+            "1925 1926 4 1 0 2 0 1 D",
+            "1927 1927 4 1 7 0 0 1 D",
+            "1927 1932 8 0 8 0 0 0 S",
+            "1928 1931 3 0 8 0 0 1 D",
+            "1932 1932 4 1 7 0 0 1 D",
+            "1933 1940 3 0 8 0 0 1 D",
+            "1933 1933 9 1 7 0 0 0 S",
+            "1934 1939 8 0 8 0 0 0 S",
+            "1946 1973 3 0 8 2 0 1 D",
+            "1945 1948 8 0 8 2 0 0 S",
+            "1949 1950 9 0 8 2 0 0 S",
+            "1951 1956 8 0 8 2 0 0 S",
+            "1957 1973 9 0 8 2 0 0 S"
+        ],
+        "Morocco": [
+            "1939 1939 8 12 7 0 0 1 S",
+            "1939 1939 10 19 7 0 0 0",
+            "1940 1940 1 25 7 0 0 1 S",
+            "1945 1945 10 18 7 0 0 0",
+            "1950 1950 5 11 7 0 0 1 S",
+            "1950 1950 9 29 7 0 0 0",
+            "1967 1967 5 3 7 12 0 1 S",
+            "1967 1967 9 1 7 0 0 0",
+            "1974 1974 5 24 7 0 0 1 S",
+            "1974 1974 8 1 7 0 0 0",
+            "1976 1977 4 1 7 0 0 1 S",
+            "1976 1976 7 1 7 0 0 0",
+            "1977 1977 8 28 7 0 0 0",
+            "1978 1978 5 1 7 0 0 1 S",
+            "1978 1978 7 4 7 0 0 0",
+            "2008 2008 5 1 7 0 0 1 S",
+            "2008 2008 8 1 7 0 0 0",
+            "2009 2009 5 1 7 0 0 1 S",
+            "2009 2009 7 21 7 0 0 0",
+            "2010 2010 4 2 7 0 0 1 S",
+            "2010 2010 7 8 7 0 0 0",
+            "2011 2011 3 3 7 0 0 1 S",
+            "2011 2011 6 31 7 0 0 0",
+            "2012 2019 3 0 8 2 0 1 S",
+            "2012 9999 8 0 8 3 0 0",
+            "2012 2012 6 20 7 3 0 0",
+            "2012 2012 7 20 7 2 0 1 S",
+            "2013 2013 6 9 7 3 0 0",
+            "2013 2013 7 8 7 2 0 1 S",
+            "2014 2014 5 29 7 3 0 0",
+            "2014 2014 6 29 7 2 0 1 S",
+            "2015 2015 5 18 7 3 0 0",
+            "2015 2015 6 18 7 2 0 1 S",
+            "2016 2016 5 7 7 3 0 0",
+            "2016 2016 6 7 7 2 0 1 S",
+            "2017 2017 4 27 7 3 0 0",
+            "2017 2017 5 26 7 2 0 1 S",
+            "2018 2018 4 16 7 3 0 0",
+            "2018 2018 5 15 7 2 0 1 S",
+            "2019 2019 4 6 7 3 0 0",
+            "2019 2019 5 5 7 2 0 1 S",
+            "2020 2020 4 24 7 2 0 1 S",
+            "2021 2021 4 13 7 2 0 1 S",
+            "2022 2022 4 3 7 2 0 1 S",
+            "2023 9999 3 0 8 2 0 1 S"
+        ],
+        "NBorneo": [
+            "1935 1941 8 14 7 0 0 0:20 TS",
+            "1935 1941 11 14 7 0 0 0"
+        ],
+        "NC": [
+            "1977 1978 11 1 0 0 0 1 S",
+            "1978 1979 1 27 7 0 0 0",
+            "1996 1996 11 1 7 2 2 1 S",
+            "1997 1997 2 2 7 2 2 0"
+        ],
+        "NT_YK": [
+            "1918 1918 3 14 7 2 0 1 D",
+            "1918 1918 9 27 7 2 0 0 S",
+            "1919 1919 4 25 7 2 0 1 D",
+            "1919 1919 10 1 7 0 0 0 S",
+            "1942 1942 1 9 7 2 0 1 W",
+            "1945 1945 7 14 7 23 1 1 P",
+            "1945 1945 8 30 7 2 0 0 S",
+            "1965 1965 3 0 8 0 0 2 DD",
+            "1965 1965 9 0 8 2 0 0 S",
+            "1980 1986 3 0 8 2 0 1 D",
+            "1980 2006 9 0 8 2 0 0 S",
+            "1987 2006 3 1 0 2 0 1 D"
+        ],
+        "NYC": [
+            "1920 1920 2 0 8 2 0 1 D",
+            "1920 1920 9 0 8 2 0 0 S",
+            "1921 1966 3 0 8 2 0 1 D",
+            "1921 1954 8 0 8 2 0 0 S",
+            "1955 1966 9 0 8 2 0 0 S"
+        ],
+        "NZ": [
+            "1927 1927 10 6 7 2 0 1 S",
+            "1928 1928 2 4 7 2 0 0 M",
+            "1928 1933 9 8 0 2 0 0:30 S",
+            "1929 1933 2 15 0 2 0 0 M",
+            "1934 1940 3 0 8 2 0 0 M",
+            "1934 1940 8 0 8 2 0 0:30 S",
+            "1946 1946 0 1 7 0 0 0 S",
+            "1974 1974 10 1 0 2 2 1 D",
+            "1975 1975 1 0 8 2 2 0 S",
+            "1975 1988 9 0 8 2 2 1 D",
+            "1976 1989 2 1 0 2 2 0 S",
+            "1989 1989 9 8 0 2 2 1 D",
+            "1990 2006 9 1 0 2 2 1 D",
+            "1990 2007 2 15 0 2 2 0 S",
+            "2007 9999 8 0 8 2 2 1 D",
+            "2008 9999 3 1 0 2 2 0 S"
+        ],
+        "NZAQ": [
+            "1974 1974 10 3 7 2 2 1 D",
+            "1975 1988 9 0 8 2 2 1 D",
+            "1989 1989 9 8 7 2 2 1 D",
+            "1990 2006 9 1 0 2 2 1 D",
+            "1975 1975 1 23 7 2 2 0 S",
+            "1976 1989 2 1 0 2 2 0 S",
+            "1990 2007 2 15 0 2 2 0 S",
+            "2007 9999 8 0 8 2 2 1 D",
+            "2008 9999 3 1 0 2 2 0 S"
+        ],
+        "Namibia": [
+            "1994 9999 8 1 0 2 0 1 S",
+            "1995 9999 3 1 0 2 0 0"
+        ],
+        "Neth": [
+            "1916 1916 4 1 7 0 0 1 NST",
+            "1916 1916 9 1 7 0 0 0 AMT",
+            "1917 1917 3 16 7 2 2 1 NST",
+            "1917 1917 8 17 7 2 2 0 AMT",
+            "1918 1921 3 1 1 2 2 1 NST",
+            "1918 1921 8 1 8 2 2 0 AMT",
+            "1922 1922 2 0 8 2 2 1 NST",
+            "1922 1936 9 2 0 2 2 0 AMT",
+            "1923 1923 5 1 5 2 2 1 NST",
+            "1924 1924 2 0 8 2 2 1 NST",
+            "1925 1925 5 1 5 2 2 1 NST",
+            "1926 1931 4 15 7 2 2 1 NST",
+            "1932 1932 4 22 7 2 2 1 NST",
+            "1933 1936 4 15 7 2 2 1 NST",
+            "1937 1937 4 22 7 2 2 1 NST",
+            "1937 1937 6 1 7 0 0 1 S",
+            "1937 1939 9 2 0 2 2 0",
+            "1938 1939 4 15 7 2 2 1 S",
+            "1945 1945 3 2 7 2 2 1 S",
+            "1945 1945 8 16 7 2 2 0"
+        ],
+        "Nic": [
+            "1979 1980 2 16 0 0 0 1 D",
+            "1979 1980 5 23 1 0 0 0 S",
+            "2005 2005 3 10 7 0 0 1 D",
+            "2005 2005 9 1 0 0 0 0 S",
+            "2006 2006 3 30 7 2 0 1 D",
+            "2006 2006 9 1 0 1 0 0 S"
+        ],
+        "Norway": [
+            "1916 1916 4 22 7 1 0 1 S",
+            "1916 1916 8 30 7 0 0 0",
+            "1945 1945 3 2 7 2 2 1 S",
+            "1945 1945 9 1 7 2 2 0",
+            "1959 1964 2 15 0 2 2 1 S",
+            "1959 1965 8 15 0 2 2 0",
+            "1965 1965 3 25 7 2 2 1 S"
+        ],
+        "PRC": [
+            "1986 1986 4 4 7 0 0 1 D",
+            "1986 1991 8 11 0 0 0 0 S",
+            "1987 1991 3 10 0 0 0 1 D"
+        ],
+        "Pakistan": [
+            "2002 2002 3 2 0 0:1 0 1 S",
+            "2002 2002 9 2 0 0:1 0 0",
+            "2008 2008 5 1 7 0 0 1 S",
+            "2008 2008 10 1 7 0 0 0",
+            "2009 2009 3 15 7 0 0 1 S",
+            "2009 2009 10 1 7 0 0 0"
+        ],
+        "Palestine": [
+            "1999 2005 3 15 5 0 0 1 S",
+            "1999 2003 9 15 5 0 0 0",
+            "2004 2004 9 1 7 1 0 0",
+            "2005 2005 9 4 7 2 0 0",
+            "2006 2007 3 1 7 0 0 1 S",
+            "2006 2006 8 22 7 0 0 0",
+            "2007 2007 8 8 4 2 0 0",
+            "2008 2009 2 5 8 0 0 1 S",
+            "2008 2008 8 1 7 0 0 0",
+            "2009 2009 8 1 5 1 0 0",
+            "2010 2010 2 26 7 0 0 1 S",
+            "2010 2010 7 11 7 0 0 0",
+            "2011 2011 3 1 7 0:1 0 1 S",
+            "2011 2011 7 1 7 0 0 0",
+            "2011 2011 7 30 7 0 0 1 S",
+            "2011 2011 8 30 7 0 0 0",
+            "2012 9999 2 4 8 24 0 1 S",
+            "2012 9999 8 21 5 1 0 0"
+        ],
+        "Para": [
+            "1975 1988 9 1 7 0 0 1 S",
+            "1975 1978 2 1 7 0 0 0",
+            "1979 1991 3 1 7 0 0 0",
+            "1989 1989 9 22 7 0 0 1 S",
+            "1990 1990 9 1 7 0 0 1 S",
+            "1991 1991 9 6 7 0 0 1 S",
+            "1992 1992 2 1 7 0 0 0",
+            "1992 1992 9 5 7 0 0 1 S",
+            "1993 1993 2 31 7 0 0 0",
+            "1993 1995 9 1 7 0 0 1 S",
+            "1994 1995 1 0 8 0 0 0",
+            "1996 1996 2 1 7 0 0 0",
+            "1996 2001 9 1 0 0 0 1 S",
+            "1997 1997 1 0 8 0 0 0",
+            "1998 2001 2 1 0 0 0 0",
+            "2002 2004 3 1 0 0 0 0",
+            "2002 2003 8 1 0 0 0 1 S",
+            "2004 2009 9 15 0 0 0 1 S",
+            "2005 2009 2 8 0 0 0 0",
+            "2010 9999 9 1 0 0 0 1 S",
+            "2010 2012 3 8 0 0 0 0",
+            "2013 9999 2 22 0 0 0 0"
+        ],
+        "Perry": [
+            "1946 1946 3 0 8 2 0 1 D",
+            "1946 1946 8 0 8 2 0 0 S",
+            "1953 1954 3 0 8 2 0 1 D",
+            "1953 1959 8 0 8 2 0 0 S",
+            "1955 1955 4 1 7 0 0 1 D",
+            "1956 1963 3 0 8 2 0 1 D",
+            "1960 1960 9 0 8 2 0 0 S",
+            "1961 1961 8 0 8 2 0 0 S",
+            "1962 1963 9 0 8 2 0 0 S"
+        ],
+        "Peru": [
+            "1938 1938 0 1 7 0 0 1 S",
+            "1938 1938 3 1 7 0 0 0",
+            "1938 1939 8 0 8 0 0 1 S",
+            "1939 1940 2 24 0 0 0 0",
+            "1986 1987 0 1 7 0 0 1 S",
+            "1986 1987 3 1 7 0 0 0",
+            "1990 1990 0 1 7 0 0 1 S",
+            "1990 1990 3 1 7 0 0 0",
+            "1994 1994 0 1 7 0 0 1 S",
+            "1994 1994 3 1 7 0 0 0"
+        ],
+        "Phil": [
+            "1936 1936 10 1 7 0 0 1 S",
+            "1937 1937 1 1 7 0 0 0",
+            "1954 1954 3 12 7 0 0 1 S",
+            "1954 1954 6 1 7 0 0 0",
+            "1978 1978 2 22 7 0 0 1 S",
+            "1978 1978 8 21 7 0 0 0"
+        ],
+        "Pike": [
+            "1955 1955 4 1 7 0 0 1 D",
+            "1955 1960 8 0 8 2 0 0 S",
+            "1956 1964 3 0 8 2 0 1 D",
+            "1961 1964 9 0 8 2 0 0 S"
+        ],
+        "Poland": [
+            "1918 1919 8 16 7 2 2 0",
+            "1919 1919 3 15 7 2 2 1 S",
+            "1944 1944 3 3 7 2 2 1 S",
+            "1944 1944 9 4 7 2 0 0",
+            "1945 1945 3 29 7 0 0 1 S",
+            "1945 1945 10 1 7 0 0 0",
+            "1946 1946 3 14 7 0 2 1 S",
+            "1946 1946 9 7 7 2 2 0",
+            "1947 1947 4 4 7 2 2 1 S",
+            "1947 1949 9 1 0 2 2 0",
+            "1948 1948 3 18 7 2 2 1 S",
+            "1949 1949 3 10 7 2 2 1 S",
+            "1957 1957 5 2 7 1 2 1 S",
+            "1957 1958 8 0 8 1 2 0",
+            "1958 1958 2 30 7 1 2 1 S",
+            "1959 1959 4 31 7 1 2 1 S",
+            "1959 1961 9 1 0 1 2 0",
+            "1960 1960 3 3 7 1 2 1 S",
+            "1961 1964 4 0 8 1 2 1 S",
+            "1962 1964 8 0 8 1 2 0"
+        ],
+        "Port": [
+            "1916 1916 5 17 7 23 0 1 S",
+            "1916 1916 10 1 7 1 0 0",
+            "1917 1917 1 28 7 23 2 1 S",
+            "1917 1921 9 14 7 23 2 0",
+            "1918 1918 2 1 7 23 2 1 S",
+            "1919 1919 1 28 7 23 2 1 S",
+            "1920 1920 1 29 7 23 2 1 S",
+            "1921 1921 1 28 7 23 2 1 S",
+            "1924 1924 3 16 7 23 2 1 S",
+            "1924 1924 9 14 7 23 2 0",
+            "1926 1926 3 17 7 23 2 1 S",
+            "1926 1929 9 1 6 23 2 0",
+            "1927 1927 3 9 7 23 2 1 S",
+            "1928 1928 3 14 7 23 2 1 S",
+            "1929 1929 3 20 7 23 2 1 S",
+            "1931 1931 3 18 7 23 2 1 S",
+            "1931 1932 9 1 6 23 2 0",
+            "1932 1932 3 2 7 23 2 1 S",
+            "1934 1934 3 7 7 23 2 1 S",
+            "1934 1938 9 1 6 23 2 0",
+            "1935 1935 2 30 7 23 2 1 S",
+            "1936 1936 3 18 7 23 2 1 S",
+            "1937 1937 3 3 7 23 2 1 S",
+            "1938 1938 2 26 7 23 2 1 S",
+            "1939 1939 3 15 7 23 2 1 S",
+            "1939 1939 10 18 7 23 2 0",
+            "1940 1940 1 24 7 23 2 1 S",
+            "1940 1941 9 5 7 23 2 0",
+            "1941 1941 3 5 7 23 2 1 S",
+            "1942 1945 2 8 6 23 2 1 S",
+            "1942 1942 3 25 7 22 2 2 M",
+            "1942 1942 7 15 7 22 2 1 S",
+            "1942 1945 9 24 6 23 2 0",
+            "1943 1943 3 17 7 22 2 2 M",
+            "1943 1945 7 25 6 22 2 1 S",
+            "1944 1945 3 21 6 22 2 2 M",
+            "1946 1946 3 1 6 23 2 1 S",
+            "1946 1946 9 1 6 23 2 0",
+            "1947 1949 3 1 0 2 2 1 S",
+            "1947 1949 9 1 0 2 2 0",
+            "1951 1965 3 1 0 2 2 1 S",
+            "1951 1965 9 1 0 2 2 0",
+            "1977 1977 2 27 7 0 2 1 S",
+            "1977 1977 8 25 7 0 2 0",
+            "1978 1979 3 1 0 0 2 1 S",
+            "1978 1978 9 1 7 0 2 0",
+            "1979 1982 8 0 8 1 2 0",
+            "1980 1980 2 0 8 0 2 1 S",
+            "1981 1982 2 0 8 1 2 1 S",
+            "1983 1983 2 0 8 2 2 1 S"
+        ],
+        "Pulaski": [
+            "1946 1960 3 0 8 2 0 1 D",
+            "1946 1954 8 0 8 2 0 0 S",
+            "1955 1956 9 0 8 2 0 0 S",
+            "1957 1960 8 0 8 2 0 0 S"
+        ],
+        "ROK": [
+            "1960 1960 4 15 7 0 0 1 D",
+            "1960 1960 8 13 7 0 0 0 S",
+            "1987 1988 4 8 0 0 0 1 D",
+            "1987 1988 9 8 0 0 0 0 S"
+        ],
+        "Regina": [
+            "1918 1918 3 14 7 2 0 1 D",
+            "1918 1918 9 27 7 2 0 0 S",
+            "1930 1934 4 1 0 0 0 1 D",
+            "1930 1934 9 1 0 0 0 0 S",
+            "1937 1941 3 8 0 0 0 1 D",
+            "1937 1937 9 8 0 0 0 0 S",
+            "1938 1938 9 1 0 0 0 0 S",
+            "1939 1941 9 8 0 0 0 0 S",
+            "1942 1942 1 9 7 2 0 1 W",
+            "1945 1945 7 14 7 23 1 1 P",
+            "1945 1945 8 0 8 2 0 0 S",
+            "1946 1946 3 8 0 2 0 1 D",
+            "1946 1946 9 8 0 2 0 0 S",
+            "1947 1957 3 0 8 2 0 1 D",
+            "1947 1957 8 0 8 2 0 0 S",
+            "1959 1959 3 0 8 2 0 1 D",
+            "1959 1959 9 0 8 2 0 0 S"
+        ],
+        "Romania": [
+            "1932 1932 4 21 7 0 2 1 S",
+            "1932 1939 9 1 0 0 2 0",
+            "1933 1939 3 2 0 0 2 1 S",
+            "1979 1979 4 27 7 0 0 1 S",
+            "1979 1979 8 0 8 0 0 0",
+            "1980 1980 3 5 7 23 0 1 S",
+            "1980 1980 8 0 8 1 0 0",
+            "1991 1993 2 0 8 0 2 1 S",
+            "1991 1993 8 0 8 0 2 0"
+        ],
+        "Russia": [
+            "1917 1917 6 1 7 23 0 1 MST",
+            "1917 1917 11 28 7 0 0 0 MMT",
+            "1918 1918 4 31 7 22 0 2 MDST",
+            "1918 1918 8 16 7 1 0 1 MST",
+            "1919 1919 4 31 7 23 0 2 MDST",
+            "1919 1919 6 1 7 2 0 1 S",
+            "1919 1919 7 16 7 0 0 0",
+            "1921 1921 1 14 7 23 0 1 S",
+            "1921 1921 2 20 7 23 0 2 M",
+            "1921 1921 8 1 7 0 0 1 S",
+            "1921 1921 9 1 7 0 0 0",
+            "1981 1984 3 1 7 0 0 1 S",
+            "1981 1983 9 1 7 0 0 0",
+            "1984 1991 8 0 8 2 2 0",
+            "1985 1991 2 0 8 2 2 1 S",
+            "1992 1992 2 6 8 23 0 1 S",
+            "1992 1992 8 6 8 23 0 0",
+            "1993 2010 2 0 8 2 2 1 S",
+            "1993 1995 8 0 8 2 2 0",
+            "1996 2010 9 0 8 2 2 0"
+        ],
+        "RussiaAsia": [
+            "1981 1984 3 1 7 0 0 1 S",
+            "1981 1983 9 1 7 0 0 0",
+            "1984 1991 8 0 8 2 2 0",
+            "1985 1991 2 0 8 2 2 1 S",
+            "1992 1992 2 6 8 23 0 1 S",
+            "1992 1992 8 6 8 23 0 0",
+            "1993 9999 2 0 8 2 2 1 S",
+            "1993 1995 8 0 8 2 2 0",
+            "1996 9999 9 0 8 2 2 0"
+        ],
+        "SA": [
+            "1942 1943 8 15 0 2 0 1",
+            "1943 1944 2 15 0 2 0 0"
+        ],
+        "SL": [
+            "1935 1942 5 1 7 0 0 0:40 SLST",
+            "1935 1942 9 1 7 0 0 0 WAT",
+            "1957 1962 5 1 7 0 0 1 SLST",
+            "1957 1962 8 1 7 0 0 0 GMT"
+        ],
+        "Salv": [
+            "1987 1988 4 1 0 0 0 1 D",
+            "1987 1988 8 0 8 0 0 0 S"
+        ],
+        "SanLuis": [
+            "2008 2009 2 8 0 0 0 0",
+            "2007 2009 9 8 0 0 0 1 S"
+        ],
+        "Shang": [
+            "1940 1940 5 3 7 0 0 1 D",
+            "1940 1941 9 1 7 0 0 0 S",
+            "1941 1941 2 16 7 0 0 1 D"
+        ],
+        "SovietZone": [
+            "1945 1945 4 24 7 2 0 2 M",
+            "1945 1945 8 24 7 3 0 1 S",
+            "1945 1945 10 18 7 2 2 0"
+        ],
+        "Spain": [
+            "1917 1917 4 5 7 23 2 1 S",
+            "1917 1919 9 6 7 23 2 0",
+            "1918 1918 3 15 7 23 2 1 S",
+            "1919 1919 3 5 7 23 2 1 S",
+            "1924 1924 3 16 7 23 2 1 S",
+            "1924 1924 9 4 7 23 2 0",
+            "1926 1926 3 17 7 23 2 1 S",
+            "1926 1929 9 1 6 23 2 0",
+            "1927 1927 3 9 7 23 2 1 S",
+            "1928 1928 3 14 7 23 2 1 S",
+            "1929 1929 3 20 7 23 2 1 S",
+            "1937 1937 4 22 7 23 2 1 S",
+            "1937 1939 9 1 6 23 2 0",
+            "1938 1938 2 22 7 23 2 1 S",
+            "1939 1939 3 15 7 23 2 1 S",
+            "1940 1940 2 16 7 23 2 1 S",
+            "1942 1942 4 2 7 22 2 2 M",
+            "1942 1942 8 1 7 22 2 1 S",
+            "1943 1946 3 13 6 22 2 2 M",
+            "1943 1943 9 3 7 22 2 1 S",
+            "1944 1944 9 10 7 22 2 1 S",
+            "1945 1945 8 30 7 1 0 1 S",
+            "1946 1946 8 30 7 0 0 0",
+            "1949 1949 3 30 7 23 0 1 S",
+            "1949 1949 8 30 7 1 0 0",
+            "1974 1975 3 13 6 23 0 1 S",
+            "1974 1975 9 1 0 1 0 0",
+            "1976 1976 2 27 7 23 0 1 S",
+            "1976 1977 8 0 8 1 0 0",
+            "1977 1978 3 2 7 23 0 1 S",
+            "1978 1978 9 1 7 1 0 0"
+        ],
+        "SpainAfrica": [
+            "1967 1967 5 3 7 12 0 1 S",
+            "1967 1967 9 1 7 0 0 0",
+            "1974 1974 5 24 7 0 0 1 S",
+            "1974 1974 8 1 7 0 0 0",
+            "1976 1977 4 1 7 0 0 1 S",
+            "1976 1976 7 1 7 0 0 0",
+            "1977 1977 8 28 7 0 0 0",
+            "1978 1978 5 1 7 0 0 1 S",
+            "1978 1978 7 4 7 0 0 0"
+        ],
+        "StJohns": [
+            "1917 1917 3 8 7 2 0 1 D",
+            "1917 1917 8 17 7 2 0 0 S",
+            "1919 1919 4 5 7 23 0 1 D",
+            "1919 1919 7 12 7 23 0 0 S",
+            "1920 1935 4 1 0 23 0 1 D",
+            "1920 1935 9 0 8 23 0 0 S",
+            "1936 1941 4 9 1 0 0 1 D",
+            "1936 1941 9 2 1 0 0 0 S",
+            "1946 1950 4 8 0 2 0 1 D",
+            "1946 1950 9 2 0 2 0 0 S",
+            "1951 1986 3 0 8 2 0 1 D",
+            "1951 1959 8 0 8 2 0 0 S",
+            "1960 1986 9 0 8 2 0 0 S",
+            "1987 1987 3 1 0 0:1 0 1 D",
+            "1987 2006 9 0 8 0:1 0 0 S",
+            "1988 1988 3 1 0 0:1 0 2 DD",
+            "1989 2006 3 1 0 0:1 0 1 D",
+            "2007 2011 2 8 0 0:1 0 1 D",
+            "2007 2010 10 1 0 0:1 0 0 S"
+        ],
+        "Starke": [
+            "1947 1961 3 0 8 2 0 1 D",
+            "1947 1954 8 0 8 2 0 0 S",
+            "1955 1956 9 0 8 2 0 0 S",
+            "1957 1958 8 0 8 2 0 0 S",
+            "1959 1961 9 0 8 2 0 0 S"
+        ],
+        "Sudan": [
+            "1970 1970 4 1 7 0 0 1 S",
+            "1970 1985 9 15 7 0 0 0",
+            "1971 1971 3 30 7 0 0 1 S",
+            "1972 1985 3 0 8 0 0 1 S"
+        ],
+        "Swift": [
+            "1957 1957 3 0 8 2 0 1 D",
+            "1957 1957 9 0 8 2 0 0 S",
+            "1959 1961 3 0 8 2 0 1 D",
+            "1959 1959 9 0 8 2 0 0 S",
+            "1960 1961 8 0 8 2 0 0 S"
+        ],
+        "Swiss": [
+            "1941 1942 4 1 1 1 0 1 S",
+            "1941 1942 9 1 1 2 0 0"
+        ],
+        "Syria": [
+            "1920 1923 3 15 0 2 0 1 S",
+            "1920 1923 9 1 0 2 0 0",
+            "1962 1962 3 29 7 2 0 1 S",
+            "1962 1962 9 1 7 2 0 0",
+            "1963 1965 4 1 7 2 0 1 S",
+            "1963 1963 8 30 7 2 0 0",
+            "1964 1964 9 1 7 2 0 0",
+            "1965 1965 8 30 7 2 0 0",
+            "1966 1966 3 24 7 2 0 1 S",
+            "1966 1976 9 1 7 2 0 0",
+            "1967 1978 4 1 7 2 0 1 S",
+            "1977 1978 8 1 7 2 0 0",
+            "1983 1984 3 9 7 2 0 1 S",
+            "1983 1984 9 1 7 2 0 0",
+            "1986 1986 1 16 7 2 0 1 S",
+            "1986 1986 9 9 7 2 0 0",
+            "1987 1987 2 1 7 2 0 1 S",
+            "1987 1988 9 31 7 2 0 0",
+            "1988 1988 2 15 7 2 0 1 S",
+            "1989 1989 2 31 7 2 0 1 S",
+            "1989 1989 9 1 7 2 0 0",
+            "1990 1990 3 1 7 2 0 1 S",
+            "1990 1990 8 30 7 2 0 0",
+            "1991 1991 3 1 7 0 0 1 S",
+            "1991 1992 9 1 7 0 0 0",
+            "1992 1992 3 8 7 0 0 1 S",
+            "1993 1993 2 26 7 0 0 1 S",
+            "1993 1993 8 25 7 0 0 0",
+            "1994 1996 3 1 7 0 0 1 S",
+            "1994 2005 9 1 7 0 0 0",
+            "1997 1998 2 1 8 0 0 1 S",
+            "1999 2006 3 1 7 0 0 1 S",
+            "2006 2006 8 22 7 0 0 0",
+            "2007 2007 2 5 8 0 0 1 S",
+            "2007 2007 10 1 5 0 0 0",
+            "2008 2008 3 1 5 0 0 1 S",
+            "2008 2008 10 1 7 0 0 0",
+            "2009 2009 2 5 8 0 0 1 S",
+            "2010 2011 3 1 5 0 0 1 S",
+            "2012 9999 2 5 8 0 0 1 S",
+            "2009 9999 9 5 8 0 0 0"
+        ],
+        "TC": [
+            "1979 1986 3 0 8 2 0 1 D",
+            "1979 2006 9 0 8 2 0 0 S",
+            "1987 2006 3 1 0 2 0 1 D",
+            "2007 9999 2 8 0 2 0 1 D",
+            "2007 9999 10 1 0 2 0 0 S"
+        ],
+        "Taiwan": [
+            "1945 1951 4 1 7 0 0 1 D",
+            "1945 1951 9 1 7 0 0 0 S",
+            "1952 1952 2 1 7 0 0 1 D",
+            "1952 1954 10 1 7 0 0 0 S",
+            "1953 1959 3 1 7 0 0 1 D",
+            "1955 1961 9 1 7 0 0 0 S",
+            "1960 1961 5 1 7 0 0 1 D",
+            "1974 1975 3 1 7 0 0 1 D",
+            "1974 1975 9 1 7 0 0 0 S",
+            "1979 1979 5 30 7 0 0 1 D",
+            "1979 1979 8 30 7 0 0 0 S"
+        ],
+        "Thule": [
+            "1991 1992 2 0 8 2 0 1 D",
+            "1991 1992 8 0 8 2 0 0 S",
+            "1993 2006 3 1 0 2 0 1 D",
+            "1993 2006 9 0 8 2 0 0 S",
+            "2007 9999 2 8 0 2 0 1 D",
+            "2007 9999 10 1 0 2 0 0 S"
+        ],
+        "Tonga": [
+            "1999 1999 9 7 7 2 2 1 S",
+            "2000 2000 2 19 7 2 2 0",
+            "2000 2001 10 1 0 2 0 1 S",
+            "2001 2002 0 0 8 2 0 0"
+        ],
+        "Toronto": [
+            "1919 1919 2 30 7 23:30 0 1 D",
+            "1919 1919 9 26 7 0 0 0 S",
+            "1920 1920 4 2 7 2 0 1 D",
+            "1920 1920 8 26 7 0 0 0 S",
+            "1921 1921 4 15 7 2 0 1 D",
+            "1921 1921 8 15 7 2 0 0 S",
+            "1922 1923 4 8 0 2 0 1 D",
+            "1922 1926 8 15 0 2 0 0 S",
+            "1924 1927 4 1 0 2 0 1 D",
+            "1927 1932 8 0 8 2 0 0 S",
+            "1928 1931 3 0 8 2 0 1 D",
+            "1932 1932 4 1 7 2 0 1 D",
+            "1933 1940 3 0 8 2 0 1 D",
+            "1933 1933 9 1 7 2 0 0 S",
+            "1934 1939 8 0 8 2 0 0 S",
+            "1945 1946 8 0 8 2 0 0 S",
+            "1946 1946 3 0 8 2 0 1 D",
+            "1947 1949 3 0 8 0 0 1 D",
+            "1947 1948 8 0 8 0 0 0 S",
+            "1949 1949 10 0 8 0 0 0 S",
+            "1950 1973 3 0 8 2 0 1 D",
+            "1950 1950 10 0 8 2 0 0 S",
+            "1951 1956 8 0 8 2 0 0 S",
+            "1957 1973 9 0 8 2 0 0 S"
+        ],
+        "Tunisia": [
+            "1939 1939 3 15 7 23 2 1 S",
+            "1939 1939 10 18 7 23 2 0",
+            "1940 1940 1 25 7 23 2 1 S",
+            "1941 1941 9 6 7 0 0 0",
+            "1942 1942 2 9 7 0 0 1 S",
+            "1942 1942 10 2 7 3 0 0",
+            "1943 1943 2 29 7 2 0 1 S",
+            "1943 1943 3 17 7 2 0 0",
+            "1943 1943 3 25 7 2 0 1 S",
+            "1943 1943 9 4 7 2 0 0",
+            "1944 1945 3 1 1 2 0 1 S",
+            "1944 1944 9 8 7 0 0 0",
+            "1945 1945 8 16 7 0 0 0",
+            "1977 1977 3 30 7 0 2 1 S",
+            "1977 1977 8 24 7 0 2 0",
+            "1978 1978 4 1 7 0 2 1 S",
+            "1978 1978 9 1 7 0 2 0",
+            "1988 1988 5 1 7 0 2 1 S",
+            "1988 1990 8 0 8 0 2 0",
+            "1989 1989 2 26 7 0 2 1 S",
+            "1990 1990 4 1 7 0 2 1 S",
+            "2005 2005 4 1 7 0 2 1 S",
+            "2005 2005 8 30 7 1 2 0",
+            "2006 2008 2 0 8 2 2 1 S",
+            "2006 2008 9 0 8 2 2 0"
+        ],
+        "Turkey": [
+            "1916 1916 4 1 7 0 0 1 S",
+            "1916 1916 9 1 7 0 0 0",
+            "1920 1920 2 28 7 0 0 1 S",
+            "1920 1920 9 25 7 0 0 0",
+            "1921 1921 3 3 7 0 0 1 S",
+            "1921 1921 9 3 7 0 0 0",
+            "1922 1922 2 26 7 0 0 1 S",
+            "1922 1922 9 8 7 0 0 0",
+            "1924 1924 4 13 7 0 0 1 S",
+            "1924 1925 9 1 7 0 0 0",
+            "1925 1925 4 1 7 0 0 1 S",
+            "1940 1940 5 30 7 0 0 1 S",
+            "1940 1940 9 5 7 0 0 0",
+            "1940 1940 11 1 7 0 0 1 S",
+            "1941 1941 8 21 7 0 0 0",
+            "1942 1942 3 1 7 0 0 1 S",
+            "1942 1942 10 1 7 0 0 0",
+            "1945 1945 3 2 7 0 0 1 S",
+            "1945 1945 9 8 7 0 0 0",
+            "1946 1946 5 1 7 0 0 1 S",
+            "1946 1946 9 1 7 0 0 0",
+            "1947 1948 3 16 0 0 0 1 S",
+            "1947 1950 9 2 0 0 0 0",
+            "1949 1949 3 10 7 0 0 1 S",
+            "1950 1950 3 19 7 0 0 1 S",
+            "1951 1951 3 22 7 0 0 1 S",
+            "1951 1951 9 8 7 0 0 0",
+            "1962 1962 6 15 7 0 0 1 S",
+            "1962 1962 9 8 7 0 0 0",
+            "1964 1964 4 15 7 0 0 1 S",
+            "1964 1964 9 1 7 0 0 0",
+            "1970 1972 4 2 0 0 0 1 S",
+            "1970 1972 9 2 0 0 0 0",
+            "1973 1973 5 3 7 1 0 1 S",
+            "1973 1973 10 4 7 3 0 0",
+            "1974 1974 2 31 7 2 0 1 S",
+            "1974 1974 10 3 7 5 0 0",
+            "1975 1975 2 30 7 0 0 1 S",
+            "1975 1976 9 0 8 0 0 0",
+            "1976 1976 5 1 7 0 0 1 S",
+            "1977 1978 3 1 0 0 0 1 S",
+            "1977 1977 9 16 7 0 0 0",
+            "1979 1980 3 1 0 3 0 1 S",
+            "1979 1982 9 11 1 0 0 0",
+            "1981 1982 2 0 8 3 0 1 S",
+            "1983 1983 6 31 7 0 0 1 S",
+            "1983 1983 9 2 7 0 0 0",
+            "1985 1985 3 20 7 0 0 1 S",
+            "1985 1985 8 28 7 0 0 0",
+            "1986 1990 2 0 8 2 2 1 S",
+            "1986 1990 8 0 8 2 2 0",
+            "1991 2006 2 0 8 1 2 1 S",
+            "1991 1995 8 0 8 1 2 0",
+            "1996 2006 9 0 8 1 2 0"
+        ],
+        "US": [
+            "1918 1919 2 0 8 2 0 1 D",
+            "1918 1919 9 0 8 2 0 0 S",
+            "1942 1942 1 9 7 2 0 1 W",
+            "1945 1945 7 14 7 23 1 1 P",
+            "1945 1945 8 30 7 2 0 0 S",
+            "1967 2006 9 0 8 2 0 0 S",
+            "1967 1973 3 0 8 2 0 1 D",
+            "1974 1974 0 6 7 2 0 1 D",
+            "1975 1975 1 23 7 2 0 1 D",
+            "1976 1986 3 0 8 2 0 1 D",
+            "1987 2006 3 1 0 2 0 1 D",
+            "2007 9999 2 8 0 2 0 1 D",
+            "2007 9999 10 1 0 2 0 0 S"
+        ],
+        "Uruguay": [
+            "1923 1923 9 2 7 0 0 0:30 HS",
+            "1924 1926 3 1 7 0 0 0",
+            "1924 1925 9 1 7 0 0 0:30 HS",
+            "1933 1935 9 0 8 0 0 0:30 HS",
+            "1934 1936 2 25 6 23:30 2 0",
+            "1936 1936 10 1 7 0 0 0:30 HS",
+            "1937 1941 2 0 8 0 0 0",
+            "1937 1940 9 0 8 0 0 0:30 HS",
+            "1941 1941 7 1 7 0 0 0:30 HS",
+            "1942 1942 0 1 7 0 0 0",
+            "1942 1942 11 14 7 0 0 1 S",
+            "1943 1943 2 14 7 0 0 0",
+            "1959 1959 4 24 7 0 0 1 S",
+            "1959 1959 10 15 7 0 0 0",
+            "1960 1960 0 17 7 0 0 1 S",
+            "1960 1960 2 6 7 0 0 0",
+            "1965 1967 3 1 0 0 0 1 S",
+            "1965 1965 8 26 7 0 0 0",
+            "1966 1967 9 31 7 0 0 0",
+            "1968 1970 4 27 7 0 0 0:30 HS",
+            "1968 1970 11 2 7 0 0 0",
+            "1972 1972 3 24 7 0 0 1 S",
+            "1972 1972 7 15 7 0 0 0",
+            "1974 1974 2 10 7 0 0 0:30 HS",
+            "1974 1974 11 22 7 0 0 1 S",
+            "1976 1976 9 1 7 0 0 0",
+            "1977 1977 11 4 7 0 0 1 S",
+            "1978 1978 3 1 7 0 0 0",
+            "1979 1979 9 1 7 0 0 1 S",
+            "1980 1980 4 1 7 0 0 0",
+            "1987 1987 11 14 7 0 0 1 S",
+            "1988 1988 2 14 7 0 0 0",
+            "1988 1988 11 11 7 0 0 1 S",
+            "1989 1989 2 12 7 0 0 0",
+            "1989 1989 9 29 7 0 0 1 S",
+            "1990 1992 2 1 0 0 0 0",
+            "1990 1991 9 21 0 0 0 1 S",
+            "1992 1992 9 18 7 0 0 1 S",
+            "1993 1993 1 28 7 0 0 0",
+            "2004 2004 8 19 7 0 0 1 S",
+            "2005 2005 2 27 7 2 0 0",
+            "2005 2005 9 9 7 2 0 1 S",
+            "2006 2006 2 12 7 2 0 0",
+            "2006 9999 9 1 0 2 0 1 S",
+            "2007 9999 2 8 0 2 0 0"
+        ],
+        "Vanc": [
+            "1918 1918 3 14 7 2 0 1 D",
+            "1918 1918 9 27 7 2 0 0 S",
+            "1942 1942 1 9 7 2 0 1 W",
+            "1945 1945 7 14 7 23 1 1 P",
+            "1945 1945 8 30 7 2 0 0 S",
+            "1946 1986 3 0 8 2 0 1 D",
+            "1946 1946 9 13 7 2 0 0 S",
+            "1947 1961 8 0 8 2 0 0 S",
+            "1962 2006 9 0 8 2 0 0 S"
+        ],
+        "Vanuatu": [
+            "1983 1983 8 25 7 0 0 1 S",
+            "1984 1991 2 23 0 0 0 0",
+            "1984 1984 9 23 7 0 0 1 S",
+            "1985 1991 8 23 0 0 0 1 S",
+            "1992 1993 0 23 0 0 0 0",
+            "1992 1992 9 23 0 0 0 1 S"
+        ],
+        "Vincennes": [
+            "1946 1946 3 0 8 2 0 1 D",
+            "1946 1946 8 0 8 2 0 0 S",
+            "1953 1954 3 0 8 2 0 1 D",
+            "1953 1959 8 0 8 2 0 0 S",
+            "1955 1955 4 1 7 0 0 1 D",
+            "1956 1963 3 0 8 2 0 1 D",
+            "1960 1960 9 0 8 2 0 0 S",
+            "1961 1961 8 0 8 2 0 0 S",
+            "1962 1963 9 0 8 2 0 0 S"
+        ],
+        "W-Eur": [
+            "1977 1980 3 1 0 1 2 1 S",
+            "1977 1977 8 0 8 1 2 0",
+            "1978 1978 9 1 7 1 2 0",
+            "1979 1995 8 0 8 1 2 0",
+            "1981 9999 2 0 8 1 2 1 S",
+            "1996 9999 9 0 8 1 2 0"
+        ],
+        "WS": [
+            "2012 9999 8 0 8 3 0 1 D",
+            "2012 9999 3 1 0 4 0 0"
+        ],
+        "Winn": [
+            "1916 1916 3 23 7 0 0 1 D",
+            "1916 1916 8 17 7 0 0 0 S",
+            "1918 1918 3 14 7 2 0 1 D",
+            "1918 1918 9 27 7 2 0 0 S",
+            "1937 1937 4 16 7 2 0 1 D",
+            "1937 1937 8 26 7 2 0 0 S",
+            "1942 1942 1 9 7 2 0 1 W",
+            "1945 1945 7 14 7 23 1 1 P",
+            "1945 1945 8 0 8 2 0 0 S",
+            "1946 1946 4 12 7 2 0 1 D",
+            "1946 1946 9 13 7 2 0 0 S",
+            "1947 1949 3 0 8 2 0 1 D",
+            "1947 1949 8 0 8 2 0 0 S",
+            "1950 1950 4 1 7 2 0 1 D",
+            "1950 1950 8 30 7 2 0 0 S",
+            "1951 1960 3 0 8 2 0 1 D",
+            "1951 1958 8 0 8 2 0 0 S",
+            "1959 1959 9 0 8 2 0 0 S",
+            "1960 1960 8 0 8 2 0 0 S",
+            "1963 1963 3 0 8 2 0 1 D",
+            "1963 1963 8 22 7 2 0 0 S",
+            "1966 1986 3 0 8 2 2 1 D",
+            "1966 2005 9 0 8 2 2 0 S",
+            "1987 2005 3 1 0 2 2 1 D"
+        ],
+        "Zion": [
+            "1940 1940 5 1 7 0 0 1 D",
+            "1942 1944 10 1 7 0 0 0 S",
+            "1943 1943 3 1 7 2 0 1 D",
+            "1944 1944 3 1 7 0 0 1 D",
+            "1945 1945 3 16 7 0 0 1 D",
+            "1945 1945 10 1 7 2 0 0 S",
+            "1946 1946 3 16 7 2 0 1 D",
+            "1946 1946 10 1 7 0 0 0 S",
+            "1948 1948 4 23 7 0 0 2 DD",
+            "1948 1948 8 1 7 0 0 1 D",
+            "1948 1949 10 1 7 2 0 0 S",
+            "1949 1949 4 1 7 0 0 1 D",
+            "1950 1950 3 16 7 0 0 1 D",
+            "1950 1950 8 15 7 3 0 0 S",
+            "1951 1951 3 1 7 0 0 1 D",
+            "1951 1951 10 11 7 3 0 0 S",
+            "1952 1952 3 20 7 2 0 1 D",
+            "1952 1952 9 19 7 3 0 0 S",
+            "1953 1953 3 12 7 2 0 1 D",
+            "1953 1953 8 13 7 3 0 0 S",
+            "1954 1954 5 13 7 0 0 1 D",
+            "1954 1954 8 12 7 0 0 0 S",
+            "1955 1955 5 11 7 2 0 1 D",
+            "1955 1955 8 11 7 0 0 0 S",
+            "1956 1956 5 3 7 0 0 1 D",
+            "1956 1956 8 30 7 3 0 0 S",
+            "1957 1957 3 29 7 2 0 1 D",
+            "1957 1957 8 22 7 0 0 0 S",
+            "1974 1974 6 7 7 0 0 1 D",
+            "1974 1974 9 13 7 0 0 0 S",
+            "1975 1975 3 20 7 0 0 1 D",
+            "1975 1975 7 31 7 0 0 0 S",
+            "1985 1985 3 14 7 0 0 1 D",
+            "1985 1985 8 15 7 0 0 0 S",
+            "1986 1986 4 18 7 0 0 1 D",
+            "1986 1986 8 7 7 0 0 0 S",
+            "1987 1987 3 15 7 0 0 1 D",
+            "1987 1987 8 13 7 0 0 0 S",
+            "1988 1988 3 9 7 0 0 1 D",
+            "1988 1988 8 3 7 0 0 0 S",
+            "1989 1989 3 30 7 0 0 1 D",
+            "1989 1989 8 3 7 0 0 0 S",
+            "1990 1990 2 25 7 0 0 1 D",
+            "1990 1990 7 26 7 0 0 0 S",
+            "1991 1991 2 24 7 0 0 1 D",
+            "1991 1991 8 1 7 0 0 0 S",
+            "1992 1992 2 29 7 0 0 1 D",
+            "1992 1992 8 6 7 0 0 0 S",
+            "1993 1993 3 2 7 0 0 1 D",
+            "1993 1993 8 5 7 0 0 0 S",
+            "1994 1994 3 1 7 0 0 1 D",
+            "1994 1994 7 28 7 0 0 0 S",
+            "1995 1995 2 31 7 0 0 1 D",
+            "1995 1995 8 3 7 0 0 0 S",
+            "1996 1996 2 15 7 0 0 1 D",
+            "1996 1996 8 16 7 0 0 0 S",
+            "1997 1997 2 21 7 0 0 1 D",
+            "1997 1997 8 14 7 0 0 0 S",
+            "1998 1998 2 20 7 0 0 1 D",
+            "1998 1998 8 6 7 0 0 0 S",
+            "1999 1999 3 2 7 2 0 1 D",
+            "1999 1999 8 3 7 2 0 0 S",
+            "2000 2000 3 14 7 2 0 1 D",
+            "2000 2000 9 6 7 1 0 0 S",
+            "2001 2001 3 9 7 1 0 1 D",
+            "2001 2001 8 24 7 1 0 0 S",
+            "2002 2002 2 29 7 1 0 1 D",
+            "2002 2002 9 7 7 1 0 0 S",
+            "2003 2003 2 28 7 1 0 1 D",
+            "2003 2003 9 3 7 1 0 0 S",
+            "2004 2004 3 7 7 1 0 1 D",
+            "2004 2004 8 22 7 1 0 0 S",
+            "2005 2005 3 1 7 2 0 1 D",
+            "2005 2005 9 9 7 2 0 0 S",
+            "2006 2010 2 26 5 2 0 1 D",
+            "2006 2006 9 1 7 2 0 0 S",
+            "2007 2007 8 16 7 2 0 0 S",
+            "2008 2008 9 5 7 2 0 0 S",
+            "2009 2009 8 27 7 2 0 0 S",
+            "2010 2010 8 12 7 2 0 0 S",
+            "2011 2011 3 1 7 2 0 1 D",
+            "2011 2011 9 2 7 2 0 0 S",
+            "2012 2012 2 26 5 2 0 1 D",
+            "2012 2012 8 23 7 2 0 0 S",
+            "2013 9999 2 23 5 2 0 1 D",
+            "2013 2026 9 2 0 2 0 0 S",
+            "2027 2027 9 3 1 2 0 0 S",
+            "2028 9999 9 2 0 2 0 0 S"
+        ]
+    },
     "zones": {
         "Africa/Abidjan": [
             "-0:16:8 - LMT 1912 -0:16:8",
@@ -1458,13 +6043,6 @@ moment.tz.add({
             "0 - zzz 1957_11_16",
             "6 - VOST"
         ],
-        "Europe/Oslo": [
-            "0:43 - LMT 1895_0_1 0:43",
-            "1 Norway CE%sT 1940_7_10_23 1",
-            "1 C-Eur CE%sT 1945_3_2_2 1",
-            "1 Norway CE%sT 1980 1",
-            "1 EU CE%sT"
-        ],
         "Asia/Aden": [
             "2:59:54 - LMT 1950 2:59:54",
             "3 - AST"
@@ -2211,23 +6789,92 @@ moment.tz.add({
         "EST5EDT": [
             "-5 US E%sT"
         ],
-        "HST": [
-            "-10 - HST"
+        "Etc/GMT": [
+            "0 - GMT"
         ],
-        "MET": [
-            "1 C-Eur ME%sT"
+        "Etc/GMT+1": [
+            "-1 - GMT+1"
         ],
-        "MST": [
-            "-7 - MST"
+        "Etc/GMT+10": [
+            "-10 - GMT+10"
         ],
-        "MST7MDT": [
-            "-7 US M%sT"
+        "Etc/GMT+11": [
+            "-11 - GMT+11"
         ],
-        "PST8PDT": [
-            "-8 US P%sT"
+        "Etc/GMT+12": [
+            "-12 - GMT+12"
         ],
-        "WET": [
-            "0 EU WE%sT"
+        "Etc/GMT+2": [
+            "-2 - GMT+2"
+        ],
+        "Etc/GMT+3": [
+            "-3 - GMT+3"
+        ],
+        "Etc/GMT+4": [
+            "-4 - GMT+4"
+        ],
+        "Etc/GMT+5": [
+            "-5 - GMT+5"
+        ],
+        "Etc/GMT+6": [
+            "-6 - GMT+6"
+        ],
+        "Etc/GMT+7": [
+            "-7 - GMT+7"
+        ],
+        "Etc/GMT+8": [
+            "-8 - GMT+8"
+        ],
+        "Etc/GMT+9": [
+            "-9 - GMT+9"
+        ],
+        "Etc/GMT-1": [
+            "1 - GMT-1"
+        ],
+        "Etc/GMT-10": [
+            "10 - GMT-10"
+        ],
+        "Etc/GMT-11": [
+            "11 - GMT-11"
+        ],
+        "Etc/GMT-12": [
+            "12 - GMT-12"
+        ],
+        "Etc/GMT-13": [
+            "13 - GMT-13"
+        ],
+        "Etc/GMT-14": [
+            "14 - GMT-14"
+        ],
+        "Etc/GMT-2": [
+            "2 - GMT-2"
+        ],
+        "Etc/GMT-3": [
+            "3 - GMT-3"
+        ],
+        "Etc/GMT-4": [
+            "4 - GMT-4"
+        ],
+        "Etc/GMT-5": [
+            "5 - GMT-5"
+        ],
+        "Etc/GMT-6": [
+            "6 - GMT-6"
+        ],
+        "Etc/GMT-7": [
+            "7 - GMT-7"
+        ],
+        "Etc/GMT-8": [
+            "8 - GMT-8"
+        ],
+        "Etc/GMT-9": [
+            "9 - GMT-9"
+        ],
+        "Etc/UCT": [
+            "0 - UCT"
+        ],
+        "Etc/UTC": [
+            "0 - UTC"
         ],
         "Europe/Amsterdam": [
             "0:19:32 - LMT 1835 0:19:32",
@@ -2267,13 +6914,6 @@ moment.tz.add({
             "1 Germany CE%sT 1980 1",
             "1 EU CE%sT"
         ],
-        "Europe/Prague": [
-            "0:57:44 - LMT 1850 0:57:44",
-            "0:57:44 - PMT 1891_9 0:57:44",
-            "1 C-Eur CE%sT 1944_8_17_2 1",
-            "1 Czech CE%sT 1979 1",
-            "1 EU CE%sT"
-        ],
         "Europe/Brussels": [
             "0:17:30 - LMT 1880 0:17:30",
             "0:17:30 - BMT 1892_4_1_12 0:17:30",
@@ -2300,12 +6940,6 @@ moment.tz.add({
             "1 Hungary CE%sT 1941_3_6_2 1",
             "1 C-Eur CE%sT 1945 1",
             "1 Hungary CE%sT 1980_8_28_2 1",
-            "1 EU CE%sT"
-        ],
-        "Europe/Zurich": [
-            "0:34:8 - LMT 1848_8_12 0:34:8",
-            "0:29:44 - BMT 1894_5 0:29:44",
-            "1 Swiss CE%sT 1981 1",
             "1 EU CE%sT"
         ],
         "Europe/Chisinau": [
@@ -2350,13 +6984,6 @@ moment.tz.add({
             "0 GB-Eire %s 1957_3_14_2",
             "1 - CET 1982 1",
             "1 EU CE%sT"
-        ],
-        "Europe/London": [
-            "-0:1:15 - LMT 1847_11_1_0 -0:1:15",
-            "0 GB-Eire %s 1968_9_27 1",
-            "1 - BST 1971_9_31_2",
-            "0 GB-Eire %s 1996",
-            "0 EU GMT/BST"
         ],
         "Europe/Helsinki": [
             "1:39:52 - LMT 1878_4_31 1:39:52",
@@ -2403,6 +7030,13 @@ moment.tz.add({
             "0 W-Eur WE%sT 1992_8_27_1",
             "1 EU CE%sT 1996_2_31_1",
             "0 EU WE%sT"
+        ],
+        "Europe/London": [
+            "-0:1:15 - LMT 1847_11_1_0 -0:1:15",
+            "0 GB-Eire %s 1968_9_27 1",
+            "1 - BST 1971_9_31_2",
+            "0 GB-Eire %s 1996",
+            "0 EU GMT/BST"
         ],
         "Europe/Luxembourg": [
             "0:24:36 - LMT 1904_5 0:24:36",
@@ -2459,6 +7093,13 @@ moment.tz.add({
             "3 Russia MSK/MSD 2011_2_27_2 3",
             "4 - MSK"
         ],
+        "Europe/Oslo": [
+            "0:43 - LMT 1895_0_1 0:43",
+            "1 Norway CE%sT 1940_7_10_23 1",
+            "1 C-Eur CE%sT 1945_3_2_2 1",
+            "1 Norway CE%sT 1980 1",
+            "1 EU CE%sT"
+        ],
         "Europe/Paris": [
             "0:9:21 - LMT 1891_2_15_0_1 0:9:21",
             "0:9:21 - PMT 1911_2_11_0_1 0:9:21",
@@ -2466,6 +7107,13 @@ moment.tz.add({
             "1 C-Eur CE%sT 1944_7_25 2",
             "0 France WE%sT 1945_8_16_3 2",
             "1 France CE%sT 1977 1",
+            "1 EU CE%sT"
+        ],
+        "Europe/Prague": [
+            "0:57:44 - LMT 1850 0:57:44",
+            "0:57:44 - PMT 1891_9 0:57:44",
+            "1 C-Eur CE%sT 1944_8_17_2 1",
+            "1 Czech CE%sT 1979 1",
             "1 EU CE%sT"
         ],
         "Europe/Riga": [
@@ -2639,6 +7287,15 @@ moment.tz.add({
             "2 E-Eur EE%sT 1995 2",
             "2 EU EE%sT"
         ],
+        "Europe/Zurich": [
+            "0:34:8 - LMT 1848_8_12 0:34:8",
+            "0:29:44 - BMT 1894_5 0:29:44",
+            "1 Swiss CE%sT 1981 1",
+            "1 EU CE%sT"
+        ],
+        "HST": [
+            "-10 - HST"
+        ],
         "Indian/Antananarivo": [
             "3:10:4 - LMT 1911_6 3:10:4",
             "3 - EAT 1954_1_27_23 3",
@@ -2686,6 +7343,18 @@ moment.tz.add({
         "Indian/Reunion": [
             "3:41:52 - LMT 1911_5 3:41:52",
             "4 - RET"
+        ],
+        "MET": [
+            "1 C-Eur ME%sT"
+        ],
+        "MST": [
+            "-7 - MST"
+        ],
+        "MST7MDT": [
+            "-7 US M%sT"
+        ],
+        "PST8PDT": [
+            "-8 US P%sT"
         ],
         "Pacific/Apia": [
             "12:33:4 - LMT 1879_6_5 12:33:4",
@@ -2887,2260 +7556,9 @@ moment.tz.add({
         "Pacific/Wallis": [
             "12:15:20 - LMT 1901 12:15:20",
             "12 - WFT"
+        ],
+        "WET": [
+            "0 EU WE%sT"
         ]
-    },
-    "rules": {
-        "Ghana": [
-            "1936 1942 8 1 7 0 0 0:20 GHST",
-            "1936 1942 11 31 7 0 0 0 GMT"
-        ],
-        "Algeria": [
-            "1916 1916 5 14 7 23 2 1 S",
-            "1916 1919 9 1 0 23 2 0",
-            "1917 1917 2 24 7 23 2 1 S",
-            "1918 1918 2 9 7 23 2 1 S",
-            "1919 1919 2 1 7 23 2 1 S",
-            "1920 1920 1 14 7 23 2 1 S",
-            "1920 1920 9 23 7 23 2 0",
-            "1921 1921 2 14 7 23 2 1 S",
-            "1921 1921 5 21 7 23 2 0",
-            "1939 1939 8 11 7 23 2 1 S",
-            "1939 1939 10 19 7 1 0 0",
-            "1944 1945 3 1 1 2 0 1 S",
-            "1944 1944 9 8 7 2 0 0",
-            "1945 1945 8 16 7 1 0 0",
-            "1971 1971 3 25 7 23 2 1 S",
-            "1971 1971 8 26 7 23 2 0",
-            "1977 1977 4 6 7 0 0 1 S",
-            "1977 1977 9 21 7 0 0 0",
-            "1978 1978 2 24 7 1 0 1 S",
-            "1978 1978 8 22 7 3 0 0",
-            "1980 1980 3 25 7 0 0 1 S",
-            "1980 1980 9 31 7 2 0 0"
-        ],
-        "Egypt": [
-            "1940 1940 6 15 7 0 0 1 S",
-            "1940 1940 9 1 7 0 0 0",
-            "1941 1941 3 15 7 0 0 1 S",
-            "1941 1941 8 16 7 0 0 0",
-            "1942 1944 3 1 7 0 0 1 S",
-            "1942 1942 9 27 7 0 0 0",
-            "1943 1945 10 1 7 0 0 0",
-            "1945 1945 3 16 7 0 0 1 S",
-            "1957 1957 4 10 7 0 0 1 S",
-            "1957 1958 9 1 7 0 0 0",
-            "1958 1958 4 1 7 0 0 1 S",
-            "1959 1981 4 1 7 1 0 1 S",
-            "1959 1965 8 30 7 3 0 0",
-            "1966 1994 9 1 7 3 0 0",
-            "1982 1982 6 25 7 1 0 1 S",
-            "1983 1983 6 12 7 1 0 1 S",
-            "1984 1988 4 1 7 1 0 1 S",
-            "1989 1989 4 6 7 1 0 1 S",
-            "1990 1994 4 1 7 1 0 1 S",
-            "1995 2010 3 5 8 0 2 1 S",
-            "1995 2005 8 4 8 23 2 0",
-            "2006 2006 8 21 7 23 2 0",
-            "2007 2007 8 1 4 23 2 0",
-            "2008 2008 7 4 8 23 2 0",
-            "2009 2009 7 20 7 23 2 0",
-            "2010 2010 7 11 7 0 0 0",
-            "2010 2010 8 10 7 0 0 1 S",
-            "2010 2010 8 4 8 23 2 0"
-        ],
-        "Morocco": [
-            "1939 1939 8 12 7 0 0 1 S",
-            "1939 1939 10 19 7 0 0 0",
-            "1940 1940 1 25 7 0 0 1 S",
-            "1945 1945 10 18 7 0 0 0",
-            "1950 1950 5 11 7 0 0 1 S",
-            "1950 1950 9 29 7 0 0 0",
-            "1967 1967 5 3 7 12 0 1 S",
-            "1967 1967 9 1 7 0 0 0",
-            "1974 1974 5 24 7 0 0 1 S",
-            "1974 1974 8 1 7 0 0 0",
-            "1976 1977 4 1 7 0 0 1 S",
-            "1976 1976 7 1 7 0 0 0",
-            "1977 1977 8 28 7 0 0 0",
-            "1978 1978 5 1 7 0 0 1 S",
-            "1978 1978 7 4 7 0 0 0",
-            "2008 2008 5 1 7 0 0 1 S",
-            "2008 2008 8 1 7 0 0 0",
-            "2009 2009 5 1 7 0 0 1 S",
-            "2009 2009 7 21 7 0 0 0",
-            "2010 2010 4 2 7 0 0 1 S",
-            "2010 2010 7 8 7 0 0 0",
-            "2011 2011 3 3 7 0 0 1 S",
-            "2011 2011 6 31 7 0 0 0",
-            "2012 2019 3 0 8 2 0 1 S",
-            "2012 9999 8 0 8 3 0 0",
-            "2012 2012 6 20 7 3 0 0",
-            "2012 2012 7 20 7 2 0 1 S",
-            "2013 2013 6 9 7 3 0 0",
-            "2013 2013 7 8 7 2 0 1 S",
-            "2014 2014 5 29 7 3 0 0",
-            "2014 2014 6 29 7 2 0 1 S",
-            "2015 2015 5 18 7 3 0 0",
-            "2015 2015 6 18 7 2 0 1 S",
-            "2016 2016 5 7 7 3 0 0",
-            "2016 2016 6 7 7 2 0 1 S",
-            "2017 2017 4 27 7 3 0 0",
-            "2017 2017 5 26 7 2 0 1 S",
-            "2018 2018 4 16 7 3 0 0",
-            "2018 2018 5 15 7 2 0 1 S",
-            "2019 2019 4 6 7 3 0 0",
-            "2019 2019 5 5 7 2 0 1 S",
-            "2020 2020 4 24 7 2 0 1 S",
-            "2021 2021 4 13 7 2 0 1 S",
-            "2022 2022 4 3 7 2 0 1 S",
-            "2023 9999 3 0 8 2 0 1 S"
-        ],
-        "Spain": [
-            "1917 1917 4 5 7 23 2 1 S",
-            "1917 1919 9 6 7 23 2 0",
-            "1918 1918 3 15 7 23 2 1 S",
-            "1919 1919 3 5 7 23 2 1 S",
-            "1924 1924 3 16 7 23 2 1 S",
-            "1924 1924 9 4 7 23 2 0",
-            "1926 1926 3 17 7 23 2 1 S",
-            "1926 1929 9 1 6 23 2 0",
-            "1927 1927 3 9 7 23 2 1 S",
-            "1928 1928 3 14 7 23 2 1 S",
-            "1929 1929 3 20 7 23 2 1 S",
-            "1937 1937 4 22 7 23 2 1 S",
-            "1937 1939 9 1 6 23 2 0",
-            "1938 1938 2 22 7 23 2 1 S",
-            "1939 1939 3 15 7 23 2 1 S",
-            "1940 1940 2 16 7 23 2 1 S",
-            "1942 1942 4 2 7 22 2 2 M",
-            "1942 1942 8 1 7 22 2 1 S",
-            "1943 1946 3 13 6 22 2 2 M",
-            "1943 1943 9 3 7 22 2 1 S",
-            "1944 1944 9 10 7 22 2 1 S",
-            "1945 1945 8 30 7 1 0 1 S",
-            "1946 1946 8 30 7 0 0 0",
-            "1949 1949 3 30 7 23 0 1 S",
-            "1949 1949 8 30 7 1 0 0",
-            "1974 1975 3 13 6 23 0 1 S",
-            "1974 1975 9 1 0 1 0 0",
-            "1976 1976 2 27 7 23 0 1 S",
-            "1976 1977 8 0 8 1 0 0",
-            "1977 1978 3 2 7 23 0 1 S",
-            "1978 1978 9 1 7 1 0 0"
-        ],
-        "SpainAfrica": [
-            "1967 1967 5 3 7 12 0 1 S",
-            "1967 1967 9 1 7 0 0 0",
-            "1974 1974 5 24 7 0 0 1 S",
-            "1974 1974 8 1 7 0 0 0",
-            "1976 1977 4 1 7 0 0 1 S",
-            "1976 1976 7 1 7 0 0 0",
-            "1977 1977 8 28 7 0 0 0",
-            "1978 1978 5 1 7 0 0 1 S",
-            "1978 1978 7 4 7 0 0 0"
-        ],
-        "EU": [
-            "1977 1980 3 1 0 1 1 1 S",
-            "1977 1977 8 0 8 1 1 0",
-            "1978 1978 9 1 7 1 1 0",
-            "1979 1995 8 0 8 1 1 0",
-            "1981 9999 2 0 8 1 1 1 S",
-            "1996 9999 9 0 8 1 1 0"
-        ],
-        "SL": [
-            "1935 1942 5 1 7 0 0 0:40 SLST",
-            "1935 1942 9 1 7 0 0 0 WAT",
-            "1957 1962 5 1 7 0 0 1 SLST",
-            "1957 1962 8 1 7 0 0 0 GMT"
-        ],
-        "SA": [
-            "1942 1943 8 15 0 2 0 1",
-            "1943 1944 2 15 0 2 0 0"
-        ],
-        "Sudan": [
-            "1970 1970 4 1 7 0 0 1 S",
-            "1970 1985 9 15 7 0 0 0",
-            "1971 1971 3 30 7 0 0 1 S",
-            "1972 1985 3 0 8 0 0 1 S"
-        ],
-        "Libya": [
-            "1951 1951 9 14 7 2 0 1 S",
-            "1952 1952 0 1 7 0 0 0",
-            "1953 1953 9 9 7 2 0 1 S",
-            "1954 1954 0 1 7 0 0 0",
-            "1955 1955 8 30 7 0 0 1 S",
-            "1956 1956 0 1 7 0 0 0",
-            "1982 1984 3 1 7 0 0 1 S",
-            "1982 1985 9 1 7 0 0 0",
-            "1985 1985 3 6 7 0 0 1 S",
-            "1986 1986 3 4 7 0 0 1 S",
-            "1986 1986 9 3 7 0 0 0",
-            "1987 1989 3 1 7 0 0 1 S",
-            "1987 1989 9 1 7 0 0 0",
-            "1997 1997 3 4 7 0 0 1 S",
-            "1997 1997 9 4 7 0 0 0",
-            "2013 9999 2 5 8 1 0 1 S",
-            "2013 9999 9 5 8 2 0 0"
-        ],
-        "Tunisia": [
-            "1939 1939 3 15 7 23 2 1 S",
-            "1939 1939 10 18 7 23 2 0",
-            "1940 1940 1 25 7 23 2 1 S",
-            "1941 1941 9 6 7 0 0 0",
-            "1942 1942 2 9 7 0 0 1 S",
-            "1942 1942 10 2 7 3 0 0",
-            "1943 1943 2 29 7 2 0 1 S",
-            "1943 1943 3 17 7 2 0 0",
-            "1943 1943 3 25 7 2 0 1 S",
-            "1943 1943 9 4 7 2 0 0",
-            "1944 1945 3 1 1 2 0 1 S",
-            "1944 1944 9 8 7 0 0 0",
-            "1945 1945 8 16 7 0 0 0",
-            "1977 1977 3 30 7 0 2 1 S",
-            "1977 1977 8 24 7 0 2 0",
-            "1978 1978 4 1 7 0 2 1 S",
-            "1978 1978 9 1 7 0 2 0",
-            "1988 1988 5 1 7 0 2 1 S",
-            "1988 1990 8 0 8 0 2 0",
-            "1989 1989 2 26 7 0 2 1 S",
-            "1990 1990 4 1 7 0 2 1 S",
-            "2005 2005 4 1 7 0 2 1 S",
-            "2005 2005 8 30 7 1 2 0",
-            "2006 2008 2 0 8 2 2 1 S",
-            "2006 2008 9 0 8 2 2 0"
-        ],
-        "Namibia": [
-            "1994 9999 8 1 0 2 0 1 S",
-            "1995 9999 3 1 0 2 0 0"
-        ],
-        "US": [
-            "1918 1919 2 0 8 2 0 1 D",
-            "1918 1919 9 0 8 2 0 0 S",
-            "1942 1942 1 9 7 2 0 1 W",
-            "1945 1945 7 14 7 23 1 1 P",
-            "1945 1945 8 30 7 2 0 0 S",
-            "1967 2006 9 0 8 2 0 0 S",
-            "1967 1973 3 0 8 2 0 1 D",
-            "1974 1974 0 6 7 2 0 1 D",
-            "1975 1975 1 23 7 2 0 1 D",
-            "1976 1986 3 0 8 2 0 1 D",
-            "1987 2006 3 1 0 2 0 1 D",
-            "2007 9999 2 8 0 2 0 1 D",
-            "2007 9999 10 1 0 2 0 0 S"
-        ],
-        "Brazil": [
-            "1931 1931 9 3 7 11 0 1 S",
-            "1932 1933 3 1 7 0 0 0",
-            "1932 1932 9 3 7 0 0 1 S",
-            "1949 1952 11 1 7 0 0 1 S",
-            "1950 1950 3 16 7 1 0 0",
-            "1951 1952 3 1 7 0 0 0",
-            "1953 1953 2 1 7 0 0 0",
-            "1963 1963 11 9 7 0 0 1 S",
-            "1964 1964 2 1 7 0 0 0",
-            "1965 1965 0 31 7 0 0 1 S",
-            "1965 1965 2 31 7 0 0 0",
-            "1965 1965 11 1 7 0 0 1 S",
-            "1966 1968 2 1 7 0 0 0",
-            "1966 1967 10 1 7 0 0 1 S",
-            "1985 1985 10 2 7 0 0 1 S",
-            "1986 1986 2 15 7 0 0 0",
-            "1986 1986 9 25 7 0 0 1 S",
-            "1987 1987 1 14 7 0 0 0",
-            "1987 1987 9 25 7 0 0 1 S",
-            "1988 1988 1 7 7 0 0 0",
-            "1988 1988 9 16 7 0 0 1 S",
-            "1989 1989 0 29 7 0 0 0",
-            "1989 1989 9 15 7 0 0 1 S",
-            "1990 1990 1 11 7 0 0 0",
-            "1990 1990 9 21 7 0 0 1 S",
-            "1991 1991 1 17 7 0 0 0",
-            "1991 1991 9 20 7 0 0 1 S",
-            "1992 1992 1 9 7 0 0 0",
-            "1992 1992 9 25 7 0 0 1 S",
-            "1993 1993 0 31 7 0 0 0",
-            "1993 1995 9 11 0 0 0 1 S",
-            "1994 1995 1 15 0 0 0 0",
-            "1996 1996 1 11 7 0 0 0",
-            "1996 1996 9 6 7 0 0 1 S",
-            "1997 1997 1 16 7 0 0 0",
-            "1997 1997 9 6 7 0 0 1 S",
-            "1998 1998 2 1 7 0 0 0",
-            "1998 1998 9 11 7 0 0 1 S",
-            "1999 1999 1 21 7 0 0 0",
-            "1999 1999 9 3 7 0 0 1 S",
-            "2000 2000 1 27 7 0 0 0",
-            "2000 2001 9 8 0 0 0 1 S",
-            "2001 2006 1 15 0 0 0 0",
-            "2002 2002 10 3 7 0 0 1 S",
-            "2003 2003 9 19 7 0 0 1 S",
-            "2004 2004 10 2 7 0 0 1 S",
-            "2005 2005 9 16 7 0 0 1 S",
-            "2006 2006 10 5 7 0 0 1 S",
-            "2007 2007 1 25 7 0 0 0",
-            "2007 2007 9 8 0 0 0 1 S",
-            "2008 9999 9 15 0 0 0 1 S",
-            "2008 2011 1 15 0 0 0 0",
-            "2012 2012 1 22 0 0 0 0",
-            "2013 2014 1 15 0 0 0 0",
-            "2015 2015 1 22 0 0 0 0",
-            "2016 2022 1 15 0 0 0 0",
-            "2023 2023 1 22 0 0 0 0",
-            "2024 2025 1 15 0 0 0 0",
-            "2026 2026 1 22 0 0 0 0",
-            "2027 2033 1 15 0 0 0 0",
-            "2034 2034 1 22 0 0 0 0",
-            "2035 2036 1 15 0 0 0 0",
-            "2037 2037 1 22 0 0 0 0",
-            "2038 9999 1 15 0 0 0 0"
-        ],
-        "Arg": [
-            "1930 1930 11 1 7 0 0 1 S",
-            "1931 1931 3 1 7 0 0 0",
-            "1931 1931 9 15 7 0 0 1 S",
-            "1932 1940 2 1 7 0 0 0",
-            "1932 1939 10 1 7 0 0 1 S",
-            "1940 1940 6 1 7 0 0 1 S",
-            "1941 1941 5 15 7 0 0 0",
-            "1941 1941 9 15 7 0 0 1 S",
-            "1943 1943 7 1 7 0 0 0",
-            "1943 1943 9 15 7 0 0 1 S",
-            "1946 1946 2 1 7 0 0 0",
-            "1946 1946 9 1 7 0 0 1 S",
-            "1963 1963 9 1 7 0 0 0",
-            "1963 1963 11 15 7 0 0 1 S",
-            "1964 1966 2 1 7 0 0 0",
-            "1964 1966 9 15 7 0 0 1 S",
-            "1967 1967 3 2 7 0 0 0",
-            "1967 1968 9 1 0 0 0 1 S",
-            "1968 1969 3 1 0 0 0 0",
-            "1974 1974 0 23 7 0 0 1 S",
-            "1974 1974 4 1 7 0 0 0",
-            "1988 1988 11 1 7 0 0 1 S",
-            "1989 1993 2 1 0 0 0 0",
-            "1989 1992 9 15 0 0 0 1 S",
-            "1999 1999 9 1 0 0 0 1 S",
-            "2000 2000 2 3 7 0 0 0",
-            "2007 2007 11 30 7 0 0 1 S",
-            "2008 2009 2 15 0 0 0 0",
-            "2008 2008 9 15 0 0 0 1 S"
-        ],
-        "SanLuis": [
-            "2008 2009 2 8 0 0 0 0",
-            "2007 2009 9 8 0 0 0 1 S"
-        ],
-        "Para": [
-            "1975 1988 9 1 7 0 0 1 S",
-            "1975 1978 2 1 7 0 0 0",
-            "1979 1991 3 1 7 0 0 0",
-            "1989 1989 9 22 7 0 0 1 S",
-            "1990 1990 9 1 7 0 0 1 S",
-            "1991 1991 9 6 7 0 0 1 S",
-            "1992 1992 2 1 7 0 0 0",
-            "1992 1992 9 5 7 0 0 1 S",
-            "1993 1993 2 31 7 0 0 0",
-            "1993 1995 9 1 7 0 0 1 S",
-            "1994 1995 1 0 8 0 0 0",
-            "1996 1996 2 1 7 0 0 0",
-            "1996 2001 9 1 0 0 0 1 S",
-            "1997 1997 1 0 8 0 0 0",
-            "1998 2001 2 1 0 0 0 0",
-            "2002 2004 3 1 0 0 0 0",
-            "2002 2003 8 1 0 0 0 1 S",
-            "2004 2009 9 15 0 0 0 1 S",
-            "2005 2009 2 8 0 0 0 0",
-            "2010 9999 9 1 0 0 0 1 S",
-            "2010 2012 3 8 0 0 0 0",
-            "2013 9999 2 22 0 0 0 0"
-        ],
-        "Canada": [
-            "1918 1918 3 14 7 2 0 1 D",
-            "1918 1918 9 27 7 2 0 0 S",
-            "1942 1942 1 9 7 2 0 1 W",
-            "1945 1945 7 14 7 23 1 1 P",
-            "1945 1945 8 30 7 2 0 0 S",
-            "1974 1986 3 0 8 2 0 1 D",
-            "1974 2006 9 0 8 2 0 0 S",
-            "1987 2006 3 1 0 2 0 1 D",
-            "2007 9999 2 8 0 2 0 1 D",
-            "2007 9999 10 1 0 2 0 0 S"
-        ],
-        "Mexico": [
-            "1939 1939 1 5 7 0 0 1 D",
-            "1939 1939 5 25 7 0 0 0 S",
-            "1940 1940 11 9 7 0 0 1 D",
-            "1941 1941 3 1 7 0 0 0 S",
-            "1943 1943 11 16 7 0 0 1 W",
-            "1944 1944 4 1 7 0 0 0 S",
-            "1950 1950 1 12 7 0 0 1 D",
-            "1950 1950 6 30 7 0 0 0 S",
-            "1996 2000 3 1 0 2 0 1 D",
-            "1996 2000 9 0 8 2 0 0 S",
-            "2001 2001 4 1 0 2 0 1 D",
-            "2001 2001 8 0 8 2 0 0 S",
-            "2002 9999 3 1 0 2 0 1 D",
-            "2002 9999 9 0 8 2 0 0 S"
-        ],
-        "Barb": [
-            "1977 1977 5 12 7 2 0 1 D",
-            "1977 1978 9 1 0 2 0 0 S",
-            "1978 1980 3 15 0 2 0 1 D",
-            "1979 1979 8 30 7 2 0 0 S",
-            "1980 1980 8 25 7 2 0 0 S"
-        ],
-        "Belize": [
-            "1918 1942 9 2 0 0 0 0:30 HD",
-            "1919 1943 1 9 0 0 0 0 S",
-            "1973 1973 11 5 7 0 0 1 D",
-            "1974 1974 1 9 7 0 0 0 S",
-            "1982 1982 11 18 7 0 0 1 D",
-            "1983 1983 1 12 7 0 0 0 S"
-        ],
-        "CO": [
-            "1992 1992 4 3 7 0 0 1 S",
-            "1993 1993 3 4 7 0 0 0"
-        ],
-        "NT_YK": [
-            "1918 1918 3 14 7 2 0 1 D",
-            "1918 1918 9 27 7 2 0 0 S",
-            "1919 1919 4 25 7 2 0 1 D",
-            "1919 1919 10 1 7 0 0 0 S",
-            "1942 1942 1 9 7 2 0 1 W",
-            "1945 1945 7 14 7 23 1 1 P",
-            "1945 1945 8 30 7 2 0 0 S",
-            "1965 1965 3 0 8 0 0 2 DD",
-            "1965 1965 9 0 8 2 0 0 S",
-            "1980 1986 3 0 8 2 0 1 D",
-            "1980 2006 9 0 8 2 0 0 S",
-            "1987 2006 3 1 0 2 0 1 D"
-        ],
-        "Chicago": [
-            "1920 1920 5 13 7 2 0 1 D",
-            "1920 1921 9 0 8 2 0 0 S",
-            "1921 1921 2 0 8 2 0 1 D",
-            "1922 1966 3 0 8 2 0 1 D",
-            "1922 1954 8 0 8 2 0 0 S",
-            "1955 1966 9 0 8 2 0 0 S"
-        ],
-        "CR": [
-            "1979 1980 1 0 8 0 0 1 D",
-            "1979 1980 5 1 0 0 0 0 S",
-            "1991 1992 0 15 6 0 0 1 D",
-            "1991 1991 6 1 7 0 0 0 S",
-            "1992 1992 2 15 7 0 0 0 S"
-        ],
-        "Vanc": [
-            "1918 1918 3 14 7 2 0 1 D",
-            "1918 1918 9 27 7 2 0 0 S",
-            "1942 1942 1 9 7 2 0 1 W",
-            "1945 1945 7 14 7 23 1 1 P",
-            "1945 1945 8 30 7 2 0 0 S",
-            "1946 1986 3 0 8 2 0 1 D",
-            "1946 1946 9 13 7 2 0 0 S",
-            "1947 1961 8 0 8 2 0 0 S",
-            "1962 2006 9 0 8 2 0 0 S"
-        ],
-        "Denver": [
-            "1920 1921 2 0 8 2 0 1 D",
-            "1920 1920 9 0 8 2 0 0 S",
-            "1921 1921 4 22 7 2 0 0 S",
-            "1965 1966 3 0 8 2 0 1 D",
-            "1965 1966 9 0 8 2 0 0 S"
-        ],
-        "Detroit": [
-            "1948 1948 3 0 8 2 0 1 D",
-            "1948 1948 8 0 8 2 0 0 S",
-            "1967 1967 5 14 7 2 0 1 D",
-            "1967 1967 9 0 8 2 0 0 S"
-        ],
-        "Edm": [
-            "1918 1919 3 8 0 2 0 1 D",
-            "1918 1918 9 27 7 2 0 0 S",
-            "1919 1919 4 27 7 2 0 0 S",
-            "1920 1923 3 0 8 2 0 1 D",
-            "1920 1920 9 0 8 2 0 0 S",
-            "1921 1923 8 0 8 2 0 0 S",
-            "1942 1942 1 9 7 2 0 1 W",
-            "1945 1945 7 14 7 23 1 1 P",
-            "1945 1945 8 0 8 2 0 0 S",
-            "1947 1947 3 0 8 2 0 1 D",
-            "1947 1947 8 0 8 2 0 0 S",
-            "1967 1967 3 0 8 2 0 1 D",
-            "1967 1967 9 0 8 2 0 0 S",
-            "1969 1969 3 0 8 2 0 1 D",
-            "1969 1969 9 0 8 2 0 0 S",
-            "1972 1986 3 0 8 2 0 1 D",
-            "1972 2006 9 0 8 2 0 0 S"
-        ],
-        "Salv": [
-            "1987 1988 4 1 0 0 0 1 D",
-            "1987 1988 8 0 8 0 0 0 S"
-        ],
-        "Halifax": [
-            "1916 1916 3 1 7 0 0 1 D",
-            "1916 1916 9 1 7 0 0 0 S",
-            "1920 1920 4 9 7 0 0 1 D",
-            "1920 1920 7 29 7 0 0 0 S",
-            "1921 1921 4 6 7 0 0 1 D",
-            "1921 1922 8 5 7 0 0 0 S",
-            "1922 1922 3 30 7 0 0 1 D",
-            "1923 1925 4 1 0 0 0 1 D",
-            "1923 1923 8 4 7 0 0 0 S",
-            "1924 1924 8 15 7 0 0 0 S",
-            "1925 1925 8 28 7 0 0 0 S",
-            "1926 1926 4 16 7 0 0 1 D",
-            "1926 1926 8 13 7 0 0 0 S",
-            "1927 1927 4 1 7 0 0 1 D",
-            "1927 1927 8 26 7 0 0 0 S",
-            "1928 1931 4 8 0 0 0 1 D",
-            "1928 1928 8 9 7 0 0 0 S",
-            "1929 1929 8 3 7 0 0 0 S",
-            "1930 1930 8 15 7 0 0 0 S",
-            "1931 1932 8 24 1 0 0 0 S",
-            "1932 1932 4 1 7 0 0 1 D",
-            "1933 1933 3 30 7 0 0 1 D",
-            "1933 1933 9 2 7 0 0 0 S",
-            "1934 1934 4 20 7 0 0 1 D",
-            "1934 1934 8 16 7 0 0 0 S",
-            "1935 1935 5 2 7 0 0 1 D",
-            "1935 1935 8 30 7 0 0 0 S",
-            "1936 1936 5 1 7 0 0 1 D",
-            "1936 1936 8 14 7 0 0 0 S",
-            "1937 1938 4 1 0 0 0 1 D",
-            "1937 1941 8 24 1 0 0 0 S",
-            "1939 1939 4 28 7 0 0 1 D",
-            "1940 1941 4 1 0 0 0 1 D",
-            "1946 1949 3 0 8 2 0 1 D",
-            "1946 1949 8 0 8 2 0 0 S",
-            "1951 1954 3 0 8 2 0 1 D",
-            "1951 1954 8 0 8 2 0 0 S",
-            "1956 1959 3 0 8 2 0 1 D",
-            "1956 1959 8 0 8 2 0 0 S",
-            "1962 1973 3 0 8 2 0 1 D",
-            "1962 1973 9 0 8 2 0 0 S"
-        ],
-        "StJohns": [
-            "1917 1917 3 8 7 2 0 1 D",
-            "1917 1917 8 17 7 2 0 0 S",
-            "1919 1919 4 5 7 23 0 1 D",
-            "1919 1919 7 12 7 23 0 0 S",
-            "1920 1935 4 1 0 23 0 1 D",
-            "1920 1935 9 0 8 23 0 0 S",
-            "1936 1941 4 9 1 0 0 1 D",
-            "1936 1941 9 2 1 0 0 0 S",
-            "1946 1950 4 8 0 2 0 1 D",
-            "1946 1950 9 2 0 2 0 0 S",
-            "1951 1986 3 0 8 2 0 1 D",
-            "1951 1959 8 0 8 2 0 0 S",
-            "1960 1986 9 0 8 2 0 0 S",
-            "1987 1987 3 1 0 0:1 0 1 D",
-            "1987 2006 9 0 8 0:1 0 0 S",
-            "1988 1988 3 1 0 0:1 0 2 DD",
-            "1989 2006 3 1 0 0:1 0 1 D",
-            "2007 2011 2 8 0 0:1 0 1 D",
-            "2007 2010 10 1 0 0:1 0 0 S"
-        ],
-        "TC": [
-            "1979 1986 3 0 8 2 0 1 D",
-            "1979 2006 9 0 8 2 0 0 S",
-            "1987 2006 3 1 0 2 0 1 D",
-            "2007 9999 2 8 0 2 0 1 D",
-            "2007 9999 10 1 0 2 0 0 S"
-        ],
-        "Guat": [
-            "1973 1973 10 25 7 0 0 1 D",
-            "1974 1974 1 24 7 0 0 0 S",
-            "1983 1983 4 21 7 0 0 1 D",
-            "1983 1983 8 22 7 0 0 0 S",
-            "1991 1991 2 23 7 0 0 1 D",
-            "1991 1991 8 7 7 0 0 0 S",
-            "2006 2006 3 30 7 0 0 1 D",
-            "2006 2006 9 1 7 0 0 0 S"
-        ],
-        "Cuba": [
-            "1928 1928 5 10 7 0 0 1 D",
-            "1928 1928 9 10 7 0 0 0 S",
-            "1940 1942 5 1 0 0 0 1 D",
-            "1940 1942 8 1 0 0 0 0 S",
-            "1945 1946 5 1 0 0 0 1 D",
-            "1945 1946 8 1 0 0 0 0 S",
-            "1965 1965 5 1 7 0 0 1 D",
-            "1965 1965 8 30 7 0 0 0 S",
-            "1966 1966 4 29 7 0 0 1 D",
-            "1966 1966 9 2 7 0 0 0 S",
-            "1967 1967 3 8 7 0 0 1 D",
-            "1967 1968 8 8 0 0 0 0 S",
-            "1968 1968 3 14 7 0 0 1 D",
-            "1969 1977 3 0 8 0 0 1 D",
-            "1969 1971 9 0 8 0 0 0 S",
-            "1972 1974 9 8 7 0 0 0 S",
-            "1975 1977 9 0 8 0 0 0 S",
-            "1978 1978 4 7 7 0 0 1 D",
-            "1978 1990 9 8 0 0 0 0 S",
-            "1979 1980 2 15 0 0 0 1 D",
-            "1981 1985 4 5 0 0 0 1 D",
-            "1986 1989 2 14 0 0 0 1 D",
-            "1990 1997 3 1 0 0 0 1 D",
-            "1991 1995 9 8 0 0 2 0 S",
-            "1996 1996 9 6 7 0 2 0 S",
-            "1997 1997 9 12 7 0 2 0 S",
-            "1998 1999 2 0 8 0 2 1 D",
-            "1998 2003 9 0 8 0 2 0 S",
-            "2000 2004 3 1 0 0 2 1 D",
-            "2006 2010 9 0 8 0 2 0 S",
-            "2007 2007 2 8 0 0 2 1 D",
-            "2008 2008 2 15 0 0 2 1 D",
-            "2009 2010 2 8 0 0 2 1 D",
-            "2011 2011 2 15 0 0 2 1 D",
-            "2011 2011 10 13 7 0 2 0 S",
-            "2012 2012 3 1 7 0 2 1 D",
-            "2012 9999 10 1 0 0 2 0 S",
-            "2013 9999 2 8 0 0 2 1 D"
-        ],
-        "Indianapolis": [
-            "1941 1941 5 22 7 2 0 1 D",
-            "1941 1954 8 0 8 2 0 0 S",
-            "1946 1954 3 0 8 2 0 1 D"
-        ],
-        "Starke": [
-            "1947 1961 3 0 8 2 0 1 D",
-            "1947 1954 8 0 8 2 0 0 S",
-            "1955 1956 9 0 8 2 0 0 S",
-            "1957 1958 8 0 8 2 0 0 S",
-            "1959 1961 9 0 8 2 0 0 S"
-        ],
-        "Marengo": [
-            "1951 1951 3 0 8 2 0 1 D",
-            "1951 1951 8 0 8 2 0 0 S",
-            "1954 1960 3 0 8 2 0 1 D",
-            "1954 1960 8 0 8 2 0 0 S"
-        ],
-        "Pike": [
-            "1955 1955 4 1 7 0 0 1 D",
-            "1955 1960 8 0 8 2 0 0 S",
-            "1956 1964 3 0 8 2 0 1 D",
-            "1961 1964 9 0 8 2 0 0 S"
-        ],
-        "Perry": [
-            "1946 1946 3 0 8 2 0 1 D",
-            "1946 1946 8 0 8 2 0 0 S",
-            "1953 1954 3 0 8 2 0 1 D",
-            "1953 1959 8 0 8 2 0 0 S",
-            "1955 1955 4 1 7 0 0 1 D",
-            "1956 1963 3 0 8 2 0 1 D",
-            "1960 1960 9 0 8 2 0 0 S",
-            "1961 1961 8 0 8 2 0 0 S",
-            "1962 1963 9 0 8 2 0 0 S"
-        ],
-        "Vincennes": [
-            "1946 1946 3 0 8 2 0 1 D",
-            "1946 1946 8 0 8 2 0 0 S",
-            "1953 1954 3 0 8 2 0 1 D",
-            "1953 1959 8 0 8 2 0 0 S",
-            "1955 1955 4 1 7 0 0 1 D",
-            "1956 1963 3 0 8 2 0 1 D",
-            "1960 1960 9 0 8 2 0 0 S",
-            "1961 1961 8 0 8 2 0 0 S",
-            "1962 1963 9 0 8 2 0 0 S"
-        ],
-        "Pulaski": [
-            "1946 1960 3 0 8 2 0 1 D",
-            "1946 1954 8 0 8 2 0 0 S",
-            "1955 1956 9 0 8 2 0 0 S",
-            "1957 1960 8 0 8 2 0 0 S"
-        ],
-        "Louisville": [
-            "1921 1921 4 1 7 2 0 1 D",
-            "1921 1921 8 1 7 2 0 0 S",
-            "1941 1961 3 0 8 2 0 1 D",
-            "1941 1941 8 0 8 2 0 0 S",
-            "1946 1946 5 2 7 2 0 0 S",
-            "1950 1955 8 0 8 2 0 0 S",
-            "1956 1960 9 0 8 2 0 0 S"
-        ],
-        "Peru": [
-            "1938 1938 0 1 7 0 0 1 S",
-            "1938 1938 3 1 7 0 0 0",
-            "1938 1939 8 0 8 0 0 1 S",
-            "1939 1940 2 24 0 0 0 0",
-            "1986 1987 0 1 7 0 0 1 S",
-            "1986 1987 3 1 7 0 0 0",
-            "1990 1990 0 1 7 0 0 1 S",
-            "1990 1990 3 1 7 0 0 0",
-            "1994 1994 0 1 7 0 0 1 S",
-            "1994 1994 3 1 7 0 0 0"
-        ],
-        "CA": [
-            "1948 1948 2 14 7 2 0 1 D",
-            "1949 1949 0 1 7 2 0 0 S",
-            "1950 1966 3 0 8 2 0 1 D",
-            "1950 1961 8 0 8 2 0 0 S",
-            "1962 1966 9 0 8 2 0 0 S"
-        ],
-        "Nic": [
-            "1979 1980 2 16 0 0 0 1 D",
-            "1979 1980 5 23 1 0 0 0 S",
-            "2005 2005 3 10 7 0 0 1 D",
-            "2005 2005 9 1 0 0 0 0 S",
-            "2006 2006 3 30 7 2 0 1 D",
-            "2006 2006 9 1 0 1 0 0 S"
-        ],
-        "Menominee": [
-            "1946 1946 3 0 8 2 0 1 D",
-            "1946 1946 8 0 8 2 0 0 S",
-            "1966 1966 3 0 8 2 0 1 D",
-            "1966 1966 9 0 8 2 0 0 S"
-        ],
-        "Moncton": [
-            "1933 1935 5 8 0 1 0 1 D",
-            "1933 1935 8 8 0 1 0 0 S",
-            "1936 1938 5 1 0 1 0 1 D",
-            "1936 1938 8 1 0 1 0 0 S",
-            "1939 1939 4 27 7 1 0 1 D",
-            "1939 1941 8 21 6 1 0 0 S",
-            "1940 1940 4 19 7 1 0 1 D",
-            "1941 1941 4 4 7 1 0 1 D",
-            "1946 1972 3 0 8 2 0 1 D",
-            "1946 1956 8 0 8 2 0 0 S",
-            "1957 1972 9 0 8 2 0 0 S",
-            "1993 2006 3 1 0 0:1 0 1 D",
-            "1993 2006 9 0 8 0:1 0 0 S"
-        ],
-        "Uruguay": [
-            "1923 1923 9 2 7 0 0 0:30 HS",
-            "1924 1926 3 1 7 0 0 0",
-            "1924 1925 9 1 7 0 0 0:30 HS",
-            "1933 1935 9 0 8 0 0 0:30 HS",
-            "1934 1936 2 25 6 23:30 2 0",
-            "1936 1936 10 1 7 0 0 0:30 HS",
-            "1937 1941 2 0 8 0 0 0",
-            "1937 1940 9 0 8 0 0 0:30 HS",
-            "1941 1941 7 1 7 0 0 0:30 HS",
-            "1942 1942 0 1 7 0 0 0",
-            "1942 1942 11 14 7 0 0 1 S",
-            "1943 1943 2 14 7 0 0 0",
-            "1959 1959 4 24 7 0 0 1 S",
-            "1959 1959 10 15 7 0 0 0",
-            "1960 1960 0 17 7 0 0 1 S",
-            "1960 1960 2 6 7 0 0 0",
-            "1965 1967 3 1 0 0 0 1 S",
-            "1965 1965 8 26 7 0 0 0",
-            "1966 1967 9 31 7 0 0 0",
-            "1968 1970 4 27 7 0 0 0:30 HS",
-            "1968 1970 11 2 7 0 0 0",
-            "1972 1972 3 24 7 0 0 1 S",
-            "1972 1972 7 15 7 0 0 0",
-            "1974 1974 2 10 7 0 0 0:30 HS",
-            "1974 1974 11 22 7 0 0 1 S",
-            "1976 1976 9 1 7 0 0 0",
-            "1977 1977 11 4 7 0 0 1 S",
-            "1978 1978 3 1 7 0 0 0",
-            "1979 1979 9 1 7 0 0 1 S",
-            "1980 1980 4 1 7 0 0 0",
-            "1987 1987 11 14 7 0 0 1 S",
-            "1988 1988 2 14 7 0 0 0",
-            "1988 1988 11 11 7 0 0 1 S",
-            "1989 1989 2 12 7 0 0 0",
-            "1989 1989 9 29 7 0 0 1 S",
-            "1990 1992 2 1 0 0 0 0",
-            "1990 1991 9 21 0 0 0 1 S",
-            "1992 1992 9 18 7 0 0 1 S",
-            "1993 1993 1 28 7 0 0 0",
-            "2004 2004 8 19 7 0 0 1 S",
-            "2005 2005 2 27 7 2 0 0",
-            "2005 2005 9 9 7 2 0 1 S",
-            "2006 2006 2 12 7 2 0 0",
-            "2006 9999 9 1 0 2 0 1 S",
-            "2007 9999 2 8 0 2 0 0"
-        ],
-        "Mont": [
-            "1917 1917 2 25 7 2 0 1 D",
-            "1917 1917 3 24 7 0 0 0 S",
-            "1919 1919 2 31 7 2:30 0 1 D",
-            "1919 1919 9 25 7 2:30 0 0 S",
-            "1920 1920 4 2 7 2:30 0 1 D",
-            "1920 1922 9 1 0 2:30 0 0 S",
-            "1921 1921 4 1 7 2 0 1 D",
-            "1922 1922 3 30 7 2 0 1 D",
-            "1924 1924 4 17 7 2 0 1 D",
-            "1924 1926 8 0 8 2:30 0 0 S",
-            "1925 1926 4 1 0 2 0 1 D",
-            "1927 1927 4 1 7 0 0 1 D",
-            "1927 1932 8 0 8 0 0 0 S",
-            "1928 1931 3 0 8 0 0 1 D",
-            "1932 1932 4 1 7 0 0 1 D",
-            "1933 1940 3 0 8 0 0 1 D",
-            "1933 1933 9 1 7 0 0 0 S",
-            "1934 1939 8 0 8 0 0 0 S",
-            "1946 1973 3 0 8 2 0 1 D",
-            "1945 1948 8 0 8 2 0 0 S",
-            "1949 1950 9 0 8 2 0 0 S",
-            "1951 1956 8 0 8 2 0 0 S",
-            "1957 1973 9 0 8 2 0 0 S"
-        ],
-        "Bahamas": [
-            "1964 1975 9 0 8 2 0 0 S",
-            "1964 1975 3 0 8 2 0 1 D"
-        ],
-        "NYC": [
-            "1920 1920 2 0 8 2 0 1 D",
-            "1920 1920 9 0 8 2 0 0 S",
-            "1921 1966 3 0 8 2 0 1 D",
-            "1921 1954 8 0 8 2 0 0 S",
-            "1955 1966 9 0 8 2 0 0 S"
-        ],
-        "Haiti": [
-            "1983 1983 4 8 7 0 0 1 D",
-            "1984 1987 3 0 8 0 0 1 D",
-            "1983 1987 9 0 8 0 0 0 S",
-            "1988 1997 3 1 0 1 2 1 D",
-            "1988 1997 9 0 8 1 2 0 S",
-            "2005 2006 3 1 0 0 0 1 D",
-            "2005 2006 9 0 8 0 0 0 S",
-            "2012 9999 2 8 0 2 0 1 D",
-            "2012 9999 10 1 0 2 0 0 S"
-        ],
-        "Regina": [
-            "1918 1918 3 14 7 2 0 1 D",
-            "1918 1918 9 27 7 2 0 0 S",
-            "1930 1934 4 1 0 0 0 1 D",
-            "1930 1934 9 1 0 0 0 0 S",
-            "1937 1941 3 8 0 0 0 1 D",
-            "1937 1937 9 8 0 0 0 0 S",
-            "1938 1938 9 1 0 0 0 0 S",
-            "1939 1941 9 8 0 0 0 0 S",
-            "1942 1942 1 9 7 2 0 1 W",
-            "1945 1945 7 14 7 23 1 1 P",
-            "1945 1945 8 0 8 2 0 0 S",
-            "1946 1946 3 8 0 2 0 1 D",
-            "1946 1946 9 8 0 2 0 0 S",
-            "1947 1957 3 0 8 2 0 1 D",
-            "1947 1957 8 0 8 2 0 0 S",
-            "1959 1959 3 0 8 2 0 1 D",
-            "1959 1959 9 0 8 2 0 0 S"
-        ],
-        "Chile": [
-            "1927 1932 8 1 7 0 0 1 S",
-            "1928 1932 3 1 7 0 0 0",
-            "1942 1942 5 1 7 4 1 0",
-            "1942 1942 7 1 7 5 1 1 S",
-            "1946 1946 6 15 7 4 1 1 S",
-            "1946 1946 8 1 7 3 1 0",
-            "1947 1947 3 1 7 4 1 0",
-            "1968 1968 10 3 7 4 1 1 S",
-            "1969 1969 2 30 7 3 1 0",
-            "1969 1969 10 23 7 4 1 1 S",
-            "1970 1970 2 29 7 3 1 0",
-            "1971 1971 2 14 7 3 1 0",
-            "1970 1972 9 9 0 4 1 1 S",
-            "1972 1986 2 9 0 3 1 0",
-            "1973 1973 8 30 7 4 1 1 S",
-            "1974 1987 9 9 0 4 1 1 S",
-            "1987 1987 3 12 7 3 1 0",
-            "1988 1989 2 9 0 3 1 0",
-            "1988 1988 9 1 0 4 1 1 S",
-            "1989 1989 9 9 0 4 1 1 S",
-            "1990 1990 2 18 7 3 1 0",
-            "1990 1990 8 16 7 4 1 1 S",
-            "1991 1996 2 9 0 3 1 0",
-            "1991 1997 9 9 0 4 1 1 S",
-            "1997 1997 2 30 7 3 1 0",
-            "1998 1998 2 9 0 3 1 0",
-            "1998 1998 8 27 7 4 1 1 S",
-            "1999 1999 3 4 7 3 1 0",
-            "1999 2010 9 9 0 4 1 1 S",
-            "2000 2007 2 9 0 3 1 0",
-            "2008 2008 2 30 7 3 1 0",
-            "2009 2009 2 9 0 3 1 0",
-            "2010 2010 3 1 0 3 1 0",
-            "2011 2011 4 2 0 3 1 0",
-            "2011 2011 7 16 0 4 1 1 S",
-            "2012 9999 3 23 0 3 1 0",
-            "2012 9999 8 2 0 4 1 1 S"
-        ],
-        "DR": [
-            "1966 1966 9 30 7 0 0 1 D",
-            "1967 1967 1 28 7 0 0 0 S",
-            "1969 1973 9 0 8 0 0 0:30 HD",
-            "1970 1970 1 21 7 0 0 0 S",
-            "1971 1971 0 20 7 0 0 0 S",
-            "1972 1974 0 21 7 0 0 0 S"
-        ],
-        "C-Eur": [
-            "1916 1916 3 30 7 23 0 1 S",
-            "1916 1916 9 1 7 1 0 0",
-            "1917 1918 3 15 1 2 2 1 S",
-            "1917 1918 8 15 1 2 2 0",
-            "1940 1940 3 1 7 2 2 1 S",
-            "1942 1942 10 2 7 2 2 0",
-            "1943 1943 2 29 7 2 2 1 S",
-            "1943 1943 9 4 7 2 2 0",
-            "1944 1945 3 1 1 2 2 1 S",
-            "1944 1944 9 2 7 2 2 0",
-            "1945 1945 8 16 7 2 2 0",
-            "1977 1980 3 1 0 2 2 1 S",
-            "1977 1977 8 0 8 2 2 0",
-            "1978 1978 9 1 7 2 2 0",
-            "1979 1995 8 0 8 2 2 0",
-            "1981 9999 2 0 8 2 2 1 S",
-            "1996 9999 9 0 8 2 2 0"
-        ],
-        "Swift": [
-            "1957 1957 3 0 8 2 0 1 D",
-            "1957 1957 9 0 8 2 0 0 S",
-            "1959 1961 3 0 8 2 0 1 D",
-            "1959 1959 9 0 8 2 0 0 S",
-            "1960 1961 8 0 8 2 0 0 S"
-        ],
-        "Hond": [
-            "1987 1988 4 1 0 0 0 1 D",
-            "1987 1988 8 0 8 0 0 0 S",
-            "2006 2006 4 1 0 0 0 1 D",
-            "2006 2006 7 1 1 0 0 0 S"
-        ],
-        "Thule": [
-            "1991 1992 2 0 8 2 0 1 D",
-            "1991 1992 8 0 8 2 0 0 S",
-            "1993 2006 3 1 0 2 0 1 D",
-            "1993 2006 9 0 8 2 0 0 S",
-            "2007 9999 2 8 0 2 0 1 D",
-            "2007 9999 10 1 0 2 0 0 S"
-        ],
-        "Toronto": [
-            "1919 1919 2 30 7 23:30 0 1 D",
-            "1919 1919 9 26 7 0 0 0 S",
-            "1920 1920 4 2 7 2 0 1 D",
-            "1920 1920 8 26 7 0 0 0 S",
-            "1921 1921 4 15 7 2 0 1 D",
-            "1921 1921 8 15 7 2 0 0 S",
-            "1922 1923 4 8 0 2 0 1 D",
-            "1922 1926 8 15 0 2 0 0 S",
-            "1924 1927 4 1 0 2 0 1 D",
-            "1927 1932 8 0 8 2 0 0 S",
-            "1928 1931 3 0 8 2 0 1 D",
-            "1932 1932 4 1 7 2 0 1 D",
-            "1933 1940 3 0 8 2 0 1 D",
-            "1933 1933 9 1 7 2 0 0 S",
-            "1934 1939 8 0 8 2 0 0 S",
-            "1945 1946 8 0 8 2 0 0 S",
-            "1946 1946 3 0 8 2 0 1 D",
-            "1947 1949 3 0 8 0 0 1 D",
-            "1947 1948 8 0 8 0 0 0 S",
-            "1949 1949 10 0 8 0 0 0 S",
-            "1950 1973 3 0 8 2 0 1 D",
-            "1950 1950 10 0 8 2 0 0 S",
-            "1951 1956 8 0 8 2 0 0 S",
-            "1957 1973 9 0 8 2 0 0 S"
-        ],
-        "Winn": [
-            "1916 1916 3 23 7 0 0 1 D",
-            "1916 1916 8 17 7 0 0 0 S",
-            "1918 1918 3 14 7 2 0 1 D",
-            "1918 1918 9 27 7 2 0 0 S",
-            "1937 1937 4 16 7 2 0 1 D",
-            "1937 1937 8 26 7 2 0 0 S",
-            "1942 1942 1 9 7 2 0 1 W",
-            "1945 1945 7 14 7 23 1 1 P",
-            "1945 1945 8 0 8 2 0 0 S",
-            "1946 1946 4 12 7 2 0 1 D",
-            "1946 1946 9 13 7 2 0 0 S",
-            "1947 1949 3 0 8 2 0 1 D",
-            "1947 1949 8 0 8 2 0 0 S",
-            "1950 1950 4 1 7 2 0 1 D",
-            "1950 1950 8 30 7 2 0 0 S",
-            "1951 1960 3 0 8 2 0 1 D",
-            "1951 1958 8 0 8 2 0 0 S",
-            "1959 1959 9 0 8 2 0 0 S",
-            "1960 1960 8 0 8 2 0 0 S",
-            "1963 1963 3 0 8 2 0 1 D",
-            "1963 1963 8 22 7 2 0 0 S",
-            "1966 1986 3 0 8 2 2 1 D",
-            "1966 2005 9 0 8 2 2 0 S",
-            "1987 2005 3 1 0 2 2 1 D"
-        ],
-        "Aus": [
-            "1917 1917 0 1 7 0:1 0 1",
-            "1917 1917 2 25 7 2 0 0",
-            "1942 1942 0 1 7 2 0 1",
-            "1942 1942 2 29 7 2 0 0",
-            "1942 1942 8 27 7 2 0 1",
-            "1943 1944 2 0 8 2 0 0",
-            "1943 1943 9 3 7 2 0 1"
-        ],
-        "AT": [
-            "1967 1967 9 1 0 2 2 1",
-            "1968 1968 2 0 8 2 2 0",
-            "1968 1985 9 0 8 2 2 1",
-            "1969 1971 2 8 0 2 2 0",
-            "1972 1972 1 0 8 2 2 0",
-            "1973 1981 2 1 0 2 2 0",
-            "1982 1983 2 0 8 2 2 0",
-            "1984 1986 2 1 0 2 2 0",
-            "1986 1986 9 15 0 2 2 1",
-            "1987 1990 2 15 0 2 2 0",
-            "1987 1987 9 22 0 2 2 1",
-            "1988 1990 9 0 8 2 2 1",
-            "1991 1999 9 1 0 2 2 1",
-            "1991 2005 2 0 8 2 2 0",
-            "2000 2000 7 0 8 2 2 1",
-            "2001 9999 9 1 0 2 2 1",
-            "2006 2006 3 1 0 2 2 0",
-            "2007 2007 2 0 8 2 2 0",
-            "2008 9999 3 1 0 2 2 0"
-        ],
-        "NZAQ": [
-            "1974 1974 10 3 7 2 2 1 D",
-            "1975 1988 9 0 8 2 2 1 D",
-            "1989 1989 9 8 7 2 2 1 D",
-            "1990 2006 9 1 0 2 2 1 D",
-            "1975 1975 1 23 7 2 2 0 S",
-            "1976 1989 2 1 0 2 2 0 S",
-            "1990 2007 2 15 0 2 2 0 S",
-            "2007 9999 8 0 8 2 2 1 D",
-            "2008 9999 3 1 0 2 2 0 S"
-        ],
-        "ArgAQ": [
-            "1964 1966 2 1 7 0 0 0",
-            "1964 1966 9 15 7 0 0 1 S",
-            "1967 1967 3 2 7 0 0 0",
-            "1967 1968 9 1 0 0 0 1 S",
-            "1968 1969 3 1 0 0 0 0",
-            "1974 1974 0 23 7 0 0 1 S",
-            "1974 1974 4 1 7 0 0 0"
-        ],
-        "ChileAQ": [
-            "1972 1986 2 9 0 3 1 0",
-            "1974 1987 9 9 0 4 1 1 S",
-            "1987 1987 3 12 7 3 1 0",
-            "1988 1989 2 9 0 3 1 0",
-            "1988 1988 9 1 0 4 1 1 S",
-            "1989 1989 9 9 0 4 1 1 S",
-            "1990 1990 2 18 7 3 1 0",
-            "1990 1990 8 16 7 4 1 1 S",
-            "1991 1996 2 9 0 3 1 0",
-            "1991 1997 9 9 0 4 1 1 S",
-            "1997 1997 2 30 7 3 1 0",
-            "1998 1998 2 9 0 3 1 0",
-            "1998 1998 8 27 7 4 1 1 S",
-            "1999 1999 3 4 7 3 1 0",
-            "1999 2010 9 9 0 4 1 1 S",
-            "2000 2007 2 9 0 3 1 0",
-            "2008 2008 2 30 7 3 1 0",
-            "2009 2009 2 9 0 3 1 0",
-            "2010 2010 3 1 0 3 1 0",
-            "2011 2011 4 2 0 3 1 0",
-            "2011 2011 7 16 0 4 1 1 S",
-            "2012 9999 3 23 0 3 1 0",
-            "2012 9999 8 2 0 4 1 1 S"
-        ],
-        "Norway": [
-            "1916 1916 4 22 7 1 0 1 S",
-            "1916 1916 8 30 7 0 0 0",
-            "1945 1945 3 2 7 2 2 1 S",
-            "1945 1945 9 1 7 2 2 0",
-            "1959 1964 2 15 0 2 2 1 S",
-            "1959 1965 8 15 0 2 2 0",
-            "1965 1965 3 25 7 2 2 1 S"
-        ],
-        "RussiaAsia": [
-            "1981 1984 3 1 7 0 0 1 S",
-            "1981 1983 9 1 7 0 0 0",
-            "1984 1991 8 0 8 2 2 0",
-            "1985 1991 2 0 8 2 2 1 S",
-            "1992 1992 2 6 8 23 0 1 S",
-            "1992 1992 8 6 8 23 0 0",
-            "1993 9999 2 0 8 2 2 1 S",
-            "1993 1995 8 0 8 2 2 0",
-            "1996 9999 9 0 8 2 2 0"
-        ],
-        "Jordan": [
-            "1973 1973 5 6 7 0 0 1 S",
-            "1973 1975 9 1 7 0 0 0",
-            "1974 1977 4 1 7 0 0 1 S",
-            "1976 1976 10 1 7 0 0 0",
-            "1977 1977 9 1 7 0 0 0",
-            "1978 1978 3 30 7 0 0 1 S",
-            "1978 1978 8 30 7 0 0 0",
-            "1985 1985 3 1 7 0 0 1 S",
-            "1985 1985 9 1 7 0 0 0",
-            "1986 1988 3 1 5 0 0 1 S",
-            "1986 1990 9 1 5 0 0 0",
-            "1989 1989 4 8 7 0 0 1 S",
-            "1990 1990 3 27 7 0 0 1 S",
-            "1991 1991 3 17 7 0 0 1 S",
-            "1991 1991 8 27 7 0 0 0",
-            "1992 1992 3 10 7 0 0 1 S",
-            "1992 1993 9 1 5 0 0 0",
-            "1993 1998 3 1 5 0 0 1 S",
-            "1994 1994 8 15 5 0 0 0",
-            "1995 1998 8 15 5 0 2 0",
-            "1999 1999 6 1 7 0 2 1 S",
-            "1999 2002 8 5 8 0 2 0",
-            "2000 2001 2 4 8 0 2 1 S",
-            "2002 9999 2 4 8 24 0 1 S",
-            "2003 2003 9 24 7 0 2 0",
-            "2004 2004 9 15 7 0 2 0",
-            "2005 2005 8 5 8 0 2 0",
-            "2006 2011 9 5 8 0 2 0",
-            "2013 9999 9 5 8 0 2 0"
-        ],
-        "Russia": [
-            "1917 1917 6 1 7 23 0 1 MST",
-            "1917 1917 11 28 7 0 0 0 MMT",
-            "1918 1918 4 31 7 22 0 2 MDST",
-            "1918 1918 8 16 7 1 0 1 MST",
-            "1919 1919 4 31 7 23 0 2 MDST",
-            "1919 1919 6 1 7 2 0 1 S",
-            "1919 1919 7 16 7 0 0 0",
-            "1921 1921 1 14 7 23 0 1 S",
-            "1921 1921 2 20 7 23 0 2 M",
-            "1921 1921 8 1 7 0 0 1 S",
-            "1921 1921 9 1 7 0 0 0",
-            "1981 1984 3 1 7 0 0 1 S",
-            "1981 1983 9 1 7 0 0 0",
-            "1984 1991 8 0 8 2 2 0",
-            "1985 1991 2 0 8 2 2 1 S",
-            "1992 1992 2 6 8 23 0 1 S",
-            "1992 1992 8 6 8 23 0 0",
-            "1993 2010 2 0 8 2 2 1 S",
-            "1993 1995 8 0 8 2 2 0",
-            "1996 2010 9 0 8 2 2 0"
-        ],
-        "Iraq": [
-            "1982 1982 4 1 7 0 0 1 D",
-            "1982 1984 9 1 7 0 0 0 S",
-            "1983 1983 2 31 7 0 0 1 D",
-            "1984 1985 3 1 7 0 0 1 D",
-            "1985 1990 8 0 8 1 2 0 S",
-            "1986 1990 2 0 8 1 2 1 D",
-            "1991 2007 3 1 7 3 2 1 D",
-            "1991 2007 9 1 7 3 2 0 S"
-        ],
-        "EUAsia": [
-            "1981 9999 2 0 8 1 1 1 S",
-            "1979 1995 8 0 8 1 1 0",
-            "1996 9999 9 0 8 1 1 0"
-        ],
-        "Azer": [
-            "1997 9999 2 0 8 4 0 1 S",
-            "1997 9999 9 0 8 5 0 0"
-        ],
-        "Lebanon": [
-            "1920 1920 2 28 7 0 0 1 S",
-            "1920 1920 9 25 7 0 0 0",
-            "1921 1921 3 3 7 0 0 1 S",
-            "1921 1921 9 3 7 0 0 0",
-            "1922 1922 2 26 7 0 0 1 S",
-            "1922 1922 9 8 7 0 0 0",
-            "1923 1923 3 22 7 0 0 1 S",
-            "1923 1923 8 16 7 0 0 0",
-            "1957 1961 4 1 7 0 0 1 S",
-            "1957 1961 9 1 7 0 0 0",
-            "1972 1972 5 22 7 0 0 1 S",
-            "1972 1977 9 1 7 0 0 0",
-            "1973 1977 4 1 7 0 0 1 S",
-            "1978 1978 3 30 7 0 0 1 S",
-            "1978 1978 8 30 7 0 0 0",
-            "1984 1987 4 1 7 0 0 1 S",
-            "1984 1991 9 16 7 0 0 0",
-            "1988 1988 5 1 7 0 0 1 S",
-            "1989 1989 4 10 7 0 0 1 S",
-            "1990 1992 4 1 7 0 0 1 S",
-            "1992 1992 9 4 7 0 0 0",
-            "1993 9999 2 0 8 0 0 1 S",
-            "1993 1998 8 0 8 0 0 0",
-            "1999 9999 9 0 8 0 0 0"
-        ],
-        "Kyrgyz": [
-            "1992 1996 3 7 0 0 2 1 S",
-            "1992 1996 8 0 8 0 0 0",
-            "1997 2005 2 0 8 2:30 0 1 S",
-            "1997 2004 9 0 8 2:30 0 0"
-        ],
-        "Mongol": [
-            "1983 1984 3 1 7 0 0 1 S",
-            "1983 1983 9 1 7 0 0 0",
-            "1985 1998 2 0 8 0 0 1 S",
-            "1984 1998 8 0 8 0 0 0",
-            "2001 2001 3 6 8 2 0 1 S",
-            "2001 2006 8 6 8 2 0 0",
-            "2002 2006 2 6 8 2 0 1 S"
-        ],
-        "PRC": [
-            "1986 1986 4 4 7 0 0 1 D",
-            "1986 1991 8 11 0 0 0 0 S",
-            "1987 1991 3 10 0 0 0 1 D"
-        ],
-        "Syria": [
-            "1920 1923 3 15 0 2 0 1 S",
-            "1920 1923 9 1 0 2 0 0",
-            "1962 1962 3 29 7 2 0 1 S",
-            "1962 1962 9 1 7 2 0 0",
-            "1963 1965 4 1 7 2 0 1 S",
-            "1963 1963 8 30 7 2 0 0",
-            "1964 1964 9 1 7 2 0 0",
-            "1965 1965 8 30 7 2 0 0",
-            "1966 1966 3 24 7 2 0 1 S",
-            "1966 1976 9 1 7 2 0 0",
-            "1967 1978 4 1 7 2 0 1 S",
-            "1977 1978 8 1 7 2 0 0",
-            "1983 1984 3 9 7 2 0 1 S",
-            "1983 1984 9 1 7 2 0 0",
-            "1986 1986 1 16 7 2 0 1 S",
-            "1986 1986 9 9 7 2 0 0",
-            "1987 1987 2 1 7 2 0 1 S",
-            "1987 1988 9 31 7 2 0 0",
-            "1988 1988 2 15 7 2 0 1 S",
-            "1989 1989 2 31 7 2 0 1 S",
-            "1989 1989 9 1 7 2 0 0",
-            "1990 1990 3 1 7 2 0 1 S",
-            "1990 1990 8 30 7 2 0 0",
-            "1991 1991 3 1 7 0 0 1 S",
-            "1991 1992 9 1 7 0 0 0",
-            "1992 1992 3 8 7 0 0 1 S",
-            "1993 1993 2 26 7 0 0 1 S",
-            "1993 1993 8 25 7 0 0 0",
-            "1994 1996 3 1 7 0 0 1 S",
-            "1994 2005 9 1 7 0 0 0",
-            "1997 1998 2 1 8 0 0 1 S",
-            "1999 2006 3 1 7 0 0 1 S",
-            "2006 2006 8 22 7 0 0 0",
-            "2007 2007 2 5 8 0 0 1 S",
-            "2007 2007 10 1 5 0 0 0",
-            "2008 2008 3 1 5 0 0 1 S",
-            "2008 2008 10 1 7 0 0 0",
-            "2009 2009 2 5 8 0 0 1 S",
-            "2010 2011 3 1 5 0 0 1 S",
-            "2012 9999 2 5 8 0 0 1 S",
-            "2009 9999 9 5 8 0 0 0"
-        ],
-        "Dhaka": [
-            "2009 2009 5 19 7 23 0 1 S",
-            "2009 2009 11 31 7 23:59 0 0"
-        ],
-        "Zion": [
-            "1940 1940 5 1 7 0 0 1 D",
-            "1942 1944 10 1 7 0 0 0 S",
-            "1943 1943 3 1 7 2 0 1 D",
-            "1944 1944 3 1 7 0 0 1 D",
-            "1945 1945 3 16 7 0 0 1 D",
-            "1945 1945 10 1 7 2 0 0 S",
-            "1946 1946 3 16 7 2 0 1 D",
-            "1946 1946 10 1 7 0 0 0 S",
-            "1948 1948 4 23 7 0 0 2 DD",
-            "1948 1948 8 1 7 0 0 1 D",
-            "1948 1949 10 1 7 2 0 0 S",
-            "1949 1949 4 1 7 0 0 1 D",
-            "1950 1950 3 16 7 0 0 1 D",
-            "1950 1950 8 15 7 3 0 0 S",
-            "1951 1951 3 1 7 0 0 1 D",
-            "1951 1951 10 11 7 3 0 0 S",
-            "1952 1952 3 20 7 2 0 1 D",
-            "1952 1952 9 19 7 3 0 0 S",
-            "1953 1953 3 12 7 2 0 1 D",
-            "1953 1953 8 13 7 3 0 0 S",
-            "1954 1954 5 13 7 0 0 1 D",
-            "1954 1954 8 12 7 0 0 0 S",
-            "1955 1955 5 11 7 2 0 1 D",
-            "1955 1955 8 11 7 0 0 0 S",
-            "1956 1956 5 3 7 0 0 1 D",
-            "1956 1956 8 30 7 3 0 0 S",
-            "1957 1957 3 29 7 2 0 1 D",
-            "1957 1957 8 22 7 0 0 0 S",
-            "1974 1974 6 7 7 0 0 1 D",
-            "1974 1974 9 13 7 0 0 0 S",
-            "1975 1975 3 20 7 0 0 1 D",
-            "1975 1975 7 31 7 0 0 0 S",
-            "1985 1985 3 14 7 0 0 1 D",
-            "1985 1985 8 15 7 0 0 0 S",
-            "1986 1986 4 18 7 0 0 1 D",
-            "1986 1986 8 7 7 0 0 0 S",
-            "1987 1987 3 15 7 0 0 1 D",
-            "1987 1987 8 13 7 0 0 0 S",
-            "1988 1988 3 9 7 0 0 1 D",
-            "1988 1988 8 3 7 0 0 0 S",
-            "1989 1989 3 30 7 0 0 1 D",
-            "1989 1989 8 3 7 0 0 0 S",
-            "1990 1990 2 25 7 0 0 1 D",
-            "1990 1990 7 26 7 0 0 0 S",
-            "1991 1991 2 24 7 0 0 1 D",
-            "1991 1991 8 1 7 0 0 0 S",
-            "1992 1992 2 29 7 0 0 1 D",
-            "1992 1992 8 6 7 0 0 0 S",
-            "1993 1993 3 2 7 0 0 1 D",
-            "1993 1993 8 5 7 0 0 0 S",
-            "1994 1994 3 1 7 0 0 1 D",
-            "1994 1994 7 28 7 0 0 0 S",
-            "1995 1995 2 31 7 0 0 1 D",
-            "1995 1995 8 3 7 0 0 0 S",
-            "1996 1996 2 15 7 0 0 1 D",
-            "1996 1996 8 16 7 0 0 0 S",
-            "1997 1997 2 21 7 0 0 1 D",
-            "1997 1997 8 14 7 0 0 0 S",
-            "1998 1998 2 20 7 0 0 1 D",
-            "1998 1998 8 6 7 0 0 0 S",
-            "1999 1999 3 2 7 2 0 1 D",
-            "1999 1999 8 3 7 2 0 0 S",
-            "2000 2000 3 14 7 2 0 1 D",
-            "2000 2000 9 6 7 1 0 0 S",
-            "2001 2001 3 9 7 1 0 1 D",
-            "2001 2001 8 24 7 1 0 0 S",
-            "2002 2002 2 29 7 1 0 1 D",
-            "2002 2002 9 7 7 1 0 0 S",
-            "2003 2003 2 28 7 1 0 1 D",
-            "2003 2003 9 3 7 1 0 0 S",
-            "2004 2004 3 7 7 1 0 1 D",
-            "2004 2004 8 22 7 1 0 0 S",
-            "2005 2005 3 1 7 2 0 1 D",
-            "2005 2005 9 9 7 2 0 0 S",
-            "2006 2010 2 26 5 2 0 1 D",
-            "2006 2006 9 1 7 2 0 0 S",
-            "2007 2007 8 16 7 2 0 0 S",
-            "2008 2008 9 5 7 2 0 0 S",
-            "2009 2009 8 27 7 2 0 0 S",
-            "2010 2010 8 12 7 2 0 0 S",
-            "2011 2011 3 1 7 2 0 1 D",
-            "2011 2011 9 2 7 2 0 0 S",
-            "2012 2012 2 26 5 2 0 1 D",
-            "2012 2012 8 23 7 2 0 0 S",
-            "2013 9999 2 23 5 2 0 1 D",
-            "2013 2026 9 2 0 2 0 0 S",
-            "2027 2027 9 3 1 2 0 0 S",
-            "2028 9999 9 2 0 2 0 0 S"
-        ],
-        "EgyptAsia": [
-            "1957 1957 4 10 7 0 0 1 S",
-            "1957 1958 9 1 7 0 0 0",
-            "1958 1958 4 1 7 0 0 1 S",
-            "1959 1967 4 1 7 1 0 1 S",
-            "1959 1965 8 30 7 3 0 0",
-            "1966 1966 9 1 7 3 0 0"
-        ],
-        "Palestine": [
-            "1999 2005 3 15 5 0 0 1 S",
-            "1999 2003 9 15 5 0 0 0",
-            "2004 2004 9 1 7 1 0 0",
-            "2005 2005 9 4 7 2 0 0",
-            "2006 2007 3 1 7 0 0 1 S",
-            "2006 2006 8 22 7 0 0 0",
-            "2007 2007 8 8 4 2 0 0",
-            "2008 2009 2 5 8 0 0 1 S",
-            "2008 2008 8 1 7 0 0 0",
-            "2009 2009 8 1 5 1 0 0",
-            "2010 2010 2 26 7 0 0 1 S",
-            "2010 2010 7 11 7 0 0 0",
-            "2011 2011 3 1 7 0:1 0 1 S",
-            "2011 2011 7 1 7 0 0 0",
-            "2011 2011 7 30 7 0 0 1 S",
-            "2011 2011 8 30 7 0 0 0",
-            "2012 9999 2 4 8 24 0 1 S",
-            "2012 9999 8 21 5 1 0 0"
-        ],
-        "HK": [
-            "1941 1941 3 1 7 3:30 0 1 S",
-            "1941 1941 8 30 7 3:30 0 0",
-            "1946 1946 3 20 7 3:30 0 1 S",
-            "1946 1946 11 1 7 3:30 0 0",
-            "1947 1947 3 13 7 3:30 0 1 S",
-            "1947 1947 11 30 7 3:30 0 0",
-            "1948 1948 4 2 7 3:30 0 1 S",
-            "1948 1951 9 0 8 3:30 0 0",
-            "1952 1952 9 25 7 3:30 0 0",
-            "1949 1953 3 1 0 3:30 0 1 S",
-            "1953 1953 10 1 7 3:30 0 0",
-            "1954 1964 2 18 0 3:30 0 1 S",
-            "1954 1954 9 31 7 3:30 0 0",
-            "1955 1964 10 1 0 3:30 0 0",
-            "1965 1976 3 16 0 3:30 0 1 S",
-            "1965 1976 9 16 0 3:30 0 0",
-            "1973 1973 11 30 7 3:30 0 1 S",
-            "1979 1979 4 8 0 3:30 0 1 S",
-            "1979 1979 9 16 0 3:30 0 0"
-        ],
-        "Pakistan": [
-            "2002 2002 3 2 0 0:1 0 1 S",
-            "2002 2002 9 2 0 0:1 0 0",
-            "2008 2008 5 1 7 0 0 1 S",
-            "2008 2008 10 1 7 0 0 0",
-            "2009 2009 3 15 7 0 0 1 S",
-            "2009 2009 10 1 7 0 0 0"
-        ],
-        "NBorneo": [
-            "1935 1941 8 14 7 0 0 0:20 TS",
-            "1935 1941 11 14 7 0 0 0"
-        ],
-        "Macau": [
-            "1961 1962 2 16 0 3:30 0 1 S",
-            "1961 1964 10 1 0 3:30 0 0",
-            "1963 1963 2 16 0 0 0 1 S",
-            "1964 1964 2 16 0 3:30 0 1 S",
-            "1965 1965 2 16 0 0 0 1 S",
-            "1965 1965 9 31 7 0 0 0",
-            "1966 1971 3 16 0 3:30 0 1 S",
-            "1966 1971 9 16 0 3:30 0 0",
-            "1972 1974 3 15 0 0 0 1 S",
-            "1972 1973 9 15 0 0 0 0",
-            "1974 1977 9 15 0 3:30 0 0",
-            "1975 1977 3 15 0 3:30 0 1 S",
-            "1978 1980 3 15 0 0 0 1 S",
-            "1978 1980 9 15 0 0 0 0"
-        ],
-        "Phil": [
-            "1936 1936 10 1 7 0 0 1 S",
-            "1937 1937 1 1 7 0 0 0",
-            "1954 1954 3 12 7 0 0 1 S",
-            "1954 1954 6 1 7 0 0 0",
-            "1978 1978 2 22 7 0 0 1 S",
-            "1978 1978 8 21 7 0 0 0"
-        ],
-        "Cyprus": [
-            "1975 1975 3 13 7 0 0 1 S",
-            "1975 1975 9 12 7 0 0 0",
-            "1976 1976 4 15 7 0 0 1 S",
-            "1976 1976 9 11 7 0 0 0",
-            "1977 1980 3 1 0 0 0 1 S",
-            "1977 1977 8 25 7 0 0 0",
-            "1978 1978 9 2 7 0 0 0",
-            "1979 1997 8 0 8 0 0 0",
-            "1981 1998 2 0 8 0 0 1 S"
-        ],
-        "ROK": [
-            "1960 1960 4 15 7 0 0 1 D",
-            "1960 1960 8 13 7 0 0 0 S",
-            "1987 1988 4 8 0 0 0 1 D",
-            "1987 1988 9 8 0 0 0 0 S"
-        ],
-        "Shang": [
-            "1940 1940 5 3 7 0 0 1 D",
-            "1940 1941 9 1 7 0 0 0 S",
-            "1941 1941 2 16 7 0 0 1 D"
-        ],
-        "Taiwan": [
-            "1945 1951 4 1 7 0 0 1 D",
-            "1945 1951 9 1 7 0 0 0 S",
-            "1952 1952 2 1 7 0 0 1 D",
-            "1952 1954 10 1 7 0 0 0 S",
-            "1953 1959 3 1 7 0 0 1 D",
-            "1955 1961 9 1 7 0 0 0 S",
-            "1960 1961 5 1 7 0 0 1 D",
-            "1974 1975 3 1 7 0 0 1 D",
-            "1974 1975 9 1 7 0 0 0 S",
-            "1979 1979 5 30 7 0 0 1 D",
-            "1979 1979 8 30 7 0 0 0 S"
-        ],
-        "E-EurAsia": [
-            "1981 9999 2 0 8 0 0 1 S",
-            "1979 1995 8 0 8 0 0 0",
-            "1996 9999 9 0 8 0 0 0"
-        ],
-        "Iran": [
-            "1978 1980 2 21 7 0 0 1 D",
-            "1978 1978 9 21 7 0 0 0 S",
-            "1979 1979 8 19 7 0 0 0 S",
-            "1980 1980 8 23 7 0 0 0 S",
-            "1991 1991 4 3 7 0 0 1 D",
-            "1992 1995 2 22 7 0 0 1 D",
-            "1991 1995 8 22 7 0 0 0 S",
-            "1996 1996 2 21 7 0 0 1 D",
-            "1996 1996 8 21 7 0 0 0 S",
-            "1997 1999 2 22 7 0 0 1 D",
-            "1997 1999 8 22 7 0 0 0 S",
-            "2000 2000 2 21 7 0 0 1 D",
-            "2000 2000 8 21 7 0 0 0 S",
-            "2001 2003 2 22 7 0 0 1 D",
-            "2001 2003 8 22 7 0 0 0 S",
-            "2004 2004 2 21 7 0 0 1 D",
-            "2004 2004 8 21 7 0 0 0 S",
-            "2005 2005 2 22 7 0 0 1 D",
-            "2005 2005 8 22 7 0 0 0 S",
-            "2008 2008 2 21 7 0 0 1 D",
-            "2008 2008 8 21 7 0 0 0 S",
-            "2009 2011 2 22 7 0 0 1 D",
-            "2009 2011 8 22 7 0 0 0 S",
-            "2012 2012 2 21 7 0 0 1 D",
-            "2012 2012 8 21 7 0 0 0 S",
-            "2013 2015 2 22 7 0 0 1 D",
-            "2013 2015 8 22 7 0 0 0 S",
-            "2016 2016 2 21 7 0 0 1 D",
-            "2016 2016 8 21 7 0 0 0 S",
-            "2017 2019 2 22 7 0 0 1 D",
-            "2017 2019 8 22 7 0 0 0 S",
-            "2020 2020 2 21 7 0 0 1 D",
-            "2020 2020 8 21 7 0 0 0 S",
-            "2021 2023 2 22 7 0 0 1 D",
-            "2021 2023 8 22 7 0 0 0 S",
-            "2024 2024 2 21 7 0 0 1 D",
-            "2024 2024 8 21 7 0 0 0 S",
-            "2025 2027 2 22 7 0 0 1 D",
-            "2025 2027 8 22 7 0 0 0 S",
-            "2028 2029 2 21 7 0 0 1 D",
-            "2028 2029 8 21 7 0 0 0 S",
-            "2030 2031 2 22 7 0 0 1 D",
-            "2030 2031 8 22 7 0 0 0 S",
-            "2032 2033 2 21 7 0 0 1 D",
-            "2032 2033 8 21 7 0 0 0 S",
-            "2034 2035 2 22 7 0 0 1 D",
-            "2034 2035 8 22 7 0 0 0 S",
-            "2036 2037 2 21 7 0 0 1 D",
-            "2036 2037 8 21 7 0 0 0 S"
-        ],
-        "Japan": [
-            "1948 1948 4 1 0 2 0 1 D",
-            "1948 1951 8 8 6 2 0 0 S",
-            "1949 1949 3 1 0 2 0 1 D",
-            "1950 1951 4 1 0 2 0 1 D"
-        ],
-        "Port": [
-            "1916 1916 5 17 7 23 0 1 S",
-            "1916 1916 10 1 7 1 0 0",
-            "1917 1917 1 28 7 23 2 1 S",
-            "1917 1921 9 14 7 23 2 0",
-            "1918 1918 2 1 7 23 2 1 S",
-            "1919 1919 1 28 7 23 2 1 S",
-            "1920 1920 1 29 7 23 2 1 S",
-            "1921 1921 1 28 7 23 2 1 S",
-            "1924 1924 3 16 7 23 2 1 S",
-            "1924 1924 9 14 7 23 2 0",
-            "1926 1926 3 17 7 23 2 1 S",
-            "1926 1929 9 1 6 23 2 0",
-            "1927 1927 3 9 7 23 2 1 S",
-            "1928 1928 3 14 7 23 2 1 S",
-            "1929 1929 3 20 7 23 2 1 S",
-            "1931 1931 3 18 7 23 2 1 S",
-            "1931 1932 9 1 6 23 2 0",
-            "1932 1932 3 2 7 23 2 1 S",
-            "1934 1934 3 7 7 23 2 1 S",
-            "1934 1938 9 1 6 23 2 0",
-            "1935 1935 2 30 7 23 2 1 S",
-            "1936 1936 3 18 7 23 2 1 S",
-            "1937 1937 3 3 7 23 2 1 S",
-            "1938 1938 2 26 7 23 2 1 S",
-            "1939 1939 3 15 7 23 2 1 S",
-            "1939 1939 10 18 7 23 2 0",
-            "1940 1940 1 24 7 23 2 1 S",
-            "1940 1941 9 5 7 23 2 0",
-            "1941 1941 3 5 7 23 2 1 S",
-            "1942 1945 2 8 6 23 2 1 S",
-            "1942 1942 3 25 7 22 2 2 M",
-            "1942 1942 7 15 7 22 2 1 S",
-            "1942 1945 9 24 6 23 2 0",
-            "1943 1943 3 17 7 22 2 2 M",
-            "1943 1945 7 25 6 22 2 1 S",
-            "1944 1945 3 21 6 22 2 2 M",
-            "1946 1946 3 1 6 23 2 1 S",
-            "1946 1946 9 1 6 23 2 0",
-            "1947 1949 3 1 0 2 2 1 S",
-            "1947 1949 9 1 0 2 2 0",
-            "1951 1965 3 1 0 2 2 1 S",
-            "1951 1965 9 1 0 2 2 0",
-            "1977 1977 2 27 7 0 2 1 S",
-            "1977 1977 8 25 7 0 2 0",
-            "1978 1979 3 1 0 0 2 1 S",
-            "1978 1978 9 1 7 0 2 0",
-            "1979 1982 8 0 8 1 2 0",
-            "1980 1980 2 0 8 0 2 1 S",
-            "1981 1982 2 0 8 1 2 1 S",
-            "1983 1983 2 0 8 2 2 1 S"
-        ],
-        "W-Eur": [
-            "1977 1980 3 1 0 1 2 1 S",
-            "1977 1977 8 0 8 1 2 0",
-            "1978 1978 9 1 7 1 2 0",
-            "1979 1995 8 0 8 1 2 0",
-            "1981 9999 2 0 8 1 2 1 S",
-            "1996 9999 9 0 8 1 2 0"
-        ],
-        "Iceland": [
-            "1917 1918 1 19 7 23 0 1 S",
-            "1917 1917 9 21 7 1 0 0",
-            "1918 1918 10 16 7 1 0 0",
-            "1939 1939 3 29 7 23 0 1 S",
-            "1939 1939 10 29 7 2 0 0",
-            "1940 1940 1 25 7 2 0 1 S",
-            "1940 1940 10 3 7 2 0 0",
-            "1941 1941 2 2 7 1 2 1 S",
-            "1941 1941 10 2 7 1 2 0",
-            "1942 1942 2 8 7 1 2 1 S",
-            "1942 1942 9 25 7 1 2 0",
-            "1943 1946 2 1 0 1 2 1 S",
-            "1943 1948 9 22 0 1 2 0",
-            "1947 1967 3 1 0 1 2 1 S",
-            "1949 1949 9 30 7 1 2 0",
-            "1950 1966 9 22 0 1 2 0",
-            "1967 1967 9 29 7 1 2 0"
-        ],
-        "Falk": [
-            "1937 1938 8 0 8 0 0 1 S",
-            "1938 1942 2 19 0 0 0 0",
-            "1939 1939 9 1 7 0 0 1 S",
-            "1940 1942 8 0 8 0 0 1 S",
-            "1943 1943 0 1 7 0 0 0",
-            "1983 1983 8 0 8 0 0 1 S",
-            "1984 1985 3 0 8 0 0 0",
-            "1984 1984 8 16 7 0 0 1 S",
-            "1985 2000 8 9 0 0 0 1 S",
-            "1986 2000 3 16 0 0 0 0",
-            "2001 2010 3 15 0 2 0 0",
-            "2001 2010 8 1 0 2 0 1 S"
-        ],
-        "AS": [
-            "1971 1985 9 0 8 2 2 1",
-            "1986 1986 9 19 7 2 2 1",
-            "1987 2007 9 0 8 2 2 1",
-            "1972 1972 1 27 7 2 2 0",
-            "1973 1985 2 1 0 2 2 0",
-            "1986 1990 2 15 0 2 2 0",
-            "1991 1991 2 3 7 2 2 0",
-            "1992 1992 2 22 7 2 2 0",
-            "1993 1993 2 7 7 2 2 0",
-            "1994 1994 2 20 7 2 2 0",
-            "1995 2005 2 0 8 2 2 0",
-            "2006 2006 3 2 7 2 2 0",
-            "2007 2007 2 0 8 2 2 0",
-            "2008 9999 3 1 0 2 2 0",
-            "2008 9999 9 1 0 2 2 1"
-        ],
-        "AQ": [
-            "1971 1971 9 0 8 2 2 1",
-            "1972 1972 1 0 8 2 2 0",
-            "1989 1991 9 0 8 2 2 1",
-            "1990 1992 2 1 0 2 2 0"
-        ],
-        "AN": [
-            "1971 1985 9 0 8 2 2 1",
-            "1972 1972 1 27 7 2 2 0",
-            "1973 1981 2 1 0 2 2 0",
-            "1982 1982 3 1 0 2 2 0",
-            "1983 1985 2 1 0 2 2 0",
-            "1986 1989 2 15 0 2 2 0",
-            "1986 1986 9 19 7 2 2 1",
-            "1987 1999 9 0 8 2 2 1",
-            "1990 1995 2 1 0 2 2 0",
-            "1996 2005 2 0 8 2 2 0",
-            "2000 2000 7 0 8 2 2 1",
-            "2001 2007 9 0 8 2 2 1",
-            "2006 2006 3 1 0 2 2 0",
-            "2007 2007 2 0 8 2 2 0",
-            "2008 9999 3 1 0 2 2 0",
-            "2008 9999 9 1 0 2 2 1"
-        ],
-        "AW": [
-            "1974 1974 9 0 8 2 2 1",
-            "1975 1975 2 1 0 2 2 0",
-            "1983 1983 9 0 8 2 2 1",
-            "1984 1984 2 1 0 2 2 0",
-            "1991 1991 10 17 7 2 2 1",
-            "1992 1992 2 1 0 2 2 0",
-            "2006 2006 11 3 7 2 2 1",
-            "2007 2009 2 0 8 2 2 0",
-            "2007 2008 9 0 8 2 2 1"
-        ],
-        "Holiday": [
-            "1992 1993 9 0 8 2 2 1",
-            "1993 1994 2 1 0 2 2 0"
-        ],
-        "LH": [
-            "1981 1984 9 0 8 2 0 1",
-            "1982 1985 2 1 0 2 0 0",
-            "1985 1985 9 0 8 2 0 0:30",
-            "1986 1989 2 15 0 2 0 0",
-            "1986 1986 9 19 7 2 0 0:30",
-            "1987 1999 9 0 8 2 0 0:30",
-            "1990 1995 2 1 0 2 0 0",
-            "1996 2005 2 0 8 2 0 0",
-            "2000 2000 7 0 8 2 0 0:30",
-            "2001 2007 9 0 8 2 0 0:30",
-            "2006 2006 3 1 0 2 0 0",
-            "2007 2007 2 0 8 2 0 0",
-            "2008 9999 3 1 0 2 0 0",
-            "2008 9999 9 1 0 2 0 0:30"
-        ],
-        "AV": [
-            "1971 1985 9 0 8 2 2 1",
-            "1972 1972 1 0 8 2 2 0",
-            "1973 1985 2 1 0 2 2 0",
-            "1986 1990 2 15 0 2 2 0",
-            "1986 1987 9 15 0 2 2 1",
-            "1988 1999 9 0 8 2 2 1",
-            "1991 1994 2 1 0 2 2 0",
-            "1995 2005 2 0 8 2 2 0",
-            "2000 2000 7 0 8 2 2 1",
-            "2001 2007 9 0 8 2 2 1",
-            "2006 2006 3 1 0 2 2 0",
-            "2007 2007 2 0 8 2 2 0",
-            "2008 9999 3 1 0 2 2 0",
-            "2008 9999 9 1 0 2 2 1"
-        ],
-        "Neth": [
-            "1916 1916 4 1 7 0 0 1 NST",
-            "1916 1916 9 1 7 0 0 0 AMT",
-            "1917 1917 3 16 7 2 2 1 NST",
-            "1917 1917 8 17 7 2 2 0 AMT",
-            "1918 1921 3 1 1 2 2 1 NST",
-            "1918 1921 8 1 8 2 2 0 AMT",
-            "1922 1922 2 0 8 2 2 1 NST",
-            "1922 1936 9 2 0 2 2 0 AMT",
-            "1923 1923 5 1 5 2 2 1 NST",
-            "1924 1924 2 0 8 2 2 1 NST",
-            "1925 1925 5 1 5 2 2 1 NST",
-            "1926 1931 4 15 7 2 2 1 NST",
-            "1932 1932 4 22 7 2 2 1 NST",
-            "1933 1936 4 15 7 2 2 1 NST",
-            "1937 1937 4 22 7 2 2 1 NST",
-            "1937 1937 6 1 7 0 0 1 S",
-            "1937 1939 9 2 0 2 2 0",
-            "1938 1939 4 15 7 2 2 1 S",
-            "1945 1945 3 2 7 2 2 1 S",
-            "1945 1945 8 16 7 2 2 0"
-        ],
-        "Greece": [
-            "1932 1932 6 7 7 0 0 1 S",
-            "1932 1932 8 1 7 0 0 0",
-            "1941 1941 3 7 7 0 0 1 S",
-            "1942 1942 10 2 7 3 0 0",
-            "1943 1943 2 30 7 0 0 1 S",
-            "1943 1943 9 4 7 0 0 0",
-            "1952 1952 6 1 7 0 0 1 S",
-            "1952 1952 10 2 7 0 0 0",
-            "1975 1975 3 12 7 0 2 1 S",
-            "1975 1975 10 26 7 0 2 0",
-            "1976 1976 3 11 7 2 2 1 S",
-            "1976 1976 9 10 7 2 2 0",
-            "1977 1978 3 1 0 2 2 1 S",
-            "1977 1977 8 26 7 2 2 0",
-            "1978 1978 8 24 7 4 0 0",
-            "1979 1979 3 1 7 9 0 1 S",
-            "1979 1979 8 29 7 2 0 0",
-            "1980 1980 3 1 7 0 0 1 S",
-            "1980 1980 8 28 7 0 0 0"
-        ],
-        "SovietZone": [
-            "1945 1945 4 24 7 2 0 2 M",
-            "1945 1945 8 24 7 3 0 1 S",
-            "1945 1945 10 18 7 2 2 0"
-        ],
-        "Germany": [
-            "1946 1946 3 14 7 2 2 1 S",
-            "1946 1946 9 7 7 2 2 0",
-            "1947 1949 9 1 0 2 2 0",
-            "1947 1947 3 6 7 3 2 1 S",
-            "1947 1947 4 11 7 2 2 2 M",
-            "1947 1947 5 29 7 3 0 1 S",
-            "1948 1948 3 18 7 2 2 1 S",
-            "1949 1949 3 10 7 2 2 1 S"
-        ],
-        "Czech": [
-            "1945 1945 3 8 7 2 2 1 S",
-            "1945 1945 10 18 7 2 2 0",
-            "1946 1946 4 6 7 2 2 1 S",
-            "1946 1949 9 1 0 2 2 0",
-            "1947 1947 3 20 7 2 2 1 S",
-            "1948 1948 3 18 7 2 2 1 S",
-            "1949 1949 3 9 7 2 2 1 S"
-        ],
-        "Belgium": [
-            "1918 1918 2 9 7 0 2 1 S",
-            "1918 1919 9 1 6 23 2 0",
-            "1919 1919 2 1 7 23 2 1 S",
-            "1920 1920 1 14 7 23 2 1 S",
-            "1920 1920 9 23 7 23 2 0",
-            "1921 1921 2 14 7 23 2 1 S",
-            "1921 1921 9 25 7 23 2 0",
-            "1922 1922 2 25 7 23 2 1 S",
-            "1922 1927 9 1 6 23 2 0",
-            "1923 1923 3 21 7 23 2 1 S",
-            "1924 1924 2 29 7 23 2 1 S",
-            "1925 1925 3 4 7 23 2 1 S",
-            "1926 1926 3 17 7 23 2 1 S",
-            "1927 1927 3 9 7 23 2 1 S",
-            "1928 1928 3 14 7 23 2 1 S",
-            "1928 1938 9 2 0 2 2 0",
-            "1929 1929 3 21 7 2 2 1 S",
-            "1930 1930 3 13 7 2 2 1 S",
-            "1931 1931 3 19 7 2 2 1 S",
-            "1932 1932 3 3 7 2 2 1 S",
-            "1933 1933 2 26 7 2 2 1 S",
-            "1934 1934 3 8 7 2 2 1 S",
-            "1935 1935 2 31 7 2 2 1 S",
-            "1936 1936 3 19 7 2 2 1 S",
-            "1937 1937 3 4 7 2 2 1 S",
-            "1938 1938 2 27 7 2 2 1 S",
-            "1939 1939 3 16 7 2 2 1 S",
-            "1939 1939 10 19 7 2 2 0",
-            "1940 1940 1 25 7 2 2 1 S",
-            "1944 1944 8 17 7 2 2 0",
-            "1945 1945 3 2 7 2 2 1 S",
-            "1945 1945 8 16 7 2 2 0",
-            "1946 1946 4 19 7 2 2 1 S",
-            "1946 1946 9 7 7 2 2 0"
-        ],
-        "Romania": [
-            "1932 1932 4 21 7 0 2 1 S",
-            "1932 1939 9 1 0 0 2 0",
-            "1933 1939 3 2 0 0 2 1 S",
-            "1979 1979 4 27 7 0 0 1 S",
-            "1979 1979 8 0 8 0 0 0",
-            "1980 1980 3 5 7 23 0 1 S",
-            "1980 1980 8 0 8 1 0 0",
-            "1991 1993 2 0 8 0 2 1 S",
-            "1991 1993 8 0 8 0 2 0"
-        ],
-        "E-Eur": [
-            "1977 1980 3 1 0 0 0 1 S",
-            "1977 1977 8 0 8 0 0 0",
-            "1978 1978 9 1 7 0 0 0",
-            "1979 1995 8 0 8 0 0 0",
-            "1981 9999 2 0 8 0 0 1 S",
-            "1996 9999 9 0 8 0 0 0"
-        ],
-        "Hungary": [
-            "1918 1918 3 1 7 3 0 1 S",
-            "1918 1918 8 29 7 3 0 0",
-            "1919 1919 3 15 7 3 0 1 S",
-            "1919 1919 8 15 7 3 0 0",
-            "1920 1920 3 5 7 3 0 1 S",
-            "1920 1920 8 30 7 3 0 0",
-            "1945 1945 4 1 7 23 0 1 S",
-            "1945 1945 10 3 7 0 0 0",
-            "1946 1946 2 31 7 2 2 1 S",
-            "1946 1949 9 1 0 2 2 0",
-            "1947 1949 3 4 0 2 2 1 S",
-            "1950 1950 3 17 7 2 2 1 S",
-            "1950 1950 9 23 7 2 2 0",
-            "1954 1955 4 23 7 0 0 1 S",
-            "1954 1955 9 3 7 0 0 0",
-            "1956 1956 5 1 0 0 0 1 S",
-            "1956 1956 8 0 8 0 0 0",
-            "1957 1957 5 1 0 1 0 1 S",
-            "1957 1957 8 0 8 3 0 0",
-            "1980 1980 3 6 7 1 0 1 S"
-        ],
-        "Swiss": [
-            "1941 1942 4 1 1 1 0 1 S",
-            "1941 1942 9 1 1 2 0 0"
-        ],
-        "Denmark": [
-            "1916 1916 4 14 7 23 0 1 S",
-            "1916 1916 8 30 7 23 0 0",
-            "1940 1940 4 15 7 0 0 1 S",
-            "1945 1945 3 2 7 2 2 1 S",
-            "1945 1945 7 15 7 2 2 0",
-            "1946 1946 4 1 7 2 2 1 S",
-            "1946 1946 8 1 7 2 2 0",
-            "1947 1947 4 4 7 2 2 1 S",
-            "1947 1947 7 10 7 2 2 0",
-            "1948 1948 4 9 7 2 2 1 S",
-            "1948 1948 7 8 7 2 2 0"
-        ],
-        "GB-Eire": [
-            "1916 1916 4 21 7 2 2 1 BST",
-            "1916 1916 9 1 7 2 2 0 GMT",
-            "1917 1917 3 8 7 2 2 1 BST",
-            "1917 1917 8 17 7 2 2 0 GMT",
-            "1918 1918 2 24 7 2 2 1 BST",
-            "1918 1918 8 30 7 2 2 0 GMT",
-            "1919 1919 2 30 7 2 2 1 BST",
-            "1919 1919 8 29 7 2 2 0 GMT",
-            "1920 1920 2 28 7 2 2 1 BST",
-            "1920 1920 9 25 7 2 2 0 GMT",
-            "1921 1921 3 3 7 2 2 1 BST",
-            "1921 1921 9 3 7 2 2 0 GMT",
-            "1922 1922 2 26 7 2 2 1 BST",
-            "1922 1922 9 8 7 2 2 0 GMT",
-            "1923 1923 3 16 0 2 2 1 BST",
-            "1923 1924 8 16 0 2 2 0 GMT",
-            "1924 1924 3 9 0 2 2 1 BST",
-            "1925 1926 3 16 0 2 2 1 BST",
-            "1925 1938 9 2 0 2 2 0 GMT",
-            "1927 1927 3 9 0 2 2 1 BST",
-            "1928 1929 3 16 0 2 2 1 BST",
-            "1930 1930 3 9 0 2 2 1 BST",
-            "1931 1932 3 16 0 2 2 1 BST",
-            "1933 1933 3 9 0 2 2 1 BST",
-            "1934 1934 3 16 0 2 2 1 BST",
-            "1935 1935 3 9 0 2 2 1 BST",
-            "1936 1937 3 16 0 2 2 1 BST",
-            "1938 1938 3 9 0 2 2 1 BST",
-            "1939 1939 3 16 0 2 2 1 BST",
-            "1939 1939 10 16 0 2 2 0 GMT",
-            "1940 1940 1 23 0 2 2 1 BST",
-            "1941 1941 4 2 0 1 2 2 BDST",
-            "1941 1943 7 9 0 1 2 1 BST",
-            "1942 1944 3 2 0 1 2 2 BDST",
-            "1944 1944 8 16 0 1 2 1 BST",
-            "1945 1945 3 2 1 1 2 2 BDST",
-            "1945 1945 6 9 0 1 2 1 BST",
-            "1945 1946 9 2 0 2 2 0 GMT",
-            "1946 1946 3 9 0 2 2 1 BST",
-            "1947 1947 2 16 7 2 2 1 BST",
-            "1947 1947 3 13 7 1 2 2 BDST",
-            "1947 1947 7 10 7 1 2 1 BST",
-            "1947 1947 10 2 7 2 2 0 GMT",
-            "1948 1948 2 14 7 2 2 1 BST",
-            "1948 1948 9 31 7 2 2 0 GMT",
-            "1949 1949 3 3 7 2 2 1 BST",
-            "1949 1949 9 30 7 2 2 0 GMT",
-            "1950 1952 3 14 0 2 2 1 BST",
-            "1950 1952 9 21 0 2 2 0 GMT",
-            "1953 1953 3 16 0 2 2 1 BST",
-            "1953 1960 9 2 0 2 2 0 GMT",
-            "1954 1954 3 9 0 2 2 1 BST",
-            "1955 1956 3 16 0 2 2 1 BST",
-            "1957 1957 3 9 0 2 2 1 BST",
-            "1958 1959 3 16 0 2 2 1 BST",
-            "1960 1960 3 9 0 2 2 1 BST",
-            "1961 1963 2 0 8 2 2 1 BST",
-            "1961 1968 9 23 0 2 2 0 GMT",
-            "1964 1967 2 19 0 2 2 1 BST",
-            "1968 1968 1 18 7 2 2 1 BST",
-            "1972 1980 2 16 0 2 2 1 BST",
-            "1972 1980 9 23 0 2 2 0 GMT",
-            "1981 1995 2 0 8 1 1 1 BST",
-            "1981 1989 9 23 0 1 1 0 GMT",
-            "1990 1995 9 22 0 1 1 0 GMT"
-        ],
-        "Finland": [
-            "1942 1942 3 3 7 0 0 1 S",
-            "1942 1942 9 3 7 0 0 0",
-            "1981 1982 2 0 8 2 0 1 S",
-            "1981 1982 8 0 8 3 0 0"
-        ],
-        "Turkey": [
-            "1916 1916 4 1 7 0 0 1 S",
-            "1916 1916 9 1 7 0 0 0",
-            "1920 1920 2 28 7 0 0 1 S",
-            "1920 1920 9 25 7 0 0 0",
-            "1921 1921 3 3 7 0 0 1 S",
-            "1921 1921 9 3 7 0 0 0",
-            "1922 1922 2 26 7 0 0 1 S",
-            "1922 1922 9 8 7 0 0 0",
-            "1924 1924 4 13 7 0 0 1 S",
-            "1924 1925 9 1 7 0 0 0",
-            "1925 1925 4 1 7 0 0 1 S",
-            "1940 1940 5 30 7 0 0 1 S",
-            "1940 1940 9 5 7 0 0 0",
-            "1940 1940 11 1 7 0 0 1 S",
-            "1941 1941 8 21 7 0 0 0",
-            "1942 1942 3 1 7 0 0 1 S",
-            "1942 1942 10 1 7 0 0 0",
-            "1945 1945 3 2 7 0 0 1 S",
-            "1945 1945 9 8 7 0 0 0",
-            "1946 1946 5 1 7 0 0 1 S",
-            "1946 1946 9 1 7 0 0 0",
-            "1947 1948 3 16 0 0 0 1 S",
-            "1947 1950 9 2 0 0 0 0",
-            "1949 1949 3 10 7 0 0 1 S",
-            "1950 1950 3 19 7 0 0 1 S",
-            "1951 1951 3 22 7 0 0 1 S",
-            "1951 1951 9 8 7 0 0 0",
-            "1962 1962 6 15 7 0 0 1 S",
-            "1962 1962 9 8 7 0 0 0",
-            "1964 1964 4 15 7 0 0 1 S",
-            "1964 1964 9 1 7 0 0 0",
-            "1970 1972 4 2 0 0 0 1 S",
-            "1970 1972 9 2 0 0 0 0",
-            "1973 1973 5 3 7 1 0 1 S",
-            "1973 1973 10 4 7 3 0 0",
-            "1974 1974 2 31 7 2 0 1 S",
-            "1974 1974 10 3 7 5 0 0",
-            "1975 1975 2 30 7 0 0 1 S",
-            "1975 1976 9 0 8 0 0 0",
-            "1976 1976 5 1 7 0 0 1 S",
-            "1977 1978 3 1 0 0 0 1 S",
-            "1977 1977 9 16 7 0 0 0",
-            "1979 1980 3 1 0 3 0 1 S",
-            "1979 1982 9 11 1 0 0 0",
-            "1981 1982 2 0 8 3 0 1 S",
-            "1983 1983 6 31 7 0 0 1 S",
-            "1983 1983 9 2 7 0 0 0",
-            "1985 1985 3 20 7 0 0 1 S",
-            "1985 1985 8 28 7 0 0 0",
-            "1986 1990 2 0 8 2 2 1 S",
-            "1986 1990 8 0 8 2 2 0",
-            "1991 2006 2 0 8 1 2 1 S",
-            "1991 1995 8 0 8 1 2 0",
-            "1996 2006 9 0 8 1 2 0"
-        ],
-        "Poland": [
-            "1918 1919 8 16 7 2 2 0",
-            "1919 1919 3 15 7 2 2 1 S",
-            "1944 1944 3 3 7 2 2 1 S",
-            "1944 1944 9 4 7 2 0 0",
-            "1945 1945 3 29 7 0 0 1 S",
-            "1945 1945 10 1 7 0 0 0",
-            "1946 1946 3 14 7 0 2 1 S",
-            "1946 1946 9 7 7 2 2 0",
-            "1947 1947 4 4 7 2 2 1 S",
-            "1947 1949 9 1 0 2 2 0",
-            "1948 1948 3 18 7 2 2 1 S",
-            "1949 1949 3 10 7 2 2 1 S",
-            "1957 1957 5 2 7 1 2 1 S",
-            "1957 1958 8 0 8 1 2 0",
-            "1958 1958 2 30 7 1 2 1 S",
-            "1959 1959 4 31 7 1 2 1 S",
-            "1959 1961 9 1 0 1 2 0",
-            "1960 1960 3 3 7 1 2 1 S",
-            "1961 1964 4 0 8 1 2 1 S",
-            "1962 1964 8 0 8 1 2 0"
-        ],
-        "Lux": [
-            "1916 1916 4 14 7 23 0 1 S",
-            "1916 1916 9 1 7 1 0 0",
-            "1917 1917 3 28 7 23 0 1 S",
-            "1917 1917 8 17 7 1 0 0",
-            "1918 1918 3 15 1 2 2 1 S",
-            "1918 1918 8 15 1 2 2 0",
-            "1919 1919 2 1 7 23 0 1 S",
-            "1919 1919 9 5 7 3 0 0",
-            "1920 1920 1 14 7 23 0 1 S",
-            "1920 1920 9 24 7 2 0 0",
-            "1921 1921 2 14 7 23 0 1 S",
-            "1921 1921 9 26 7 2 0 0",
-            "1922 1922 2 25 7 23 0 1 S",
-            "1922 1922 9 2 0 1 0 0",
-            "1923 1923 3 21 7 23 0 1 S",
-            "1923 1923 9 2 0 2 0 0",
-            "1924 1924 2 29 7 23 0 1 S",
-            "1924 1928 9 2 0 1 0 0",
-            "1925 1925 3 5 7 23 0 1 S",
-            "1926 1926 3 17 7 23 0 1 S",
-            "1927 1927 3 9 7 23 0 1 S",
-            "1928 1928 3 14 7 23 0 1 S",
-            "1929 1929 3 20 7 23 0 1 S"
-        ],
-        "Italy": [
-            "1916 1916 5 3 7 0 2 1 S",
-            "1916 1916 9 1 7 0 2 0",
-            "1917 1917 3 1 7 0 2 1 S",
-            "1917 1917 8 30 7 0 2 0",
-            "1918 1918 2 10 7 0 2 1 S",
-            "1918 1919 9 1 0 0 2 0",
-            "1919 1919 2 2 7 0 2 1 S",
-            "1920 1920 2 21 7 0 2 1 S",
-            "1920 1920 8 19 7 0 2 0",
-            "1940 1940 5 15 7 0 2 1 S",
-            "1944 1944 8 17 7 0 2 0",
-            "1945 1945 3 2 7 2 0 1 S",
-            "1945 1945 8 15 7 0 2 0",
-            "1946 1946 2 17 7 2 2 1 S",
-            "1946 1946 9 6 7 2 2 0",
-            "1947 1947 2 16 7 0 2 1 S",
-            "1947 1947 9 5 7 0 2 0",
-            "1948 1948 1 29 7 2 2 1 S",
-            "1948 1948 9 3 7 2 2 0",
-            "1966 1968 4 22 0 0 0 1 S",
-            "1966 1969 8 22 0 0 0 0",
-            "1969 1969 5 1 7 0 0 1 S",
-            "1970 1970 4 31 7 0 0 1 S",
-            "1970 1970 8 0 8 0 0 0",
-            "1971 1972 4 22 0 0 0 1 S",
-            "1971 1971 8 0 8 1 0 0",
-            "1972 1972 9 1 7 0 0 0",
-            "1973 1973 5 3 7 0 0 1 S",
-            "1973 1974 8 0 8 0 0 0",
-            "1974 1974 4 26 7 0 0 1 S",
-            "1975 1975 5 1 7 0 2 1 S",
-            "1975 1977 8 0 8 0 2 0",
-            "1976 1976 4 30 7 0 2 1 S",
-            "1977 1979 4 22 0 0 2 1 S",
-            "1978 1978 9 1 7 0 2 0",
-            "1979 1979 8 30 7 0 2 0"
-        ],
-        "Malta": [
-            "1973 1973 2 31 7 0 2 1 S",
-            "1973 1973 8 29 7 0 2 0",
-            "1974 1974 3 21 7 0 2 1 S",
-            "1974 1974 8 16 7 0 2 0",
-            "1975 1979 3 15 0 2 0 1 S",
-            "1975 1980 8 15 0 2 0 0",
-            "1980 1980 2 31 7 2 0 1 S"
-        ],
-        "France": [
-            "1916 1916 5 14 7 23 2 1 S",
-            "1916 1919 9 1 0 23 2 0",
-            "1917 1917 2 24 7 23 2 1 S",
-            "1918 1918 2 9 7 23 2 1 S",
-            "1919 1919 2 1 7 23 2 1 S",
-            "1920 1920 1 14 7 23 2 1 S",
-            "1920 1920 9 23 7 23 2 0",
-            "1921 1921 2 14 7 23 2 1 S",
-            "1921 1921 9 25 7 23 2 0",
-            "1922 1922 2 25 7 23 2 1 S",
-            "1922 1938 9 1 6 23 2 0",
-            "1923 1923 4 26 7 23 2 1 S",
-            "1924 1924 2 29 7 23 2 1 S",
-            "1925 1925 3 4 7 23 2 1 S",
-            "1926 1926 3 17 7 23 2 1 S",
-            "1927 1927 3 9 7 23 2 1 S",
-            "1928 1928 3 14 7 23 2 1 S",
-            "1929 1929 3 20 7 23 2 1 S",
-            "1930 1930 3 12 7 23 2 1 S",
-            "1931 1931 3 18 7 23 2 1 S",
-            "1932 1932 3 2 7 23 2 1 S",
-            "1933 1933 2 25 7 23 2 1 S",
-            "1934 1934 3 7 7 23 2 1 S",
-            "1935 1935 2 30 7 23 2 1 S",
-            "1936 1936 3 18 7 23 2 1 S",
-            "1937 1937 3 3 7 23 2 1 S",
-            "1938 1938 2 26 7 23 2 1 S",
-            "1939 1939 3 15 7 23 2 1 S",
-            "1939 1939 10 18 7 23 2 0",
-            "1940 1940 1 25 7 2 0 1 S",
-            "1941 1941 4 5 7 0 0 2 M",
-            "1941 1941 9 6 7 0 0 1 S",
-            "1942 1942 2 9 7 0 0 2 M",
-            "1942 1942 10 2 7 3 0 1 S",
-            "1943 1943 2 29 7 2 0 2 M",
-            "1943 1943 9 4 7 3 0 1 S",
-            "1944 1944 3 3 7 2 0 2 M",
-            "1944 1944 9 8 7 1 0 1 S",
-            "1945 1945 3 2 7 2 0 2 M",
-            "1945 1945 8 16 7 3 0 0",
-            "1976 1976 2 28 7 1 0 1 S",
-            "1976 1976 8 26 7 1 0 0"
-        ],
-        "Latvia": [
-            "1989 1996 2 0 8 2 2 1 S",
-            "1989 1996 8 0 8 2 2 0"
-        ],
-        "Bulg": [
-            "1979 1979 2 31 7 23 0 1 S",
-            "1979 1979 9 1 7 1 0 0",
-            "1980 1982 3 1 6 23 0 1 S",
-            "1980 1980 8 29 7 1 0 0",
-            "1981 1981 8 27 7 2 0 0"
-        ],
-        "Albania": [
-            "1940 1940 5 16 7 0 0 1 S",
-            "1942 1942 10 2 7 3 0 0",
-            "1943 1943 2 29 7 2 0 1 S",
-            "1943 1943 3 10 7 3 0 0",
-            "1974 1974 4 4 7 0 0 1 S",
-            "1974 1974 9 2 7 0 0 0",
-            "1975 1975 4 1 7 0 0 1 S",
-            "1975 1975 9 2 7 0 0 0",
-            "1976 1976 4 2 7 0 0 1 S",
-            "1976 1976 9 3 7 0 0 0",
-            "1977 1977 4 8 7 0 0 1 S",
-            "1977 1977 9 2 7 0 0 0",
-            "1978 1978 4 6 7 0 0 1 S",
-            "1978 1978 9 1 7 0 0 0",
-            "1979 1979 4 5 7 0 0 1 S",
-            "1979 1979 8 30 7 0 0 0",
-            "1980 1980 4 3 7 0 0 1 S",
-            "1980 1980 9 4 7 0 0 0",
-            "1981 1981 3 26 7 0 0 1 S",
-            "1981 1981 8 27 7 0 0 0",
-            "1982 1982 4 2 7 0 0 1 S",
-            "1982 1982 9 3 7 0 0 0",
-            "1983 1983 3 18 7 0 0 1 S",
-            "1983 1983 9 1 7 0 0 0",
-            "1984 1984 3 1 7 0 0 1 S"
-        ],
-        "Austria": [
-            "1920 1920 3 5 7 2 2 1 S",
-            "1920 1920 8 13 7 2 2 0",
-            "1946 1946 3 14 7 2 2 1 S",
-            "1946 1948 9 1 0 2 2 0",
-            "1947 1947 3 6 7 2 2 1 S",
-            "1948 1948 3 18 7 2 2 1 S",
-            "1980 1980 3 6 7 0 0 1 S",
-            "1980 1980 8 28 7 0 0 0"
-        ],
-        "Mauritius": [
-            "1982 1982 9 10 7 0 0 1 S",
-            "1983 1983 2 21 7 0 0 0",
-            "2008 2008 9 0 8 2 0 1 S",
-            "2009 2009 2 0 8 2 0 0"
-        ],
-        "WS": [
-            "2012 9999 8 0 8 3 0 1 D",
-            "2012 9999 3 1 0 4 0 0"
-        ],
-        "NZ": [
-            "1927 1927 10 6 7 2 0 1 S",
-            "1928 1928 2 4 7 2 0 0 M",
-            "1928 1933 9 8 0 2 0 0:30 S",
-            "1929 1933 2 15 0 2 0 0 M",
-            "1934 1940 3 0 8 2 0 0 M",
-            "1934 1940 8 0 8 2 0 0:30 S",
-            "1946 1946 0 1 7 0 0 0 S",
-            "1974 1974 10 1 0 2 2 1 D",
-            "1975 1975 1 0 8 2 2 0 S",
-            "1975 1988 9 0 8 2 2 1 D",
-            "1976 1989 2 1 0 2 2 0 S",
-            "1989 1989 9 8 0 2 2 1 D",
-            "1990 2006 9 1 0 2 2 1 D",
-            "1990 2007 2 15 0 2 2 0 S",
-            "2007 9999 8 0 8 2 2 1 D",
-            "2008 9999 3 1 0 2 2 0 S"
-        ],
-        "Chatham": [
-            "1974 1974 10 1 0 2:45 2 1 D",
-            "1975 1975 1 0 8 2:45 2 0 S",
-            "1975 1988 9 0 8 2:45 2 1 D",
-            "1976 1989 2 1 0 2:45 2 0 S",
-            "1989 1989 9 8 0 2:45 2 1 D",
-            "1990 2006 9 1 0 2:45 2 1 D",
-            "1990 2007 2 15 0 2:45 2 0 S",
-            "2007 9999 8 0 8 2:45 2 1 D",
-            "2008 9999 3 1 0 2:45 2 0 S"
-        ],
-        "Vanuatu": [
-            "1983 1983 8 25 7 0 0 1 S",
-            "1984 1991 2 23 0 0 0 0",
-            "1984 1984 9 23 7 0 0 1 S",
-            "1985 1991 8 23 0 0 0 1 S",
-            "1992 1993 0 23 0 0 0 0",
-            "1992 1992 9 23 0 0 0 1 S"
-        ],
-        "Fiji": [
-            "1998 1999 10 1 0 2 0 1 S",
-            "1999 2000 1 0 8 3 0 0",
-            "2009 2009 10 29 7 2 0 1 S",
-            "2010 2010 2 0 8 3 0 0",
-            "2010 9999 9 18 0 2 0 1 S",
-            "2011 2011 2 1 0 3 0 0",
-            "2012 9999 0 18 0 3 0 0"
-        ],
-        "NC": [
-            "1977 1978 11 1 0 0 0 1 S",
-            "1978 1979 1 27 7 0 0 0",
-            "1996 1996 11 1 7 2 2 1 S",
-            "1997 1997 2 2 7 2 2 0"
-        ],
-        "Cook": [
-            "1978 1978 10 12 7 0 0 0:30 HS",
-            "1979 1991 2 1 0 0 0 0",
-            "1979 1990 9 0 8 0 0 0:30 HS"
-        ],
-        "Tonga": [
-            "1999 1999 9 7 7 2 2 1 S",
-            "2000 2000 2 19 7 2 2 0",
-            "2000 2001 10 1 0 2 0 1 S",
-            "2001 2002 0 0 8 2 0 0"
-        ]
-    },
-    "links": {
-        "America/Kralendijk": "America/Curacao",
-        "America/Lower_Princes": "America/Curacao",
-        "America/Marigot": "America/Guadeloupe",
-        "America/Shiprock": "America/Denver",
-        "America/St_Barthelemy": "America/Guadeloupe",
-        "Antarctica/South_Pole": "Antarctica/McMurdo",
-        "Arctic/Longyearbyen": "Europe/Oslo",
-        "Europe/Bratislava": "Europe/Prague",
-        "Europe/Busingen": "Europe/Zurich",
-        "Europe/Guernsey": "Europe/London",
-        "Europe/Isle_of_Man": "Europe/London",
-        "Europe/Jersey": "Europe/London",
-        "Europe/Ljubljana": "Europe/Belgrade",
-        "Europe/Mariehamn": "Europe/Helsinki",
-        "Europe/Podgorica": "Europe/Belgrade",
-        "Europe/San_Marino": "Europe/Rome",
-        "Europe/Sarajevo": "Europe/Belgrade",
-        "Europe/Skopje": "Europe/Belgrade",
-        "Europe/Vatican": "Europe/Rome",
-        "Europe/Zagreb": "Europe/Belgrade"
     }
 });
