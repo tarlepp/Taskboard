@@ -61,7 +61,6 @@ module.exports = function (grunt) {
         'linker/js/app.js',
 
         // Taskboard specified vendor dependencies
-        'linker/vendor/date.format.js',
         'linker/vendor/json5.js',
         'linker/vendor/underscore.js',
         'linker/vendor/jquery-2.0.3.min.js',
