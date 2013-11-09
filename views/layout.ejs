@@ -27,6 +27,7 @@
     <!--STYLES END-->
 
     <script type="text/javascript">
+        var userObject = <%- JSON.stringify(user) %>;
         var loggedUserId = <%= user.id %>;
         var selectedProjectId = <%= projectId %>;
         var selectedSprintId = <%= sprintId %>;
@@ -339,7 +340,6 @@
 <script src="/linker/js/socket.io.js"></script>
 <script src="/linker/js/sails.io.js"></script>
 <script src="/linker/js/app.js"></script>
-<script src="/linker/vendor/date.format.js"></script>
 <script src="/linker/vendor/json5.js"></script>
 <script src="/linker/vendor/underscore.js"></script>
 <script src="/linker/vendor/jquery-2.0.3.min.js"></script>
