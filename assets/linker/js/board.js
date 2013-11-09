@@ -14,6 +14,11 @@ jQuery(document).ready(function() {
         animate: false
     });
 
+    if (typeof userObject !== 'undefined') {
+        // Set language
+        moment.lang(userObject.language);
+    }
+
     // Global tooltip event
     initTooltips(jQuery(document));
 

@@ -559,28 +559,21 @@ function initProjectForm(modal, edit, parameters) {
     var containerEnd = jQuery(".dateEnd", modal);
     var inputStart = containerStart.find("input");
     var inputEnd = containerEnd.find("input");
-    var bitsStart = inputStart.val().split("-");
-    var bitsEnd = inputEnd.val().split("-");
     var valueStart = null;
     var valueEnd = null;
     var dateMin = null;
     var dateMax = null;
-
-    if (bitsStart.length === 3) {
-        valueStart = new Date(bitsStart[0], bitsStart[1] - 1, bitsStart[2], 3, 0, 0);
-    }
-
-    if (bitsEnd.length === 3) {
-        valueEnd = new Date(bitsEnd[0], bitsEnd[1] - 1, bitsEnd[2], 3, 0, 0);
-    }
 
     /**
      * We are editing project so we must check that project dates don't overlap
      * with existing sprints.
      */
     if (edit) {
-        var sprintFirst = _.min(myViewModel.sprints(), function(sprint) { return sprint.dateStartObject().getTime(); } );
-        var sprintLast = _.max(myViewModel.sprints(), function(sprint) { return sprint.dateEndObject().getTime(); } );
+        valueStart = moment(inputStart.val(), 'YYYY-MM-DD');
+        valueEnd = moment(inputEnd.val(), 'YYYY-MM-DD');
+
+        var sprintFirst = _.min(myViewModel.sprints(), function(sprint) { return sprint.dateStartObject(); } );
+        var sprintLast = _.max(myViewModel.sprints(), function(sprint) { return sprint.dateEndObject(); } );
 
         dateMin = sprintFirst ? sprintFirst.dateStartObject() : null;
         dateMax = sprintLast ? sprintLast.dateEndObject() : null;
@@ -592,22 +585,39 @@ function initProjectForm(modal, edit, parameters) {
         calendarWeeks: true
     })
     .on("changeDate", function(event) {
-        if (valueEnd && event.date.format("yyyy-mm-dd") > valueEnd.format("yyyy-mm-dd")) {
+        var eventDate = moment(
+            new Date(
+                Date.UTC(
+                    event.date.getFullYear(),
+                    event.date.getMonth(),
+                    event.date.getDate(),
+                    event.date.getHours(),
+                    event.date.getMinutes(),
+                    event.date.getSeconds()
+                )
+            )
+        ).tz("Etc/Universal");
+
+        if (valueEnd && eventDate > valueEnd) {
             if (valueStart) {
-                containerStart.val(valueStart.format("yyyy-mm-dd"));
+                if (!moment.isMoment(valueStart)) {
+                    valueStart = moment(valueStart);
+                }
+
+                inputStart.val(valueStart.format("YYYY-MM-DD"));
             } else {
-                containerStart.val("");
+                inputStart.val("");
             }
 
             makeMessage("Start date cannot be later than end date.", "error", {});
 
             containerStart.closest(".control-group").addClass("error");
-        } else if (edit && event.date.format("yyyy-mm-dd") > dateMin.format("yyyy-mm-dd")) {
-            makeMessage("Start date overlaps with project sprints. Start date cannot be before " + dateMin.format("yyyy-mm-dd") + ".", "error", {});
+        } else if (edit && eventDate > dateMin) {
+            makeMessage("Start date overlaps with project sprints. Start date cannot be before " + dateMin.format(userObject.momentFormatDate) + ".", "error", {});
 
             containerStart.closest(".control-group").addClass("error");
         } else {
-            valueStart = new Date(event.date);
+            valueStart = eventDate;
 
             containerStart.bootstrapDP("hide");
             containerStart.closest(".control-group").removeClass("error");
@@ -620,22 +630,39 @@ function initProjectForm(modal, edit, parameters) {
         calendarWeeks: true
     })
     .on("changeDate", function(event) {
-        if (valueStart && event.date.format("yyyy-mm-dd") < valueStart.format("yyyy-mm-dd")) {
+        var eventDate = moment(
+            new Date(
+                Date.UTC(
+                    event.date.getFullYear(),
+                    event.date.getMonth(),
+                    event.date.getDate(),
+                    event.date.getHours(),
+                    event.date.getMinutes(),
+                    event.date.getSeconds()
+                )
+            )
+        ).tz("Etc/Universal");
+
+        if (valueStart &&  eventDate < valueStart) {
             if (valueEnd) {
-                containerEnd.val(valueEnd.format("yyyy-mm-dd"));
+                if (!moment.isMoment(valueEnd)) {
+                    valueEnd = moment(valueEnd);
+                }
+
+                inputEnd.val(valueEnd.format("YYYY-MM-DD"));
             } else {
-                containerEnd.val("");
+                inputEnd.val("");
             }
 
             makeMessage("End date cannot be before than start date.", "error", {});
 
             containerEnd.closest(".control-group").addClass("error");
-        } else if (edit && event.date.format("yyyy-mm-dd") < dateMax.format("yyyy-mm-dd")) {
-            makeMessage("End date overlaps with project sprints. End date must be at least " + dateMax.format("yyyy-mm-dd") + ".", "error", {});
+        } else if (edit && eventDate < dateMax) {
+            makeMessage("End date overlaps with project sprints. End date must be at least " + dateMax.format(userObject.momentFormatDate) + ".", "error", {});
 
             containerEnd.closest(".control-group").addClass("error");
         } else {
-            valueEnd = new Date(event.date);
+            valueEnd = eventDate;
 
             containerEnd.bootstrapDP("hide");
             containerEnd.closest(".control-group").removeClass("error");
