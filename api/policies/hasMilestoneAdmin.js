@@ -27,7 +27,7 @@ module.exports = function hasMilestoneAdmin(request, response, next) {
             }
         });
     } else if (!isNaN(projectId)) { // Check that current user has update access to specified project
-        AuthService.hasProjectUpdate(request.user, projectId, function(error, hasRight) {
+        AuthService.hasProjectAdmin(request.user, projectId, function(error, hasRight) {
             if (error) { // Error occurred
                 response.send(error, error.status ? error.status : 500);
             } else if (!hasRight) { // No admin rights

@@ -453,7 +453,7 @@ function checkSprintDates(date, type, sprintId, showMessage) {
 /**
  * Function checks that given date is valid for current project.
  *
- * @param   {Date}      date        Date to check
+ * @param   {moment}    date        Date as in moment is object to check
  * @param   {Boolean}   showMessage Make possible error message
  *
  * @returns {Boolean|String}        Boolean true if ok, otherwise error message.
@@ -463,10 +463,8 @@ function checkProjectDates(date, showMessage) {
     var dateMax = myViewModel.project().dateEndObject();
 
     // Date conflicts with project duration
-    if ((date.format('yyyy-mm-dd') < dateMin.format('yyyy-mm-dd'))
-        || (date.format('yyyy-mm-dd') > dateMax.format('yyyy-mm-dd'))
-    ) {
-        var message = 'Given date conflicts with project duration. Date must be between ' + dateMin.format('yyyy-mm-dd') + ' and ' + dateMax.format('yyyy-mm-dd')  + '.'
+    if (date < dateMin || date > dateMax) {
+        var message = 'Given date conflicts with project duration. Date must be between ' + dateMin.format(userObject.momentFormatDate) + ' and ' + dateMax.format(userObject.momentFormatDate)  + '.';
 
         if (showMessage) {
             makeMessage(message, 'error', {});
