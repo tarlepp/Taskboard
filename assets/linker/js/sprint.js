@@ -238,20 +238,15 @@ function initSprintForm(modal, edit, parameters) {
     var containerEnd = jQuery(".dateEnd", modal);
     var inputStart = containerStart.find("input");
     var inputEnd = containerEnd.find("input");
-    var bitsStart = inputStart.val().split("-");
-    var bitsEnd = inputEnd.val().split("-");
     var valueStart = null;
     var valueEnd = null;
     var dateMin = myViewModel.project().dateStartObject();
     var dateMax = myViewModel.project().dateEndObject();
     var sprintId = edit ? myViewModel.sprint().id() : 0;
 
-    if (bitsStart.length === 3) {
-        valueStart = new Date(bitsStart[0], bitsStart[1] - 1, bitsStart[2], 3, 0, 0);
-    }
-
-    if (bitsEnd.length === 3) {
-        valueEnd = new Date(bitsEnd[0], bitsEnd[1] - 1, bitsEnd[2], 3, 0, 0);
+    if (edit) {
+        valueStart = moment(inputStart.val(), 'YYYY-MM-DD');
+        valueEnd = moment(inputEnd.val(), 'YYYY-MM-DD');
     }
 
     containerStart.bootstrapDP({
@@ -260,26 +255,41 @@ function initSprintForm(modal, edit, parameters) {
         calendarWeeks: true
     })
     .on("changeDate", function(event) {
-        if (valueEnd && event.date.format("yyyy-mm-dd") > valueEnd.format("yyyy-mm-dd")) {
+        var eventDate = moment(
+            new Date(
+                Date.UTC(
+                    event.date.getFullYear(),
+                    event.date.getMonth(),
+                    event.date.getDate(),
+                    event.date.getHours(),
+                    event.date.getMinutes(),
+                    event.date.getSeconds()
+                )
+            )
+        ).tz("Etc/Universal");
+
+        if (valueEnd && eventDate > valueEnd) {
             if (valueStart) {
-                containerStart.val(valueStart.format("yyyy-mm-dd"));
+                if (!moment.isMoment(valueStart)) {
+                    valueStart = moment(valueStart);
+                }
+
+                inputStart.val(valueStart.format("YYYY-MM-DD"));
             } else {
-                containerStart.val("");
+                inputStart.val("");
             }
 
             makeMessage("Start date cannot be later than end date.", "error", {});
 
             containerStart.closest(".input-group").addClass("has-error");
-        } else if ((event.date.format("yyyy-mm-dd") < dateMin.format("yyyy-mm-dd"))
-            || (event.date.format("yyyy-mm-dd") > dateMax.format("yyyy-mm-dd"))
-        ) {
-            makeMessage("Start date conflicts with project duration. Start date must be between " + dateMin.format("yyyy-mm-dd") + " and " + dateMax.format("yyyy-mm-dd")  + ".", "error", {});
+        } else if (eventDate < dateMin || eventDate > dateMax) {
+            makeMessage("Start date conflicts with project duration. Start date must be between " + dateMin.format(userObject.momentFormatDate) + " and " + dateMax.format(userObject.momentFormatDate)  + ".", "error", {});
 
             containerStart.closest(".input-group").addClass("has-error");
-        } else if (checkSprintDates(event.date, 1, sprintId, true) !== true) {
+        } else if (checkSprintDates(eventDate, 0, sprintId, true) !== true) {
             containerStart.closest(".input-group").addClass("has-error");
         } else {
-            valueStart = new Date(event.date);
+            valueStart = eventDate;
 
             containerStart.bootstrapDP("hide");
             containerStart.closest(".input-group").removeClass("has-error");
@@ -292,26 +302,41 @@ function initSprintForm(modal, edit, parameters) {
         calendarWeeks: true
     })
     .on("changeDate", function(event) {
-        if (valueStart && event.date.format("yyyy-mm-dd") < valueStart.format("yyyy-mm-dd")) {
+        var eventDate = moment(
+            new Date(
+                Date.UTC(
+                    event.date.getFullYear(),
+                    event.date.getMonth(),
+                    event.date.getDate(),
+                    event.date.getHours(),
+                    event.date.getMinutes(),
+                    event.date.getSeconds()
+                )
+            )
+        ).tz("Etc/Universal");
+
+        if (valueStart && eventDate < valueStart) {
             if (valueEnd) {
-                containerEnd.val(valueEnd.format("yyyy-mm-dd"));
+                if (!moment.isMoment(valueEnd)) {
+                    valueEnd = moment(valueEnd);
+                }
+
+                inputEnd.val(valueEnd.format("YYYY-MM-DD"));
             } else {
-                containerEnd.val("");
+                inputEnd.val("");
             }
 
             makeMessage("End date cannot be before than start date.", "error", {});
 
             containerEnd.closest(".input-group").addClass("has-error");
-        } else if ((event.date.format("yyyy-mm-dd") < dateMin.format("yyyy-mm-dd"))
-            || (event.date.format("yyyy-mm-dd") > dateMax.format("yyyy-mm-dd"))
-        ) {
-            makeMessage("End date conflicts with project duration. End date must be between " + dateMin.format("yyyy-mm-dd") + " and " + dateMax.format("yyyy-mm-dd")  + ".", "error", {});
+        } else if (eventDate < dateMin || eventDate > dateMax) {
+            makeMessage("End date conflicts with project duration. End date must be between " + dateMin.format(userObject.momentFormatDate) + " and " + dateMax.format(userObject.momentFormatDate)  + ".", "error", {});
 
             containerStart.closest(".input-group").addClass("has-error");
-        } else if (checkSprintDates(event.date, 1, sprintId, true) !== true) {
+        } else if (checkSprintDates(eventDate, 1, sprintId, true) !== true) {
             containerStart.closest(".input-group").addClass("has-error");
         } else {
-            valueEnd = new Date(event.date);
+            valueEnd = eventDate;
 
             containerEnd.bootstrapDP("hide");
             containerEnd.closest(".input-group").removeClass("has-error");

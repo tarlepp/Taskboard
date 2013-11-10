@@ -214,17 +214,15 @@ function validateDateRange(context, input, group, label, date, errors) {
     var dateSelf = moment(dateBitsSelf, "YYYY-MM-DD");
     var datePair = moment(dateBitsPair, "YYYY-MM-DD");
 
-    if ((role == 'start' && dateSelf > datePair)
-        || (role == 'end' && dateSelf < datePair)
-        ) {
+    if ((role == 'start' && dateSelf > datePair) || (role == 'end' && dateSelf < datePair)) {
         errors.push("Invalid date range.");
 
         return false;
     }
 
     if (type == 'project' && edit) {
-        var sprintFirst = _.min(myViewModel.sprints(), function(sprint) { return sprint.dateStartObject().seconds(); } );
-        var sprintLast = _.max(myViewModel.sprints(), function(sprint) { return sprint.dateEndObject().seconds(); } );
+        var sprintFirst = _.min(myViewModel.sprints(), function(sprint) { return sprint.dateStartObject(); } );
+        var sprintLast = _.max(myViewModel.sprints(), function(sprint) { return sprint.dateEndObject(); } );
 
         var dateMin = sprintFirst ? sprintFirst.dateStartObject() : null;
         var dateMax = sprintLast ? sprintLast.dateEndObject() : null;
@@ -392,7 +390,7 @@ function validateLength(context, input, group, label, value, errors) {
  *
  * @param   {String}    dateText    Date must be in yyyy-mm-dd or yyyy.mm.dd format
  *
- * @returns {boolean}
+ * @returns {Boolean}
  */
 function checkDate(dateText) {
     if (typeof(dateText) == 'undefined') {
@@ -415,7 +413,7 @@ function checkDate(dateText) {
 /**
  * Method checks if given sprint date conflicts with existing project sprint durations.
  *
- * @param   {Date}      date        Date object to check
+ * @param   {moment}    date        Moment.js date object to check
  * @param   {Number}    type        Date type, 0 = start, 1 = end
  * @param   {Number}    sprintId    Current sprint ID, this is skipped in test if give ( > 0 )
  * @param   {Boolean}   showMessage Return possible error message
@@ -423,20 +421,20 @@ function checkDate(dateText) {
  * @returns {Boolean|String}        Boolean true if ok, otherwise error message
  */
 function checkSprintDates(date, type, sprintId, showMessage) {
-    var check = date.format('yyyy-mm-dd');
     var errors = [];
+    var output = true;
 
+    // Iterate current sprints
     jQuery.each(myViewModel.sprints(), function(key, sprint) {
-        var start = ko.toJS(sprint.dateStartObject()).format('yyyy-mm-dd');
-        var end = ko.toJS(sprint.dateEndObject()).format('yyyy-mm-dd');
+        var start = sprint.dateStartObject();
+        var end = sprint.dateEndObject();
 
-        if (sprintId != ko.toJS(sprint.id()) && start <= check && end >= check) {
+        if (sprintId !== sprint.id() && start <= date && end >= date) {
             errors.push(ko.toJS(sprint.formattedTitle()));
         }
     });
 
-    var output = true;
-
+    // Errors found...
     if (errors.length > 0) {
         var message = type === 0 ? "Start " : "End ";
 
