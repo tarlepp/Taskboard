@@ -227,13 +227,27 @@ function initMilestoneForm(context, parameters) {
         calendarWeeks: true
     })
     .on("changeDate", function(event) {
-        var isValid = checkProjectDates(event.date, false);
+        var eventDate = moment(
+            new Date(
+                Date.UTC(
+                    event.date.getFullYear(),
+                    event.date.getMonth(),
+                    event.date.getDate(),
+                    event.date.getHours(),
+                    event.date.getMinutes(),
+                    event.date.getSeconds()
+                )
+            )
+        ).tz("Etc/Universal");
+
+        var isValid = checkProjectDates(eventDate, false);
 
         if (isValid !== true) {
             makeMessage(isValid, "error");
 
             containerDeadline.closest(".input-group").addClass("has-error");
         } else {
+            containerDeadline.closest(".input-group").removeClass("has-error");
             containerDeadline.bootstrapDP("hide");
         }
     });

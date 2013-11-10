@@ -5,7 +5,7 @@
  * @description :: Contains logic for handling requests.
  */
 var jQuery = require("jquery");
-var async = require("async");
+
 
 module.exports = {
     /**
@@ -22,6 +22,10 @@ module.exports = {
                 // Determine user role in this project
                 role: function(callback) {
                     AuthService.hasProjectAccess(req.user, projectId, callback, true);
+                },
+                // Fetch project data
+                project: function(callback) {
+                    DataService.getProject(projectId, callback);
                 }
             },
             function (error, data) {
@@ -29,6 +33,7 @@ module.exports = {
                     res.send(error, error.status ? error.status : 500);
                 } else {
                     data.layout = req.isAjax ? "layout_ajax" : "layout";
+                    data.currentUser = req.user;
                     data.projectId = projectId;
 
                     res.view(data);
@@ -52,7 +57,6 @@ module.exports = {
                 role: function(callback) {
                     AuthService.hasMilestoneAccess(req.user, milestoneId, callback, true);
                 },
-
                 // Fetch milestone data
                 milestone: function(callback) {
                     DataService.getMilestone(milestoneId, callback)
@@ -63,6 +67,7 @@ module.exports = {
                     res.send(error, error.status ? error.status : 500);
                 } else {
                     data.layout = req.isAjax ? "layout_ajax" : "layout";
+                    data.currentUser = req.user;
 
                     res.view(data);
                 }
@@ -81,6 +86,7 @@ module.exports = {
 
         var data = {
             layout: req.isAjax ? "layout_ajax" : "layout",
+            currentUser: req.user,
             role: 0,
             milestone: {
                 data: false,
