@@ -1,0 +1,27 @@
+{
+  "name": "Taskboard",
+  "version": "0.5.0",
+  "homepage": "https://github.com/tarlepp/Taskboard",
+  "authors": [
+    "tarlepp <tarmo.leppanen@kase.fi>"
+  ],
+  "description": "a Sails application to mimic \"scrum-ban\" taskboard.",
+  "main": "assets/linker/styles/screen.css",
+  "directory": "assets/linker/bower_components",
+  "keywords": [
+    "taskboard",
+    "scrum",
+    "kanban"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "font-awesome": "~4.0.3"
+  }
+}
