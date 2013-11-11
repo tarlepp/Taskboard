@@ -17,7 +17,8 @@
     "gravatar": "~1.0.6",
     "async": "~0.2.9",
     "moment": "~2.3.1",
-    "moment-timezone": "~0.0.3"
+    "moment-timezone": "~0.0.3",
+    "bower": "~1.2.7"
   },
   "devDependencies": {
     "supertest": "~0.8.0",
