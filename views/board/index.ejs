@@ -1,7 +1,7 @@
 <div data-bind="if: loading().length">
     <div id="loading" class="panel panel-info">
         <div class="panel-body text-center text-info">
-            <icon class="icon-spinner icon-spin icon-large"></icon>&nbsp;&nbsp;&nbsp;Loading data...
+            <i class="fa fa-spinner fa-spin fa-large"></i>&nbsp;&nbsp;&nbsp;Loading data...
         </div>
     </div>
 </div>
@@ -54,7 +54,7 @@
                     >
                         <button data-bind="
                             click: actionStoryAdd.bind($data, $root.project().id(), $root.sprint().id())
-                        "><icon class="icon-plus"></icon></button>
+                        "><i class="fa fa-plus"></i></button>
                     </td>
 
                     <!-- ko foreach: $root.sortedPhases -->
@@ -121,7 +121,7 @@
                     ">
                         <button data-bind="
                             click: addNewTask
-                        "><icon class="icon-plus"></icon></button>
+                        "><i class="fa fa-plus"></i></button>
                     </td>
 
                     <!-- ko foreach: $root.sortedPhases -->

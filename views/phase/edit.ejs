@@ -9,7 +9,7 @@
         <thead>
         <tr>
             <th colspan="2">Name of the phase</th>
-            <th><i class="icon icon-question-sign tooltipTitle" title="Select phase which indicates that task is done.<br /><br />Tasks in this phase are not assigned to new story on splitting story."></i></th>
+            <th><i class="fa fa-question-sign tooltipTitle" title="Select phase which indicates that task is done.<br /><br />Tasks in this phase are not assigned to new story on splitting story."></i></th>
             <th colspan="3">Target task count</th>
         </tr>
         </thead>
@@ -17,7 +17,7 @@
         <% _.each(phases, function(phase) { %>
         <tr class="form-group" data-phase-id="<%= phase.id %>">
             <td>
-                <i class="icon icon-resize-vertical"></i>
+                <i class="fa fa-resize-vertical"></i>
             </td>
             <td>
                 <input type="text" name="title[]" class="form-control" value="<%= phase.title %>" placeholder="enter phase name" />
@@ -34,7 +34,7 @@
             <td></td>
             <td>
                 <button class="btn btn-danger btn-small phaseDelete" type="button">
-                    <i class="icon icon-trash"></i>
+                    <i class="fa fa-trash"></i>
                 </button>
             </td>
         </tr>
@@ -47,7 +47,7 @@
     <table id="projectPhasesNew">
         <tr class="control-group">
             <td>
-                <i class="icon-resize-vertical"></i>
+                <i class="fa fa-resize-vertical"></i>
             </td>
             <td>
                 <input type="text" name="title[]" class="form-control" value="" placeholder="enter phase name" />
@@ -64,7 +64,7 @@
             <td></td>
             <td>
                 <button class="btn btn-danger btn-small phaseDelete" type="button">
-                    <i class="icon icon-trash"></i>
+                    <i class="fa fa-trash"></i>
                 </button>
             </td>
         </tr>

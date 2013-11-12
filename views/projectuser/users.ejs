@@ -21,7 +21,7 @@
                    data-add-new-user="true"
                    data-project-id="<%= project.id %>"
                 >
-                    <i class="icon icon-plus"></i>
+                    <i class="fa fa-plus"></i>
                 </a>
             </th>
             <% } %>
@@ -40,10 +40,9 @@
                 <div class="tooltipTitle" title="You cannot remove primary project manager"
                     data-qtip-options='{ "position": {"my": "center right", "at": "center left"} }'
                 >
-                    <span class="btn btn-default btn-danger btn-icon  disabled">
-                    <i class="icon icon-remove"></i>
-                </span>
-
+                    <span class="btn btn-default btn-danger btn-icon disabled">
+                        <i class="fa fa-trash-o"></i>
+                    </span>
                 </div>
                 <% } else { %>
                 <a href="javascript: void(0);" class="btn btn-default btn-danger btn-icon tooltipTitle" title="Remove this user from project"
@@ -52,7 +51,7 @@
                     data-project-id="<%= project.id %>"
                     data-user-id="<%= user.id %>"
                 >
-                    <i class="icon icon-remove"></i>
+                    <i class="fa fa-trash-o"></i>
                 </a>
                 <% } %>
             </td>

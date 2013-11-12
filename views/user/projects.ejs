@@ -7,7 +7,7 @@
                 data-attach-user="true"
                 data-user-id="<%= user.id %>"
             >
-                <i class="icon icon-plus"></i>
+                <i class="fa fa-plus"></i>
             </a>
         </th>
         <th class="col-md-9">Project</th>
@@ -21,7 +21,7 @@
     <tr>
         <td>
             <a class="actionMenu-toggle btn btn-icon btn-default" href="javascript: void(0);" data-popover="true">
-                <i class="icon icon-chevron-down"></i>
+                <i class="fa fa-chevron-down"></i>
             </a>
             <div class="hidden">
                 <div class="actionMenu">
@@ -32,7 +32,7 @@
                                 data-user-id="<%= user.id %>"
                                 data-action="projectEdit"
                             >
-                                <i class="icon icon-wrench"></i> Edit project
+                                <i class="fa fa-wrench"></i> Edit project
                             </a>
                         </li>
                         <% if (project.role < -1 || currentUser.admin === true) { %>
@@ -45,7 +45,7 @@
                                 data-user-id="<%= user.id %>"
                                 data-action="deattachUser"
                             >
-                                <i class="icon icon-remove"></i> Remove user
+                                <i class="fa fa-trash-o"></i> Remove user
                             </a>
                         </li>
                         <% } %>
@@ -56,7 +56,7 @@
                                 data-user-id="<%= user.id %>"
                                 data-action="projectDelete"
                             >
-                                <i class="icon icon-remove"></i> Delete project
+                                <i class="fa fa-trash-o"></i> Delete project
                             </a>
                         </li>
                         <% } %>

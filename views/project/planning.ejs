@@ -12,7 +12,7 @@
         <% _.each(stories, function(story) { %>
             <% if(story.sprintId === 0 || story.sprintId === null) { %>
             <li class="list-group-item" data-story-id="<%= story.id %>">
-                <i class="icon icon-wrench pull-right tooltipTitle event" title="Edit story"
+                <i class="fa fa-wrench pull-right tooltipTitle event" title="Edit story"
                     data-id="<%= story.id %>"
                     data-type="story"
                 ></i>
@@ -30,13 +30,13 @@
         <% _.each(sprints, function(sprint) { %>
             <div class="panel panel-info">
                 <div class="panel-heading alert-info">
-                    <i class="icon icon-wrench pull-right tooltipTitle event" title="Edit sprint"
+                    <i class="fa fa-wrench pull-right tooltipTitle event" title="Edit sprint"
                        data-id="<%= sprint.id %>"
                        data-type="sprint"
                     ></i>
 
                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#backlogAccordion" href="#sprintContent_<%= sprint.id %>">
-                        <i class="chevron icon icon-chevron-right icon-chevron-right"></i>
+                        <i class="chevron fa fa-chevron-right"></i>
                         <%= sprint.title %>
 
                         <span class="pull-right text-small">
@@ -50,7 +50,7 @@
                         <% _.each(stories, function(story) { %>
                             <% if(story.sprintId === sprint.id) { %>
                             <li class="list-group-item" data-story-id="<%= story.id %>">
-                                <i class="icon icon-wrench pull-right tooltipTitle event" title="Edit story"
+                                <i class="fa fa-wrench pull-right tooltipTitle event" title="Edit story"
                                     data-id="<%= story.id %>"
                                     data-type="story"
                                 ></i>

@@ -44,7 +44,7 @@
                data-project-id="<%= milestone.data.projectId %>"
                data-milestone-id="<%= milestone.data.id %>"
             >
-                <i class="icon icon-plus"></i>
+                <i class="fa fa-plus"></i>
             </a>
         </th>
         <th class="col-md-6">Story</th>
@@ -58,7 +58,7 @@
     <tr>
         <td>
             <a class="actionMenu-toggle btn btn-icon btn-default" href="javascript: void(0);" data-popover="true">
-                <i class="icon icon-chevron-down"></i>
+                <i class="fa fa-chevron-down"></i>
             </a>
 
             <div class="hidden">
@@ -66,20 +66,20 @@
                     <ul class="actionMenu-actions">
                         <li>
                             <a href="javascript: void(0);" data-story-id="<%= story.id %>" data-milestone-id="<%= milestone.data.id %>" data-action="storyEdit">
-                                <i class="icon icon-wrench"></i> Edit story
+                                <i class="fa fa-wrench"></i> Edit story
                             </a>
                         </li>
 
                         <% if (role !== 0) { %>
                         <li>
                             <a href="javascript: void(0);" data-story-id="<%= story.id %>" data-milestone-id="<%= milestone.data.id %>" data-action="storySplit">
-                                <i class="icon icon-code-fork"></i> Split story
+                                <i class="fa fa-code-fork"></i> Split story
                             </a>
                         </li>
                         <li class="divider"></li>
                         <li>
                             <a href="javascript: void(0);" data-story-id="<%= story.id %>" data-milestone-id="<%= milestone.data.id %>" data-action="storyDelete" class="text-danger">
-                                <i class="icon icon-remove"></i> Delete story
+                                <i class="fa fa-trash-o"></i> Delete story
                             </a>
                         </li>
                         <% } %>
