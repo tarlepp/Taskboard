@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="/linker/vendor/bootstrap-datepicker/datepicker.css">
     <link rel="stylesheet" href="/linker/vendor/bootstrap-select/bootstrap-select.css">
     <link rel="stylesheet" href="/linker/vendor/qTip/jquery.qtip.css">
-    <link rel="stylesheet" href="/linker/vendor/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="/linker/bower_components/font-awesome/css/font-awesome.css">
     <link rel="stylesheet" href="/linker/styles/form.css">
     <link rel="stylesheet" href="/linker/styles/layout.css">
     <link rel="stylesheet" href="/linker/styles/modal.css">
@@ -62,7 +62,7 @@
                                data-placement="bottom"
                                data-bind="click: $root.actionProjectAdd"
                             >
-                                <i class="icon-plus"></i>
+                                <i class="fa fa-plus"></i>
                             </a>
                         </div>
                         <div data-bind="visible: project()">
@@ -71,7 +71,7 @@
                                data-hover="dropdown"
                                data-delay="100"
                             >
-                                <i class="icon-wrench"></i>
+                                <i class="fa fa-wrench"></i>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="nav-header text-info">Basic functions</li>
@@ -79,7 +79,7 @@
                                     <a href="javascript: void(0);"
                                        data-bind="click: $root.actionProjectAdd"
                                     >
-                                        <i class="icon-plus"></i>
+                                        <i class="fa fa-plus"></i>
                                         Add new project
                                     </a>
                                 </li>
@@ -87,7 +87,7 @@
                                     <a href="javascript: void(0);"
                                        data-bind="click: $root.actionProjectEdit"
                                     >
-                                        <i class="icon-wrench"></i>
+                                        <i class="fa fa-wrench"></i>
                                         Edit project
                                     </a>
                                 </li>
@@ -95,7 +95,7 @@
                                     <a href="javascript: void(0);"
                                        data-bind="click: $root.actionProjectBacklog"
                                     >
-                                        <i class="icon-list-ol"></i>
+                                        <i class="fa fa-list-ol"></i>
                                         Project backlog
                                     </a>
                                 </li>
@@ -103,7 +103,7 @@
                                     <a href="javascript: void(0);"
                                        data-bind="click: $root.actionProjectMilestones"
                                     >
-                                        <i class="icon-gear"></i>
+                                        <i class="fa fa-gear"></i>
                                         Milestones
                                     </a>
                                 </li>
@@ -115,7 +115,7 @@
                                     <a href="javascript: void(0);"
                                        data-bind="click: $root.actionPhasesEdit"
                                     >
-                                        <i class="icon-reorder icon-rotate-90"></i>
+                                        <i class="fa fa-bars fa-rotate-90"></i>
                                         Edit phases
                                     </a>
                                 </li>
@@ -125,7 +125,7 @@
                                     <a href="javascript: void(0);"
                                         data-bind="click: $root.actionProjectUsers"
                                     >
-                                        <i class="icon-user"></i>
+                                        <i class="fa fa-user"></i>
                                         Users
                                     </a>
                                 </li>
@@ -133,7 +133,7 @@
                                     <a href="javascript: void(0);"
                                        data-bind="click: $root.actionProjectPlanning"
                                     >
-                                        <i class="icon-cogs"></i>
+                                        <i class="fa fa-cogs"></i>
                                         Planning view
                                     </a>
                                 </li>
@@ -144,7 +144,7 @@
                                     <a href="javascript: void(0);" class="text-danger"
                                        data-bind="click: $root.actionProjectDelete"
                                     >
-                                        <i class="icon-trash"></i>
+                                        <i class="fa fa-trash-o"></i>
                                         Delete project
                                     </a>
                                 </li>
@@ -178,7 +178,7 @@
                                     visible: $root.role() < 0
                                 "
                             >
-                                <i class="icon-plus"></i>
+                                <i class="fa fa-plus"></i>
                             </a>
                         </div>
                         <div data-bind="visible: sprint()">
@@ -187,7 +187,7 @@
                                data-hover="dropdown"
                                data-delay="100"
                             >
-                                <i class="icon-wrench"></i>
+                                <i class="fa fa-wrench"></i>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="nav-header text-info">Basic functions</li>
@@ -197,7 +197,7 @@
                                        data-placement="bottom"
                                        data-bind="click: $root.actionSprintAdd"
                                     >
-                                        <i class="icon-plus"></i>
+                                        <i class="fa fa-plus"></i>
                                         Add new sprint
                                     </a>
                                 </li>
@@ -206,7 +206,7 @@
                                     <a href="javascript: void(0);"
                                        data-bind="click: $root.actionSprintEdit"
                                     >
-                                        <i class="icon-wrench"></i>
+                                        <i class="fa fa-wrench"></i>
                                         Edit sprint
                                     </a>
                                 </li>
@@ -214,7 +214,7 @@
                                     <a href="javascript: void(0);"
                                        data-bind="click: $root.actionSprintBacklog"
                                     >
-                                        <i class="icon-list-ol"></i>
+                                        <i class="fa fa-list-ol"></i>
                                         Sprint backlog
                                     </a>
                                 </li>
@@ -225,7 +225,7 @@
                                     <a href="javascript: void(0);" class="text-danger"
                                        data-bind="click: $root.actionSprintDelete"
                                     >
-                                        <i class="icon-trash"></i>
+                                        <i class="fa fa-trash-o"></i>
                                         Delete sprint
                                     </a>
                                 </li>
@@ -255,7 +255,7 @@
                         <a href="javascript: void(0);"
                             data-bind="click: $root.usersOpen"
                         >
-                            <i class="icon-user"></i>
+                            <i class="fa fa-user"></i>
                             Users
                         </a>
                     </li>
@@ -266,14 +266,14 @@
                 data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
             >
                 <a href="javascript: void(0);">
-                    <i class="icon-question-sign"></i>
+                    <i class="fa fa-question-sign"></i>
                 </a>
             </li>
             <li class="navbar-icon navbar-user tooltipTitle" title="<%= user.fullName() %>"
                 data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
             >
                 <a href="javascript: void(0);" data-user-id="<%= user.id %>">
-                    <i id="user-icon" class="icon-user" style="display: none;"></i>
+                    <i id="user-icon" class="fa fa-user" style="display: none;"></i>
                     <img src="<%= user.gravatarImage() %>" onerror="this.style.display = 'none'; document.getElementById('user-icon').style.display = '';" />
 
                     <span><%= user.username %></span>
@@ -283,7 +283,7 @@
                 data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
             >
                 <a href="/logout">
-                    <i class="icon-signout text-danger"></i>
+                    <i class="fa fa-sign-out text-danger"></i>
                 </a>
             </li>
 
@@ -307,17 +307,17 @@
                 <ul>
                     <li>
                         <a href="<%= packageJson.homepage %>" target="_blank">
-                            <i class="icon-github"></i>GitHub
+                            <i class="fa fa-github"></i>GitHub
                         </a>
                     </li>
                     <li>
                         <a href="<%= packageJson.bugs.url %>" target="_blank">
-                            <i class="icon-bug"></i>Issues
+                            <i class="fa fa-bug"></i>Issues
                         </a>
                     </li>
                     <li>
                         <a href="https://github.com/tarlepp/" target="_blank">
-                            <i class="icon-user"></i><%= packageJson.author %>
+                            <i class="fa fa-user"></i><%= packageJson.author %>
                         </a>
                     </li>
                 </ul>
@@ -328,7 +328,7 @@
 
 <div id="placeholderLoading" class="hidden">
     <div class="text-center">
-        <icon class="icon-spinner icon-spin icon-large"></icon>&nbsp;&nbsp;&nbsp;<span class="text-muted">Loading data...</span>
+        <i class="fa fa-spinner fa-spin fa-large"></i>&nbsp;&nbsp;&nbsp;<span class="text-muted">Loading data...</span>
     </div>
 </div>
 

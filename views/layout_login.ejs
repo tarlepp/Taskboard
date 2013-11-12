@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="/linker/vendor/bootstrap-datepicker/datepicker.css">
     <link rel="stylesheet" href="/linker/vendor/bootstrap-select/bootstrap-select.css">
     <link rel="stylesheet" href="/linker/vendor/qTip/jquery.qtip.css">
-    <link rel="stylesheet" href="/linker/vendor/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="/linker/bower_components/font-awesome/css/font-awesome.css">
     <link rel="stylesheet" href="/linker/styles/form.css">
     <link rel="stylesheet" href="/linker/styles/layout.css">
     <link rel="stylesheet" href="/linker/styles/modal.css">
@@ -52,17 +52,17 @@
                 <ul>
                     <li>
                         <a href="<%= packageJson.homepage %>" target="_blank">
-                            <i class="icon-github"></i>GitHub
+                            <i class="fa fa-github"></i>GitHub
                         </a>
                     </li>
                     <li>
                         <a href="<%= packageJson.bugs.url %>" target="_blank">
-                            <i class="icon-bug"></i>Issues
+                            <i class="fa fa-bug"></i>Issues
                         </a>
                     </li>
                     <li>
                         <a href="https://github.com/tarlepp/" target="_blank">
-                            <i class="icon-user"></i><%= packageJson.author %>
+                            <i class="fa fa-user"></i><%= packageJson.author %>
                         </a>
                     </li>
                 </ul>
@@ -73,7 +73,7 @@
 
 <div id="placeholderLoading" class="hidden">
     <div class="text-center">
-        <icon class="icon-spinner icon-spin icon-large"></icon>&nbsp;&nbsp;&nbsp;<span class="text-muted">Loading data...</span>
+        <i class="fa fa-spinner fa-spin fa-large"></i>&nbsp;&nbsp;&nbsp;<span class="text-muted">Loading data...</span>
     </div>
 </div>
 
