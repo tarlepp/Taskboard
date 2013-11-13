@@ -256,25 +256,9 @@ ul.dropdown-menu .divider {
     border-top-left-radius: 4px;
 }
 
-@media (min-width: 1200px) {
-    .container {
-        max-width: 100%;
-    }
-}
-
-@media (min-width: 992px) {
-    .container {
-        max-width: 100%;
-    }
-}
-
-@media (min-width: 768px) {
-    .container {
-        max-width: 100%;
-    }
-}
-
 .container {
+    min-width: 100%;
+    max-width: 100%;
     padding-right: 10px;
     padding-left: 10px;
 }

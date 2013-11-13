@@ -27,14 +27,13 @@ module.exports = function (grunt) {
 
     var cssFilesToInject = [
         // Taskboard specified vendor dependencies
-        'linker/vendor/jQuery-UI/jquery-ui.css',
-        'linker/vendor/bootstrap/css/bootstrap.css',
-        'linker/vendor/bootstrap-datepicker/datepicker.css',
-        'linker/vendor/bootstrap-select/bootstrap-select.css',
-        'linker/vendor/qTip/jquery.qtip.css',
-
+        'linker/bower_components/jquery-ui/themes/base/minified/jquery-ui.min.css',
+        'linker/bower_components/bootstrap/dist/css/bootstrap.min.css',
+        'linker/bower_components/bootstrap-datepicker/css/datepicker.css',
+        'linker/bower_components/bootstrap-select/bootstrap-select.min.css',
         'linker/bower_components/font-awesome/css/font-awesome.css',
 
+        'linker/vendor/qTip/jquery.qtip.css',
 
         'linker/styles/**/*.css'
     ];
@@ -63,9 +62,14 @@ module.exports = function (grunt) {
         'linker/js/app.js',
 
         // Taskboard specified vendor dependencies
+        'linker/bower_components/jquery/jquery.min.js',
+        'linker/bower_components/jquery-ui/ui/minified/jquery-ui.min.js',
+        'linker/bower_components/bootstrap/dist/js/bootstrap.min.js',
+        'linker/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
+        'linker/bower_components/bootstrap-select/bootstrap-select.min.js',
+
         'linker/vendor/json5.js',
         'linker/vendor/underscore.js',
-        'linker/vendor/jquery-2.0.3.min.js',
         'linker/vendor/jquery.hotkeys.js',
         'linker/vendor/trunk8.js',
         'linker/vendor/selectorator.js',
@@ -77,11 +81,7 @@ module.exports = function (grunt) {
         'linker/vendor/jQuery-noty/jquery.noty.js',
         'linker/vendor/jQuery-noty/jquery.noty-default.js',
         'linker/vendor/jQuery-noty/jquery.noty-top.js',
-        'linker/vendor/jQuery-UI/jquery-ui.min.js',
         'linker/vendor/qTip/jquery.qtip.js',
-        'linker/vendor/bootstrap/js/bootstrap.js',
-        'linker/vendor/bootstrap-datepicker/bootstrap-datepicker.js',
-        'linker/vendor/bootstrap-select/bootstrap-select.js',
         'linker/vendor/bootstrap-popover-extra-placements/popover-extra-placements.js',
         'linker/vendor/twitter-bootstrap-hover-dropdown.js',
         'linker/vendor/bootstrap-wysiwyg.js',
