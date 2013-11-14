@@ -273,13 +273,6 @@ div[data-role="editor-toolbar"] {
     color: #333333;
 }
 
-.dropdown-menu > li > a.select-dummy-option:focus,
-.dropdown-menu > li > a.select-dummy-option:hover,
-.dropdown-menu > li > a.select-dummy-option:focus i,
-.dropdown-menu > li > a.select-dummy-option:hover i {
-    color: #ffffff;
-}
-
 .help-block {
     margin-bottom: 0;
 }

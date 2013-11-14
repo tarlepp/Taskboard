@@ -124,6 +124,20 @@ function ViewModel() {
             if (self.selectedProjectId() > 0) {
                 self.initProject(self.selectedProjectId());
             }
+
+            var selectProject = jQuery("#selectProject");
+
+            selectProject.val(self.selectedProjectId());
+
+            selectProject.find("option").each(function() {
+                var option = jQuery(this);
+
+                if (option.text() == "Choose project to show") {
+                    option.addClass("select-dummy-option text-muted");
+                }
+            });
+
+            selectProject.selectpicker("refresh");
         }
 
         self.loading.pop();
@@ -132,10 +146,14 @@ function ViewModel() {
 
     // Sorted project objects
     self.sortedProjects = ko.computed(function() {
+        jQuery("#selectProject").selectpicker("refresh");
+
         return self.projects().sort(function(a, b) {
             return a.title().toString().toLowerCase() > b.title().toString().toLowerCase() ? 1 : -1;
         });
     });
+
+    //self.sortedProjects.extend({ notify: 'always' });
 
     // Sorted sprint objects
     self.sortedSprints = ko.computed(function() {
@@ -215,6 +233,20 @@ function ViewModel() {
                     if (self.selectedSprintId() > 0) {
                         self.initSprint(self.selectedSprintId());
                     }
+
+                    var selectSprint = jQuery("#selectSprint");
+
+                    selectSprint.val(self.selectedSprintId());
+
+                    selectSprint.find("option").each(function() {
+                        var option = jQuery(this);
+
+                        if (option.text() == "Choose sprint to show") {
+                            option.addClass("select-dummy-option text-muted");
+                        }
+                    });
+
+                    selectSprint.selectpicker("refresh");
                 }
 
                 self.loading.pop();

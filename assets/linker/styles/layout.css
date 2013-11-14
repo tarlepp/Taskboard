@@ -194,15 +194,6 @@ ul.dropdown-menu .divider {
     color: #b94a48;
 }
 
-.dropdown-menu > li > a.text-muted:hover,
-.dropdown-menu > li > a.text-muted:focus,
-.dropdown-menu > li > a.text-success:hover,
-.dropdown-menu > li > a.text-success:focus,
-.dropdown-menu > li > a.text-danger:hover
-.dropdown-menu > li > a.text-danger:focus {
-    color: #ffffff;
-}
-
 #navigation .dropdown-menu:before,
 .dropdown-menu.with-tick:before {
     position: absolute;
@@ -265,14 +256,6 @@ ul.dropdown-menu .divider {
 
 ul, ol {
     padding-left: 25px;
-}
-
-.dropdown-menu > li > a.text-danger {
-    color: #b94a48;
-}
-
-.dropdown-menu > li > a.text-danger:hover {
-    color: #ffffff;
 }
 
 .history {
