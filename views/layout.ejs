@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="/linker/bower_components/bootstrap-datepicker/css/datepicker.css">
     <link rel="stylesheet" href="/linker/bower_components/bootstrap-select/bootstrap-select.min.css">
     <link rel="stylesheet" href="/linker/bower_components/font-awesome/css/font-awesome.css">
-    <link rel="stylesheet" href="/linker/vendor/qTip/jquery.qtip.css">
+    <link rel="stylesheet" href="/linker/bower_components/qtip2/jquery.qtip.min.css">
     <link rel="stylesheet" href="/linker/styles/form.css">
     <link rel="stylesheet" href="/linker/styles/layout.css">
     <link rel="stylesheet" href="/linker/styles/modal.css">
@@ -46,16 +46,16 @@
             <li>
                 <div class="input-group">
                     <select id="selectProject" class="show-tick show-menu-arrow"
-                        data-select="true"
                         data-bind="
+                            value: selectedProjectId(),
                             options: sortedProjects,
                             optionsText: 'title',
                             optionsValue: 'id',
                             optionsCaption: 'Choose project to show',
-                            value: selectedProjectId(),
                             changeProject: 'id'
                         "
-                    ></select>
+                    >
+                    </select>
                     <span class="input-group-addon dropdown">
                         <div data-bind="visible: !project()">
                             <a href="javascript: void(0);" class="tooltipTitle" title="Add new project"
@@ -157,16 +157,16 @@
                 <div class="input-group" data-bind="visible: project()">
                     <select id="selectSprint" class="show-tick show-menu-arrow"
                         data-bind="
+                            value: selectedSprintId(),
                             options: sortedSprints,
                             optionsText: 'formattedTitle',
                             optionsValue: 'id',
                             optionsCaption: 'Choose sprint to show',
-                            value: selectedSprintId(),
                             changeSprint: 'id'
                         "
-                        data-text-choose-sprint="Choose sprint to show"
-                        data-text-no-data="No sprint data to show"
-                    ></select>
+                    >
+
+                    </select>
                     <span class="input-group-addon dropdown">
                         <div
                             data-bind="visible: !sprint()"
@@ -340,33 +340,32 @@
 <script src="/linker/js/socket.io.js"></script>
 <script src="/linker/js/sails.io.js"></script>
 <script src="/linker/js/app.js"></script>
+<script src="/linker/bower_components/json5/lib/json5.js"></script>
+<script src="/linker/bower_components/underscore/underscore-min.js"></script>
+<script src="/linker/bower_components/async/lib/async.js"></script>
 <script src="/linker/bower_components/jquery/jquery.min.js"></script>
 <script src="/linker/bower_components/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+<script src="/linker/bower_components/jquery.hotkeys/jquery.hotkeys.js"></script>
+<script src="/linker/bower_components/qtip2/jquery.qtip.min.js"></script>
+<script src="/linker/bower_components/trunk8/trunk8.js"></script>
 <script src="/linker/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/linker/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 <script src="/linker/bower_components/bootstrap-select/bootstrap-select.min.js"></script>
-<script src="/linker/vendor/json5.js"></script>
-<script src="/linker/vendor/underscore.js"></script>
-<script src="/linker/vendor/jquery.hotkeys.js"></script>
-<script src="/linker/vendor/trunk8.js"></script>
+<script src="/linker/bower_components/knockout.js/knockout.js"></script>
+<script src="/linker/bower_components/knockout-sortable/build/knockout-sortable.min.js"></script>
 <script src="/linker/vendor/selectorator.js"></script>
 <script src="/linker/vendor/moment.js"></script>
 <script src="/linker/vendor/moment-timezone.js"></script>
 <script src="/linker/vendor/moment-timezone-data.js"></script>
-<script src="/linker/vendor/async.js"></script>
 <script src="/linker/vendor/cookie.js/cookie.js"></script>
 <script src="/linker/vendor/jQuery-noty/jquery.noty.js"></script>
 <script src="/linker/vendor/jQuery-noty/jquery.noty-default.js"></script>
 <script src="/linker/vendor/jQuery-noty/jquery.noty-top.js"></script>
-<script src="/linker/vendor/qTip/jquery.qtip.js"></script>
 <script src="/linker/vendor/bootstrap-popover-extra-placements/popover-extra-placements.js"></script>
 <script src="/linker/vendor/twitter-bootstrap-hover-dropdown.js"></script>
 <script src="/linker/vendor/bootstrap-wysiwyg.js"></script>
 <script src="/linker/vendor/bootbox.js"></script>
-<script src="/linker/vendor/Knockout/knockout-2.2.1.js"></script>
 <script src="/linker/vendor/knockout-bootstrap.js"></script>
-<script src="/linker/vendor/knockout-sortable.js"></script>
-<script src="/linker/vendor/knockout-deferred-updates.js"></script>
 <script src="/linker/js/board.js"></script>
 <script src="/linker/js/common.js"></script>
 <script src="/linker/js/errors.js"></script>

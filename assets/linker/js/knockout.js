@@ -42,6 +42,8 @@ ko.bindingHandlers.changeProject = {
     init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
         var elementProject = jQuery(element);
 
+        elementProject.selectpicker();
+
         // Actual change event is triggered
         elementProject.change(function() {
             var projectId = parseInt(elementProject.val(), 10);
@@ -66,7 +68,9 @@ ko.bindingHandlers.changeProject = {
      * @param   {String}    element Name of the current element
      */
     update:function (element) {
-        jQuery(element).find("option").each(function() {
+        var elementProject = jQuery(element);
+
+        elementProject.find("option").each(function() {
             var option = jQuery(this);
 
             if (option.text() == "Choose project to show") {
@@ -74,7 +78,7 @@ ko.bindingHandlers.changeProject = {
             }
         });
 
-        jQuery(element).selectpicker("refresh");
+        elementProject.selectpicker("refresh");
     }
 };
 
@@ -95,6 +99,8 @@ ko.bindingHandlers.changeSprint = {
      */
     init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
         var elementSprint = jQuery(element);
+
+        elementSprint.selectpicker();
 
         elementSprint.change(function() {
             var sprintId = parseInt(elementSprint.val(), 10);
@@ -118,7 +124,9 @@ ko.bindingHandlers.changeSprint = {
      * @param   {String}    element Name of the current element
      */
     update: function (element) {
-        jQuery(element).find("option").each(function() {
+        var elementSprint = jQuery(element);
+
+        elementSprint.find("option").each(function() {
             var option = jQuery(this);
 
             if (option.text() == "Choose sprint to show") {
@@ -126,7 +134,7 @@ ko.bindingHandlers.changeSprint = {
             }
         });
 
-        jQuery(element).selectpicker("refresh");
+        elementSprint.selectpicker("refresh");
     }
 };
 
