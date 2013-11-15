@@ -66,6 +66,8 @@ module.exports = function (grunt) {
         'linker/bower_components/json5/lib/json5.js',
         'linker/bower_components/underscore/underscore-min.js',
         'linker/bower_components/async/lib/async.js',
+        'linker/bower_components/momentjs/min/moment-with-langs.min.js',
+        'linker/bower_components/moment-timezone/min/moment-timezone.min.js',
 
         // jQuery specified libraries
         'linker/bower_components/jquery/jquery.min.js',
@@ -73,11 +75,18 @@ module.exports = function (grunt) {
         'linker/bower_components/jquery.hotkeys/jquery.hotkeys.js',
         'linker/bower_components/qtip2/jquery.qtip.min.js',
         'linker/bower_components/trunk8/trunk8.js',
+        'linker/bower_components/noty/js/noty/jquery.noty.js',
+        'linker/bower_components/noty/js/noty/themes/default.js',
+        'linker/bower_components/noty/js/noty/layouts/top.js',
+        'linker/bower_components/jquery-selectorator/dist/selectorator.min.js',
 
         // Bootstrap specified libraries
         'linker/bower_components/bootstrap/dist/js/bootstrap.min.js',
         'linker/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
         'linker/bower_components/bootstrap-select/bootstrap-select.min.js',
+        'linker/bower_components/bootbox/bootbox.js',
+        'linker/bower_components/bootstrap-wysiwyg/bootstrap-wysiwyg.js',
+        'linker/bower_components/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js',
 
         // Knockout specified libraries
         'linker/bower_components/knockout.js/knockout.js',
@@ -85,18 +94,9 @@ module.exports = function (grunt) {
         // Cannot use this, yet figure out why this breaks main navigation selects
         //'linker/bower_components/knockout-deferred-updates/knockout-deferred-updates.min.js',
 
-        'linker/vendor/selectorator.js',
-        'linker/vendor/moment.js',
-        'linker/vendor/moment-timezone.js',
+        // Vendor specified libraries, that aren't available via bower
         'linker/vendor/moment-timezone-data.js',
         'linker/vendor/cookie.js/cookie.js',
-        'linker/vendor/jQuery-noty/jquery.noty.js',
-        'linker/vendor/jQuery-noty/jquery.noty-default.js',
-        'linker/vendor/jQuery-noty/jquery.noty-top.js',
-        'linker/vendor/bootstrap-popover-extra-placements/popover-extra-placements.js',
-        'linker/vendor/twitter-bootstrap-hover-dropdown.js',
-        'linker/vendor/bootstrap-wysiwyg.js',
-        'linker/vendor/bootbox.js',
         'linker/vendor/knockout-bootstrap.js',
 
         // All of the rest of your app scripts imported here
