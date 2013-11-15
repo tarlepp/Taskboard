@@ -72,7 +72,6 @@ module.exports = function (grunt) {
         // jQuery specified libraries
         'linker/bower_components/jquery/jquery.min.js',
         'linker/bower_components/jquery-ui/ui/minified/jquery-ui.min.js',
-        'linker/bower_components/jquery.hotkeys/jquery.hotkeys.js',
         'linker/bower_components/qtip2/jquery.qtip.min.js',
         'linker/bower_components/trunk8/trunk8.js',
         'linker/bower_components/noty/js/noty/jquery.noty.js',
@@ -86,6 +85,7 @@ module.exports = function (grunt) {
         'linker/bower_components/bootstrap-select/bootstrap-select.min.js',
         'linker/bower_components/bootbox/bootbox.js',
         'linker/bower_components/bootstrap-wysiwyg/bootstrap-wysiwyg.js',
+        'linker/bower_components/bootstrap-wysiwyg/external/jquery.hotkeys.js',
         'linker/bower_components/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js',
 
         // Knockout specified libraries
