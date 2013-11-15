@@ -6,8 +6,8 @@ body.modal-open {
     overflow: hidden;
 }
 
-.modal-dialog {
-    width: 750px;
+.modal.modal-wide .modal-dialog {
+    width: 95%;
 }
 
 .modal-body {
@@ -78,6 +78,11 @@ body.modal-open {
 
 .backlog .col-lg-6:first-of-type {
     padding-right: 0;
+}
+
+.backlog .panel-heading i {
+    position: relative;
+    top: 4px;
 }
 
 .modal-body .nav.nav-tabs {
