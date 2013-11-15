@@ -248,23 +248,23 @@ jQuery(document).ready(function() {
             var title = "Project planning view";
             var buttons = [
                 {
-                    label: "Add new sprint",
-                    className: "btn-primary pull-right",
-                    callback: function() {
-                        modal.modal("hide");
-
-                        body.trigger("sprintAdd", ["projectPlanning"]);
-
-                        return false;
-                    }
-                },
-                {
                     label: "Add new story",
                     className: "btn-primary pull-right",
                     callback: function() {
                         modal.modal("hide");
 
                         body.trigger("storyAdd", [projectId, 0, "projectPlanning"]);
+
+                        return false;
+                    }
+                },
+                {
+                    label: "Add new sprint",
+                    className: "btn-primary pull-right",
+                    callback: function() {
+                        modal.modal("hide");
+
+                        body.trigger("sprintAdd", ["projectPlanning"]);
 
                         return false;
                     }
