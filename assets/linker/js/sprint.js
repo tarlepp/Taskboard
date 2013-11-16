@@ -197,8 +197,6 @@ jQuery(document).ready(function() {
 
                             modal.modal("hide");
                         }
-
-                        handleEventTrigger(trigger);
                     }
                 });
             }
