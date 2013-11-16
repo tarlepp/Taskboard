@@ -322,7 +322,14 @@ li.list-group-item.ui-sortable-helper {
 .progressTotal .progress {
     height: 25px;
     margin-bottom: 10px;
+}
+
+.progressTotal .progress-bar {
     line-height: 25px;
+}
+
+.progressDetailed .progress-bar {
+    line-height: 20px;
 }
 
 .progressTotal .col-md-2,
