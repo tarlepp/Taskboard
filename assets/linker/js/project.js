@@ -21,9 +21,11 @@ jQuery(document).ready(function() {
     /**
      * Project add event, this opens a modal bootbox dialog with project add form on it.
      *
-     * @param   {jQuery.Event}          event       Event object
-     * @param   {sails.helper.trigger}  trigger     Trigger to process after actions
-     * @param   {{}}                    formData    Possible form data, simple key/value
+     * todo: should created project to be selected automatic?
+     *
+     * @param   {jQuery.Event}              event       Event object
+     * @param   {sails.helper.trigger|bool} trigger     Trigger to process after actions
+     * @param   {{}}                        formData    Possible form data, simple key/value
      */
     body.on("projectAdd", function(event, trigger, formData) {
         trigger = trigger || false;
@@ -32,34 +34,26 @@ jQuery(document).ready(function() {
         jQuery.get("/Project/add", {formData: formData})
         .done(function(content) {
             var title = "Add new project";
-            var buttons = {
-                label: "Save",
-                className: "btn-primary pull-right",
-                callback: function() {
-                    var form = jQuery("#formProjectNew", modal);
-                    var formItems = form.serializeJSON();
+            var buttons = [
+                {
+                    label: "Save and close",
+                    className: "btn-primary pull-right",
+                    callback: function() {
+                        save(modal, trigger, true);
 
-                    // Validate form and try to create new project
-                    if (validateForm(formItems, modal)) {
-                        // Create new project
-                        socket.post("/Project", formItems, function(/** sails.json.project */data) {
-                            if (handleSocketError(data, true)) {
-                                makeMessage("Project created successfully.", "success", {});
-
-                                modal.modal("hide");
-
-                                // Trigger specified event
-                                handleEventTrigger(trigger);
-
-                                // Update client bindings
-                                myViewModel.processSocketMessage("project", "create", data.id, data);
-                            }
-                        });
+                        return false;
                     }
+                },
+                {
+                    label: "Save",
+                    className: "btn-primary pull-right",
+                    callback: function() {
+                        save(modal, trigger, false);
 
-                    return false;
+                        return false;
+                    }
                 }
-            };
+            ];
 
             // Create bootbox modal
             var modal = createBootboxDialog(title, content, buttons, trigger);
@@ -74,17 +68,50 @@ jQuery(document).ready(function() {
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
         });
+
+        /**
+         * Method makes actual save function for current model and closes dialog + fire specified
+         * trigger event OR opens edit modal with specified trigger event.
+         *
+         * @param   {jQuery|$}                  modal
+         * @param   {sails.helper.trigger|bool} trigger
+         * @param   {boolean}                   close
+         */
+        function save(modal, trigger, close) {
+            var form = jQuery("#formProjectNew", modal);
+            var formItems = form.serializeJSON();
+
+            // Validate form and try to create new project
+            if (validateForm(formItems, modal)) {
+                // Create new project
+                socket.post("/Project", formItems, function(/** sails.json.project */data) {
+                    if (handleSocketError(data, true)) {
+                        makeMessage("Project created successfully.", "success", {});
+
+                        modal.modal("hide");
+
+                        // User wants to close modal so pass just trigger
+                        if (close) {
+                            handleEventTrigger(trigger);
+                        } else { // Otherwise trigger edit with same trigger
+                            body.trigger("projectEdit", [data.id, trigger]);
+                        }
+
+                        // Update client bindings
+                        myViewModel.processSocketMessage("project", "create", data.id, data);
+                    }
+                });
+            }
+        }
     });
 
     /**
      * Project edit event, this opens a modal bootbox dialog with project edit form on it.
      *
-     * todo do we really need project id parameter?
-     *
-     * @param   {jQuery.Event}          event       Event object
-     * @param   {Number}                projectId   Project id, if not given fallback to current project
-     * @param   {sails.helper.trigger}  trigger     Trigger to process after actions
-     * @param   {{}}                    parameters  Init parameters, this is passed to form init function
+     * @param   {jQuery.Event}              event       Event object
+     * @param   {Number}                    projectId   Project id, if not given fallback to current project
+     * @param   {sails.helper.trigger|bool} trigger     Trigger to process after actions
+     * @param   {{}}                        parameters  Init parameters, this is passed to form init function
      */
     body.on("projectEdit", function(event, projectId, trigger, parameters) {
         projectId = projectId || myViewModel.project().id();
@@ -96,29 +123,19 @@ jQuery(document).ready(function() {
             var title = "Edit project";
             var buttons = [
                 {
+                    label: "Save and close",
+                    className: "btn-primary pull-right",
+                    callback: function() {
+                        save(modal, trigger, true);
+
+                        return false;
+                    }
+                },
+                {
                     label: "Save",
                     className: "btn-primary pull-right",
                     callback: function() {
-                        var form = jQuery("#formProjectEdit", modal);
-                        var formItems = form.serializeJSON();
-
-                        // Validate form and try to update project data
-                        if (validateForm(formItems, modal)) {
-                            // Update project data
-                            socket.put("/Project/"  + projectId, formItems, function(/** sails.json.project */data) {
-                                if (handleSocketError(data, true)) {
-                                    makeMessage("Project updated successfully.", "success", {});
-
-                                    modal.modal("hide");
-
-                                    // Trigger specified event
-                                    handleEventTrigger(trigger);
-
-                                    // Update client bindings
-                                    myViewModel.processSocketMessage("project", "update", data.id, data);
-                                }
-                            });
-                        }
+                        save(modal, trigger, false);
 
                         return false;
                     }
@@ -151,6 +168,39 @@ jQuery(document).ready(function() {
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
         });
+
+        /**
+         * Method makes actual save function for current model and closes dialog + fire specified
+         * trigger event OR opens edit modal with specified trigger event.
+         *
+         * @param   {jQuery|$}                  modal
+         * @param   {sails.helper.trigger|bool} trigger
+         * @param   {boolean}                   close
+         */
+        function save(modal, trigger, close) {
+            var form = jQuery("#formProjectEdit", modal);
+            var formItems = form.serializeJSON();
+
+            // Validate form and try to update project data
+            if (validateForm(formItems, modal)) {
+                // Update project data
+                socket.put("/Project/"  + projectId, formItems, function(/** sails.json.project */data) {
+                    if (handleSocketError(data, true)) {
+                        makeMessage("Project updated successfully.", "success", {});
+
+                        // User wants to close modal so pass just trigger
+                        if (close) {
+                            handleEventTrigger(trigger);
+
+                            modal.modal("hide");
+                        }
+
+                        // Update client bindings
+                        myViewModel.processSocketMessage("project", "update", data.id, data);
+                    }
+                });
+            }
+        }
     });
 
     /**
@@ -158,8 +208,6 @@ jQuery(document).ready(function() {
      * tab to be opened. Note that this just fires projectEdit event with specified parameters.
      *
      * User can edit existing backlog stories and add new ones from this UI.
-     *
-     * todo do we really need project id parameter?
      *
      * @param   {jQuery.Event}          event       Event object
      * @param   {Number}                projectId   Project id, if not given fallback to current project
