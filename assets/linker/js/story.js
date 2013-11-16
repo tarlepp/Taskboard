@@ -43,25 +43,19 @@ jQuery(document).ready(function() {
             var title = "Add new user story";
             var buttons = [
                 {
+                    label: "Save and close",
+                    className: "btn-primary pull-right",
+                    callback: function() {
+                        save(modal, trigger, true);
+
+                        return false;
+                    }
+                },
+                {
                     label: "Save",
                     className: "btn-primary pull-right",
                     callback: function() {
-                        var form = jQuery("#formStoryNew", modal);
-                        var formItems = form.serializeJSON();
-
-                        // Validate form and try to create new user story
-                        if (validateForm(formItems, modal)) {
-                            // Create new user story
-                            socket.post("/Story", formItems, function(/** sails.json.story */story) {
-                                if (handleSocketError(story)) {
-                                    makeMessage("User story created successfully.");
-
-                                    modal.modal("hide");
-
-                                    handleEventTrigger(trigger);
-                                }
-                            });
-                        }
+                        save(modal, trigger, false);
 
                         return false;
                     }
@@ -82,6 +76,38 @@ jQuery(document).ready(function() {
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
         });
+
+        /**
+         * Method makes actual save function for current model and closes dialog + fire specified
+         * trigger event OR opens edit modal with specified trigger event.
+         *
+         * @param   {jQuery|$}                  modal
+         * @param   {sails.helper.trigger|bool} trigger
+         * @param   {boolean}                   close
+         */
+        function save(modal, trigger, close) {
+            var form = jQuery("#formStoryNew", modal);
+            var formItems = form.serializeJSON();
+
+            // Validate form and try to create new user story
+            if (validateForm(formItems, modal)) {
+                // Create new user story
+                socket.post("/Story", formItems, function(/** sails.json.story */story) {
+                    if (handleSocketError(story)) {
+                        makeMessage("User story created successfully.");
+
+                        modal.modal("hide");
+
+                        // User wants to close modal so just handle trigger
+                        if (close) {
+                            handleEventTrigger(trigger);
+                        } else { // Otherwise trigger edit with same trigger
+                            body.trigger("storyEdit", [data.id, trigger]);
+                        }
+                    }
+                });
+            }
+        }
     });
 
     /**
