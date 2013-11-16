@@ -39,28 +39,19 @@ jQuery(document).ready(function() {
             var title = "Add sprint";
             var buttons = [
                 {
+                    label: "Save and close",
+                    className: "btn-primary pull-right",
+                    callback: function() {
+                        save(modal, trigger, true);
+
+                        return false;
+                    }
+                },
+                {
                     label: "Save",
                     className: "btn-primary pull-right",
                     callback: function() {
-                        var form = jQuery("#formSprintNew", modal);
-                        var formItems = form.serializeJSON();
-
-                        // Validate form and try to create new sprint
-                        if (validateForm(formItems, modal)) {
-                            // Create new sprint
-                            socket.post("/Sprint", formItems, function(/** sails.json.sprint */data) {
-                                if (handleSocketError(data)) {
-                                    makeMessage("New sprint added to project successfully.", "success", {});
-
-                                    modal.modal("hide");
-
-                                    handleEventTrigger(trigger);
-
-                                    // Update client bindings
-                                    myViewModel.processSocketMessage("sprint", "create", data.id, data);
-                                }
-                            });
-                        }
+                        save(modal, trigger, false);
 
                         return false;
                     }
@@ -81,6 +72,41 @@ jQuery(document).ready(function() {
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
         });
+
+        /**
+         * Method makes actual save function for current model and closes dialog + fire specified
+         * trigger event OR opens edit modal with specified trigger event.
+         *
+         * @param   {jQuery|$}                  modal
+         * @param   {sails.helper.trigger|bool} trigger
+         * @param   {boolean}                   close
+         */
+        function save(modal, trigger, close) {
+            var form = jQuery("#formSprintNew", modal);
+            var formItems = form.serializeJSON();
+
+            // Validate form and try to create new sprint
+            if (validateForm(formItems, modal)) {
+                // Create new sprint
+                socket.post("/Sprint", formItems, function(/** sails.json.sprint */data) {
+                    if (handleSocketError(data)) {
+                        makeMessage("New sprint added to project successfully.", "success", {});
+
+                        modal.modal("hide");
+
+                        // User wants to close modal so pass just trigger
+                        if (close) {
+                            handleEventTrigger(trigger);
+                        } else { // Otherwise trigger edit with same trigger
+                            body.trigger("sprintEdit", [data.id, trigger]);
+                        }
+
+                        // Update client bindings
+                        myViewModel.processSocketMessage("sprint", "create", data.id, data);
+                    }
+                });
+            }
+        }
     });
 
     /**
@@ -105,25 +131,19 @@ jQuery(document).ready(function() {
             var title = "Edit sprint";
             var buttons = [
                 {
+                    label: "Save and close",
+                    className: "btn-primary pull-right",
+                    callback: function() {
+                        save(modal, trigger, true);
+
+                        return false;
+                    }
+                },
+                {
                     label: "Save",
                     className: "btn-primary pull-right",
                     callback: function() {
-                        var form = jQuery("#formSprintEdit", modal);
-                        var formItems = form.serializeJSON();
-
-                        // Validate form and try to create new sprint
-                        if (validateForm(formItems, modal)) {
-                            // Update sprint data
-                            socket.put("/Sprint/" + sprintId, formItems, function(/** sails.json.sprint */data) {
-                                if (handleSocketError(data)) {
-                                    makeMessage("Sprint saved successfully.", "success", {});
-
-                                    modal.modal("hide");
-
-                                    handleEventTrigger(trigger);
-                                }
-                            });
-                        }
+                        save(modal, trigger, false);
 
                         return false;
                     }
@@ -151,6 +171,38 @@ jQuery(document).ready(function() {
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
         });
+
+        /**
+         * Method makes actual save function for current model and closes dialog + fire specified
+         * trigger event OR opens edit modal with specified trigger event.
+         *
+         * @param   {jQuery|$}                  modal
+         * @param   {sails.helper.trigger|bool} trigger
+         * @param   {boolean}                   close
+         */
+        function save(modal, trigger, close) {
+            var form = jQuery("#formSprintEdit", modal);
+            var formItems = form.serializeJSON();
+
+            // Validate form and try to create new sprint
+            if (validateForm(formItems, modal)) {
+                // Update sprint data
+                socket.put("/Sprint/" + sprintId, formItems, function(/** sails.json.sprint */data) {
+                    if (handleSocketError(data)) {
+                        makeMessage("Sprint saved successfully.", "success", {});
+
+                        // User wants to close modal so pass just trigger
+                        if (close) {
+                            handleEventTrigger(trigger);
+
+                            modal.modal("hide");
+                        }
+
+                        handleEventTrigger(trigger);
+                    }
+                });
+            }
+        }
     });
 
     /**

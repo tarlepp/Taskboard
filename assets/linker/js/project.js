@@ -234,8 +234,6 @@ jQuery(document).ready(function() {
      *
      * Also progress bars are shown about current progress of project milestones.
      *
-     * todo do we really need project id parameter?
-     *
      * @param   {jQuery.Event}          event       Event object
      * @param   {Number}                projectId   Project id, if not given fallback to current project
      * @param   {sails.helper.trigger}  trigger     Trigger to process after actions
