@@ -44,31 +44,71 @@
         </div>
 
         <div class="tab-pane" id="languageAndRegion">
+            <h4 class="col-lg-offset-3">General settings</h4>
+
             <div class="form-group required">
                 <label class="col-lg-3 control-label" for="formUserNewLanguage">Language</label>
-                <div class="col-lg-3">
-                    <select id="formUserNewLanguage" name="language" class="in-modal show-tick show-menu-arrow"
+                <div class="col-lg-9">
+                    <select id="formUserNewLanguage" name="language" class="form-control in-modal show-tick show-menu-arrow"
                         data-select="true"
                         data-container="body"
+                        data-change-dates="true"
                     >
                         <% _.each(languages, function(language) { %>
                         <option value="<%= language %>"><%= language %></option>
                         <% }) %>
                     </select>
+
+                    <span class="help-block">This will affect to text localizations.</span>
                 </div>
             </div>
             <div class="form-group required">
                 <label class="col-lg-3 control-label" for="formUserNewTimezone">Timezone</label>
                 <div class="col-lg-9">
-                    <select id="formUserNewTimezone" name="language" class="in-modal show-tick show-menu-arrow"
+                    <select id="formUserNewTimezone" name="momentTimezone" class="form-control in-modal show-tick show-menu-arrow"
                         data-select="true"
                         data-container="body"
                         data-live-search="true"
+                        data-change-dates="true"
                     >
                         <% _.each(timezones, function(timezone) { %>
                         <option value="<%= timezone.key %>"><%= timezone.name %></option>
                         <% }) %>
                     </select>
+                </div>
+            </div>
+
+            <hr/>
+            <h4 class="col-lg-offset-3">Date and time formats</h4>
+
+            <div class="form-group required">
+                <label class="col-lg-3 control-label" for="formUserNewMomentFormatDate">Date format</label>
+                <div class="col-lg-9 input-group">
+                    <input id="formUserNewMomentFormatDate" name="momentFormatDate" type="text" class="form-control" placeholder="enter date format" required="required" data-change-dates="true" value="L" />
+
+                    <span id="momentFormatDateShow" class="input-group-addon"></span>
+                </div>
+            </div>
+
+            <div class="form-group required">
+                <label class="col-lg-3 control-label" for="formUserNewMomentFormatTime">Time format</label>
+                <div class="col-lg-9 input-group">
+                    <input id="formUserNewMomentFormatTime" name="momentFormatTime" type="text" class="form-control" placeholder="enter time format" required="required" data-change-dates="true" value="LT" />
+
+                    <span id="momentFormatTimeShow" class="input-group-addon"></span>
+                </div>
+            </div>
+
+            <div class="form-group required">
+                <label class="col-lg-3 control-label" for="formUserNewMomentFormatDateTime">Datetime format</label>
+                <div class="col-lg-9 input-group">
+                    <input id="formUserNewMomentFormatDateTime" name="momentFormatDateTime" type="text" class="form-control" placeholder="enter datetime format" required="required" data-change-dates="true" value="L LT" />
+
+                    <span id="momentFormatDateTimeShow" class="input-group-addon"></span>
+                </div>
+
+                <div class="col-lg-offset-3 col-lg-9">
+                    <span class=" help-block">All date formatting is done with <a href="http://momentjs.com/docs/#/displaying/format/" target="_blank">moment.js</a> library so use it format options with above settings.</span>
                 </div>
             </div>
         </div>

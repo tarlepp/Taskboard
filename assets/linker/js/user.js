@@ -401,9 +401,9 @@ function populateDateTimeFormats() {
     }
 
     // Update actual time and date values
-    jQuery("#momentFormatDateShow").html(now.format(jQuery("#formUserEditMomentFormatDate").val()));
-    jQuery("#momentFormatTimeShow").html(now.format(jQuery("#formUserEditMomentFormatTime").val()));
-    jQuery("#momentFormatDateTimeShow").html(now.format(jQuery("#formUserEditMomentFormatDateTime").val()));
+    jQuery("#momentFormatDateShow").html(now.format(jQuery("input[name=momentFormatDate]").val()));
+    jQuery("#momentFormatTimeShow").html(now.format(jQuery("input[name=momentFormatTime]").val()));
+    jQuery("#momentFormatDateTimeShow").html(now.format(jQuery("input[name=momentFormatDateTime]").val()));
 }
 
 /**
