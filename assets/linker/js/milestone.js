@@ -34,25 +34,19 @@ jQuery(document).ready(function() {
             var title = "Add new milestone";
             var buttons = [
                 {
+                    label: "Save and close",
+                    className: "btn-primary pull-right",
+                    callback: function() {
+                        save(modal, trigger, true);
+
+                        return false;
+                    }
+                },
+                {
                     label: "Save",
                     className: "btn-primary pull-right",
                     callback: function () {
-                        var form = jQuery("#formMilestoneNew", modal);
-                        var formItems = form.serializeJSON();
-
-                        // Validate current form items and try to create new task
-                        if (validateForm(formItems, modal)) {
-                            // Create new milestone via socket
-                            socket.post("/Milestone/", formItems, function(/** sails.json.milestone */milestone) {
-                                if (handleSocketError(milestone)) {
-                                    makeMessage("Milestone created successfully.");
-
-                                    modal.modal("hide");
-
-                                    handleEventTrigger(trigger);
-                                }
-                            });
-                        }
+                        save(modal, trigger, false);
 
                         return false;
                     }
@@ -73,6 +67,38 @@ jQuery(document).ready(function() {
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
         });
+
+        /**
+         * Method makes actual save function for current model and closes dialog + fire specified
+         * trigger event OR opens edit modal with specified trigger event.
+         *
+         * @param   {jQuery|$}                  modal
+         * @param   {sails.helper.trigger|bool} trigger
+         * @param   {boolean}                   close
+         */
+        function save(modal, trigger, close) {
+            var form = jQuery("#formMilestoneNew", modal);
+            var formItems = form.serializeJSON();
+
+            // Validate current form items and try to create new task
+            if (validateForm(formItems, modal)) {
+                // Create new milestone via socket
+                socket.post("/Milestone/", formItems, function(/** sails.json.milestone */data) {
+                    if (handleSocketError(data)) {
+                        makeMessage("Milestone created successfully.");
+
+                        modal.modal("hide");
+
+                        // User wants to close modal so just handle trigger
+                        if (close) {
+                            handleEventTrigger(trigger);
+                        } else { // Otherwise trigger edit with same trigger
+                            body.trigger("milestoneEdit", [data.id, trigger]);
+                        }
+                    }
+                });
+            }
+        }
     });
 
     /**
@@ -93,26 +119,19 @@ jQuery(document).ready(function() {
             var title = "Edit milestone";
             var buttons = [
                 {
+                    label: "Save and close",
+                    className: "btn-primary pull-right",
+                    callback: function() {
+                        save(modal, trigger, true);
+
+                        return false;
+                    }
+                },
+                {
                     label: "Save",
                     className: "btn-primary pull-right",
                     callback: function() {
-                        var form = jQuery("#formMilestoneEdit", modal);
-                        var formItems = form.serializeJSON();
-
-                        // Validate current form items and try to update milestone data
-                        if (validateForm(formItems, modal)) {
-                            // Update milestone data
-                            socket.put("/Milestone/"  + milestoneId, formItems, function(/** sails.json.milestone */milestone) {
-                                if (handleSocketError(milestone)) {
-                                    makeMessage("Milestone updated successfully.");
-
-                                    modal.modal("hide");
-
-                                    // Trigger specified event
-                                    handleEventTrigger(trigger);
-                                }
-                            });
-                        }
+                        save(modal, trigger, false);
 
                         return false;
                     }
@@ -141,6 +160,36 @@ jQuery(document).ready(function() {
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
         });
+
+        /**
+         * Method makes actual save function for current model and closes dialog + fire specified
+         * trigger event OR opens edit modal with specified trigger event.
+         *
+         * @param   {jQuery|$}                  modal
+         * @param   {sails.helper.trigger|bool} trigger
+         * @param   {boolean}                   close
+         */
+        function save(modal, trigger, close) {
+            var form = jQuery("#formMilestoneEdit", modal);
+            var formItems = form.serializeJSON();
+
+            // Validate current form items and try to update milestone data
+            if (validateForm(formItems, modal)) {
+                // Update milestone data
+                socket.put("/Milestone/"  + milestoneId, formItems, function(/** sails.json.milestone */data) {
+                    if (handleSocketError(data)) {
+                        makeMessage("Milestone updated successfully.");
+
+                        // User wants to close modal so just handle trigger
+                        if (close) {
+                            handleEventTrigger(trigger);
+
+                            modal.modal("hide");
+                        }
+                    }
+                });
+            }
+        }
     });
 
     /**
