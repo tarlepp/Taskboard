@@ -92,8 +92,8 @@ jQuery(document).ready(function() {
             // Validate form and try to create new user story
             if (validateForm(formItems, modal)) {
                 // Create new user story
-                socket.post("/Story", formItems, function(/** sails.json.story */story) {
-                    if (handleSocketError(story)) {
+                socket.post("/Story", formItems, function(/** sails.json.story */data) {
+                    if (handleSocketError(data)) {
                         makeMessage("User story created successfully.");
 
                         modal.modal("hide");

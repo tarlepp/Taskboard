@@ -34,25 +34,19 @@ jQuery(document).ready(function() {
             var title = "Add new task to story '" + ko.toJS(story.title()) + "'";
             var buttons = [
                 {
+                    label: "Save and close",
+                    className: "btn-primary pull-right",
+                    callback: function() {
+                        save(modal, trigger, true);
+
+                        return false;
+                    }
+                },
+                {
                     label: "Save",
                     className: "btn-primary pull-right",
                     callback: function () {
-                        var form = jQuery("#formTaskNew", modal);
-                        var formItems = form.serializeJSON();
-
-                        // Validate current form items and try to create new task
-                        if (validateForm(formItems, modal)) {
-                            // Create new task
-                            socket.post("/Task", formItems, function(/** sails.json.task */task) {
-                                if (handleSocketError(task)) {
-                                    makeMessage("Task created successfully.");
-
-                                    modal.modal("hide");
-
-                                    handleEventTrigger(trigger);
-                                }
-                            });
-                        }
+                        save(modal, trigger, false);
 
                         return false;
                     }
@@ -73,6 +67,38 @@ jQuery(document).ready(function() {
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
         });
+
+        /**
+         * Method makes actual save function for current model and closes dialog + fire specified
+         * trigger event OR opens edit modal with specified trigger event.
+         *
+         * @param   {jQuery|$}                  modal
+         * @param   {sails.helper.trigger|bool} trigger
+         * @param   {boolean}                   close
+         */
+        function save(modal, trigger, close) {
+            var form = jQuery("#formTaskNew", modal);
+            var formItems = form.serializeJSON();
+
+            // Validate current form items and try to create new task
+            if (validateForm(formItems, modal)) {
+                // Create new task
+                socket.post("/Task", formItems, function(/** sails.json.task */data) {
+                    if (handleSocketError(data)) {
+                        makeMessage("Task created successfully.");
+
+                        modal.modal("hide");
+
+                        // User wants to close modal so just handle trigger
+                        if (close) {
+                            handleEventTrigger(trigger);
+                        } else { // Otherwise trigger edit with same trigger
+                            body.trigger("taskEdit", [data.id, trigger]);
+                        }
+                    }
+                });
+            }
+        }
     });
 
     /**
@@ -90,25 +116,19 @@ jQuery(document).ready(function() {
             var title = "Edit task";
             var buttons = [
                 {
+                    label: "Save and close",
+                    className: "btn-primary pull-right",
+                    callback: function() {
+                        save(modal, trigger, true);
+
+                        return false;
+                    }
+                },
+                {
                     label: "Save",
                     className: "btn-primary pull-right",
                     callback: function() {
-                        var form = jQuery("#formTaskEdit", modal);
-                        var formItems = form.serializeJSON();
-
-                        // Validate current form items and try to update task data
-                        if (validateForm(formItems, modal)) {
-                            // Update task data
-                            socket.put("/Task/"  + taskId, formItems, function(/** sails.json.task */task) {
-                                if (handleSocketError(task)) {
-                                    makeMessage("Task updated successfully.");
-
-                                    modal.modal("hide");
-
-                                    handleEventTrigger(trigger);
-                                }
-                            });
-                        }
+                        save(modal, trigger, false);
 
                         return false;
                     }
@@ -137,6 +157,36 @@ jQuery(document).ready(function() {
         .fail(function(jqXhr, textStatus, error) {
             handleAjaxError(jqXhr, textStatus, error);
         });
+
+        /**
+         * Method makes actual save function for current model and closes dialog + fire specified
+         * trigger event OR opens edit modal with specified trigger event.
+         *
+         * @param   {jQuery|$}                  modal
+         * @param   {sails.helper.trigger|bool} trigger
+         * @param   {boolean}                   close
+         */
+        function save(modal, trigger, close) {
+            var form = jQuery("#formTaskEdit", modal);
+            var formItems = form.serializeJSON();
+
+            // Validate current form items and try to update task data
+            if (validateForm(formItems, modal)) {
+                // Update task data
+                socket.put("/Task/"  + taskId, formItems, function(/** sails.json.task */data) {
+                    if (handleSocketError(data)) {
+                        makeMessage("Task updated successfully.");
+
+                        // User wants to close modal so just handle trigger
+                        if (close) {
+                            handleEventTrigger(trigger);
+
+                            modal.modal("hide");
+                        }
+                    }
+                });
+            }
+        }
     });
 
     /**
@@ -164,7 +214,6 @@ jQuery(document).ready(function() {
                 }
             },
             callback: function(result) {
-                console.log(trigger);
                 if (result) {
                     // Delete task
                     socket.delete("/Task/" + taskId, function(task) {
