@@ -84,25 +84,19 @@ jQuery(document).ready(function() {
                 var title = "Add new user";
                 var buttons = [
                     {
+                        label: "Save and close",
+                        className: "btn-primary pull-right",
+                        callback: function() {
+                            save(modal, trigger, true);
+
+                            return false;
+                        }
+                    },
+                    {
                         label: "Save",
                         className: "btn-primary pull-right",
                         callback: function () {
-                            var form = jQuery("#formUserNew", modal);
-                            var formItems = form.serializeJSON();
-
-                            // Validate current form items and try to update milestone data
-                            if (validateForm(formItems, modal)) {
-                                // Create new user
-                                socket.post("/User", formItems, function(/** sails.json.user */user) {
-                                    if (handleSocketError(user)) {
-                                        makeMessage("User created successfully.");
-
-                                        modal.modal("hide");
-
-                                        handleEventTrigger(trigger);
-                                    }
-                                });
-                            }
+                            save(modal, trigger, false);
 
                             return false;
                         }
@@ -123,6 +117,38 @@ jQuery(document).ready(function() {
             .fail(function(jqXhr, textStatus, error) {
                 handleAjaxError(jqXhr, textStatus, error);
             });
+
+        /**
+         * Method makes actual save function for current model and closes dialog + fire specified
+         * trigger event OR opens edit modal with specified trigger event.
+         *
+         * @param   {jQuery|$}                  modal
+         * @param   {sails.helper.trigger|bool} trigger
+         * @param   {boolean}                   close
+         */
+        function save(modal, trigger, close) {
+            var form = jQuery("#formUserNew", modal);
+            var formItems = form.serializeJSON();
+
+            // Validate current form items and try to update milestone data
+            if (validateForm(formItems, modal)) {
+                // Create new user
+                socket.post("/User", formItems, function(/** sails.json.user */data) {
+                    if (handleSocketError(data)) {
+                        makeMessage("User created successfully.");
+
+                        modal.modal("hide");
+
+                        // User wants to close modal so just handle trigger
+                        if (close) {
+                            handleEventTrigger(trigger);
+                        } else { // Otherwise trigger edit with same trigger
+                            body.trigger("userEdit", [data.id, trigger]);
+                        }
+                    }
+                });
+            }
+        }
     });
 
     /**
@@ -140,27 +166,19 @@ jQuery(document).ready(function() {
                 var title = "Edit user";
                 var buttons = [
                     {
+                        label: "Save and close",
+                        className: "btn-primary pull-right",
+                        callback: function() {
+                            save(modal, trigger, true);
+
+                            return false;
+                        }
+                    },
+                    {
                         label: "Save",
                         className: "btn-primary pull-right",
                         callback: function () {
-                            var formBasic = jQuery("#formUserEdit_1", modal);
-                            var formRegion = jQuery("#formUserEdit_2", modal);
-                            var formItems = jQuery.extend({}, formBasic.serializeJSON(), formRegion.serializeJSON());
-
-                            // Validate current form items and try to update milestone data
-                            if (validateForm(formItems, modal)) {
-                                // Update user data
-                                socket.put("/User/"  + userId, formItems, function(/** sails.json.user */user) {
-                                    if (handleSocketError(user)) {
-                                        makeMessage("User updated successfully.");
-
-                                        modal.modal("hide");
-
-                                        // Trigger specified event
-                                        handleEventTrigger(trigger);
-                                    }
-                                });
-                            }
+                            save(modal, trigger, false);
 
                             return false;
                         }
@@ -189,6 +207,37 @@ jQuery(document).ready(function() {
             .fail(function(jqXhr, textStatus, error) {
                 handleAjaxError(jqXhr, textStatus, error);
             });
+
+        /**
+         * Method makes actual save function for current model and closes dialog + fire specified
+         * trigger event OR opens edit modal with specified trigger event.
+         *
+         * @param   {jQuery|$}                  modal
+         * @param   {sails.helper.trigger|bool} trigger
+         * @param   {boolean}                   close
+         */
+        function save(modal, trigger, close) {
+            var formBasic = jQuery("#formUserEdit_1", modal);
+            var formRegion = jQuery("#formUserEdit_2", modal);
+            var formItems = jQuery.extend({}, formBasic.serializeJSON(), formRegion.serializeJSON());
+
+            // Validate current form items and try to update milestone data
+            if (validateForm(formItems, modal)) {
+                // Update user data
+                socket.put("/User/"  + userId, formItems, function(/** sails.json.user */data) {
+                    if (handleSocketError(data)) {
+                        makeMessage("User updated successfully.");
+
+                        // User wants to close modal so just handle trigger
+                        if (close) {
+                            handleEventTrigger(trigger);
+
+                            modal.modal("hide");
+                        }
+                    }
+                });
+            }
+        }
     });
 
     /**
