@@ -23,8 +23,8 @@
             </a>
         </th>
         <th class="col-md-9">Story</th>
-        <th class="col-md-2">Created at</th>
-        <th class="col-md-1">Estimate</th>
+        <th class="col-md-1 text-right">Estimate</th>
+        <th class="col-md-2 text-right">Created at</th>
     </tr>
     </thead>
     <tbody>
@@ -63,9 +63,12 @@
         <td class="col-md-9 <% if (role < 0) { %>cursor-move<% } %>">
             <%= story.title %>
         </td>
-        <td class="col-md-2 text-nowrap">
+        <td class="col-md-1 text-right">
+            <%= (story.estimate == -1) ? '???' : story.estimate %>
+        </td>
+        <td class="col-md-2 text-right text-nowrap">
             <span class="tooltipDiv">
-                <%= story.createdAtObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDate) %>
+                <%= story.createdAtObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDateTime) %>
 
                 <div class="tooltipDivContainer">
                     <div>
@@ -88,9 +91,6 @@
                     </div>
                 </div>
             </span>
-        </td>
-        <td class="col-md-1 text-right">
-            <%= (story.estimate == -1) ? '???' : story.estimate %>
         </td>
     </tr>
     <% }); %>
