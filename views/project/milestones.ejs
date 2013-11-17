@@ -61,10 +61,10 @@
             </a>
         </th>
         <th class="col-md-5">Milestone</th>
-        <th class="col-md-1">Deadline</th>
+        <th class="col-md-1 text-center">Deadline</th>
         <th class="col-md-1 text-right">Stories</th>
         <th class="col-md-1 text-right">Tasks</th>
-        <th class="col-md-4">Progress</th>
+        <th class="col-md-4 text-center">Progress</th>
     </tr>
     </thead>
     <tbody>
@@ -105,7 +105,7 @@
         <td>
             <%= milestone.title %>
         </td>
-        <td class="text-nowrap">
+        <td class="text-nowrap text-center">
             <% if (milestone.deadlineObject()) { %>
                 <span class="tooltipDiv">
                     <%= milestone.deadlineObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDate) %>
