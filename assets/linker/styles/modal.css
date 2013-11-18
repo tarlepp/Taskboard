@@ -93,3 +93,10 @@ body.modal-open {
 .modal-body .nav > li > a {
     padding: 5px 15px;
 }
+
+.modal-body .tab-content h4:first-of-type {
+    margin-top: 0;
+}
+.modal-body .tab-content h4 {
+    margin-top: 15px;
+}
