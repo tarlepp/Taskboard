@@ -149,6 +149,16 @@ module.exports = {
                         row.stamp.tz(req.user.momentTimezone);
                     });
 
+                    // Group sign in data by IP addresses
+                    data.ipData = _.groupBy(data.history, function(row) {
+                        return row.ip;
+                    });
+
+                    // Group sign in data by user agents
+                    data.agentData = _.groupBy(data.history, function(row) {
+                        return row.agent;
+                    });
+
                     data.currentUser = req.user;
 
                     res.view(data);
