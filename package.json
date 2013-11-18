@@ -6,7 +6,7 @@
   "dependencies": {
     "sails": "0.9.7",
     "grunt": "0.4.1",
-    "sails-mysql": "0.9.2",
+    "sails-mysql": "0.9.5",
     "optimist": "0.3.4",
     "ejs": "0.8.4",
     "jquery": "~1.8.3",
@@ -16,7 +16,7 @@
     "passport-local": "~0.1.6",
     "gravatar": "~1.0.6",
     "async": "~0.2.9",
-    "moment": "~2.3.1",
+    "moment": "~2.4.0",
     "moment-timezone": "~0.0.3",
     "bower": "~1.2.7"
   },
