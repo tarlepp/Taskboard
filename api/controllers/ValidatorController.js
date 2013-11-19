@@ -8,8 +8,6 @@ module.exports = {
     /**
      * isUnique action. This is just a temporary solution for this...
      *
-     * todo: This is not secure way to do this...
-     *
      * @param   {Request}   req Request object
      * @param   {Response}  res Response object
      */
@@ -22,7 +20,7 @@ module.exports = {
         try {
             require("../models/" + model);
         } catch (Error) {
-            res.send("Invalid model", 404);
+            res.send(404, "Invalid model");
         }
 
         // This is dirty, very dirty...
@@ -31,7 +29,7 @@ module.exports = {
             .where(search)
             .done(function(error, data) {
                 if (error) {
-                    res.send(error, 500);
+                    res.send(500, error);
                 }
 
                 var output = false;
@@ -43,6 +41,29 @@ module.exports = {
                 }
 
                 res.json(output);
+            });
+    },
+
+    /**
+     * passwordCheck action.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    passwordCheck: function(req, res) {
+        var userId = req.param("userId");
+        var password = req.param("password");
+
+        User
+            .findOne(userId)
+            .done(function(error, user) {
+                if (error) {
+                    res.send(500, error);
+                } else if (!user) {
+                    res.send(404, "User not found");
+                } else {
+                    res.json(user.validPassword(password));
+                }
             });
     }
 };
