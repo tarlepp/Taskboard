@@ -171,5 +171,15 @@ module.exports.policies = {
         create:     ["authenticated", "isAjaxOrSocket", "isAdministrator"],
         update:     ["authenticated", "isAjaxOrSocket", "isAdministrator"],
         destroy:    ["authenticated", "isAjaxOrSocket", "isAdministrator"]
+    },
+
+    // Type controller policies
+    "Validator": {
+        // By default do not allow nothing
+        "*":            false,
+
+        // Custom actions
+        isUnique:       ["authenticated", "isAjax"],
+        passwordCheck:  ["authenticated", "isAjax"]
     }
 };
