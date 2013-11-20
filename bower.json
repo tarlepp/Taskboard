@@ -42,6 +42,7 @@
     "bootstrap-hover-dropdown": "~2.0.1",
     "knockout.js": "~3.0.0",
     "knockout-deferred-updates": "~3.0.0",
-    "knockout-sortable": "~0.8.4"
+    "knockout-sortable": "~0.8.4",
+    "jquery.complexify.js": "*"
   }
 }
