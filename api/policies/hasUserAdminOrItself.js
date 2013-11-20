@@ -13,7 +13,7 @@ module.exports = function hasUserAdmin(request, response, next) {
 
     var userId = parseInt(request.param("userId"), 10);
 
-    if (isNaN(projectId)) {
+    if (isNaN(userId)) {
         userId = parseInt(request.param("id"), 10);
     }
 
