@@ -31,10 +31,6 @@ h1, h2, h3, h4, h5, h6,
     font-family: 'Yanone Kaffeesatz', "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-i, em {
-    margin-right: 2px;
-}
-
 .table thead > tr > th,
 .table tbody > tr > th,
 .table tfoot > tr > th,

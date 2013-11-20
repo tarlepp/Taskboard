@@ -11,7 +11,11 @@
 module.exports = function hasUserAdmin(request, response, next) {
     sails.log.verbose(" POLICY - api/policies/hasUserAdminOrItself.js");
 
-    var userId = parseInt(request.param("id"), 10);
+    var userId = parseInt(request.param("userId"), 10);
+
+    if (isNaN(projectId)) {
+        userId = parseInt(request.param("id"), 10);
+    }
 
     // Only administrator users have right to admin users.
     if (request.user.admin || request.user.id === userId) {
