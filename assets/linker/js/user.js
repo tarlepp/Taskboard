@@ -367,6 +367,28 @@ function initUserForm(context, parameters) {
 
     // Updated times
     timedUpdate();
+
+    context.on("click", "#passwordChangeButton", function() {
+        var form = jQuery("#formUserEditPasswordChange", context);
+        var formItems = form.serializeJSON();
+
+        // Validate password change form items and try to update user's password
+        if (validateForm(formItems, context)) {
+            // Fetch available users
+            jQuery.ajax({
+                type: "POST",
+                url: "/User/changePassword/",
+                data: formItems,
+                dataType: "json"
+            })
+            .done(function() {
+                makeMessage("Password changed successfully.");
+            })
+            .fail(function(jqXhr, textStatus, error) {
+                handleAjaxError(jqXhr, textStatus, error);
+            });
+        }
+    });
 }
 
 function timedUpdate () {

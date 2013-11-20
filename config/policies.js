@@ -136,11 +136,12 @@ module.exports.policies = {
         destroy:    ["authenticated", "isAjaxOrSocket", "hasUserAdmin"],
 
         // Custom actions
-        list:       ["authenticated", "isAjax", "hasUserAdmin"],
-        add:        ["authenticated", "isAjax", "hasUserAdmin"],
-        edit:       ["authenticated", "isAjax", "hasUserAdminOrItself"],
-        history:    ["authenticated", "isAjax", "hasUserAdminOrItself"],
-        projects:   ["authenticated", "isAjax", "hasUserAdminOrItself"]
+        list:           ["authenticated", "isAjax", "hasUserAdmin"],
+        add:            ["authenticated", "isAjax", "hasUserAdmin"],
+        edit:           ["authenticated", "isAjax", "hasUserAdminOrItself"],
+        history:        ["authenticated", "isAjax", "hasUserAdminOrItself"],
+        projects:       ["authenticated", "isAjax", "hasUserAdminOrItself"],
+        changePassword: ["authenticated", "isAjax", "hasUserAdminOrItself"]
     },
 
     // ProjectUser controller policies
@@ -180,6 +181,6 @@ module.exports.policies = {
 
         // Custom actions
         isUnique:       ["authenticated", "isAjax"],
-        passwordCheck:  ["authenticated", "isAjax"]
+        passwordCheck:  ["authenticated", "isAjax", "hasUserAdminOrItself"]
     }
 };

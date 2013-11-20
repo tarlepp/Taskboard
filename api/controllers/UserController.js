@@ -244,5 +244,50 @@ module.exports = {
                 }
             }
         );
+    },
+
+    /**
+     * User password change action.
+     *
+     * todo add support for admin users to change anyone password
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    changePassword: function(req, res) {
+        var userId = req.param("userId");
+        var passwordCurrent = req.param("passwordCurrent");
+        var passwordNew = req.param("password");
+        var passwordReType = req.param("passwordReType");
+
+        if (passwordNew !== passwordReType) {
+            return res.send(400, "Given passwords doesn't match.");
+        } else if (passwordNew.length < 10) {
+            return res.send(400, "Given new password is too short.");
+        } else if (passwordCurrent.length < 10) {
+            return res.send(400, "Given current password is too short.");
+        }
+
+        // Get user object
+        DataService.getUser(userId, function(error, user) {
+            if (error) {
+                return res.send(error.status ? error.status : 500, error.message ? error.message : error);
+            } else if (!user) {
+                return res.send(404, "User not found");
+            } else if (!user.validPassword(passwordCurrent)) {
+                return res.send(400, "Given current password value doesn't match.");
+            } else {
+                // Set new password value for user
+                user.password = passwordNew;
+
+                user.save(function(error) {
+                    if (error) {
+                        return res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    } else {
+                        return res.json(true);
+                    }
+                });
+            }
+        });
     }
 };
