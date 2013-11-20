@@ -89,6 +89,9 @@ function validateForm(items, context) {
                 case "length":
                     method = "validateLength";
                     break;
+                case "passwordCurrent":
+                    method = "validateCurrentPassword";
+                    break;
                 default:
                     throw new Error("Implement '" + type + "' validation!");
                     break;
@@ -383,6 +386,40 @@ function validateLength(context, input, group, label, value, errors) {
     }
 
     return true;
+}
+
+/**
+ * Method validates current user password.
+ *
+ * @param   {jQuery}    context Current context
+ * @param   {jQuery}    input   Current input field
+ * @param   {jQuery}    group   Input control group
+ * @param   {String}    label   Input label as a text
+ * @param   {String}    value   Actual email address value from input
+ * @param   {Array}     errors  Array of current errors
+ *
+ * @returns {boolean}
+ */
+function validateCurrentPassword(context, input, group, label, value, errors) {
+    var userId = parseInt(input.data("userId"), 10);
+
+    // Make AJAX call to validate given password with specified user
+    var response = jQuery.ajax({
+        async: false,
+        type: "POST",
+        dataType: "json",
+        url: "/Validator/passwordCheck",
+        data: {
+            password: value,
+            userId: userId
+        }
+    }).responseText;
+
+    if (response !== "true") {
+        errors.push("Given current password value doesn't match.");
+    }
+
+    return (response === "true");
 }
 
 /**
