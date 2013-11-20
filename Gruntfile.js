@@ -78,6 +78,8 @@ module.exports = function (grunt) {
         'linker/bower_components/noty/js/noty/themes/default.js',
         'linker/bower_components/noty/js/noty/layouts/top.js',
         'linker/bower_components/jquery-selectorator/dist/selectorator.min.js',
+        'linker/bower_components/jquery.complexify.js/jquery.complexify.min.js',
+        'linker/bower_components/jquery.complexify.js/jquery.complexify.banlist.js',
 
         // Bootstrap specified libraries
         'linker/bower_components/bootstrap/dist/js/bootstrap.min.js',
