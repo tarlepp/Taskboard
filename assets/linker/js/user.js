@@ -389,6 +389,35 @@ function initUserForm(context, parameters) {
             });
         }
     });
+
+    jQuery("#formUserEditPassword, #formUserNewPassword", context).complexify({}, function(valid, complexity) {
+        var progressBar = jQuery("#passwordStrength", context);
+
+        if (!valid) {
+            progressBar
+                .css({"width":complexity + "%"})
+                .removeClass("progress-bar-success")
+                .removeClass("progress-bar-warning")
+                .addClass("progress-bar-danger")
+                .addClass("progress-bar-invalid");
+
+            if (Math.round(complexity) > 0) {
+                progressBar.removeClass("progress-bar-invalid");
+            }
+        } else {
+            var classToAdd = Math.round(complexity) > 60 ? "progress-bar-success" : "progress-bar-warning";
+
+            progressBar
+                .css({"width":complexity + "%"})
+                .removeClass("progress-bar-invalid")
+                .removeClass("progress-bar-danger")
+                .removeClass("progress-bar-warning")
+                .removeClass("progress-bar-success")
+                .addClass(classToAdd);
+        }
+
+        progressBar.find("span").html(Math.round(complexity) + "%");
+    });
 }
 
 function timedUpdate () {

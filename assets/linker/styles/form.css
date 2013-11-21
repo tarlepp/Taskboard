@@ -263,7 +263,6 @@ div[data-role="editor-toolbar"] {
     top: 3px;
 }
 
-
 .dropdown-menu > li > a.select-dummy-option,
 .select-dummy-option {
     color: #999999;
@@ -276,3 +275,22 @@ div[data-role="editor-toolbar"] {
 .help-block {
     margin-bottom: 0;
 }
+
+.password-strength .progress {
+    height: 35px;
+    margin-bottom: 0;
+}
+
+.password-strength .progress .progress-bar {
+    font-size: 16px;
+    line-height: 35px;
+}
+
+.password-strength .progress .progress-bar span {
+    margin: 0 10px;
+}
+
+.password-strength .progress .progress-bar.progress-bar-invalid span {
+    color: #333333;
+}
+
