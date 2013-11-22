@@ -31,6 +31,7 @@ module.exports = function (grunt) {
         'linker/bower_components/bootstrap/dist/css/bootstrap.min.css',
         'linker/bower_components/bootstrap-datepicker/css/datepicker.css',
         'linker/bower_components/bootstrap-select/bootstrap-select.min.css',
+        'linker/bower_components/bootstrap-popover-extra-placements/source/popover-extra-placements.css',
         'linker/bower_components/font-awesome/css/font-awesome.css',
         'linker/bower_components/qtip2/jquery.qtip.min.css',
 
@@ -89,6 +90,7 @@ module.exports = function (grunt) {
         'linker/bower_components/bootstrap-wysiwyg/bootstrap-wysiwyg.js',
         'linker/bower_components/bootstrap-wysiwyg/external/jquery.hotkeys.js',
         'linker/bower_components/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js',
+        'linker/bower_components/bootstrap-popover-extra-placements/source/popover-extra-placements.js',
 
         // Knockout specified libraries
         'linker/bower_components/knockout.js/knockout.js',
