@@ -270,10 +270,6 @@ ul, ol {
     margin-left: 5px;
 }
 
-.actionMenu-toggle span {
-    padding-left: 6px;
-}
-
 .popover.actionMenu {
     z-index: 3000;
     padding: 0;;
