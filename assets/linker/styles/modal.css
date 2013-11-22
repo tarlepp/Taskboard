@@ -6,6 +6,18 @@ body.modal-open {
     overflow: hidden;
 }
 
+@media screen and (min-width: 768px) {
+    .modal-dialog {
+        width: 700px;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .modal-dialog {
+        width: 950px;
+    }
+}
+
 .modal.modal-wide .modal-dialog {
     width: 95%;
 }
