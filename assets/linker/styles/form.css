@@ -4,9 +4,7 @@ textarea {
 
 label {
     cursor: default;
-    font-size: 18px;
     font-weight: normal;
-    line-height: 20px;
 }
 
 label.col-lg-3 {
@@ -126,7 +124,6 @@ form .required label:after {
     position: relative;
     right: -4px;
     top: -4px;
-    font-size: 16px;
     font-weight: bold;
     color: #d9534f;
 }

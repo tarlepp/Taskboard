@@ -204,12 +204,11 @@ function createBootboxDialog(title, content, buttons, trigger) {
         initTabs(modal);        // Initialize tabs
         initActionMenu(modal);  // Initialize custom action menus
 
-        modal.addClass("modal-wide");
+        var header = modal.find(".modal-header");
+        var body = modal.find(".modal-body");
+        var footer = modal.find(".modal-footer");
 
-        var header = modal.find(".modal-header", modal);
-        var body = modal.find(".modal-body", modal);
-        var footer = modal.find(".modal-footer", modal);
-        var height = $(window).height() - header.height() - footer.height() - 90;
+        var height = jQuery(window).height() - header.height() - footer.height() - 90;
 
         body.css("max-height", height);
         body.width(body.width() - 2);
