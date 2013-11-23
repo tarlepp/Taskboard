@@ -38,7 +38,8 @@ var sails = {
     error: {
         socket: {
             status: "",
-            errors: ""
+            errors: "",
+            message: ""
         },
         generic: {
             message: "",
