@@ -11,7 +11,15 @@
 module.exports = function hasProjectUpdate(request, response, next) {
     sails.log.verbose(" POLICY - api/policies/hasProjectAdmin.js");
 
-    var projectId = parseInt(request.param("id"), 10);
+    var projectId = parseInt(request.param("projectId"), 10);
+
+    if (isNaN(projectId)) {
+        projectId = parseInt(request.param("id"), 10);
+    }
+
+    if (isNaN(projectId)) {
+        response.send(400, "Cannot verify policy.");
+    }
 
     // Check that current user has access to specified project
     AuthService.hasProjectAdmin(request.user, projectId, function(error, hasRight) {
