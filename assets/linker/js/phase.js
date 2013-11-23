@@ -59,63 +59,68 @@ jQuery(document).ready(function() {
                             } else {
                                 row.removeClass("has-error");
 
-                                var phaseData = {
+                                phases.push({
+                                    id: phaseId,
                                     title: title,
                                     order: key,
                                     tasks: isNaN(tasks) ? 0 : tasks,
                                     isDone: isDone,
                                     projectId: projectId
-                                };
-
-                                // Add new phase
-                                if (isNaN(phaseId)) {
-                                    socket.post("/Phase", phaseData, function(/** sails.json.phase */phase) {
-                                        if (handleSocketError(phase)) {
-                                            phases.push(true);
-
-                                            checkData();
-                                        } else {
-                                            errors = true;
-                                        }
-                                    });
-                                } else { // Update phase data
-                                    socket.put("/Phase/"  + phaseId, phaseData, function(/** sails.json.phase */phase) {
-                                        if (handleSocketError(phase)) {
-                                            phases.push(true);
-
-                                            checkData();
-                                        } else {
-                                            errors = true;
-                                        }
-                                    });
-                                }
+                                });
                             }
                         });
 
                         /**
-                         * Function checks that we have processed all phases data correctly. If
-                         * all phases are updated function will trigger success message.
+                         * Function to update or insert phase to database. This is used with
+                         * async.map() method.
+                         *
+                         * @param   {sails.model.phase} item        Single phase item
+                         * @param   {Function}          callback    Callback function to call after job
                          */
-                        function checkData() {
-                            var ready = true;
+                        var phaseUpdate = function(item, callback) {
+                            var phaseId = item.id;
 
-                            if (lines.length === phases.length) {
-                                jQuery.each(phases, function(key, value) {
-                                    if (value !== true) {
-                                        ready = false;
+                            delete item.id;
+
+                            // Insert new phase
+                            if (isNaN(phaseId)) {
+                                socket.post("/Phase/", item, function(data) {
+                                    if (handleSocketError(data, true)) {
+                                        callback(null, data);
+                                    } else {
+                                        callback(data, null);
                                     }
                                 });
-                            } else {
-                                ready = false;
+                            } else { // Update phase data
+                                socket.put("/Phase/" + phaseId, item, function(data) {
+                                    if (handleSocketError(data, true)) {
+                                        callback(null, data);
+                                    } else {
+                                        callback(data, null);
+                                    }
+                                });
+                            }
+                        };
+
+                        /**
+                         * Used callback function on phase insert / update async.map() function.
+                         *
+                         * @param   {Null|sails.error.socket}   error   Socket error or null
+                         * @param   {Null|sails.model.phase[]}  results Phase data or null
+                         */
+                        var phaseCallback = function(error, results) {
+                            if (!error) {
+                                makeMessage("Project phases saved successfully.");
                             }
 
-                            if (ready && errors === false) {
-                                makeMessage("Project phases saved successfully.", "success", {});
+                            modal.modal("hide");
 
-                                modal.modal("hide");
+                            body.trigger("phasesEdit", [projectId, trigger]);
+                        };
 
-                                handleEventTrigger({trigger: "phasesEdit", parameters: [projectId]});
-                            }
+                        // We have no errors, so try to insert / update phase data
+                        if (!errors) {
+                            async.map(phases, phaseUpdate,phaseCallback);
                         }
 
                         return false;
