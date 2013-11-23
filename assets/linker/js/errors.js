@@ -29,17 +29,21 @@ function handleSocketError(error, showMessage) {
     // We have an error!
     if (error && ((error.status && error.status !== 200) || (error.errors && error.status))) {
         if (showMessage) {
-            var message = '';
+            var message = "";
 
             _.each(error.errors, function(error) {
                 message += parseSailsError(error);
             });
 
             if (message.length === 0) {
-                if (error.status == 404) {
-                    message = 'Requested page not found [404].';
+                if (error.message) {
+                    message = error.message + " [" + error.status + "]";
+                } else if (error.status == 404) {
+                    message = "Requested page not found [404].";
                 } else if (error.status == 500) {
-                    message = 'Internal Server Error [500].';
+                    message = "Internal Server Error [500].";
+                } else {
+                    message = "Unknown error occured."
                 }
             }
 
