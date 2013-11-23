@@ -117,8 +117,10 @@ exports.hasProjectAccess = function(user, projectId, next, returnRole) {
                     output = -3;
                 } else if (results.primary) {
                     output = -2;
-                } else {
+                } else if (results.contributor.role) {
                     output = results.contributor.role;
+                } else {
+                    output = false;
                 }
             }
 
