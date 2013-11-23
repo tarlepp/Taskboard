@@ -6,6 +6,8 @@
  *                  sprint. Sprint relation is not required, if sprintId is 0 or null current user story is
  *                  in project backlog.
  */
+var moment = require("moment-timezone");
+
 module.exports = {
     schema: true,
     attributes: {
@@ -58,6 +60,12 @@ module.exports = {
             required:   true,
             defaultsTo: 0
         },
+        timeStart: {
+            type:       'datetime'
+        },
+        timeEnd: {
+            type:       'datetime'
+        },
 
         estimateFormatted: function() {
             return (parseInt(this.estimate, 10) === -1) ? '???' : this.estimate;
@@ -65,13 +73,43 @@ module.exports = {
         objectTitle: function() {
             return this.title;
         },
-        createdAtObject: function () {
+        createdAtObject: function() {
             return (this.createdAt && this.createdAt != '0000-00-00')
                 ? DateService.convertDateObjectToUtc(this.createdAt) : null;
         },
-        updatedAtObject: function () {
+        updatedAtObject: function() {
             return (this.updatedAt && this.updatedAt != '0000-00-00')
                 ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
+        },
+        timeStartObject: function() {
+            return (this.timeStart && this.timeStart != '0000-00-00 00:00:00')
+                ? DateService.convertDateObjectToUtc(this.timeStart) : null;
+        },
+        timeEndObject: function() {
+            return (this.timeStart && this.timeStart != '0000-00-00 00:00:00')
+                ? DateService.convertDateObjectToUtc(this.timeEnd) : null;
+        },
+        timeDuration: function() {
+            var output;
+
+            if (moment.isMoment(this.timeStartObject()) && moment.isMoment(this.timeEndObject())) {
+                output = this.timeEndObject().diff(this.timeStartObject(), 'seconds');
+            } else {
+                output = 0;
+            }
+
+            return output;
+        },
+        timeDurationHuman: function() {
+            var output;
+
+            if (moment.isMoment(this.timeStartObject()) && moment.isMoment(this.timeEndObject())) {
+                output = this.timeStartObject().from(this.timeEndObject(), true);
+            } else {
+                output = "";
+            }
+
+            return output;
         }
     },
 
