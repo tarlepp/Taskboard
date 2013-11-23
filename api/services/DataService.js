@@ -1,8 +1,7 @@
 /**
  * /api/services/DataService.js
  *
- * Generic data service, which is used to fetch generic data and call defined callback
- * after data fetching.
+ * Generic data service, which is used to fetch generic data and call defined callback after data fetching.
  */
 
 /**
@@ -18,12 +17,12 @@ exports.getProject = function(projectId, callback) {
             if (error) {
                 callback(error, null);
             } else if (!project) {
-                var err = new Error();
+                var errorMessage = new Error();
 
-                err.message = "Project not found.";
-                err.status = 404;
+                errorMessage.message = "Project not found.";
+                errorMessage.status = 404;
 
-                callback(err, null);
+                callback(errorMessage, null);
             } else {
                 callback(null, project);
             }
@@ -43,12 +42,12 @@ exports.getSprint = function(sprintId, callback) {
             if (error) {
                 callback(error, null);
             } else if (!sprint) {
-                var err = new Error();
+                var errorMessage = new Error();
 
-                err.message = "Sprint not found.";
-                err.status = 404;
+                errorMessage.message = "Sprint not found.";
+                errorMessage.status = 404;
 
-                callback(err, null);
+                callback(errorMessage, null);
             } else {
                 callback(null, sprint);
             }
@@ -68,12 +67,12 @@ exports.getMilestone = function(milestoneId, callback) {
             if (error) {
                 callback(error, null);
             } else if (!milestone) {
-                var err = new Error();
+                var errorMessage = new Error();
 
-                err.message = "Milestone not found.";
-                err.status = 404;
+                errorMessage.message = "Milestone not found.";
+                errorMessage.status = 404;
 
-                callback(err, null);
+                callback(errorMessage, null);
             } else {
                 callback(null, milestone);
             }
@@ -93,12 +92,12 @@ exports.getStory = function(storyId, callback) {
             if (error) {
                 callback(error, null);
             } else if (!story) {
-                var err = new Error();
+                var errorMessage = new Error();
 
-                err.message = "Story not found.";
-                err.status = 404;
+                errorMessage.message = "Story not found.";
+                errorMessage.status = 404;
 
-                callback(err, null);
+                callback(errorMessage, null);
             } else {
                 callback(null, story);
             }
@@ -118,12 +117,12 @@ exports.getTask = function(taskId, callback) {
             if (error) {
                 callback(error, null);
             } else if (!task) {
-                var err = new Error();
+                var errorMessage = new Error();
 
-                err.message = "Task not found.";
-                err.status = 404;
+                errorMessage.message = "Task not found.";
+                errorMessage.status = 404;
 
-                callback(err, null);
+                callback(errorMessage, null);
             } else {
                 callback(null, task);
             }
@@ -143,12 +142,12 @@ exports.getUser = function(userId, callback) {
             if (error) {
                 callback(error, null);
             } else if (!user) {
-                var err = new Error();
+                var errorMessage = new Error();
 
-                err.message = "User not found.";
-                err.status = 404;
+                errorMessage.message = "User not found.";
+                errorMessage.status = 404;
 
-                callback(err, null);
+                callback(errorMessage, null);
             } else {
                 callback(null, user);
             }
@@ -168,12 +167,12 @@ exports.getPhase = function(phaseId, callback) {
             if (error) {
                 callback(error, null);
             } else if (!phase) {
-                var err = new Error();
+                var errorMessage = new Error();
 
-                err.message = "Phase not found.";
-                err.status = 404;
+                errorMessage.message = "Phase not found.";
+                errorMessage.status = 404;
 
-                callback(err, null);
+                callback(errorMessage, null);
             } else {
                 callback(null, phase);
             }
