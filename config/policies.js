@@ -48,9 +48,9 @@ module.exports.policies = {
 
         // Default handling for blueprints
         find:       ["authenticated", "isAjaxOrSocket"],
-        create:     ["authenticated", "isAjaxOrSocket", "hasProjectAdmin"],
-        update:     ["authenticated", "isAjaxOrSocket", "hasProjectAdmin"],
-        destroy:    ["authenticated", "isAjaxOrSocket", "hasProjectAdmin"],
+        create:     ["authenticated", "isAjaxOrSocket", "hasPhaseAdmin"],
+        update:     ["authenticated", "isAjaxOrSocket", "hasPhaseAdmin"],
+        destroy:    ["authenticated", "isAjaxOrSocket", "hasPhaseAdmin"],
 
         // Custom actions
         edit:       ["authenticated", "isAjax", "hasProjectAdmin"]
