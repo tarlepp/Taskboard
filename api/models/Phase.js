@@ -34,7 +34,6 @@ module.exports = {
         // If false, then in case of story splitting move phase tasks to new story
         isDone: {
             type:       'boolean',
-            required:   true,
             defaultsTo: 0
         },
 
