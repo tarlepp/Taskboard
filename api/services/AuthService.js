@@ -482,6 +482,57 @@ exports.hasTaskAdmin = function(user, taskId, next) {
 };
 
 /**
+ * Method checks if specified user has access to specified phase or not.
+ *
+ * @param   {sails.req.user}    user            Signed in user object
+ * @param   {Number}            phaseId         Phase id to check
+ * @param   {Function}          next            Main callback function, which is called after checks
+ * @param   {Boolean}           [returnRole]    Return role in callback not just boolean value
+ */
+exports.hasPhaseAccess = function(user, phaseId, next, returnRole) {
+    returnRole = returnRole || false;
+
+    /**
+     * Make waterfall jobs to check if user has access to specified story or not:
+     *
+     *  1)  Fetch phase data (check that phase exists)
+     *  2)  Call AuthService.hasProjectAccess to check actual project right
+     */
+    async.waterfall(
+        [
+            /**
+             * Check that phase exists.
+             *
+             * @param   {Function}  callback
+             */
+            function(callback) {
+                DataService.getPhase(phaseId, callback);
+            },
+
+            /**
+             * Check that user has access to phase project
+             *
+             * @param   {sails.model.phase} phase       Phase data
+             * @param   {Function}          callback
+             */
+            function(phase, callback) {
+                AuthService.hasStoryAccess(user, phase.projectId, callback, returnRole);
+            }
+        ],
+
+        /**
+         * Callback function which is been called after all jobs are processed.
+         *
+         * @param   {Error|String}  error
+         * @param   {Boolean}       results
+         */
+        function(error, results) {
+            next(error, results);
+        }
+    );
+};
+
+/**
  * Method checks if specified user has admin access to specified phase or not.
  *
  * @param   {sails.req.user}    user    Signed in user object
