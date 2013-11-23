@@ -20,6 +20,6 @@ module.exports = function isAjax(request, response, next) {
              */
         }, 1000);
 
-        response.redirect("/");
+        return response.redirect("/");
     }
 };

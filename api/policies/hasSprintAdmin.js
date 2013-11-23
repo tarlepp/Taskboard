@@ -1,7 +1,19 @@
 // api/policies/hasSprintAdmin.js
 
 /**
- * Policy to check if user has admin rights to sprint in specified project or not.
+ * Policy to check if user has admin rights to sprint in specified project or not. Actual check is
+ * done by one of following internal AuthService methods;
+ *
+ *  - hasSprintAdmin
+ *  - hasProjectAdmin
+ *
+ * Note that this policy relies one of following parameters are:
+ *
+ *  - id
+ *  - sprintId
+ *  - projectId
+ *
+ * Actual auth checks are done depending of given parameters.
  *
  * @param   {Request}   request     Request object
  * @param   {Response}  response    Response object
@@ -10,16 +22,19 @@
 module.exports = function hasSprintAdmin(request, response, next) {
     sails.log.verbose(" POLICY - api/policies/hasSprintAdmin.js");
 
-    var sprintId = parseInt(request.param("id"), 10);
+    var id = parseInt(request.param("id"), 10);
+    var sprintId = parseInt(request.param("sprintId"), 10);
     var projectId = parseInt(request.param("projectId"), 10);
 
-    // Check that current user has access to specified sprint
-    if (!isNaN(sprintId)) {
+    // Id or sprint id given
+    if (!isNaN(id) || !isNaN(sprintId)) {
+        sprintId = !isNaN(sprintId) ? id : sprintId;
+
         AuthService.hasSprintAdmin(request.user, sprintId, function(error, hasRight) {
             if (error) { // Error occurred
-                response.send(error, error.status ? error.status : 500);
+                return ErrorService.makeErrorResponse(error.status ? error.status : 500, error, request, response);
             } else if (!hasRight) { // No admin rights
-                response.send("Insufficient rights to admin sprint.", 403);
+                return ErrorService.makeErrorResponse(403, "Insufficient rights to admin this sprint.", request, response);
             } else { // Otherwise all is ok
                 sails.log.verbose("          OK");
 
@@ -30,9 +45,9 @@ module.exports = function hasSprintAdmin(request, response, next) {
         // Check that current user has update access to specified project
         AuthService.hasProjectAdmin(request.user, projectId, function(error, hasRight) {
             if (error) { // Error occurred
-                response.send(error, error.status ? error.status : 500);
+                return ErrorService.makeErrorResponse(error.status ? error.status : 500, error, request, response);
             } else if (!hasRight) { // No admin rights
-                response.send("Insufficient rights to admin sprint.", 403);
+                return ErrorService.makeErrorResponse(403, "Insufficient rights to admin this sprint.", request, response);
             } else { // Otherwise all is ok
                 sails.log.verbose("          OK");
 
@@ -40,6 +55,6 @@ module.exports = function hasSprintAdmin(request, response, next) {
             }
         });
     } else {
-        response.send("Cannot identify sprint.", 403);
+        return ErrorService.makeErrorResponse(403, "Cannot identify sprint.", request, response);
     }
 };

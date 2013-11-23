@@ -8,14 +8,13 @@
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function to call if all is ok
  */
-module.exports = function hasUserAdmin(request, response, next) {
+module.exports = function hasUserAdminOrItself(request, response, next) {
     sails.log.verbose(" POLICY - api/policies/hasUserAdminOrItself.js");
 
+    var id = parseInt(request.param("id"), 10);
     var userId = parseInt(request.param("userId"), 10);
 
-    if (isNaN(userId)) {
-        userId = parseInt(request.param("id"), 10);
-    }
+    userId = isNaN(userId) ? id : userId;
 
     // Only administrator users have right to admin users.
     if (request.user.admin || request.user.id === userId) {
@@ -23,6 +22,6 @@ module.exports = function hasUserAdmin(request, response, next) {
 
         next();
     } else {
-        response.send("Weird. You're not the one you present.", 403);
+        return ErrorService.makeErrorResponse(403, "Weird. You're not the one you present.", request, response);
     }
 };

@@ -11,6 +11,7 @@
  * Note that this policy relies one of following parameters are:
  *
  *  - id
+ *  - storyId
  *  - sprintId
  *  - projectId
  *
@@ -23,41 +24,47 @@
 module.exports = function hasStoryAccess(request, response, next) {
     sails.log.verbose(" POLICY - api/policies/hasStoryAccess.js");
 
-    var storyId = parseInt(request.param("id"), 10);
+    var id = parseInt(request.param("id"), 10);
+    var storyId = parseInt(request.param("storyId"), 10);
     var sprintId = parseInt(request.param("sprintId"), 10);
     var projectId = parseInt(request.param("projectId"), 10);
 
-    // Story id found, check that user has access to it
-    if (!isNaN(storyId)) {
+    // Story id given
+    if (!isNaN(id) || !isNaN(storyId)) {
+        storyId = isNaN(storyId) ? id : storyId;
+
+        // Check that user has access to specified story
         AuthService.hasStoryAccess(request.user, storyId, function(error, hasRight) {
             if (error) { // Error occurred
-                response.send(error, error.status ? error.status : 500);
+                return ErrorService.makeErrorResponse(error.status ? error.status : 500, error, request, response);
             } else if (!hasRight) { // No access right to story
-                response.send("Insufficient rights to access story.", 403);
+                return ErrorService.makeErrorResponse(403, "Insufficient rights to access story.", request, response);
             } else { // Otherwise all is ok
                 sails.log.verbose("          OK");
 
                 next();
             }
         });
-    } else if (!isNaN(sprintId) && sprintId > 0) { // Check that current user has access to specified story
+    } else if (!isNaN(sprintId) && sprintId > 0) { // Sprint id given
+        // Check that current user has access to specified sprint
         AuthService.hasSprintAccess(request.user, sprintId, function(error, hasRight) {
             if (error) { // Error occurred
-                response.send(error, error.status ? error.status : 500);
+                return ErrorService.makeErrorResponse(error.status ? error.status : 500, error, request, response);
             } else if (!hasRight) { // No access right to story
-                response.send("Insufficient rights to access story.", 403);
+                return ErrorService.makeErrorResponse(403, "Insufficient rights to access story.", request, response);
             } else { // Otherwise all is ok
                 sails.log.verbose("          OK");
 
                 next();
             }
         });
-    } else if (!isNaN(projectId)) { // Check that current user has access to specified story
+    } else if (!isNaN(projectId)) { // Project id given
+        // Check that current user has access to specified project
         AuthService.hasProjectAccess(request.user, projectId, function(error, hasRight) {
             if (error) { // Error occurred
-                response.send(error, error.status ? error.status : 500);
+                return ErrorService.makeErrorResponse(error.status ? error.status : 500, error, request, response);
             } else if (!hasRight) { // No access right to story
-                response.send("Insufficient rights to access story.", 403);
+                return ErrorService.makeErrorResponse(403, "Insufficient rights to access story.", request, response);
             } else { // Otherwise all is ok
                 sails.log.verbose("          OK");
 
@@ -65,7 +72,7 @@ module.exports = function hasStoryAccess(request, response, next) {
             }
         });
     } else {
-        response.send("Cannot identify story.", 403);
+        return ErrorService.makeErrorResponse(403, "Cannot identify story.", request, response);
     }
 };
 

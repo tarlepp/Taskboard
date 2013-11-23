@@ -13,9 +13,9 @@ module.exports = function hasUserAdmin(request, response, next) {
 
     AuthService.isAdministrator(request.user, function(error, hasRight) {
         if (error) { // Error occurred
-            response.send(error, error.status ? error.status : 500);
+            return ErrorService.makeErrorResponse(error.status ? error.status : 500, error, request, response);
         } else if (!hasRight) {
-            response.send("Insufficient rights you're not administrator.", 403);
+            return ErrorService.makeErrorResponse(403, "Insufficient rights you're not administrator.", request, response);
         } else { // Otherwise all is ok
             sails.log.verbose("          OK");
 

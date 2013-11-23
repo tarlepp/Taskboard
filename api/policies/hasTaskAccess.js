@@ -8,7 +8,7 @@
  *  - hasStoryAccess
  *  - hasPhaseAccess
  *
- * Note that this policy relies one of following parameters are:
+ * Note that this policy relies one of following parameters is present:
  *
  *  - id
  *  - storyId
