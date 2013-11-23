@@ -20,6 +20,6 @@ module.exports = function isAjaxOrSocket(request, response, next) {
              */
         }, 1000);
 
-        response.redirect("/");
+        return response.redirect("/");
     }
 };

@@ -30,23 +30,24 @@ module.exports = function hasTaskAdmin(request, response, next) {
     if (!isNaN(projectId)) {
         AuthService.hasProjectAdmin(request.user, projectId, function(error, hasRight) {
             if (error) { // Error occurred
-                response.send(error.status ? error.status : 500, error);
+                return ErrorService.makeErrorResponse(error.status ? error.status : 500, error, request, response);
             } else if (!hasRight) { // No admin right to phase
-                response.send(403, "Insufficient rights to admin phase.");
+                return ErrorService.makeErrorResponse(403, "Insufficient rights to admin phase.", request, response);
             } else { // Otherwise all is ok
                 sails.log.verbose("          OK");
 
                 next();
             }
         });
-    } else if (!isNaN(id) || !isNaN(phaseId)) { // Check that current user has access to specified phase
-        phaseId = isNaN(phaseId) ? id : phaseId;
+    } else if (!isNaN(id) || !isNaN(phaseId)) { // Phase id found
+        phaseId = !isNaN(phaseId) ? phaseId : id;
 
+        // Check that current user has access to specified phase
         AuthService.hasPhaseAdmin(request.user, phaseId, function(error, hasRight) {
             if (error) { // Error occurred
-                response.send(error.status ? error.status : 500, error);
+                return ErrorService.makeErrorResponse(error.status ? error.status : 500, error, request, response);
             } else if (!hasRight) { // No admin right to phase
-                response.send(403, "Insufficient rights to admin phase.");
+                return ErrorService.makeErrorResponse(403, "Insufficient rights to admin phase.", request, response);
             } else { // Otherwise all is ok
                 sails.log.verbose("          OK");
 
@@ -54,6 +55,6 @@ module.exports = function hasTaskAdmin(request, response, next) {
             }
         });
     } else {
-        response.send(403, "Cannot identify phase.");
+        return ErrorService.makeErrorResponse(403, "Cannot identify milestone.", request, response);
     }
 };

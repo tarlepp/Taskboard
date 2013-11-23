@@ -1,8 +1,7 @@
 // api/policies/authenticated.js
 
 /**
- * Policy to check if user is signed in or not. We use passport to
- * determine if user is authenticated.
+ * Policy to check if user is signed in or not. We use passport to determine if user is authenticated.
  *
  * @param   {Request}   request     Request object
  * @param   {Response}  response    Response object
@@ -13,8 +12,10 @@ module.exports = function(request, response, next) {
 
     // All is ok, continue
     if (request.isAuthenticated()) {
+        sails.log.verbose("          OK");
+
         next();
     } else { // User not authenticated, redirect to login
-        response.redirect("/login");
+        return response.redirect("/login");
     }
 };

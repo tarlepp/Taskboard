@@ -7,7 +7,7 @@
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function to call if all is ok
  */
-module.exports = function isAjax(request, response, next) {
+module.exports = function isSocket(request, response, next) {
     sails.log.verbose(" POLICY - api/policies/isSocket.js");
 
     if (request.isSocket) {
@@ -20,6 +20,6 @@ module.exports = function isAjax(request, response, next) {
              */
         }, 1000);
 
-        response.redirect("/");
+        return response.redirect("/");
     }
 };

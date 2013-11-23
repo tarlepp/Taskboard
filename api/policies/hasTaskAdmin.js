@@ -10,6 +10,7 @@
  * Note that this policy relies one of following parameters are:
  *
  *  - id
+ *  - taskId
  *  - storyId
  *
  * Actual auth checks are done depending of given parameters.
@@ -21,16 +22,20 @@
 module.exports = function hasTaskAdmin(request, response, next) {
     sails.log.verbose(" POLICY - api/policies/hasTaskAdmin.js");
 
+    var id = parseInt(request.param("id"), 10);
     var taskId = parseInt(request.param("id"), 10);
     var storyId = parseInt(request.param("storyId"), 10);
 
     // Task id found, check that user has access to it
-    if (!isNaN(taskId)) {
+    if (!isNaN(id) || !isNaN(taskId)) {
+        taskId = isNaN(taskId) ? id : taskId;
+
+        // Check that user has admin access to task
         AuthService.hasTaskAdmin(request.user, taskId, function(error, hasRight) {
             if (error) { // Error occurred
-                response.send(error, error.status ? error.status : 500);
+                return ErrorService.makeErrorResponse(error.status ? error.status : 500, error, request, response);
             } else if (!hasRight) { // No admin right to task
-                response.send("Insufficient rights to admin task.", 403);
+                return ErrorService.makeErrorResponse(403, "Insufficient rights to admin task.", request, response);
             } else { // Otherwise all is ok
                 sails.log.verbose("          OK");
 
@@ -40,19 +45,19 @@ module.exports = function hasTaskAdmin(request, response, next) {
     } else if (!isNaN(storyId) && storyId > 0) { // Check that current user has access to specified story
         AuthService.hasStoryAdmin(request.user, storyId, function(error, role) {
             if (error) { // Error occurred
-                response.send(error, error.status ? error.status : 500);
+                return ErrorService.makeErrorResponse(error.status ? error.status : 500, error, request, response);
             } else {
                 // User has necessary role in project
-                if (role !== false && role !== 0) {
+                if (role !== false && role !== 0 && !isNaN(role)) {
                     sails.log.verbose("          OK");
 
                     next();
                 } else {
-                    response.send("Insufficient rights to admin task.", 403);
+                    return ErrorService.makeErrorResponse(403, "Insufficient rights to admin task.", request, response);
                 }
             }
         }, true);
     } else {
-        response.send("Cannot identify task.", 403);
+        return ErrorService.makeErrorResponse(403, "Cannot identify task.", request, response);
     }
 };
