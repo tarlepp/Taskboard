@@ -156,6 +156,31 @@ exports.getUser = function(userId, callback) {
 };
 
 /**
+ * Service to fetch single phase data from database.
+ *
+ * @param   {Number}    phaseId     Phase id
+ * @param   {Function}  callback    Callback function to call after query
+ */
+exports.getPhase = function(phaseId, callback) {
+    Phase
+        .findOne(phaseId)
+        .done(function(error, /** sails.model.phase */ phase) {
+            if (error) {
+                callback(error, null);
+            } else if (!phase) {
+                var err = new Error();
+
+                err.message = "Phase not found.";
+                err.status = 404;
+
+                callback(err, null);
+            } else {
+                callback(null, phase);
+            }
+        });
+};
+
+/**
  * Service to fetch project data from database.
  *
  * @param   {{}}        where       Used query conditions
