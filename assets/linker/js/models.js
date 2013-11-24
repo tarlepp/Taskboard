@@ -206,33 +206,33 @@ function Story(data) {
         var description = self.description();
 
         // No description but VF case defined
-        if (description.length === 0) {
+        if (_.isUndefined(description) || description.length === 0) {
             description = "<em>No description...</em>";
         }
 
         var parts = [];
 
-        parts.push("Estimate: " + (self.estimate() == -1 ? "???" : self.estimate()));
+        parts.push("<tr><th>Estimate:</th><td>" + (self.estimate() == -1 ? "???" : self.estimate()) + "</td></tr>");
 
         if (moment.isMoment(self.timeStartObject()) && self.timeStartObject().isValid()) {
-            parts.push("Started: " + self.timeStartObject().format(userObject.momentFormatDateTime) );
+            parts.push("<tr><th>Started:</th><td>" + self.timeStartObject().format(userObject.momentFormatDateTime) + "</td></tr>");
         }
 
         if (moment.isMoment(self.timeEndObject()) && self.timeEndObject().isValid()) {
-            parts.push("Ended: " + self.timeEndObject().format(userObject.momentFormatDateTime) );
+            parts.push("<tr><th>Ended:</th><td>" + self.timeEndObject().format(userObject.momentFormatDateTime) + "</td></tr>");
         }
 
         if ((moment.isMoment(self.timeStartObject()) && self.timeStartObject().isValid())
             && (moment.isMoment(self.timeEndObject()) && self.timeEndObject().isValid())) {
-            parts.push("Duration: " + self.timeStartObject().from(self.timeEndObject(), true));
+            parts.push("<tr><th>Duration:</th><td>" + self.timeStartObject().from(self.timeEndObject(), true) + "</td></tr>");
         }
 
         // ValueFrame case defined
         if (self.vfCase()) {
-            parts.push("ValueFrame case: <a href=''>#" + self.vfCase() + "</a>");
+            parts.push("<tr><th>ValueFrame case:</th><td><a href=''>#" + self.vfCase() + "</a></td></tr>");
         }
 
-        description += "<hr />" + parts.join("<br />");
+        description += "<hr /><table class='info'>" + parts.join("") + "</table>";
 
         return description;
     });
