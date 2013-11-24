@@ -148,6 +148,8 @@ var sails = {
             priority: "",
             vfCase: "",
             isDone: "",
+            timeStart: "",
+            timeEnd: "",
             id: "",
             createdAt: "",
             updatedAt: ""
@@ -159,6 +161,8 @@ var sails = {
             typeId: "",
             title: "",
             description: "",
+            timeStart: "",
+            timeEnd: "",
             isDone: "",
             id: "",
             createdAt: "",

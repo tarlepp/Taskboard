@@ -180,6 +180,8 @@ function Story(data) {
     self.estimate       = ko.observable(data.estimate);
     self.priority       = ko.observable(data.priority);
     self.vfCase         = ko.observable(data.vfCase);
+    self.timeStart      = ko.observable(data.timeStart);
+    self.timeEnd        = ko.observable(data.timeEnd);
     self.tasks          = ko.observableArray([]);
 
     // Formatted story title
@@ -189,6 +191,14 @@ function Story(data) {
 
     self.storyRowId = ko.computed(function() {
         return "storyRow_" + self.id();
+    });
+
+    self.timeStartObject = ko.computed(function() {
+        return moment(self.timeStart());
+    });
+
+    self.timeEndObject = ko.computed(function() {
+        return moment(self.timeEnd());
     });
 
     // Story description tooltip text
@@ -203,6 +213,19 @@ function Story(data) {
         var parts = [];
 
         parts.push("Estimate: " + (self.estimate() == -1 ? "???" : self.estimate()));
+
+        if (moment.isMoment(self.timeStartObject()) && self.timeStartObject().isValid()) {
+            parts.push("Started: " + self.timeStartObject().format(userObject.momentFormatDateTime) );
+        }
+
+        if (moment.isMoment(self.timeEndObject()) && self.timeEndObject().isValid()) {
+            parts.push("Ended: " + self.timeEndObject().format(userObject.momentFormatDateTime) );
+        }
+
+        if ((moment.isMoment(self.timeStartObject()) && self.timeStartObject().isValid())
+            && (moment.isMoment(self.timeEndObject()) && self.timeEndObject().isValid())) {
+            parts.push("Duration: " + self.timeStartObject().from(self.timeEndObject(), true));
+        }
 
         // ValueFrame case defined
         if (self.vfCase()) {
@@ -246,6 +269,8 @@ function Task(data) {
     self.typeId         = ko.observable(data.typeId);
     self.title          = ko.observable(data.title);
     self.description    = ko.observable(data.description);
+    self.timeStart      = ko.observable(data.timeStart);
+    self.timeEnd        = ko.observable(data.timeEnd);
 
     // Task class determination, basically task type
     self.taskClass = ko.computed(function() {
@@ -267,6 +292,14 @@ function Task(data) {
         }
 
         return self.description();
+    });
+
+    self.timeStartObject = ko.computed(function() {
+        return moment(self.timeStart());
+    });
+
+    self.timeEndObject = ko.computed(function() {
+        return moment(self.timeEnd());
     });
 }
 
