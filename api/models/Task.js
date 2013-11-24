@@ -204,6 +204,10 @@ module.exports = {
                                         if (error) {
                                             cb(error);
                                         } else {
+                                            _.each(stories, function(story) {
+                                                Story.publishUpdate(story.id, story.toJSON());
+                                            });
+
                                             cb();
                                         }
                                 });
@@ -230,6 +234,10 @@ module.exports = {
                     if (error) {
                         cb(error);
                     } else {
+                        _.each(stories, function(story) {
+                            Story.publishUpdate(story.id, story.toJSON());
+                        });
+
                         cb();
                     }
             });
@@ -277,7 +285,7 @@ module.exports = {
                         }
                     });
 
-                    var where = {id: data.story.storyId};
+                    var where = {id: data.story.id};
                     var updateData = {
                         isDone: isDone,
                         timeEnd: timeEnd
@@ -293,6 +301,10 @@ module.exports = {
                             if (error) {
                                 cb(error);
                             } else {
+                                _.each(stories, function(story) {
+                                    Story.publishUpdate(story.id, story.toJSON());
+                                });
+
                                 cb();
                             }
                         });
