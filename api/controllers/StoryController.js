@@ -391,6 +391,7 @@ module.exports = {
 
         function makeView(data) {
             data.layout = req.isAjax ? "layout_ajax" : "layout";
+            data.currentUser = req.user;
 
             // Add relation data to each tasks
             _.each(data.tasks, function(task) {

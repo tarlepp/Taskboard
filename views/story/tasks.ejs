@@ -30,10 +30,10 @@
                     <i class="fa fa-plus"></i>
                 </a>
             </th>
-            <th class="col-md-6">Task</th>
+            <th class="col-md-7">Task</th>
             <th class="col-md-3">Owner</th>
             <th class="col-md-1 text-center">Type</th>
-            <th class="col-md-2 text-right">Duration</th>
+            <th class="col-md-1 text-right">Duration</th>
         </tr>
     </thead>
     <tbody>
@@ -72,18 +72,80 @@
                 </div>
             </td>
             <td><%= task.title %></td>
-            <td>
+            <td class="text-nowrap">
                 <% if (task.user) { %>
                     <%= task.user.fullName() %>
                 <% } else { %>
                     <em>nobody</em>
                 <% } %>
             </td>
-            <td class="text-center <%= task.type.classText %>">
+            <td class="text-center text-nowrap <%= task.type.classText %>">
                 <%= task.type.title %>
             </td>
-            <td class="text-right">
-                <small><em>not yet...</em></small>
+            <td class="text-right text-nowrap">
+                <span class="tooltipDiv">
+                <% if (task.timeDurationHuman()) { %>
+                    <%= task.timeDurationHuman() %>
+                <% } else if (task.timeStartObject()) { %>
+                    <em>started</em>
+                <% } else { %>
+                    <em>not yet started</em>
+                <% } %>
+
+                <div class="tooltipDivContainer">
+                    <h1>Task duration information</h1>
+                    <div>
+                        <table class="dateTimeTooltip">
+                            <% if (task.timeStartObject()) { %>
+                            <tr class="title">
+                                <th colspan="100%">Task work started at</th>
+                            </tr>
+                            <tr>
+                                <th>Local time</th>
+                                <td><%= task.timeStartObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDateTime) %></td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td class="text-muted text-small">
+                                    <%= task.timeStartObject().tz() %> (<%= task.timeStartObject().format("ZZ") %>)
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>UTC time</th>
+                                <td><%= task.timeStartObject().utc().format(currentUser.momentFormatDateTime) %></td>
+                            </tr>
+                            <% } %>
+
+                            <% if (task.timeEndObject()) { %>
+                            <tr class="title">
+                                <th colspan="100%">Task work ended at</th>
+                            </tr>
+                            <tr>
+                                <th>Local time</th>
+                                <td><%= task.timeEndObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDateTime) %></td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td class="text-muted text-small">
+                                    <%= task.timeEndObject().tz() %> (<%= task.timeEndObject().format("ZZ") %>)
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>UTC time</th>
+                                <td><%= task.timeEndObject().utc().format(currentUser.momentFormatDateTime) %></td>
+                            </tr>
+                            <% } %>
+
+                            <% if (!task.timeStartObject() && !task.timeEndObject()) { %>
+                            <tr class="title">
+                                <th colspan="100%">Task has not yet been started.</th>
+                            </tr>
+                            <% } %>
+                        </table>
+                    </div>
+                </div>
+
+                </span>
             </td>
         </tr>
     <% }); %>

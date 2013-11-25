@@ -7,6 +7,7 @@
  */
 var jQuery = require("jquery");
 var async = require("async");
+var moment = require("moment-timezone");
 
 module.exports = {
     schema: true,
@@ -70,7 +71,7 @@ module.exports = {
                 ? DateService.convertDateObjectToUtc(this.timeStart) : null;
         },
         timeEndObject: function() {
-            return (this.timeStart && this.timeStart != '0000-00-00 00:00:00')
+            return (this.timeEnd && this.timeEnd != '0000-00-00 00:00:00')
                 ? DateService.convertDateObjectToUtc(this.timeEnd) : null;
         },
         timeDuration: function() {
@@ -87,7 +88,9 @@ module.exports = {
         timeDurationHuman: function() {
             var output;
 
-            if (moment.isMoment(this.timeStartObject()) && moment.isMoment(this.timeEndObject())) {
+            if (moment.isMoment(this.timeStartObject()) && this.timeStartObject().isValid()
+                && moment.isMoment(this.timeEndObject()) && this.timeEndObject().isValid()
+            ) {
                 output = this.timeStartObject().from(this.timeEndObject(), true);
             } else {
                 output = "";
