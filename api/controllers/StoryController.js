@@ -6,6 +6,7 @@
  */
 var jQuery = require("jquery");
 var async = require("async");
+var moment = require("moment-timezone");
 
 module.exports = {
     /**
@@ -390,14 +391,23 @@ module.exports = {
         );
 
         function makeView(data) {
+            moment.lang(req.user.language);
+
             data.layout = req.isAjax ? "layout_ajax" : "layout";
             data.currentUser = req.user;
+            data.moment = moment;
 
             // Add relation data to each tasks
             _.each(data.tasks, function(task) {
                 task.type = _.find(data.types, function(type) { return type.id === task.typeId; });
                 task.user = _.find(data.users, function(user) { return user.id === task.userId; });
                 task.phase = _.find(data.phases, function(phase) { return phase.id === task.phaseId; });
+
+                task.timeStartObjectUser = moment.isMoment(task.timeStartObject())
+                    ? task.timeStartObject().tz(req.user.momentTimezone) : null;
+
+                task.timeEndObjectUser = moment.isMoment(task.timeEndObject())
+                    ? task.timeEndObject().tz(req.user.momentTimezone) : null;
             });
 
             data.cntTaskTotal = data.tasks.length;
