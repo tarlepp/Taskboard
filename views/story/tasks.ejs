@@ -83,10 +83,13 @@
                 <%= task.type.title %>
             </td>
             <td class="text-right text-nowrap">
+                <% if (task.timeDurationHuman() || task.timeStartObjectUser) { %>
                 <span class="tooltipDiv">
+                <% } %>
+
                 <% if (task.timeDurationHuman()) { %>
                     <%= task.timeDurationHuman() %>
-                <% } else if (task.timeStartObject()) { %>
+                <% } else if (task.timeStartObjectUser) { %>
                     <em>started</em>
                 <% } else { %>
                     <em>not yet started</em>
@@ -96,47 +99,90 @@
                     <h1>Task duration information</h1>
                     <div>
                         <table class="dateTimeTooltip">
-                            <% if (task.timeStartObject()) { %>
+                            <% if (task.timeStartObjectUser) { %>
                             <tr class="title">
                                 <th colspan="100%">Task work started at</th>
                             </tr>
                             <tr>
                                 <th>Local time</th>
-                                <td><%= task.timeStartObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDateTime) %></td>
+                                <td>
+                                    <%= task.timeStartObjectUser.format(currentUser.momentFormatDateTime) %>
+                                </td>
                             </tr>
                             <tr>
                                 <th></th>
                                 <td class="text-muted text-small">
-                                    <%= task.timeStartObject().tz() %> (<%= task.timeStartObject().format("ZZ") %>)
+                                    <%= task.timeStartObjectUser.tz() %> (<%= task.timeStartObjectUser.format("ZZ") %>)
                                 </td>
                             </tr>
                             <tr>
                                 <th>UTC time</th>
-                                <td><%= task.timeStartObject().utc().format(currentUser.momentFormatDateTime) %></td>
+                                <td><%= task.timeStartObjectUser.utc().format(currentUser.momentFormatDateTime) %></td>
                             </tr>
                             <% } %>
 
-                            <% if (task.timeEndObject()) { %>
+                            <% if (task.timeEndObjectUser) { %>
                             <tr class="title">
                                 <th colspan="100%">Task work ended at</th>
                             </tr>
                             <tr>
                                 <th>Local time</th>
-                                <td><%= task.timeEndObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDateTime) %></td>
+                                <td><%= task.timeEndObjectUser.format(currentUser.momentFormatDateTime) %></td>
                             </tr>
                             <tr>
                                 <th></th>
                                 <td class="text-muted text-small">
-                                    <%= task.timeEndObject().tz() %> (<%= task.timeEndObject().format("ZZ") %>)
+                                    <%= task.timeEndObjectUser.tz() %> (<%= task.timeEndObjectUser.format("ZZ") %>)
                                 </td>
                             </tr>
                             <tr>
                                 <th>UTC time</th>
-                                <td><%= task.timeEndObject().utc().format(currentUser.momentFormatDateTime) %></td>
+                                <td><%= task.timeEndObjectUser.utc().format(currentUser.momentFormatDateTime) %></td>
+                            </tr>
+
+                            <tr class="title">
+                                <th colspan="100%">Task duration data</th>
+                            </tr>
+                            <tr>
+                                <th class="text-right">Relative</th>
+                                <td><%= task.timeStartObjectUser.from(task.timeEndObjectUser, true) %></td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">Days</th>
+                                <td><%= task.timeEndObjectUser.diff(task.timeStartObjectUser, 'days', true) %></td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">Hours</th>
+                                <td><%= task.timeEndObjectUser.diff(task.timeStartObjectUser, 'hours', true) %></td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">Minutes</th>
+                                <td><%= task.timeEndObjectUser.diff(task.timeStartObjectUser, 'minutes', true) %></td>
+                            </tr>
+
+                            <% } else if (task.timeStartObjectUser) { %>
+                            <tr class="title">
+                                <th colspan="100%">Task duration so far</th>
+                            </tr>
+                            <tr>
+                                <th class="text-right">Relative</th>
+                                <td><%= task.timeStartObjectUser.fromNow(true) %></td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">Days</th>
+                                <td><%= moment().diff(task.timeStartObjectUser, 'days', true) %></td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">Hours</th>
+                                <td><%= moment().diff(task.timeStartObjectUser, 'hours', true) %></td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">Minutes</th>
+                                <td><%= moment().diff(task.timeStartObjectUser, 'minutes', true) %></td>
                             </tr>
                             <% } %>
 
-                            <% if (!task.timeStartObject() && !task.timeEndObject()) { %>
+                            <% if (!task.timeStartObjectUser && !task.timeEndObjectUser) { %>
                             <tr class="title">
                                 <th colspan="100%">Task has not yet been started.</th>
                             </tr>

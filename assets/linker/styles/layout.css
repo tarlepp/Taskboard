@@ -410,6 +410,21 @@ table.dateTimeTooltip th {
     padding-right: 5px;
 }
 
+table.dateTimeTooltip tr.title th {
+    padding-top: 10px;
+    text-align: left;
+    color: #000000;
+    border-bottom: 1px solid #dddddd;
+}
+
+table.dateTimeTooltip tr.title:first-of-type th {
+    padding-top: 0;
+}
+
+table.dateTimeTooltip tr th {
+    text-align: right;
+}
+
 table.dateTimeTooltip td {
     padding-left: 5px;
 }
