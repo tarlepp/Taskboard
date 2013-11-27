@@ -67,10 +67,20 @@ module.exports = {
                         layout: "layout_login"
                     });
                 } else {
-                    // Write user sign in log
-                    LoggerService.userSignIn(user, req);
+                    // Update current session id to user data
+                    User.update({id: user.id}, {sessionId: req.sessionID}, function(error, users) {
+                        // Oh nou error
+                        if (error) {
+                            res.view({
+                                layout: "layout_login"
+                            });
+                        } else { // Otherwise redirect user to main page
+                            // Write user sign in log
+                            LoggerService.userSignIn(user, req);
 
-                    res.redirect("/");
+                            res.redirect("/");
+                        }
+                    });
                 }
             });
         })(req, res);

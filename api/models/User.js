@@ -80,6 +80,10 @@ module.exports = {
             defaultsTo: "Europe/Mariehamn",
             required:   true
         },
+        sessionId: {
+            type:       "string",
+            defaultsTo: ""
+        },
 
         // Computed user fullName string
         fullName: function() {
@@ -106,6 +110,7 @@ module.exports = {
         toJSON: function() {
             var obj = this.toObject();
             delete obj.password;
+            delete obj.sessionId;
 
             return obj;
         },
