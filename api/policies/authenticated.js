@@ -12,10 +12,19 @@ module.exports = function(request, response, next) {
 
     // All is ok, continue
     if (request.isAuthenticated()) {
-        sails.log.verbose("          OK");
+        /**
+         * Check that current user session ID is exactly same with user model.
+         *
+         * @todo
+         * Note that this doesn't work on socket request, have to solve this someway later...
+         */
+        if (request.sessionID && request.sessionID !== request.user.sessionId) {
+            return response.redirect("/logout");
+        }
 
+        sails.log.verbose("          OK");
         next();
     } else { // User not authenticated, redirect to login
-        return response.redirect("/login");
+        return response.redirect("/logout");
     }
 };
