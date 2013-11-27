@@ -8,12 +8,12 @@
  * http://sailsjs.org/#documentation
  */
 module.exports.bootstrap = function(cb) {
-    var passport = require('passport');
-    var LocalStrategy = require('passport-local').Strategy;
+    var passport = require("passport");
+    var LocalStrategy = require("passport-local").Strategy;
     var initialize = passport.initialize();
     var session = passport.session();
-    var http = require('http');
-    var methods = ['login', 'logIn', 'logout', 'logOut', 'isAuthenticated', 'isUnauthenticated'];
+    var http = require("http");
+    var methods = ["login", "logIn", "logout", "logOut", "isAuthenticated", "isUnauthenticated"];
 
     /**
      * Following is to fix socket request on authenticated users.
@@ -21,9 +21,10 @@ module.exports.bootstrap = function(cb) {
      * Thanks to: http://stackoverflow.com/questions/17365444/sails-js-passport-js-authentication-through-websockets/18343226#18343226
      */
     sails.removeAllListeners('router:request');
+
     sails.on('router:request', function(req, res) {
-        initialize(req, res, function () {
-            session(req, res, function (err) {
+        initialize(req, res, function() {
+            session(req, res, function(err) {
                 if (err) {
                     return sails.config[500](500, req, res);
                 }
@@ -39,6 +40,7 @@ module.exports.bootstrap = function(cb) {
 
     /**
      * Passport session setup.
+     *
      * To support persistent login sessions, Passport needs to be able to
      * serialize users into and deserialize users out of the session. Typically,
      * this will be as simple as storing the user ID when serializing, and finding
@@ -67,6 +69,7 @@ module.exports.bootstrap = function(cb) {
 
     /*
      * Use the LocalStrategy within Passport.
+     *
      * Strategies in passport require a `verify` function, which accept
      * credentials (in this case, a username and password), and invoke a callback
      * with a user object. In the real world, this would query a database;
