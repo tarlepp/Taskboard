@@ -25,6 +25,6 @@ module.exports = function(request, response, next) {
         sails.log.verbose("          OK");
         next();
     } else { // User not authenticated, redirect to login
-        return response.redirect("/logout");
+        return response.redirect("/login");
     }
 };
