@@ -28,7 +28,7 @@ module.exports = function hasSprintAdmin(request, response, next) {
 
     // Id or sprint id given
     if (!isNaN(id) || !isNaN(sprintId)) {
-        sprintId = !isNaN(sprintId) ? id : sprintId;
+        sprintId = !isNaN(sprintId) ? sprintId : id;
 
         AuthService.hasSprintAdmin(request.user, sprintId, function(error, hasRight) {
             if (error) { // Error occurred
