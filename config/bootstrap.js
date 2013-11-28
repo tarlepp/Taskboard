@@ -6,6 +6,9 @@
  *
  * For more information on bootstrapping your app, check out:
  * http://sailsjs.org/#documentation
+ *
+ * It's very important to trigger this callback method when you are finished with the bootstrap!
+ * (otherwise your server will never lift, since it's waiting on the bootstrap)
  */
 module.exports.bootstrap = function(cb) {
     var passport = require("passport");
@@ -14,6 +17,7 @@ module.exports.bootstrap = function(cb) {
     var session = passport.session();
     var http = require("http");
     var methods = ["login", "logIn", "logout", "logOut", "isAuthenticated", "isUnauthenticated"];
+    var async = require("async");
 
     /**
      * Following is to fix socket request on authenticated users.
@@ -114,9 +118,6 @@ module.exports.bootstrap = function(cb) {
         }
     ));
 
-    /**
-     * It's very important to trigger this callback method when you are finished with the bootstrap!
-     * (otherwise your server will never lift, since it's waiting on the bootstrap)
-     */
-    cb();
+    // Make necessary Taskboard init
+    TaskboardInitService.init(cb);
 };
