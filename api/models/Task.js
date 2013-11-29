@@ -143,7 +143,9 @@ module.exports = {
                         values.timeEnd = values.isDone ? new Date() : null;
 
                         // We can assume that this update is from the board, so set start time if needed
-                        if (!data.task.timeStart || data.task.timeStart == '0000-00-00 00:00:00') {
+                        if (values.phaseId !== data.task.phaseId
+                            && (!data.task.timeStart || data.task.timeStart == '0000-00-00 00:00:00')
+                        ) {
                             values.timeStart = new Date();
                         }
 
