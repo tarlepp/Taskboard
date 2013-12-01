@@ -97,6 +97,9 @@ module.exports = function (grunt) {
         'linker/bower_components/knockout-sortable/build/knockout-sortable.min.js',
         // Cannot use this, yet figure out why this breaks main navigation selects
         //'linker/bower_components/knockout-deferred-updates/knockout-deferred-updates.min.js',
+        
+        // Other libraries
+        'linker/bower_components/highcharts.com/js/highcharts.src.js',
 
         // Vendor specified libraries, that aren't available via bower
         'linker/vendor/moment-timezone-data.js',
