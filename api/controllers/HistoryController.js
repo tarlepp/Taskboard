@@ -140,7 +140,7 @@ module.exports = {
                                 columnType = 'relation';
 
                                 // Only fetch possible relation data if change type is insert or update
-                                if (changeType != 'delete') {
+                                if (global[object] && typeof global[object] === "object" && changeType != 'delete') {
                                     // Fetch new value
                                     global[object]
                                         .findOne(objectIdNew)
