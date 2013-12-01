@@ -10,11 +10,21 @@ body.modal-open {
     .modal-dialog {
         width: 700px;
     }
+
+    .bootbox-prompt .modal-dialog,
+    .bootbox-confirm .modal-dialog {
+        width: 550px;
+    }
 }
 
 @media screen and (min-width: 1024px) {
     .modal-dialog {
         width: 950px;
+    }
+
+    .bootbox-prompt .modal-dialog,
+    .bootbox-confirm .modal-dialog {
+        width: 600px;
     }
 }
 
