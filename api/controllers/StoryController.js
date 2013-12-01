@@ -204,6 +204,8 @@ module.exports = {
             delete story.id;
             delete story.createdAt;
             delete story.updatedAt;
+            delete story.timeStart;
+            delete story.timeEnd;
 
             // Change story sprint data to user selected value
             story.sprintId = sprintId;
@@ -230,18 +232,10 @@ module.exports = {
                             .done(function(error, /** sails.model.phase[] */phases) {
                                 if (error) {
                                     res.send(error, 500);
+                                } else if (phases.length > 0 ) {
+                                    changeTasks(phases);
                                 } else {
-                                    var phaseIds = [];
-
-                                    jQuery.each(phases, function(key, /** sails.model.phase */phase) {
-                                        phaseIds.push({phaseId: phase.id});
-                                    });
-
-                                    if (phaseIds.length > 0) {
-                                        changeTasks(phaseIds);
-                                    } else {
-                                        finalizeClone();
-                                    }
+                                    finalizeClone();
                                 }
                             });
                     }
@@ -252,9 +246,19 @@ module.exports = {
          * Private function to change tasks story id to new one. Note that
          * we only change tasks which are in specified phase.
          *
-         * @param   {Array} phaseIds
+         * @param   {sails.model.phase[]}   phases
          */
-        function changeTasks(phaseIds) {
+        function changeTasks(phases) {
+            var phaseIds = _.map(phases, function(phase) { return {phaseId: phase.id}; });
+            var firstPhase = phases[0];
+
+            // Find first phase in this project
+            _.each(phases, function(phase) {
+                if (phase.order < firstPhase.order) {
+                    firstPhase = phase;
+                }
+            });
+
             // Fetch tasks which we want to assign to new story
             Task
                 .find()
@@ -266,42 +270,65 @@ module.exports = {
                 })
                 .done(function(error, /** sails.model.task[] */tasks) {
                     if (error) {
-                        res.send(error, 500);
+                        res.send(500, error);
                     } else {
                         data.taskCnt = tasks.length;
 
-                        if (tasks.length === 0) {
+                        if (data.taskCnt === 0) {
                             finalizeClone();
                         }
 
-                        jQuery.each(tasks, function(key, /** sails.model.task */task) {
-                            // Update existing task data, basically just change story id to new one
-                            Task
-                                .update({
-                                    id: task.id
-                                },{
-                                    storyId: data.storyNew.id
-                                }, function(error, task) {
-                                    // Error handling
-                                    if (error) {
-                                        res.send(error, 500);
-                                    } else {
-                                        /**
-                                         * Send socket message about task update, this is a small hack.
-                                         * First we must publish destroy for "existing" task and after
-                                         * that publish create for the same task.
-                                         */
-                                        Task.publishDestroy(task[0].id);
-                                        Task.publishCreate(task[0].toJSON());
+                        async.map(
+                            tasks,
+                            function(task, callback) {
+                                var taskId = task.id;
+                                var timeStart = task.timeStart;
+                                var phaseId = task.phaseId;
 
-                                        data.tasks.push(task[0]);
+                                // Move to project backlog so time start is null and phase if is first phase
+                                if (data.storyNew.sprintId == 0) {
+                                    timeStart = null;
+                                    phaseId = firstPhase.id;
+                                }
 
-                                        if (data.taskCnt === data.tasks.length) {
-                                            finalizeClone();
+                                Task
+                                    .findOne(taskId)
+                                    .done(function(error, task) {
+                                        if (error) {
+                                            res.send(500, error);
+                                        } else {
+                                            task.storyId = data.storyNew.id;
+                                            task.phaseId = phaseId;
+                                            task.timeStart = timeStart;
+
+                                            task.save(function(error) {
+                                                if (error) {
+                                                    callback(error, null)
+                                                } else {
+                                                    /**
+                                                     * Send socket message about task update, this is a small hack.
+                                                     * First we must publish destroy for "existing" task and after
+                                                     * that publish create for the same task.
+                                                     */
+                                                    Task.publishDestroy(task.id);
+                                                    Task.publishCreate(task.toJSON());
+
+                                                    callback(null, task);
+                                                }
+                                            });
                                         }
-                                    }
-                                });
-                        });
+                                    });
+                            },
+                            function(error, tasks) {
+                                if (error) {
+                                    res.send(500, error);
+                                } else {
+                                    data.tasks = tasks;
+
+                                    finalizeClone();
+                                }
+                            }
+                        );
                     }
                 });
         }
@@ -310,23 +337,60 @@ module.exports = {
          * Private function to finalize
          */
         function finalizeClone() {
-            // Update story data
-            Story
-                .update(
-                    {id: storyId},
-                    {isDone: true},
-                    function(error, /** sails.model.story[] */stories) {
-                        data.storyOld = stories[0];
+            async.parallel(
+                [
+                    function (callback) {
+                        // Update old story data
+                        Story
+                            .update(
+                            {id: storyId},
+                            {
+                                isDone: true,
+                                timeEnd: new Date()
+                            },
+                            function(error, /** sails.model.story[] */stories) {
+                                if (error) {
+                                    callback(error, null);
+                                } else {
+                                    data.storyOld = stories[0];
 
-                        if (error) {
-                            res.send(error, 500);
-                        } else {
-                            // Send socket message about old story update
-                            Story.publishUpdate(stories[0].id, stories[0].toJSON());
+                                    callback(null, stories);
+                                }
+                            });
+                    },
+                    function(callback) {
+                        var timeStart = null;
 
-                            res.send(data);
-                        }
-                });
+                        _.each(data.tasks, function(task) {
+                            if (task.timeStart > timeStart) {
+                                timeStart = task.timeStart;
+                            }
+                        });
+
+                        // Update old story data
+                        Story
+                            .update(
+                            {id: data.storyNew.id},
+                            {
+                                isDone: false,
+                                timeStart: timeStart,
+                                timeEnd: null
+                            },
+                            function(error, /** sails.model.story[] */stories) {
+                                data.storyOld = stories[0];
+
+                                callback(error, stories);
+                            });
+                    }
+                ],
+                function(error, results) {
+                    if (error) {
+                        res.send(error, 500);
+                    } else {
+                        res.send(data);
+                    }
+                }
+            );
         }
     },
 
