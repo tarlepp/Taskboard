@@ -44,6 +44,7 @@
     "knockout-deferred-updates": "~3.0.0",
     "knockout-sortable": "~0.8.4",
     "jquery.complexify.js": "*",
-    "bootstrap-popover-extra-placements": "*"
+    "bootstrap-popover-extra-placements": "*",
+    "highcharts.com": "~3.0.7"
   }
 }
