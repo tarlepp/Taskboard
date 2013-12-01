@@ -171,57 +171,66 @@ module.exports = {
         var projectId = parseInt(req.param('projectId'), 10);
 
         if (isNaN(storyId) || isNaN(sprintId) || isNaN(projectId)) {
-            res.send("Required input data missing...", 400);
+            res.send(400, "Required input data missing...");
+        } else {
+            var data = {
+                storyOld: false,
+                storyNew: false,
+                tasks: [],
+                taskCnt: 0
+            };
+
+            // Fetch story data
+            Story
+                .findOne(storyId)
+                .done(function(error, /** sails.model.story */story) {
+                    if (error) {
+                        res.send(500, error);
+                    } else if (!story) {
+                        res.send(404, "Story not found.");
+                    } else {
+                        splitStory(story);
+                    }
+                });
         }
 
-        var data = {
-            storyOld: false,
-            storyNew: false,
-            tasks: [],
-            taskCnt: 0
-        };
-
-        // Fetch story data
-        Story
-            .findOne(storyId)
-            .done(function(error, /** sails.model.story */story) {
-                if (error) {
-                    res.send(error, 500);
-                } else if (!story) {
-                    res.send("Story not found.", 404);
-                } else {
-                    cloneStory(story)
-                }
-            });
-
         /**
-         * Private function to clone given story
+         * Private function to split specified story to new one.
          *
          * @param   {sails.model.story} story
          */
-        function cloneStory(story) {
-            // Remove story specified data
-            delete story.id;
-            delete story.createdAt;
-            delete story.updatedAt;
-            delete story.timeStart;
-            delete story.timeEnd;
+        function splitStory(story) {
+            async.parallel(
+                {
+                    // Create new story
+                    newStory: function(callback) {
+                        // Remove story specified data, that we don't want to pass to new story
+                        delete story.id;
+                        delete story.createdAt;
+                        delete story.updatedAt;
+                        delete story.timeStart;
+                        delete story.timeEnd;
 
-            // Change story sprint data to user selected value
-            story.sprintId = sprintId;
+                        // Change story sprint data to user selected value
+                        story.sprintId = sprintId;
 
-            // Create new story
-            Story
-                .create(story.toJSON())
-                .done(function(error, /** sails.model.story */story) {
-                    if (error) {
-                        res.send(error, 500);
-                    } else  {
-                        // Send socket message about new story
-                        Story.publishCreate(story.toJSON());
+                        // Create new story
+                        Story
+                            .create(story.toJSON())
+                            .done(function(error, /** sails.model.story */story) {
+                                if (error) {
+                                    callback(error, null);
+                                } else  {
+                                    // Send socket message about new story
+                                    Story.publishCreate(story.toJSON());
 
-                        data.storyNew = story;
+                                    callback(null, story);
+                                }
+                            });
+                    },
 
+                    // Fetch phases data that may contain tasks that we must move to new story
+                    phases: function(callback) {
                         // Fetch phases which tasks are wanted to move to new story
                         Phase
                             .find()
@@ -231,15 +240,37 @@ module.exports = {
                             })
                             .done(function(error, /** sails.model.phase[] */phases) {
                                 if (error) {
-                                    res.send(error, 500);
-                                } else if (phases.length > 0 ) {
-                                    changeTasks(phases);
+                                    callback(error, null);
                                 } else {
-                                    finalizeClone();
+                                    callback(null, phases);
                                 }
                             });
                     }
-                });
+                },
+
+                /**
+                 * Callback function that is called after all parallel jobs are done, or
+                 * if those generated some error.
+                 *
+                 * @param   {Error} error   Error info
+                 * @param   {{}}    results Result object that contains following data:
+                 *                           - newStory = Created new story object
+                 *                           - phases   = Array of phase objects
+                 */
+                function(error, results) {
+                    if (error) {
+                        res.send(500, error);
+                    } else {
+                        data.storyNew = results.newStory;
+
+                        if (results.phases.length > 0) {
+                            changeTasks(results.phases);
+                        } else {
+                            finalizeStorySplit();
+                        }
+                    }
+                }
+            );
         }
 
         /**
@@ -275,7 +306,7 @@ module.exports = {
                         data.taskCnt = tasks.length;
 
                         if (data.taskCnt === 0) {
-                            finalizeClone();
+                            finalizeStorySplit();
                         }
 
                         async.map(
@@ -325,7 +356,7 @@ module.exports = {
                                 } else {
                                     data.tasks = tasks;
 
-                                    finalizeClone();
+                                    finalizeStorySplit();
                                 }
                             }
                         );
@@ -334,9 +365,9 @@ module.exports = {
         }
 
         /**
-         * Private function to finalize
+         * Private function to finalize story splitting.
          */
-        function finalizeClone() {
+        function finalizeStorySplit() {
             async.parallel(
                 [
                     function (callback) {
@@ -354,6 +385,9 @@ module.exports = {
                                 } else {
                                     data.storyOld = stories[0];
 
+                                    // Publish update for old story object
+                                    Story.publishUpdate(storyId, data.storyOld.toJSON());
+
                                     callback(null, stories);
                                 }
                             });
@@ -367,7 +401,7 @@ module.exports = {
                             }
                         });
 
-                        // Update old story data
+                        // Update new story data
                         Story
                             .update(
                             {id: data.storyNew.id},
@@ -377,15 +411,22 @@ module.exports = {
                                 timeEnd: null
                             },
                             function(error, /** sails.model.story[] */stories) {
-                                data.storyOld = stories[0];
+                                if (error) {
+                                    callback(error, null);
+                                } else {
+                                    data.storyNew = stories[0];
 
-                                callback(error, stories);
+                                    // Publish update for new story object
+                                    Story.publishUpdate(data.storyNew.id, data.storyNew.toJSON());
+
+                                    callback(error, stories);
+                                }
                             });
                     }
                 ],
                 function(error, results) {
                     if (error) {
-                        res.send(error, 500);
+                        res.send(500, error);
                     } else {
                         res.send(data);
                     }
