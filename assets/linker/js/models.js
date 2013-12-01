@@ -194,11 +194,11 @@ function Story(data) {
     });
 
     self.timeStartObject = ko.computed(function() {
-        return moment(self.timeStart());
+        return dateConvertToMoment(self.timeStart());
     });
 
     self.timeEndObject = ko.computed(function() {
-        return moment(self.timeEnd());
+        return dateConvertToMoment(self.timeEnd());
     });
 
     // Story description tooltip text
@@ -215,11 +215,11 @@ function Story(data) {
         parts.push("<tr><th>Estimate:</th><td>" + (self.estimate() == -1 ? "???" : self.estimate()) + "</td></tr>");
 
         if (moment.isMoment(self.timeStartObject()) && self.timeStartObject().isValid()) {
-            parts.push("<tr><th>Started:</th><td>" + self.timeStartObject().format(userObject.momentFormatDateTime) + "</td></tr>");
+            parts.push("<tr><th>Started:</th><td>" + self.timeStartObject().tz(userObject.momentTimezone).format(userObject.momentFormatDateTime) + "</td></tr>");
         }
 
         if (moment.isMoment(self.timeEndObject()) && self.timeEndObject().isValid()) {
-            parts.push("<tr><th>Ended:</th><td>" + self.timeEndObject().format(userObject.momentFormatDateTime) + "</td></tr>");
+            parts.push("<tr><th>Ended:</th><td>" + self.timeEndObject().tz(userObject.momentTimezone).format(userObject.momentFormatDateTime) + "</td></tr>");
         }
 
         if ((moment.isMoment(self.timeStartObject()) && self.timeStartObject().isValid())
@@ -295,11 +295,11 @@ function Task(data) {
     });
 
     self.timeStartObject = ko.computed(function() {
-        return moment(self.timeStart());
+        return dateConvertToMoment(self.timeStart());
     });
 
     self.timeEndObject = ko.computed(function() {
-        return moment(self.timeEnd());
+        return dateConvertToMoment(self.timeEnd());
     });
 }
 
