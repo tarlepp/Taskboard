@@ -6,6 +6,9 @@
         <a id="backlogTab" href="#backlog" data-toggle="tab" data-callback="initSprintTabBacklog" data-href="/Sprint/Backlog?id=<%= sprint.id %>">Backlog</a>
     </li>
     <li>
+        <a id="chartsTab" href="#charts" data-toggle="tab" data-callback="initSprintTabChart" data-href="/Sprint/Charts?id=<%= sprint.id %>">Charts</a>
+    </li>
+    <li>
         <a id="historyTab" href="#history" data-toggle="tab" data-href="/History?objectName=Sprint&objectId=<%= sprint.id %>">History</a>
     </li>
 </ul>
@@ -60,6 +63,8 @@
     </div>
 
     <div class="tab-pane" id="backlog"></div>
+
+    <div class="tab-pane" id="charts"></div>
 
     <div class="tab-pane" id="history"></div>
 </div>
