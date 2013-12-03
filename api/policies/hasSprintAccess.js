@@ -23,12 +23,12 @@ module.exports = function hasSprintAccess(request, response, next) {
     sails.log.verbose(" POLICY - api/policies/hasSprintAccess.js");
 
     var id = parseInt(request.param("id"), 10);
-    var sprintId = parseInt(request.param("id"), 10);
+    var sprintId = parseInt(request.param("sprintId"), 10);
     var projectId = parseInt(request.param("projectId"), 10);
 
     // Id or sprint id given
     if (!isNaN(id) || !isNaN(sprintId)) {
-        sprintId = !isNaN(sprintId) ? id : sprintId;
+        sprintId = !isNaN(sprintId) ? sprintId : id;
 
         // Check that current user has access to specified sprint
         AuthService.hasSprintAccess(request.user, sprintId, function(error, hasRight) {
