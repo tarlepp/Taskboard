@@ -100,6 +100,8 @@ module.exports = function (grunt) {
         
         // Other libraries
         'linker/bower_components/highcharts.com/js/highcharts.src.js',
+        'linker/bower_components/numeral/min/numeral.min.js',
+        'linker/bower_components/numeral/min/languages.min.js',
 
         // Vendor specified libraries, that aren't available via bower
         'linker/vendor/moment-timezone-data.js',
