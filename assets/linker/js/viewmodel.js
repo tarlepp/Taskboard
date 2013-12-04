@@ -534,6 +534,11 @@ function ViewModel() {
         body.trigger('sprintBacklog', [self.sprint().id()]);
     };
 
+    // Method opens sprint charts
+    self.actionSprintCharts = function() {
+        body.trigger('sprintCharts', [self.sprint().id()]);
+    };
+
     /**#@-*/
 
 
