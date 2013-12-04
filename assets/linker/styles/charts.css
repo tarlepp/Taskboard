@@ -1,0 +1,31 @@
+.chartToolTipTasks {
+    font-family: 'Yanone Kaffeesatz', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.chartToolTipTasks h1 {
+    font-size: 16px;
+}
+
+.chartToolTipTasks hr {
+    margin: 3px 0;
+}
+
+.chartToolTipTasks h1,
+.chartToolTipTasks table {
+    margin: 0;
+    padding: 0;
+}
+
+.chartToolTipTasks table th,
+.chartToolTipTasks table td {
+    font-size: 14px;
+    padding: 0 3px;
+}
+
+.chartToolTipTasks table th {
+    text-align: right;
+}
+
+.chartToolTipTasks table td {
+    text-align: left;
+}
