@@ -68,9 +68,11 @@ module.exports.policies = {
         destroy:    ["authenticated", "isAjaxOrSocket", "hasSprintAdmin"],
 
         // Custom actions
-        add:        ["authenticated", "isAjax", "hasSprintAdmin"],
-        edit:       ["authenticated", "isAjax", "hasSprintAccess"],
-        backlog:    ["authenticated", "isAjax", "hasSprintAccess"]
+        add:            ["authenticated", "isAjax", "hasSprintAdmin"],
+        edit:           ["authenticated", "isAjax", "hasSprintAccess"],
+        backlog:        ["authenticated", "isAjax", "hasSprintAccess"],
+        charts:         ["authenticated", "isAjax", "hasSprintAccess"],
+        chartDataTasks: ["authenticated", "isAjax", "hasSprintAccess"]
     },
 
     // Milestone controller policies
