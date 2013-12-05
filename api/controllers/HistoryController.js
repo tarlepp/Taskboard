@@ -240,7 +240,6 @@ module.exports = {
                     // Make view
                     res.view({
                         layout: req.isAjax ? "layout_ajax" : "layout",
-                        currentUser: req.user,
                         data: data
                     });
                 }

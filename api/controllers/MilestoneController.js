@@ -33,7 +33,6 @@ module.exports = {
                     res.send(error, error.status ? error.status : 500);
                 } else {
                     data.layout = req.isAjax ? "layout_ajax" : "layout";
-                    data.currentUser = req.user;
                     data.projectId = projectId;
 
                     res.view(data);
@@ -67,7 +66,6 @@ module.exports = {
                     res.send(error, error.status ? error.status : 500);
                 } else {
                     data.layout = req.isAjax ? "layout_ajax" : "layout";
-                    data.currentUser = req.user;
 
                     res.view(data);
                 }
@@ -86,7 +84,6 @@ module.exports = {
 
         var data = {
             layout: req.isAjax ? "layout_ajax" : "layout",
-            currentUser: req.user,
             role: 0,
             milestone: {
                 data: false,

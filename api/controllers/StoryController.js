@@ -499,7 +499,6 @@ module.exports = {
             moment.lang(req.user.language);
 
             data.layout = req.isAjax ? "layout_ajax" : "layout";
-            data.currentUser = req.user;
             data.moment = moment;
 
             // Add relation data to each tasks

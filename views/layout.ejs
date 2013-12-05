@@ -30,8 +30,8 @@
     <!--STYLES END-->
 
     <script type="text/javascript">
-        var userObject = <%- JSON.stringify(user) %>;
-        var loggedUserId = <%= user.id %>;
+        var userObject = <%- JSON.stringify(currentUser) %>;
+        var loggedUserId = <%= currentUser.id %>;
         var selectedProjectId = <%= projectId %>;
         var selectedSprintId = <%= sprintId %>;
     </script>
@@ -257,7 +257,7 @@
         <ul id="navigation-static" class="nav navbar-nav pull-right">
 
             <li class="dropdown" style="display: none;"
-                data-bind="visible: <% if (user.admin) { %>1<% } else { %>0<% } %>"
+                data-bind="visible: <% if (currentUser.admin) { %>1<% } else { %>0<% } %>"
             >
                 <a href="javascript: void(0);" class="dropdown-toggle"
                     data-toggle="dropdown"
@@ -278,14 +278,14 @@
                     </li>
                 </ul>
             </li>
-            <li class="navbar-icon navbar-user tooltipTitle" title="<%= user.fullName() %>"
+            <li class="navbar-icon navbar-user tooltipTitle" title="<%= currentUser.fullName() %>"
                 data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
             >
-                <a href="javascript: void(0);" data-user-id="<%= user.id %>">
+                <a href="javascript: void(0);" data-user-id="<%= currentUser.id %>">
                     <i id="user-icon" class="fa fa-user" style="display: none;"></i>
-                    <img src="<%= user.gravatarImage() %>" onerror="this.style.display = 'none'; document.getElementById('user-icon').style.display = '';" />
+                    <img src="<%= currentUser.gravatarImage() %>" onerror="this.style.display = 'none'; document.getElementById('user-icon').style.display = '';" />
 
-                    <span><%= user.username %></span>
+                    <span><%= currentUser.username %></span>
                 </a>
             </li>
             <li id="functionHelp" class="navbar-icon tooltipTitle" title="Show help"
