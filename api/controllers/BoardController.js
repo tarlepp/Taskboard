@@ -50,7 +50,6 @@ module.exports = {
         res.view({
             projectId: projectId,
             sprintId: sprintId,
-            user: req.user,
             packageJson: packageJson
         });
     }

@@ -104,8 +104,7 @@ module.exports = {
                                 res.view({
                                     layout: req.isAjax ? "layout_ajax" : "layout",
                                     users: users,
-                                    moment: moment,
-                                    currentUser: req.user
+                                    moment: moment
                                 });
                             }
                         }
@@ -158,8 +157,6 @@ module.exports = {
                     data.agentData = _.groupBy(data.history, function(row) {
                         return row.agent;
                     });
-
-                    data.currentUser = req.user;
 
                     res.view(data);
                 }
@@ -235,7 +232,6 @@ module.exports = {
                         },
                         function(projects) {
                             data.projects = projects;
-                            data.currentUser = req.user;
                             data.layout = req.isAjax ? "layout_ajax" : "layout";
 
                             res.view(data);

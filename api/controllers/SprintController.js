@@ -50,7 +50,6 @@ module.exports = {
                     res.send(error, error.status ? error.status : 500);
                 } else {
                     data.layout = req.isAjax ? "layout_ajax" : "layout";
-                    data.currentUser = req.user;
 
                     res.view(data);
                 }

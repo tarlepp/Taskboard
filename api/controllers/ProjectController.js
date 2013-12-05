@@ -134,7 +134,6 @@ module.exports = {
                     res.send(error, error.status ? error.status : 500);
                 } else {
                     data.layout = req.isAjax ? "layout_ajax" : "layout";
-                    data.currentUser = req.user;
 
                     res.view(data);
                 }
@@ -296,8 +295,6 @@ module.exports = {
             });
 
             if (ok) {
-                data.currentUser = req.user;
-
                 if (data.milestones.length > 0) {
                     var show = true;
 
@@ -378,7 +375,6 @@ module.exports = {
                     res.send(error.status ? error.status : 500, error);
                 } else {
                     data.layout = req.isAjax ? "layout_ajax" : "layout";
-                    data.currentUser = req.user;
 
                     res.view(data);
                 }
@@ -550,8 +546,6 @@ module.exports = {
 
             if (ok) {
                 makeDetailedStatistics();
-
-                data.currentUser = req.user;
 
                 res.view(data);
             }
