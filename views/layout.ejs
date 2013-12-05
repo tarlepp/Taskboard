@@ -94,10 +94,13 @@
                                         Edit project
                                     </a>
                                 </li>
+
+                                <li class="divider"></li>
+                                <li class="nav-header text-info">Project data</li>
                                 <li>
                                     <a href="javascript: void(0);"
                                        data-bind="click: $root.actionProjectBacklog"
-                                    >
+                                            >
                                         <i class="fa fa-list-ol"></i>
                                         Project backlog
                                     </a>
@@ -105,11 +108,20 @@
                                 <li>
                                     <a href="javascript: void(0);"
                                        data-bind="click: $root.actionProjectMilestones"
-                                    >
+                                            >
                                         <i class="fa fa-gear"></i>
                                         Milestones
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="javascript: void(0);"
+                                       data-bind="click: $root.actionProjectUsers"
+                                            >
+                                        <i class="fa fa-user"></i>
+                                        Users
+                                    </a>
+                                </li>
+
                                 <li class="divider"></li>
                                 <li class="nav-header text-info">Advanced</li>
 
@@ -124,14 +136,6 @@
                                 </li>
                                 <!-- /ko -->
 
-                                <li>
-                                    <a href="javascript: void(0);"
-                                        data-bind="click: $root.actionProjectUsers"
-                                    >
-                                        <i class="fa fa-user"></i>
-                                        Users
-                                    </a>
-                                </li>
                                 <li>
                                     <a href="javascript: void(0);"
                                        data-bind="click: $root.actionProjectPlanning"
@@ -213,6 +217,8 @@
                                         Edit sprint
                                     </a>
                                 </li>
+                                <li class="divider"></li>
+                                <li class="nav-header text-info">Sprint data</li>
                                 <li>
                                     <a href="javascript: void(0);"
                                        data-bind="click: $root.actionSprintBacklog"
@@ -272,14 +278,6 @@
                     </li>
                 </ul>
             </li>
-
-            <li id="functionHelp" class="navbar-icon tooltipTitle" title="Show help"
-                data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
-            >
-                <a href="javascript: void(0);">
-                    <i class="fa fa-question-sign"></i>
-                </a>
-            </li>
             <li class="navbar-icon navbar-user tooltipTitle" title="<%= user.fullName() %>"
                 data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
             >
@@ -288,6 +286,13 @@
                     <img src="<%= user.gravatarImage() %>" onerror="this.style.display = 'none'; document.getElementById('user-icon').style.display = '';" />
 
                     <span><%= user.username %></span>
+                </a>
+            </li>
+            <li id="functionHelp" class="navbar-icon tooltipTitle" title="Show help"
+                data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
+            >
+                <a href="javascript: void(0);">
+                    <i class="fa fa-question-circle"></i>
                 </a>
             </li>
             <li class="navbar-icon tooltipTitle" title="Sign out"
