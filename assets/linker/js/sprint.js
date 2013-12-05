@@ -552,117 +552,151 @@ function initSprintTabBacklog(modal, contentId) {
     });
 }
 
-
+/**
+ * Function initializes sprint charts tab content to use. Note that
+ * this init can be called multiple times.
+ *
+ * Also note that this init is called dynamic from initTabs() function.
+ *
+ * @param   {jQuery|$}  modal       Current modal content
+ * @param   {String}    contentId   Tab content div id
+ */
 function initSprintTabChart(modal, contentId) {
     var context = jQuery(contentId);
     var sprintId = parseInt(context.data("sprintId"));
 
-    var makeChart = function(data) {
-        jQuery("#burnDownChartTasks", context)
-            .highcharts({
-                chart: {
-                },
-                title: {
-                    text: data.sprint.title + " " + moment(data.sprint.dateStart).format(userObject.momentFormatDate) + " - " + moment(data.sprint.dateEnd).format(userObject.momentFormatDate)
-                },
-                subtitle: {
-                    text: "Sprint task burndown chart"
-                },
-                credits: {
-                    enabled: false
-                },
-                xAxis: {
-                    type: "datetime",
-                    tickInterval: 3600 * 1000 * 24,
-                    labels: {
-                        rotation: -30,
-                        align: "right",
-
-                        formatter: function() {
-                            return moment(this.value).format(userObject.momentFormatDate);
-                        }
-                    }
-                },
-                yAxis: {
-                    title: {
-                        text: "Tasks remaining"
-                    },
-                    gridLineColor: "#dddddd",
-                    min: 0
-                },
-                plotOptions: {
-                    series: {
-                        pointPadding: 0.1,
-                        groupPadding: 0,
-                        borderWidth: 0,
-                        shadow: false
-                    }
-                },
-                legend: {
-                    align: "right",
-                    verticalAlign: "top",
-                    x: -10,
-                    y: 50,
-                    floating: true
-                },
-                tooltip: {
-                    shared: true,
-                    hideDelay: 100,
-                    useHTML: true,
-                    borderColor: "#cccccc",
-                    borderWidth: 1,
-                    shadow: false,
-                    formatter: function() {
-                        var dateEnd = moment(this.x);
-                        var dateStart = dateEnd.clone().subtract("days", 1);
-                        var tooltip = "<div class='chartToolTipTasks'>"
-                            + "<h1>"
-                            + dateStart.format(userObject.momentFormatDate)
-                            + " - "
-                            + dateEnd.format(userObject.momentFormatDate)
-                            + "</h1>"
-                            + "<hr />"
-                            + "<table>"
-                        ;
-
-                        // Iterate each points and add data to tooltip as a table row
-                        jQuery.each(this.points, function(i, point) {
-                            tooltip += "<tr>"
-                                + "<th>"
-                                + point.series.options.nameShort
-                                + "</th>"
-                                + "<td>"
-                                + point.y
-                                + "</th>"
-                                + "</tr>"
-                            ;
-                        });
-
-                        tooltip += "</table>"
-                            + "</div>";
-
-                        return tooltip;
-                    }
-
-                },
-                series: data.chartData
-            });
-    };
-
-    jQuery
-        .ajax({
-            url: "/Sprint/ChartDataTasks",
-            type: "POST",
-            data: {
-
-                sprintId: sprintId
+    // Create chart
+    var chart = new Highcharts.Chart({
+        chart: {
+            renderTo: 'burnDownChartTasks',
+            events: {
+                load: requestData
             }
-        })
-        .done(function(data) {
-            makeChart(data);
-        })
-        .fail(function(jqXhr, textStatus, error) {
-            handleAjaxError(jqXhr, textStatus, error);
-        });
+        },
+        title: {
+            text: "Loading data..."
+        },
+        subtitle: {
+            text: "Sprint task burndown chart"
+        },
+        credits: {
+            enabled: false
+        },
+        xAxis: {
+            type: "datetime",
+            startOnTick: false,
+            endOnTick: false,
+            tickInterval: 3600 * 1000 * 24,
+            labels: {
+                rotation: -36,
+                useHTML: true,
+                align: "right",
+                formatter: function() {
+                    return "<span class='chartLabel'>" + moment(this.value).format(userObject.momentFormatDate) + "</span>";
+                }
+            }
+        },
+        yAxis: {
+            title: {
+                text: "Tasks remaining"
+            },
+            gridLineColor: "#dddddd",
+            lineWidth: 1,
+            min: 0
+        },
+        plotOptions: {
+            series: {
+                pointPadding: 0.1,
+                groupPadding: 0,
+                borderWidth: 0,
+                shadow: false
+            }
+        },
+        legend: {
+            backgroundColor: "#ffffff",
+            align: "right",
+            verticalAlign: "top",
+            layout: "vertical",
+            x: -10,
+            y: 60,
+            floating: true
+        },
+        tooltip: {
+            shared: true,
+            hideDelay: 100,
+            useHTML: true,
+            borderColor: "#cccccc",
+            borderWidth: 1,
+            shadow: false,
+            formatter: function() {
+                var dateEnd = moment(this.x);
+                var dateStart = dateEnd.clone().subtract("days", 1);
+                var tooltip = "<div class='chartToolTipTasks'>"
+                        + "<h1>"
+                        + dateStart.format(userObject.momentFormatDate)
+                        + " - "
+                        + dateEnd.format(userObject.momentFormatDate)
+                        + "</h1>"
+                        + "<hr />"
+                        + "<table>"
+                    ;
 
+                // Iterate each points and add data to tooltip as a table row
+                jQuery.each(this.points, function(i, point) {
+                    tooltip += "<tr>"
+                        + "<th>"
+                        + point.series.options.nameShort
+                        + "</th>"
+                        + "<td>"
+                        + numeral(point.y).format("0[.]0")
+                        + "</th>"
+                        + "</tr>"
+                    ;
+                });
+
+                tooltip += "</table>"
+                    + "</div>";
+
+                return tooltip;
+            }
+
+        },
+        series: []
+    });
+
+    /**
+     * This function fetches actual data for chart from server.
+     *
+     * Note that request data from server contains also other data.
+     */
+    function requestData() {
+        jQuery
+            .ajax({
+                url: "/Sprint/ChartDataTasks",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    sprintId: sprintId
+                }
+            })
+            .done(function(data) {
+                // Set main title for chart
+                chart.setTitle({
+                    text: data.sprint.title + " " + moment(data.sprint.dateStart).format(userObject.momentFormatDate) + " - " + moment(data.sprint.dateEnd).format(userObject.momentFormatDate)
+                });
+
+                // Iterate chart data and add new series to chart
+                for (var i = 0; i < data.chartData.length; i++) {
+                    chart.addSeries(data.chartData[i], false)
+                }
+
+                chart.xAxis.min = data.pointStart;
+
+                // Redraw chart
+                chart.redraw();
+            })
+            .fail(function(jqXhr, textStatus, error) {
+                handleAjaxError(jqXhr, textStatus, error);
+            });
+    }
 }
