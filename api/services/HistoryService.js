@@ -10,6 +10,7 @@
  *
  * @param   {String}    objectName  Name of the object eg. Task
  * @param   {Object}    object      Actual object
+ * @param   {String}    message     Extra message for history row
  */
 exports.write = function(objectName, object, message) {
     var objectId = object.id;
