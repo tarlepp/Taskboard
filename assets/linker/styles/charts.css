@@ -1,9 +1,21 @@
+.chartLabel,
 .chartToolTipTasks {
     font-family: 'Yanone Kaffeesatz', "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.chartLabel {
+    font-size: 14px;
+    position: relative;
+    top: 18px;
+    left: -2px;
+    transform-style: preserve-3d;
+    -webkit-backface-vivbility: hidden;
+    -webkit-transform: translate3d(0,0,0);
+    -webkit-transform-style: preserve-3d;
+}
+
 .chartToolTipTasks h1 {
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .chartToolTipTasks hr {
@@ -18,8 +30,8 @@
 
 .chartToolTipTasks table th,
 .chartToolTipTasks table td {
-    font-size: 14px;
-    padding: 0 3px;
+    font-size: 15px;
+    padding: 0 4px;
 }
 
 .chartToolTipTasks table th {

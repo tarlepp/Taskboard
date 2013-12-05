@@ -15,8 +15,9 @@ jQuery(document).ready(function() {
     });
 
     if (typeof userObject !== 'undefined') {
-        // Set language
+        // Set language for moment.js and numeral.js
         moment.lang(userObject.language);
+        numeral.language(userObject.language);
     }
 
     // Global tooltip event

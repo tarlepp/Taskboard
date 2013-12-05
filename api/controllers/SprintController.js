@@ -305,7 +305,8 @@ module.exports = {
                         if (error) {
                             res.send(500, error);
                         } else {
-                            data.tasks = tasks;
+                            data.tasks = _.sortBy(tasks, function(task) { return task.timeEnd; } );
+                            data.tasksDone = _.filter(data.tasks, function(task) { return task.isDone; } );
 
                             parseData();
                         }
@@ -351,6 +352,14 @@ module.exports = {
             data.initTasks = initTasks;
             data.chartData = [];
 
+            var pointStart = Date.UTC(
+                data.sprint.dateStartObject().year(),
+                data.sprint.dateStartObject().month(),
+                data.sprint.dateStartObject().date()
+            );
+
+            data.pointStart = pointStart;
+
             // Add 'Ideal task remaining' data
             data.chartData.push({
                 name: "Ideal tasks remaining",
@@ -363,6 +372,8 @@ module.exports = {
                     radius: 3
                 },
                 lineWidth: 1,
+                zIndex: 10,
+                pointStart: pointStart,
                 data: getIdealData()
             });
 
@@ -377,7 +388,20 @@ module.exports = {
                     enabled: false,
                     radius: 3
                 },
+                zIndex: 20,
+                pointStart: pointStart,
                 data: getActualData()
+            });
+
+            // Add 'Done tasks' data
+            data.chartData.push({
+                name: "Done tasks",
+                nameShort: "Done",
+                type: "column",
+                color: "#47a447",
+                zIndex: 5,
+                pointStart: pointStart,
+                data: getDoneData()
             });
 
             // Add 'Added tasks' data
@@ -386,6 +410,8 @@ module.exports = {
                 nameShort: "Added",
                 type: "column",
                 color: "#ec971f",
+                zIndex: 0,
+                pointStart: pointStart,
                 data: getAddedData()
             });
 
@@ -484,6 +510,26 @@ module.exports = {
             );
 
             return output;
+        }
+
+        /**
+         * Private function to get done data for current sprint.
+         *
+         * @returns {Array}
+         */
+        function getDoneData() {
+            var output = [];
+
+            _.each(_.groupBy(data.tasksDone, function(task) { return task.timeEndObject().format("YYYY-MM-DD"); }),
+                function(tasks) {
+                    var date = tasks[0].timeEndObject();
+
+                    output.push([Date.UTC(date.year(), date.month(), date.date()), _.size(tasks)]);
+                }
+            );
+
+            return output;
+
         }
     }
 };
