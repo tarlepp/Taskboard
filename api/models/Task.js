@@ -142,8 +142,11 @@ module.exports = {
                         values.isDone = data.phase.isDone;
                         values.timeEnd = values.isDone ? new Date() : null;
 
-                        // We can assume that this update is from the board, so set start time if needed
-                        if (values.phaseId !== data.task.phaseId
+                        // Task is updated to first phase, so set start and end times to null
+                        if (data.phase.order === 0) {
+                            values.timeStart = null;
+                            values.timeEnd = null;
+                        } else if (values.phaseId !== data.task.phaseId // We can assume that this update is from the board, so set start time if needed
                             && (!data.task.timeStart || data.task.timeStart == '0000-00-00 00:00:00')
                         ) {
                             values.timeStart = new Date();
@@ -272,8 +275,14 @@ module.exports = {
                     DataService.getTask(values.id, callback);
                 },
 
+                // Fetch tasks that are attached to same story
                 tasks: function(callback) {
                     DataService.getTasks({storyId: values.storyId}, callback);
+                },
+
+                // Fetch phases
+                phases: function(callback) {
+                    DataService.getPhases({}, callback);
                 }
             },
             function (error, data) {
@@ -282,39 +291,61 @@ module.exports = {
                 } else {
                     var isDone = true;
                     var timeEnd = new Date();
+                    var taskPhases = [];
 
                     _.each(data.tasks, function(task) {
                         if (!task.isDone) {
                             isDone = false;
                             timeEnd = null;
                         }
+
+                        taskPhases.push(task.phaseId);
                     });
 
-                    var where = {id: data.story.id};
+                    taskPhases = _.uniq(taskPhases);
+
                     var updateData = {
                         isDone: isDone,
                         timeEnd: timeEnd
                     };
 
-                    if ((!data.story.timeStart || data.story.timeStart == '0000-00-00 00:00:00')
-                        && data.task.timeStart && data.task.timeStart != '0000-00-00 00:00:00') {
-                        updateData['timeStart'] = new Date();
-                    }
-
-                    Story
-                        .update(where, updateData, function(error, stories) {
+                    if (taskPhases.length === 1) {
+                        DataService.getPhase(taskPhases[0], function(error, phase) {
                             if (error) {
                                 cb(error);
-                            } else {
-                                _.each(stories, function(story) {
-                                    Story.publishUpdate(story.id, story.toJSON());
-                                });
-
-                                cb();
+                            } else if (phase.order == 0) {
+                                updateData['timeStart'] = null;
                             }
+
+                            updateStory(data, updateData);
                         });
+                    } else if ((!data.story.timeStart || data.story.timeStart == '0000-00-00 00:00:00')
+                        && data.task.timeStart && data.task.timeStart != '0000-00-00 00:00:00') {
+                        updateData['timeStart'] = new Date();
+
+                        updateStory(data, updateData);
+                    } else {
+                        updateStory(data, updateData);
+                    }
                 }
             }
         );
+
+        function updateStory(data, updateData) {
+            var where = {id: data.story.id};
+
+            Story
+                .update(where, updateData, function(error, stories) {
+                    if (error) {
+                        cb(error);
+                    } else {
+                        _.each(stories, function(story) {
+                            Story.publishUpdate(story.id, story.toJSON());
+                        });
+
+                        cb();
+                    }
+                });
+        }
     }
 };
