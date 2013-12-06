@@ -72,7 +72,9 @@
     <% _.each(sprints, function(sprint) { %>
     <tr>
         <td>
-            <a class="actionMenu-toggle btn btn-icon btn-default" href="javascript: void(0);" data-popover="true">
+            <a class="actionMenu-toggle btn btn-icon btn-default" href="javascript: void(0);"
+                data-popover="true"
+            >
                 <i class="fa fa-chevron-down"></i>
             </a>
             <div class="hidden">
@@ -80,7 +82,7 @@
                     <ul class="actionMenu-actions">
                         <li>
                             <a href="javascript: void(0);"
-                               data-milestone-id="<%= sprint.id %>"
+                               data-sprint-id="<%= sprint.id %>"
                                data-project-id="<%= project.id %>"
                                data-action="sprintEdit"
                             >
@@ -91,7 +93,7 @@
                         <li class="divider"></li>
                         <li>
                             <a href="javascript: void(0);" class="text-danger"
-                               data-milestone-id="<%= sprint.id %>"
+                               data-sprint-id="<%= sprint.id %>"
                                data-project-id="<%= project.id %>"
                                data-action="sprintDelete"
                             >
@@ -129,7 +131,7 @@
                                data-project-id="<%= project.id %>"
                                data-story-id="<%= story.id %>"
                                data-action="storyEdit"
-                                    >
+                            >
                                 <%= story.title %> (<%= (story.estimate == -1) ? '???' : story.estimate %>)
                             </a>
                         </li>
