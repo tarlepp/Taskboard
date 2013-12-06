@@ -1230,4 +1230,58 @@ function initProjectTabUsers(modal, contentId) {
 function initProjectTabSprints(modal, contentId) {
     var body = jQuery("body");
     var container = modal.find(contentId);
+
+    // Initialize action menu for project milestones and milestone stories
+    initActionMenu(container, {});
+
+    // User clicks action menu link
+    body.on("click", "ul.actionMenu-actions a", function() {
+        var element = jQuery(this);
+        var projectId = element.data("projectId");
+        var sprintId = element.data("sprintId");
+        var storyId = element.data("storyId");
+        var action = element.data("action");
+        var selector = element.data("selector");
+
+        // We have popover selector, so hide it
+        if (selector) {
+            jQuery(selector).popover("hide");
+        }
+
+        // Hide current modal
+        modal.modal("hide");
+
+        // Specify used trigger to come back to this view
+        var trigger = {
+            trigger: "projectSprints",
+            parameters: [projectId]
+        };
+
+        // Determine used main action id
+        var actionId = storyId || sprintId;
+
+        // Trigger milestone action event
+        body.trigger(action, [actionId, trigger]);
+    });
+
+    // Remove 'add new' click listeners, this prevents firing this event multiple times
+    body.off("click", "[data-add-new-sprint='true']");
+
+    // User wants to add new milestone to current sprint
+    body.on("click", "[data-add-new-sprint='true']", function() {
+        var element = jQuery(this);
+        var projectId = element.data("projectId");
+
+        // Hide current modal
+        modal.modal("hide");
+
+        // Specify used trigger to come back to this view
+        var trigger = {
+            trigger: "projectSprints",
+            parameters: [projectId]
+        };
+
+        // Trigger milestone add
+        body.trigger("sprintAdd", [projectId, trigger]);
+    });
 }
