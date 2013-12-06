@@ -3,13 +3,16 @@
         <a id="basicTab" href="#basic" data-toggle="tab">Basic</a>
     </li>
     <li>
-        <a id="usersTab" href="#users" data-toggle="tab" data-callback="initProjectTabUsers" data-href="/ProjectUser/Users?projectId=<%= project.id %>">Users</a>
-    </li>
-    <li>
         <a id="backlogTab" href="#backlog" data-toggle="tab" data-callback="initProjectTabBacklog" data-href="/Project/Backlog?id=<%= project.id %>">Backlog</a>
     </li>
     <li>
+        <a id="sprintsTab" href="#sprints" data-toggle="tab" data-callback="initProjectTabSprints" data-href="/Project/Sprints?id=<%= project.id %>">Sprints</a>
+    </li>
+    <li>
         <a id="milestonesTab" href="#milestones" data-toggle="tab" data-callback="initProjectTabMilestones" data-href="/Project/Milestones?id=<%= project.id %>">Milestones</a>
+    </li>
+    <li>
+        <a id="usersTab" href="#users" data-toggle="tab" data-callback="initProjectTabUsers" data-href="/ProjectUser/Users?projectId=<%= project.id %>">Users</a>
     </li>
     <li>
         <a id="statisticsTab" href="#statistics" data-toggle="tab" data-callback="initProjectTabStatistics" data-href="/Project/Statistics?id=<%= project.id %>">Statistics</a>
@@ -88,6 +91,8 @@
     <div class="tab-pane" id="backlog"></div>
 
     <div class="tab-pane" id="milestones"></div>
+
+    <div class="tab-pane" id="sprints"></div>
 
     <div class="tab-pane" id="statistics"></div>
 

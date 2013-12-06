@@ -275,6 +275,26 @@ jQuery(document).ready(function() {
     });
 
     /**
+     * Project sprints event. This will open project edit modal dialog and activates Sprints
+     * tab to be opened. Note that this just fires projectEdit event with specified parameters.
+     *
+     * @param   {jQuery.Event}          event       Event object
+     * @param   {Number}                projectId   Project id, if not given fallback to current project
+     * @param   {sails.helper.trigger}  trigger     Trigger to process after actions
+     */
+    body.on("projectSprints", function(event, projectId, trigger) {
+        projectId = projectId || myViewModel.project().id();
+        trigger = trigger || false;
+
+        // Used parameters for form init
+        var parameters = {
+            activeTab: "sprints"
+        };
+
+        body.trigger("projectEdit", [projectId, trigger, parameters]);
+    });
+
+    /**
      * Project planning event, this opens a modal bootbox dialog with project backlog view on it.
      * In this dialog user can prioritize user stories and assign them to existing sprints or move
      * them back to backlog.
@@ -1196,4 +1216,18 @@ function initProjectTabUsers(modal, contentId) {
 
         body.trigger("projectUserRoleChange", [projectId, userId, roleId, trigger]);
     });
+}
+
+/**
+ * Function initializes project sprints tab to use in project edit. Note that
+ * this init can be called multiple times.
+ *
+ * Also note that this init is called dynamic from initTabs() function.
+ *
+ * @param   {jQuery|$}  modal       Current modal content
+ * @param   {String}    contentId   Tab content div id
+ */
+function initProjectTabSprints(modal, contentId) {
+    var body = jQuery("body");
+    var container = modal.find(contentId);
 }

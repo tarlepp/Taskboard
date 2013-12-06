@@ -490,6 +490,11 @@ function ViewModel() {
         body.trigger("projectUsers", [self.project().id()]);
     };
 
+    // Method opens project sprints
+    self.actionProjectSprints = function() {
+        body.trigger("projectSprints", [self.project().id()]);
+    };
+
     // TODO
     self.actionProjectDelete = function() {
         if (self.role() < -1) {
