@@ -43,6 +43,10 @@ module.exports = {
             type:       'text',
             defaultsTo: ''
         },
+        priority: {
+            type:       'integer',
+            defaultsTo: 0
+        },
         isDone: {
             type:       'boolean',
             required:   true,
