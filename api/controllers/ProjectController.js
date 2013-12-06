@@ -656,5 +656,22 @@ module.exports = {
                 data.milestones.progress = Math.round(data.milestones.cntDone / data.milestones.cntTotal * 100);
             }
         }
+    },
+
+    /**
+     * Project sprints action.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    sprints: function(req, res) {
+        var projectId = parseInt(req.param('id'), 10);
+
+        // Specify template data to use
+        var data = {
+            layout: req.isAjax ? "layout_ajax" : "layout"
+        };
+
+        res.view(data);
     }
 };
