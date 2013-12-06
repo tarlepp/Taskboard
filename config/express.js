@@ -6,7 +6,8 @@
  * @type {*}
  */
 
-var passport = require('passport');
+var passport = require("passport");
+var moment = require("moment-timezone");
 
 module.exports.express = {
     customMiddleware: function (app) {
@@ -16,7 +17,12 @@ module.exports.express = {
 
         // Add some basic data for all views
         app.use(function(req, res, next) {
+            if (req.user && req.user.language) {
+                moment.lang(req.user.language);
+            }
+
             res.locals.currentUser = req.user;
+            res.locals.moment = moment;
 
             next();
         });
