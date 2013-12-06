@@ -176,6 +176,12 @@ function ViewModel() {
         });
     });
 
+    // Sorted tasks
+    self.sortedTasks = ko.computed(function() {
+        return self.tasks().sort(function(a, b) {
+            return a.priority() > b.priority() ? 1 : -1;
+        });
+    });
 
     /**
      * Project initialize method. This method is called when ever user changes project selection.
@@ -376,7 +382,7 @@ function ViewModel() {
     self.getTasks = function(phaseId, storyId) {
         var output = [];
 
-        for (var i = 0; i < self.tasks().length; i++) {
+        for (var i = 0; i < self.sortedTasks().length; i++) {
             var task = self.tasks()[i];
 
             if (task.storyId() === storyId && task.phaseId() === phaseId) {
