@@ -447,7 +447,7 @@ function ViewModel() {
             var phase = ko.toJS(context.$data);
 
             // Update task data
-            socket.put('/Task/' + arg.item.id(), {phaseId: phase.id}, function(/** sails.json.task */response) {
+            socket.put('/Task/' + arg.item.id(), {phaseId: phase.id, _csrf: getCsrfToken()}, function(/** sails.json.task */response) {
                 if (handleSocketError(response, true)) {
                     // all was ok, nice!
                 }

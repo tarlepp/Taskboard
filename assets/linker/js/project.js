@@ -567,7 +567,7 @@ jQuery(document).ready(function() {
                             // User founded
                             if (projectUser.length === 1 && projectUser[0].id) {
                                 // Change user role
-                                socket.put("/ProjectUser/" + projectUser[0].id, {role: result}, function(/** sails.json.projectUser */projectUser) {
+                                socket.put("/ProjectUser/" + projectUser[0].id, {role: result, _csrf: getCsrfToken()}, function(/** sails.json.projectUser */projectUser) {
                                     if (handleSocketError(projectUser)) {
                                         makeMessage("User role changed successfully");
                                     }
@@ -824,7 +824,8 @@ function initProjectPlanning(modal) {
                     var storyId = jQuery(item).data("storyId");
                     var data = {
                         priority: key + 1,
-                        sprintId: sprintId
+                        sprintId: sprintId,
+                        _csrf: getCsrfToken()
                     };
 
                     // Update user story priority and sprint id data
@@ -1073,7 +1074,8 @@ function initProjectTabBacklog(modal, contentId) {
                         jQuery.ajax({
                             url: "/Story/" + item.storyId,
                             data: {
-                                priority: item.priority
+                                priority: item.priority,
+                                _csrf: getCsrfToken()
                             },
                             type: "PUT",
                             dataType: "json"

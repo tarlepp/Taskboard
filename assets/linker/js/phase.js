@@ -82,6 +82,9 @@ jQuery(document).ready(function() {
 
                             delete item.id;
 
+                            // Add CSRF token to data
+                            item._csrf = getCsrfToken();
+
                             // Insert new phase
                             if (isNaN(phaseId)) {
                                 socket.post("/Phase/", item, function(data) {
