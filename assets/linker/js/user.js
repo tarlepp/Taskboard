@@ -264,7 +264,7 @@ jQuery(document).ready(function() {
             callback: function(result) {
                 if (result) {
                     // Remove user via socket
-                    socket.delete("/User/" + userId, function(/** sails.json.user */user) {
+                    socket.delete("/User/" + userId, {_csrf: getCsrfToken()}, function(/** sails.json.user */user) {
                         if (handleSocketError(user)) {
                             makeMessage("User deleted successfully.");
 

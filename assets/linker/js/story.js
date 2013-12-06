@@ -314,7 +314,7 @@ jQuery(document).ready(function() {
             callback: function(result) {
                 if (result) {
                     // Delete story data
-                    socket.delete("/Story/" + storyId, function(/** sails.json.story */story) {
+                    socket.delete("/Story/" + storyId, {_csrf: getCsrfToken()}, function(/** sails.json.story */story) {
                         if (handleSocketError(story)) {
                             makeMessage("User story deleted successfully.");
 

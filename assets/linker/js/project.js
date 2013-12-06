@@ -506,7 +506,7 @@ jQuery(document).ready(function() {
                             // User founded
                             if (projectUser.length === 1 && projectUser[0].id) {
                                 // De-attach user from this project
-                                socket.delete("/ProjectUser/" + projectUser[0].id, function(/** sails.json.projectUser */projectUser) {
+                                socket.delete("/ProjectUser/" + projectUser[0].id, {_csrf: getCsrfToken()}, function(/** sails.json.projectUser */projectUser) {
                                     if (handleSocketError(projectUser)) {
                                         makeMessage("User de-attached successfully from project");
                                     }

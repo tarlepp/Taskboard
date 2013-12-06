@@ -276,7 +276,7 @@ function initProjectPhases(modal) {
                             },
                             callback: function(result) {
                                 if (result) {
-                                    socket.delete("/Phase/" + phaseId, function(/** sails.json.phase */data) {
+                                    socket.delete("/Phase/" + phaseId, {_csrf: getCsrfToken()}, function(/** sails.json.phase */data) {
                                         if (handleSocketError(data)) {
                                             makeMessage("Phase deleted successfully.", "success", {});
 
