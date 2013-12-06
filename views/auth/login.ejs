@@ -1,4 +1,6 @@
 <form class="form-signin" action="/login" method="post">
+    <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+
     <h2 class="form-signin-heading">Please sign in</h2>
 
     <input type="text" name="username" class="form-control" placeholder="enter username" autofocus autocomplete="off" />

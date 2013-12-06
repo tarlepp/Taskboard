@@ -13,6 +13,7 @@
 <div class="tab-content">
     <div class="tab-pane active" id="basic">
         <form id="formMilestoneEdit" class="form-horizontal">
+            <input type="hidden" name="_csrf" value="<%= _csrf %>" />
             <input type="hidden" name="projectId" value="<%= milestone.projectId %>" />
 
             <div class="form-group required">

@@ -40,6 +40,7 @@
 <div class="tab-content">
     <div class="tab-pane active" id="basic">
         <form id="formUserEdit_1" class="form-horizontal">
+            <input type="hidden" name="_csrf" value="<%= _csrf %>" />
 
             <div class="form-group">
                 <label class="col-lg-3 control-label">Username</label>
@@ -79,6 +80,8 @@
 
     <div class="tab-pane" id="languageAndRegion">
         <form id="formUserEdit_2" class="form-horizontal">
+            <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+
             <h4 class="col-lg-offset-3">General settings</h4>
 
             <div class="form-group required">
