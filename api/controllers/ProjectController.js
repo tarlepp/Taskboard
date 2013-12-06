@@ -667,11 +667,163 @@ module.exports = {
     sprints: function(req, res) {
         var projectId = parseInt(req.param('id'), 10);
 
-        // Specify template data to use
         var data = {
-            layout: req.isAjax ? "layout_ajax" : "layout"
+            layout: req.isAjax ? "layout_ajax" : "layout",
+            project: false,
+            sprints: false,
+            stories: false,
+            tasks: false,
+            progressSprints: 0,
+            progressStories: 0,
+            progressTasks: 0,
+            cntSprintsDone: 0,
+            cntSprintsTotal: 0,
+            cntStoriesDone: 0,
+            cntStoriesTotal: 0,
+            cntTasksDone: 0,
+            cntTasksTotal: 0
         };
 
-        res.view(data);
+        async.parallel(
+            {
+                /**
+                 * Fetch project data.
+                 *
+                 * @param   {Function}  callback
+                 */
+                project: function(callback) {
+                    DataService.getProject(projectId, callback);
+                },
+
+                /**
+                 * Fetch project sprint data
+                 *
+                 * @param   {Function}  callback
+                 */
+                sprints: function(callback) {
+                    DataService.getSprints({
+                        projectId: projectId
+                    }, callback);
+                }
+            },
+
+            /**
+             * Callback function which is been called after all parallel jobs are processed.
+             *
+             * @param   {Error|String}  error
+             * @param   {{}}            results
+             */
+            function(error, results) {
+                if (error) {
+                    res.send(error.status ? error.status : 500, error);
+                } else {
+                    data.project = results.project;
+                    data.sprints = results.sprints;
+                    data.cntSprintsTotal = data.sprints.length;
+
+                    fetchStoryAndTaskData();
+                }
+            }
+        );
+
+        /**
+         * Private function to fetch project sprints story and task data from database.
+         *
+         * Function will also make some calculations for statistics.
+         */
+        function fetchStoryAndTaskData() {
+            async.map(
+                data.sprints,
+                function(sprint, callback) {
+                    Story
+                        .find()
+                        .where({
+                            sprintId: sprint.id
+                        })
+                        .sort("title ASC")
+                        .done(function(error, stories) {
+                            if (error) {
+                                callback(error, null);
+                            }
+
+                            // Add stories to sprint data
+                            sprint.stories = stories;
+
+                            // Calculate done stories count
+                            sprint.doneStories = _.reduce(stories, function(memo, story) {
+                                return (story.isDone) ? memo + 1 : memo;
+                            }, 0);
+
+                            // Add global story counter data
+                            data.cntStoriesTotal = data.cntStoriesTotal + stories.length;
+                            data.cntStoriesDone = data.cntStoriesDone + sprint.doneStories;
+
+                            // Some of sprint stories are done, so calculate sprint progress
+                            if (sprint.doneStories > 0) {
+                                if (stories.length === sprint.doneStories) {
+                                    data.cntSprintsDone = data.cntSprintsDone + 1;
+                                }
+
+                                sprint.progress = Math.round(sprint.doneStories / stories.length * 100);
+                            } else { // Otherwise sprint progress is zero
+                                sprint.progress = 0;
+                            }
+
+                            // Determine story id values for task data fetch
+                            var storyIds = _.map(stories, function(story) { return { storyId: story.id }; } );
+
+                            if (storyIds.length > 0) {
+                                // Find story tasks
+                                Task
+                                    .find()
+                                    .where({or: storyIds})
+                                    .done(function(error, tasks) {
+                                        data.cntTasksTotal = data.cntTasksTotal + tasks.length;
+                                        data.cntTasksDone = data.cntTasksDone + _.reduce(tasks, function(memo, task) {
+                                            return (task.isDone) ? memo + 1 : memo;
+                                        }, 0);
+
+                                        // Add tasks to sprint data
+                                        sprint.tasks = tasks;
+
+                                        callback(null, sprint);
+                                    });
+                            } else {
+                                // Add tasks to sprint data
+                                sprint.tasks = [];
+
+                                callback(null, sprint);
+                            }
+                        });
+                },
+                function(error, results) {
+                    if (error) {
+                        res.send(error.status ? error.status : 500, error);
+                    } else {
+                        data.sprints = results;
+
+                        if (data.cntSprintsDone > 0) {
+                            data.progressSprints = Math.round(data.cntSprintsDone / data.cntSprintsTotal * 100);
+                        } else {
+                            data.progressSprints = 0;
+                        }
+
+                        if (data.cntStoriesDone > 0) {
+                            data.progressStories = Math.round(data.cntStoriesDone / data.cntStoriesTotal * 100);
+                        } else {
+                            data.progressStories = 0;
+                        }
+
+                        if (data.cntTasksDone > 0) {
+                            data.progressTasks = Math.round(data.cntTasksDone / data.cntTasksTotal * 100);
+                        } else {
+                            data.progressTasks = 0;
+                        }
+
+                        res.view(data);
+                    }
+                }
+            );
+        }
     }
 };
