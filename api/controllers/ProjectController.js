@@ -669,6 +669,7 @@ module.exports = {
 
         var data = {
             layout: req.isAjax ? "layout_ajax" : "layout",
+            role: false,
             project: false,
             sprints: false,
             stories: false,
@@ -686,6 +687,11 @@ module.exports = {
 
         async.parallel(
             {
+                // Fetch user role
+                role: function(callback) {
+                    AuthService.hasProjectAccess(req.user, projectId, callback, true);
+                },
+
                 /**
                  * Fetch project data.
                  *
@@ -717,6 +723,7 @@ module.exports = {
                 if (error) {
                     res.send(error.status ? error.status : 500, error);
                 } else {
+                    data.role = results.role;
                     data.project = results.project;
                     data.sprints = results.sprints;
                     data.cntSprintsTotal = data.sprints.length;
