@@ -38,7 +38,8 @@ module.exports.policies = {
         backlog:    ["authenticated", "isAjax", "hasProjectAccess"],
         milestones: ["authenticated", "isAjax", "hasProjectAccess"],
         planning:   ["authenticated", "isAjax", "hasProjectAccess"],
-        statistics: ["authenticated", "isAjax", "hasProjectAccess"]
+        statistics: ["authenticated", "isAjax", "hasProjectAccess"],
+        sprints:    ["authenticated", "isAjax", "hasProjectAccess"]
     },
 
     // Phase controller policies
