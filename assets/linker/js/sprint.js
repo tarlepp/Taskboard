@@ -229,7 +229,7 @@ jQuery(document).ready(function() {
             callback: function(result) {
                 if (result) {
                     // Delete sprint data
-                    socket.delete("/Sprint/" + sprintId, function(/** sails.json.sprint */sprint) {
+                    socket.delete("/Sprint/" + sprintId, {_csrf: getCsrfToken()}, function(/** sails.json.sprint */sprint) {
                         if (handleSocketError(sprint)) {
                             makeMessage("Sprint deleted successfully.", "success", {});
 

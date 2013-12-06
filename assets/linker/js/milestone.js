@@ -216,7 +216,7 @@ jQuery(document).ready(function() {
             callback: function(result) {
                 if (result) {
                     // Remove milestone via socket
-                    socket.delete("/Milestone/" + milestoneId, function(/** sails.json.milestone */milestone) {
+                    socket.delete("/Milestone/" + milestoneId, {_csrf: getCsrfToken()}, function(/** sails.json.milestone */milestone) {
                         if (handleSocketError(milestone)) {
                             makeMessage("Milestone deleted successfully.");
 
