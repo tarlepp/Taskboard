@@ -289,3 +289,24 @@ function convertUTCDateToLocalDate(date) {
 
     return newDate;
 }
+
+/**
+ * Function fetches CSRF token from sails.js server for AJAX and socket
+ * requests. Token is fetched from server via simple request, note that
+ * this call is not async.
+ *
+ * @returns {String}    CSRF token
+ */
+function getCsrfToken() {
+    // Make AJAX call to fetch valid CSRF token
+    var response = jQuery.parseJSON(
+        jQuery.ajax({
+            async: false,
+            type: "GET",
+            dataType: "json",
+            url: "/csrfToken"
+        }).responseText
+    );
+
+    return response._csrf;
+}

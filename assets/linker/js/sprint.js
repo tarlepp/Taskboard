@@ -510,7 +510,8 @@ function initSprintTabBacklog(modal, contentId) {
                 jQuery.ajax({
                     url: "/Story/" + storyId,
                     data: {
-                        priority: index + 1
+                        priority: index + 1,
+                        _csrf: getCsrfToken()
                     },
                     type: "PUT",
                     dataType: "json"
@@ -673,7 +674,7 @@ function initSprintTabChart(modal, contentId) {
         jQuery
             .ajax({
                 url: "/Sprint/ChartDataTasks",
-                type: "POST",
+                type: "GET",
                 dataType: "json",
                 data: {
                     sprintId: sprintId

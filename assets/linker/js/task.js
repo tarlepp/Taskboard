@@ -216,7 +216,7 @@ jQuery(document).ready(function() {
             callback: function(result) {
                 if (result) {
                     // Delete task
-                    socket.delete("/Task/" + taskId, function(task) {
+                    socket.delete("/Task/" + taskId + "?_csrf=" + getCsrfToken(), function(task) {
                         if (handleSocketError(task)) {
                             makeMessage("Task deleted successfully.");
 

@@ -253,7 +253,8 @@ jQuery(document).ready(function() {
                         data: {
                             storyId: storyId,
                             sprintId: result,
-                            projectId: myViewModel.project().id()
+                            projectId: myViewModel.project().id(),
+                            _csrf: getCsrfToken()
                         },
                         dataType: "json"
                     })

@@ -305,7 +305,7 @@ function validateUnique(context, input, group, label, value, errors) {
     // Make AJAX call to
     var response = jQuery.ajax({
         async: false,
-        type: "POST",
+        type: "GET",
         dataType: "json",
         url: "/Validator/isUnique",
         data: {
@@ -406,7 +406,7 @@ function validateCurrentPassword(context, input, group, label, value, errors) {
     // Make AJAX call to validate given password with specified user
     var response = jQuery.ajax({
         async: false,
-        type: "POST",
+        type: "GET",
         dataType: "json",
         url: "/Validator/passwordCheck",
         data: {

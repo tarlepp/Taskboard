@@ -157,6 +157,7 @@
 
     <div class="tab-pane" id="passwordChange">
         <form id="formUserEditPasswordChange" class="form-horizontal">
+            <input type="hidden" name="_csrf" value="<%= _csrf %>" />
             <input type="hidden" name="userId" value="<%= user.id %>" />
 
             <div class="form-group required">
