@@ -269,6 +269,7 @@ function Task(data) {
     self.typeId         = ko.observable(data.typeId);
     self.title          = ko.observable(data.title);
     self.description    = ko.observable(data.description);
+    self.priority       = ko.observable(data.priority);
     self.timeStart      = ko.observable(data.timeStart);
     self.timeEnd        = ko.observable(data.timeEnd);
 
