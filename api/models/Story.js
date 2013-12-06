@@ -86,7 +86,7 @@ module.exports = {
                 ? DateService.convertDateObjectToUtc(this.timeStart) : null;
         },
         timeEndObject: function() {
-            return (this.timeStart && this.timeStart != '0000-00-00 00:00:00')
+            return (this.timeEnd && this.timeEnd != '0000-00-00 00:00:00')
                 ? DateService.convertDateObjectToUtc(this.timeEnd) : null;
         },
         timeDuration: function() {
