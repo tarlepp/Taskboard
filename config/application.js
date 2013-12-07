@@ -4,5 +4,11 @@
  * @type {{appName: string}}
  */
 module.exports = {
-    appName: "Taskboard"
+    appName: "Taskboard",
+    history: {
+        ignoreValues: [
+            "sessionId",
+            "password"
+        ]
+    }
 };
