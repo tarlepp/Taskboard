@@ -461,4 +461,83 @@ function initStoryTabTasks(modal, contentId) {
         // Trigger milestone action event
         body.trigger(action, [taskId, trigger]);
     });
+
+    if (myViewModel.role() < 0) {
+        // User changes task priority order
+        jQuery("#storyTasks tbody", container).sortable({
+            axis: "y",
+            helper: function(e, tr) {
+                var helper = tr.clone();
+
+                return helper.addClass("sortable");
+            },
+            stop: function() {
+                var table = jQuery("#storyTasks", container);
+                var rows = table.find("tbody tr.taskRow");
+                var taskIds = [];
+
+                rows.fadeTo(0, 0.5);
+
+                // Get used task id and priority values
+                rows.each(function(index) {
+                    var taskId = jQuery(this).data("taskId");
+
+                    if (taskId) {
+                        taskIds.push({taskId: taskId, priority: index + 1, row: jQuery(this)});
+                    }
+                });
+
+                // Make necessary updates
+                async.map(
+                    taskIds,
+                    function (item, callback) {
+                        // This is weird, why this is faster than socket.put() call? possible bug in sails.js?
+                        jQuery
+                            .ajax({
+                                url: "/Task/" + item.taskId,
+                                data: {
+                                    priority: item.priority,
+                                    _csrf: getCsrfToken()
+                                },
+                                type: "PUT",
+                                dataType: "json"
+                            })
+                            .done(function() {
+                                item.row.find("td.task-priority").html(item.priority);
+
+                                callback(null, item.taskId);
+                            })
+                            .fail(function(jqXhr, textStatus, error) {
+                                var errorMessage = {
+                                    jqXhr: jqXhr,
+                                    textStatus: textStatus,
+                                    error: error
+                                };
+
+                                callback(errorMessage, null);
+                            });
+                    },
+                    function(error, results) {
+                        if (error) {
+                            handleAjaxError(error.jqXhr, error.textStatus, error.error);
+                        }
+
+                        var message = "";
+                        var type = "success";
+
+                        if (error) {
+                            type = "error";
+                            message = "Error in task priority update";
+                        } else {
+                            message = "Tasks priorities changed successfully";
+                        }
+
+                        makeMessage(message, type);
+
+                        rows.fadeTo(0, 1);
+                    }
+                );
+            }
+        });
+    }
 }

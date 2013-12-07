@@ -39,7 +39,9 @@
     </thead>
     <tbody>
     <% _.each(tasks, function(task) { %>
-        <tr>
+        <tr class="taskRow"
+            data-task-id="<%= task.id %>"
+        >
             <td>
                 <a class="actionMenu-toggle btn btn-icon btn-default" href="javascript: void(0);" data-popover="true">
                     <i class="fa fa-chevron-down"></i>
@@ -80,7 +82,7 @@
                     <em>nobody</em>
                 <% } %>
             </td>
-            <td class="text-center text-nowrap">
+            <td class="text-center text-nowrap task-priority">
                 <% if (task.priority) { %>
                     <%= task.priority %>
                 <% } %>
