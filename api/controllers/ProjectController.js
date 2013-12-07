@@ -4,7 +4,6 @@
  * @module      ::  Controller
  * @description ::  Contains logic for handling requests.
  */
-var jQuery = require("jquery");
 var async = require("async");
 
 module.exports = {
@@ -144,6 +143,8 @@ module.exports = {
     /**
      * Project milestones action
      *
+     * @todo this needs dome work
+     *
      * @param   {Request}   req Request object
      * @param   {Response}  res Response object
      */
@@ -180,9 +181,7 @@ module.exports = {
 
                 // Fetch project milestone data.
                 milestones: function(callback) {
-                    DataService.getMilestones({
-                        projectId: projectId
-                    }, callback);
+                    DataService.getMilestones({projectId: projectId}, callback);
                 }
             },
 
@@ -215,7 +214,7 @@ module.exports = {
                 makeView();
             } else {
                 // Iterate milestones
-                jQuery.each(data.milestones, function(key, /** sails.model.milestone */milestone) {
+                _.each(data.milestones, function(/** sails.model.milestone */milestone) {
                     // Initialize milestone stories property
                     milestone.stories = false;
 
@@ -288,7 +287,7 @@ module.exports = {
         function makeView() {
             var ok = true;
 
-            jQuery.each(data, function(key, data) {
+            _.each(data, function(data) {
                 if (data === false) {
                     ok = false;
                 }
@@ -298,7 +297,7 @@ module.exports = {
                 if (data.milestones.length > 0) {
                     var show = true;
 
-                    jQuery.each(data.milestones, function(key, /** sails.model.milestone */milestone) {
+                    _.each(data.milestones, function(/** sails.model.milestone */milestone) {
                         if (milestone.stories === false) {
                             show = false;
                         }
@@ -384,6 +383,8 @@ module.exports = {
 
     /**
      * Project statistics action.
+     *
+     * @todo this needs dome work
      *
      * @param   {Request}   req Request object
      * @param   {Response}  res Response object
@@ -538,7 +539,7 @@ module.exports = {
         function makeView() {
             var ok = true;
 
-            jQuery.each(data, function(key, data) {
+            _.each(data, function(data) {
                 if (data.data === false) {
                     ok = false;
                 }
@@ -660,6 +661,8 @@ module.exports = {
 
     /**
      * Project sprints action.
+     *
+     * @todo this needs dome work
      *
      * @param   {Request}   req Request object
      * @param   {Response}  res Response object
