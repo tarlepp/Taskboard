@@ -271,7 +271,7 @@ exports.getTasks = function(where, callback) {
     Task
         .find()
         .where(where)
-        .sort("title ASC")
+        .sort("priority ASC")
         .done(function(error, tasks) {
             if (error) {
                 callback(error, null);
