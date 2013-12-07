@@ -22,9 +22,13 @@ module.exports.express = {
                 // Change moment language
                 moment.lang(req.user.language);
 
-                // Change numeral language
-                numeral.language(req.user.language, require("../node_modules/numeral/languages/" + req.user.language + ".js"));
-                numeral.language(req.user.language);
+                try {
+                    // Change numeral language
+                    numeral.language(req.user.language, require("../node_modules/numeral/languages/" + req.user.language + ".js"));
+                    numeral.language(req.user.language);
+                } catch (error) {
+                    // Just silently ignore this error...
+                }
             }
 
             // Set data to response locals, so those are accessible by any view
