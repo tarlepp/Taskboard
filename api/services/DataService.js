@@ -291,7 +291,7 @@ exports.getPhases = function(where, callback) {
     Phase
         .find()
         .where(where)
-        .sort("title ASC")
+        .sort("order ASC")
         .done(function(error, phases) {
             if (error) {
                 callback(error, null);
