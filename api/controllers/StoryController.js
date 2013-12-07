@@ -211,8 +211,9 @@ module.exports = {
                         delete story.timeStart;
                         delete story.timeEnd;
 
-                        // Change story sprint data to user selected value
+                        // Change story sprint data to user selected value and set the parent story id
                         story.sprintId = sprintId;
+                        story.parentId = storyId;
 
                         // Create new story
                         Story

@@ -32,6 +32,12 @@ module.exports = {
             defaultsTo: 0,
             required:   true
         },
+        // Relation to parent story, this tells where the story is splitted
+        parentId: {
+            type:       'integer',
+            defaultsTo: 0,
+            required:   true
+        },
         title: {
             type:       'string',
             required:   true,
