@@ -18,7 +18,8 @@
     "async": "~0.2.9",
     "moment": "~2.4.0",
     "moment-timezone": "~0.0.3",
-    "bower": "~1.2.8"
+    "bower": "~1.2.8",
+    "numeral": "~1.5.2"
   },
   "devDependencies": {
     "supertest": "~0.8.0",
