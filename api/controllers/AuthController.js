@@ -21,17 +21,13 @@ module.exports = {
             res.redirect("/");
         }
 
-        var fs = require('fs');
-        var packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-
         if (error) {
             res.status(401);
         }
 
         res.view({
             layout: "layout_login",
-            error: error,
-            packageJson: packageJson
+            error: error
         });
     },
 
@@ -50,8 +46,8 @@ module.exports = {
      * Authentication action, this uses passport local directive to
      * check if user is valid user or not.
      *
-     * @param req
-     * @param res
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
      */
     authenticate: function(req, res) {
         passport.authenticate('local', function(error, user, info) {
