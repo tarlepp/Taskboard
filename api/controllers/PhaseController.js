@@ -4,7 +4,7 @@
  * @module      ::  Controller
  * @description ::  Contains logic for handling requests.
  */
-var jQuery = require('jquery');
+var async = require("async");
 
 module.exports = {
     /**
@@ -16,61 +16,28 @@ module.exports = {
     edit: function(req, res) {
         var projectId = parseInt(req.param('id'), 10);
 
-        // Specify template data to use
-        var data = {
-            layout: req.isAjax ? "layout_ajax" : "layout",
-            project: false,
-            phases: false
-        };
+        // Fetch project and project phases data async
+        async.parallel(
+            {
+                // Get project data
+                project: function(callback) {
+                    DataService.getProject(projectId, callback)
+                },
 
-        // Fetch project data.
-        Project
-            .findOne(projectId)
-            .done(function(error, project) {
+                // Get project phases data
+                phases: function(callback) {
+                    DataService.getPhases({projectId: projectId}, callback)
+                }
+            },
+            function(error, data) {
                 if (error) {
-                    res.send(error, 500);
-                } else if (!project) {
-                    res.send("Project not found.", 404);
+                    res.send(error.status ? error.status : 500, error);
                 } else {
-                    data.project = project;
+                    data.layout = req.isAjax ? "layout_ajax" : "layout";
 
-                    makeView();
+                    res.view(data);
                 }
-            });
-
-        // Fetch project phases
-        Phase
-            .find()
-            .where({
-                projectId: projectId
-            })
-            .sort('order ASC')
-            .done(function(error, phases) {
-                if (error) {
-                    res.send(error, 500);
-                } else {
-                    data.phases = phases;
-
-                    makeView();
-                }
-            });
-
-        /**
-         * Function makes actual view if all necessary data is fetched
-         * from database for template.
-         */
-        function makeView() {
-            var ok = true;
-
-            jQuery.each(data, function(key, data) {
-                if (data === false) {
-                    ok = false;
-                }
-            });
-
-            if (ok) {
-                res.view(data);
             }
-        }
+        );
     }
 };
