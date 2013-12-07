@@ -9,6 +9,7 @@
 var passport = require("passport");
 var moment = require("moment-timezone");
 var numeral = require("numeral");
+var fs = require("fs");
 
 module.exports.express = {
     customMiddleware: function(app) {
@@ -35,6 +36,7 @@ module.exports.express = {
             res.locals.currentUser = req.user;
             res.locals.moment = moment;
             res.locals.numeral = numeral;
+            res.locals.packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
 
             next();
         });
