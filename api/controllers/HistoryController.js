@@ -85,12 +85,20 @@ module.exports = {
                     var previousRow = JSON.parse(histories[key - 1].objectData);
                     var currentRow = JSON.parse(history.objectData);
 
+                    // Iterate ignore values of history data and delete those from current and previous history rows
+                    _.each(sails.config.history.ignoreValues, function(value) {
+                        delete previousRow[value];
+                        delete currentRow[value];
+                    });
+
                     // Calculate object difference to previous one
                     var difference = JsonDiffPatch.diff(previousRow, currentRow);
 
                     // No difference between objects
                     if (typeof difference == "undefined") {
                         dataCount--;
+
+                        makeView();
                     } else { // Otherwise make data row
                         var changeCount = _.size(difference);
 
