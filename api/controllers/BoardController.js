@@ -43,14 +43,10 @@ module.exports = {
         projectId = isNaN(parseInt(projectId)) ? 0 : projectId;
         sprintId = isNaN(parseInt(sprintId)) ? 0 : sprintId;
 
-        var fs = require('fs');
-        var packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-
         // Make view
         res.view({
             projectId: projectId,
-            sprintId: sprintId,
-            packageJson: packageJson
+            sprintId: sprintId
         });
     }
 };
