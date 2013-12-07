@@ -115,7 +115,21 @@ module.exports = {
     beforeCreate: function(values, cb) {
         values.isDone = false;
 
-        cb();
+        // Fetch latest task and determine new task priority from that
+        Task
+            .find()
+            .where({storyId: values.storyId})
+            .sort("priority DESC")
+            .limit(1)
+            .done(function(error, task) {
+                if (error) {
+                    cb(error);
+                } else {
+                    values.priority = (task) ? task[0].priority + 1 : 1;
+
+                    cb();
+                }
+            });
     },
 
     /**
