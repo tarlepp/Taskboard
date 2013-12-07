@@ -4,8 +4,6 @@
  * @module      :: Controller
  * @description :: Contains logic for handling requests.
  */
-var jQuery = require("jquery");
-
 
 module.exports = {
     /**
@@ -17,6 +15,7 @@ module.exports = {
     add: function(req, res) {
         var projectId = parseInt(req.param("projectId"), 10);
 
+        // Fetch user role and project data
         async.parallel(
             {
                 // Determine user role in this project
@@ -50,12 +49,14 @@ module.exports = {
     edit: function(req, res) {
         var milestoneId = parseInt(req.param("id"), 10);
 
+        // Fetch role and milestone data
         async.parallel(
             {
                 // Determine user role in this milestone
                 role: function(callback) {
                     AuthService.hasMilestoneAccess(req.user, milestoneId, callback, true);
                 },
+
                 // Fetch milestone data
                 milestone: function(callback) {
                     DataService.getMilestone(milestoneId, callback)
@@ -75,6 +76,8 @@ module.exports = {
 
     /**
      * Milestone stories action.
+     *
+     * @todo refactor this later on...
      *
      * @param   {Request}   req Request object
      * @param   {Response}  res Response object
@@ -97,6 +100,7 @@ module.exports = {
             stories: false
         };
 
+        // Fetch role and milestone data
         async.parallel(
             {
                 // Determine user role in this milestone
@@ -133,7 +137,9 @@ module.exports = {
         );
 
         /**
-         * Function to fetch tasks of stories
+         * Function to fetch tasks of stories in current milestone.
+         *
+         * @todo refactor all this shit later
          */
         function fetchTasks() {
             // We have no stories, so make view
@@ -149,8 +155,8 @@ module.exports = {
                     data.milestone.progressStory = Math.round(data.milestone.cntStoryDone  / data.milestone.cntStoryTotal * 100);
                 }
 
-                // Iterate milestones
-                jQuery.each(data.stories, function(key, /** sails.model.story */story) {
+                // Iterate stories
+                _.each(data.stories, function(/** sails.model.story */story) {
                     // Initialize milestone stories property
                     story.tasks = false;
 
@@ -187,13 +193,15 @@ module.exports = {
         }
 
         /**
-         * Function to make actual view for milestone edit
+         * Function to make actual view for milestone edit.
+         *
+         * @todo this needs some real refactoring later on...
          */
         function makeView() {
             if (data.stories.length > 0) {
                 var show = true;
 
-                jQuery.each(data.stories, function(key, /** sails.model.story */story) {
+                _.each(data.stories, function(/** sails.model.story */story) {
                     if (story.tasks === false) {
                         show = false;
                     }
