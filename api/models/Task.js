@@ -125,7 +125,7 @@ module.exports = {
                 if (error) {
                     cb(error);
                 } else {
-                    values.priority = (task) ? task[0].priority + 1 : 1;
+                    values.priority = (task[0]) ? task[0].priority + 1 : 1;
 
                     cb();
                 }
