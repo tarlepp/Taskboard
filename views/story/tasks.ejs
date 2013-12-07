@@ -30,8 +30,9 @@
                     <i class="fa fa-plus"></i>
                 </a>
             </th>
-            <th class="col-md-7">Task</th>
+            <th class="col-md-6">Task</th>
             <th class="col-md-3">Owner</th>
+            <th class="col-md-1 text-center">Priority</th>
             <th class="col-md-1 text-center">Type</th>
             <th class="col-md-1 text-right">Duration</th>
         </tr>
@@ -77,6 +78,11 @@
                     <%= task.user.fullName() %>
                 <% } else { %>
                     <em>nobody</em>
+                <% } %>
+            </td>
+            <td class="text-center text-nowrap">
+                <% if (task.priority) { %>
+                    <%= task.priority %>
                 <% } %>
             </td>
             <td class="text-center text-nowrap <%= task.type.classText %>">
@@ -149,15 +155,15 @@
                             </tr>
                             <tr>
                                 <th class="text-right">Days</th>
-                                <td><%= task.timeEndObjectUser.diff(task.timeStartObjectUser, 'days', true) %></td>
+                                <td><%= numeral(task.timeEndObjectUser.diff(task.timeStartObjectUser, 'days', true)).format("0,0[.]00") %></td>
                             </tr>
                             <tr>
                                 <th class="text-right">Hours</th>
-                                <td><%= task.timeEndObjectUser.diff(task.timeStartObjectUser, 'hours', true) %></td>
+                                <td><%= numeral(task.timeEndObjectUser.diff(task.timeStartObjectUser, 'hours', true)).format("0,0[.]00") %></td>
                             </tr>
                             <tr>
                                 <th class="text-right">Minutes</th>
-                                <td><%= task.timeEndObjectUser.diff(task.timeStartObjectUser, 'minutes', true) %></td>
+                                <td><%= numeral(task.timeEndObjectUser.diff(task.timeStartObjectUser, 'minutes', true)).format("0,0[.]00") %></td>
                             </tr>
 
                             <% } else if (task.timeStartObjectUser) { %>
@@ -170,15 +176,15 @@
                             </tr>
                             <tr>
                                 <th class="text-right">Days</th>
-                                <td><%= moment().diff(task.timeStartObjectUser, 'days', true) %></td>
+                                <td><%= numeral(moment().diff(task.timeStartObjectUser, 'days', true)).format("0,0[.]00") %></td>
                             </tr>
                             <tr>
                                 <th class="text-right">Hours</th>
-                                <td><%= moment().diff(task.timeStartObjectUser, 'hours', true) %></td>
+                                <td><%= numeral(moment().diff(task.timeStartObjectUser, 'hours', true)).format("0,0[.]00") %></td>
                             </tr>
                             <tr>
                                 <th class="text-right">Minutes</th>
-                                <td><%= moment().diff(task.timeStartObjectUser, 'minutes', true) %></td>
+                                <td><%= numeral(moment().diff(task.timeStartObjectUser, 'minutes', true)).format("0,0[.]00") %></td>
                             </tr>
                             <% } %>
 
