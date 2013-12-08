@@ -25,31 +25,38 @@ module.exports = {
             signedIn: req.user
         };
 
+
         async.parallel(
             {
+                // Fetch project data
                 project: function(callback) {
-                    Project
-                        .findOne(projectId)
-                        .done(function(error, /** sails.json.project */project) {
-                            if (error) {
-                                callback(error, null)
-                            } else if (!project) {
-                                callback("Project not found", null);
-                            } else {
-                                callback(null, project);
-                            }
-                        });
+                    DataService.getProject(projectId, callback);
                 },
+
+                // Fetch current user role in project
                 role: function(callback) {
                     AuthService.hasProjectAccess(req.user, projectId, callback, true);
                 }
             },
 
+            /**
+             * Callback function that is called after all parallel jobs are done
+             * or some error has happen in those
+             *
+             * @param   {Error} error   Error data
+             * @param   {{}}    results Object that contains following data:
+             *                           - project {sails.model.project}
+             *                           - role, User role in current project
+             */
             function callback(error, results) {
-                data.project = results.project;
-                data.role = results.role;
+                if (error) {
+                    res.send(error.status ? error.status : 500, error);
+                } else {
+                    data.project = results.project;
+                    data.role = results.role;
 
-                fetchProjectUsers();
+                    fetchProjectUsers();
+                }
             }
         );
 
@@ -90,11 +97,12 @@ module.exports = {
         /**
          * Function to fetch detailed user data from database.
          *
-         * todo:    refactor role text determination.
+         * @todo refactor role text determination.
+         * @todo change each to use async.map
          */
         function fetchUserData() {
             // Iterate project users, we have always at least one user
-            jQuery.each(data.users, function(key, /** sails.json.projectUser */projectUser) {
+            _.each(data.users, function(/** sails.json.projectUser */projectUser) {
                 // Initialize project user user property
                 projectUser.data = false;
 
@@ -140,7 +148,7 @@ module.exports = {
                 var show = true;
 
                 // Check that we have fetched all users data for project
-                jQuery.each(data.users, function(key, /** sails.json.projectUser */projectUser) {
+                _.each(data.users, function(/** sails.json.projectUser */projectUser) {
                     // All user data are not yet fetched
                     if (projectUser.data === false) {
                         show = false;
@@ -215,6 +223,8 @@ module.exports = {
         /**
          * Private function to fetch all available users for
          * specified project.
+         *
+         * @todo exclude admin users for this list
          */
         function fetchAvailableUsers() {
             User
@@ -355,7 +365,8 @@ module.exports = {
         if (req.user.admin) {
             res.json(200, -3);
         } else { // Otherwise fetch user role
-            async.parallel({
+            async.parallel(
+                {
                     /**
                      * Function to fetch possible Project object for signed in user and
                      * specified project. User must be project manager.
@@ -407,7 +418,7 @@ module.exports = {
                  * Callback function which is been called after all parallel jobs are
                  * processed.
                  *
-                 * @param   {{}}    error
+                 * @param   {Error} error
                  * @param   {{}}    results
                  */
                 function(error, results) {
