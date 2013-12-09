@@ -7,6 +7,7 @@
 var jQuery = require("jquery");
 var JsonDiffPatch = require("jsondiffpatch");
 var moment = require("moment-timezone");
+var async = require("async");
 
 module.exports = {
     /**
@@ -32,7 +33,7 @@ module.exports = {
                 var histories = [];
 
                 // Remove duplicate rows
-                jQuery.each(data, function(key, row) {
+                _.each(data, function(row, key) {
                     if (key === 0
                         || row.objectData !== data[key - 1].objectData
                         || row.message !== data[key - 1].message
@@ -42,8 +43,56 @@ module.exports = {
                 });
 
                 // Process history data
-                processHistoryData(histories);
+                processHistoryData2(histories);
             });
+
+        var index = 0;
+
+        function processHistoryData2(histories) {
+            async.map(
+                histories,
+                function(history, callback) {
+                    var dateObject = DateService.convertDateObjectToUtc(history.createdAt);
+
+                    var historyRow = {
+                        message: (data.length === 0) ? "Object created" : history.message,
+                        stamp: dateObject.tz(req.user.momentTimezone),
+                        data: []
+                    };
+
+                    // Determine previous and current rows as JSON objects
+                    var currentRow = JSON.parse(history.objectData);
+                    var previousRow = {};
+
+                    // We have a previous row data defined
+                    if (!_.isUndefined(histories[index - 1].objectData)) {
+                        previousRow = JSON.parse(histories[index - 1].objectData);
+                    }
+
+                    // Iterate ignore values of history data and delete those from current and previous history rows
+                    _.each(sails.config.history.ignoreValues, function(value) {
+                        delete previousRow[value];
+                        delete currentRow[value];
+                    });
+
+                    // Calculate object difference to previous one
+                    var difference = JsonDiffPatch.diff(previousRow, currentRow);
+
+                    index++;
+
+                    // We have no difference
+                    if (_.isUndefined(difference)) {
+
+                    } else { // Yeah some difference found...
+                        _.each(difference, function(column, value) {
+
+                        });
+                    }
+                },
+                function(error, results) {
+                }
+            )
+        }
 
         /**
          * Function process history data and fetches possible relation data
@@ -73,9 +122,45 @@ module.exports = {
                 if (key === 0) {
                     historyRow.message = "Object created";
 
-                    data.push(historyRow);
+                    var currentRow = JSON.parse(history.objectData);
 
-                    makeView();
+                    // Iterate ignore values of history data and delete those from current and previous history rows
+                    _.each(sails.config.history.ignoreValues, function(value) {
+                        delete currentRow[value];
+                    });
+
+                    jQuery.each(currentRow, function(column, value) {
+                    // Parent id setted, so this is relation to object itself
+                    if (column.match(/parentId$/) !== null) {
+                        object = objectName;
+
+                        // Only fetch possible relation data if change type is insert or update
+                        if (global[object] && typeof global[object] === "object") {
+                            // Fetch new value
+                            global[object]
+                                .findOne(value)
+                                .done(function(error, objectData) {
+                                    historyRow.data.push({
+                                        column: column,
+                                        columnType: "columnType",
+                                        changeType: "changeType",
+                                        valueNew: "valueNew",
+                                        valueOld: "valueOld",
+                                        valueIdOld: "valueIdOld",
+                                        valueIdNew: "valueIdNew"
+                                    });
+
+                                    data.push(historyRow);
+
+                                    makeView();
+                                });
+                        }
+                    } else {
+                        data.push(historyRow);
+
+                        makeView();
+                    }
+                    });
                 } else { // Otherwise we have some object data updated
                     if (history.message) {
                         historyRow.message = history.message;
@@ -146,6 +231,11 @@ module.exports = {
                                 }
 
                                 columnType = 'relation';
+
+                                // Parent id setted, so this is relation to object itself
+                                if (column.match(/parentId$/) !== null) {
+                                    object = objectName;
+                                }
 
                                 // Only fetch possible relation data if change type is insert or update
                                 if (global[object] && typeof global[object] === "object" && changeType != 'delete') {
