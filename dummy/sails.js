@@ -288,6 +288,12 @@ var sails = {
             id: "",
             createdAt: "",
             updatedAt: ""
+        },
+        history: {
+            objectName: "",
+            objectId: "",
+            objectData: "",
+            message: "",
         }
     }
 };
