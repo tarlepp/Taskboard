@@ -58,6 +58,25 @@ var sails = {
             createdAt: "",
             updatedAt: ""
         },
+        historyRow: {
+            message: "",
+            index: "",
+            stamp: "",
+            data: []
+        },
+        historyRowData: {
+            column: "",
+            columnType: "",
+            changeType: "",
+            valueNew: "",
+            valueOld: "",
+            valueIdOld: "",
+            valueIdNew: ""
+        },
+        historyDifference: {
+            column: "",
+            value: ""
+        },
         trigger: {
             trigger: "",
             parameters: []
