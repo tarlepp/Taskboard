@@ -4,7 +4,6 @@
  * @module      ::  Controller
  * @description ::  Contains logic for handling requests.
  */
-var jQuery = require("jquery");
 var JsonDiffPatch = require("jsondiffpatch");
 var moment = require("moment-timezone");
 var async = require("async");
@@ -19,53 +18,73 @@ module.exports = {
     index: function(req, res) {
         var objectId = req.param("objectId");
         var objectName = req.param("objectName");
-        var data = [];
 
-        // Fetch history rows
+        // Fetch history rows for current object
         History
             .find()
             .where({
                 objectName: objectName,
                 objectId: objectId
             })
-            .sort("id ASC")
+            .sort("createdAt ASC")
             .done(function(error, data) {
-                var histories = [];
+                if (error) {
+                    res.send(error.status ? error.status : 500, error);
+                } else {
+                    var histories = [];
 
-                // Remove duplicate rows
-                _.each(data, function(row, key) {
-                    if (key === 0
-                        || row.objectData !== data[key - 1].objectData
-                        || row.message !== data[key - 1].message
-                    ) {
-                        histories.push(row);
-                    }
-                });
+                    // Remove duplicate rows
+                    _.each(data, function(row, key) {
+                        if (key === 0
+                            || row.objectData !== data[key - 1].objectData
+                            || row.message !== data[key - 1].message
+                        ) {
+                            histories.push(row);
+                        }
+                    });
 
-                // Process history data
-                processHistoryData2(histories);
+                    // Process history data
+                    processHistoryData(histories);
+                }
             });
 
-        var index = 0;
+        /**
+         * Function process history rows for specified object.
+         *
+         * @param   {sails.model.history[]} histories
+         */
+        function processHistoryData(histories) {
+            var index = 0;
 
-        function processHistoryData2(histories) {
+            // Map all history rows to sub-methods
             async.map(
                 histories,
-                function(history, callback) {
-                    var dateObject = DateService.convertDateObjectToUtc(history.createdAt);
 
-                    var historyRow = {
-                        message: (data.length === 0) ? "Object created" : history.message,
+                /**
+                 * Iterator function to process all history rows for specified object. Note that this
+                 * function will call sub-functions to handle specified data of each history rows and
+                 * those functions will eventually call this callback function.
+                 *
+                 * @param   {sails.model.history}   historyRow  Single history row data as an object
+                 * @param   {Function}              callback    Callback function to call after row is processed
+                 */
+                function(historyRow, callback) {
+                    var dateObject = DateService.convertDateObjectToUtc(historyRow.createdAt);
+
+                    // Create main data array which contains all necessary data for this history row
+                    var data = {
+                        message: (index === 0) ? "Object created" : historyRow.message,
+                        index: index,
                         stamp: dateObject.tz(req.user.momentTimezone),
                         data: []
                     };
 
                     // Determine previous and current rows as JSON objects
-                    var currentRow = JSON.parse(history.objectData);
+                    var currentRow = JSON.parse(historyRow.objectData);
                     var previousRow = {};
 
                     // We have a previous row data defined
-                    if (!_.isUndefined(histories[index - 1].objectData)) {
+                    if (!_.isUndefined(histories[index - 1])) {
                         previousRow = JSON.parse(histories[index - 1].objectData);
                     }
 
@@ -80,267 +99,217 @@ module.exports = {
 
                     index++;
 
-                    // We have no difference
+                    // We have no difference so just call callback function with no parameters
                     if (_.isUndefined(difference)) {
-
+                        callback(null, null);
                     } else { // Yeah some difference found...
-                        _.each(difference, function(column, value) {
+                        var differenceArray = [];
 
+                        // Firstly convert difference object to simple array
+                        _.each(difference, function(value, column) {
+                            differenceArray.push({
+                                column: column,
+                                value: value
+                            });
                         });
+
+                        // Process single history row
+                        processHistoryRow(differenceArray, data, callback);
                     }
                 },
+
+                /**
+                 * Main callback function which is called after _all_ specified jobs are done. Basically
+                 * this function just shows pages if no error(s) occurred while processing data.
+                 *
+                 * @param   {Error} error
+                 * @param   {Array} results
+                 */
                 function(error, results) {
+                    if (error) {
+                        res.send(error.status ? error.status : 500, error);
+                    } else {
+                        // Make view
+                        res.view({
+                            layout: req.isAjax ? "layout_ajax" : "layout",
+                            data: _.compact(results).reverse()
+                        });
+                    }
                 }
-            )
+            );
         }
 
         /**
-         * Function process history data and fetches possible relation data
-         * from models.
+         * Function to process single history row data. Basically this function just maps all
+         * differences and make specified data processing for single column (data attribute).
          *
-         * Please note that this function is very complicated so be very
-         * carefully when you change this functionality - good luck.
          *
-         * @param   {sails.helper.history[]}  histories
+         *
+         * @param   {{}[]}                      differences Current row differences as an array of objects
+         * @param   {sails.helper.historyRow}   historyRow  History row data
+         * @param   {Function}                  next        Callback function to call after row is processed
          */
-        function processHistoryData(histories) {
-            var dataCount = histories.length;
+        function processHistoryRow(differences, historyRow, next) {
+            // Map all differences
+            async.map(
+                differences,
 
-            // First call makeView, this is needed for objects that have no history
-            makeView();
+                /**
+                 * Iterator function to process single difference data in one history row. Note that this
+                 * function will call sub-function to handle specified difference handling. That function
+                 * will eventually call this callback function.
+                 *
+                 * @param   {sails.helper.historyDifference}    difference  Difference data
+                 * @param   {Function}                          callback    Callback function to call after differences are processed
+                 */
+                function(difference, callback) {
+                    var valueOld    = false;
+                    var valueIdOld  = false;
+                    var valueNew    = false;
+                    var valueIdNew  = false;
+                    var columnType  = false;
+                    var changeType  = "";
 
-            // Iterate history data
-            jQuery.each(histories, function(key, history) {
-                var dateObject = DateService.convertDateObjectToUtc(history.createdAt);
-
-                var historyRow = {
-                    stamp: dateObject.tz(req.user.momentTimezone),
-                    data: []
-                };
-
-                // First record, assume that object is created at this point
-                if (key === 0) {
-                    historyRow.message = "Object created";
-
-                    var currentRow = JSON.parse(history.objectData);
-
-                    // Iterate ignore values of history data and delete those from current and previous history rows
-                    _.each(sails.config.history.ignoreValues, function(value) {
-                        delete currentRow[value];
-                    });
-
-                    jQuery.each(currentRow, function(column, value) {
-                    // Parent id setted, so this is relation to object itself
-                    if (column.match(/parentId$/) !== null) {
-                        object = objectName;
-
-                        // Only fetch possible relation data if change type is insert or update
-                        if (global[object] && typeof global[object] === "object") {
-                            // Fetch new value
-                            global[object]
-                                .findOne(value)
-                                .done(function(error, objectData) {
-                                    historyRow.data.push({
-                                        column: column,
-                                        columnType: "columnType",
-                                        changeType: "changeType",
-                                        valueNew: "valueNew",
-                                        valueOld: "valueOld",
-                                        valueIdOld: "valueIdOld",
-                                        valueIdNew: "valueIdNew"
-                                    });
-
-                                    data.push(historyRow);
-
-                                    makeView();
-                                });
-                        }
+                    // On the first row skip all but parentId column
+                    if (historyRow.index === 0 && difference.column !== "parentId") {
+                        callback(null, null);
                     } else {
-                        data.push(historyRow);
+                        if (difference.value.length === 3) {
+                            changeType = "delete";
+                        } else if (difference.value.length == 2) {
+                            changeType  = "update";
+                            valueOld    = difference.value[0];
+                            valueIdOld  = difference.value[0];
+                            valueNew    = difference.value[1];
+                            valueIdNew  = difference.value[1];
+                        } else {
+                            changeType = "insert";
+                            valueNew   = difference.value[0];
+                            valueIdNew = difference.value[0];
+                        }
 
-                        makeView();
+                        var differenceData = {
+                            column:     difference.column,
+                            columnType: columnType,
+                            changeType: changeType,
+                            valueNew:   valueNew,
+                            valueOld:   valueOld,
+                            valueIdOld: valueIdOld,
+                            valueIdNew: valueIdNew
+                        };
+
+                        processHistoryRowColumn(differenceData, callback);
                     }
-                    });
-                } else { // Otherwise we have some object data updated
-                    if (history.message) {
-                        historyRow.message = history.message;
-                    }
+                },
 
-                    // Determine previous and current rows as JSON objects
-                    var previousRow = JSON.parse(histories[key - 1].objectData);
-                    var currentRow = JSON.parse(history.objectData);
+                /**
+                 * Callback function for single history row process which is called after all
+                 * difference data for current history row is processed.
+                 *
+                 * Note that this callback will call main callback.
+                 *
+                 * @param   {Error}                         error   Possible error
+                 * @param   {sails.helper.historyRowData[]} results History row data as an array
+                 */
+                function(error, results) {
+                    // Store history row data
+                    historyRow.data = _.compact(results);
 
-                    // Iterate ignore values of history data and delete those from current and previous history rows
-                    _.each(sails.config.history.ignoreValues, function(value) {
-                        delete previousRow[value];
-                        delete currentRow[value];
-                    });
-
-                    // Calculate object difference to previous one
-                    var difference = JsonDiffPatch.diff(previousRow, currentRow);
-
-                    // No difference between objects
-                    if (typeof difference == "undefined") {
-                        dataCount--;
-
-                        makeView();
-                    } else { // Otherwise make data row
-                        var changeCount = _.size(difference);
-
-                        // Iterate each difference
-                        jQuery.each(difference, function(column, value) {
-                            var valueOld    = false;
-                            var objectIdOld = false;
-                            var valueNew    = false;
-                            var objectIdNew = false;
-                            var columnType  = false;
-                            var changeType  = '';
-
-                            if (value.length === 3) {
-                                changeType = "delete";
-                            } else if (value.length == 2) {
-                                changeType = "update";
-
-                                valueOld    = value[0];
-                                objectIdOld = value[0];
-                                valueNew    = value[1];
-                                objectIdNew = value[1];
-                            } else {
-                                changeType = "insert";
-
-                                valueNew    = value[0];
-                                objectIdNew = value[0];
-                            }
-
-                            /**
-                             * Magic happens here, we can assume that attributes which ends with 'Id'
-                             * strings are actual relations to another models.
-                             *
-                             * In these cases we want to fetch actual text values for changed old and
-                             * new values.
-                             *
-                             * Note that fetching old and new value must be done at in same process
-                             * otherwise this doesn't work right.
-                             */
-                            if (column.match(/Id$/) !== null) {
-                                var object = column.charAt(0).toUpperCase() + column.slice(1, -2);
-
-                                // In project object managerId refers to User object
-                                if (object == "Manager") {
-                                    object = "User";
-                                }
-
-                                columnType = 'relation';
-
-                                // Parent id setted, so this is relation to object itself
-                                if (column.match(/parentId$/) !== null) {
-                                    object = objectName;
-                                }
-
-                                // Only fetch possible relation data if change type is insert or update
-                                if (global[object] && typeof global[object] === "object" && changeType != 'delete') {
-                                    // Fetch new value
-                                    global[object]
-                                        .findOne(objectIdNew)
-                                        .done(function(error, objectData) {
-                                            // Store real new value
-                                            valueNew = (!objectData) ? "none" : objectData.objectTitle();
-
-                                            // Fetch old value only in update
-                                            if (changeType == 'update') {
-                                                // Fetch old value
-                                                global[object]
-                                                    .findOne(objectIdOld)
-                                                    .done(function(error, objectData) {
-                                                        // Store real old value
-                                                        valueOld = (!objectData) ? "none" : objectData.objectTitle();
-
-                                                        // Make necessary checks if we can show page or not
-                                                        checkData();
-                                                    });
-                                            } else {
-                                                checkData();
-                                            }
-                                        });
-                                } else {
-                                    checkData();
-                                }
-                            } else { // No relation
-                                // Determine column type
-                                if (valueOld === true && valueNew === false
-                                    || valueOld === false && valueNew === true
-                                ) {
-                                    columnType = 'boolean';
-                                } else {
-                                    columnType = 'normal';
-                                }
-
-                                checkData();
-                            }
-
-                            /**
-                             * Private function to check that we have processed all required
-                             * data for view.
-                             *
-                             * This function is called x times in this action.
-                             */
-                            function checkData() {
-                                var ready = false;
-
-                                // Add data to history row object
-                                historyRow.data.push({
-                                    column: column,
-                                    columnType: columnType,
-                                    changeType: changeType,
-                                    valueNew: valueNew,
-                                    valueOld: valueOld,
-                                    valueIdOld: objectIdOld,
-                                    valueIdNew: objectIdNew
-                                });
-
-                                // Check if have processed all required rows
-                                if (changeCount == historyRow.data.length) {
-                                    ready = true;
-
-                                    // Add data to view object
-                                    data.push(historyRow);
-                                }
-
-                                if (ready) {
-                                    makeView();
-                                }
-                            }
-                        });
-                    }
+                    next(error, historyRow);
                 }
-            });
+            );
+        }
 
+        /**
+         * Private function to process single column data on history row.
+         *
+         * @param   {sails.helper.historyRowData}   data    Single column data
+         * @param   {Function}                      next    Callback function to call after column is processed
+         */
+        function processHistoryRowColumn(data, next) {
             /**
-             * This function will make actual view to client.
+             * Magic happens here, we can assume that attributes which ends with 'Id'
+             * strings are actual relations to another models.
+             *
+             * In these cases we want to fetch actual text values for changed old and
+             * new values.
+             *
+             * Note that fetching old and new value must be done at in same process
+             * otherwise this doesn't work right.
              */
-            function makeView() {
-                var ready = data.length === dataCount;
+            if (data.column.match(/Id$/) !== null) {
+                var object = data.column.charAt(0).toUpperCase() + data.column.slice(1, -2);
 
-                // We're ready to show some stuff
-                if (ready) {
-                    // Data sorting function
-                    function sortByStamp(a, b) {
-                        if (a.stamp < b.stamp)
-                            return 1;
-                        if (a.stamp > b.stamp)
-                            return -1;
-                        return 0;
-                    }
-
-                    // Sort data
-                    data.sort(sortByStamp);
-
-                    // Make view
-                    res.view({
-                        layout: req.isAjax ? "layout_ajax" : "layout",
-                        data: data
-                    });
+                // In project object managerId refers to User object
+                if (object == "Manager") {
+                    object = "User";
                 }
+
+                data.columnType = "relation";
+
+                // Column is parentId, so this is relation to object itself
+                if (data.column.match(/parentId$/) !== null) {
+                    data.columnType = 'parent';
+
+                    object = objectName;
+                }
+
+                // Only fetch possible relation data if change type is insert or update AND data object is present
+                if (global[object] && typeof global[object] === "object" && data.changeType != 'delete') {
+                    // Fetch relation data for column
+                    async.parallel(
+                        {
+                            // New value object data
+                            dataNew: function(callback) {
+                                global[object]
+                                    .findOne(data.valueIdNew)
+                                    .done(function(error, objectData) {
+                                        callback(error, objectData);
+                                    })
+
+                            },
+
+                            // New value object data
+                            dataOld: function(callback) {
+                                if (data.changeType == 'update') {
+                                    global[object]
+                                        .findOne(data.valueIdOld)
+                                        .done(function(error, objectData) {
+                                            callback(error, objectData);
+                                        })
+                                } else {
+                                    callback(null, false);
+                                }
+                            }
+                        },
+
+                        /**
+                         * Callback function which is called after all specified parallel jobs are done.
+                         *
+                         * @param   {Error} error   Possible error
+                         * @param   {{}}    results Actual data results
+                         */
+                        function(error, results) {
+                            data.valueNew = (!results.dataNew) ? "none" : results.dataNew.objectTitle();
+                            data.valueOld = (!results.dataOld) ? "none" : results.dataOld.objectTitle();
+
+                            next(error, data);
+                        }
+                    );
+                } else {
+                    next(null, data);
+                }
+            } else { // No relation
+                // Determine column type
+                if (data.valueOld === true && data.valueNew === false
+                    || data.valueOld === false && data.valueNew === true
+                ) {
+                    data.columnType = "boolean";
+                } else {
+                    data.columnType = "normal";
+                }
+
+                next(null, data);
             }
         }
     }

@@ -47,7 +47,9 @@
                 <% _.each(row.data, function(value, key) { %>
                 <li>
                     <% if (value.changeType == 'insert') { %>
-                        <% if (value.columnType == 'relation' || value.columnType == 'boolean') { %>
+                        <% if (value.columnType == 'parent') { %>
+                            Copied object from <span class="text-info"><%= value.valueNew %></span>.
+                        <% } else if (value.columnType == 'relation' || value.columnType == 'boolean') { %>
                             Added column <span class="text-info"><%= value.column %></span> with value <span class="text-info"><%= value.valueNew %></span>.
                         <% } else { %>
                             Added column <span class="text-info"><%= value.column %></span>.
