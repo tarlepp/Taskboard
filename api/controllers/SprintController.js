@@ -4,7 +4,6 @@
  * @module      ::  Controller
  * @description ::  Contains logic for handling requests.
  */
-var jQuery = require("jquery");
 var async = require("async");
 
 module.exports = {
@@ -21,7 +20,6 @@ module.exports = {
             layout: req.isAjax ? "layout_ajax" : "layout",
             projectId: projectId
         });
-
     },
 
     /**
@@ -33,6 +31,7 @@ module.exports = {
     edit: function(req, res) {
         var sprintId = parseInt(req.param("id"), 10);
 
+        // Fetch sprint data for edit action
         async.parallel(
             {
                 // Fetch single sprint data
@@ -45,9 +44,16 @@ module.exports = {
                     AuthService.hasSprintAccess(req.user, sprintId, callback, true);
                 }
             },
+
+            /**
+             * Callback function which is called after all specified parallel jobs are done.
+             *
+             * @param   {Error} error   Error object
+             * @param   {{}}    data    Object that contains sprint and role data
+             */
             function (error, data) {
                 if (error) {
-                    res.send(error, error.status ? error.status : 500);
+                    res.send(error.status ? error.status : 500, error);
                 } else {
                     data.layout = req.isAjax ? "layout_ajax" : "layout";
 
@@ -66,6 +72,7 @@ module.exports = {
     backlog: function(req, res) {
         var sprintId = parseInt(req.param("id"), 10);
 
+        // Initialize view data object
         var data = {
             layout: req.isAjax ? "layout_ajax" : "layout",
             stories: false,
@@ -83,6 +90,7 @@ module.exports = {
             }
         };
 
+        // Fetch basic data for backlog action parallel
         async.parallel(
             {
                 // Fetch sprint data.
@@ -104,48 +112,52 @@ module.exports = {
             /**
              * Callback function which is been called after all parallel jobs are processed.
              *
-             * @param   {Error|String}  error
-             * @param   {{}}            results
+             * @param   {Error} error   Error object
+             * @param   {{}}    result  Result object that contains 'sprint', 'stories' and 'role' data
              */
-            function(error, results) {
+            function(error, result) {
                 if (error) {
-                    res.send(error, error.status ? error.status : 500);
+                    res.send(error.status ? error.status : 500, error);
                 } else {
-                    data.sprint.data = results.sprint;
-                    data.stories = results.stories;
-                    data.role = results.role;
+                    data.sprint.data = result.sprint;
+                    data.stories = result.stories;
+                    data.role = result.role;
 
+                    // Fetch task data
                     fetchTaskData();
                 }
             }
         );
 
         /**
-         * Function to fetch task data for each story
+         * Private function to fetch task data for each story in specified sprint.
          *
          * @return  void
          */
         function fetchTaskData() {
-            // We have no stories, so make view
-            if (data.stories.length === 0) {
-                makeView();
+            // Calculate story specified statistics
+            data.sprint.cntStoryTotal = data.stories.length;
+            data.sprint.cntStoryDone = _.reduce(data.stories, function(memo, story) { return (story.isDone) ? memo + 1 : memo; }, 0);
+            data.sprint.cntStoryNotDone = data.sprint.cntStoryTotal - data.sprint.cntStoryDone;
+
+            if (data.sprint.cntStoryDone > 0) {
+                data.sprint.progressStory = Math.round(data.sprint.cntStoryDone / data.sprint.cntStoryTotal * 100);
             } else {
-                data.sprint.cntStoryTotal = data.stories.length;
-                data.sprint.cntStoryDone = _.reduce(data.stories, function(memo, story) { return (story.isDone) ? memo + 1 : memo; }, 0);
-                data.sprint.cntStoryNotDone = data.sprint.cntStoryTotal - data.sprint.cntStoryDone;
+                data.sprint.progressStory = 0;
+            }
 
-                if (data.sprint.cntStoryDone > 0) {
-                    data.sprint.progressStory = Math.round(data.sprint.cntStoryDone / data.sprint.cntStoryTotal * 100);
-                } else {
-                    data.sprint.progressStory = 0;
-                }
+            // Map each sprint story and fetch task data of those
+            async.map(
+                data.stories,
 
-                // Iterate stories
-                jQuery.each(data.stories, function(key, /** sails.model.story */story) {
-                    // Initialize story tasks property
-                    story.tasks = false;
-
-                    // Find all tasks which are attached to current user story
+                /**
+                 * Iterator function which will fetch all tasks that are attached to current
+                 * story and calculates some statistics data for story and sprint data.
+                 *
+                 * @param   {sails.model.story} story       Story object
+                 * @param   {Function}          callback    Callback function to call after job is finished
+                 */
+                function(story, callback) {
                     Task
                         .find()
                         .where({
@@ -153,56 +165,51 @@ module.exports = {
                         })
                         .sort("title ASC")
                         .done(function(error, tasks) {
-                            // Add tasks to story data
-                            story.tasks = tasks;
-                            story.doneTasks = _.reduce(tasks, function(memo, task) { return (task.isDone) ? memo + 1 : memo; }, 0);
-
-                            if (story.doneTasks > 0) {
-                                story.progress = Math.round(story.doneTasks / tasks.length * 100);
+                            if (error) {
+                                callback(error, false);
                             } else {
-                                story.progress = 0;
+                                // Add tasks to story data
+                                story.tasks = tasks;
+                                story.doneTasks = _.reduce(tasks, function(memo, task) { return (task.isDone) ? memo + 1 : memo; }, 0);
+
+                                if (story.doneTasks > 0) {
+                                    story.progress = Math.round(story.doneTasks / tasks.length * 100);
+                                } else {
+                                    story.progress = 0;
+                                }
+
+                                // Add task counts to sprint
+                                data.sprint.cntTaskTotal += story.tasks.length;
+                                data.sprint.cntTaskDone += story.doneTasks;
+
+                                callback(null, true);
                             }
-
-                            // Add task counts to sprint
-                            data.sprint.cntTaskTotal += story.tasks.length;
-                            data.sprint.cntTaskDone += story.doneTasks;
-
-                            // Call view
-                            makeView();
                         });
-                });
-            }
-        }
 
-        /**
-         * Function to make actual view for sprint backlog.
-         */
-        function makeView() {
-            if (data.stories.length > 0) {
-                var show = true;
+                },
 
-                // Check that we all tasks for story
-                jQuery.each(data.stories, function(key, /** sails.model.story */story) {
-                    // All tasks are not yet fetched
-                    if (story.tasks === false) {
-                        show = false;
-                    }
-                });
-
-                if (show) {
-                    data.sprint.cntTaskNotDone = data.sprint.cntTaskTotal - data.sprint.cntTaskDone;
-
-                    if (data.sprint.cntTaskDone > 0) {
-                        data.sprint.progressTask = Math.round(data.sprint.cntTaskDone / data.sprint.cntTaskTotal * 100);
+                /**
+                 * Callback function which is been called after all stories are processed.
+                 *
+                 * @param   {Error}     error   Error object
+                 * @param   {Boolean}   result
+                 */
+                function(error, result) {
+                    if (error) {
+                        res.send(error.status ? error.status : 500, error);
                     } else {
-                        data.sprint.progressTask = 0;
-                    }
+                        data.sprint.cntTaskNotDone = data.sprint.cntTaskTotal - data.sprint.cntTaskDone;
 
-                    res.view(data);
+                        if (data.sprint.cntTaskDone > 0) {
+                            data.sprint.progressTask = Math.round(data.sprint.cntTaskDone / data.sprint.cntTaskTotal * 100);
+                        } else {
+                            data.sprint.progressTask = 0;
+                        }
+
+                        res.view(data);
+                    }
                 }
-            } else {
-                res.view(data);
-            }
+            )
         }
     },
 
@@ -461,6 +468,8 @@ module.exports = {
             output.push([Date.UTC(startTime.year(), startTime.month(), startTime.date()), tasks]);
 
             var currentDate = startTime.add("days", 1);
+
+            console.log(data.tasks);
 
             // Loops days
             while (endTime.diff(currentDate, "days") >= 0) {
