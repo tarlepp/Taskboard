@@ -185,7 +185,6 @@ module.exports = {
                                 callback(null, true);
                             }
                         });
-
                 },
 
                 /**
@@ -242,31 +241,34 @@ module.exports = {
             },
             function(error, results) {
                 if (error) {
-                    res.send(500, error);
+                    res.send(error.status ? error.status : 500, error);
                 } else {
                     // Store results to data
                     data.sprint = results.sprint;
                     data.stories = results.stories;
 
-                    // Determine story id values for task search.
-                    var storyIds = _.map(data.stories, function(story) { return {storyId: story.id}; });
-
-                    // Fetch stories tasks
-                    DataService.getTasks({or: storyIds}, function(error, tasks) {
-                        if (error) {
-                            res.send(500, error);
-                        } else {
-                            data.tasks = tasks;
-
-                            makeView();
-                        }
-                    });
+                    getTasks();
                 }
             }
         );
 
-        function makeView() {
-            res.view(data);
+        /**
+         * Private function to fetch all task data that are attached specified sprint.
+         */
+        function getTasks() {
+            // Determine story id values for task search.
+            var storyIds = _.map(data.stories, function(story) { return {storyId: story.id}; });
+
+            // Fetch stories tasks
+            DataService.getTasks({or: storyIds}, function(error, tasks) {
+                if (error) {
+                    res.send(error.status ? error.status : 500, error);
+                } else {
+                    data.tasks = tasks;
+
+                    res.view(data);
+                }
+            });
         }
     },
 
@@ -537,7 +539,6 @@ module.exports = {
             );
 
             return output;
-
         }
     }
 };
