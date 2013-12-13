@@ -127,6 +127,8 @@ module.exports = {
                  */
                 function(error, results) {
                     if (error) {
+                        console.log(error);
+
                         res.send(error.status ? error.status : 500, error);
                     } else {
                         // Make view
@@ -261,17 +263,20 @@ module.exports = {
                         {
                             // New value object data
                             dataNew: function(callback) {
-                                global[object]
-                                    .findOne(data.valueIdNew)
-                                    .done(function(error, objectData) {
-                                        callback(error, objectData);
-                                    })
-
+                                if (data.valueIdNew) {
+                                    global[object]
+                                        .findOne(data.valueIdNew)
+                                        .done(function(error, objectData) {
+                                            callback(error, objectData);
+                                        })
+                                } else {
+                                    callback(null, false);
+                                }
                             },
 
                             // New value object data
                             dataOld: function(callback) {
-                                if (data.changeType == 'update') {
+                                if (data.changeType == 'update' && data.valueIdOld) {
                                     global[object]
                                         .findOne(data.valueIdOld)
                                         .done(function(error, objectData) {
