@@ -239,6 +239,13 @@ module.exports = {
                     DataService.getStories({sprintId: sprintId}, callback);
                 }
             },
+
+            /**
+             * Callback function which is been called after all parallel jobs are processed.
+             *
+             * @param   {Error} error   Error object
+             * @param   {{}}    results Result data as an object that contains 'sprint' and 'stories'
+             */
             function(error, results) {
                 if (error) {
                     res.send(error.status ? error.status : 500, error);
@@ -297,6 +304,13 @@ module.exports = {
                     DataService.getStories({sprintId: sprintId}, callback);
                 }
             },
+
+            /**
+             * Callback function which is been called after all parallel jobs are processed.
+             *
+             * @param   {Error} error   Error object
+             * @param   {{}}    results Result data as an object that contains 'sprint' and 'stories'
+             */
             function(error, results) {
                 if (error) {
                     res.send(500, error);
@@ -311,7 +325,7 @@ module.exports = {
                     // Fetch story tasks
                     DataService.getTasks({or: storyIds}, function(error, tasks) {
                         if (error) {
-                            res.send(500, error);
+                            res.send(error.status ? error.status : 500, error);
                         } else {
                             data.tasks = _.sortBy(tasks, function(task) { return task.timeEnd; } );
                             data.tasksDone = _.filter(data.tasks, function(task) { return task.isDone; } );
@@ -324,7 +338,7 @@ module.exports = {
         );
 
         /**
-         * Private function to parse actual data.
+         * Private function to parse actual data for chart.
          */
         function parseData() {
             var initTasks = 0;
@@ -471,8 +485,6 @@ module.exports = {
 
             var currentDate = startTime.add("days", 1);
 
-            console.log(data.tasks);
-
             // Loops days
             while (endTime.diff(currentDate, "days") >= 0) {
                 // Get reference date, this is used to determine actual tasks that are done or added
@@ -511,7 +523,8 @@ module.exports = {
         function getAddedData() {
             var output = [];
 
-            _.each(_.groupBy(data.tasksOver, function(task) { return task.createdAtObject().format("YYYY-MM-DD"); }),
+            // Group task data by create date and iterate grouped data
+            _.each(_.groupBy(data.tasksOver, function(task) { return task.createdAtObject().format("YYYY-MM-DD"); } ),
                 function(tasks) {
                     var date = tasks[0].createdAtObject();
 
@@ -530,6 +543,7 @@ module.exports = {
         function getDoneData() {
             var output = [];
 
+            // Group task data by done date and iterate grouped data
             _.each(_.groupBy(data.tasksDone, function(task) { return task.timeEndObject().format("YYYY-MM-DD"); }),
                 function(tasks) {
                     var date = tasks[0].timeEndObject();
