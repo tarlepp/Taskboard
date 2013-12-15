@@ -4,7 +4,7 @@
  * @module      ::  Controller
  * @description ::  Contains logic for handling requests.
  */
-var jQuery = require('jquery');
+var async = require("async");
 
 module.exports = {
     /**
@@ -14,94 +14,73 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     add: function(req, res) {
-        // Specify template data
-        var data = {
-            layout: req.isAjax ? "layout_ajax" : "layout",
-            projectId: parseInt(req.param('projectId'), 10),
-            storyId: parseInt(req.param('storyId'), 10),
-            phaseId: false,
-            types: false,
-            story: false,
-            users: false
-        };
+        var projectId = parseInt(req.param("projectId"), 10);
+        var storyId = parseInt(req.param("storyId"), 10);
 
-        // Fetch first phase for current project
-        Phase
-            .find()
-            .where({
-                projectId: data.projectId
-            })
-            .sort('order ASC')
-            .limit(1)
-            .done(function(error, phases) {
+        // Make parallel jobs for task add
+        async.parallel(
+            {
+                // Determine first phase in this project
+                phaseId: function(callback) {
+                    Phase
+                        .find()
+                        .where({
+                            projectId: projectId
+                        })
+                        .sort('order ASC')
+                        .limit(1)
+                        .done(function(error, phases) {
+                            if (error) {
+                                callback(error, null)
+                            } else if (phases.length > 0) {
+                                callback(null, phases[0].id);
+                            } else {
+                                var errorMessage = new Error();
+
+                                errorMessage.message = "Phase data not found.";
+                                errorMessage.status = 404;
+
+                                callback(errorMessage, null);
+                            }
+                        });
+                },
+
+                // Fetch story data
+                story: function(callback) {
+                    DataService.getStory(storyId, callback);
+                },
+
+                // Fetch task types
+                types: function(callback) {
+                    DataService.getTypes({}, callback);
+                },
+
+                // Fetch users
+                users: function(callback) {
+                    DataService.getUsers({}, callback);
+                }
+            },
+
+            /**
+             * Callback function which is called after all specified parallel jobs are done.
+             *
+             * @param   {Error} error   Error object
+             * @param   {{}}    data    Object that contains all necessary data for task add
+             */
+            function(error, data) {
                 if (error) {
-                    res.send(error, 500);
+                    res.send(error.status ? error.status : 500, error);
                 } else {
-                    data.phaseId = (phases.length > 0) ? phases[0].id : 0;
+                    data.layout = req.isAjax ? "layout_ajax" : "layout";
+                    data.projectId = projectId;
+                    data.storyId = storyId;
 
-                    makeView();
+                    res.view(data);
                 }
-            });
-
-        // Fetch story
-        Story
-            .findOne(data.storyId)
-            .done(function(error, story) {
-                if (error) {
-                    res.send(error, 500);
-                } else {
-                    data.story = story;
-
-                    makeView();
-                }
-            });
-
-        // Fetch task types
-        Type
-            .find()
-            .sort('order ASC')
-            .done(function(error, types) {
-                if (error) {
-                    res.send(error, 500);
-                } else {
-                    data.types = types;
-
-                    makeView();
-                }
-            });
-
-        // Fetch users
-        User
-            .find()
-            .sort('lastName ASC')
-            .done(function(error, users) {
-                if (error) {
-                    res.send(error, 500);
-                } else {
-                    data.users = users;
-
-                    makeView();
-                }
-            });
-
-        /**
-         * Function makes actual view if all necessary data is fetched
-         * from database for template.
-         */
-        function makeView() {
-            var ok = true;
-
-            jQuery.each(data, function(key, data) {
-                if (data === false) {
-                    ok = false;
-                }
-            });
-
-            if (ok) {
-                res.view(data);
             }
-        }
+        );
     },
+
     /**
      * Task edit action.
      *
@@ -111,73 +90,40 @@ module.exports = {
     edit: function(req, res) {
         var taskId = parseInt(req.param('id'), 10);
 
-        // Specify template data
-        var data = {
-            layout: req.isAjax ? "layout_ajax" : "layout",
-            task: false,
-            types: false,
-            users: false
-        };
+        // Make parallel jobs for task edit
+        async.parallel(
+            {
+                // Fetch task data
+                task: function(callback) {
+                    DataService.getTask(taskId, callback);
+                },
 
-        // Fetch task data
-        Task
-            .findOne(taskId)
-            .done(function(error, task) {
+                // Fetch task types
+                types: function(callback) {
+                    DataService.getTypes({}, callback);
+                },
+
+                // Fetch users
+                users: function(callback) {
+                    DataService.getUsers({}, callback);
+                }
+            },
+
+            /**
+             * Callback function which is called after all specified parallel jobs are done.
+             *
+             * @param   {Error} error   Error object
+             * @param   {{}}    data    Object that contains all necessary data for task edit
+             */
+            function(error, data) {
                 if (error) {
-                    res.send(error, 500);
-                } else if (!task) {
-                    res.send("Task not found.", 404);
+                    res.send(error.status ? error.status : 500, error);
                 } else {
-                    data.task = task;
+                    data.layout = req.isAjax ? "layout_ajax" : "layout";
 
-                    makeView();
+                    res.view(data);
                 }
-            });
-
-        // Fetch task types
-        Type
-            .find()
-            .sort('order ASC')
-            .done(function(error, types) {
-                if (error) {
-                    res.send(error, 500);
-                } else {
-                    data.types = types;
-
-                    makeView();
-                }
-            });
-
-        // Fetch users
-        User
-            .find()
-            .sort('lastName ASC')
-            .done(function(error, users) {
-                if (error) {
-                    res.send(error, 500);
-                } else {
-                    data.users = users;
-
-                    makeView();
-                }
-            });
-
-        /**
-         * Function makes actual view if all necessary data is fetched
-         * from database for template.
-         */
-        function makeView() {
-            var ok = true;
-
-            jQuery.each(data, function(key, data) {
-                if (data === false) {
-                    ok = false;
-                }
-            });
-
-            if (ok) {
-                res.view(data);
             }
-        }
+        );
     }
 };
