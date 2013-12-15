@@ -37,9 +37,9 @@ module.exports = {
             .findOne(userId)
             .done(function(error, user) {
                 if (error) {
-                    res.send(error, 500);
+                    res.send(500, error);
                 } else if (!user) {
-                    res.send("User not found.", 404);
+                    res.send(404, "User not found.");
                 } else {
                     res.view({
                         user: user,
@@ -66,51 +66,75 @@ module.exports = {
             .sort("username ASC")
             .done(function(error, users) {
                 if (error) {
-                    res.send(error, 500);
+                    res.send(500, error);
                 } else {
-                    // Map user
-                    async.map(
-                        users,
-                        function(user, callback) {
-                            // Fetch user last sign in record
-                            UserLogin
-                                .findOne({
-                                    userId: user.id
-                                })
-                                .sort("stamp DESC")
-                                .limit(1)
-                                .done(function(error, loginData) {
-                                    if (error) {
-                                        callback(error, null);
-                                    } else {
-                                        // Add last login to user data
-                                        user.lastLogin = (!loginData) ? null : loginData.stamp;
-
-                                        if (user.lastLogin !== null) {
-                                            moment.lang(req.user.language);
-
-                                            user.lastLogin = DateService.convertDateObjectToUtc(user.lastLogin);
-                                            user.lastLogin.tz(req.user.momentTimezone);
-                                        }
-
-                                        callback(null, user);
-                                    }
-                                });
-                        },
-                        function(error, users) {
-                            if (error) {
-                                res.send(error, error.status ? error.status : 500);
-                            } else {
-                                res.view({
-                                    layout: req.isAjax ? "layout_ajax" : "layout",
-                                    users: users,
-                                    moment: moment
-                                });
-                            }
-                        }
-                    );
+                    fetchLastLogin(users);
                 }
             });
+
+        /**
+         * Private function to fetch last login of each user.
+         *
+         * @param   {sails.model.user[]}    users
+         */
+        function fetchLastLogin(users) {
+            // Map users
+            async.map(
+                users,
+
+                /**
+                 * Iterator function which is called with every user object in input array.
+                 * Function will fetch last login information of current user.
+                 *
+                 * @param   {sails.model.user}  user        User object
+                 * @param   {Function}          callback    Callback function to call after job is finished
+                 */
+                function(user, callback) {
+                    // Fetch user last sign in record
+                    UserLogin
+                        .findOne({
+                            userId: user.id
+                        })
+                        .sort("stamp DESC")
+                        .limit(1)
+                        .done(function(error, loginData) {
+                            if (error) {
+                                callback(error, null);
+                            } else {
+                                // Add last login to user data
+                                user.lastLogin = (!loginData) ? null : loginData.stamp;
+
+                                if (user.lastLogin !== null) {
+                                    moment.lang(req.user.language);
+
+                                    user.lastLogin = DateService.convertDateObjectToUtc(user.lastLogin);
+                                    user.lastLogin.tz(req.user.momentTimezone);
+                                }
+
+                                callback(null, user);
+                            }
+                        });
+                },
+
+                /**
+                 * Callback function which is called after all users have been processed with iterator
+                 * function.
+                 *
+                 * @param   {Error}                 error   Error object
+                 * @param   {sails.model.user[]}    users   User objects extended by 'lastLogin' information
+                 */
+                function(error, users) {
+                    if (error) {
+                        res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    } else {
+                        res.view({
+                            layout: req.isAjax ? "layout_ajax" : "layout",
+                            users: users
+                        });
+                    }
+                }
+            );
+        }
     },
 
     /**
@@ -122,6 +146,7 @@ module.exports = {
     history: function(req, res) {
         var userId = req.param("id");
 
+        // Make parallel jobs for history action
         async.parallel(
             {
                 // Fetch single user data
@@ -134,9 +159,16 @@ module.exports = {
                     DataService.getUserSignInData(userId, callback);
                 }
             },
+
+            /**
+             * Callback function which is called after all parallel jobs have been processed.
+             *
+             * @param   {Error} error   Error object
+             * @param   {{}}    data    Object that contains 'user' and 'history' data
+             */
             function (error, data) {
                 if (error) {
-                    res.send(error, error.status ? error.status : 500);
+                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
                     data.layout = req.isAjax ? "layout_ajax" : "layout";
 
@@ -174,6 +206,7 @@ module.exports = {
     projects: function(req, res) {
         var userId = req.param("id");
 
+        // Make parallel jobs for 'projects' action
         async.parallel(
             {
                 // Fetch single user data
@@ -181,65 +214,95 @@ module.exports = {
                     DataService.getUser(userId, callback);
                 },
 
-                // Fetch user sign in data
+                // Fetch project data
                 projects: function(callback) {
                     DataService.getProjects({}, callback);
                 }
             },
+
+            /**
+             * Callback function which is called after all parallel jobs have been processed.
+             *
+             * @param   {Error} error   Error object
+             * @param   {{}}    data    Object that contains 'user' and 'projects' data
+             */
             function (error, data) {
                 if (error) {
-                    res.send(error, error.status ? error.status : 500);
+                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
-                    moment.lang(req.user.language);
-
-                    async.filter(
-                        data.projects,
-                        function(project, callback) {
-                            AuthService.hasProjectAccess(data.user, project.id, function(error, role) {
-                                if (role !== false) {
-                                    project.role = role;
-                                    project.roleText = "Unknown";
-
-                                    project.dateStart = DateService.convertDateObjectToUtc(project.dateStart);
-                                    project.dateStart.tz(req.user.momentTimezone);
-
-                                    project.dateEnd = DateService.convertDateObjectToUtc(project.dateEnd);
-                                    project.dateEnd.tz(req.user.momentTimezone);
-
-                                    switch (project.role) {
-                                        case -3:
-                                            project.roleText = "Administrator";
-                                            break;
-                                        case -2:
-                                            project.roleText = "Manager (Primary)";
-                                            break;
-                                        case -1:
-                                            project.roleText = "Manager";
-                                            break;
-                                        case 0:
-                                            project.roleText = "Viewer";
-                                            break;
-                                        case 1:
-                                            project.roleText = "User";
-                                            break;
-                                    }
-
-                                    callback(true);
-                                } else {
-                                    callback(false);
-                                }
-                            }, true);
-                        },
-                        function(projects) {
-                            data.projects = projects;
-                            data.layout = req.isAjax ? "layout_ajax" : "layout";
-
-                            res.view(data);
-                        }
-                    );
+                    filterOutInvalidProjects(data);
                 }
             }
         );
+
+        /**
+         * Private function to filter out projects that current user has no access to.
+         *
+         * @param   {{}}    data
+         */
+        function filterOutInvalidProjects(data) {
+            moment.lang(req.user.language);
+
+            async.filter(
+                data.projects,
+
+                /**
+                 * Iterator function which will filter out projects that current user has no access.
+                 *
+                 * @param   {sails.model.project}   project     Project object
+                 * @param   {Function}              callback    Callback function to call after project is processed
+                 */
+                function(project, callback) {
+                    AuthService.hasProjectAccess(data.user, project.id, function(error, role) {
+                        if (role !== false) {
+                            project.role = role;
+                            project.roleText = "Unknown";
+
+                            project.dateStart = DateService.convertDateObjectToUtc(project.dateStart);
+                            project.dateStart.tz(req.user.momentTimezone);
+
+                            project.dateEnd = DateService.convertDateObjectToUtc(project.dateEnd);
+                            project.dateEnd.tz(req.user.momentTimezone);
+
+                            switch (project.role) {
+                                case -3:
+                                    project.roleText = "Administrator";
+                                    break;
+                                case -2:
+                                    project.roleText = "Manager (Primary)";
+                                    break;
+                                case -1:
+                                    project.roleText = "Manager";
+                                    break;
+                                case 0:
+                                    project.roleText = "Viewer";
+                                    break;
+                                case 1:
+                                    project.roleText = "User";
+                                    break;
+                            }
+
+                            callback(true);
+                        } else {
+                            callback(false);
+                        }
+                    }, true);
+                },
+
+                /**
+                 * Callback function which is called after all projects have been processed by
+                 * specified iterator function.
+                 *
+                 * @param   {sails.model.project[]} projects    Project objects extended by role
+                 */
+                function(projects) {
+                    data.projects = projects;
+                    data.layout = req.isAjax ? "layout_ajax" : "layout";
+
+                    res.view(data);
+                }
+            );
+        }
     },
 
     /**
