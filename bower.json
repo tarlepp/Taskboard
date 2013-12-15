@@ -3,7 +3,7 @@
   "version": "0.5.0",
   "homepage": "https://github.com/tarlepp/Taskboard",
   "authors": [
-    "tarlepp <tarmo.leppanen@kase.fi>"
+    "tarlepp <tarmo.leppanen@protacon.com>"
   ],
   "description": "a Sails application to mimic \"scrum-ban\" taskboard.",
   "main": "assets/linker/styles/screen.css",
@@ -32,11 +32,11 @@
     "jquery-ui": "~1.10.3",
     "qtip2": "~2.2.0",
     "trunk8": "~1.3.3",
-    "noty": "~2.1.2",
+    "noty": "~2.2.0",
     "jquery-selectorator": "~0.1.3",
-    "bootstrap": "~3.0.2",
+    "bootstrap": "~3.0.3",
     "bootstrap-datepicker": "~1.2.0",
-    "bootstrap-select": "~1.3.5",
+    "bootstrap-select": "~1.4.1",
     "bootbox": "~4.1.0",
     "bootstrap-wysiwyg": "*",
     "bootstrap-hover-dropdown": "~2.0.1",
@@ -47,5 +47,8 @@
     "bootstrap-popover-extra-placements": "*",
     "highcharts.com": "~3.0.7",
     "numeral": "~1.5.2"
+  },
+  "resolutions": {
+    "bootstrap": "~3.0.3"
   }
 }
