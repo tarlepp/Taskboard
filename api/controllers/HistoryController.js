@@ -127,8 +127,6 @@ module.exports = {
                  */
                 function(error, results) {
                     if (error) {
-                        console.log(error);
-
                         res.send(error.status ? error.status : 500, error);
                     } else {
                         // Make view
@@ -144,8 +142,6 @@ module.exports = {
         /**
          * Function to process single history row data. Basically this function just maps all
          * differences and make specified data processing for single column (data attribute).
-         *
-         *
          *
          * @param   {{}[]}                      differences Current row differences as an array of objects
          * @param   {sails.helper.historyRow}   historyRow  History row data
@@ -251,13 +247,13 @@ module.exports = {
 
                 // Column is parentId, so this is relation to object itself
                 if (data.column.match(/parentId$/) !== null) {
-                    data.columnType = 'parent';
+                    data.columnType = "parent";
 
                     object = objectName;
                 }
 
                 // Only fetch possible relation data if change type is insert or update AND data object is present
-                if (global[object] && typeof global[object] === "object" && data.changeType != 'delete') {
+                if (global[object] && typeof global[object] === "object" && data.changeType != "delete") {
                     // Fetch relation data for column
                     async.parallel(
                         {
@@ -276,7 +272,7 @@ module.exports = {
 
                             // New value object data
                             dataOld: function(callback) {
-                                if (data.changeType == 'update' && data.valueIdOld) {
+                                if (data.changeType == "update" && data.valueIdOld) {
                                     global[object]
                                         .findOne(data.valueIdOld)
                                         .done(function(error, objectData) {

@@ -69,7 +69,7 @@ module.exports = {
              */
             function(error, data) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error);
+                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
                     data.layout = req.isAjax ? "layout_ajax" : "layout";
                     data.projectId = projectId;
@@ -117,7 +117,7 @@ module.exports = {
              */
             function(error, data) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error);
+                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
                     data.layout = req.isAjax ? "layout_ajax" : "layout";
 

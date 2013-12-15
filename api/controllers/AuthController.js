@@ -50,7 +50,7 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     authenticate: function(req, res) {
-        passport.authenticate('local', function(error, user, info) {
+        passport.authenticate("local", function(error, user, info) {
             if ((error) || (!user)) {
                 res.redirect("/login?error=true");
 
