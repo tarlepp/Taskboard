@@ -4,6 +4,8 @@
  * @module      ::  Controller
  * @description ::  Contains logic for handling requests.
  */
+"use strict";
+
 var async = require("async");
 
 module.exports = {
@@ -29,9 +31,16 @@ module.exports = {
                     DataService.getPhases({projectId: projectId}, callback)
                 }
             },
+
+            /**
+             * Main callback function which is called after all parallel jobs are processed.
+             *
+             * @param   {Error} error   Possible error object
+             * @param   {{}}    data    Data object that contains 'project' and 'phases' data
+             */
             function(error, data) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error);
+                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
                     data.layout = req.isAjax ? "layout_ajax" : "layout";
 
