@@ -4,6 +4,9 @@
  * @module      :: Controller
  * @description :: Contains logic for handling requests.
  */
+"use strict";
+
+var async = require("async");
 
 module.exports = {
     /**
@@ -27,9 +30,16 @@ module.exports = {
                     DataService.getProject(projectId, callback);
                 }
             },
-            function (error, data) {
+
+            /**
+             * Main callback function which is called after all parallel jobs are processed.
+             *
+             * @param   {Error} error   Possible error object
+             * @param   {{}}    data    Data object that contains 'role' and 'project' data
+             */
+            function(error, data) {
                 if (error) {
-                    res.send(error, error.status ? error.status : 500);
+                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
                     data.layout = req.isAjax ? "layout_ajax" : "layout";
                     data.projectId = projectId;
@@ -62,9 +72,16 @@ module.exports = {
                     DataService.getMilestone(milestoneId, callback)
                 }
             },
+
+            /**
+             * Callback function which is called after all parallel jobs are processed.
+             *
+             * @param   {Error} error   Possible error object
+             * @param   {{}}    data    Data object that contains 'role' and 'milestone' data
+             */
             function (error, data) {
                 if (error) {
-                    res.send(error, error.status ? error.status : 500);
+                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
                     data.layout = req.isAjax ? "layout_ajax" : "layout";
 
@@ -76,8 +93,6 @@ module.exports = {
 
     /**
      * Milestone stories action.
-     *
-     * @todo refactor this later on...
      *
      * @param   {Request}   req Request object
      * @param   {Response}  res Response object
@@ -113,9 +128,16 @@ module.exports = {
                     DataService.getMilestone(milestoneId, callback)
                 }
             },
+
+            /**
+             * Callback function which is called after all parallel jobs are processed.
+             *
+             * @param   {Error} error   Possible error object
+             * @param   {{}}    results Data object that contains 'role' and 'milestone' data
+             */
             function (error, results) {
                 if (error) {
-                    res.send(error, error.status ? error.status : 500);
+                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
                     data.role = results.role;
                     data.milestone.data = results.milestone;
@@ -137,30 +159,29 @@ module.exports = {
         );
 
         /**
-         * Function to fetch tasks of stories in current milestone.
-         *
-         * @todo refactor all this shit later
+         * Private function to fetch tasks of stories in current milestone.
          */
         function fetchTasks() {
-            // We have no stories, so make view
-            if (data.stories.length === 0) {
-                makeView();
-            } else {
-                data.milestone.cntStoryTotal = data.stories.length;
-                data.milestone.cntStoryDone = _.reduce(data.stories, function (memo, story) {
-                    return (story.isDone) ? memo + 1 : memo;
-                }, 0);
+            data.milestone.cntStoryTotal = data.stories.length;
+            data.milestone.cntStoryDone = _.reduce(data.stories, function (memo, story) {
+                return (story.isDone) ? memo + 1 : memo;
+            }, 0);
 
-                if (data.milestone.cntStoryDone > 0) {
-                    data.milestone.progressStory = Math.round(data.milestone.cntStoryDone  / data.milestone.cntStoryTotal * 100);
-                }
+            if (data.milestone.cntStoryDone > 0) {
+                data.milestone.progressStory = Math.round(data.milestone.cntStoryDone  / data.milestone.cntStoryTotal * 100);
+            }
 
-                // Iterate stories
-                _.each(data.stories, function(/** sails.model.story */story) {
-                    // Initialize milestone stories property
-                    story.tasks = false;
+            // Map each stories and fetch task data for those
+            async.map(
+                data.stories,
 
-                    // Find all user stories which are attached to current milestone
+                /**
+                 * Iterator function to process single story object and fetch task data for that.
+                 *
+                 * @param   {sails.model.story} story       Story object
+                 * @param   {Function}          callback    Callback function to call after story is processed
+                 */
+                function(story, callback) {
                     Task
                         .find()
                         .where({
@@ -168,55 +189,45 @@ module.exports = {
                         })
                         .sort('title ASC')
                         .done(function(error, tasks) {
-                            // Add tasks to story data
-                            story.tasks = tasks;
-
-                            story.doneTasks = _.reduce(tasks, function (memo, task) {
-                                return (task.isDone) ? memo + 1 : memo;
-                            }, 0);
-
-                            // Add milestone task counter
-                            data.milestone.cntTaskTotal = data.milestone.cntTaskTotal + story.tasks.length;
-                            data.milestone.cntTaskDone = data.milestone.cntTaskDone + story.doneTasks;
-
-                            if (story.doneTasks > 0) {
-                                story.progress = Math.round(story.doneTasks / tasks.length * 100);
+                            if (error) {
+                                callback(error, null);
                             } else {
-                                story.progress = 0;
+                                // Add tasks to story data
+                                story.tasks = tasks;
+
+                                story.doneTasks = _.reduce(tasks, function (memo, task) {
+                                    return (task.isDone) ? memo + 1 : memo;
+                                }, 0);
+
+                                // Add milestone task counter
+                                data.milestone.cntTaskTotal = data.milestone.cntTaskTotal + story.tasks.length;
+                                data.milestone.cntTaskDone = data.milestone.cntTaskDone + story.doneTasks;
+
+                                if (story.doneTasks > 0) {
+                                    story.progress = Math.round(story.doneTasks / tasks.length * 100);
+                                } else {
+                                    story.progress = 0;
+                                }
+
+                                callback(null, true);
                             }
-
-                            // Call view
-                            makeView();
                         });
-                });
-            }
-        }
+                },
 
-        /**
-         * Function to make actual view for milestone edit.
-         *
-         * @todo this needs some real refactoring later on...
-         */
-        function makeView() {
-            if (data.stories.length > 0) {
-                var show = true;
-
-                _.each(data.stories, function(/** sails.model.story */story) {
-                    if (story.tasks === false) {
-                        show = false;
-                    }
-                });
-
-                if (show) {
+                /**
+                 * Callback function which is call after are stories are processed.
+                 *
+                 * @param   {Error}     error   Possible error object
+                 * @param   {Boolean}   result  Result data
+                 */
+                function(error, result) {
                     if (data.milestone.cntTaskDone > 0) {
                         data.milestone.progressTask = Math.round(data.milestone.cntTaskDone  / data.milestone.cntTaskTotal * 100);
                     }
 
                     res.view(data);
                 }
-            } else {
-                res.view(data);
-            }
+            );
         }
     }
 };
