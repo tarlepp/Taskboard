@@ -4,7 +4,8 @@
  * @module      ::  Controller
  * @description ::  Contains logic for handling requests.
  */
-var jQuery = require("jquery");
+"use strict";
+
 var async = require("async");
 var moment = require("moment-timezone");
 
@@ -20,63 +21,39 @@ module.exports = {
         var sprintId = parseInt(req.param("sprintId"), 10);
         var formData = req.param("formData") || {};
 
-        // Required view data
-        var data = {
-            layout: req.isAjax ? "layout_ajax" : "layout",
-            projectId: projectId,
-            sprintId: sprintId,
-            formData: formData,
-            milestones: false,
-            types: false
-        };
+        // Make parallel jobs for add action
+        async.parallel(
+            {
+                // Fetch milestone data
+                milestones: function(callback) {
+                    DataService.getMilestones({projectId: projectId}, callback);
+                },
 
-        // Fetch project milestones
-        Milestone
-            .find()
-            .where({
-                projectId: projectId
-            })
-            .sort('deadline ASC')
-            .done(function(error, milestones) {
+                // Fetch task types
+                types: function(callback) {
+                    DataService.getTypes({}, callback);
+                }
+            },
+
+            /**
+             * Callback function which is called after all parallel jobs have been processed.
+             *
+             * @param   {Error} error   Error object
+             * @param   {{}}    data    Object that contains 'milestones' and 'types' data
+             */
+            function(error, data) {
                 if (error) {
-                    res.send(error, 500);
+                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
-                    data.milestones = milestones;
+                    data.layout = req.isAjax ? "layout_ajax" : "layout";
+                    data.projectId = projectId;
+                    data.sprintId = sprintId;
+                    data.formData = formData;
 
-                    makeView();
+                    res.view(data);
                 }
-            });
-
-        // Fetch task types
-        Type
-            .find()
-            .sort('order ASC')
-            .done(function(error, types) {
-                if (error) {
-                    res.send(error, 500);
-                } else {
-                    data.types = types;
-
-                    makeView();
-                }
-            });
-
-        /**
-         * Private function to make actual view with specified data.
-         */
-        function makeView() {
-            var ready = true;
-
-            jQuery.each(data, function(key, data) {
-                if (data === false) {
-                    ready = false;
-                }
-            });
-
-            if (ready) {
-                res.view(data);
             }
-        }
+        );
     },
 
     /**
@@ -86,77 +63,46 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     edit: function(req, res) {
-        var storyId = parseInt(req.param('id'), 10);
+        var storyId = parseInt(req.param("id"), 10);
 
-        var data = {
-            layout: req.isAjax ? "layout_ajax" : "layout",
-            story: false,
-            milestones: false,
-            types: false
-        };
+        // Make parallel jobs for edit action
+        async.parallel(
+            {
+                // Fetch story data
+                story: function(callback) {
+                    DataService.getStory(storyId, callback);
+                },
 
-        // Fetch story data
-        Story
-            .findOne(storyId)
-            .done(function(error, story) {
+                // Fetch task types
+                types: function(callback) {
+                    DataService.getTypes({}, callback);
+                }
+            },
+
+            /**
+             * Callback function which is called after all parallel jobs have been processed.
+             *
+             * @param   {Error} error   Error object
+             * @param   {{}}    data    Object that contains 'story' and 'types' data
+             */
+            function(error, data) {
                 if (error) {
-                    res.send(error, 500);
-                } else if (!story) {
-                    res.send("Story not found.", 404);
+                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
-                    data.story = story;
+                    // Fetch milestone data which are attached to story project
+                    DataService.getMilestones({projectId: data.story.projectId}, function(error, milestones) {
+                        if (error) {
+                            res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                        } else {
+                            data.milestones = milestones;
+                            data.layout = req.isAjax ? "layout_ajax" : "layout";
 
-                    // Fetch project milestones
-                    Milestone
-                        .find()
-                        .where({
-                            projectId: data.story.projectId
-                        })
-                        .sort('deadline ASC')
-                        .done(function(error, milestones) {
-                            if (error) {
-                                res.send(error, 500);
-                            } else {
-                                data.milestones = milestones;
-
-                                makeView();
-                            }
-                        });
-
-                    makeView();
+                            res.view(data);
+                        }
+                    });
                 }
-            });
-
-        // Fetch task types
-        Type
-            .find()
-            .sort('order ASC')
-            .done(function(error, types) {
-                if (error) {
-                    res.send(error, 500);
-                } else {
-                    data.types = types;
-
-                    makeView();
-                }
-            });
-
-        /**
-         * Private function to make actual view with specified data.
-         */
-        function makeView() {
-            var ready = true;
-
-            jQuery.each(data, function(key, data) {
-                if (data === false) {
-                    ready = false;
-                }
-            });
-
-            if (ready) {
-                res.view(data);
             }
-        }
+        );
     },
 
     /**
@@ -166,9 +112,9 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     split: function(req, res) {
-        var storyId = parseInt(req.param('storyId'), 10);
-        var sprintId = parseInt(req.param('sprintId'), 10);
-        var projectId = parseInt(req.param('projectId'), 10);
+        var storyId = parseInt(req.param("storyId"), 10);
+        var sprintId = parseInt(req.param("sprintId"), 10);
+        var projectId = parseInt(req.param("projectId"), 10);
 
         if (isNaN(storyId) || isNaN(sprintId) || isNaN(projectId)) {
             res.send(400, "Required input data missing...");
@@ -500,7 +446,6 @@ module.exports = {
             moment.lang(req.user.language);
 
             data.layout = req.isAjax ? "layout_ajax" : "layout";
-            data.moment = moment;
 
             // Add relation data to each tasks
             _.each(data.tasks, function(task) {
