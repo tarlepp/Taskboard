@@ -1,33 +1,27 @@
 /**
  * Module dependencies
  */
-var sails = require("sails");
+var Sails = require("sails");
 var lifted = false;
 
-global.sails = sails;
+global.sails = Sails;
 global.lifted = lifted;
+var app   = null;
+var booting = false;
 
-module.exports = {
-    build: function(cb) {
-        if (lifted === false) {
-            sails.lift(function() {
-                setTimeout(cb('', sails), 2000);
-            });
-        } else {
-            cb('', sails);
-        }
+var sailsTestConfig = {
+    log : { level: null }
+};
 
-    },
+module.exports.build = function liftSails(cb) {
+    if(app) return cb(null, app);
 
-    teardown: function(sails, cb) {
-        if (lifted) {
-            sails.lower(function() {
-                lifted = false;
+    //If server has been booted but no app is loaded, try again.
+    if(booting && !app) return setTimeout(function(){ liftSails(cb); }, 300);
 
-                cb();
-            });
-        } else {
-            cb();
-        }
-    }
+    booting = true;
+    Sails.lift(sailsTestConfig, function(err, sails) {
+        app = sails;
+        return cb(err, sails);
+    });
 };
