@@ -257,8 +257,9 @@ div[data-role="editor-toolbar"] {
 }
 
 .bootstrap-select ul.dropdown-menu > li > a i {
+    font-size: 12px;
     left: auto;
-    top: 3px;
+    top: 5px;
 }
 
 .dropdown-menu > li > a.select-dummy-option,
