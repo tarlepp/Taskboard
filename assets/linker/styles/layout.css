@@ -342,11 +342,20 @@ ul, ol {
     display: inline-block;
 }
 
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.dropdown-menu > li > a:focus:hover,
+.dropdown-menu > li.selected > a,
 .popover.actionMenu .actionMenu-actions > li:hover,
 .popover.actionMenu .actionMenu-actions > li:focus {
     color: #ffffff;
     text-decoration: none;
     background-color: #428bca;
+}
+
+.dropdown-menu > li.selected > a,
+.dropdown-menu > li > a:focus {
+    background-color: rgba(66, 139, 202, .75);
 }
 
 .popover.actionMenu .actionMenu-actions > li:hover a,
