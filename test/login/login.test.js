@@ -4,28 +4,23 @@
  * Hopefully sails.js dev team writes some docs about proper testing of sails.js app.
  */
 
-/**
 var request = require("supertest");
 var should = require('chai').should();
 var sailsHelper = require("./../helpers/sailsHelper");
 
+var sails;
+before(function(done) {
+    sailsHelper.build(function (error, _sails) {
+        if (error || !_sails) {
+            return done(error || 'Sails could not be instantiated.');
+        }
+        sails = _sails;
+
+        return done();
+    });
+});
+
 describe("not logged in user", function () {
-    var sails;
-
-    before(function(done) {
-        sailsHelper.build(function (error, _sails) {
-            if (error || !_sails) {
-                return done(error || 'Sails could not be instantiated.');
-            }
-            sails = _sails;
-
-            return done();
-        });
-    });
-
-    after(function(done) {
-        sailsHelper.teardown(sails, done);
-    });
 
     describe("trying to sign in", function() {
         describe("with invalid credential data", function () {
@@ -33,6 +28,7 @@ describe("not logged in user", function () {
                 username: "foo",
                 password: "bar"
             };
+
             it("user should not be signed in", function (done) {
                 request(sails.express.server)
                     .post("/login")
@@ -45,6 +41,19 @@ describe("not logged in user", function () {
                     });
             });
         });
+
+        it("with good credential data");
+
+        it("with incomplete data", function(done) {
+            //SHOWING THAT MULTIPLE TESTS WORK
+            request(sails.express.server)
+                .post("/login")
+                .send({})
+                .expect(500)
+                .end(function (error, result) {
+                    done();
+                });
+        });
     });
 });
-*/
+
