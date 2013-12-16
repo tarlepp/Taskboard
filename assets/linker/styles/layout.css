@@ -120,7 +120,7 @@
     margin-right: -15px;
 }
 
-#navigation .input-group span {
+#navigation .input-group span.input-group-addon {
     position: relative;
     left: -3px;
 }
