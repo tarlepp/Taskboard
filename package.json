@@ -4,7 +4,7 @@
   "version": "0.5.0",
   "description": "a Sails application to mimic 'scrum-ban' taskboard.",
   "dependencies": {
-    "sails": "0.9.7",
+    "sails": "0.9.8",
     "grunt": "0.4.1",
     "sails-mysql": "0.9.5",
     "optimist": "0.3.4",
