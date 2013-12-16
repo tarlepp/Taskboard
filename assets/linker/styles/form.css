@@ -211,12 +211,13 @@ div[data-role="editor-toolbar"] {
     padding: 0;
 }
 
-.bootstrap-select .dropdown-menu {
-    z-index: 3000;
+.btn-group.bootstrap-select.form-control.in-modal .dropdown-menu {
+    top: 0;
 }
 
-.btn-group.bootstrap-select.form-control.in-modal .dropdown-menu {
-    top: -2px;
+.bootstrap-select.show-menu-arrow .dropdown-toggle:after,
+.bootstrap-select.show-menu-arrow .dropdown-toggle:before {
+    z-index: 2000;
 }
 
 .bootstrap-select.btn-group.open .dropdown-toggle {
