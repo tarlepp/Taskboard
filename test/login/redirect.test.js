@@ -2,24 +2,21 @@ var request = require("supertest");
 var should = require('chai').should();
 var sailsHelper = require("./../helpers/sailsHelper");
 
+var sails;
+before(function(done) {
+    sailsHelper.build(function(error, _sails) {
+        if (error || !_sails) {
+            return done(error || 'Sails could not be instantiated.');
+        }
+
+        sails = _sails;
+
+        return done();
+    });
+});
+
+
 describe("not logged in user", function() {
-    var sails;
-
-    before(function(done) {
-        sailsHelper.build(function(error, _sails) {
-            if (error || !_sails) {
-                return done(error || 'Sails could not be instantiated.');
-            }
-
-            sails = _sails;
-
-            return done();
-        });
-    });
-
-    after(function(done) {
-        sailsHelper.teardown(sails, done);
-    });
 
     describe("accessing to '/board/'", function() {
         it('should be redirected to sign in page', function (done) {
