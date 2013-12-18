@@ -1,14 +1,15 @@
 "use strict";
 
 var request = require("supertest");
-var should = require('chai').should();
+var should = require("chai").should();
+var expect = require("chai").expect();
 var sailsHelper = require("./../helpers/sailsHelper");
 var sails;
 
 before(function(done) {
     sailsHelper.build(function(error, _sails) {
         if (error || !_sails) {
-            return done(error || 'Sails could not be instantiated.');
+            return done(error || "Sails could not be instantiated.");
         }
 
         sails = _sails;
@@ -28,8 +29,7 @@ describe("not logged in user", function() {
             };
 
             describe("without CSRF token", function() {
-
-                it("user should be redirected to 403 page", function (done) {
+                it("user should be redirected to 403 page", function(done) {
                     request(sails.express.server)
                         .post("/login")
                         .send(loginData)
@@ -42,7 +42,45 @@ describe("not logged in user", function() {
                         });
                 });
             });
+
+            describe("with invalid CSRF token", function() {
+                loginData._csrf = "invalidToken";
+
+                it("user should be redirected to 403 page", function(done) {
+                    request(sails.express.server)
+                        .post("/login")
+                        .send(loginData)
+                        .expect(403)
+                        .end(function(error, result) {
+                            should.not.exist(error);
+                            should.exist(result);
+
+                            done();
+                        });
+                });
+            });
+
+            describe("with valid CSRF token", function() {
+
+                it("user should be redirected back to login form", function(done) {
+                    sailsHelper.getCsrfToken(function(error, token) {
+                        loginData._csrf = token;
+
+                        request(sails.express.server)
+                            .post("/login")
+                            .send(loginData)
+                            .expect(403)
+                            .end(function(error, result) {
+                                should.not.exist(error);
+                                should.exist(result);
+
+                                done();
+                            });
+                    });
+                });
+            });
         });
+
     });
 });
 
