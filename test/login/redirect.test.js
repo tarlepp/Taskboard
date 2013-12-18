@@ -1,8 +1,8 @@
 var request = require("supertest");
 var should = require('chai').should();
 var sailsHelper = require("./../helpers/sailsHelper");
-
 var sails;
+
 before(function(done) {
     sailsHelper.build(function(error, _sails) {
         if (error || !_sails) {
