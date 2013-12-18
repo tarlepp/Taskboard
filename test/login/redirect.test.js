@@ -1,3 +1,5 @@
+"use strict";
+
 var request = require("supertest");
 var should = require('chai').should();
 var sailsHelper = require("./../helpers/sailsHelper");
@@ -14,7 +16,6 @@ before(function(done) {
         return done();
     });
 });
-
 
 describe("not logged in user", function() {
 
