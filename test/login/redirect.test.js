@@ -36,7 +36,7 @@ describe("not logged in user", function() {
     describe("accessing invalid url", function() {
         it('should show 404 page', function (done) {
             request(sails.express.server)
-                .get('/foobar')
+                .get('/url_that_does_not_exists')
                 .expect(404)
                 .end(function(error, result) {
                     should.not.exist(error);
