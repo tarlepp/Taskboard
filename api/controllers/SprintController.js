@@ -5,6 +5,7 @@
  * @description ::  Contains logic for handling requests.
  */
 var async = require("async");
+var moment = require("moment-timezone");
 
 module.exports = {
     /**
@@ -343,7 +344,10 @@ module.exports = {
         function parseData() {
             var initTasks = 0;
             var storyTasks = 0;
+            var doneTasks = data.tasksDone.length;
             var tasksOver = [];
+
+            data.workDays = 0;
 
             // Iterate each stories and determine initial and "over" tasks
             _.each(data.stories, function(story) {
@@ -374,13 +378,9 @@ module.exports = {
             data.initTasks = initTasks;
             data.chartData = [];
 
-            var pointStart = Date.UTC(
-                data.sprint.dateStartObject().year(),
-                data.sprint.dateStartObject().month(),
-                data.sprint.dateStartObject().date()
-            );
+            data.pointStart = data.sprint.dateStartObject();
 
-            data.pointStart = pointStart;
+            var dataActual = getActualData();
 
             // Add 'Ideal task remaining' data
             data.chartData.push({
@@ -395,7 +395,7 @@ module.exports = {
                 },
                 lineWidth: 1,
                 zIndex: 10,
-                pointStart: pointStart,
+                pointStart: data.pointStart,
                 data: getIdealData()
             });
 
@@ -411,8 +411,8 @@ module.exports = {
                     radius: 3
                 },
                 zIndex: 20,
-                pointStart: pointStart,
-                data: getActualData()
+                pointStart: data.pointStart,
+                data: dataActual
             });
 
             // Add 'Done tasks' data
@@ -422,7 +422,7 @@ module.exports = {
                 type: "column",
                 color: "#47a447",
                 zIndex: 5,
-                pointStart: pointStart,
+                pointStart: data.pointStart,
                 data: getDoneData()
             });
 
@@ -433,9 +433,17 @@ module.exports = {
                 type: "column",
                 color: "#ec971f",
                 zIndex: 0,
-                pointStart: pointStart,
+                pointStart: data.pointStart,
                 data: getAddedData()
             });
+
+            data.pointActual = moment(_.last(dataActual)[0]);
+            data.workDays = data.pointStart.diff(data.pointActual, "days") + 1;
+
+            data.statistics = {
+                tasksPerDayIdeal: data.initTasks / (data.sprint.durationDays() - 1),
+                tasksPerDayActual: doneTasks / data.workDays
+            };
 
             res.json(data);
         }
