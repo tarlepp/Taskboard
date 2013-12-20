@@ -557,7 +557,7 @@ module.exports = {
             // Group task data by create date and iterate grouped data
             _.each(_.groupBy(data.tasksOver, function(task) { return task.createdAtObject().format("YYYY-MM-DD"); } ),
                 function(tasks) {
-                    var date = tasks[0].createdAtObject();
+                    var date = tasks[0].createdAtObject().add("days", 1);
 
                     output.push([Date.UTC(date.year(), date.month(), date.date()), _.size(tasks)]);
                 }
@@ -577,7 +577,7 @@ module.exports = {
             // Group task data by done date and iterate grouped data
             _.each(_.groupBy(data.tasksDone, function(task) { return task.timeEndObject().format("YYYY-MM-DD"); }),
                 function(tasks) {
-                    var date = tasks[0].timeEndObject();
+                    var date = tasks[0].timeEndObject().add("days", 1);
 
                     output.push([Date.UTC(date.year(), date.month(), date.date()), _.size(tasks)]);
                 }
