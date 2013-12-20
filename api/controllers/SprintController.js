@@ -378,30 +378,41 @@ module.exports = {
             data.initTasks = initTasks;
             data.chartData = [];
 
-            data.pointStart = data.sprint.dateStartObject();
+            var dataActualOriginal = getActualData();
+            var dataActual;
+            var dataEstimate;
 
-            var dataActual = getActualData();
+            data.pointStart = data.sprint.dateStartObject();
+            data.pointActual = moment(_.last(dataActualOriginal)[0]);
+            data.workDays = data.pointStart.diff(data.pointActual, "days") + 1;
+
+            if (data.pointActual.isAfter(moment())) {
+                dataActual = dataActualOriginal.slice(0, dataActualOriginal.length -1);
+
+                dataEstimate = dataActualOriginal.slice(dataActualOriginal.length - 2, dataActualOriginal.length);
+            } else {
+                dataActual = dataActualOriginal;
+            }
 
             // Add 'Ideal task remaining' data
             data.chartData.push({
-                name: "Ideal tasks remaining",
+                name: "Ideal",
                 nameShort: "Ideal",
                 type: "spline",
                 color: "#3276b1",
-                dashStyle: "dash",
+                dashStyle: "Dash",
                 marker: {
                     enabled: false,
                     radius: 3
                 },
                 lineWidth: 1,
                 zIndex: 10,
-                pointStart: data.pointStart,
                 data: getIdealData()
             });
 
             // Add 'Actual task remaining' data
             data.chartData.push({
-                name: "Actual tasks remaining",
+                name: "Actual",
                 nameShort: "Actual",
                 type: "spline",
                 color: "#c9302c",
@@ -411,34 +422,46 @@ module.exports = {
                     radius: 3
                 },
                 zIndex: 20,
-                pointStart: data.pointStart,
                 data: dataActual
             });
 
+            // Add 'Estimate tasks' data
+            if (dataEstimate) {
+                data.chartData.push({
+                    name: "Estimate",
+                    nameShort: "Estimate",
+                    type: "spline",
+                    color: "#c9302c",
+                    dashStyle: "ShortDot",
+                    shadow: true,
+                    marker: {
+                        enabled: false,
+                        radius: 3
+                    },
+                    zIndex: 25,
+                    data: dataEstimate
+                });
+            }
+
             // Add 'Done tasks' data
             data.chartData.push({
-                name: "Done tasks",
+                name: "Done",
                 nameShort: "Done",
                 type: "column",
                 color: "#47a447",
                 zIndex: 5,
-                pointStart: data.pointStart,
                 data: getDoneData()
             });
 
             // Add 'Added tasks' data
             data.chartData.push({
-                name: "Added tasks",
+                name: "Added",
                 nameShort: "Added",
                 type: "column",
                 color: "#ec971f",
                 zIndex: 0,
-                pointStart: data.pointStart,
                 data: getAddedData()
             });
-
-            data.pointActual = moment(_.last(dataActual)[0]);
-            data.workDays = data.pointStart.diff(data.pointActual, "days") + 1;
 
             data.statistics = {
                 tasksPerDayIdeal: data.initTasks / (data.sprint.durationDays() - 1),
