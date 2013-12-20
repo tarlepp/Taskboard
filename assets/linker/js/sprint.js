@@ -589,6 +589,7 @@ function initSprintTabChart(modal, contentId) {
             startOnTick: false,
             endOnTick: false,
             tickInterval: 3600 * 1000 * 24,
+            tickmarkPlacement: "on",
             labels: {
                 rotation: -36,
                 useHTML: true,
