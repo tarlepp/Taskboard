@@ -33,11 +33,3 @@
     font-size: 15px;
     padding: 0 4px;
 }
-
-.chartToolTipTasks table th {
-    text-align: right;
-}
-
-.chartToolTipTasks table td {
-    text-align: left;
-}

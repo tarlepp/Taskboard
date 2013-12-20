@@ -565,6 +565,7 @@ function initSprintTabBacklog(modal, contentId) {
 function initSprintTabChart(modal, contentId) {
     var context = jQuery(contentId);
     var sprintId = parseInt(context.data("sprintId"));
+    var ajaxData;
 
     // Create chart
     var chart = new Highcharts.Chart({
@@ -640,25 +641,67 @@ function initSprintTabChart(modal, contentId) {
                         + "</h1>"
                         + "<hr />"
                         + "<table>"
+                            + "<tr>"
+                                + "<td></td>"
+                                + "<th>Tasks remaining</th>"
+                            + "</tr>"
                     ;
+
+                var actualDone = 0;
+                var daysSoFar = 0;
+                var daysText = "";
 
                 // Iterate each points and add data to tooltip as a table row
-                jQuery.each(this.points, function(i, point) {
-                    tooltip += "<tr>"
-                        + "<th>"
-                        + point.series.options.nameShort
-                        + "</th>"
-                        + "<td>"
-                        + numeral(point.y).format("0[.]0")
-                        + "</th>"
+                _.each(this.points, function(point, i) {
+                    tooltip += ""
+                        + "<tr>"
+                            + "<th class='text-right'>"
+                                + point.series.options.nameShort
+                            + "</th>"
+                            + "<td>"
+                                + numeral(point.y).format("0[.]00")
+                            + "</td>"
                         + "</tr>"
                     ;
+
+                    if (point.series.options.nameShort == 'Actual') {
+                        daysSoFar = (moment(point.x).diff(ajaxData.pointStart, "days") + 1)
+                        actualDone = (ajaxData.initTasks - point.y) / daysSoFar;
+
+                        daysText = " <span class='text-muted'>(" + daysSoFar + " days)</span>";
+                    }
                 });
 
-                tooltip += "</table>"
+                tooltip += ""
+                    + "<tr>"
+                        + "<td></td>"
+                        + "<th>Tasks per day</th>"
+                    + "</tr>"
+                    + "<tr>"
+                        + "<th class='text-right'>Ideal</th>"
+                        + "<td>"
+                            + numeral(ajaxData.statistics.tasksPerDayIdeal).format("0[.]00")
+                        + "</td>"
+                    + "</tr>"
+                ;
+
+                if (actualDone) {
+                    tooltip += ""
+                        + "<tr>"
+                            + "<th class='text-right'>Actual</th>"
+                            + "<td>"
+                                + numeral(actualDone).format("0[.]00") + daysText
+                        + "</td>"
+                        + "</tr>"
+                    ;
+                }
+
+                tooltip += ""
+                    + "</table>"
                     + "</div>";
 
                 return tooltip;
+
             }
 
         },
@@ -681,6 +724,8 @@ function initSprintTabChart(modal, contentId) {
                 }
             })
             .done(function(data) {
+                ajaxData = data;
+
                 // Set main title for chart
                 chart.setTitle({
                     text: data.sprint.title + " " + moment(data.sprint.dateStart).format(userObject.momentFormatDate) + " - " + moment(data.sprint.dateEnd).format(userObject.momentFormatDate)
