@@ -650,22 +650,33 @@ function initSprintTabChart(modal, contentId) {
                 var actualDone = 0;
                 var daysSoFar = 0;
                 var daysText = "";
+                var showEstimate = true;
 
                 // Iterate each points and add data to tooltip as a table row
                 _.each(this.points, function(point, i) {
-                    tooltip += ""
-                        + "<tr>"
-                            + "<th class='text-right'>"
-                                + point.series.options.nameShort
-                            + "</th>"
-                            + "<td>"
-                                + numeral(point.y).format("0[.]00")
-                            + "</td>"
-                        + "</tr>"
-                    ;
+                    if (point.series.options.nameShort != 'Estimate'
+                        || point.series.options.nameShort == 'Estimate' && showEstimate) {
+                        tooltip += ""
+                            + "<tr>"
+                                + "<th class='text-right'>"
+                                    + point.series.options.nameShort
+                                + "</th>"
+                                + "<td>"
+                                    + numeral(point.y).format("0[.]00")
+                                + "</td>"
+                            + "</tr>"
+                        ;
+                    }
 
                     if (point.series.options.nameShort == 'Actual') {
-                        daysSoFar = (moment(point.x).diff(ajaxData.pointStart, "days") + 1)
+                        daysSoFar = (moment(point.x).diff(ajaxData.pointStart, "days") + 1);
+                        actualDone = (ajaxData.initTasks - point.y) / daysSoFar;
+
+                        daysText = " <span class='text-muted'>(" + daysSoFar + " days)</span>";
+
+                        showEstimate = false;
+                    } else if (point.series.options.nameShort == 'Estimate' && showEstimate) {
+                        daysSoFar = (moment(point.x).diff(ajaxData.pointStart, "days") + 1);
                         actualDone = (ajaxData.initTasks - point.y) / daysSoFar;
 
                         daysText = " <span class='text-muted'>(" + daysSoFar + " days)</span>";
@@ -686,9 +697,11 @@ function initSprintTabChart(modal, contentId) {
                 ;
 
                 if (actualDone) {
+                    var title = showEstimate ? "Estimate" : "Actual";
+
                     tooltip += ""
                         + "<tr>"
-                            + "<th class='text-right'>Actual</th>"
+                            + "<th class='text-right'>" + title + "</th>"
                             + "<td>"
                                 + numeral(actualDone).format("0[.]00") + daysText
                         + "</td>"
@@ -701,7 +714,6 @@ function initSprintTabChart(modal, contentId) {
                     + "</div>";
 
                 return tooltip;
-
             }
 
         },
