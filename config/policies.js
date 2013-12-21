@@ -14,11 +14,16 @@ module.exports.policies = {
      *
      * see api/policies/authenticated.js
      */
-    "*": "authenticated",
+    "*": ["flashMessage", "authenticated"],
 
     // whitelist the auth controller, this is used for login
     "auth": {
-        "*": true
+        "*": true,
+
+        // Custom actions
+        login:          ["flashMessage"],
+        logout:         ["flashMessage"],
+        authenticate:   ["flashMessage"]
     },
 
     // Project controller policies
@@ -27,19 +32,19 @@ module.exports.policies = {
         "*":        false,
 
         // Default handling for blueprints
-        find:       ["authenticated", "isAjaxOrSocket"], // Todo: try to figure out how to restrict access to all projects
-        create:     ["authenticated", "isAjaxOrSocket"], // Todo: it is really good that every user can add new project?
-        update:     ["authenticated", "isAjaxOrSocket", "hasProjectAdmin"],
-        destroy:    ["authenticated", "isAjaxOrSocket", "hasProjectAdmin"],
+        find:       ["flashMessage", "authenticated", "isAjaxOrSocket"], // Todo: try to figure out how to restrict access to all projects
+        create:     ["flashMessage", "authenticated", "isAjaxOrSocket"], // Todo: it is really good that every user can add new project?
+        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin"],
+        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin"],
 
         // Custom actions
-        add:        ["authenticated", "isAjax"],
-        edit:       ["authenticated", "isAjax", "hasProjectAccess"],
-        backlog:    ["authenticated", "isAjax", "hasProjectAccess"],
-        milestones: ["authenticated", "isAjax", "hasProjectAccess"],
-        planning:   ["authenticated", "isAjax", "hasProjectAccess"],
-        statistics: ["authenticated", "isAjax", "hasProjectAccess"],
-        sprints:    ["authenticated", "isAjax", "hasProjectAccess"]
+        add:        ["flashMessage", "authenticated", "isAjax"],
+        edit:       ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"],
+        backlog:    ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"],
+        milestones: ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"],
+        planning:   ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"],
+        statistics: ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"],
+        sprints:    ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"]
     },
 
     // Phase controller policies
@@ -48,13 +53,13 @@ module.exports.policies = {
         "*":        false,
 
         // Default handling for blueprints
-        find:       ["authenticated", "isAjaxOrSocket"],
-        create:     ["authenticated", "isAjaxOrSocket", "hasPhaseAdmin"],
-        update:     ["authenticated", "isAjaxOrSocket", "hasPhaseAdmin"],
-        destroy:    ["authenticated", "isAjaxOrSocket", "hasPhaseAdmin"],
+        find:       ["flashMessage", "authenticated", "isAjaxOrSocket"],
+        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasPhaseAdmin"],
+        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasPhaseAdmin"],
+        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasPhaseAdmin"],
 
         // Custom actions
-        edit:       ["authenticated", "isAjax", "hasProjectAdmin"]
+        edit:       ["flashMessage", "authenticated", "isAjax", "hasProjectAdmin"]
     },
 
     // Sprint controller policies
@@ -63,17 +68,17 @@ module.exports.policies = {
         "*":        false,
 
         // Default handling for blueprints
-        find:       ["authenticated", "isAjaxOrSocket", "hasSprintAccess"],
-        create:     ["authenticated", "isAjaxOrSocket", "hasSprintAdmin"],
-        update:     ["authenticated", "isAjaxOrSocket", "hasSprintAdmin"],
-        destroy:    ["authenticated", "isAjaxOrSocket", "hasSprintAdmin"],
+        find:       ["flashMessage", "authenticated", "isAjaxOrSocket", "hasSprintAccess"],
+        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasSprintAdmin"],
+        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasSprintAdmin"],
+        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasSprintAdmin"],
 
         // Custom actions
-        add:            ["authenticated", "isAjax", "hasSprintAdmin"],
-        edit:           ["authenticated", "isAjax", "hasSprintAccess"],
-        backlog:        ["authenticated", "isAjax", "hasSprintAccess"],
-        charts:         ["authenticated", "isAjax", "hasSprintAccess"],
-        chartDataTasks: ["authenticated", "isAjax", "hasSprintAccess"]
+        add:            ["flashMessage", "authenticated", "isAjax", "hasSprintAdmin"],
+        edit:           ["flashMessage", "authenticated", "isAjax", "hasSprintAccess"],
+        backlog:        ["flashMessage", "authenticated", "isAjax", "hasSprintAccess"],
+        charts:         ["flashMessage", "authenticated", "isAjax", "hasSprintAccess"],
+        chartDataTasks: ["flashMessage", "authenticated", "isAjax", "hasSprintAccess"]
     },
 
     // Milestone controller policies
@@ -82,15 +87,15 @@ module.exports.policies = {
         "*":        false,
 
         // Default handling for blueprints
-        find:       ["authenticated", "isAjaxOrSocket", "hasMilestoneAccess"],
-        create:     ["authenticated", "isAjaxOrSocket", "hasMilestoneAdmin"],
-        update:     ["authenticated", "isAjaxOrSocket", "hasMilestoneAdmin"],
-        destroy:    ["authenticated", "isAjaxOrSocket", "hasMilestoneAdmin"],
+        find:       ["flashMessage", "authenticated", "isAjaxOrSocket", "hasMilestoneAccess"],
+        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasMilestoneAdmin"],
+        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasMilestoneAdmin"],
+        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasMilestoneAdmin"],
 
         // Custom actions
-        add:        ["authenticated", "isAjax", "hasMilestoneAdmin"],
-        edit:       ["authenticated", "isAjax", "hasMilestoneAccess"],
-        stories:    ["authenticated", "isAjax", "hasMilestoneAccess"]
+        add:        ["flashMessage", "authenticated", "isAjax", "hasMilestoneAdmin"],
+        edit:       ["flashMessage", "authenticated", "isAjax", "hasMilestoneAccess"],
+        stories:    ["flashMessage", "authenticated", "isAjax", "hasMilestoneAccess"]
     },
 
     // Story controller policies
@@ -99,16 +104,16 @@ module.exports.policies = {
         "*":        false,
 
         // Default handling for blueprints
-        find:       ["authenticated", "isAjaxOrSocket", "hasStoryAccess"],
-        create:     ["authenticated", "isAjaxOrSocket", "hasStoryAdmin"],
-        update:     ["authenticated", "isAjaxOrSocket", "hasStoryAdmin"],
-        destroy:    ["authenticated", "isAjaxOrSocket", "hasStoryAdmin"],
+        find:       ["flashMessage", "authenticated", "isAjaxOrSocket", "hasStoryAccess"],
+        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasStoryAdmin"],
+        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasStoryAdmin"],
+        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasStoryAdmin"],
 
         // Custom actions
-        add:        ["authenticated", "isAjax", "hasStoryAdmin"],
-        split:      ["authenticated", "isAjax", "hasStoryAdmin"],
-        edit:       ["authenticated", "isAjax", "hasStoryAccess"],
-        tasks:      ["authenticated", "isAjax", "hasStoryAccess"]
+        add:        ["flashMessage", "authenticated", "isAjax", "hasStoryAdmin"],
+        split:      ["flashMessage", "authenticated", "isAjax", "hasStoryAdmin"],
+        edit:       ["flashMessage", "authenticated", "isAjax", "hasStoryAccess"],
+        tasks:      ["flashMessage", "authenticated", "isAjax", "hasStoryAccess"]
     },
 
     // Task controller policies
@@ -117,14 +122,14 @@ module.exports.policies = {
         "*":        false,
 
         // Default handling for blueprints
-        find:       ["authenticated", "isAjaxOrSocket", "hasTaskAccess"],
-        create:     ["authenticated", "isAjaxOrSocket", "hasTaskAdmin"],
-        update:     ["authenticated", "isAjaxOrSocket", "hasTaskAdmin"],
-        destroy:    ["authenticated", "isAjaxOrSocket", "hasTaskAdmin"],
+        find:       ["flashMessage", "authenticated", "isAjaxOrSocket", "hasTaskAccess"],
+        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasTaskAdmin"],
+        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasTaskAdmin"],
+        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasTaskAdmin"],
 
         // Custom actions
-        add:        ["authenticated", "isAjax", "hasTaskAdmin"],
-        edit:       ["authenticated", "isAjax", "hasTaskAccess"]
+        add:        ["flashMessage", "authenticated", "isAjax", "hasTaskAdmin"],
+        edit:       ["flashMessage", "authenticated", "isAjax", "hasTaskAccess"]
     },
 
     // User controller policies
@@ -133,18 +138,18 @@ module.exports.policies = {
         "*":        false,
 
         // Default handling for blueprints
-        find:       ["authenticated", "isAjaxOrSocket"],
-        create:     ["authenticated", "isAjaxOrSocket", "hasUserAdmin"],
-        update:     ["authenticated", "isAjaxOrSocket", "hasUserAdminOrItself"],
-        destroy:    ["authenticated", "isAjaxOrSocket", "hasUserAdmin"],
+        find:       ["flashMessage", "authenticated", "isAjaxOrSocket"],
+        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasUserAdmin"],
+        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasUserAdminOrItself"],
+        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasUserAdmin"],
 
         // Custom actions
-        list:           ["authenticated", "isAjax", "hasUserAdmin"],
-        add:            ["authenticated", "isAjax", "hasUserAdmin"],
-        edit:           ["authenticated", "isAjax", "hasUserAdminOrItself"],
-        history:        ["authenticated", "isAjax", "hasUserAdminOrItself"],
-        projects:       ["authenticated", "isAjax", "hasUserAdminOrItself"],
-        changePassword: ["authenticated", "isAjax", "hasUserAdminOrItself"]
+        list:           ["flashMessage", "authenticated", "isAjax", "hasUserAdmin"],
+        add:            ["flashMessage", "authenticated", "isAjax", "hasUserAdmin"],
+        edit:           ["flashMessage", "authenticated", "isAjax", "hasUserAdminOrItself"],
+        history:        ["flashMessage", "authenticated", "isAjax", "hasUserAdminOrItself"],
+        projects:       ["flashMessage", "authenticated", "isAjax", "hasUserAdminOrItself"],
+        changePassword: ["flashMessage", "authenticated", "isAjax", "hasUserAdminOrItself"]
     },
 
     // ProjectUser controller policies
@@ -153,16 +158,16 @@ module.exports.policies = {
         "*":        false,
 
         // Default handling for blueprints
-        find:       ["authenticated", "isAjaxOrSocket"],
-        create:     ["authenticated", "isAjaxOrSocket", "hasProjectAdmin"],
-        update:     ["authenticated", "isAjaxOrSocket", "hasProjectAdmin"],
-        destroy:    ["authenticated", "isAjaxOrSocket", "hasProjectAdmin"],
+        find:       ["flashMessage", "authenticated", "isAjaxOrSocket"],
+        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin"],
+        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin"],
+        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin"],
 
         // Custom actions
-        users:          ["authenticated", "isAjax", "hasProjectAccess"],
-        availableUsers: ["authenticated", "isAjaxOrSocket", "hasProjectAccess"],
-        ownProjects:    ["authenticated", "isAjaxOrSocket"],
-        getRole:        ["authenticated", "isAjaxOrSocket", "hasProjectAccess"]
+        users:          ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"],
+        availableUsers: ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAccess"],
+        ownProjects:    ["flashMessage", "authenticated", "isAjaxOrSocket"],
+        getRole:        ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAccess"]
     },
 
     // Type controller policies
@@ -171,10 +176,10 @@ module.exports.policies = {
         "*":        false,
 
         // Default handling for blueprints
-        find:       ["authenticated", "isAjaxOrSocket"],
-        create:     ["authenticated", "isAjaxOrSocket", "isAdministrator"],
-        update:     ["authenticated", "isAjaxOrSocket", "isAdministrator"],
-        destroy:    ["authenticated", "isAjaxOrSocket", "isAdministrator"]
+        find:       ["flashMessage", "authenticated", "isAjaxOrSocket"],
+        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "isAdministrator"],
+        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "isAdministrator"],
+        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "isAdministrator"]
     },
 
     // Type controller policies
@@ -183,7 +188,7 @@ module.exports.policies = {
         "*":            false,
 
         // Custom actions
-        isUnique:       ["authenticated", "isAjax"],
-        passwordCheck:  ["authenticated", "isAjax", "hasUserAdminOrItself"]
+        isUnique:       ["flashMessage", "authenticated", "isAjax"],
+        passwordCheck:  ["flashMessage", "authenticated", "isAjax", "hasUserAdminOrItself"]
     }
 };
