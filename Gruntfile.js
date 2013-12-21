@@ -89,7 +89,7 @@ module.exports = function (grunt) {
         'linker/bower_components/bootbox/bootbox.js',
         'linker/bower_components/bootstrap-wysiwyg/bootstrap-wysiwyg.js',
         'linker/bower_components/bootstrap-wysiwyg/external/jquery.hotkeys.js',
-        'linker/bower_components/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js',
+        'linker/bower_components/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js',
         'linker/bower_components/bootstrap-popover-extra-placements/source/popover-extra-placements.js',
 
         // Knockout specified libraries
