@@ -4,7 +4,9 @@
  * @module      :: Controller
  * @description :: Contains logic for handling requests.
  */
-var passport = require('passport');
+"use strict";
+
+var passport = require("passport");
 
 module.exports = {
     /**
@@ -14,20 +16,13 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     login: function(req, res) {
-        var error = req.param("error");
-
         // If user is already signed in redirect to main page
         if (req.user) {
             res.redirect("/");
         }
 
-        if (error) {
-            res.status(401);
-        }
-
         res.view({
-            layout: "layout_login",
-            error: error
+            layout: "layout_login"
         });
     },
 
@@ -52,27 +47,29 @@ module.exports = {
     authenticate: function(req, res) {
         passport.authenticate("local", function(error, user, info) {
             if ((error) || (!user)) {
-                res.redirect("/login?error=true");
+                req.flash.message("Invalid credentials", "error");
+
+                res.redirect("/login");
 
                 return;
             }
 
             req.logIn(user, function(error) {
                 if (error) {
-                    res.view({
-                        layout: "layout_login"
-                    });
+                    req.flash.message("Login fail...", "error");
+
+                    res.redirect("/login");
                 } else {
                     // Update current session id to user data
                     User.update({id: user.id}, {sessionId: req.sessionID}, function(error, users) {
                         // Oh nou error
                         if (error) {
-                            res.view({
-                                layout: "layout_login"
-                            });
+                            res.redirect("/logout");
                         } else { // Otherwise redirect user to main page
                             // Write user sign in log
                             LoggerService.userSignIn(user, req);
+
+                            req.flash.message("Successfully sign in", "success");
 
                             res.redirect("/");
                         }

@@ -8,15 +8,3 @@
 
     <input type="submit" value="Sign in" class="btn btn-lg btn-primary btn-block" />
 </form>
-
-<script>
-    document.onreadystatechange = function() {
-        var state = document.readyState;
-
-        if (state == "complete") {
-        <% if(error) { %>
-            makeMessage("Invalid credentials", "error");
-        <% } %>
-        }
-    }
-</script>
