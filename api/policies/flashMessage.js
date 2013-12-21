@@ -37,9 +37,7 @@ module.exports = function flashMessage(request, response, next) {
     var messages = session.messages || (session.messages = []);
 
     // Store current messages to res.locals so they can be accessed from views
-    response.locals({
-        flashMessages: (!messages.length) ? false : messages
-    });
+    response.locals.flashMessages = (!messages.length) ? false : messages;
 
     // Clear existing messages from session
     request.session.messages = [];
