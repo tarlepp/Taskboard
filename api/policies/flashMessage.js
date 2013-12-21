@@ -8,7 +8,9 @@
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function to call after policy is processed
  */
-module.exports = function(request, response, next) {
+module.exports = function flashMessage(request, response, next) {
+    sails.log.verbose(" POLICY - api/policies/flashMessage.js");
+
     var session = request.session;
 
     /**
@@ -41,4 +43,6 @@ module.exports = function(request, response, next) {
 
     // Clear existing messages from session
     request.session.messages = [];
+
+    next();
 };
