@@ -6,11 +6,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href='//fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,300' rel='stylesheet' type='text/css'>
+    <link href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,300" rel="stylesheet" type="text/css" />
 
-    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/lightbox.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="stylesheets/main.css" media="screen" />
 </head>
 <body>
@@ -54,6 +55,20 @@
                     a Sails application to mimic "scrum-ban" taskboard.
                 </p>
 
+                <h2>Key features</h2>
+                <ul>
+                    <li>Real-time updates on board</li>
+                    <li>Authentication via passport.js</li>
+                    <li>Project-specific customizations
+                        <ul>
+                            <li>User access</li>
+                            <li>Phases</li>
+                            <li>Sprints</li>
+                            <li>Milestones</li>
+                        </ul>
+                    </li>
+                </ul>
+
                 <h2>Demo</h2>
                 <p>
                     Maybe sails are lifted on <a href="http://wunder.sytes.net:1337/">http://wunder.sytes.net:1337/</a> or maybe not...
@@ -75,6 +90,7 @@
                 <ul>
                     <li>node.js (<a href="http://nodejs.org/">http://nodejs.org/</a>)</li>
                     <li>Sails.js (<a href="http://sailsjs.org/">http://sailsjs.org/</a>)</li>
+                    <li>Bower (<a href="https://github.com/bower/bower">https://github.com/bower/bower</a>)</li>
                 </ul>
 
                 <h2>Windows environment</h2>
@@ -86,13 +102,42 @@
             </div>
 
             <div class="article">
+                <h1>Application</h1>
+            </div>
+
+            <div class="article">
                 <h1>3rd party libraries</h1>
                 <p>
                     Taskboard uses many 3rd party library to accomplish all necessary functionality of application. Below is list of used components.
                 </p>
 
                 <ul>
-                    <li>Font Awesome (<a href="http://fontawesome.io/">http://fontawesome.io/</a>)</li>
+                    <li>Font Awesome, <a href="http://fontawesome.io/">http://fontawesome.io/</a></li>
+                    <li>JSON5 – Modern JSON, <a href="https://github.com/aseemk/json5">https://github.com/aseemk/json5</a></li>
+                    <li>Underscore.js, <a href="http://underscorejs.org/">http://underscorejs.org/</a></li>
+                    <li>Async.js, <a href="https://github.com/caolan/async">https://github.com/caolan/async</a></li>
+                    <li>Moment.js, <a href="http://momentjs.com/">http://momentjs.com/</a></li>
+                    <li>Numeral.js, <a href="http://numeraljs.com/">http://numeraljs.com/</a></li>
+                    <li>JsonDiffPatch, <a href="https://github.com/benjamine/JsonDiffPatch">https://github.com/benjamine/JsonDiffPatch</a></li>
+                    <li>jQuery, <a href="http://jquery.com/">http://jquery.com/</a></li>
+                    <li>jQuery UI, <a href="http://jqueryui.com/">http://jqueryui.com/</a></li>
+                    <li>jQuery Selectorator, <a href="https://github.com/ngs/jquery-selectorator">https://github.com/ngs/jquery-selectorator</a></li>
+                    <li>jQuery Complexify, <a href="http://danpalmer.me/jquery-complexify/">http://danpalmer.me/jquery-complexify/</a></li>
+                    <li>qTip2, <a href="http://qtip2.com/">http://qtip2.com/</a></li>
+                    <li>trunk8, <a href="http://jrvis.com/trunk8/">http://jrvis.com/trunk8/</a></li>
+                    <li>noty, <a href="http://needim.github.io/noty/">http://needim.github.io/noty/</a></li>
+                    <li>Bootstrap, <a href="http://getbootstrap.com/">http://getbootstrap.com/</a></li>
+                    <li>Bootstrap Hover Dropdown Plugin, <a href="http://cameronspear.com/demos/bootstrap-hover-dropdown/">http://cameronspear.com/demos/bootstrap-hover-dropdown/</a></li>
+                    <li>bootstrap-datepicker, <a href="https://github.com/eternicode/bootstrap-datepicker/">https://github.com/eternicode/bootstrap-datepicker/</a></li>
+                    <li>bootstrap-wysiwyg, <a href="http://mindmup.github.io/bootstrap-wysiwyg/">http://mindmup.github.io/bootstrap-wysiwyg/</a></li>
+                    <li>bootstrap-select, <a href="http://silviomoreto.github.io/bootstrap-select/3/">http://silviomoreto.github.io/bootstrap-select/3/</a></li>
+                    <li>bootstrap-popover-extra-placements, <a href="https://github.com/dkleehammer/bootstrap-popover-extra-placements">https://github.com/dkleehammer/bootstrap-popover-extra-placements</a></li>
+                    <li>Bootbox.js, <a href="http://bootboxjs.com/">http://bootboxjs.com/</a></li>
+                    <li>Knockout, <a href="http://knockoutjs.com/">http://knockoutjs.com/</a></li>
+                    <li>Knockout-bootstrap, <a href="http://billpull.github.io/knockout-bootstrap/">http://billpull.github.io/knockout-bootstrap/</a></li>
+                    <li>knockout-sortable, <a href="https://github.com/rniemeyer/knockout-sortable/">https://github.com/rniemeyer/knockout-sortable/</a></li>
+                    <li>knockout-deferred-updates, <a href="https://github.com/mbest/knockout-deferred-updates">https://github.com/mbest/knockout-deferred-updates</a></li>
+                    <li>Highcharts JS, <a href="http://www.highcharts.com/">http://www.highcharts.com/</a></li>
                 </ul>
 
                 <p>
@@ -103,15 +148,15 @@
             <div class="article">
                 <h1>Thanks</h1>
                 <p>
-                    This application wouldn't be possible to do if I didn't get <em>some</em> help. So thanks goes to people on list below.
+                    This application wouldn't be possible to do if I didn't get <em>some help and support</em> from others. So special thanks goes to people on list below.
                 </p>
                 <ul>
                     <li>My family (Tuula and Topi), thanks for support you're amazing</li>
-                    <li>My co-workers @ <a href="http://www.protacon.com/">Protacon</a>, you guys are awesome!</li>
+                    <li>My co-workers @ <a href="http://www.protacon.com/">Protacon Solutions</a>, you guys are awesome!</li>
                     <li>People at #sailsjs IRC-channel @freenode</li>
                 </ul>
                 <p>
-                    If <em>you</em> are missing from list please contact me.
+                    Please note that there are many other who helped me with this application...
                 </p>
             </div>
 
@@ -151,19 +196,19 @@
             <div class="article">
                 <h1 class="text-center" style="margin-bottom: 5px;">Screenshots of application</h1>
                 <ul class="images">
-                    <li><a href="images/shot_01.png"><img src="images/shot_01.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_02.png"><img src="images/shot_02.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_03.png"><img src="images/shot_03.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_04.png"><img src="images/shot_04.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_05.png"><img src="images/shot_05.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_06.png"><img src="images/shot_06.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_07.png"><img src="images/shot_07.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_08.png"><img src="images/shot_08.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_09.png"><img src="images/shot_09.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_10.png"><img src="images/shot_10.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_11.png"><img src="images/shot_11.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_12.png"><img src="images/shot_12.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_13.png"><img src="images/shot_13.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/shot_01.png" data-lightbox="Screenshot" title="Main view of taskboard"><img src="images/shot_01.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/shot_02.png" data-lightbox="Screenshot" title="Project planning view"><img src="images/shot_02.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/shot_03.png" data-lightbox="Screenshot" title="Sprint burndown chart of tasks"><img src="images/shot_03.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/shot_04.png" data-lightbox="Screenshot" title="Task edit modal"><img src="images/shot_04.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/shot_05.png" data-lightbox="Screenshot" title="Task history"><img src="images/shot_05.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/shot_06.png" data-lightbox="Screenshot" title="User story tasks tab"><img src="images/shot_06.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/shot_07.png" data-lightbox="Screenshot" title="Project phases edit"><img src="images/shot_07.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/shot_08.png" data-lightbox="Screenshot" title="Project edit modal"><img src="images/shot_08.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/shot_09.png" data-lightbox="Screenshot" title="Project backlog view"><img src="images/shot_09.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/shot_10.png" data-lightbox="Screenshot" title="Project sprint view"><img src="images/shot_10.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/shot_11.png" data-lightbox="Screenshot" title="Project milestone view"><img src="images/shot_11.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/shot_12.png" data-lightbox="Screenshot" title="Project user view"><img src="images/shot_12.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/shot_13.png" data-lightbox="Screenshot" title="Project statistics"><img src="images/shot_13.png" class="img-thumbnail" /></a></li>
                 </ul>
             </div>
         </div>
@@ -196,6 +241,8 @@
     </div>
 </div>
 
+<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script src="javascript/lightbox-2.6.min.js"></script>
 </body>
 </html>
