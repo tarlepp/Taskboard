@@ -102,9 +102,11 @@ password: demodemodemo</pre></blockquote>
 
                 <h2>Installation in linux</h2>
 
-                <p>Install Git, node.js, sails.js, npm and bower</p>
+                <p>
+                    Install Git, node.js, sails.js, npm and bower
+                </p>
 
-                <blockquote><pre>sudo yum install git
+                <blockquote><pre>sudo yum install git mysql mysql-server
 sudo yum -y groupinstall "Development Tools"
 wget http://nodejs.org/dist/v0.10.24/node-v0.10.24-linux-x64.tar.gz
 tar xvzf node-v0.10.24-linux-x64.tar.gz
@@ -113,9 +115,15 @@ cd /opt/.
 sudo ln -s node-v0.10.24-linux-x64 node
 sudo ln -s /opt/node/bin/npm /usr/local/bin/.
 sudo ln -s /opt/node/bin/node /usr/local/bin/.
-sudo npm -g install express supervisor
-sudo npm -g install sails
-sudo npm -g install bower</pre></blockquote>
+sudo npm -g install express supervisor bower sails</pre></blockquote>
+
+                <p>
+                    MySQL setup, note that you must change following terms; YOUR_MYSQL_DB, YOUR_MYSQL_USER, YOUR_MYSQL_PASSWORD
+                </p>
+
+                <blockquote><pre>sudo service mysql start
+sudo /usr/bin/mysql_secure_installation
+mysql -uroot -p -e "CREATE DATABASE YOUR_MYSQL_DB; GRANT ALL ON YOUR_MYSQL_DB.* TO YOUR_MYSQL_USER@'localhost' IDENTIFIED BY 'YOUR_MYSQL_PASSWORD';"</pre></blockquote>
 
                 <p>
                     Clone Taskboard repository from GitHub and install it, note that this will take a moment...
