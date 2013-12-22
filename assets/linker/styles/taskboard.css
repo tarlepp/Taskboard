@@ -129,7 +129,7 @@ div.story,
 div.task {
     position: relative;
     padding: 5px 0;
-    margin: 5px 5px 8px 0;
+    margin: 4px 4px 4px 0;
     text-align: center;
     box-shadow: 2px 2px 3px rgba(0,0,0,0.1);
     -webkit-user-select: none;
