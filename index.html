@@ -50,7 +50,7 @@
     <div class="container row">
         <div class="col-md-8">
             <div class="article">
-                <h1>What is this shit?</h1>
+                <h1>What is this?</h1>
                 <p>
                     a Sails application to mimic "scrum-ban" taskboard.
                 </p>
@@ -74,9 +74,8 @@
                     Maybe sails are lifted on <a href="http://wunder.sytes.net:1337/">http://wunder.sytes.net:1337/</a> or maybe not...
                     <br />
                     You can use following credentials for demo:
-                    <blockquote class="monospace">username: demo<br />
-                    password: demodemodemo
-                    </blockquote>
+                    <blockquote><pre>username: demo
+password: demodemodemo</pre></blockquote>
                 </p>
             </div>
 
@@ -99,6 +98,54 @@
 
                     <blockquote><a href="https://github.com/TooTallNate/node-gyp/wiki/Visual-Studio-2010-Setup">https://github.com/TooTallNate/node-gyp/wiki/Visual-Studio-2010-Setup</a></blockquote>
                 </p>
+
+                <h2>Installation in linux</h2>
+
+                <p>Install Git, node.js, sails.js and bower</p>
+
+                <blockquote><pre>sudo yum install git
+sudo yum -y groupinstall "Development Tools"
+wget http://nodejs.org/dist/v0.10.24/node-v0.10.24-linux-x64.tar.gz
+tar xvzf node-v0.10.24-linux-x64.tar.gz
+sudo mv node-v0.10.24-linux-x64 /opt/.
+cd /opt/.
+sudo ln -s node-v0.10.24-linux-x64 node
+sudo ln -s /opt/node/bin/npm /usr/local/bin/.
+sudo ln -s /opt/node/bin/node /usr/local/bin/.
+sudo npm -g install express supervisor
+sudo npm -g install sails
+sudo npm -g install bower</pre></blockquote>
+
+                <p>
+                    Clone Taskboard repository from GitHub and install it, note that this will take a moment...
+                </p>
+
+                <blockquote><pre>git clone https://github.com/tarlepp/Taskboard.git
+cd Taskboard
+npm install
+vim config/local.js</pre></blockquote>
+
+                <p>
+                    Add following lines to your local.js configuration file
+                </p>
+
+                <blockquote><pre>module.exports.adapters = {
+    'default': 'mysql',
+    mysql: {
+        module: 'sails-mysql',
+        host: 'YOUR_MYSQL_SERVER_HOSTNAME_OR_IP_ADDRESS',
+        user: 'YOUR_MYSQL_USER',
+        password: 'YOUR_MYSQL_PASSWORD',
+        database: 'YOUR_MYSQL_DB'
+    }
+};</pre></blockquote>
+
+                <p>
+                    And then you're ready to lift the sails!
+                </p>
+
+                <blockquote><pre>/opt/node/bin/sails lift</pre></blockquote>
+
             </div>
 
             <div class="article">
