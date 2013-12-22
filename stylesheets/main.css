@@ -343,3 +343,15 @@ ul.images li {
 ul.images li a:hover img {
     box-shadow: 1px 1px 15px rgba(51, 51, 51, 0.4);
 }
+
+pre.prettyprint {
+    border: 1px solid #ccc;
+    margin-bottom: 0;
+    padding: 5px 0 5px 15px;
+}
+
+li.L0, li.L1, li.L2, li.L3, li.L4, li.L5, li.L6, li.L7, li.L8, li.L9
+{
+    color: #555;
+    list-style-type: decimal;
+}
