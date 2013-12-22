@@ -1,7 +1,9 @@
 # taskboard
 ### a Sails application to mimic "scrum-ban" taskboard.
 
-This needs a lots of work...
+![ScreenShot](http://tarlepp.github.io/Taskboard/images/shot_01.png)
+
+More information @ http://tarlepp.github.io/Taskboard/
 
 ### Demo
 
@@ -13,72 +15,4 @@ username: demo
 password: demodemodemo
 ```
 
-### What are we using to do this all:
-- Sails.js (http://sailsjs.org/)
-- jQuery (http://www.jquery.com/)
-- jQueryUI (http://www.jqueryui.com/)
-- jQuery Selectorator (https://github.com/ngs/jquery-selectorator)
-- qTip2 (http://craigsworks.com/projects/qtip2/)
-- noty (http://needim.github.com/noty/)
-- Async.js (https://github.com/caolan/async)
-- Twitter Bootstrap (https://github.com/twitter/bootstrap/)
-- Twitter Bootstrap Hover Dropdown Plugin (https://github.com/CWSpear/twitter-bootstrap-hover-dropdown)
-- bootstrap-datepicker (https://github.com/eternicode/bootstrap-datepicker/)
-- bootstrap-wysiwyg (http://mindmup.github.io/bootstrap-wysiwyg/)
-- bootstrap-select (https://github.com/silviomoreto/bootstrap-select)
-- bootstrap-popover-extra-placements (https://github.com/dkleehammer/bootstrap-popover-extra-placements)
-- Bootbox.js (http://bootboxjs.com/)
-- Knockout (http://knockoutjs.com/)
-- Knockout-Bootstrap (http://billpull.github.io/knockout-bootstrap/)
-- knockout-sortable (https://github.com/rniemeyer/knockout-sortable/)
-- Deferred Updates plugin for Knockout (https://github.com/mbest/knockout-deferred-updates)
-- Moment.js (http://momentjs.com/)
-- trunk8 (http://jrvis.com/trunk8/)
-- JSON5 – Modern JSON (http://json5.org/)
-- Font Awesome (http://fortawesome.github.io/Font-Awesome/)
-- JsonDiffPatch (https://github.com/benjamine/JsonDiffPatch)
-- <em>This list will be updated</em>
-
-### Installation
-Todo, write this... Really do this...
-
-#### Requirements
-- node.js (http://nodejs.org/)
-- Sails.js (http://sailsjs.org/)
-
-#### Windows environment
-If you have problems with <em>npm install</em> make sure that you have installed all required software. More info at:
-
-https://github.com/TooTallNate/node-gyp/wiki/Visual-Studio-2010-Setup
-
-## Application
-
-#### User profiles
-At a basic level taskboard users have basically following roles in projects.
-- Manager (primary or normal)
-- User (viewer or normal)
-
-Above there users there is Taskboard administrator users.
-
-##### Administrator
-- Full access to all projects
-- Taskboard settings
-- Users
-
-##### Manager (Primary)
-- Project admin
-
-##### Manager (normal)
-- Project user admin
-- Phases admin
-- Milestone admin
-- Sprint admin
-
-##### User (normal)
-- Story admin
-- Task admin
-- Task move at board
-
-##### User (viewer)
-- No rights to modify any data, only view
 
