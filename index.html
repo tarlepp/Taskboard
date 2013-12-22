@@ -57,7 +57,7 @@
 
                 <h2>Key features</h2>
                 <ul>
-                    <li>Real-time updates on board</li>
+                    <li>Real-time updates on board via websockets</li>
                     <li>Authentication via passport.js</li>
                     <li>Project-specific customizations
                         <ul>
@@ -102,7 +102,270 @@
             </div>
 
             <div class="article">
-                <h1>Application</h1>
+                <h1>User roles</h1>
+                <p>
+                    Taskboard users have different roles in projects which will determine what user can do within project. User roles are following:
+                </p>
+                    <ul>
+                        <li>Administrator
+                            <ul>
+                                <li>No limits to specified project, full access to all projects</li>
+                                <li>Taskboard global settings</li>
+                                <li>User management</li>
+                            </ul>
+                        </li>
+                        <li>Project manager (Primary)
+                            <ul>
+                                <li>Person who has created the project</li>
+                                <li>Full access to created project</li>
+                            </ul>
+                        </li>
+                        <li>Project manager (Normal)
+                            <ul>
+                                <li>Like primary manager but limited rights</li>
+                            </ul>
+                        </li>
+                        <li>Project user (Normal)
+                            <ul>
+                                <li>story/task admin rights</li>
+                            </ul>
+                        </li>
+                        <li>Project user (Viewer)
+                            <ul>
+                                <li>Just view access to specified project</li>
+                                <li>No rights to make any modifications at all</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                <h2>User permissions in Taskboard</h2>
+
+                <table class="table table-striped table-bordered table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Action</th>
+                            <th class="text-center">Administrator</th>
+                            <th class="text-center">Manager (Primary)</th>
+                            <th class="text-center">Manager (Normal)</th>
+                            <th class="text-center">User (Normal)</th>
+                            <th class="text-center">User (Viewer)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-medium">
+                        <tr>
+                            <th colspan="100%" class="text-center">Project</th>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">Add</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">Edit</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">Delete</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">View</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                        </tr>
+                        <tr>
+                            <th colspan="100%" class="text-center">Phases</th>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">Add</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">Edit</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">Delete</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">View</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                        </tr>
+                        <tr>
+                            <th colspan="100%" class="text-center">Milestones</th>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">Add</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">Edit</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">Delete</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">View</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                        </tr>
+                        <tr>
+                            <th colspan="100%" class="text-center">Sprints</th>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">Add</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">Edit</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">Delete</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">View</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                        </tr>
+                        <tr>
+                            <th colspan="100%" class="text-center">Stories</th>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">Add</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"></td>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">Edit</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"></td>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">Delete</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"></td>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">View</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                        </tr>
+                        <tr>
+                            <th colspan="100%" class="text-center">Tasks</th>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">Add</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"></td>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">Edit</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"></td>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">Delete</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"></td>
+                        </tr>
+                        <tr class="text-medium">
+                            <th class="text-right">View</th>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
             </div>
 
             <div class="article">

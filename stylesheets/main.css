@@ -54,13 +54,21 @@ h3 {
 
 .table th,
 .table td {
-    font-size: 16px;
     vertical-align: middle;
     padding: 4px;
 }
 
 .table th {
     font-weight: normal;
+}
+
+.table-condensed > thead > tr.text-medium > th,
+.table-condensed > tbody > tr.text-medium > th,
+.table-condensed > tfoot > tr.text-medium > th,
+.table-condensed > thead > tr.text-medium > td,
+.table-condensed > tbody > tr.text-medium > td,
+.table-condensed > tfoot > tr.text-medium > td {
+    padding: 2px 5px;
 }
 
 .table thead > tr > th {
