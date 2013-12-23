@@ -93,10 +93,10 @@ password: demodemodemo</pre></blockquote>
 
                 <h2>Basic requirements</h2>
                 <ul>
-                    <li>node.js (<a href="http://nodejs.org/">http://nodejs.org/</a>)</li>
-                    <li>Sails.js (<a href="http://sailsjs.org/">http://sailsjs.org/</a>)</li>
-                    <li>Bower (<a href="https://github.com/bower/bower">https://github.com/bower/bower</a>)</li>
-                    <li>MySQL (<a href="http://www.mysql.com/">http://www.mysql.com/</a>)</li>
+                    <li>node.js, <a href="http://nodejs.org/">http://nodejs.org/</a></li>
+                    <li>Sails.js, <a href="http://sailsjs.org/">http://sailsjs.org/</a></li>
+                    <li>Bower, <a href="https://github.com/bower/bower">https://github.com/bower/bower</a></li>
+                    <li>MySQL, <a href="http://www.mysql.com/">http://www.mysql.com/</a></li>
                 </ul>
 
                 <h2>Windows environment</h2>
@@ -107,6 +107,10 @@ password: demodemodemo</pre></blockquote>
                 </p>
 
                 <h2>Installation in linux</h2>
+
+                <p>
+                    Below is basic installation guide for Taskboard application. Note that you gotta have <em>root</em> access to your linux box to make install process.
+                </p>
 
                 <p>
                     Install Git, MySQL, node.js, sails.js, npm and bower
@@ -125,7 +129,8 @@ sudo ln -s /opt/node/bin/node /usr/local/bin/.
 sudo npm -g install express supervisor bower sails</pre></blockquote>
 
                 <p>
-                    MySQL setup, note that you must change following terms; YOUR_MYSQL_DB, YOUR_MYSQL_USER, YOUR_MYSQL_PASSWORD
+                    MySQL setup<br />
+                    <strong>Note:</strong> you must change following terms: <code>YOUR_MYSQL_DB</code>, <code>YOUR_MYSQL_USER</code>, <code>YOUR_MYSQL_PASSWORD</code>
                 </p>
 
                 <blockquote><pre class="prettyprint linenums">
@@ -134,7 +139,9 @@ sudo /usr/bin/mysql_secure_installation
 mysql -uroot -p -e "CREATE DATABASE YOUR_MYSQL_DB; GRANT ALL ON YOUR_MYSQL_DB.* TO YOUR_MYSQL_USER@'localhost' IDENTIFIED BY 'YOUR_MYSQL_PASSWORD';"</pre></blockquote>
 
                 <p>
-                    Clone Taskboard repository from GitHub and install it, note that this will take a moment...
+                    Clone Taskboard repository from GitHub, install it and create configuration<br />
+                    <strong>Note:</strong> Remember to change your installation directory, change it before running git clone<br />
+                    <strong>Note:</strong> <em>npm install</em> command will take a moment or a two to process.
                 </p>
 
                 <blockquote><pre class="prettyprint linenums">
@@ -144,7 +151,8 @@ npm install
 vim config/local.js</pre></blockquote>
 
                 <p>
-                    Add following lines to your local.js configuration file and make necessary modifications
+                    Add following lines to your local.js configuration file and make necessary modifications.<br />
+                    <strong>Note:</strong> Use same information that you used in MySQL setup section.
                 </p>
 
                 <blockquote><pre class="prettyprint linenums">
@@ -160,13 +168,14 @@ module.exports.adapters = {
 };</pre></blockquote>
 
                 <p>
-                    And then you're ready to lift the sails!
+                    And then you're ready to lift the sails!<br />
+                    <strong>Note: </strong> Remember run this within your Taskboard installation directory.
                 </p>
 
                 <blockquote><pre class="prettyprint linenums">/opt/node/bin/sails lift</pre></blockquote>
 
                 <p>
-                    Note that application will create admin user and demonstration project if database is empty. Admin user credentials are following:
+                    Taskboard application will create admin user and demonstration project automatic if database is empty. Admin user credentials are following:
                 </p>
 
                 <blockquote><pre>username: admin
@@ -214,7 +223,7 @@ password: taskboardisawesome</pre></blockquote>
                         </li>
                     </ul>
 
-                <h2>User permissions in Taskboard</h2>
+                <h1>User permissions in Taskboard</h1>
 
                 <table class="table table-bordered table-hover table-condensed">
                     <thead>
@@ -228,7 +237,7 @@ password: taskboardisawesome</pre></blockquote>
                         </tr>
                     </thead>
                     <tbody class="text-medium">
-                        <tr class="warning">
+                        <tr class="text-medium warning">
                             <th colspan="100%" class="text-center">
                                 <span class="col-md-offset-2 col-md-10">
                                     Project
@@ -237,37 +246,37 @@ password: taskboardisawesome</pre></blockquote>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">Add</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">Edit</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                             <td class="text-center"></td>
                             <td class="text-center"></td>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">Delete</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                             <td class="text-center"></td>
                             <td class="text-center"></td>
                             <td class="text-center"></td>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">View</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                         </tr>
-                        <tr class="warning">
+                        <tr class="text-medium warning">
                             <th colspan="100%" class="text-center">
                                 <span class="col-md-offset-2 col-md-10">
                                     Phases
@@ -276,37 +285,37 @@ password: taskboardisawesome</pre></blockquote>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">Add</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                             <td class="text-center"></td>
                             <td class="text-center"></td>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">Edit</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                             <td class="text-center"></td>
                             <td class="text-center"></td>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">Delete</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                             <td class="text-center"></td>
                             <td class="text-center"></td>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">View</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                         </tr>
-                        <tr class="warning">
+                        <tr class="text-medium warning">
                             <th colspan="100%" class="text-center">
                                 <span class="col-md-offset-2 col-md-10">
                                     Milestones
@@ -315,37 +324,37 @@ password: taskboardisawesome</pre></blockquote>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">Add</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                             <td class="text-center"></td>
                             <td class="text-center"></td>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">Edit</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                             <td class="text-center"></td>
                             <td class="text-center"></td>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">Delete</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                             <td class="text-center"></td>
                             <td class="text-center"></td>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">View</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                         </tr>
-                        <tr class="warning">
+                        <tr class="text-medium warning">
                             <th colspan="100%" class="text-center">
                                 <span class="col-md-offset-2 col-md-10">
                                     Sprints
@@ -354,37 +363,37 @@ password: taskboardisawesome</pre></blockquote>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">Add</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                             <td class="text-center"></td>
                             <td class="text-center"></td>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">Edit</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                             <td class="text-center"></td>
                             <td class="text-center"></td>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">Delete</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                             <td class="text-center"></td>
                             <td class="text-center"></td>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">View</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                         </tr>
-                        <tr class="warning">
+                        <tr class="text-medium warning">
                             <th colspan="100%" class="text-center">
                                 <span class="col-md-offset-2 col-md-10">
                                     Stories
@@ -393,37 +402,37 @@ password: taskboardisawesome</pre></blockquote>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">Add</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                             <td class="text-center"></td>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">Edit</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                             <td class="text-center"></td>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">Delete</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                             <td class="text-center"></td>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">View</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                         </tr>
-                        <tr class="warning">
+                        <tr class="text-medium warning">
                             <th colspan="100%" class="text-center">
                                 <span class="col-md-offset-2 col-md-10">
                                     Tasks
@@ -432,40 +441,38 @@ password: taskboardisawesome</pre></blockquote>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">Add</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                             <td class="text-center"></td>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">Edit</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                             <td class="text-center"></td>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">Delete</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                             <td class="text-center"></td>
                         </tr>
                         <tr class="text-medium">
                             <th class="text-right">View</th>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
-                            <td class="text-center"><i class="fa fa-times"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
+                            <td class="text-center"><i class="fa fa-times text-success"></i></td>
                         </tr>
                     </tbody>
                 </table>
-
-
             </div>
 
             <div class="article">
@@ -481,6 +488,7 @@ password: taskboardisawesome</pre></blockquote>
                     <li>Async.js, <a href="https://github.com/caolan/async">https://github.com/caolan/async</a></li>
                     <li>Moment.js, <a href="http://momentjs.com/">http://momentjs.com/</a></li>
                     <li>Numeral.js, <a href="http://numeraljs.com/">http://numeraljs.com/</a></li>
+                    <li>cookie.js, <a href="https://github.com/js-coder/cookie.js">https://github.com/js-coder/cookie.js</a></li>
                     <li>JsonDiffPatch, <a href="https://github.com/benjamine/JsonDiffPatch">https://github.com/benjamine/JsonDiffPatch</a></li>
                     <li>jQuery, <a href="http://jquery.com/">http://jquery.com/</a></li>
                     <li>jQuery UI, <a href="http://jqueryui.com/">http://jqueryui.com/</a></li>

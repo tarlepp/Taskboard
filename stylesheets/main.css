@@ -307,8 +307,8 @@ div.bootstrap-select.open .dropdown-toggle.btn-default {
 }
 
 .article blockquote {
-    margin: 5px 10px;
-    padding: 0 10px;
+    margin: 5px 0 10px 10px;
+    padding: 0 0 0 10px;
 }
 
 .col-md-8 {
@@ -346,12 +346,21 @@ ul.images li a:hover img {
 
 pre.prettyprint {
     border: 1px solid #ccc;
-    margin-bottom: 0;
+    margin: 0;
     padding: 5px 0 5px 15px;
 }
 
-li.L0, li.L1, li.L2, li.L3, li.L4, li.L5, li.L6, li.L7, li.L8, li.L9
-{
+li.L0, li.L1, li.L2, li.L3, li.L4, li.L5, li.L6, li.L7, li.L8, li.L9 {
     color: #555;
     list-style-type: decimal;
+    background-color: #F5F5F5;
+}
+
+code {
+    font-size: 75%;
+}
+
+.table {
+    margin-top: 10px;
+    margin-bottom: 0;
 }
