@@ -19,19 +19,18 @@
     "moment": "~2.4.0",
     "moment-timezone": "~0.0.3",
     "bower": "~1.2.8",
-    "numeral": "~1.5.2",
-      "supertest": "~0.8.0",
-      "mocha": "~1.13.0",
-      "should": "~2.0.1",
-      "chai": "~1.8.1"
+    "numeral": "~1.5.2"
   },
   "devDependencies": {
-
+    "supertest": "~0.8.0",
+    "mocha": "~1.13.0",
+    "should": "~2.0.1",
+    "chai": "~1.8.1"
   },
   "scripts": {
     "start": "node app.js",
     "debug": "node debug app.js",
-    "test": "mocha",
+    "test": "./node_modules/mocha/bin/mocha",
     "postinstall": "./node_modules/bower/bin/bower install"
   },
   "main": "app.js",
