@@ -1,0 +1,13 @@
+language: node_js
+
+node_js:
+  - "0.10"
+  - "0.11"
+
+notifications:
+  email: true
+
+# whitelisted branches
+branches:
+  only:
+    - master
