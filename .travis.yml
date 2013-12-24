@@ -5,6 +5,7 @@ node_js:
 
 before_script:
  - npm install -g sails
+ - sails lift
 #  - bower install
 
 notifications:
