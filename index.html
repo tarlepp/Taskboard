@@ -68,6 +68,13 @@
                             <li>Milestones</li>
                         </ul>
                     </li>
+                    <li>Automatic burndown charts</li>
+                    <li>Localizations
+                        <ul>
+                            <li>Texts</li>
+                            <li>Time and number formats</li>
+                        </ul>
+                    </li>
                 </ul>
 
                 <h2>Demo</h2>
@@ -81,7 +88,12 @@
 password: demodemodemo</pre></blockquote>
 
                 <p>
-                    Note that application allows one sign in at same time, so if you're kicked out from Taskboard the reason is probably that someone else is logged in using the same username.
+                    <strong>Note</strong> that application allows one sign in at same time, so if you're kicked out from Taskboard the reason is probably that someone else is logged in using the same username.
+                </p>
+
+                <h2>Notes</h2>
+                <p>
+                    Application is in under heavy development, so there might be some bugs and unfinished functionalities.
                 </p>
             </div>
 
@@ -151,8 +163,9 @@ npm install
 vim config/local.js</pre></blockquote>
 
                 <p>
-                    Add following lines to your local.js configuration file and make necessary modifications.<br />
-                    <strong>Note:</strong> Use same information that you used in MySQL setup section.
+                    Add following lines to your <code>local.js</code>code> configuration file and make necessary modifications.<br />
+                    <strong>Note:</strong> Use same information that you used in MySQL setup section.<br />
+                    <strong>Note:</strong> You can override any config values in your <code>local.js</code> file
                 </p>
 
                 <blockquote><pre class="prettyprint linenums">
@@ -175,14 +188,14 @@ module.exports.adapters = {
                 <blockquote><pre class="prettyprint linenums">/opt/node/bin/sails lift</pre></blockquote>
 
                 <p>
-                    Taskboard application will create admin user and demonstration project automatic if database is empty. Admin user credentials are following:
+                    Taskboard application will create admin user and demonstration project automatic if database is empty. Default admin user credentials are following:
                 </p>
 
                 <blockquote><pre>username: admin
 password: taskboardisawesome</pre></blockquote>
 
                 <p>
-                    <strong>Note:</strong> remember to change admin user password.
+                    <strong>Note:</strong> remember to change admin user password and other info.
                 </p>
             </div>
 
