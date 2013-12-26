@@ -9,9 +9,6 @@ services:
 before_script:
   - mysql -e 'create database myapp_test;'
   - cp ./test/config/local.js ./config/local.js
-# - npm install -g mocha
-# - sails lift
-# - bower install
 
 notifications:
   email: true
