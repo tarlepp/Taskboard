@@ -3,10 +3,15 @@ language: node_js
 node_js:
   - "0.10"
 
+services:
+  - mysql
+
 before_script:
- - npm install -g mocha
+  - mysql -e 'create database myapp_test;'
+  - cp ./test/config/local.js ./config/local.js
+# - npm install -g mocha
 # - sails lift
-#  - bower install
+# - bower install
 
 notifications:
   email: true
