@@ -128,7 +128,12 @@ password: demodemodemo</pre></blockquote>
                     Install Git, MySQL, node.js, sails.js, npm and bower
                 </p>
 
-                <blockquote><pre class="prettyprint linenums">
+                <blockquote>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h2>CentOS / Fedora</h2>
+
+<pre class="prettyprint linenums">
 sudo yum install git mysql mysql-server
 sudo yum -y groupinstall "Development Tools"
 wget http://nodejs.org/dist/v0.10.24/node-v0.10.24-linux-x64.tar.gz
@@ -138,29 +143,53 @@ cd /opt/.
 sudo ln -s node-v0.10.24-linux-x64 node
 sudo ln -s /opt/node/bin/npm /usr/local/bin/.
 sudo ln -s /opt/node/bin/node /usr/local/bin/.
-sudo npm -g install express supervisor bower sails</pre></blockquote>
+sudo npm install -g npm
+sudo npm install -g express supervisor bower sails
+</pre>
+                        </div>
+                        <div class="col-md-6">
+                            <h2>Debian / Ubuntu</h2>
+<pre class="prettyprint linenums">
+sudo apt-get install git mysql-server
+sudo apt-get install python-software-properties python g++ make
+sudo add-apt-repository ppa:chris-lea/node.js
+sudo apt-get update
+sudo apt-get install nodejs
+sudo npm install -g npm
+sudo npm install -g express supervisor bower sails
+</pre>
+                        </div>
+                    </div>
+                </blockquote>
 
                 <p>
                     MySQL setup<br />
                     <strong>Note:</strong> you must change following terms: <code>YOUR_MYSQL_DB</code>, <code>YOUR_MYSQL_USER</code>, <code>YOUR_MYSQL_PASSWORD</code>
                 </p>
 
-                <blockquote><pre class="prettyprint linenums">
+<blockquote><pre class="prettyprint linenums">
 sudo service mysql start
 sudo /usr/bin/mysql_secure_installation
-mysql -uroot -p -e "CREATE DATABASE YOUR_MYSQL_DB; GRANT ALL ON YOUR_MYSQL_DB.* TO YOUR_MYSQL_USER@'localhost' IDENTIFIED BY 'YOUR_MYSQL_PASSWORD';"</pre></blockquote>
+mysql -uroot -p -e "CREATE DATABASE YOUR_MYSQL_DB; GRANT ALL ON YOUR_MYSQL_DB.* TO YOUR_MYSQL_USER@'localhost' IDENTIFIED BY 'YOUR_MYSQL_PASSWORD';"
+</pre></blockquote>
 
                 <p>
                     Clone Taskboard repository from GitHub, install it and create configuration<br />
-                    <strong>Note:</strong> Remember to change your installation directory, change it before running git clone<br />
+                    <strong>Note:</strong> Remember to change your main node application installation directory <code>/var/node</code><br />
+                    <strong>Note:</strong> Change <code>YOUR_USER_GROUP</code> to desired user group in your Linux installation.<br />
                     <strong>Note:</strong> <em>npm install</em> command will take a moment or a two to process.
                 </p>
 
-                <blockquote><pre class="prettyprint linenums">
+<blockquote><pre class="prettyprint linenums">
+sudo mkdir /var/node
+sudo chgrp -R YOUR_USER_GROUP /var/node/
+sudo chmod -R g+w /var/node/
+cd /var/node
 git clone https://github.com/tarlepp/Taskboard.git
 cd Taskboard
 npm install
-vim config/local.js</pre></blockquote>
+vim config/local.js
+</pre></blockquote>
 
                 <p>
                     Add following lines to your <code>local.js</code> configuration file and make necessary modifications.<br />
@@ -168,7 +197,7 @@ vim config/local.js</pre></blockquote>
                     <strong>Note:</strong> You can override any config values in your <code>local.js</code> file
                 </p>
 
-                <blockquote><pre class="prettyprint linenums">
+<blockquote><pre class="prettyprint linenums">
 module.exports.adapters = {
     'default': 'mysql',
     mysql: {
@@ -178,21 +207,28 @@ module.exports.adapters = {
         password: 'YOUR_MYSQL_PASSWORD',
         database: 'YOUR_MYSQL_DB'
     }
-};</pre></blockquote>
+};
+</pre></blockquote>
 
                 <p>
                     And then you're ready to lift the sails!<br />
-                    <strong>Note: </strong> Remember run this within your Taskboard installation directory.
+                    <strong>Note: </strong> Remember run this within your Taskboard installation directory.<br />
+                    <strong>Note: </strong> With CentOS use command <code>/opt/node/bin/sails lift</code>
                 </p>
 
-                <blockquote><pre class="prettyprint linenums">/opt/node/bin/sails lift</pre></blockquote>
+<blockquote><pre class="prettyprint linenums">
+cd /var/node/Taskboard/
+sails lift
+</pre></blockquote>
 
                 <p>
                     Taskboard application will create admin user and demonstration project automatic if database is empty. Default admin user credentials are following:
                 </p>
 
-                <blockquote><pre>username: admin
-password: taskboardisawesome</pre></blockquote>
+<blockquote><pre>
+username: admin
+password: taskboardisawesome
+</pre></blockquote>
 
                 <p>
                     <strong>Note:</strong> remember to change admin user password and other info.
