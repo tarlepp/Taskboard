@@ -186,6 +186,10 @@ small,
     line-height: 20px;
 }
 
+.navbar .nav > li.build a {
+    padding-top: 13px;
+}
+
 #navigation-static li.navbar-icon a {
     padding: 15px 7px;
     font-size: 20px;
