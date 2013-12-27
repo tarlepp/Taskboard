@@ -46,7 +46,7 @@ module.exports = {
         description: {
             type:       'text',
             required:   true,
-            minLength:  10
+            minLength:  5
         },
         estimate: {
             type:       'integer',
