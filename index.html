@@ -59,7 +59,11 @@
                 <h2>Key features</h2>
                 <ul>
                     <li>Real-time updates on board via websockets</li>
-                    <li>Authentication via passport.js</li>
+                    <li>Authentication via passport.js, supported strategies
+                        <ul>
+                            <li>Local (username + password)</li>
+                        </ul>
+                    </li>
                     <li>Project-specific customizations
                         <ul>
                             <li>User access</li>
@@ -213,7 +217,7 @@ module.exports.adapters = {
                 <p>
                     And then you're ready to lift the sails!<br />
                     <strong>Note: </strong> Remember run this within your Taskboard installation directory.<br />
-                    <strong>Note: </strong> With CentOS use command <code>/opt/node/bin/sails lift</code>
+                    <strong>Note: </strong> With CentOS / Fedora use command <code>/opt/node/bin/sails lift</code>
                 </p>
 
 <blockquote><pre class="prettyprint linenums">
@@ -534,6 +538,9 @@ password: taskboardisawesome
                     <li>Font Awesome, <a href="http://fontawesome.io/">http://fontawesome.io/</a></li>
                     <li>JSON5 – Modern JSON, <a href="https://github.com/aseemk/json5">https://github.com/aseemk/json5</a></li>
                     <li>Underscore.js, <a href="http://underscorejs.org/">http://underscorejs.org/</a></li>
+                    <li>node.bcrypt.js, <a href="https://github.com/ncb000gt/node.bcrypt.js">https://github.com/ncb000gt/node.bcrypt.js</a></li>
+                    <li>Node.js Gravatar library, <a href="https://github.com/emerleite/node-gravatar">https://github.com/emerleite/node-gravatar</a></li>
+                    <li>Passport, <a href="http://passportjs.org/">http://passportjs.org/</a></li>
                     <li>Async.js, <a href="https://github.com/caolan/async">https://github.com/caolan/async</a></li>
                     <li>Moment.js, <a href="http://momentjs.com/">http://momentjs.com/</a></li>
                     <li>Numeral.js, <a href="http://numeraljs.com/">http://numeraljs.com/</a></li>
