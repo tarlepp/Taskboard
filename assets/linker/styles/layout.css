@@ -355,7 +355,7 @@ ul, ol {
 
 .dropdown-menu > li.selected > a,
 .dropdown-menu > li > a:focus {
-    background-color: rgba(66, 139, 202, .75);
+    background-color: #428bca;
 }
 
 .popover.actionMenu .actionMenu-actions > li:hover a,
