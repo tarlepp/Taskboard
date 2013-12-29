@@ -10,11 +10,12 @@ var async = require("async");
  * specified callback with simple true/false value but optionally method calls callback with user
  * role value in specified project, Possible roles are following:
  *
- *  -3  = Administrator
- *  -2  = Project manager primary
- *  -1  = Project manager (contributor)
- *   0  = Viewer
- *   1  = User
+ *  -3      = Administrator
+ *  -2      = Project manager primary
+ *  -1      = Project manager (contributor)
+ *   0      = Viewer
+ *   1      = User
+ *   false  = No access
  *
  * @param   {sails.req.user}    user            Signed in user object
  * @param   {Number}            projectId       Project id to check
@@ -117,7 +118,7 @@ exports.hasProjectAccess = function(user, projectId, next, returnRole) {
                     output = -3;
                 } else if (results.primary) {
                     output = -2;
-                } else if (results.contributor.role) {
+                } else if (results.contributor) {
                     output = results.contributor.role;
                 } else {
                     output = false;
