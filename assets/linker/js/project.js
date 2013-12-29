@@ -144,13 +144,7 @@ jQuery(document).ready(function() {
                     label: "Delete",
                     className: "btn-danger pull-right",
                     callback: function() {
-                        // todo implement this
-                        console.log("TODO TODO TODO: Implement project delete");
-
-                        // Trigger specified event
-                        handleEventTrigger(trigger);
-
-                        return false;
+                        body.trigger("ProjectDelete", [projectId, {trigger: "projectEdit", parameters: [projectId, trigger, parameters]}]);
                     }
                 }
             ];
@@ -600,6 +594,53 @@ jQuery(document).ready(function() {
 
         // Open bootbox prompt modal
         prompt.modal("show");
+    });
+
+    /**
+     * This event handles project delete functionality.
+     *
+     * @param   {jQuery.Event}          event       Event object
+     * @param   {Number}                projectId   Project id
+     * @param   {sails.helper.trigger}  [trigger]   Trigger to process after actions
+     */
+    body.on("projectDelete", function(event, projectId, trigger) {
+        trigger = trigger || false;
+
+        // Open confirm dialog
+        bootbox.confirm({
+            title: "danger - danger - danger",
+            message: "Are you sure of project delete? This is major delete, you absolute sure of this?",
+            buttons: {
+                cancel: {
+                    className: "btn-default pull-left"
+                },
+                confirm: {
+                    label: "Delete",
+                    className: "btn-danger pull-right"
+                }
+            },
+            callback: function(result) {
+                if (result) {
+                    // Todo do we need some user role validation here?
+
+                    // Delete sprint data
+                    socket.delete("/Project/" + projectId, {_csrf: getCsrfToken()}, function(/** sails.json.project */project) {
+                        if (handleSocketError(project)) {
+                            makeMessage("Project deleted successfully.", "success", {});
+
+                            if (trigger) {
+                                handleEventTrigger(trigger, "projectEdit");
+                            } else {
+                                // Todo add flahs mesage here
+                                location.reload();
+                            }
+                        }
+                    });
+                } else {
+                    handleEventTrigger(trigger);
+                }
+            }
+        });
     });
 });
 
