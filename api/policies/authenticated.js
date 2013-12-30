@@ -19,6 +19,8 @@ module.exports = function(request, response, next) {
          * Note that this doesn't work on socket request, have to solve this someway later...
          */
         if (request.sessionID && request.sessionID !== request.user.sessionId) {
+            request.flash.message("Someone else have been signed in with same credentials.", "error");
+
             return response.redirect("/logout");
         }
 

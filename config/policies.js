@@ -22,8 +22,8 @@ module.exports.policies = {
 
         // Custom actions
         login:          ["flashMessage"],
-        logout:         ["flashMessage"],
-        authenticate:   ["flashMessage"]
+        logout:         [true],
+        authenticate:   [true]
     },
 
     // Project controller policies
