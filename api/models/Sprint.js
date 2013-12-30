@@ -91,19 +91,16 @@ module.exports = {
             .findOne(terms)
             .done(function(error, sprint) {
                 HistoryService.remove('Sprint', sprint.id);
-            });
 
-        // Update all stories sprint id to 0 which belongs to delete sprint
-        Story.update(
-            terms,
-            {sprintId: 0},
-            function(err, stories) {
-                if (err) {
-                    cb(err);
-                } else {
-                    cb();
-                }
-            }
-        );
+                // Update all stories sprint id to 0 which belongs to delete sprint
+                Story
+                    .update(
+                        {sprintId: sprint.id},
+                        {sprintId: 0},
+                        function(error, stories) {
+                            cb();
+                        }
+                    );
+            });
     }
 };
