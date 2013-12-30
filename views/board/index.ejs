@@ -33,7 +33,7 @@
         </p>
     </div>
 
-    <div id="board" data-bind="if: $root.sprint()">
+    <div id="board" data-bind="if: $root.sprint() && $root.phases().length">
         <table class="table table-bordered">
             <thead>
                 <tr id="boardHeader">
