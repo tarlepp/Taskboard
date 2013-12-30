@@ -29,7 +29,6 @@ module.exports = function hasTaskAccess(request, response, next) {
     var phaseId = parseInt(request.param("phaseId"), 10);
     var where = request.param("where");
 
-
     if (!isNaN(taskId)) { // Task id found, check that user has access to it
         AuthService.hasTaskAccess(request.user, taskId, function(error, hasRight) {
             if (error) { // Error occurred

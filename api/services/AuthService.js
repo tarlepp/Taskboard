@@ -519,7 +519,7 @@ exports.hasPhaseAccess = function(user, phaseId, next, returnRole) {
              * @param   {Function}          callback
              */
             function(phase, callback) {
-                AuthService.hasStoryAccess(user, phase.projectId, callback, returnRole);
+                AuthService.hasProjectAccess(user, phase.projectId, callback, returnRole);
             }
         ],
 
