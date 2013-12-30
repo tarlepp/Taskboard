@@ -72,6 +72,10 @@ select.form-control {
     border-bottom-right-radius: 4px;
 }
 
+.input-group[class*="col-"] {
+    padding-right: 15px;
+}
+
 .form-group .col-lg-9,
 .form-group .col-lg-8,
 .form-group .col-lg-7,
