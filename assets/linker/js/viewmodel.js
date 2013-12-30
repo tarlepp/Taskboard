@@ -143,17 +143,12 @@ function ViewModel() {
         self.loading.pop();
     });
 
-
     // Sorted project objects
     self.sortedProjects = ko.computed(function() {
-        jQuery("#selectProject").selectpicker("refresh");
-
         return self.projects().sort(function(a, b) {
             return a.title().toString().toLowerCase() > b.title().toString().toLowerCase() ? 1 : -1;
         });
     });
-
-    //self.sortedProjects.extend({ notify: 'always' });
 
     // Sorted sprint objects
     self.sortedSprints = ko.computed(function() {
@@ -608,6 +603,8 @@ function ViewModel() {
     self.processSocketMessage = function(model, type, id, data) {
         console.log("Processing socket message for: '" + model + "' type: '" + type + "' id: '" + id + "'");
 
+        var updateSelects = false;
+
         switch (type) {
             // Update events
             case 'update':
@@ -618,6 +615,8 @@ function ViewModel() {
                         if (typeof project != 'undefined') {
                             self.projects.replace(project, new Project(data));
                         }
+
+                        updateSelects = true;
                         break;
                     case 'phase':
                         //noinspection JSDuplicatedDeclaration
@@ -633,6 +632,8 @@ function ViewModel() {
 
                         if (typeof sprint !== 'undefined') {
                             self.sprints.replace(sprint, new Sprint(data));
+
+                            updateSelects = true;
                         }
                         break;
                     case 'story':
@@ -674,6 +675,8 @@ function ViewModel() {
                 switch (model) {
                     case 'project':
                         self.projects.push(new Project(data));
+
+                        updateSelects = true;
                         break;
                     case 'phase':
                         if (self.project().id() === data.projectId) {
@@ -683,6 +686,8 @@ function ViewModel() {
                     case 'sprint':
                         if (self.project().id() === data.projectId) {
                             self.sprints.push(new Sprint(data));
+
+                            updateSelects = true;
                         }
                         break;
                     case 'story':
@@ -729,6 +734,8 @@ function ViewModel() {
                             }
 
                             self.sprints.remove(sprint);
+
+                            updateSelects = true;
                         }
                         break;
                     case 'story':
@@ -760,6 +767,12 @@ function ViewModel() {
             default:
                 console.log("implement type " + type);
                 break;
+        }
+
+
+        if (updateSelects) {
+            jQuery("#selectProject").selectpicker("refresh");
+            jQuery("#selectSprint").selectpicker("refresh");
         }
     };
 }

@@ -67,7 +67,7 @@ ko.bindingHandlers.changeProject = {
      *
      * @param   {String}    element Name of the current element
      */
-    update:function (element) {
+    update: function (element) {
         var elementProject = jQuery(element);
 
         elementProject.find("option").each(function() {

@@ -100,9 +100,6 @@ jQuery(document).ready(function() {
                         } else { // Otherwise trigger edit with same trigger
                             body.trigger("sprintEdit", [data.id, trigger]);
                         }
-
-                        // Update client bindings
-                        myViewModel.processSocketMessage("sprint", "create", data.id, data);
                     }
                 });
             }
