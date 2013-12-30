@@ -431,7 +431,8 @@ jQuery(document).ready(function() {
                             var data = {
                                 projectId: projectId,
                                 userId: values[1],
-                                role: values[0]
+                                role: values[0],
+                                _csrf: getCsrfToken()
                             };
 
                             // Attach user to project
