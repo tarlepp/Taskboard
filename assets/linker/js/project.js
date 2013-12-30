@@ -679,11 +679,13 @@ function initProjectForm(modal, edit, parameters) {
         valueStart = moment(inputStart.val(), 'YYYY-MM-DD');
         valueEnd = moment(inputEnd.val(), 'YYYY-MM-DD');
 
-        var sprintFirst = _.min(myViewModel.sprints(), function(sprint) { return sprint.dateStartObject(); } );
-        var sprintLast = _.max(myViewModel.sprints(), function(sprint) { return sprint.dateEndObject(); } );
+        if (myViewModel.sprints().length > 0) {
+            var sprintFirst = _.min(myViewModel.sprints(), function(sprint) { return sprint.dateStartObject(); } );
+            var sprintLast = _.max(myViewModel.sprints(), function(sprint) { return sprint.dateEndObject(); } );
 
-        dateMin = sprintFirst ? sprintFirst.dateStartObject() : null;
-        dateMax = sprintLast ? sprintLast.dateEndObject() : null;
+            dateMin = sprintFirst.dateStartObject();
+            dateMax = sprintLast.dateEndObject();
+        }
     }
 
     containerStart.bootstrapDP({
@@ -719,7 +721,7 @@ function initProjectForm(modal, edit, parameters) {
             makeMessage("Start date cannot be later than end date.", "error", {});
 
             containerStart.closest(".control-group").addClass("error");
-        } else if (edit && eventDate > dateMin) {
+        } else if (edit && dateMin && eventDate > dateMin) {
             makeMessage("Start date overlaps with project sprints. Start date cannot be before " + dateMin.format(userObject.momentFormatDate) + ".", "error", {});
 
             containerStart.closest(".control-group").addClass("error");
@@ -764,7 +766,7 @@ function initProjectForm(modal, edit, parameters) {
             makeMessage("End date cannot be before than start date.", "error", {});
 
             containerEnd.closest(".control-group").addClass("error");
-        } else if (edit && eventDate < dateMax) {
+        } else if (edit && dateMax && eventDate < dateMax) {
             makeMessage("End date overlaps with project sprints. End date must be at least " + dateMax.format(userObject.momentFormatDate) + ".", "error", {});
 
             containerEnd.closest(".control-group").addClass("error");

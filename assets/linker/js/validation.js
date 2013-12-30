@@ -247,11 +247,16 @@ function validateDateRange(context, input, group, label, date, errors) {
     }
 
     if (type == 'project' && edit) {
-        var sprintFirst = _.min(myViewModel.sprints(), function(sprint) { return sprint.dateStartObject(); } );
-        var sprintLast = _.max(myViewModel.sprints(), function(sprint) { return sprint.dateEndObject(); } );
+        var dateMin = null;
+        var dateMax = null;
 
-        var dateMin = sprintFirst ? sprintFirst.dateStartObject() : null;
-        var dateMax = sprintLast ? sprintLast.dateEndObject() : null;
+        if (myViewModel.sprints().length > 0) {
+            var sprintFirst = _.min(myViewModel.sprints(), function(sprint) { return sprint.dateStartObject(); } );
+            var sprintLast = _.max(myViewModel.sprints(), function(sprint) { return sprint.dateEndObject(); } );
+
+            dateMin = sprintFirst.dateStartObject();
+            dateMax = sprintLast.dateEndObject();
+        }
 
         if (role == 'start' && dateMin && dateSelf > dateMin) {
             errors.push('Start date overlaps with project sprints. Start date cannot be before ' + dateMin.format(userObject.momentFormatDate) + '.');
