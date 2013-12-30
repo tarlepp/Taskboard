@@ -562,7 +562,7 @@ jQuery(document).ready(function() {
                             // User founded
                             if (projectUser.length === 1 && projectUser[0].id) {
                                 // Change user role
-                                socket.put("/ProjectUser/" + projectUser[0].id, {role: result, _csrf: getCsrfToken()}, function(/** sails.json.projectUser */projectUser) {
+                                socket.put("/ProjectUser/" + projectUser[0].id, {projectId: projectId, role: result, _csrf: getCsrfToken()}, function(/** sails.json.projectUser */projectUser) {
                                     if (handleSocketError(projectUser)) {
                                         makeMessage("User role changed successfully");
                                     }

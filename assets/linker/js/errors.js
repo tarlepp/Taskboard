@@ -37,7 +37,8 @@ function handleSocketError(error, showMessage) {
 
             if (message.length === 0) {
                 if (error.message) {
-                    message = error.message + " [" + error.status + "]";
+                    message = (error.message.message) ? error.message.message : error.message;
+                    message += " [" + error.status + "]";
                 } else if (error.status == 404) {
                     message = "Requested page not found [404].";
                 } else if (error.status == 500) {
