@@ -1,5 +1,6 @@
 <form id="formUserNew" class="form-horizontal">
     <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+    <input type="hidden" name="admin" value="0" />
 
     <ul class="nav nav-tabs">
         <li class="active">
@@ -137,14 +138,13 @@
                     />
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="col-lg-3 control-label" for="formUserNewPasswordRetype"></label>
                 <div class="col-lg-5">
                     <input id="formUserNewPasswordRetype" name="password2" type="password" class="form-control" placeholder="re-type password" autocomplete="off"
-                           data-password="true"
-                       data-pair="formUserNewPassword"
-                       data-validate-type="password"
+                        data-password="true"
+                        data-pair="formUserNewPassword"
+                        data-validate-type="password"
                     />
                 </div>
             </div>
@@ -158,6 +158,22 @@
                     </div>
                 </div>
             </div>
+
+            <% if (currentUser.admin) { %>
+
+            <div class="form-group">
+                <div class="col-lg-9 col-lg-offset-3">
+                    <div class="checkbox">
+                        <label>
+                            <input id="formUserNewAdministrator" name="admin" type="checkbox"  value="1" /> Administrator user
+                        </label>
+                    </div>
+
+                    <span class="help-block text-nowrap">Administrator users have access to all projects in Taskboard.</span>
+                </div>
+            </div>
+
+            <% } %>
         </div>
     </div>
 </form>

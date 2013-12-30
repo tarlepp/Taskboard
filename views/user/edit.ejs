@@ -41,6 +41,7 @@
     <div class="tab-pane active" id="basic">
         <form id="formUserEdit_1" class="form-horizontal">
             <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+            <input type="hidden" name="admin" value="0" />
 
             <div class="form-group">
                 <label class="col-lg-3 control-label">Username</label>
@@ -75,6 +76,21 @@
                 </div>
             </div>
 
+            <% if (currentUser.admin) { %>
+
+            <div class="form-group">
+                <div class="col-lg-9 col-lg-offset-3">
+                    <div class="checkbox">
+                        <label>
+                            <input id="formUserNewAdministrator" name="admin" type="checkbox" value="1" <% if (user.admin) { %>checked="checked"<% } %> /> Administrator user
+                        </label>
+                    </div>
+
+                    <span class="help-block text-nowrap">Administrator users have access to all projects in Taskboard.</span>
+                </div>
+            </div>
+
+            <% } %>
         </form>
     </div>
 
