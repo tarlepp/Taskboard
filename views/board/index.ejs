@@ -26,10 +26,16 @@
     >
         <h3>No phases for current project</h3>
         <p>
-            Current project does not have any <a href="javascript: void(0);" class="alert-link" data-bind="click: $root.actionPhasesEdit">phases</a>, please add phases before anything else.
+            Current project does not have any <a href="javascript: void(0);" class="alert-link" data-bind="click: $root.actionPhasesEdit">phases</a>, please add phases to project before anything else.
         </p>
+    </div>
+
+    <div class="alert alert-danger"
+        data-bind="visible: $root.phases().length > 0 && $root.sprints().length === 0"
+    >
+        <h3>No sprints in current project</h3>
         <p>
-            You can setup project phases within <em>project settings menu</em>.
+            Current project does not have any <a href="javascript: void(0);" class="alert-link" data-bind="click: $root.actionSprintAdd">sprints</a>, you have to add at least one sprint at this point.
         </p>
     </div>
 
