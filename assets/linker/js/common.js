@@ -117,11 +117,11 @@ function makeMessage(text, type, options) {
     type = type || "success";
     options = options || {};
 
-    var timeout = 3000;
+    var timeout = 6000;
 
     switch (type) {
         case "success":
-            timeout = 1500;
+            timeout = 3000;
             break;
     }
 

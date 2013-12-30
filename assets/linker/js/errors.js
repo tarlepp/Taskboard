@@ -117,33 +117,24 @@ function parseSailsError(errorObject) {
     var message = "";
 
     try {
-        /**
-         * Parse sails error message to real JSON object.
-         *
-         * todo: remove replace when sails.js is fixed https://github.com/balderdashy/sails/issues/826
-         *
-         * @type {sails.error.validation}
-         */
-        var object = JSON5.parse(errorObject.message.replace("[ [Object] ]", "[]"));
-
-        if (object.ValidationError) {
+        if (errorObject.ValidationError) {
             var columns = [];
 
-            jQuery.each(object.ValidationError, function(column, errors) {
+            _.each(errorObject.ValidationError, function(errors, column) {
                 if (_.size(errors) > 0) {
                     var rules = [];
 
-                    jQuery.each(errors, function(i, error) {
-                        rules.push(error.rule);
+                    _.each(errors, function(error) {
+                        rules.push(error.message);
                     });
 
                     columns.push("\n" + column + ": " + rules.join(", "));
                 } else {
                     columns.push(column);
                 }
-
-                message += "Validation errors with column: " + columns.join(", ");
             });
+
+            message += "Following validation errors occurred: " + columns.join("");
         }
     } catch (exception) {
         message = errorObject;
