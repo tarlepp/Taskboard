@@ -156,6 +156,12 @@ module.exports = {
                         next(err);
                     } else {
                         values.password = user.password;
+
+                        // User try to make himself an administrator user, no-way-hose :D
+                        if (values.admin && !user.admin) {
+                            values.admin = false;
+                        }
+
                         next();
                     }
                 });
