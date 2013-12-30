@@ -130,6 +130,12 @@ jQuery(document).ready(function() {
             var form = jQuery("#formUserNew", modal);
             var formItems = form.serializeJSON();
 
+            if (typeof formItems.admin === "object") {
+                formItems.admin = 1;
+            } else {
+                formItems.admin = 0;
+            }
+
             // Validate current form items and try to update milestone data
             if (validateForm(formItems, modal)) {
                 // Create new user
@@ -220,6 +226,12 @@ jQuery(document).ready(function() {
             var formBasic = jQuery("#formUserEdit_1", modal);
             var formRegion = jQuery("#formUserEdit_2", modal);
             var formItems = jQuery.extend({}, formBasic.serializeJSON(), formRegion.serializeJSON());
+
+            if (typeof formItems.admin === "object") {
+                formItems.admin = 1;
+            } else {
+                formItems.admin = 0;
+            }
 
             // Validate current form items and try to update milestone data
             if (validateForm(formItems, modal)) {
