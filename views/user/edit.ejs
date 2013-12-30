@@ -163,8 +163,8 @@
             <div class="form-group required">
                 <label class="col-lg-3 control-label" for="formUserEditPasswordCurrent">Current password</label>
                 <div class="col-lg-5">
-                    <input id="formUserEditPasswordCurrent" name="passwordCurrent" type="password" class="form-control" placeholder="enter current password" required="required"
-                        data-validate-type="passwordCurrent"
+                    <input id="formUserEditPasswordCurrent" name="passwordCurrent" type="password" class="form-control" placeholder="enter current password" required="required" autocomplete="off"
+                           data-validate-type="passwordCurrent"
                         data-user-id="<%= user.id %>"
                     />
 
@@ -174,7 +174,7 @@
             <div class="form-group required">
                 <label class="col-lg-3 control-label" for="formUserEditPassword">New password</label>
                 <div class="col-lg-5">
-                    <input id="formUserEditPassword" name="password" type="password" class="form-control" placeholder="enter new password" required="required"
+                    <input id="formUserEditPassword" name="password" type="password" class="form-control" placeholder="enter new password" required="required" autocomplete="off"
                         data-password="true"
                         data-pair="formUserEditPasswordRetype"
                         data-validate-type="password,length"
@@ -185,7 +185,7 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label" for="formUserEditPasswordRetype"></label>
                 <div class="col-lg-5">
-                    <input id="formUserEditPasswordRetype" name="passwordReType" type="password" class="form-control" placeholder="re-type new password"
+                    <input id="formUserEditPasswordRetype" name="passwordReType" type="password" class="form-control" placeholder="re-type new password" autocomplete="off"
                         data-password="true"
                         data-pair="formUserEditPassword"
                         data-validate-type="password,length"

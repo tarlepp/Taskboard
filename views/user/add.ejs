@@ -119,7 +119,7 @@
             <div class="form-group required">
                 <label class="col-lg-3 control-label" for="formUserNewUsername">Username</label>
                 <div class="col-lg-3">
-                    <input id="formUserNewUsername" name="username" type="text" class="form-control" placeholder="enter username" required="required"
+                    <input id="formUserNewUsername" name="username" type="text" class="form-control" placeholder="enter username" autocomplete="off" required="required"
                        data-validate-type="unique"
                        data-model="User"
                     />
@@ -129,7 +129,7 @@
             <div class="form-group required">
                 <label class="col-lg-3 control-label" for="formUserNewPassword">Password</label>
                 <div class="col-lg-5">
-                    <input id="formUserNewPassword" name="password" type="password" class="form-control" placeholder="enter password" required="required"
+                    <input id="formUserNewPassword" name="password" type="password" class="form-control" placeholder="enter password" autocomplete="off" required="required"
                         data-password="true"
                         data-pair="formUserNewPasswordRetype"
                         data-validate-type="password,length"
@@ -141,8 +141,8 @@
             <div class="form-group">
                 <label class="col-lg-3 control-label" for="formUserNewPasswordRetype"></label>
                 <div class="col-lg-5">
-                    <input id="formUserNewPasswordRetype" name="password2" type="password" class="form-control" placeholder="re-type password"
-                       data-password="true"
+                    <input id="formUserNewPasswordRetype" name="password2" type="password" class="form-control" placeholder="re-type password" autocomplete="off"
+                           data-password="true"
                        data-pair="formUserNewPassword"
                        data-validate-type="password"
                     />
