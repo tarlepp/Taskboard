@@ -48,7 +48,6 @@ function validateForm(items, context) {
             types = type.split(",");
         }
 
-
         if ((input.prop('required') && value == '')
             || (input.getType() == 'select' && value == '#')
         ) {
@@ -214,8 +213,32 @@ function validateDateRange(context, input, group, label, date, errors) {
 
     var dateBitsSelf = date.split('-');
     var dateBitsPair = pair.split('-');
-    var dateSelf = moment(dateBitsSelf, "YYYY-MM-DD");
-    var datePair = moment(dateBitsPair, "YYYY-MM-DD");
+
+    var dateSelf = moment(
+        new Date(
+            Date.UTC(
+                dateBitsSelf[0],
+                dateBitsSelf[1] - 1,
+                dateBitsSelf[2],
+                0,
+                0,
+                0
+            )
+        )
+    ).tz("Etc/Universal");
+
+    var datePair = moment(
+        new Date(
+            Date.UTC(
+                dateBitsPair[0],
+                dateBitsPair[1] - 1,
+                dateBitsPair[2],
+                0,
+                0,
+                0
+            )
+        )
+    ).tz("Etc/Universal");
 
     if ((role == 'start' && dateSelf > datePair) || (role == 'end' && dateSelf < datePair)) {
         errors.push("Invalid date range.");
