@@ -53,6 +53,15 @@
     </tr>
     </thead>
     <tbody>
+
+    <% if (stories.length === 0) { %>
+    <tr>
+        <td colspan="100%" class="text-center text-muted">
+            No story data...
+        </td>
+    </tr>
+    <% } %>
+
     <% _.each(stories, function(story) { %>
     <tr data-story-id="<%= story.id %>">
         <td>
