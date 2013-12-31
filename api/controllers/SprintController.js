@@ -288,7 +288,6 @@ module.exports = {
      */
     chartDataTasks: function(req, res) {
         var sprintId = parseInt(req.param("sprintId"), 10);
-
         var data = {};
 
         // Get sprint and attached stories data
@@ -314,7 +313,7 @@ module.exports = {
              */
             function(error, results) {
                 if (error) {
-                    res.send(500, error);
+                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
                     // Store results to data
                     data.sprint = results.sprint;
@@ -326,7 +325,7 @@ module.exports = {
                     // Fetch story tasks
                     DataService.getTasks({or: storyIds}, function(error, tasks) {
                         if (error) {
-                            res.send(error.status ? error.status : 500, error);
+                            res.send(error.status ? error.status : 500, error.message ? error.message : error);
                         } else {
                             data.tasks = _.sortBy(tasks, function(task) { return task.timeEnd; } );
                             data.tasksDone = _.filter(data.tasks, function(task) { return task.isDone; } );
@@ -510,16 +509,17 @@ module.exports = {
             var endTime = data.sprint.dateEndObject();
             var tasksDone = 0;
             var tasksOver = 0;
+            var referenceDate;
 
             // Add first point of data
             output.push([Date.UTC(startTime.year(), startTime.month(), startTime.date()), tasks]);
 
             var currentDate = startTime.add("days", 1);
 
-            // Loops days
+            // Loops sprint days
             while (endTime.diff(currentDate, "days") >= 0) {
                 // Get reference date, this is used to determine actual tasks that are done or added
-                var referenceDate = currentDate.clone().subtract("days", 1);
+                referenceDate = currentDate.clone().subtract("days", 1);
 
                 // We are only interested days that are before current day
                 if (referenceDate.isBefore(moment().add("days", 1), "day")) {
@@ -541,6 +541,36 @@ module.exports = {
 
                 // Go to next date
                 currentDate.add("days", 1);
+            }
+
+            // We have some tasks not done, this means that sprint has failed somehow
+            if (tasks > 0) {
+                // Loop days until we have today.
+                while (moment().diff(currentDate, "days") >= 0) {
+                    // Get reference date, this is used to determine actual tasks that are done or added
+                    referenceDate = currentDate.clone().subtract("days", 1);
+
+                    // We are only interested days that are before current day
+                    if (referenceDate.isBefore(moment().add("days", 1), "day")) {
+                        // Calculate done task count
+                        tasksDone = _.size(_.filter(data.tasks, function(task) {
+                            return task.isDone && task.timeEndObject().isSame(referenceDate, "day");
+                        }));
+
+                        // Calculate added task count
+                        tasksOver = _.size(_.filter(data.tasksOver, function(task) {
+                            return task.createdAtObject().isSame(referenceDate, "day");
+                        }));
+
+                        // Calculate new task count based to previous tasks, done and added tasks count
+                        tasks = tasks - tasksDone + tasksOver;
+
+                        output.push([Date.UTC(currentDate.year(), currentDate.month(), currentDate.date()), tasks]);
+                    }
+
+                    // Go to next date
+                    currentDate.add("days", 1);
+                }
             }
 
             return output;
