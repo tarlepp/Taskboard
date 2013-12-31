@@ -29,7 +29,7 @@ module.exports = function (grunt) {
         // Taskboard specified vendor dependencies
         'linker/bower_components/jquery-ui/themes/base/minified/jquery-ui.min.css',
         'linker/bower_components/bootstrap/dist/css/bootstrap.min.css',
-        'linker/bower_components/bootstrap-datepicker/css/datepicker.css',
+        'linker/bower_components/bootstrap-datepicker/css/datepicker3.css',
         'linker/bower_components/bootstrap-select/bootstrap-select.min.css',
         'linker/bower_components/bootstrap-popover-extra-placements/source/popover-extra-placements.css',
         'linker/bower_components/font-awesome/css/font-awesome.css',

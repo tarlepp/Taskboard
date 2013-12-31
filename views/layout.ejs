@@ -13,7 +13,7 @@
     <!--STYLES-->
     <link rel="stylesheet" href="/linker/bower_components/jquery-ui/themes/base/minified/jquery-ui.min.css">
     <link rel="stylesheet" href="/linker/bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/linker/bower_components/bootstrap-datepicker/css/datepicker.css">
+    <link rel="stylesheet" href="/linker/bower_components/bootstrap-datepicker/css/datepicker3.css">
     <link rel="stylesheet" href="/linker/bower_components/bootstrap-select/bootstrap-select.min.css">
     <link rel="stylesheet" href="/linker/bower_components/bootstrap-popover-extra-placements/source/popover-extra-placements.css">
     <link rel="stylesheet" href="/linker/bower_components/font-awesome/css/font-awesome.css">
@@ -34,7 +34,9 @@
         var loggedUserId = <%= currentUser.id %>;
         var selectedProjectId = <%= projectId %>;
         var selectedSprintId = <%= sprintId %>;
+        <% if (typeof flashMessages !== 'undefined') { %>
         var messages = <%- JSON.stringify(flashMessages) %>;
+        <% } %>
     </script>
 
 </head>

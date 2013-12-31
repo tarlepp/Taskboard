@@ -46,10 +46,12 @@ select.form-control {
 .input-group.date span.input-group-addon {
     position: relative;
     left: -3px;
-    padding: 9px 20px 9px 8px;
+    padding: 8px 22px 8px 6px;
 }
 
 .input-group.date span.input-group-addon i {
+    position: relative;
+    top: 1px;
     color: #428bca;
     cursor: pointer;
 }
@@ -121,6 +123,11 @@ select.form-control {
 .datepicker .cw {
     font-size: 14px;
     font-weight: bold;
+}
+
+.datepicker.dropdown-menu {
+    font-family: 'Yanone Kaffeesatz', "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
 }
 
 form .required label:after {
