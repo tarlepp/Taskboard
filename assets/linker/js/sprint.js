@@ -749,9 +749,11 @@ function initSprintTabChart(modal, contentId) {
                     text: data.sprint.title + " " + moment(data.sprint.dateStart).format(userObject.momentFormatDate) + " - " + moment(data.sprint.dateEnd).format(userObject.momentFormatDate)
                 });
 
-                // Iterate chart data and add new series to chart
-                for (var i = 0; i < data.chartData.length; i++) {
-                    chart.addSeries(data.chartData[i], false)
+                if (data.initTasks > 0) {
+                    // Iterate chart data and add new series to chart
+                    for (var i = 0; i < data.chartData.length; i++) {
+                        chart.addSeries(data.chartData[i], false);
+                    }
                 }
 
                 chart.xAxis.min = data.pointStart;

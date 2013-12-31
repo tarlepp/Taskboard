@@ -267,16 +267,22 @@ module.exports = {
             // Determine story id values for task search.
             var storyIds = _.map(data.stories, function(story) { return {storyId: story.id}; });
 
-            // Fetch stories tasks
-            DataService.getTasks({or: storyIds}, function(error, tasks) {
-                if (error) {
-                    res.send(error.status ? error.status : 500, error);
-                } else {
-                    data.tasks = tasks;
+            if (storyIds.length > 0) {
+                // Fetch stories tasks
+                DataService.getTasks({or: storyIds}, function(error, tasks) {
+                    if (error) {
+                        res.send(error.status ? error.status : 500, error);
+                    } else {
+                        data.tasks = tasks;
 
-                    res.view(data);
-                }
-            });
+                        res.view(data);
+                    }
+                });
+            } else {
+                data.tasks = [];
+
+                res.view(data);
+            }
         }
     },
 
@@ -318,21 +324,27 @@ module.exports = {
                     // Store results to data
                     data.sprint = results.sprint;
                     data.stories = results.stories;
+                    data.tasks = [];
+                    data.tasksDone = [];
 
                     // Determine story id values for task search.
                     var storyIds = _.map(data.stories, function(story) { return {storyId: story.id}; });
 
-                    // Fetch story tasks
-                    DataService.getTasks({or: storyIds}, function(error, tasks) {
-                        if (error) {
-                            res.send(error.status ? error.status : 500, error.message ? error.message : error);
-                        } else {
-                            data.tasks = _.sortBy(tasks, function(task) { return task.timeEnd; } );
-                            data.tasksDone = _.filter(data.tasks, function(task) { return task.isDone; } );
+                    if (storyIds.length > 0) {
+                        // Fetch story tasks
+                        DataService.getTasks({or: storyIds}, function(error, tasks) {
+                            if (error) {
+                                res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                            } else {
+                                data.tasks = _.sortBy(tasks, function(task) { return task.timeEnd; } );
+                                data.tasksDone = _.filter(data.tasks, function(task) { return task.isDone; } );
 
-                            parseData();
-                        }
-                    });
+                                parseData();
+                            }
+                        });
+                    } else {
+                        parseData();
+                    }
                 }
             }
         );
