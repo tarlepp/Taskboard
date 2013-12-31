@@ -259,11 +259,11 @@ function validateDateRange(context, input, group, label, date, errors) {
         }
 
         if (role == 'start' && dateMin && dateSelf > dateMin) {
-            errors.push('Start date overlaps with project sprints. Start date cannot be before ' + dateMin.format(userObject.momentFormatDate) + '.');
+            errors.push('Start date overlaps with project sprints. Start date cannot be before ' + dateMin.format(myViewModel.user().momentFormatDate()) + '.');
 
             return false;
         } else if (role == 'end' && dateMax && dateSelf < dateMax) {
-            errors.push('End date overlaps with project sprints. End date must be at least ' + dateMax.format(userObject.momentFormatDate) + '.');
+            errors.push('End date overlaps with project sprints. End date must be at least ' + dateMax.format(myViewModel.user().momentFormatDate()) + '.');
 
             return false;
         }
@@ -529,7 +529,7 @@ function checkProjectDates(date, showMessage) {
 
     // Date conflicts with project duration
     if (date < dateMin || date > dateMax) {
-        var message = 'Given date conflicts with project duration. Date must be between ' + dateMin.format(userObject.momentFormatDate) + ' and ' + dateMax.format(userObject.momentFormatDate)  + '.';
+        var message = 'Given date conflicts with project duration. Date must be between ' + dateMin.format(myViewModel.user().momentFormatDate()) + ' and ' + dateMax.format(myViewModel.user().momentFormatDate())  + '.';
 
         if (showMessage) {
             makeMessage(message, 'error', {});

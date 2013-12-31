@@ -723,7 +723,7 @@ function initProjectForm(modal, edit, parameters) {
 
             containerStart.closest(".control-group").addClass("error");
         } else if (edit && dateMin && eventDate > dateMin) {
-            makeMessage("Start date overlaps with project sprints. Start date cannot be before " + dateMin.format(userObject.momentFormatDate) + ".", "error", {});
+            makeMessage("Start date overlaps with project sprints. Start date cannot be before " + dateMin.format(myViewModel.user().momentFormatDate()) + ".", "error", {});
 
             containerStart.closest(".control-group").addClass("error");
         } else {
@@ -768,7 +768,7 @@ function initProjectForm(modal, edit, parameters) {
 
             containerEnd.closest(".control-group").addClass("error");
         } else if (edit && dateMax && eventDate < dateMax) {
-            makeMessage("End date overlaps with project sprints. End date must be at least " + dateMax.format(userObject.momentFormatDate) + ".", "error", {});
+            makeMessage("End date overlaps with project sprints. End date must be at least " + dateMax.format(myViewModel.user().momentFormatDate()) + ".", "error", {});
 
             containerEnd.closest(".control-group").addClass("error");
         } else {

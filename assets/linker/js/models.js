@@ -31,7 +31,7 @@ function Project(data) {
     });
 
     self.formattedDuration = ko.computed(function() {
-        return self.dateStartObject().format(userObject.momentFormatDate) + " - " + self.dateEndObject().format(userObject.momentFormatDate);
+        return self.dateStartObject().format(myViewModel.user().momentFormatDate()) + " - " + self.dateEndObject().format(myViewModel.user().momentFormatDate());
     });
 
     // Make formatted project title
@@ -65,7 +65,7 @@ function Phase(data) {
     self.getColumnWidth = function(reservedSize, phasesCount) {
         var columnWidth = (100 - reservedSize) / phasesCount;
 
-        return columnWidth + '%';
+        return columnWidth + "%";
     };
 
     // Max task count for this phase
@@ -79,7 +79,7 @@ function Phase(data) {
      * @return  {Number}
      */
     self.cntTask = ko.computed(function() {
-        return _.size(_.filter(myViewModel.tasks(), function(task) { return task.phaseId() === self.id(); }));
+        return _.size(_.filter(myViewModel.tasks(), function(task) { return task.phaseId() === self.id(); } ));
     });
 
     /**
@@ -148,7 +148,7 @@ function Sprint(data) {
     });
 
     self.formattedDuration = ko.computed(function() {
-        return self.dateStartObject().format(userObject.momentFormatDate) + " - " + self.dateEndObject().format(userObject.momentFormatDate);
+        return self.dateStartObject().format(myViewModel.user().momentFormatDate()) + " - " + self.dateEndObject().format(myViewModel.user().momentFormatDate());
     });
 
     // Make formatted sprint title
@@ -215,11 +215,11 @@ function Story(data) {
         parts.push("<tr><th>Estimate:</th><td>" + (self.estimate() == -1 ? "???" : self.estimate()) + "</td></tr>");
 
         if (moment.isMoment(self.timeStartObject()) && self.timeStartObject().isValid()) {
-            parts.push("<tr><th>Started:</th><td>" + self.timeStartObject().tz(userObject.momentTimezone).format(userObject.momentFormatDateTime) + "</td></tr>");
+            parts.push("<tr><th>Started:</th><td>" + self.timeStartObject().tz(myViewModel.user().momentTimezone()).format(myViewModel.user().momentFormatDateTime()) + "</td></tr>");
         }
 
         if (moment.isMoment(self.timeEndObject()) && self.timeEndObject().isValid()) {
-            parts.push("<tr><th>Ended:</th><td>" + self.timeEndObject().tz(userObject.momentTimezone).format(userObject.momentFormatDateTime) + "</td></tr>");
+            parts.push("<tr><th>Ended:</th><td>" + self.timeEndObject().tz(myViewModel.user().momentTimezone()).format(myViewModel.user().momentFormatDateTime()) + "</td></tr>");
         }
 
         if ((moment.isMoment(self.timeStartObject()) && self.timeStartObject().isValid())
@@ -314,11 +314,17 @@ function User(data) {
     var self = this;
 
     // Initialize object data
-    self.id         = ko.observable(data.id);
-    self.username   = ko.observable(data.username);
-    self.firstName  = ko.observable(data.firstName);
-    self.lastName   = ko.observable(data.lastName);
-    self.email      = ko.observable(data.email);
+    self.id                     = ko.observable(data.id);
+    self.username               = ko.observable(data.username);
+    self.firstName              = ko.observable(data.firstName);
+    self.lastName               = ko.observable(data.lastName);
+    self.email                  = ko.observable(data.email);
+    self.admin                  = ko.observable(data.admin);
+    self.language               = ko.observable(data.language);
+    self.momentFormatDate       = ko.observable(data.momentFormatDate);
+    self.momentFormatDateTime   = ko.observable(data.momentFormatDateTime);
+    self.momentFormatTime       = ko.observable(data.momentFormatTime);
+    self.momentTimezone         = ko.observable(data.momentTimezone);
 
     // Make formatted fullname
     self.fullName = ko.computed(function() {

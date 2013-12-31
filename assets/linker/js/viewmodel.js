@@ -41,6 +41,9 @@ function ViewModel() {
     self.project    = ko.observable();
     self.sprint     = ko.observable();
 
+    // Current user observable data
+    self.user       = ko.observable(new User(userObject));
+
     /**
      * User role in current project
      *
@@ -63,7 +66,6 @@ function ViewModel() {
     self.loading = ko.observableArray([]);
 
     self.noProjectData = ko.observable(false);
-
 
     // Push data to loading state
     self.loading.push(true);
@@ -664,6 +666,19 @@ function ViewModel() {
                         if (typeof user != 'undefined') {
                             self.users.replace(user, new User(data));
                         }
+
+                        // User itself has been updated
+                        if (id === self.user().id()) {
+                            // Create new current user object and replace existing one
+                            self.user(new User(data));
+
+                            // We need to update selects in this case (date formats...)
+                            updateSelects = true;
+
+                            // Change moment.js / numeral.js language
+                            moment.lang(data.language);
+                            numeral.language(data.language);
+                        }
                         break;
                     default:
                         console.log("implement update for " + model);
@@ -768,7 +783,6 @@ function ViewModel() {
                 console.log("implement type " + type);
                 break;
         }
-
 
         if (updateSelects) {
             jQuery("#selectProject").selectpicker("refresh");

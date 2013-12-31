@@ -104,6 +104,12 @@ var sails = {
             firstName: "",
             lastName: "",
             email: "",
+            admin: "",
+            language: "",
+            momentFormatDate: "",
+            momentFormatDateTime: "",
+            momentFormatTime: "",
+            momentTimezone: "",
             id: "",
             createdAt: "",
             updatedAt: ""

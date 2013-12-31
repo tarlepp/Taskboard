@@ -351,7 +351,7 @@ function initSprintForm(modal, edit, parameters) {
 
             containerStart.closest(".input-group").addClass("has-error");
         } else if (eventDate < dateMin || eventDate > dateMax) {
-            makeMessage("Start date conflicts with project duration. Start date must be between " + dateMin.format(userObject.momentFormatDate) + " and " + dateMax.format(userObject.momentFormatDate)  + ".", "error", {});
+            makeMessage("Start date conflicts with project duration. Start date must be between " + dateMin.format(myViewModel.user().momentFormatDate()) + " and " + dateMax.format(myViewModel.user().momentFormatDate())  + ".", "error", {});
 
             containerStart.closest(".input-group").addClass("has-error");
         } else if (checkSprintDates(eventDate, 0, sprintId, true) !== true) {
@@ -398,7 +398,7 @@ function initSprintForm(modal, edit, parameters) {
 
             containerEnd.closest(".input-group").addClass("has-error");
         } else if (eventDate < dateMin || eventDate > dateMax) {
-            makeMessage("End date conflicts with project duration. End date must be between " + dateMin.format(userObject.momentFormatDate) + " and " + dateMax.format(userObject.momentFormatDate)  + ".", "error", {});
+            makeMessage("End date conflicts with project duration. End date must be between " + dateMin.format(myViewModel.user().momentFormatDate()) + " and " + dateMax.format(myViewModel.user().momentFormatDate())  + ".", "error", {});
 
             containerStart.closest(".input-group").addClass("has-error");
         } else if (checkSprintDates(eventDate, 1, sprintId, true) !== true) {
@@ -600,7 +600,7 @@ function initSprintTabChart(modal, contentId) {
                         labelClass += " text-danger";
                     }
 
-                    return "<span class='" + labelClass + "'>" + currentDate.format(userObject.momentFormatDate) + "</span>";
+                    return "<span class='" + labelClass + "'>" + currentDate.format(myViewModel.user().momentFormatDate()) + "</span>";
                 }
             }
         },
@@ -641,9 +641,9 @@ function initSprintTabChart(modal, contentId) {
                 var dateStart = dateEnd.clone().subtract("days", 1);
                 var tooltip = "<div class='chartToolTipTasks'>"
                         + "<h1>"
-                        + dateStart.format(userObject.momentFormatDate)
+                        + dateStart.format(myViewModel.user().momentFormatDate())
                         + " - "
-                        + dateEnd.format(userObject.momentFormatDate)
+                        + dateEnd.format(myViewModel.user().momentFormatDate())
                         + "</h1>"
                         + "<hr />"
                         + "<table>"
@@ -746,7 +746,7 @@ function initSprintTabChart(modal, contentId) {
 
                 // Set main title for chart
                 chart.setTitle({
-                    text: data.sprint.title + " " + moment(data.sprint.dateStart).format(userObject.momentFormatDate) + " - " + moment(data.sprint.dateEnd).format(userObject.momentFormatDate)
+                    text: data.sprint.title + " " + moment(data.sprint.dateStart).format(myViewModel.user().momentFormatDate()) + " - " + moment(data.sprint.dateEnd).format(myViewModel.user().momentFormatDate())
                 });
 
                 if (data.initTasks > 0) {
