@@ -68,6 +68,15 @@
     </tr>
     </thead>
     <tbody>
+
+    <% if (milestones.length === 0) { %>
+    <tr>
+        <td colspan="100%" class="text-center text-muted">
+            No milestone data...
+        </td>
+    </tr>
+    <% } %>
+
     <% _.each(milestones, function(milestone) { %>
     <tr>
         <td>

@@ -69,6 +69,15 @@
     </tr>
     </thead>
     <tbody>
+
+    <% if (sprints.length === 0) { %>
+    <tr>
+        <td colspan="100%" class="text-center text-muted">
+            No sprint data...
+        </td>
+    </tr>
+    <% } %>
+
     <% _.each(sprints, function(sprint) { %>
     <tr>
         <td>
