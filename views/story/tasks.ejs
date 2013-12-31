@@ -38,6 +38,15 @@
         </tr>
     </thead>
     <tbody>
+
+    <% if (tasks.length === 0) { %>
+    <tr>
+        <td colspan="100%" class="text-center text-muted">
+            No task data...
+        </td>
+    </tr>
+    <% } %>
+
     <% _.each(tasks, function(task) { %>
         <tr class="taskRow"
             data-task-id="<%= task.id %>"
