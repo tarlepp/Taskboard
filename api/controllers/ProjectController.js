@@ -523,33 +523,17 @@ module.exports = {
                                         data.tasks.progress = Math.round(data.tasks.cntDone / data.tasks.cntTotal * 100);
                                     }
 
-                                    makeView();
+                                    makeDetailedStatistics();
+
+                                    res.view(data);
                                 });
                         } else {
-                            makeView();
+                            makeDetailedStatistics();
+
+                            res.view(data);
                         }
                     }
                 });
-        }
-
-        /**
-         * Function makes actual view if all necessary data is fetched
-         * from database for template.
-         */
-        function makeView() {
-            var ok = true;
-
-            _.each(data, function(data) {
-                if (data.data === false) {
-                    ok = false;
-                }
-            });
-
-            if (ok) {
-                makeDetailedStatistics();
-
-                res.view(data);
-            }
         }
 
         /**
