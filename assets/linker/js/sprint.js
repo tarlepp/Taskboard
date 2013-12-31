@@ -592,7 +592,15 @@ function initSprintTabChart(modal, contentId) {
                 useHTML: true,
                 align: "right",
                 formatter: function() {
-                    return "<span class='chartLabel'>" + moment(this.value).format(userObject.momentFormatDate) + "</span>";
+                    var currentDate = moment(this.value);
+                    var sprintEnd = moment(ajaxData.sprint.dateEnd);
+                    var labelClass = "chartLabel";
+
+                    if (currentDate.isAfter(sprintEnd, "day")) {
+                        labelClass += " text-danger";
+                    }
+
+                    return "<span class='" + labelClass + "'>" + currentDate.format(userObject.momentFormatDate) + "</span>";
                 }
             }
         },
