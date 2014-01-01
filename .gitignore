@@ -44,3 +44,8 @@ assets/linker/bower_components/*
 # local config
 ########################
 config/local.js
+
+########################
+# vagrant
+########################
+.vagrant
