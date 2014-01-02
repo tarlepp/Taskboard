@@ -47,8 +47,5 @@
     "bootstrap-popover-extra-placements": "*",
     "highcharts-components": "~3.0.7",
     "numeral": "~1.5.2"
-  },
-  "resolutions": {
-    "bootstrap": "~3.0.3"
   }
 }
