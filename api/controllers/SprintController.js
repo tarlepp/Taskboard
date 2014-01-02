@@ -558,7 +558,7 @@ module.exports = {
             // We have some tasks not done, this means that sprint has failed somehow
             if (tasks > 0) {
                 // Loop days until we have today.
-                while (moment().diff(currentDate, "days") >= 0) {
+                while (moment().diff(currentDate, "days") >= 0 && tasks > 0) {
                     // Get reference date, this is used to determine actual tasks that are done or added
                     referenceDate = currentDate.clone().subtract("days", 1);
 
