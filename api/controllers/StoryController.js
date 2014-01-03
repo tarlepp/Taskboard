@@ -8,6 +8,7 @@
 
 var async = require("async");
 var moment = require("moment-timezone");
+var numeral = require("numeral");
 
 module.exports = {
     /**
@@ -435,17 +436,80 @@ module.exports = {
                         } else {
                             data.phases = phases;
 
-                            makeView(data);
+                            fetchPhaseDuration(data);
                         }
                     });
                 }
             }
         );
 
+        /**
+         * Private function to fetch story task phase duration times. This will sum tasks durations
+         * for each phase in this project.
+         *
+         * @param data
+         */
+        function fetchPhaseDuration(data) {
+            async.map(
+                data.phases,
+
+                /**
+                 * Function to determine duration in current phase.
+                 *
+                 * @param   {sails.model.phase} phase
+                 * @param   {Function}          callback
+                 */
+                function (phase, callback) {
+                    PhaseDuration
+                        .find({
+                            sum: "duration"
+                        })
+                        .where({phaseId: phase.id})
+                        .where({storyId: data.story.id})
+                        .done(function(error, result) {
+                            if (error) {
+                                callback(error, null);
+                            } else {
+                                phase.duration = result[0].duration ? result[0].duration : 0;
+
+                                callback(null, phase.duration);
+                            }
+                        });
+                },
+
+                /**
+                 * Main callback function which is called after all phases are processed.
+                 *
+                 * @param   {Error|null}    error
+                 * @param   {{}}            result
+                 */
+                function (error, result) {
+                    if (error) {
+                        res.send(error, error.status ? error.status : 500);
+                    } else {
+                        makeView(data);
+                    }
+                }
+            );
+        }
+
         function makeView(data) {
             moment.lang(req.user.language);
 
             data.layout = req.isAjax ? "layout_ajax" : "layout";
+
+            var totalTime = _.pluck(data.phases, "duration").reduce(function(memo, i) {return memo + i});
+            var totalTimeNoFirst = _.pluck(_.reject(data.phases, function(phase) { return phase.order === 0 } ), "duration").reduce(function(memo, i) {return memo + i});
+
+            data.phaseDuration = {
+                totalTime: totalTime,
+                totalTimeNoFirst: totalTimeNoFirst
+            };
+
+            _.each(data.phases, function(phase) {
+                phase.durationPercentage = (phase.duration > 0) ? Math.round(phase.duration / totalTimeNoFirst * 100 * Math.pow(10, 2)) / Math.pow(10, 2) : 0;
+                phase.durationPercentageTotal = (phase.duration > 0) ? Math.round(phase.duration / totalTime * 100 * Math.pow(10, 2)) / Math.pow(10, 2) : 0;
+            });
 
             // Add relation data to each tasks
             _.each(data.tasks, function(task) {
