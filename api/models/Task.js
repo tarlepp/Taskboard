@@ -5,7 +5,6 @@
  * @description ::  Model represents single task on taskboard. Tasks are attached to specified user story, phase,
  *                  type and user.
  */
-var jQuery = require("jquery");
 var async = require("async");
 var moment = require("moment-timezone");
 
@@ -14,75 +13,75 @@ module.exports = {
     attributes: {
         // Relation to Story model
         storyId: {
-            type:       'integer',
+            type:       "integer",
             required:   true
         },
         // Relation to User model
         userId: {
-            type:       'integer',
+            type:       "integer",
             defaultsTo: 0
         },
         // Relation to Phase model
         phaseId: {
-            type:       'integer',
+            type:       "integer",
             required:   true,
             defaultsTo: 0
         },
         // Relation to Type model
         typeId: {
-            type:       'integer',
+            type:       "integer",
             required:   true,
             defaultsTo: 1
         },
         title: {
-            type:       'string',
+            type:       "string",
             required:   true,
             minLength:  5
         },
         description: {
-            type:       'text',
-            defaultsTo: ''
+            type:       "text",
+            defaultsTo: ""
         },
         priority: {
-            type:       'integer',
+            type:       "integer",
             defaultsTo: 0
         },
         isDone: {
-            type:       'boolean',
+            type:       "boolean",
             required:   true,
             defaultsTo: 0
         },
         timeStart: {
-            type:       'datetime'
+            type:       "datetime"
         },
         timeEnd: {
-            type:       'datetime'
+            type:       "datetime"
         },
 
         objectTitle: function() {
             return this.title;
         },
         createdAtObject: function () {
-            return (this.createdAt && this.createdAt != '0000-00-00')
+            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.createdAt) : null;
         },
         updatedAtObject: function () {
-            return (this.updatedAt && this.updatedAt != '0000-00-00')
+            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         },
         timeStartObject: function() {
-            return (this.timeStart && this.timeStart != '0000-00-00 00:00:00')
+            return (this.timeStart && this.timeStart != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.timeStart) : null;
         },
         timeEndObject: function() {
-            return (this.timeEnd && this.timeEnd != '0000-00-00 00:00:00')
+            return (this.timeEnd && this.timeEnd != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.timeEnd) : null;
         },
         timeDuration: function() {
             var output;
 
             if (moment.isMoment(this.timeStartObject()) && moment.isMoment(this.timeEndObject())) {
-                output = this.timeEndObject().diff(this.timeStartObject(), 'seconds');
+                output = this.timeEndObject().diff(this.timeStartObject(), "seconds");
             } else {
                 output = 0;
             }
@@ -165,7 +164,7 @@ module.exports = {
                             values.timeStart = null;
                             values.timeEnd = null;
                         } else if (values.phaseId !== data.task.phaseId // We can assume that this update is from the board, so set start time if needed
-                            && (!data.task.timeStart || data.task.timeStart == '0000-00-00 00:00:00')
+                            && (!data.task.timeStart || data.task.timeStart == "0000-00-00 00:00:00")
                         ) {
                             values.timeStart = new Date();
                         }
@@ -186,6 +185,8 @@ module.exports = {
      * If all task are done (isDone === true) we can update current story as done. Note
      * that if story hasn't any task it cannot be "done".
      *
+     * @todo refactor this.
+     *
      * @param   {Number}    taskId
      * @param   {Function}  cb
      */
@@ -196,19 +197,21 @@ module.exports = {
                 if (error) {
                     cb(error)
                 } else {
-                    HistoryService.remove('Task', task.id);
+                    HistoryService.remove("Task", task.id);
+
+                    PhaseDurationService.remove({taskId: task.id});
 
                     Task
                         .find()
                         .where({storyId: task.storyId})
-                        .where({id: {'!': task.id}})
+                        .where({id: {"!": task.id}})
                         .done(function(error, /** sails.model.task[] */tasks) {
                             var isDone = true;
                             var timeEnd = null;
 
                             if (_.size(tasks) > 0) {
                                 // Iterate story tasks
-                                jQuery.each(tasks, function(key, /** sails.model.task */task) {
+                                _.each(tasks, function(/** sails.model.task */task) {
                                     if (!task.isDone) {
                                         isDone = false;
                                     }
@@ -249,7 +252,9 @@ module.exports = {
      * @param   {Function}          cb
      */
     afterCreate: function(values, cb) {
-        HistoryService.write('Task', values);
+        HistoryService.write("Task", values);
+
+        PhaseDurationService.write(values);
 
         // Update story data
         Story
@@ -279,7 +284,9 @@ module.exports = {
      * @param   {Function}          cb
      */
     afterUpdate: function(values, cb) {
-        HistoryService.write('Task', values);
+        HistoryService.write("Task", values);
+
+        PhaseDurationService.write(values);
 
         async.parallel(
             {
@@ -303,6 +310,13 @@ module.exports = {
                     DataService.getPhases({}, callback);
                 }
             },
+
+            /**
+             * Main callback function which is called after all parallel jobs are done.
+             *
+             * @param   {Error|null}    error
+             * @param   {{}}            data
+             */
             function (error, data) {
                 if (error) {
                     cb(error);
@@ -332,14 +346,14 @@ module.exports = {
                             if (error) {
                                 cb(error);
                             } else if (phase.order == 0) {
-                                updateData['timeStart'] = null;
+                                updateData["timeStart"] = null;
                             }
 
                             updateStory(data, updateData);
                         });
-                    } else if ((!data.story.timeStart || data.story.timeStart == '0000-00-00 00:00:00')
-                        && data.task.timeStart && data.task.timeStart != '0000-00-00 00:00:00') {
-                        updateData['timeStart'] = new Date();
+                    } else if ((!data.story.timeStart || data.story.timeStart == "0000-00-00 00:00:00")
+                        && data.task.timeStart && data.task.timeStart != "0000-00-00 00:00:00") {
+                        updateData["timeStart"] = new Date();
 
                         updateStory(data, updateData);
                     } else {
@@ -349,6 +363,12 @@ module.exports = {
             }
         );
 
+        /**
+         * Private function to update story data and publish updates via socket.
+         *
+         * @param   {{}}    data
+         * @param   {{}}    updateData
+         */
         function updateStory(data, updateData) {
             var where = {id: data.story.id};
 
