@@ -64,6 +64,10 @@ h1, h2, h3, h4, h5, h6,
     text-shadow: 1px 1px 3px rgba(51, 51, 51, .3);
 }
 
+.text-no-shadow {
+    text-shadow: none;
+}
+
 .table .progress {
     margin-bottom: 0;
 }

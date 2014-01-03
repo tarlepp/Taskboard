@@ -120,5 +120,5 @@ body.modal-open {
     margin-top: 0;
 }
 .modal-body .tab-content h4 {
-    margin-top: 15px;
+    /* margin-top: 15px; */
 }
