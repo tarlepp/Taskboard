@@ -507,8 +507,8 @@ module.exports = {
             };
 
             _.each(data.phases, function(phase) {
-                phase.durationPercentage = (phase.duration > 0) ? Math.round(phase.duration / totalTimeNoFirst * 100 * Math.pow(10, 2)) / Math.pow(10, 2) : 0;
-                phase.durationPercentageTotal = (phase.duration > 0) ? Math.round(phase.duration / totalTime * 100 * Math.pow(10, 2)) / Math.pow(10, 2) : 0;
+                phase.durationPercentage = (phase.duration > 0 && phase.order !== 0) ? phase.duration / totalTimeNoFirst * 100 : 0;
+                phase.durationPercentageTotal = (phase.duration > 0) ? phase.duration / totalTime * 100 : 0;
             });
 
             // Add relation data to each tasks
