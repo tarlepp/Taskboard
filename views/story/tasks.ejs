@@ -20,7 +20,7 @@
     <div class="progress">
     <% _.each(phases, function(phase) { %>
         <% if (phase.order !== 0 && phase.durationPercentage > 0) { %>
-        <div class="progress-bar tooltipDiv" style="width: <%= phase.durationPercentage %>%;">
+        <div class="progress-bar tooltipDiv" style="width: <%= phase.durationPercentage %>%; background-color: <%= phase.backgroundColor %>;">
             <span><%= phase.title %> <%= numeral(phase.durationPercentage).format("0.00") %>%</span>
 
             <div class="tooltipDivContainer">
