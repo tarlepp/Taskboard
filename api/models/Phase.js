@@ -22,6 +22,10 @@ module.exports = {
             type:       'text',
             defaultsTo: ''
         },
+        backgroundColor: {
+            type:       'string',
+            defaultsTo: '#428bca'
+        },
         order: {
             type:       'integer',
             defaultsTo: 0
