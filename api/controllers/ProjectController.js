@@ -443,9 +443,7 @@ module.exports = {
                  * @param   {Function}  callback
                  */
                 milestones: function(callback) {
-                    DataService.getMilestones({
-                        projectId: projectId
-                    }, callback);
+                    DataService.getMilestones({projectId: projectId}, callback);
                 },
 
                 /**
@@ -454,9 +452,16 @@ module.exports = {
                  * @param   {Function}  callback
                  */
                 sprints: function(callback) {
-                    DataService.getSprints({
-                        projectId: projectId
-                    }, callback);
+                    DataService.getSprints({projectId: projectId}, callback);
+                },
+
+                /**
+                 * Fetch project phases data
+                 *
+                 * @param   {Function}  callback
+                 */
+                phases: function(callback) {
+                    DataService.getPhases({projectId: projectId}, callback);
                 }
             },
 
@@ -478,10 +483,60 @@ module.exports = {
                     data.sprints.data = results.sprints;
                     data.sprints.cntTotal = results.sprints.length;
 
-                    fetchStories();
+                    data.phases = results.phases;
+
+                    fetchPhaseDuration();
                 }
             }
         );
+
+        /**
+         * Private function to fetch project task phase duration times. This will sum tasks durations
+         * for each phase in this project.
+         */
+        function fetchPhaseDuration() {
+            async.map(
+                data.phases,
+
+                /**
+                 * Function to determine duration in specified phase.
+                 *
+                 * @param   {sails.model.phase} phase
+                 * @param   {Function}          callback
+                 */
+                function (phase, callback) {
+                    PhaseDuration
+                        .find({
+                            sum: "duration"
+                        })
+                        .where({phaseId: phase.id})
+                        .where({projectId: data.project.data.id})
+                        .done(function(error, result) {
+                            if (error) {
+                                callback(error, null);
+                            } else {
+                                phase.duration = result[0].duration ? result[0].duration : 0;
+
+                                callback(null, phase.duration);
+                            }
+                        });
+                },
+
+                /**
+                 * Main callback function which is called after all phases are processed.
+                 *
+                 * @param   {Error|null}    error
+                 * @param   {{}}            result
+                 */
+                    function (error, result) {
+                    if (error) {
+                        res.send(error, error.status ? error.status : 500);
+                    } else {
+                        fetchStories();
+                    }
+                }
+            );
+        }
 
         function fetchStories() {
             // Fetch project stories
@@ -540,6 +595,19 @@ module.exports = {
          * Function makes detailed statistics from fetched data.
          */
         function makeDetailedStatistics() {
+            var totalTime = _.pluck(data.phases, "duration").reduce(function(memo, i) {return memo + i});
+            var totalTimeNoFirst = _.pluck(_.reject(data.phases, function(phase) { return phase.order === 0 } ), "duration").reduce(function(memo, i) {return memo + i});
+
+            data.phaseDuration = {
+                totalTime: totalTime,
+                totalTimeNoFirst: totalTimeNoFirst
+            };
+
+            _.each(data.phases, function(phase) {
+                phase.durationPercentage = (phase.duration > 0 && phase.order !== 0) ? phase.duration / totalTimeNoFirst * 100 : 0;
+                phase.durationPercentageTotal = (phase.duration > 0) ? phase.duration / totalTime * 100 : 0;
+            });
+
             _.each(data.stories.data, function(story) {
                 story.tasks = {
                     data: [],

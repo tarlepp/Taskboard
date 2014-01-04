@@ -333,7 +333,6 @@
         <% }); %>
     </div>
 
-
     <div class="row">
         <div class="col-md-2 text-right text-nowrap">
             <a href="javascript: void(0)" class="tooltipTitle" title="Show detailed information about progress of stories"
@@ -451,5 +450,37 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <h4>Task times in phases <span class="text-no-shadow text-small text-muted">Note that first and last phases are excluded out of this statistics.</span></h4>
+
+    <div class="progress">
+    <% _.each(phases, function(phase) { %>
+        <% if (phase.order !== 0 && phase.durationPercentage > 0) { %>
+        <div class="progress-bar tooltipDiv" style="width: <%= phase.durationPercentage %>%; background-color: <%= phase.backgroundColor %>;">
+            <span><%= phase.title %> <%= numeral(phase.durationPercentage).format("0.00") %>%</span>
+
+            <div class="tooltipDivContainer">
+                <h1>Statistics of phase '<%= phase.title %>'</h1>
+                <div>
+                    <table>
+                        <tr>
+                            <th class="text-right">Percentage:</th>
+                            <td class="text-nowrap"><%= numeral(phase.durationPercentage).format("0.00") %>%</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Duration:</th>
+                            <td class="text-nowrap"><%= moment().from(moment().add(phase.duration, "seconds"), true) %></td>
+                        </tr>
+                        <tr>
+                            <th class="text-right"></th>
+                            <td class="text-nowrap"><%= numeral(phase.duration).format() %> seconds</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <% } %>
+    <% }); %>
     </div>
 </div>
