@@ -56,6 +56,17 @@ select.form-control {
     cursor: pointer;
 }
 
+.form-control.colorPicker {
+    display: inline-block;
+    width: 80px;
+    font-family: monospace;
+    font-size: 13px;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
 .form-group .input-group.col-lg-4 {
     padding: 0;
 }
@@ -304,3 +315,12 @@ div[data-role="editor-toolbar"] {
     color: #333333;
 }
 
+.evo-colorind-ie {
+    top: -34px;
+    margin-bottom: -34px;
+    border: 1px solid #CCCCCC;
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+    width: 30px;
+    height: 34px;
+}

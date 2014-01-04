@@ -46,6 +46,7 @@ jQuery(document).ready(function() {
                         lines.each(function(key) {
                             var row = jQuery(this);
                             var title = jQuery.trim(row.find("input[name='title[]']").val());
+                            var backgroundColor = jQuery.trim(row.find("input[name='backgroundColor[]']").val());
                             var isDone = row.find("input[name='isDone[]']").is(":checked") ? 1 : 0;
                             var tasks = parseInt(row.find("input[name='tasks[]']").val(), 10);
                             var phaseId = parseInt(row.find("input[name='id[]']").val(), 10);
@@ -62,6 +63,7 @@ jQuery(document).ready(function() {
                                 phases.push({
                                     id: phaseId,
                                     title: title,
+                                    backgroundColor: backgroundColor,
                                     order: key,
                                     tasks: isNaN(tasks) ? 0 : tasks,
                                     isDone: isDone,
@@ -123,7 +125,7 @@ jQuery(document).ready(function() {
 
                         // We have no errors, so try to insert / update phase data
                         if (!errors) {
-                            async.map(phases, phaseUpdate,phaseCallback);
+                            async.map(phases, phaseUpdate, phaseCallback);
                         }
 
                         return false;
@@ -156,6 +158,24 @@ jQuery(document).ready(function() {
                             }
                         });
 
+                        jQuery(".colorPicker_", newRow).each(function() {
+                            // Enable colorpicker
+                            jQuery(this)
+                                .addClass("colorPicker")
+                                .removeClass("colorPicker_")
+                                .colorpicker({
+                                    displayIndicator: false,
+                                    show: 'both',
+                                    history: false
+                                });
+
+                            // Fix positions
+                            jQuery(this)
+                                .parent()
+                                .width(106)
+                                .css("margin-bottom", 0);
+                        });
+
                         jQuery("#projectPhases", modal).find("tbody").append(newRow);
 
                         return false;
@@ -185,6 +205,15 @@ jQuery(document).ready(function() {
  * @param   {jQuery|$}  modal   Current modal content
  */
 function initProjectPhases(modal) {
+    // Initialize colorpicker
+    jQuery(".colorPicker", modal).each(function() {
+        jQuery(this).colorpicker({
+            displayIndicator: false,
+            show: 'both',
+            history: false
+        });
+    });
+
     // Initialize jQuery UI sliders for phase task count
     jQuery.each(jQuery("#projectPhases", modal).find(".slider"), function() {
         var slider = jQuery(this);
