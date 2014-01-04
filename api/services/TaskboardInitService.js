@@ -250,11 +250,11 @@ exports.createProject = function(data, next) {
 exports.createPhases = function(project, next) {
     // Specify project phase data
     var phaseData = [
-        {projectId: project.id, title: "Tasks",      order: 1, tasks: 0, isDone: false},
-        {projectId: project.id, title: "In process", order: 2, tasks: 3, isDone: false},
-        {projectId: project.id, title: "To review",  order: 3, tasks: 3, isDone: false},
-        {projectId: project.id, title: "Reviewed",   order: 4, tasks: 6, isDone: false},
-        {projectId: project.id, title: "Done",       order: 5, tasks: 0, isDone: true}
+        {projectId: project.id, title: "Tasks",      backgroundColor: "#c6d9f0", order: 1, tasks: 0, isDone: false},
+        {projectId: project.id, title: "In process", backgroundColor: "#92cddc", order: 2, tasks: 3, isDone: false},
+        {projectId: project.id, title: "To review",  backgroundColor: "#8db3e2", order: 3, tasks: 3, isDone: false},
+        {projectId: project.id, title: "Reviewed",   backgroundColor: "#548dd4", order: 4, tasks: 6, isDone: false},
+        {projectId: project.id, title: "Done",       backgroundColor: "#0070c0", order: 5, tasks: 0, isDone: true}
     ];
 
     // Create specified phases
