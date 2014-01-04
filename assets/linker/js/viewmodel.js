@@ -155,7 +155,7 @@ function ViewModel() {
     // Sorted sprint objects
     self.sortedSprints = ko.computed(function() {
         return self.sprints().sort(function(a, b) {
-            return a.dateStart() > b.dateStart() ? 1 : -1;
+            return a.dateStart() > b.dateStart() ? -1 : 1;
         });
     });
 
