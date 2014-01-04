@@ -54,6 +54,7 @@
             <li>
                 <div class="input-group">
                     <select id="selectProject" class="show-tick show-menu-arrow"
+                        data-live-search="true"
                         data-bind="
                             value: selectedProjectId(),
                             options: sortedProjects,
@@ -176,6 +177,7 @@
 
                 <div class="input-group" data-bind="visible: project()">
                     <select id="selectSprint" class="show-tick show-menu-arrow"
+                        data-live-search="true"
                         data-bind="
                             value: selectedSprintId(),
                             options: sortedSprints,
