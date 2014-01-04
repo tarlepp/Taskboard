@@ -227,12 +227,6 @@ function ViewModel() {
 
                     self.sprints(mappedSprints);
 
-                    var sprintId = parseInt(cookie.get("sprintId_" + projectId));
-
-                    if (sprintId > 0) {
-                        self.selectedSprintId(sprintId);
-                    }
-
                     if (self.selectedSprintId() > 0) {
                         self.initSprint(self.selectedSprintId());
                     }
@@ -288,6 +282,9 @@ function ViewModel() {
 
             // Push data to loading state
             self.loading.push(true);
+
+            // Add current project + sprint to history state of browser
+            window.history.pushState("", "Taskboard", "/board/" + self.project().id() + "/sprint/" + sprintId);
 
             // Get sprint stories via socket
             socket.get("/Story", {sprintId: sprintId}, function(stories) {

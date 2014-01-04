@@ -20,18 +20,10 @@ module.exports = {
         // Project id not given, but user has cookie that contains last selected project
         if (projectId === 0 && req.cookies.projectId) {
             projectId = req.cookies.projectId;
-
-            // Specify sprint cookie
-            sprintCookie = 'sprintId_' + projectId;
-
-            // Sprint cookie exists for current project
-            if (req.cookies[sprintCookie]) {
-                sprintId = req.cookies[sprintCookie];
-            }
         }
 
         // Project id given and sprint id not, check cookie for sprint id
-        if (sprintId === 0 && projectId > 0) {
+        if (sprintId == 0 && projectId > 0) {
             sprintCookie = 'sprintId_' + projectId;
 
             // Cookie founded
