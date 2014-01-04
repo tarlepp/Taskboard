@@ -34,6 +34,7 @@ module.exports = function (grunt) {
         'linker/bower_components/bootstrap-popover-extra-placements/source/popover-extra-placements.css',
         'linker/bower_components/font-awesome/css/font-awesome.css',
         'linker/bower_components/qtip2/jquery.qtip.min.css',
+        'linker/bower_components/evol.colorpicker/css/evol.colorpicker.css',
 
         'linker/styles/**/*.css'
     ];
@@ -81,6 +82,7 @@ module.exports = function (grunt) {
         'linker/bower_components/jquery-selectorator/dist/selectorator.min.js',
         'linker/bower_components/jquery.complexify.js/jquery.complexify.min.js',
         'linker/bower_components/jquery.complexify.js/jquery.complexify.banlist.js',
+        'linker/bower_components/evol.colorpicker/js/evol.colorpicker.min.js',
 
         // Bootstrap specified libraries
         'linker/bower_components/bootstrap/dist/js/bootstrap.min.js',

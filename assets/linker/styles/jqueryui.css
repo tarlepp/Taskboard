@@ -1,0 +1,18 @@
+.ui-widget {
+    font-family: 'Yanone Kaffeesatz', "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+}
+
+.evo-more {
+    font-size: 16px;
+}
+
+table.evo-palette-ie th {
+    padding-left: 0;
+}
+
+table.evo-palette-ie td {
+    padding: 7px;
+    border: none;
+}
+
