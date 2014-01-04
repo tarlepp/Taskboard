@@ -120,22 +120,81 @@ module.exports = {
                 if (error) {
                     res.send(error.status ? error.status : 500, error);
                 } else {
-                    data.sprint.data = result.sprint;
-                    data.stories = result.stories;
-                    data.role = result.role;
+                    DataService.getPhases({projectId: result.sprint.projectId}, function(error, phases) {
+                        if (error) {
+                            res.send(error.status ? error.status : 500, error);
+                        } else {
+                            data.sprint.data = result.sprint;
+                            data.stories = result.stories;
+                            data.phases = phases;
+                            data.role = result.role;
 
-                    // Fetch task data
-                    fetchTaskData();
+                            // Fetch task data
+                            fetchPhaseDuration(data);
+                        }
+                    });
                 }
             }
         );
+
+        /**
+         * Private function to fetch sprint task phase duration times. This will sum tasks durations
+         * for each phase in this sprint.
+         *
+         * @param data
+         */
+        function fetchPhaseDuration(data) {
+            async.map(
+                data.phases,
+
+                /**
+                 * Function to determine duration in specified phase.
+                 *
+                 * @param   {sails.model.phase} phase
+                 * @param   {Function}          callback
+                 */
+                function (phase, callback) {
+                    PhaseDuration
+                        .find({
+                            sum: "duration"
+                        })
+                        .where({phaseId: phase.id})
+                        .where({sprintId: data.sprint.data.id})
+                        .done(function(error, result) {
+                            if (error) {
+                                callback(error, null);
+                            } else {
+                                console.log(result);
+                                console.log({sprintId: data.sprint.id});
+                                phase.duration = result[0].duration ? result[0].duration : 0;
+
+                                callback(null, phase.duration);
+                            }
+                        });
+                },
+
+                /**
+                 * Main callback function which is called after all phases are processed.
+                 *
+                 * @param   {Error|null}    error
+                 * @param   {{}}            result
+                 */
+                    function (error, result) {
+                    if (error) {
+                        res.send(error, error.status ? error.status : 500);
+                    } else {
+                        fetchTaskData(data);
+                    }
+                }
+            );
+        }
 
         /**
          * Private function to fetch task data for each story in specified sprint.
          *
          * @return  void
          */
-        function fetchTaskData() {
+        function fetchTaskData(data) {
             // Calculate story specified statistics
             data.sprint.cntStoryTotal = data.stories.length;
             data.sprint.cntStoryDone = _.reduce(data.stories, function(memo, story) { return (story.isDone) ? memo + 1 : memo; }, 0);
@@ -205,6 +264,19 @@ module.exports = {
                         } else {
                             data.sprint.progressTask = 0;
                         }
+
+                        var totalTime = _.pluck(data.phases, "duration").reduce(function(memo, i) {return memo + i});
+                        var totalTimeNoFirst = _.pluck(_.reject(data.phases, function(phase) { return phase.order === 0 } ), "duration").reduce(function(memo, i) {return memo + i});
+
+                        data.phaseDuration = {
+                            totalTime: totalTime,
+                            totalTimeNoFirst: totalTimeNoFirst
+                        };
+
+                        _.each(data.phases, function(phase) {
+                            phase.durationPercentage = (phase.duration > 0 && phase.order !== 0) ? phase.duration / totalTimeNoFirst * 100 : 0;
+                            phase.durationPercentageTotal = (phase.duration > 0) ? phase.duration / totalTime * 100 : 0;
+                        });
 
                         res.view(data);
                     }
