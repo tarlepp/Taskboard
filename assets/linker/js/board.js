@@ -51,4 +51,26 @@ jQuery(document).ready(function() {
             template: "<div class='noty_message'><span class='noty_text'></span></div>"
         });
     }
+
+    /**
+     * Set some defaults for HighCharts component.
+     */
+    Highcharts.setOptions({
+        chart: {
+            style: {
+                fontFamily: "Yanone Kaffeesatz, Helvetica Neue, Helvetica, Arial, sans-serif",
+                fontSize: "16px"
+            }
+        },
+        legend: {
+            itemStyle: {
+                fontSize: "14px"
+            }
+        },
+        title: {
+            style: {
+                fontSize: "20px"
+            }
+        }
+    });
 });
