@@ -224,6 +224,7 @@ module.exports = {
                         });
 
                         data.chartData = [];
+                        data.chartDataTotal = [];
 
                         _.each(data.phases, function(phase) {
                             if (phase.durationPercentage > 0) {
@@ -231,6 +232,14 @@ module.exports = {
                                     name: phase.title,
                                     color: phase.backgroundColor,
                                     y: phase.durationPercentage
+                                });
+                            }
+
+                            if (phase.durationPercentageTotal > 0) {
+                                data.chartDataTotal.push({
+                                    name: phase.title,
+                                    color: phase.backgroundColor,
+                                    y: phase.durationPercentageTotal
                                 });
                             }
                         });
