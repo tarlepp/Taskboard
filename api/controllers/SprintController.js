@@ -600,6 +600,10 @@ module.exports = {
 
             var currentDate = startTime.add("days", 1);
 
+            // Group tasks for calculations
+            var objectsTasksDone = _.groupBy(data.tasks, function(task) { return task.isDone ? task.timeEndObject().format("YYYY-MM-DD") : null; } );
+            var objectsTasksOver = _.groupBy(data.tasksOver, function(task) { return task.createdAtObject().format("YYYY-MM-DD"); } );
+
             // Loops sprint days
             while (endTime.diff(currentDate, "days") >= 0) {
                 // Get reference date, this is used to determine actual tasks that are done or added
@@ -607,15 +611,11 @@ module.exports = {
 
                 // We are only interested days that are before current day
                 if (referenceDate.isBefore(moment().add("days", 1), "day")) {
-                    // Calculate done task count
-                    tasksDone = _.size(_.filter(data.tasks, function(task) {
-                        return task.isDone && task.timeEndObject().isSame(referenceDate, "day");
-                    }));
+                    var date = referenceDate.format("YYYY-MM-DD");
 
-                    // Calculate added task count
-                    tasksOver = _.size(_.filter(data.tasksOver, function(task) {
-                        return task.createdAtObject().isSame(referenceDate, "day");
-                    }));
+                    // Determine tasks count
+                    tasksDone = objectsTasksDone[date] ? _.size(objectsTasksDone[date]) : 0;
+                    tasksOver = objectsTasksOver[date] ? _.size(objectsTasksOver[date]) : 0;
 
                     // Calculate new task count based to previous tasks, done and added tasks count
                     tasks = tasks - tasksDone + tasksOver;
