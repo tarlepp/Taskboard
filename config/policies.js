@@ -129,7 +129,8 @@ module.exports.policies = {
 
         // Custom actions
         add:        ["flashMessage", "authenticated", "isAjax", "hasTaskAdmin"],
-        edit:       ["flashMessage", "authenticated", "isAjax", "hasTaskAccess"]
+        edit:       ["flashMessage", "authenticated", "isAjax", "hasTaskAccess"],
+        statistics: ["flashMessage", "authenticated", "isAjax", "hasTaskAccess"]
     },
 
     // User controller policies
