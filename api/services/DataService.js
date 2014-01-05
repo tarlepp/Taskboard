@@ -4,6 +4,8 @@
  * Generic data service, which is used to fetch generic data and call defined callback after data fetching.
  */
 
+var async = require("async");
+
 /**
  * Service to fetch single project data from database.
  *
@@ -299,6 +301,43 @@ exports.getPhases = function(where, callback) {
                 callback(null, phases);
             }
         });
+};
+
+/**
+ * Service to fetch phase data via specified task id data.
+ *
+ * @param   {Number}    taskId  Task id whose phases are fetched
+ * @param   {Function}  next    Callback function to call after query
+ */
+exports.getPhasesForTask = function(taskId, next) {
+    async.waterfall(
+        [
+            // Fetch task data
+            function(callback) {
+                DataService.getTask(taskId, callback);
+            },
+
+            // Fetch task story data
+            function(task, callback) {
+                DataService.getStory(task.storyId, callback);
+            },
+
+            // Fetch task phases data via story projectId information
+            function(story, callback) {
+                DataService.getPhases({projectId: story.projectId}, callback);
+            }
+        ],
+
+        /**
+         * Main callback function which is called after all jobs are done and processed.
+         *
+         * @param   {Error|null}            error
+         * @param   {sails.model.phase[]}   data
+         */
+        function (error, data) {
+            next(error, data);
+        }
+    );
 };
 
 /**
