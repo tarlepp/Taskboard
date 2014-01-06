@@ -3,6 +3,9 @@
         <a href="#basic" data-toggle="tab">Basic</a>
     </li>
     <li>
+        <a id="tasksTab" href="#statistics" data-toggle="tab" data-callback="initTaskTabStatistics" data-href="/Task/Statistics?id=<%= task.id %>">Statistics</a>
+    </li>
+    <li>
         <a href="#history" data-toggle="tab" data-href="/History?objectName=Task&objectId=<%= task.id %>">History</a>
     </li>
 </ul>
@@ -57,6 +60,8 @@
             </div>
         </form>
     </div>
-    <div class="tab-pane" id="history">
-    </div>
+
+    <div class="tab-pane" id="statistics"></div>
+
+    <div class="tab-pane" id="history"></div>
 </div>

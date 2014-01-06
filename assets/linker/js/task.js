@@ -241,3 +241,12 @@ function initTaskForm(modal) {
 
     inputTitle.focus().val(inputTitle.val());
 }
+
+/**
+ * Function to initialize task statistics tab in modal.
+ *
+ * @param   {jQuery|$}  modal
+ * @param   {String}    contentId
+ */
+function initTaskTabStatistics(modal, contentId) {
+}
