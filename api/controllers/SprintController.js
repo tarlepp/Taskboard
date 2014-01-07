@@ -380,6 +380,11 @@ module.exports = {
                 // Fetch stories that are attached to this sprint
                 stories: function(callback) {
                     DataService.getStories({sprintId: sprintId}, callback);
+                },
+
+                // Fetch task types
+                types: function(callback) {
+                    DataService.getTypes({}, callback);
                 }
             },
 
@@ -396,30 +401,139 @@ module.exports = {
                     // Store results to data
                     data.sprint = results.sprint;
                     data.stories = results.stories;
-                    data.tasks = [];
-                    data.tasksDone = [];
+                    data.types = results.types;
 
-                    // Determine story id values for task search.
-                    var storyIds = _.map(data.stories, function(story) { return {storyId: story.id}; });
-
-                    if (storyIds.length > 0) {
-                        // Fetch story tasks
-                        DataService.getTasks({or: storyIds}, function(error, tasks) {
-                            if (error) {
-                                res.send(error.status ? error.status : 500, error.message ? error.message : error);
-                            } else {
-                                data.tasks = _.sortBy(tasks, function(task) { return task.timeEnd; } );
-                                data.tasksDone = _.filter(data.tasks, function(task) { return task.isDone; } );
-
-                                parseData();
-                            }
-                        });
-                    } else {
-                        parseData();
-                    }
+                    getTaskData();
                 }
             }
         );
+
+        /**
+         * Private function to fetch task data.
+         */
+        function getTaskData() {
+            async.parallel(
+                {
+                    // Fetch project phases data
+                    phases: function(callback) {
+                        DataService.getPhases({projectId: data.sprint.projectId}, callback);
+                    },
+
+                    // Fetch tasks that are attached to this sprint
+                    tasks: function(callback) {
+                        // Determine story id values for task search.
+                        var storyIds = _.map(data.stories, function(story) { return {storyId: story.id}; });
+
+                        if (storyIds.length > 0) {
+                            DataService.getTasks({or: storyIds}, callback);
+                        } else {
+                            callback(null, []);
+                        }
+                    }
+                },
+
+                /**
+                 * Main callback function which is called after all parallel jobs are done.
+                 *
+                 * @param   {Error|null}    error
+                 * @param   {{}}            results
+                 */
+                function(error, results) {
+                    if (error) {
+                        res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    } else {
+                        data.phases = results.phases;
+                        data.tasks = _.sortBy(results.tasks, function(task) { return task.timeEnd; } );
+                        data.tasksDone = _.filter(data.tasks, function(task) { return task.isDone; } );
+
+                        fetchTaskDuration();
+                    }
+                }
+            );
+        }
+
+        /**
+         * Private function to determine tasks durations in each phase.
+         */
+        function fetchTaskDuration() {
+            async.map(
+                data.phases,
+
+                /**
+                 * Function to determine duration in current phase.
+                 *
+                 * @param   {sails.model.phase} phase
+                 * @param   {Function}          callback
+                 */
+                function (phase, callback) {
+                    PhaseDuration
+                        .find({
+                            sum: "duration"
+                        })
+                        .where({phaseId: phase.id})
+                        .where({sprintId: data.sprint.id})
+                        .done(function(error, result) {
+                            if (error) {
+                                callback(error, null);
+                            } else {
+                                phase.duration = result[0].duration ? result[0].duration : 0;
+
+                                callback(null, phase.duration);
+                            }
+                        });
+                },
+
+                /**
+                 * Main callback function which is called after all phases are processed.
+                 *
+                 * @param   {Error|null}    error
+                 * @param   {{}}            result
+                 */
+                function (error, result) {
+                    if (error) {
+                        res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    } else {
+                        var totalTime = _.pluck(data.phases, "duration").reduce(function(memo, i) {return memo + i});
+                        var totalTimeNoFirst = _.pluck(_.reject(data.phases, function(phase) { return phase.order === 0 } ), "duration").reduce(function(memo, i) {return memo + i});
+
+                        data.phaseDuration = {
+                            totalTime: totalTime,
+                            totalTimeNoFirst: totalTimeNoFirst
+                        };
+
+                        _.each(data.phases, function(phase) {
+                            phase.durationPercentage = (phase.duration > 0 && phase.order !== 0) ? phase.duration / totalTimeNoFirst * 100 : 0;
+                            phase.durationPercentageTotal = (phase.duration > 0) ? phase.duration / totalTime * 100 : 0;
+                        });
+
+                        data.chartDataPhases = [];
+                        data.chartDataPhasesTotal = [];
+
+                        _.each(data.phases, function(phase) {
+                            if (phase.durationPercentage > 0) {
+                                data.chartDataPhases.push({
+                                    name: phase.title,
+                                    color: phase.backgroundColor,
+                                    y: phase.durationPercentage,
+                                    duration: phase.duration
+                                });
+                            }
+
+                            if (phase.durationPercentageTotal > 0) {
+                                data.chartDataPhasesTotal.push({
+                                    name: phase.title,
+                                    color: phase.backgroundColor,
+                                    y: phase.durationPercentageTotal,
+                                    duration: phase.duration
+                                });
+                            }
+                        });
+
+                        parseData();
+                    }
+                }
+            );
+        }
 
         /**
          * Private function to parse actual data for chart.
@@ -429,6 +543,25 @@ module.exports = {
             var storyTasks = 0;
             var doneTasks = data.tasksDone.length;
             var tasksOver = [];
+
+            var taskCount = _.size(data.tasks);
+            var taskTypes = _.groupBy(data.tasks, function(task) { return task.typeId; } );
+
+            data.chartDataTaskTypes = [];
+
+            _.each(taskTypes, function(tasks, typeId) {
+                var type = _.find(data.types, function(type) { return type.id == typeId; });
+                var count = _.size(tasks);
+
+                if (count > 0) {
+                    data.chartDataTaskTypes.push({
+                        name: type.title,
+                        color: type.chartColor,
+                        y: count / taskCount * 100,
+                        count: count
+                    });
+                }
+            });
 
             data.workDays = 0;
 

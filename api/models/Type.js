@@ -18,6 +18,10 @@ module.exports = {
             type:       'integer',
             required:   true
         },
+        chartColor: {
+            type:       'string',
+            required:   true
+        },
         class: {
             type:       'string',
             required:   true
@@ -31,11 +35,11 @@ module.exports = {
             return this.title;
         },
         createdAtObject: function () {
-            return (this.createdAt && this.createdAt != '0000-00-00')
+            return (this.createdAt && this.createdAt != '0000-00-00 00:00:00')
                 ? DateService.convertDateObjectToUtc(this.createdAt) : null;
         },
         updatedAtObject: function () {
-            return (this.updatedAt && this.updatedAt != '0000-00-00')
+            return (this.updatedAt && this.updatedAt != '0000-00-00 00:00:00')
                 ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         }
     },

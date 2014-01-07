@@ -726,6 +726,136 @@ function initSprintTabChart(modal, contentId) {
         series: []
     });
 
+    // Create pie chart for phase durations
+    var durationPie = new Highcharts.Chart({
+        chart: {
+            renderTo: 'phaseDurations',
+            height: 250
+        },
+        title: {
+            text: "Loading data..."
+        },
+        credits: {
+            enabled: false
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: "pointer",
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: true,
+                center: ["25%", "50%"]
+            }
+        },
+        legend: {
+            backgroundColor: "#ffffff",
+            align: "right",
+            verticalAlign: "middle",
+            layout: "vertical",
+            x: -60,
+            floating: true,
+            labelFormatter: function() {
+                return this.name + " " + numeral(this.y).format("0.00") + "%";
+            }
+        },
+        tooltip: {
+            hideDelay: 100,
+            useHTML: true,
+            borderColor: "#cccccc",
+            borderWidth: 1,
+            shadow: false,
+            formatter: function() {
+                return ""
+                    + "<div class='chartToolTipTasks'>"
+                        + "<h1>Statistics of phase '" + this.point.name + "'</h1>"
+                        + "<div>"
+                            + "<table>"
+                                + "<tr>"
+                                    + "<th class='text-right'>Percentage:</th>"
+                                    + "<td class='text-nowrap'>" + numeral(this.y).format("0.00") + "%</td>"
+                                + "</tr>"
+                                + "<tr>"
+                                    + "<th class='text-right'>Duration:</th>"
+                                    + "<td class='text-nowrap'>" + moment().from(moment().add(this.point.duration, "seconds"), true) + "</td>"
+                                + "</tr>"
+                                + "<tr>"
+                                    + "<th class='text-right'></th>"
+                                    + "<td class='text-nowrap'>" + numeral(this.point.duration).format() + " seconds</td>"
+                                + "</tr>"
+                            + "</table>"
+                        + "</div>"
+                    + "</div>"
+                ;
+            }
+        },
+        series: []
+    });
+
+    // Create pie chart for phase durations
+    var pieTaskTypes = new Highcharts.Chart({
+        chart: {
+            renderTo: 'taskTypes',
+            height: 250
+        },
+        title: {
+            text: "Loading data..."
+        },
+        credits: {
+            enabled: false
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: "pointer",
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: true,
+                center: ["25%", "50%"]
+            }
+        },
+        legend: {
+            backgroundColor: "#ffffff",
+            align: "right",
+            verticalAlign: "middle",
+            layout: "vertical",
+            x: -60,
+            floating: true,
+            labelFormatter: function() {
+                return this.name + " " + numeral(this.y).format("0.00") + "%";
+            }
+        },
+        tooltip: {
+            hideDelay: 100,
+            useHTML: true,
+            borderColor: "#cccccc",
+            borderWidth: 1,
+            shadow: false,
+            formatter: function() {
+                return ""
+                    + "<div class='chartToolTipTasks'>"
+                        + "<h1>Tasks in '" + this.point.name + "' type</h1>"
+                        + "<div>"
+                            + "<table>"
+                                + "<tr>"
+                                    + "<th class='text-right'>Percentage:</th>"
+                                    + "<td class='text-nowrap'>" + numeral(this.y).format("0.00") + "%</td>"
+                                + "</tr>"
+                                + "<tr>"
+                                    + "<th class='text-right'>Count</th>"
+                                    + "<td class='text-nowrap'>" + numeral(this.point.count).format() + " </td>"
+                                + "</tr>"
+                            + "</table>"
+                        + "</div>"
+                    + "</div>"
+                ;
+            }
+        },
+        series: []
+    });
+
     /**
      * This function fetches actual data for chart from server.
      *
@@ -746,7 +876,7 @@ function initSprintTabChart(modal, contentId) {
 
                 // Set main title for chart
                 chart.setTitle({
-                    text: data.sprint.title + " " + moment(data.sprint.dateStart).format(myViewModel.user().momentFormatDate()) + " - " + moment(data.sprint.dateEnd).format(myViewModel.user().momentFormatDate())
+                    text: moment(data.sprint.dateStart).format(myViewModel.user().momentFormatDate()) + " - " + moment(data.sprint.dateEnd).format(myViewModel.user().momentFormatDate()) + " " + data.sprint.title
                 });
 
                 if (data.initTasks > 0) {
@@ -760,6 +890,30 @@ function initSprintTabChart(modal, contentId) {
 
                 // Redraw chart
                 chart.redraw();
+
+                durationPie.setTitle({
+                    text: "Task durations in phases"
+                });
+
+                durationPie.addSeries({
+                    type: "pie",
+                    name: "Task durations in phases",
+                    data: data.chartDataPhases
+                }, false);
+
+                durationPie.redraw();
+
+                pieTaskTypes.setTitle({
+                    text: "Task types"
+                });
+
+                pieTaskTypes.addSeries({
+                    type: "pie",
+                    name: "Task types in sprint",
+                    data: data.chartDataTaskTypes
+                }, false);
+
+                pieTaskTypes.redraw();
             })
             .fail(function(jqXhr, textStatus, error) {
                 handleAjaxError(jqXhr, textStatus, error);
