@@ -1,5 +1,5 @@
 <div class="progressTotal">
-    <h4>Task times in phases <span class="text-no-shadow text-small text-muted">Note that first and last phases are excluded out of this statistics.</span></h4>
+    <h4>Task durations in phases <span class="text-no-shadow text-small text-muted">Note that first and last phases are excluded out of this statistics.</span></h4>
 
     <div class="progress">
     <% _.each(phases, function(phase) { %>
@@ -40,7 +40,7 @@
             height: 250
         },
         title: {
-            text: "Task times in phases"
+            text: false
         },
         credits: {
             enabled: false
@@ -75,9 +75,23 @@
             formatter: function() {
                 return ""
                     + "<div class='chartToolTipTasks'>"
-                        + "<h1>"
-                            + this.point.name + " " + numeral(this.y).format("0.00") + "%"
-                        + "</h1>"
+                        + "<h1>Statistics of phase '" + this.point.name + "'</h1>"
+                        + "<div>"
+                            + "<table>"
+                                + "<tr>"
+                                    + "<th class='text-right'>Percentage:</th>"
+                                    + "<td class='text-nowrap'>" + numeral(this.y).format("0.00") + "%</td>"
+                                + "</tr>"
+                                + "<tr>"
+                                    + "<th class='text-right'>Duration:</th>"
+                                    + "<td class='text-nowrap'>" + moment().from(moment().add(this.point.duration, "seconds"), true) + "</td>"
+                                + "</tr>"
+                                + "<tr>"
+                                    + "<th class='text-right'></th>"
+                                    + "<td class='text-nowrap'>" + numeral(this.point.duration).format() + " seconds</td>"
+                                + "</tr>"
+                            + "</table>"
+                        + "</div>"
                     + "</div>"
                 ;
             }
