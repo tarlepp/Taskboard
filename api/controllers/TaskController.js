@@ -231,7 +231,8 @@ module.exports = {
                                 data.chartData.push({
                                     name: phase.title,
                                     color: phase.backgroundColor,
-                                    y: phase.durationPercentage
+                                    y: phase.durationPercentage,
+                                    duration: phase.duration
                                 });
                             }
 
@@ -239,7 +240,8 @@ module.exports = {
                                 data.chartDataTotal.push({
                                     name: phase.title,
                                     color: phase.backgroundColor,
-                                    y: phase.durationPercentageTotal
+                                    y: phase.durationPercentageTotal,
+                                    duration: phase.duration
                                 });
                             }
                         });
