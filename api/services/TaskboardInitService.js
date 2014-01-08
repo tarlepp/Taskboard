@@ -96,9 +96,9 @@ exports.createTypes = function(next) {
             } else if (_.size(types) === 0) {
                 // Specify "default" type data
                 var defaultTypes = [
-                    {title: "Task", order: "1", class: "alert alert-warning", classText: "text-warning"},
-                    {title: "Test", order: "2", class: "alert alert-success", classText: "text-success"},
-                    {title: "Bug",  order: "3", class: "alert alert-danger",  classText: "text-danger"}
+                    {title: "Task", order: "1", chartColor: '#548dd4', class: "alert alert-warning", classText: "text-warning"},
+                    {title: "Test", order: "2", chartColor: '#8db3e2', class: "alert alert-success", classText: "text-success"},
+                    {title: "Bug",  order: "3", chartColor: '#92cddc', class: "alert alert-danger",  classText: "text-danger"}
                 ];
 
                 // Create default types and pass those to callback function
