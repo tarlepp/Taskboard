@@ -6,7 +6,7 @@
   "dependencies": {
     "sails": "0.9.8",
     "grunt": "0.4.1",
-    "sails-mysql": "0.9.5",
+    "sails-mysql": "0.9.7",
     "optimist": "0.3.4",
     "ejs": "0.8.4",
     "jquery": "~1.8.3",
