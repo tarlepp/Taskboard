@@ -6,7 +6,6 @@
  */
 var bcrypt = require("bcrypt");
 var gravatar = require("gravatar");
-var http = require("http");
 var async = require("async");
 
 /**
@@ -89,8 +88,12 @@ module.exports = {
         fullName: function() {
             return this.lastName + " " + this.firstName;
         },
-        gravatarImage: function() {
-            return gravatar.url(this.email, {s: "25", r: "pg", d: "404"});
+
+        // Gravatar image url
+        gravatarImage: function(size) {
+            size = size || 25;
+
+            return gravatar.url(this.email, {s: size, r: "pg", d: "404"});
         },
 
         // ObjectTitle
