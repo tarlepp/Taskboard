@@ -164,8 +164,6 @@ module.exports = {
                             if (error) {
                                 callback(error, null);
                             } else {
-                                console.log(result);
-                                console.log({sprintId: data.sprint.id});
                                 phase.duration = result[0].duration ? result[0].duration : 0;
 
                                 callback(null, phase.duration);
@@ -179,7 +177,7 @@ module.exports = {
                  * @param   {Error|null}    error
                  * @param   {{}}            result
                  */
-                    function (error, result) {
+                function (error, result) {
                     if (error) {
                         res.send(error, error.status ? error.status : 500);
                     } else {
