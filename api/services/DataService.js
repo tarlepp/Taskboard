@@ -399,3 +399,83 @@ exports.getUserSignInData = function(userId, callback) {
             }
         });
 };
+
+/**
+ * Service to fetch comments for specified object. Note that service calls itself
+ * recursive to fetch all nested comments.
+ *
+ * @param   {String}    objectName  Name of the object (Project, Sprint, Story, Task, etc.)
+ * @param   {Number}    objectId    Id of the specified object
+ * @param   {Number}    commentId   Possible parent comment id
+ * @param   {Function}  callback    Callback function which is called after comments are fetched
+ */
+exports.getComments = function(objectName, objectId, commentId, callback) {
+    Comment
+        .find()
+        .where({
+            objectName: objectName,
+            objectId: objectId,
+            commentId: commentId
+        })
+        .sort("createdAt ASC")
+        .exec(function(error, comments) {
+            if (error) {
+                callback(error, null);
+            } else {
+                // Map all comments and fetch children(s) for those
+                async.map(
+                    comments,
+
+                    /**
+                     * Map function to fetch current comment children comments. Note that
+                     * this will actually call service method recursively.
+                     *
+                     * @param   {sails.model.comment}   comment Comment object
+                     * @param   {Function}              callback      Callback function
+                     */
+                    function(comment, callback) {
+                        async.parallel(
+                            {
+                                // Fetch comment author data
+                                author: function(callback) {
+                                    DataService.getUser(comment.createdUserId, callback);
+                                },
+
+                                // Fetch children comments
+                                comments: function(callback) {
+                                    DataService.getComments(objectName, objectId, comment.id, callback);
+                                }
+                            },
+
+                            /**
+                             * Main callback function which is called after parallel jobs are done.
+                             *
+                             * @param   {Error|null}    error
+                             * @param   {{}}            results
+                             */
+                            function(error, results) {
+                                if (error) {
+                                    callback(error, null);
+                                } else {
+                                    comment.author = results.author;
+                                    comment.comments = results.comments;
+
+                                    callback(null, results);
+                                }
+                            }
+                        );
+                    },
+
+                    /**
+                     * Main callback function for comment mapping.
+                     *
+                     * @param   {Error} error   Possible error object
+                     */
+                    function(error) {
+                        // Just call specified service callback function
+                        callback(error, comments);
+                    }
+                );
+            }
+        });
+};
