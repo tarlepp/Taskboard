@@ -183,7 +183,23 @@ module.exports.policies = {
         destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "isAdministrator"]
     },
 
-    // Type controller policies
+    // Story controller policies
+    "Comment": {
+        // By default do not allow nothing
+        "*":        false,
+
+        // Default handling for blueprints
+        // TODO: add policy to check actual right to create, update and destroy
+        find:       ["flashMessage", "authenticated", "isAjaxOrSocket"],
+        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "addUserDataCreate"],
+        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "addUserDataUpdate"],
+        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket"],
+
+        // Custom actions
+        index:      ["flashMessage", "authenticated", "isAjax"]
+    },
+
+    // Validator controller policies
     "Validator": {
         // By default do not allow nothing
         "*":            false,
