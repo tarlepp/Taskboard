@@ -42,5 +42,31 @@ module.exports = {
             return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         }
+    },
+
+    // Lifecycle callbacks
+
+    /**
+     * Before destroy callback, which will destroy all comment siblings.
+     *
+     * @param   {Object}    terms
+     * @param   {Function}  cb
+     */
+    beforeDestroy: function(terms, cb) {
+        Comment
+            .findOne(terms)
+            .exec(function(error, comment) {
+                if (error) {
+                    cb(error);
+                } else if (comment) {
+                    Comment
+                        .destroy({commentId: comment.id})
+                        .exec(function(error) {
+                            cb(error);
+                        });
+                } else {
+                    cb();
+                }
+            });
     }
 };

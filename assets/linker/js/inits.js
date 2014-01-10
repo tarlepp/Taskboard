@@ -321,6 +321,7 @@ function initCommonTabComments(modal, contentId) {
                         }
                     });
                     break;
+                default:
                 case "reply":
                     // Create new comment
                     socket.post("/Comment/create", formItems, function(/** sails.json.comment */data) {
@@ -382,6 +383,41 @@ function initCommonTabComments(modal, contentId) {
 
                 comment.append(form);
             }
+        } else if (action === "delete") {
+            modal.hide();
+
+            jQuery("body").find(".modal-backdrop.in:first").hide();
+
+            bootbox.confirm({
+                title: "danger - danger - danger",
+                message: "Are you sure of your comment delete? Note that all replies are also deleted!",
+                buttons: {
+                    cancel: {
+                        label: "Cancel",
+                        className: "btn-default pull-left"
+                    },
+                    confirm: {
+                        label: "Delete",
+                        className: "btn-danger pull-right"
+                    }
+                },
+                callback: function(result) {
+                    jQuery("body").find(".modal-backdrop.in").show();
+
+                    modal.show();
+
+                    if (result) {
+                        // Remove comment via socket
+                        socket.delete("/Comment/" + commentId, {_csrf: getCsrfToken()}, function(/** sails.json.comment */comment) {
+                            if (handleSocketError(comment)) {
+                                makeMessage("Comment deleted successfully.");
+
+                                reloadTabContentUrl(modal, contentId);
+                            }
+                        });
+                    }
+                }
+            });
         }
     });
 }
