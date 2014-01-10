@@ -81,6 +81,10 @@ table input[type="text"] {
     top: 2px;
 }
 
+.hidden {
+    display: none;
+}
+
 small,
 .text-small {
     font-size: 80%;
