@@ -171,6 +171,7 @@ function initTabs(context) {
         // We have url defined, so fetch tab content via AJAX call.
         if (contentUrl) {
             disableButtons = true;
+
             var content = jQuery(contentId);
 
             content.html(jQuery("#placeholderLoading").clone().html());
@@ -278,4 +279,104 @@ function initActionMenu(context, parameters) {
             }
         });
     });
+}
+
+/**
+ * Function initializes 'Comments' tab to use in any modal where it's attached.
+ *
+ * @param   {jQuery|$}  modal       Current modal content
+ * @param   {String}    contentId   Tab content div id
+ */
+function initCommonTabComments(modal, contentId) {
+    var body = jQuery("body");
+    var container = modal.find(contentId);
+    var form = jQuery("#formComment", modal);
+
+    // Initialize wysiwyg editor
+    initWysiwyg(container);
+
+    form.off("click", "button.btn-primary");
+
+    // User clicks "make comment" button
+    form.on("click", "button.btn-primary", function(event) {
+        event.preventDefault();
+
+        var formItems = form.serializeJSON();
+
+        if (validateForm(formItems, modal)) {
+            // Create new comment
+            socket.post("/Comment/create", formItems, function(/** sails.json.comment */data) {
+                if (handleSocketError(data, true)) {
+                    makeMessage("Comment created successfully.", "success", {});
+
+                    reloadTabContentUrl(modal, contentId);
+                }
+            });
+        }
+    });
+
+    container.off("click", "a.comment-action");
+
+    // User click comment action link
+    container.on("click", "a.comment-action", function(event) {
+        event.preventDefault();
+
+        var element = jQuery(this);
+        var commentId = element.data("commentId");
+        var action = element.data("action");
+        var comment = container.find("#comment_" + commentId + " .panel");
+
+        if (comment.find("form").length) {
+            form.find("input[name=commentId]").val(0);
+
+            form.insertAfter(container.find("#comments"));
+        } else {
+            form.find("input[name=commentId]").val(commentId);
+
+            comment.append(form);
+        }
+    });
+}
+
+/**
+ * Function initializes 'History' tab to use in any modal where it's attached.
+ *
+ * @param   {jQuery|$}  modal       Current modal content
+ * @param   {String}    contentId   Tab content div id
+ */
+function initCommonTabHistory(modal, contentId) {
+    // This just a placeholder
+}
+
+/**
+ * Function to reload URL tab content again.
+ *
+ * @param   {jQuery|$}  modal       Current modal content
+ * @param   {String}    contentId   Tab content div id
+ */
+function reloadTabContentUrl(modal, contentId) {
+    var element = jQuery("a[href=" + contentId + "]");
+    var contentUrl = element.data("href");
+    var callback = element.data("callback");
+    var content = jQuery(contentId);
+
+    // Add loading spinner
+    content.html(jQuery("#placeholderLoading").clone().html());
+
+    // Load tab content
+    jQuery
+        .ajax({
+            url: contentUrl,
+            context: document.body
+        })
+        .done(function(result) {
+            content.html(result);
+
+            if (typeof callback !== "undefined") {
+                dispatch(callback, [modal, contentId]);
+            }
+        })
+        .fail(function(jqXhr, textStatus, error) {
+            content.html(handleAjaxError(jqXhr, textStatus, error, true));
+        });
 }

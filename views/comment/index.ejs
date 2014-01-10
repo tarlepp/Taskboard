@@ -1,0 +1,30 @@
+<div id="comments">
+<% if (_.size(comments) > 0) { %>
+    <ul class="comment-list">
+        <% _.each(comments, function(comment) { %>
+            <%- partial("partials/comment", comment) %>
+        <% }); %>
+    </ul>
+<% } else { %>
+    <p class="text-center text-muted">
+        No comments yet.
+    </p>
+<% } %>
+</div>
+
+<form id="formComment">
+    <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+    <input type="hidden" name="objectName" value="<%= objectName %>" />
+    <input type="hidden" name="objectId" value="<%= objectId %>" />
+    <input type="hidden" name="commentId" value="0" />
+
+    <div class="form-group required">
+        <label class="control-label hidden">Comment</label>
+        <textarea id="comment" name="comment" class="form-control" data-wysiwyg="true" required="required" placeholder="enter comment"></textarea>
+    </div>
+
+    <div class="form-group">
+        <button type="button" class="btn btn-sm btn-primary pull-right">Add comment</button>
+    </div>
+    <div class="clearfix"></div>
+</form>

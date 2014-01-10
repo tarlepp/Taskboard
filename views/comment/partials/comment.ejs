@@ -1,0 +1,46 @@
+<li class="comment">
+    <article>
+        <a class="pull-left gravatar" href="javascript: void(0);">
+            <div style="display: none;">
+                <i class="fa fa-user"></i>
+            </div>
+
+            <img src="<%= comment.author.gravatarImage(50) %>" onerror="this.style.display = 'none'; this.previousElementSibling.style.display = '';" />
+        </a>
+
+        <div id="comment_<%= comment.id %>">
+            <div class="panel">
+                <h1>
+                    <%= comment.author.fullName() %>
+                    -
+                    <span class="text-medium tooltipTitle" title="<%= comment.createdAtObject().format(currentUser.momentFormatDateTime) %>"
+                        data-qtip-options='{ "position": { "at": "top center", "my": "bottom center" } }'
+                    >
+                        <%= comment.createdAtObject().fromNow() %>
+                    </span>
+
+                    <span class="pull-right text-small">
+                        <a href="javascript: void(0);" class="comment-action tooltipTitle" title="Make reply to this comment"
+                           data-qtip-options='{ "position": { "at": "top center", "my": "bottom center" } }'
+                           data-comment-id="<%= comment.id %>"
+                           data-action="reply"
+                        >
+                            <i class="fa fa-reply"></i>
+                        </a>
+                    </span>
+                </h1>
+
+                <%- comment.comment %>
+
+            </div>
+        </div>
+
+    <% if (_.size(comment.comments) > 0) { %>
+        <ul>
+        <% _.each(comment.comments, function(comment) { %>
+            <%- partial("comment", comment) %>
+        <% }); %>
+        </ul>
+    <% } %>
+    </article>
+</li>
