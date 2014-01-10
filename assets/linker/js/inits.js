@@ -166,9 +166,11 @@ function initTabs(context) {
         var contentId = element.attr("href");
         var contentUrl = element.data("href");
         var callback = element.data("callback");
+        var disableButtons = element.data("disableButtons");
 
         // We have url defined, so fetch tab content via AJAX call.
         if (contentUrl) {
+            disableButtons = true;
             var content = jQuery(contentId);
 
             content.html(jQuery("#placeholderLoading").clone().html());
@@ -187,6 +189,19 @@ function initTabs(context) {
             });
         } else if (typeof callback !== "undefined") { // Dispatch callback function with default parameters
             dispatch(callback, [context, contentId]);
+        }
+
+        // Action buttons
+        var buttons = context.find("button.pull-right");
+
+        if (disableButtons) {
+            buttons.each(function() {
+                jQuery(this).hide();
+            });
+        } else {
+            buttons.each(function() {
+                jQuery(this).show();
+            });
         }
     });
 }
