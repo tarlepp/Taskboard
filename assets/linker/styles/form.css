@@ -334,3 +334,7 @@ div[data-role="editor-toolbar"] {
     width: 30px;
     height: 34px;
 }
+
+.action-images a {
+    margin-left: 5px;
+}

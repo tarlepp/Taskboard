@@ -304,14 +304,34 @@ function initCommonTabComments(modal, contentId) {
         var formItems = form.serializeJSON();
 
         if (validateForm(formItems, modal)) {
-            // Create new comment
-            socket.post("/Comment/create", formItems, function(/** sails.json.comment */data) {
-                if (handleSocketError(data, true)) {
-                    makeMessage("Comment created successfully.", "success", {});
+            switch (form.data("type")) {
+                case "edit":
+                    // Main comment ID is stored as "parent" id information
+                    var commentId = formItems.commentId;
 
-                    reloadTabContentUrl(modal, contentId);
-                }
-            });
+                    // Remove this temporary "parent" id
+                    delete formItems.commentId;
+
+                    // Update comment data
+                    socket.put("/Comment/" + commentId, formItems, function(/** sails.json.comment */data) {
+                        if (handleSocketError(data, true)) {
+                            makeMessage("Comment updated successfully.", "success", {});
+
+                            reloadTabContentUrl(modal, contentId);
+                        }
+                    });
+                    break;
+                case "reply":
+                    // Create new comment
+                    socket.post("/Comment/create", formItems, function(/** sails.json.comment */data) {
+                        if (handleSocketError(data, true)) {
+                            makeMessage("Comment created successfully.", "success", {});
+
+                            reloadTabContentUrl(modal, contentId);
+                        }
+                    });
+                    break;
+            }
         }
     });
 
@@ -325,15 +345,34 @@ function initCommonTabComments(modal, contentId) {
         var commentId = element.data("commentId");
         var action = element.data("action");
         var comment = container.find("#comment_" + commentId + " .panel");
+        var button = form.find(".btn-primary");
 
-        if (comment.find("form").length) {
-            form.find("input[name=commentId]").val(0);
+        // Set form type
+        form.data("type", action);
 
-            form.insertAfter(container.find("#comments"));
-        } else {
-            form.find("input[name=commentId]").val(commentId);
+        // Edit or reply action
+        if (action === "edit" || action === "reply") {
+            if (action === "edit") {
+                var currentText = jQuery.trim(comment.find(".comment-content").html());
 
-            comment.append(form);
+                // set current text to editor and actual textarea
+                form.find(".editor").html(currentText);
+                form.find("textarea").html(currentText);
+
+                button.text(button.data("textEdit"));
+            }
+
+            // Second click of "reply" icon will reset comment form
+            if (comment.find("form").length) {
+                button.text(button.data("textReply"));
+
+                form.find("input[name=commentId]").val(0);
+                form.insertAfter(container.find("#comments"));
+            } else { // Otherwise append form below comment and set parent id value
+                form.find("input[name=commentId]").val(commentId);
+
+                comment.append(form);
+            }
         }
     });
 }

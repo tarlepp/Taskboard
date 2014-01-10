@@ -19,18 +19,32 @@
                         <%= comment.createdAtObject().fromNow() %>
                     </span>
 
-                    <span class="pull-right text-small">
+                    <span class="pull-right text-no-shadow text-small action-images">
                         <a href="javascript: void(0);" class="comment-action tooltipTitle" title="Make reply to this comment"
+                            data-qtip-options='{ "position": { "at": "top center", "my": "bottom center" } }'
+                            data-comment-id="<%= comment.id %>"
+                            data-action="reply"
+                        ><i class="fa fa-reply"></i></a>
+
+                        <% if (comment.author.id === currentUser.id) { %>
+                        <a href="javascript: void(0);" class="comment-action tooltipTitle" title="Edit your comment"
+                            data-qtip-options='{ "position": { "at": "top center", "my": "bottom center" } }'
+                            data-comment-id="<%= comment.id %>"
+                            data-action="edit"
+                        ><i class="fa fa-pencil"></i></a>
+
+                        <a href="javascript: void(0);" class="comment-action tooltipTitle text-danger" title="Delete your comment"
                            data-qtip-options='{ "position": { "at": "top center", "my": "bottom center" } }'
                            data-comment-id="<%= comment.id %>"
-                           data-action="reply"
-                        >
-                            <i class="fa fa-reply"></i>
-                        </a>
+                           data-action="delete"
+                        ><i class="fa fa-times"></i></a>
+                        <% }%>
                     </span>
                 </h1>
 
-                <%- comment.comment %>
+                <div class="comment-content">
+                    <%- comment.comment %>
+                </div>
 
             </div>
         </div>

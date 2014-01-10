@@ -19,7 +19,8 @@
  *          sails.json.sprint|
  *          sails.json.story|
  *          sails.json.task|
- *          sails.json.projectUser
+ *          sails.json.projectUser|
+ *          sails.json.comment
  *          }                       error
  * @param   {Boolean}               [showMessage]
  */

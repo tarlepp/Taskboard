@@ -37,6 +37,7 @@ ul.comment-list .gravatar div i {
 ul.comment-list h1 {
     font-size: 18px;
     border-bottom: 1px solid #ddd;
+    margin-bottom: 5px;
 }
 
 ul.comment-list .panel {
