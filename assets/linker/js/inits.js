@@ -346,6 +346,7 @@ function initCommonTabComments(modal, contentId) {
         var action = element.data("action");
         var comment = container.find("#comment_" + commentId + " .panel");
         var button = form.find(".btn-primary");
+        var previousAction = form.data("type");
 
         // Set form type
         form.data("type", action);
@@ -360,13 +361,21 @@ function initCommonTabComments(modal, contentId) {
                 form.find("textarea").html(currentText);
 
                 button.text(button.data("textEdit"));
+            } else {
+                form.find(".editor").html("");
+                form.find("textarea").html("");
+
+                button.text(button.data("textReply"));
             }
 
             // Second click of "reply" icon will reset comment form
-            if (comment.find("form").length) {
+            if (comment.find("form").length && previousAction && previousAction == action) {
                 button.text(button.data("textReply"));
 
                 form.find("input[name=commentId]").val(0);
+                form.find(".editor").html("");
+                form.find("textarea").html("");
+
                 form.insertAfter(container.find("#comments"));
             } else { // Otherwise append form below comment and set parent id value
                 form.find("input[name=commentId]").val(commentId);
