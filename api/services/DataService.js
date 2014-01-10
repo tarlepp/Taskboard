@@ -182,6 +182,32 @@ exports.getPhase = function(phaseId, callback) {
 };
 
 /**
+ * Service to fetch single comment from database. Note that this won't fetch
+ * siblings and author data
+ *
+ * @param   {Number}    commentId   Comment id
+ * @param   {Function}  callback    Callback function to call after query
+ */
+exports.getComment = function(commentId, callback) {
+    Comment
+        .findOne(commentId)
+        .done(function(error, /** sails.model.comment */ comment) {
+            if (error) {
+                callback(error, null);
+            } else if (!comment) {
+                var errorMessage = new Error();
+
+                errorMessage.message = "Comment not found.";
+                errorMessage.status = 404;
+
+                callback(errorMessage, null);
+            } else {
+                callback(null, comment);
+            }
+        });
+};
+
+/**
  * Service to fetch project data from database.
  *
  * @param   {{}}        where       Used query conditions

@@ -189,14 +189,13 @@ module.exports.policies = {
         "*":        false,
 
         // Default handling for blueprints
-        // TODO: add policy to check actual right to create, update and destroy
-        find:       ["flashMessage", "authenticated", "isAjaxOrSocket"],
-        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "addUserDataCreate"],
-        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "addUserDataUpdate"],
-        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket"],
+        find:       ["flashMessage", "authenticated", "isAjaxOrSocket", "hasCommentObjectAccess"],
+        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasCommentObjectCreate", "addUserDataCreate"],
+        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasCommentObjectAdmin", "addUserDataUpdate"],
+        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasCommentObjectAdmin"],
 
         // Custom actions
-        index:      ["flashMessage", "authenticated", "isAjax"]
+        index:      ["flashMessage", "authenticated", "isAjax", "hasCommentObjectAccess"]
     },
 
     // Validator controller policies
