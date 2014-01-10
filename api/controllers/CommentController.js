@@ -20,5 +20,26 @@ module.exports = {
      * Overrides for the settings in `config/controllers.js`
      * (specific to CommentController)
      */
-    _config: {}
+    _config: {},
+
+    /**
+     * Main history action.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    index: function(req, res) {
+        var objectId = req.param("objectId");
+        var objectName = req.param("objectName");
+
+        // Fetch specified object and id comments
+        DataService.getComments(objectName, objectId, 0, function(error, comments) {
+            res.view({
+                layout: req.isAjax ? "layout_ajax" : "layout",
+                objectId: objectId,
+                objectName: objectName,
+                comments: comments
+            });
+        });
+    }
 };
