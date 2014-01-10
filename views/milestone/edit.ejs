@@ -5,9 +5,8 @@
     <li>
         <a id="storiesTab" href="#stories" data-toggle="tab" data-callback="initMilestoneTabStories" data-href="/Milestone/Stories?id=<%= milestone.id %>">Stories</a>
     </li>
-    <li>
-        <a id="historyTab" href="#history" data-toggle="tab" data-href="/History?objectName=Milestone&objectId=<%= milestone.id %>">History</a>
-    </li>
+
+    <%- partial("../partials/common_tabs_header", {objectName: "Milestone", objectId: milestone.id}) %>
 </ul>
 
 <div class="tab-content">
@@ -48,5 +47,5 @@
 
     <div class="tab-pane" id="stories"></div>
 
-    <div class="tab-pane" id="history"></div>
+    <%- partial("../partials/common_tabs_content") %>
 </div>

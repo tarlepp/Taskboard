@@ -8,16 +8,15 @@
     <li>
         <a id="tasksTab" href="#tasks" data-toggle="tab" data-callback="initStoryTabTasks" data-href="/Story/Tasks?id=<%= story.id %>">Tasks</a>
     </li>
-    <li>
-        <a id="historyTab" href="#history" data-toggle="tab" data-href="/History?objectName=Story&objectId=<%= story.id %>">History</a>
-    </li>
+
+    <%- partial("../partials/common_tabs_header", {objectName: "Story", objectId: story.id}) %>
 </ul>
 
-<form id="formStoryEdit" class="form-horizontal">
-    <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+<div class="tab-content">
+    <div class="tab-pane active" id="basic">
+        <form id="formStoryEdit_1" class="form-horizontal">
+            <input type="hidden" name="_csrf" value="<%= _csrf %>" />
 
-    <div class="tab-content">
-        <div class="tab-pane active" id="basic">
             <div class="form-group required">
                 <label class="col-lg-3 control-label" for="formStoryEditTitle">Title</label>
                 <div class="col-lg-9">
@@ -40,8 +39,10 @@
                     <textarea id="formStoryEditDescription" name="description" class="form-control" data-wysiwyg="true" placeholder="enter user story description"><%= story.description %></textarea>
                 </div>
             </div>
-        </div>
-        <div class="tab-pane" id="advanced">
+        </form>
+    </div>
+    <div class="tab-pane" id="advanced">
+        <form id="formStoryEdit_2" class="form-horizontal">
             <div class="form-group">
                 <label class="col-lg-3 control-label" for="formStoryNewMilestone">Milestone</label>
                 <div class="col-lg-9">
@@ -91,10 +92,10 @@
                     <% }  %>
                 </div>
             </div>
-        </div>
-
-        <div class="tab-pane" id="tasks"></div>
-
-        <div class="tab-pane" id="history"></div>
+        </form>
     </div>
-</form>
+
+    <div class="tab-pane" id="tasks"></div>
+
+    <%- partial("../partials/common_tabs_content") %>
+</div>

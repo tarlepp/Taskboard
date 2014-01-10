@@ -187,8 +187,9 @@ jQuery(document).ready(function() {
          * @param   {boolean}                   close
          */
         function save(modal, trigger, close) {
-            var form = jQuery("#formStoryEdit", modal);
-            var formItems = form.serializeJSON();
+            var formBasic = jQuery("#formStoryEdit_1", modal);
+            var formAdvanced = jQuery("#formStoryEdit_2", modal);
+            var formItems = jQuery.extend({}, formBasic.serializeJSON(), formAdvanced.serializeJSON());
 
             // Validate current form items and try to update user story data
             if (validateForm(formItems, modal)) {

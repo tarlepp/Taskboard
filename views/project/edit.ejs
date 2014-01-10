@@ -17,9 +17,8 @@
     <li>
         <a id="statisticsTab" href="#statistics" data-toggle="tab" data-callback="initProjectTabStatistics" data-href="/Project/Statistics?id=<%= project.id %>">Statistics</a>
     </li>
-    <li>
-        <a id="historyTab" href="#history" data-toggle="tab" data-href="/History?objectName=Project&objectId=<%= project.id %>">History</a>
-    </li>
+
+    <%- partial("../partials/common_tabs_header", {objectName: "Project", objectId: project.id}) %>
 </ul>
 
 <div class="tab-content">
@@ -98,5 +97,5 @@
 
     <div class="tab-pane" id="statistics"></div>
 
-    <div class="tab-pane" id="history"></div>
+    <%- partial("../partials/common_tabs_content") %>
 </div>
