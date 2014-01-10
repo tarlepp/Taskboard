@@ -18,26 +18,29 @@ module.exports = {
             required:   true
         },
         commentId: {
-            type:       "integer"
+            type:       "integer",
+            defaultsTo: 0
         },
         comment: {
             type:       "text",
             required:   true
         },
         createdUserId: {
-            type:       "integer"
+            type:       "integer",
+            required:   true
         },
         updatedUserId: {
-            type:       "integer"
-        }
-    },
+            type:       "integer",
+            required:   true
+        },
 
-    createdAtObject: function () {
-        return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
-            ? DateService.convertDateObjectToUtc(this.createdAt) : null;
-    },
-    updatedAtObject: function () {
-        return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
-            ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
+        createdAtObject: function () {
+            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
+                ? DateService.convertDateObjectToUtc(this.createdAt) : null;
+        },
+        updatedAtObject: function () {
+            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
+                ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
+        }
     }
 };
