@@ -1,7 +1,7 @@
 # Taskboard [![Build Status](https://travis-ci.org/tarlepp/Taskboard.png?branch=master)](https://travis-ci.org/tarlepp/Taskboard)
 ### a Sails application to mimic "scrum-ban" taskboard.
 
-![ScreenShot](http://tarlepp.github.io/Taskboard/images/shot_01.png)
+![ScreenShot](http://tarlepp.github.io/Taskboard/images/screenshots/board_01.png)
 
 More information @ http://tarlepp.github.io/Taskboard/
 
