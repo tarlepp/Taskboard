@@ -223,14 +223,13 @@ module.exports = {
         /**
          * Private function to fetch all available users for
          * specified project.
-         *
-         * @todo exclude admin users for this list
          */
         function fetchAvailableUsers() {
             User
                 .find()
                 .where({
-                    and: userIds
+                    and: userIds,
+                    admin: 0
                 })
                 .done(function(error, users) {
                     if (error) {
