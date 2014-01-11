@@ -58,12 +58,18 @@
             <div class="article">
                 <h1>What is this?</h1>
                 <p>
-                    a Sails application to mimic "scrum-ban" taskboard.
+                    a Sails application to mimic "scrum-ban" taskboard. The application is built with <a href="http://sailsjs.org/">Sails.js</a> web framework.
                 </p>
 
                 <h2>Key features</h2>
                 <ul>
                     <li>Real-time updates on board via websockets</li>
+                    <li>Easy usage
+                        <ul>
+                            <li>Basically just drag&drop tasks between phases</li>
+                            <li>Story / Task edit via double click on the board</li>
+                        </ul>
+                    </li>
                     <li>Authentication via passport.js, supported strategies
                         <ul>
                             <li>Local (username + password)</li>
@@ -72,16 +78,16 @@
                     </li>
                     <li>Project-specific customizations
                         <ul>
-                            <li>User access</li>
-                            <li>Phases</li>
-                            <li>Sprints</li>
-                            <li>Milestones</li>
+                            <li>User access, using roles; manager, user and viewer</li>
+                            <li>Phases; fully customizable</li>
+                            <li>Sprints; time frame, stories</li>
+                            <li>Milestones; deadline, stories</li>
                         </ul>
                     </li>
-                    <li>Automation of statistics
+                    <li>Automatic statistics collection
                         <ul>
                             <li>Sprint burndown charts</li>
-                            <li>Tasks durations</li>
+                            <li>Tasks durations in phases</li>
                             <li><em>More is on the way...</em></li>
                         </ul>
                     </li>
@@ -90,6 +96,13 @@
                             <li><span style="text-decoration:line-through;">Texts</span> need more time for this...</li>
                             <li>Time and number formats, handled via <a href="http://momentjs.com/">moment.js</a> and <a href="http://numeraljs.com/">numeral.js</a></li>
                         </ul>
+                    </li>
+                    <li>Common object specified functions
+                        <ul>
+                            <li>History of changes</li>
+                            <li>Commenting</li>
+                        </ul>
+
                     </li>
                 </ul>
 
@@ -100,8 +113,10 @@
                     You can use following credentials for demo:
                 </p>
 
-                <blockquote><pre>username: demo
-password: demodemodemo</pre></blockquote>
+<blockquote><pre>
+username: demo
+password: demodemodemo
+</pre></blockquote>
 
                 <p>
                     <strong>Note</strong> that application allows one sign in at same time, so if you're kicked out from Taskboard the reason is probably that someone else is logged in using the same username.
@@ -471,7 +486,7 @@ sudo npm install -g npm bower sails
                     <strong>Note:</strong> you must change following terms: <code>YOUR_MYSQL_DB</code>, <code>YOUR_MYSQL_USER</code>, <code>YOUR_MYSQL_PASSWORD</code>
                 </p>
 
-                <blockquote><pre class="prettyprint linenums">
+<blockquote><pre class="prettyprint linenums">
 sudo service mysql start
 sudo /usr/bin/mysql_secure_installation
 mysql -uroot -p -e "CREATE DATABASE YOUR_MYSQL_DB; GRANT ALL ON YOUR_MYSQL_DB.* TO YOUR_MYSQL_USER@'localhost' IDENTIFIED BY 'YOUR_MYSQL_PASSWORD';"
@@ -484,7 +499,7 @@ mysql -uroot -p -e "CREATE DATABASE YOUR_MYSQL_DB; GRANT ALL ON YOUR_MYSQL_DB.* 
                     <strong>Note:</strong> <code>npm install</code> command will take a moment or a two to process.
                 </p>
 
-                <blockquote><pre class="prettyprint linenums">
+<blockquote><pre class="prettyprint linenums">
 sudo mkdir /var/node
 sudo chgrp -R YOUR_USER_GROUP /var/node/
 sudo chmod -R g+w /var/node/
@@ -501,7 +516,7 @@ vim config/local.js
                     <strong>Note:</strong> You can override any config values in your <code>local.js</code> file
                 </p>
 
-                <blockquote><pre class="prettyprint linenums">
+<blockquote><pre class="prettyprint linenums">
 module.exports.adapters = {
     'default': 'mysql',
     mysql: {
@@ -520,7 +535,7 @@ module.exports.adapters = {
                     <strong>Note: </strong> With CentOS / Fedora use command <code>/opt/node/bin/sails lift</code>
                 </p>
 
-                <blockquote><pre class="prettyprint linenums">
+<blockquote><pre class="prettyprint linenums">
 cd /var/node/Taskboard/
 sails lift
 </pre></blockquote>
@@ -529,7 +544,7 @@ sails lift
                     Taskboard application will create admin user and demonstration project automatic if database is empty. Default admin user credentials are following:
                 </p>
 
-                <blockquote><pre>
+<blockquote><pre>
 username: admin
 password: taskboardisawesome
 </pre></blockquote>
@@ -550,7 +565,7 @@ password: taskboardisawesome
                     <strong>Note:</strong> After <code>sails lift</code> command wait for a while so that <a href="http://gruntjs.com/">Grunt</a> has made all necessary jobs
                 </p>
 
-                <blockquote><pre>
+<blockquote><pre>
 cd Taskboard
 vagrant up
 vagrant ssh
@@ -561,7 +576,26 @@ sails lift
                 <p>
                     After that you should apply to use Taskboard with your favorite browser on url <code>http://localhost:1337</code>
                 </p>
+            </div>
 
+            <div class="article">
+                <h1>Update</h1>
+                <p>
+                    When you need to update your installation of Taskboard just follow instructions below. <br />
+
+                    <strong>Note:</strong> Before update remember to lower sails.
+                </p>
+
+<blockquote><pre>
+rm -rf .tmp/
+git pull
+npm install
+sails lift
+</pre></blockquote>
+
+                <p>
+                    After that you should
+                </p>
             </div>
 
             <div class="article">
@@ -685,19 +719,39 @@ sails lift
             <div class="article">
                 <h1 class="text-center" style="margin-bottom: 5px;">Screenshots of application</h1>
                 <ul class="images">
-                    <li><a href="images/shot_01.png" data-lightbox="Screenshot" title="Main view of taskboard"><img src="images/shot_01.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_02.png" data-lightbox="Screenshot" title="Project planning view"><img src="images/shot_02.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_03.png" data-lightbox="Screenshot" title="Sprint burndown chart of tasks"><img src="images/shot_03.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_04.png" data-lightbox="Screenshot" title="Task edit modal"><img src="images/shot_04.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_05.png" data-lightbox="Screenshot" title="Task history"><img src="images/shot_05.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_06.png" data-lightbox="Screenshot" title="User story tasks tab"><img src="images/shot_06.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_07.png" data-lightbox="Screenshot" title="Project phases edit"><img src="images/shot_07.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_08.png" data-lightbox="Screenshot" title="Project edit modal"><img src="images/shot_08.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_09.png" data-lightbox="Screenshot" title="Project backlog view"><img src="images/shot_09.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_10.png" data-lightbox="Screenshot" title="Project sprint view"><img src="images/shot_10.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_11.png" data-lightbox="Screenshot" title="Project milestone view"><img src="images/shot_11.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_12.png" data-lightbox="Screenshot" title="Project user view"><img src="images/shot_12.png" class="img-thumbnail" /></a></li>
-                    <li><a href="images/shot_13.png" data-lightbox="Screenshot" title="Project statistics"><img src="images/shot_13.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/screenshots/board_01.png" data-lightbox="Screenshot" title="Main view of taskboard"><img src="images/screenshots/board_01.png" class="img-thumbnail" /></a></li>
+
+                    <li><a href="images/screenshots/planning_view_01.png" data-lightbox="Screenshot" title="Project planning view"><img src="images/screenshots/planning_view_01.png" class="img-thumbnail" /></a></li>
+
+                    <li><a href="images/screenshots/phases_01.png" data-lightbox="Screenshot" title="Project phases on board"><img src="images/screenshots/phases_01.png" class="img-thumbnail" /></a></li>
+
+                    <li><a href="images/screenshots/project_add_01.png" data-lightbox="Screenshot" title="Project add"><img src="images/screenshots/project_add_01.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/screenshots/project_edit_01.png" data-lightbox="Screenshot" title="Project edit"><img src="images/screenshots/project_edit_01.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/screenshots/project_edit_02.png" data-lightbox="Screenshot" title="Project backlog"><img src="images/screenshots/project_edit_02.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/screenshots/project_edit_03.png" data-lightbox="Screenshot" title="Project sprints view"><img src="images/screenshots/project_edit_03.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/screenshots/project_edit_04.png" data-lightbox="Screenshot" title="Project milestones view"><img src="images/screenshots/project_edit_04.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/screenshots/project_edit_05.png" data-lightbox="Screenshot" title="Project users view"><img src="images/screenshots/project_edit_05.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/screenshots/project_edit_06.png" data-lightbox="Screenshot" title="Project statistics"><img src="images/screenshots/project_edit_06.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/screenshots/project_edit_07.png" data-lightbox="Screenshot" title="Project comments"><img src="images/screenshots/project_edit_07.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/screenshots/project_edit_08.png" data-lightbox="Screenshot" title="Project basic data history"><img src="images/screenshots/project_edit_08.png" class="img-thumbnail" /></a></li>
+
+                    <li><a href="images/screenshots/milestone_add_01.png" data-lightbox="Screenshot" title="Milestone add"><img src="images/screenshots/milestone_add_01.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/screenshots/milestone_edit_01.png" data-lightbox="Screenshot" title="Milestone edit"><img src="images/screenshots/milestone_edit_01.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/screenshots/milestone_edit_02.png" data-lightbox="Screenshot" title="Milestone stories"><img src="images/screenshots/milestone_edit_02.png" class="img-thumbnail" /></a></li>
+
+                    <li><a href="images/screenshots/sprint_add_01.png" data-lightbox="Screenshot" title="Sprint add"><img src="images/screenshots/sprint_add_01.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/screenshots/sprint_edit_01.png" data-lightbox="Screenshot" title="Sprint edit"><img src="images/screenshots/sprint_edit_01.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/screenshots/sprint_edit_02.png" data-lightbox="Screenshot" title="Sprint backlog"><img src="images/screenshots/sprint_edit_02.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/screenshots/sprint_edit_03.png" data-lightbox="Screenshot" title="Sprint charts (burndown, task durations / types)"><img src="images/screenshots/sprint_edit_03.png" class="img-thumbnail" /></a></li>
+
+                    <li><a href="images/screenshots/story_add_01.png" data-lightbox="Screenshot" title="Story add"><img src="images/screenshots/story_add_01.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/screenshots/story_edit_01.png" data-lightbox="Screenshot" title="Story edit"><img src="images/screenshots/story_edit_01.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/screenshots/story_edit_02.png" data-lightbox="Screenshot" title="Story edit, advanced"><img src="images/screenshots/story_edit_02.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/screenshots/story_edit_03.png" data-lightbox="Screenshot" title="Story tasks"><img src="images/screenshots/story_edit_03.png" class="img-thumbnail" /></a></li>
+
+                    <li><a href="images/screenshots/task_add_01.png" data-lightbox="Screenshot" title="Task add"><img src="images/screenshots/task_add_01.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/screenshots/task_edit_01.png" data-lightbox="Screenshot" title="Task add"><img src="images/screenshots/task_edit_01.png" class="img-thumbnail" /></a></li>
+                    <li><a href="images/screenshots/task_edit_02.png" data-lightbox="Screenshot" title="Task add"><img src="images/screenshots/task_edit_02.png" class="img-thumbnail" /></a></li>
                 </ul>
             </div>
 
