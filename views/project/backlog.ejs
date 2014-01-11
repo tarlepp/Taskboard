@@ -79,26 +79,7 @@
             <span class="tooltipDiv">
                 <%= story.createdAtObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDateTime) %>
 
-                <div class="tooltipDivContainer">
-                    <div>
-                        <table class="dateTimeTooltip">
-                            <tr>
-                                <th>Local time</th>
-                                <td><%= story.createdAtObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDateTime) %></td>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <td class="text-muted">
-                                    <%= story.createdAtObject().tz(currentUser.momentTimezone).tz() %> (<%= story.createdAtObject().tz(currentUser.momentTimezone).format("ZZ") %>)
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>UTC time</th>
-                                <td><%= story.createdAtObject().tz(currentUser.momentTimezone).utc().format(currentUser.momentFormatDateTime) %></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
+                <%- partial("../partials/tooltip/datetime", {tooltipTitle: false, stamp: story.createdAtObject()}) %>
             </span>
         </td>
     </tr>

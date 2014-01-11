@@ -21,26 +21,7 @@
                 <small class="tooltipDiv">
                     <%= row[0].stamp.format(currentUser.momentFormatDateTime) %>
 
-                    <div class="tooltipDivContainer">
-                        <div>
-                            <table class="dateTimeTooltip">
-                                <tr>
-                                    <th>Local time</th>
-                                    <td><%= row[0].stamp.format(currentUser.momentFormatDateTime) %></td>
-                                </tr>
-                                <tr>
-                                    <th></th>
-                                    <td class="text-muted">
-                                        <%= row[0].stamp.tz() %> (<%= row[0].stamp.format("ZZ") %>)
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>UTC time</th>
-                                    <td><%= row[0].stamp.utc().format(currentUser.momentFormatDateTime) %></td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+                    <%- partial("../partials/tooltip/datetime", {tooltipTitle: false, stamp: row[0].stamp}) %>
                 </small>
             </td>
             <td class="text-nowrap">
@@ -74,26 +55,7 @@
             <small class="tooltipDiv">
                 <%= row[0].stamp.format(currentUser.momentFormatDateTime) %>
 
-                <div class="tooltipDivContainer">
-                    <div>
-                        <table class="dateTimeTooltip">
-                            <tr>
-                                <th>Local time</th>
-                                <td><%= row[0].stamp.format(currentUser.momentFormatDateTime) %></td>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <td class="text-muted">
-                                    <%= row[0].stamp.tz() %> (<%= row[0].stamp.format("ZZ") %>)
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>UTC time</th>
-                                <td><%= row[0].stamp.utc().format(currentUser.momentFormatDateTime) %></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
+                <%- partial("../partials/tooltip/datetime", {tooltipTitle: false, stamp: row[0].stamp}) %>
             </small>
         </td>
         <td class="text-nowrap">
@@ -122,26 +84,7 @@
                 <small class="tooltipDiv">
                     <%= row.stamp.format(currentUser.momentFormatDateTime) %>
 
-                    <div class="tooltipDivContainer">
-                        <div>
-                            <table class="dateTimeTooltip">
-                                <tr>
-                                    <th>Local time</th>
-                                    <td><%= row.stamp.format(currentUser.momentFormatDateTime) %></td>
-                                </tr>
-                                <tr>
-                                    <th></th>
-                                    <td class="text-muted">
-                                        <%= row.stamp.tz() %> (<%= row.stamp.format("ZZ") %>)
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>UTC time</th>
-                                    <td><%= row.stamp.utc().format(currentUser.momentFormatDateTime) %></td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+                    <%- partial("../partials/tooltip/datetime", {tooltipTitle: false, stamp: row.stamp}) %>
                 </small>
             </td>
             <td class="text-nowrap">

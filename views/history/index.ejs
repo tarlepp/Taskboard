@@ -9,26 +9,7 @@
                 <span class="tooltipDiv">
                     <%= row.stamp.format(currentUser.momentFormatDateTime) %>
 
-                    <div class="tooltipDivContainer">
-                        <div>
-                            <table class="dateTimeTooltip">
-                                <tr>
-                                    <th>Local time</th>
-                                    <td><%= row.stamp.format(currentUser.momentFormatDateTime) %></td>
-                                </tr>
-                                <tr>
-                                    <th></th>
-                                    <td class="text-muted">
-                                        <%= row.stamp.tz() %> (<%= row.stamp.format("ZZ") %>)
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>UTC time</th>
-                                    <td><%= row.stamp.utc().format(currentUser.momentFormatDateTime) %></td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+                    <%- partial("../partials/tooltip/datetime", {tooltipTitle: false, stamp: row.stamp}) %>
                 </span>
                 <small class="pull-right">
                     Add user info here

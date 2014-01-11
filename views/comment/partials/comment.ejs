@@ -13,10 +13,12 @@
                 <h1>
                     <%= comment.author.fullName() %>
                     -
-                    <span class="text-medium tooltipTitle" title="<%= comment.createdAtObject().format(currentUser.momentFormatDateTime) %>"
+                    <span class="text-medium tooltipDiv"
                         data-qtip-options='{ "position": { "at": "top center", "my": "bottom center" } }'
                     >
                         <%= comment.createdAtObject().fromNow() %>
+
+                        <%- partial("../../partials/tooltip/datetime", {tooltipTitle: false, stamp: comment.createdAtObject()}) %>
                     </span>
 
                     <span class="pull-right text-no-shadow text-small action-images">
