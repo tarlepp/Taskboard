@@ -4,7 +4,6 @@
  * @module      :: Controller
  * @description :: Contains logic for handling requests.
  */
-var jQuery = require("jquery");
 var async = require("async");
 
 module.exports = {
@@ -21,10 +20,8 @@ module.exports = {
             layout: req.isAjax ? "layout_ajax" : "layout",
             users: false,
             project: false,
-            role: false,
-            signedIn: req.user
+            role: false
         };
-
 
         async.parallel(
             {
@@ -50,7 +47,7 @@ module.exports = {
              */
             function callback(error, results) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error);
+                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
                     data.project = results.project;
                     data.role = results.role;
@@ -68,15 +65,17 @@ module.exports = {
          *          and afterwards this same user has been selected to project manager.
          *
          *          This is not a big deal yet, but remember to handle this :D
+         *
+         *          Life cycle callbacks should handle this.
          */
         function fetchProjectUsers() {
             // Fetch all project user
             ProjectUser
                 .find()
                 .where({projectId: projectId})
-                .done(function(error, /** sails.json.projectUser */projectUsers) {
+                .exec(function(error, /** sails.json.projectUser */projectUsers) {
                     if (error) {
-                        res.send(error, 500);
+                        res.send(error.status ? error.status : 500, error.message ? error.message : error);
                     } else {
                         data.users = projectUsers;
 
@@ -88,84 +87,97 @@ module.exports = {
                             main: 1
                         });
 
-                        // Fetch detailed user data
-                        fetchUserData();
+                        // Fetch administrator users, excluding the main admin
+                        User
+                            .find()
+                            .where({
+                                admin: true,
+                                username: {"!": "admin"}
+                            })
+                            .exec(function(error, admins) {
+                                _.each(admins, function(admin) {
+                                    var founded = _.find(data.users, function(user) { return user.userId === admin.id; });
+
+                                    if (founded) {
+                                        founded.admin = true;
+                                    } else {
+                                        projectUsers.push({
+                                            projectId: data.project.id,
+                                            userId: admin.id,
+                                            role: -1,
+                                            main: 0,
+                                            admin: true
+                                        });
+                                    }
+                                });
+
+                                // Fetch detailed user data
+                                fetchUserData();
+                            });
                     }
                 });
         }
 
         /**
          * Function to fetch detailed user data from database.
-         *
-         * @todo refactor role text determination.
-         * @todo change each to use async.map
          */
         function fetchUserData() {
-            // Iterate project users, we have always at least one user
-            _.each(data.users, function(/** sails.json.projectUser */projectUser) {
-                // Initialize project user user property
-                projectUser.data = false;
+            async.map(
+                data.users,
 
-                var roleText = "Unknown";
-
-                switch (projectUser.role) {
-                    case -1:
-                        roleText = "Manager";
-                        break;
-                    case 0:
-                        roleText = "Viewer";
-                        break;
-                    case 1:
-                        roleText = "User";
-                        break;
-                }
-
-                projectUser.roleText = roleText;
-
-                // Fetch single user data from database
-                User
-                    .findOne(projectUser.userId)
-                    .done(function(error, user) {
+                /**
+                 * Iterator function which is called on every user in data.users variable.
+                 *
+                 * @param   {sails.model.projectUser}   projectUser
+                 * @param   {Function}                  callback
+                 */
+                function(projectUser, callback) {
+                    DataService.getUser(projectUser.userId, function(error, user) {
                         if (error) {
-                            res.send(error, 500);
-                        } else if (!user) {
-                            res.send("User not found.", 404);
+                            callback(error, null);
                         } else {
-                            jQuery.extend(projectUser, user, {data: true});
+                            var roleText = "Unknown";
 
-                            makeView();
+                            switch (projectUser.role) {
+                                case -1:
+                                    roleText = "Manager";
+                                    break;
+                                case 0:
+                                    roleText = "Viewer";
+                                    break;
+                                case 1:
+                                    roleText = "User";
+                                    break;
+                            }
+
+                            projectUser.roleText = roleText;
+
+                            user.projectUser = projectUser;
+
+                            callback(null, user);
                         }
                     });
-            });
-        }
+                },
 
-        /**
-         * Function makes actual view if all necessary data is fetched
-         * from database for template.
-         */
-        function makeView() {
-            if (data.users.length > 0) {
-                var show = true;
+                /**
+                 * Main callback function which is called after all project users have
+                 * been mapped via async.js.
+                 *
+                 * @param   {Error|null}        error
+                 * @param   {sails.model.user}  results
+                 */
+                function(error, results) {
+                    if (error) {
+                        res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    } else {
+                        data.users = _.sortBy(results, function(user) {
+                            return [user.fullName(), user.username].join("|");
+                        });
 
-                // Check that we have fetched all users data for project
-                _.each(data.users, function(/** sails.json.projectUser */projectUser) {
-                    // All user data are not yet fetched
-                    if (projectUser.data === false) {
-                        show = false;
+                        res.view(data);
                     }
-                });
-
-                if (show) {
-                    // Sort user data
-                    data.users = _.sortBy(data.users, function(user) {
-                        return [user.role, user.fullName(), user.username].join("|");
-                    });
-
-                    res.view(data);
                 }
-            } else {
-                res.view(data);
-            }
+            );
         }
     },
 
@@ -177,7 +189,7 @@ module.exports = {
      * @param   {Response}  res Response object
      */
     availableUsers: function(req, res) {
-        var projectId = parseInt(req.param('projectId'), 10);
+        var projectId = parseInt(req.param("projectId"), 10);
         var userIds = [];
 
         // Fetch project data
