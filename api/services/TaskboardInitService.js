@@ -72,7 +72,7 @@ exports.createAdmin = function(next) {
                         email: "john.doe@localhost.com",
                         admin: true,
                         password: "taskboardisawesome",
-                        createUserId: 1,
+                        createdUserId: 1,
                         updatedUserId: 1
                     })
                     .exec(function(error, user) {
@@ -98,9 +98,9 @@ exports.createTypes = function(next) {
             } else if (_.size(types) === 0) {
                 // Specify "default" type data
                 var defaultTypes = [
-                    {title: "Task", order: "1", createUserId: 1, updatedUserId: 1, chartColor: '#548dd4', class: "alert alert-warning", classText: "text-warning"},
-                    {title: "Test", order: "2", createUserId: 1, updatedUserId: 1, chartColor: '#8db3e2', class: "alert alert-success", classText: "text-success"},
-                    {title: "Bug",  order: "3", createUserId: 1, updatedUserId: 1, chartColor: '#92cddc', class: "alert alert-danger",  classText: "text-danger"}
+                    {title: "Task", order: "1", createdUserId: 1, updatedUserId: 1, chartColor: '#548dd4', class: "alert alert-warning", classText: "text-warning"},
+                    {title: "Test", order: "2", createdUserId: 1, updatedUserId: 1, chartColor: '#8db3e2', class: "alert alert-success", classText: "text-success"},
+                    {title: "Bug",  order: "3", createdUserId: 1, updatedUserId: 1, chartColor: '#92cddc', class: "alert alert-danger",  classText: "text-danger"}
                 ];
 
                 // Create default types and pass those to callback function
@@ -223,7 +223,7 @@ exports.createProject = function(data, next) {
                     description: "This is a demo project, which is created automatic if any other projects doesn't exists yet.",
                     dateStart: moment().format("YYYY-MM-DD"),
                     dateEnd: moment().add("years", 1).format("YYYY-MM-DD"),
-                    createUserId: 1,
+                    createdUserId: 1,
                     updatedUserId: 1
                 };
 
@@ -248,11 +248,11 @@ exports.createProject = function(data, next) {
 exports.createPhases = function(project, next) {
     // Specify project phase data
     var phaseData = [
-        {projectId: project.id, createUserId: 1, updatedUserId: 1, title: "Tasks",      backgroundColor: "#c6d9f0", order: 1, tasks: 0, isDone: false},
-        {projectId: project.id, createUserId: 1, updatedUserId: 1, title: "In process", backgroundColor: "#92cddc", order: 2, tasks: 3, isDone: false},
-        {projectId: project.id, createUserId: 1, updatedUserId: 1, title: "To review",  backgroundColor: "#8db3e2", order: 3, tasks: 3, isDone: false},
-        {projectId: project.id, createUserId: 1, updatedUserId: 1, title: "Reviewed",   backgroundColor: "#548dd4", order: 4, tasks: 6, isDone: false},
-        {projectId: project.id, createUserId: 1, updatedUserId: 1, title: "Done",       backgroundColor: "#0070c0", order: 5, tasks: 0, isDone: true}
+        {projectId: project.id, createdUserId: 1, updatedUserId: 1, title: "Tasks",      backgroundColor: "#c6d9f0", order: 1, tasks: 0, isDone: false},
+        {projectId: project.id, createdUserId: 1, updatedUserId: 1, title: "In process", backgroundColor: "#92cddc", order: 2, tasks: 3, isDone: false},
+        {projectId: project.id, createdUserId: 1, updatedUserId: 1, title: "To review",  backgroundColor: "#8db3e2", order: 3, tasks: 3, isDone: false},
+        {projectId: project.id, createdUserId: 1, updatedUserId: 1, title: "Reviewed",   backgroundColor: "#548dd4", order: 4, tasks: 6, isDone: false},
+        {projectId: project.id, createdUserId: 1, updatedUserId: 1, title: "Done",       backgroundColor: "#0070c0", order: 5, tasks: 0, isDone: true}
     ];
 
     // Create specified phases
@@ -300,7 +300,7 @@ exports.createSprint = function(project, phases, next) {
         description: "This is a first sprint in demo project.",
         dateStart: moment(project.dateStart).format("YYYY-MM-DD"),
         dateEnd: moment(project.dateStart).add("days", 30).format("YYYY-MM-DD"),
-        createUserId: 1,
+        createdUserId: 1,
         updatedUserId: 1
     };
 
@@ -338,7 +338,7 @@ exports.createStories = function(data, project, phases, sprint, next) {
             description: "This is a basic user story where you can add new tasks.",
             estimate: 5,
             priority: 1,
-            createUserId: 1,
+            createdUserId: 1,
             updatedUserId: 1
         },
         {
@@ -350,7 +350,7 @@ exports.createStories = function(data, project, phases, sprint, next) {
             description: "You can add new user stories to current sprint by clicking '+' button on the board header row.",
             estimate: -1,
             priority: 2,
-            createUserId: 1,
+            createdUserId: 1,
             updatedUserId: 1
         },
         {
@@ -362,7 +362,7 @@ exports.createStories = function(data, project, phases, sprint, next) {
             description: "This user story has no relation to any existing sprint, so it is in project backlog, where you can prioritize it.",
             estimate: 5,
             priority: 1,
-            createUserId: 1,
+            createdUserId: 1,
             updatedUserId: 1
         }
     ];
@@ -425,7 +425,7 @@ exports.createTasks = function(data, project, phases, sprint, stories, next) {
             typeId: typeTask.id,
             title: "Normal task",
             description: "This is a 'normal' task, which you can drag around the board.",
-            createUserId: 1,
+            createdUserId: 1,
             updatedUserId: 1
         },
         {
@@ -435,7 +435,7 @@ exports.createTasks = function(data, project, phases, sprint, stories, next) {
             typeId: typeTest.id,
             title: "Test task",
             description: "This is a 'test' task, usually this means writing some kind of test to this user story.",
-            createUserId: 1,
+            createdUserId: 1,
             updatedUserId: 1
         },
         {
@@ -445,7 +445,7 @@ exports.createTasks = function(data, project, phases, sprint, stories, next) {
             typeId: typeBug.id,
             title: "Major bug in app",
             description: "This is a 'bug' task, you can track bugs with these tasks in each user story.",
-            createUserId: 1,
+            createdUserId: 1,
             updatedUserId: 1
         }
     ];
