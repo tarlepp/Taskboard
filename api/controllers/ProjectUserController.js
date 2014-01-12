@@ -190,67 +190,56 @@ module.exports = {
      */
     availableUsers: function(req, res) {
         var projectId = parseInt(req.param("projectId"), 10);
-        var userIds = [];
 
-        // Fetch project data
-        Project
-            .findOne(projectId)
-            .done(function(error, project) {
-                if (error) {
-                    res.send(error, 500);
-                } else if (!project) {
-                    res.send("Project not found.", 404);
-                } else {
-                    // Add project manager to "used" users
-                    userIds.push({id: {"!": project.managerId}});
+        async.parallel(
+            {
+                // Fetch project data
+                project: function(callback) {
+                    DataService.getProject(projectId, callback);
+                },
 
-                    // Fetch current attached users
-                    fetchCurrentUsers();
-                }
-            });
-
-        /**
-         * Private function to fetch all users who are already attached
-         * to specified project.
-         */
-        function fetchCurrentUsers() {
-            ProjectUser
-                .find()
-                .where({projectId: projectId})
-                .done(function(error, users) {
-                    if (error) {
-                        res.send(error, 500);
-                    } else {
-                        // Iterate users and add those to "used" users
-                        _.each(users, function(projectUser) {
-                            userIds.push({id: {"!": projectUser.userId}});
+                // Fetch current project users
+                projectUsers: function(callback) {
+                    ProjectUser
+                        .find()
+                        .where({projectId: projectId})
+                        .exec(function(error, projectUsers) {
+                            callback(error, projectUsers)
                         });
+                }
+            },
 
-                        // And finally fetch available users
-                        fetchAvailableUsers();
-                    }
-                });
-        }
+            /**
+             * Main callback function which is called after all parallel jobs are done.
+             *
+             * @param   {Error|null}    error
+             * @param   {{}}            results
+             */
+            function (error, results) {
+                if (error) {
+                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                } else {
+                    var userIds = _.map(results.projectUsers, function(user) {
+                        return {id: {"!": user.userId}};
+                    });
 
-        /**
-         * Private function to fetch all available users for
-         * specified project.
-         */
-        function fetchAvailableUsers() {
-            User
-                .find()
-                .where({
-                    and: userIds,
-                    admin: 0
-                })
-                .done(function(error, users) {
-                    if (error) {
-                        res.send(error, 500);
-                    } else {
-                        res.json(users);
-                    }
-                });
-        }
+                    userIds.push({id: {"!": results.project.managerId}});
+
+                    var where = {
+                        and: userIds,
+                        admin: 0
+                    };
+
+                    DataService.getUsers(where, function(error, users) {
+                        if (error) {
+                            res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                        } else {
+                            res.json(users);
+                        }
+                    });
+                }
+            }
+        );
     },
 
     /**
