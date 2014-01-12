@@ -4,6 +4,8 @@
  * @module      ::  Controller
  * @description ::  Contains logic for handling requests.
  */
+"use strict";
+
 var JsonDiffPatch = require("jsondiffpatch");
 var moment = require("moment-timezone");
 var async = require("async");
@@ -19,41 +21,59 @@ module.exports = {
         var objectId = req.param("objectId");
         var objectName = req.param("objectName");
 
-        // Fetch history rows for current object
-        History
-            .find()
-            .where({
-                objectName: objectName,
-                objectId: objectId
-            })
-            .sort("createdAt ASC")
-            .done(function(error, data) {
-                if (error) {
-                    res.send(error.status ? error.status : 500, error);
-                } else {
-                    var histories = [];
+        async.parallel(
+            {
+                // Fetch history rows
+                histories: function(callback) {
+                    History
+                        .find()
+                        .where({
+                            objectName: objectName,
+                            objectId: objectId
+                        })
+                        .sort("createdAt ASC")
+                        .exec(function(error, data) {
+                            callback(error, data)
+                        });
+                },
 
-                    // Remove duplicate rows
-                    _.each(data, function(row, key) {
-                        if (key === 0
-                            || row.objectData !== data[key - 1].objectData
-                            || row.message !== data[key - 1].message
-                        ) {
-                            histories.push(row);
-                        }
-                    });
-
-                    // Process history data
-                    processHistoryData(histories);
+                // Fetch users
+                users: function(callback) {
+                    DataService.getUsers({}, callback);
                 }
-            });
+            },
+
+            /**
+             * Main callback function which is called after all parallel jobs are done.
+             *
+             * @param   {Error|null}    error
+             * @param   {{}}            results
+             */
+            function(error, results) {
+                var histories = [];
+
+                // Remove duplicate rows
+                _.each(results.histories, function(row, key) {
+                    if (key === 0
+                        || row.objectData !== results.histories[key - 1].objectData
+                        || row.message !== results.histories[key - 1].message
+                    ) {
+                        histories.push(row);
+                    }
+                });
+
+                // Process history data
+                processHistoryData(histories, results.users);
+            }
+        );
 
         /**
          * Function process history rows for specified object.
          *
          * @param   {sails.model.history[]} histories
+         * @param   {sails.model.user[]}    users
          */
-        function processHistoryData(histories) {
+        function processHistoryData(histories, users) {
             var index = 0;
 
             // Map all history rows to sub-methods
@@ -70,12 +90,20 @@ module.exports = {
                  */
                 function(historyRow, callback) {
                     var dateObject = DateService.convertDateObjectToUtc(historyRow.createdAt);
+                    var user;
+
+                    if (historyRow.userId == -1) {
+                        user = -1;
+                    } else {
+                        user = _.find(users, function(user) { return user.id === historyRow.userId; });
+                    }
 
                     // Create main data array which contains all necessary data for this history row
                     var data = {
                         message: (index === 0) ? "Object created" : historyRow.message,
                         index: index,
                         stamp: dateObject.tz(req.user.momentTimezone),
+                        user: user,
                         data: []
                     };
 

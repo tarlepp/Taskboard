@@ -12,13 +12,16 @@
                     <%- partial("../partials/tooltip/datetime", {tooltipTitle: false, stamp: row.stamp}) %>
                 </span>
                 <small class="pull-right">
-                    Add user info here
+                    <% if (row.user === -1) { %>
+                        Unknown
+                    <% } else if (row.user) { %>
+                        <%= row.user.fullName() %>
+                    <% } %>
                 </small>
             </h4>
 
             <% if (row.data) { %>
             <ul class="list-unstyled">
-
                 <% if (row.message) { %>
                 <li>
                     <%= row.message %>
