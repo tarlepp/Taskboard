@@ -5,7 +5,10 @@
  * @description ::  This model represent user story on taskboard. User stories are attached to project and
  *                  sprint. Sprint relation is not required, if sprintId is 0 or null current user story is
  *                  in project backlog.
+ * @docs        ::  http://sailsjs.org/#!documentation/models
  */
+"use strict";
+
 var moment = require("moment-timezone");
 
 module.exports = {
@@ -13,93 +16,103 @@ module.exports = {
     attributes: {
         // Relation to Project model
         projectId: {
-            type:       'integer',
+            type:       "integer",
             required:   true
         },
         // Relation to Sprint model
         sprintId: {
-            type:       'integer',
+            type:       "integer",
             defaultsTo: 0
         },
         // Relation to Milestone model
         milestoneId: {
-            type:       'integer',
+            type:       "integer",
             defaultsTo: 0
         },
         // Relation to type model, note that this is just default type for story tasks
         typeId: {
-            type:       'integer',
+            type:       "integer",
             defaultsTo: 0,
             required:   true
         },
         // Relation to parent story, this tells where the story is splitted
         parentId: {
-            type:       'integer',
+            type:       "integer",
             defaultsTo: 0,
             required:   true
         },
         title: {
-            type:       'string',
+            type:       "string",
             required:   true,
             minLength:  5
         },
         description: {
-            type:       'text',
+            type:       "text",
             required:   true,
             minLength:  5
         },
         estimate: {
-            type:       'integer',
+            type:       "integer",
             required:   true,
             defaultsTo: -1
         },
         priority: {
-            type:       'integer',
+            type:       "integer",
             defaultsTo: 0
         },
         vfCase: {
-            type:       'integer',
+            type:       "integer",
             defaultsTo: 0
         },
         isDone: {
-            type:       'boolean',
+            type:       "boolean",
             required:   true,
             defaultsTo: 0
         },
         timeStart: {
-            type:       'datetime'
+            type:       "datetime"
         },
         timeEnd: {
-            type:       'datetime'
+            type:       "datetime"
+        },
+        createdUserId: {
+            type:       "integer",
+            required:   true
+        },
+        updatedUserId: {
+            type:       "integer",
+            required:   true
         },
 
-        estimateFormatted: function() {
-            return (parseInt(this.estimate, 10) === -1) ? '???' : this.estimate;
-        },
+        // Dynamic data attributes
+
         objectTitle: function() {
             return this.title;
         },
+        estimateFormatted: function() {
+            return (parseInt(this.estimate, 10) === -1) ? "???" : this.estimate;
+        },
         createdAtObject: function() {
-            return (this.createdAt && this.createdAt != '0000-00-00')
+            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.createdAt) : null;
         },
         updatedAtObject: function() {
-            return (this.updatedAt && this.updatedAt != '0000-00-00')
+            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         },
         timeStartObject: function() {
-            return (this.timeStart && this.timeStart != '0000-00-00 00:00:00')
+            return (this.timeStart && this.timeStart != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.timeStart) : null;
         },
         timeEndObject: function() {
-            return (this.timeEnd && this.timeEnd != '0000-00-00 00:00:00')
+            return (this.timeEnd && this.timeEnd != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.timeEnd) : null;
         },
         timeDuration: function() {
             var output;
 
             if (moment.isMoment(this.timeStartObject()) && moment.isMoment(this.timeEndObject())) {
-                output = this.timeEndObject().diff(this.timeStartObject(), 'seconds');
+                output = this.timeEndObject().diff(this.timeStartObject(), "seconds");
             } else {
                 output = 0;
             }
@@ -136,11 +149,13 @@ module.exports = {
                 projectId: values.projectId,
                 sprintId: values.sprintId
             })
-            .sort('priority DESC')
-            .done(function(error, story) {
+            .sort("priority DESC")
+            .exec(function(error, story) {
                 var priority;
 
                 if (error) {
+                    sails.log.error(error);
+
                     cb(error)
                 } else if (!story) {
                     priority = 0;
@@ -161,7 +176,7 @@ module.exports = {
      * @param   {Function}          cb
      */
     afterCreate: function(values, cb) {
-        HistoryService.write('Story', values);
+        HistoryService.write("Story", values);
 
         cb();
     },
@@ -173,7 +188,7 @@ module.exports = {
      * @param   {Function}          cb
      */
     afterUpdate: function(values, cb) {
-        HistoryService.write('Story', values);
+        HistoryService.write("Story", values);
 
         cb();
     },
@@ -187,8 +202,12 @@ module.exports = {
     beforeDestroy: function(terms, cb) {
         Story
             .findOne(terms)
-            .done(function(error, story) {
-                HistoryService.remove('Story', story.id);
+            .exec(function(error, story) {
+                if (error) {
+                    sails.log.error(error);
+                } else {
+                    HistoryService.remove("Story", story.id);
+                }
 
                 cb();
             });
