@@ -4,42 +4,54 @@
  * @module      ::  Model
  * @description ::  This model represents project milestone in taskboard. Note that all milestones are
  *                  connected to specified project.
- *
+ * @docs        ::  http://sailsjs.org/#!documentation/models
  */
+"use strict";
+
 module.exports = {
     schema: true,
     attributes: {
         // Relation to Project model
         projectId: {
-            type:       'integer',
+            type:       "integer",
             required:   true
         },
         title: {
-            type:       'string',
+            type:       "string",
             required:   true,
             minLength:  4
         },
         description: {
-            type:       'text',
-            defaultsTo: ''
+            type:       "text",
+            defaultsTo: ""
         },
         deadline: {
-            type:       'date'
+            type:       "date"
         },
+        createdUserId: {
+            type:       "integer",
+            required:   true
+        },
+        updatedUserId: {
+            type:       "integer",
+            required:   true
+        },
+
+        // Dynamic data attributes
 
         objectTitle: function() {
             return this.title;
         },
         deadlineObject: function() {
-            return (this.deadline && this.deadline != '0000-00-00')
+            return (this.deadline && this.deadline != "0000-00-00")
                 ? DateService.convertDateObjectToUtc(this.deadline) : null;
         },
         createdAtObject: function () {
-            return (this.createdAt && this.createdAt != '0000-00-00')
+            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.createdAt) : null;
         },
         updatedAtObject: function () {
-            return (this.updatedAt && this.updatedAt != '0000-00-00')
+            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         }
     },
@@ -53,7 +65,7 @@ module.exports = {
      * @param   {Function}              cb
      */
     afterCreate: function(values, cb) {
-        HistoryService.write('Milestone', values);
+        HistoryService.write("Milestone", values);
 
         cb();
     },
@@ -65,7 +77,7 @@ module.exports = {
      * @param   {Function}              cb
      */
     afterUpdate: function(values, cb) {
-        HistoryService.write('Milestone', values);
+        HistoryService.write("Milestone", values);
 
         cb();
     },
@@ -79,8 +91,12 @@ module.exports = {
     beforeDestroy: function(terms, cb) {
         Milestone
             .findOne(terms)
-            .done(function(error, milestone) {
-                HistoryService.remove('Milestone', milestone.id);
+            .exec(function(error, milestone) {
+                if (error) {
+                    sails.log.error(error);
+                } else {
+                    HistoryService.remove("Milestone", milestone.id);
+                }
 
                 cb();
             });
