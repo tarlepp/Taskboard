@@ -2,44 +2,58 @@
  * Type
  *
  * @module      ::  Model
- * @description ::  This model represent task types on taskboard. Basically this types are 'static':
+ * @description ::  This model represent task types on taskboard. Basically this types are "static":
  *                   - 1 = normal
  *                   - 2 = bug
  *                   - 3 = test
+ *                  Todo: make types to be project specified.
+ * @docs        ::  http://sailsjs.org/#!documentation/models
  */
+"use strict";
+
 module.exports = {
     schema: true,
     attributes: {
         title: {
-            type:       'string',
+            type:       "string",
             required:   true
         },
         order: {
-            type:       'integer',
+            type:       "integer",
             required:   true
         },
         chartColor: {
-            type:       'string',
+            type:       "string",
             required:   true
         },
         class: {
-            type:       'string',
+            type:       "string",
             required:   true
         },
         classText: {
-            type:       'string',
+            type:       "string",
             required:   true
         },
+        createdUserId: {
+            type:       "integer",
+            required:   true
+        },
+        updatedUserId: {
+            type:       "integer",
+            required:   true
+        },
+
+        // Dynamic data attributes
 
         objectTitle: function() {
             return this.title;
         },
         createdAtObject: function () {
-            return (this.createdAt && this.createdAt != '0000-00-00 00:00:00')
+            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.createdAt) : null;
         },
         updatedAtObject: function () {
-            return (this.updatedAt && this.updatedAt != '0000-00-00 00:00:00')
+            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         }
     },
@@ -53,7 +67,7 @@ module.exports = {
      * @param   {Function}          cb
      */
     afterCreate: function(values, cb) {
-        HistoryService.write('Type', values);
+        HistoryService.write("Type", values);
 
         cb();
     },
@@ -65,7 +79,7 @@ module.exports = {
      * @param   {Function}          cb
      */
     afterUpdate: function(values, cb) {
-        HistoryService.write('Type', values);
+        HistoryService.write("Type", values);
 
         cb();
     },
@@ -79,8 +93,12 @@ module.exports = {
     beforeDestroy: function(terms, cb) {
         Type
             .findOne(terms)
-            .done(function(error, type) {
-                HistoryService.remove('Type', type.id);
+            .exec(function(error, type) {
+                if (error) {
+                    sails.log.error(error);
+                } else {
+                    HistoryService.remove("Type", type.id);
+                }
 
                 cb();
             });
