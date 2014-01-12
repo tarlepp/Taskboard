@@ -65,8 +65,11 @@
                 </a>
             </th>
             <th class="col-md-6">Task</th>
-            <th class="col-md-3">Owner</th>
+            <th class="col-md-2">Owner</th>
             <th class="col-md-1 text-center">Priority</th>
+            <th class="col-md-1 text-center tooltipTitle" title="Task have been created after the story has started."
+                data-qtip-options='{ "position": { "at": "top center", "my": "bottom center" } }'
+            >Overhead</th>
             <th class="col-md-1 text-center">Type</th>
             <th class="col-md-1 text-right">Duration</th>
         </tr>
@@ -128,6 +131,13 @@
             <td class="text-center text-nowrap task-priority">
                 <% if (task.priority) { %>
                     <%= task.priority %>
+                <% } %>
+            </td>
+            <td class="text-center text-nowrap task-overhead">
+                <% if (task.createdAtObject().isAfter(story.timeStartObject())) { %>
+                    Yes
+                <% } else { %>
+                    No
                 <% } %>
             </td>
             <td class="text-center text-nowrap <%= task.type.classText %>">
