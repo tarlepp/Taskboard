@@ -1,24 +1,25 @@
 /**
  * ProjectUser
  *
- * @module      :: Model
- * @description :: A short summary of how this model works and what it represents.
- *
+ * @module      ::  Model
+ * @description ::  Model presents users that are attached to specified project in some role.
+ * @docs        ::  http://sailsjs.org/#!documentation/models
  */
+"use strict";
+
 module.exports = {
+    schema: true,
     attributes: {
         // Relation to Project model
         projectId: {
-            type:       'integer',
+            type:       "integer",
             required:   true
         },
-
         // Relation to User model
         userId: {
-            type:       'integer',
+            type:       "integer",
             required:   true
         },
-
         /**
          * Relation type:
          *  -1 = admin, he/she has _all_ rights
@@ -26,16 +27,26 @@ module.exports = {
          *   1 = normal user, can add and edit stories and tasks objects
          */
         role: {
-            type:       'integer',
+            type:       "integer",
             defaultsTo: 0
         },
+        createdUserId: {
+            type:       "integer",
+            required:   true
+        },
+        updatedUserId: {
+            type:       "integer",
+            required:   true
+        },
+
+        // Dynamic data attributes
 
         createdAtObject: function () {
-            return (this.createdAt && this.createdAt != '0000-00-00')
+            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.createdAt) : null;
         },
         updatedAtObject: function () {
-            return (this.updatedAt && this.updatedAt != '0000-00-00')
+            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         }
     }
