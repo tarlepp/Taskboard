@@ -1,9 +1,11 @@
 /**
  * PhaseDuration
  *
- * @module      :: Model
- * @description :: A short summary of how this model works and what it represents.
- * @docs        :: http://sailsjs.org/#!documentation/models
+ * @module      ::  Model
+ * @description ::  Model to keep track of phase duration times. Model contains information
+ *                  that is easy access from any point of view (project, sprint, story, task)
+ *                  so statistics is easy to use also.
+ * @docs        ::  http://sailsjs.org/#!documentation/models
  */
 "use strict";
 
@@ -11,47 +13,55 @@ var async = require("async");
 var moment = require("moment-timezone");
 
 module.exports = {
+    schema: true,
     attributes: {
         // Relation to Project model
         projectId: {
-            type:       'integer'
+            type:       "integer"
         },
         // Relation to Sprint model
         sprintId: {
-            type:       'integer'
+            type:       "integer"
         },
         // Relation to Story model
         storyId: {
-            type:       'integer'
+            type:       "integer"
         },
         // Relation to Task model
         taskId: {
-            type:       'integer'
+            type:       "integer"
         },
         // Relation to Phase model
         phaseId: {
-            type:       'integer'
+            type:       "integer"
         },
         timeStart: {
-            type:       'datetime'
+            type:       "datetime"
         },
         timeEnd: {
-            type:       'datetime'
+            type:       "datetime"
         },
+        // Absolute duration in seconds
         duration: {
-            type:       'integer'
+            type:       "integer"
+        },
+        // Relative duration in seconds (no weekends, etc.)
+        durationRelative: {
+            type:       "integer"
         },
         open: {
             type:       "boolean",
             defaultsTo: true
         },
 
+        // Dynamic data attributes
+
         timeStartObject: function() {
-            return (this.timeStart && this.timeStart != '0000-00-00 00:00:00')
+            return (this.timeStart && this.timeStart != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.timeStart) : null;
         },
         timeEndObject: function() {
-            return (this.timeEnd && this.timeEnd != '0000-00-00 00:00:00')
+            return (this.timeEnd && this.timeEnd != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.timeEnd) : null;
         },
         timeDurationHuman: function() {
@@ -64,6 +74,14 @@ module.exports = {
             }
 
             return output;
+        },
+        createdAtObject: function () {
+            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
+                ? DateService.convertDateObjectToUtc(this.createdAt) : null;
+        },
+        updatedAtObject: function () {
+            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
+                ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         }
     },
 
@@ -141,6 +159,8 @@ module.exports = {
              */
             function(error, task, story, sprint, project) {
                 if (error) {
+                    sails.log.error(error);
+
                     next(error);
                 } else {
                     // Add relation information to current values
