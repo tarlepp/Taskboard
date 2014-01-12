@@ -3,7 +3,10 @@
  *
  * @module      ::  Model
  * @description ::  Model to represents taskboard user.
+ * @docs        ::  http://sailsjs.org/#!documentation/models
  */
+"use strict";
+
 var bcrypt = require("bcrypt");
 var gravatar = require("gravatar");
 var async = require("async");
@@ -21,7 +24,8 @@ function hashPassword(values, next) {
         }
 
         values.password = hash;
-        next();
+
+        return next();
     });
 }
 
@@ -83,6 +87,16 @@ module.exports = {
             type:       "string",
             defaultsTo: ""
         },
+        createdUserId: {
+            type:       "integer",
+            required:   true
+        },
+        updatedUserId: {
+            type:       "integer",
+            required:   true
+        },
+
+        // Dynamic data attributes
 
         // Computed user fullName string
         fullName: function() {
@@ -101,11 +115,11 @@ module.exports = {
             return this.lastName + " " + this.firstName;
         },
         createdAtObject: function () {
-            return (this.createdAt && this.createdAt != '0000-00-00')
+            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.createdAt) : null;
         },
         updatedAtObject: function () {
-            return (this.updatedAt && this.updatedAt != '0000-00-00')
+            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         },
 
@@ -124,9 +138,9 @@ module.exports = {
 
             if (callback) {
                 return bcrypt.compare(password, obj.password, callback);
+            } else {
+                return bcrypt.compareSync(password, obj.password);
             }
-
-            return bcrypt.compareSync(password, obj.password);
         }
     },
 
@@ -207,7 +221,11 @@ module.exports = {
         User
             .findOne(terms)
             .done(function(error, user) {
-                HistoryService.remove("User", user.id);
+                if (error) {
+                    sails.log.error(error);
+                } else {
+                    HistoryService.remove("User", user.id);
+                }
 
                 cb();
             });
