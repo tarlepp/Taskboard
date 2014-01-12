@@ -4,52 +4,65 @@
  * @module      ::  Model
  * @description ::  This model represents project phases in taskboard. Note that all phases are
  *                  connected to specified project.
+ * @docs        ::  http://sailsjs.org/#!documentation/models
  */
+"use strict";
+
 module.exports = {
     schema: true,
     attributes: {
         // Relation to Project model
         projectId: {
-            type:       'integer',
+            type:       "integer",
             required:   true
         },
         title: {
-            type:       'string',
+            type:       "string",
             required:   true,
             minLength:  4
         },
         description: {
-            type:       'text',
-            defaultsTo: ''
+            type:       "text",
+            defaultsTo: ""
         },
         backgroundColor: {
-            type:       'string',
-            defaultsTo: '#428bca'
+            type:       "string",
+            defaultsTo: "#428bca"
         },
         order: {
-            type:       'integer',
+            type:       "integer",
             defaultsTo: 0
         },
         // How many "tasks" is allowed to in this phase
         tasks: {
-            type:       'integer',
+            type:       "integer",
             defaultsTo: 0
         },
         // If false, then in case of story splitting move phase tasks to new story
         isDone: {
-            type:       'boolean',
-            defaultsTo: 0
+            type:       "boolean",
+            defaultsTo: false
         },
+        createdUserId: {
+            type:       "integer",
+            required:   true
+        },
+        updatedUserId: {
+            type:       "integer",
+            required:   true
+        },
+
+        // Dynamic data attributes
 
         objectTitle: function() {
             return this.title;
         },
         createdAtObject: function () {
-            return (this.createdAt && this.createdAt != '0000-00-00')
+            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.createdAt) : null;
         },
         updatedAtObject: function () {
-            return (this.updatedAt && this.updatedAt != '0000-00-00')
+            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         }
     },
@@ -63,7 +76,7 @@ module.exports = {
      * @param   {Function}              cb
      */
     afterCreate: function(values, cb) {
-        HistoryService.write('Phase', values);
+        HistoryService.write("Phase", values);
 
         cb();
     },
@@ -75,7 +88,7 @@ module.exports = {
      * @param   {Function}              cb
      */
     afterUpdate: function(values, cb) {
-        HistoryService.write('Phase', values);
+        HistoryService.write("Phase", values);
 
         cb();
     },
@@ -90,7 +103,11 @@ module.exports = {
         Phase
             .findOne(terms)
             .done(function(error, phase) {
-                HistoryService.remove('Phase', phase.id);
+                if (error) {
+                    sails.log.error(error);
+                } else {
+                    HistoryService.remove("Phase", phase.id);
+                }
 
                 cb();
             });
