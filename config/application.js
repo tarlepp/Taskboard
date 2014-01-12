@@ -8,7 +8,9 @@ module.exports = {
     history: {
         ignoreValues: [
             "sessionId",
-            "password"
+            "password",
+            "createdUserId",
+            "updatedUserId"
         ]
     }
 };

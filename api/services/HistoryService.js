@@ -15,11 +15,17 @@
 exports.write = function(objectName, object, message) {
     var objectId = object.id;
     var objectData = _.clone(object);
+    var userId = objectData.updatedUserId ? objectData.updatedUserId : -1;
 
     // Remove not needed "waste" data
     delete objectData.id;
     delete objectData.createdAt;
     delete objectData.updatedAt;
+
+    // Remove all configured data from
+    _.each(sails.config.history.ignoreValues, function(value) {
+        delete objectData[value];
+    });
 
     // Create new history row
     History
@@ -27,9 +33,13 @@ exports.write = function(objectName, object, message) {
             objectId: objectId,
             objectName: objectName,
             objectData: JSON.stringify(objectData),
+            userId: userId,
             message: message
         })
-        .done(function(error, data) {
+        .exec(function(error, data) {
+            if (error) {
+                sails.log.error(error);
+            }
         });
 };
 
@@ -46,6 +56,9 @@ exports.remove = function(objectName, objectId) {
             objectId: objectId,
             objectName: objectName
         })
-        .done(function(error, data) {
+        .exec(function(error, data) {
+            if (error) {
+                sails.log.error(error);
+            }
         });
 };

@@ -29,11 +29,8 @@ module.exports = {
         message: {
             type:       "text"
         },
-        createdUserId: {
-            type:       "integer",
-            required:   true
-        },
-        updatedUserId: {
+        // Relation to user id
+        userId: {
             type:       "integer",
             required:   true
         },

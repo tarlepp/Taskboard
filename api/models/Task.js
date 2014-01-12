@@ -318,7 +318,7 @@ module.exports = {
         Story
             .update(
                 {id: values.storyId},
-                {isDone: 0, timeEnd: null},
+                {isDone: 0, timeEnd: null, updatedUserId: values.updatedUserId ? values.updatedUserId : -1},
                 function(error, /** sails.model.story[] */stories) {
                     if (error) {
                         sails.log.error(error);
@@ -401,7 +401,8 @@ module.exports = {
 
                     var updateData = {
                         isDone: isDone,
-                        timeEnd: timeEnd
+                        timeEnd: timeEnd,
+                        updatedUserId: values.updatedUserId ? values.updatedUserId : -1
                     };
 
                     if (taskPhases.length === 1) {
