@@ -1,10 +1,13 @@
 /**
  * Comment
  *
- * @module      :: Model
- * @description :: A short summary of how this model works and what it represents.
- * @docs        :: http://sailsjs.org/#!documentation/models
+ * @module      ::  Model
+ * @description ::  Model to present comment object. This comment object can be attached to
+ *                  any another object in Taskboard application. Also comment can be attached
+ *                  to another comment. This allows comment threads.
+ * @docs        ::  http://sailsjs.org/#!documentation/models
  */
+"use strict";
 
 module.exports = {
     schema: true,
@@ -34,6 +37,8 @@ module.exports = {
             required:   true
         },
 
+        // Dynamic model data attributes
+
         createdAtObject: function () {
             return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.createdAt) : null;
@@ -53,12 +58,14 @@ module.exports = {
      * @param   {Function}  cb
      */
     beforeDestroy: function(terms, cb) {
+        // Fetch comment itself
         Comment
             .findOne(terms)
             .exec(function(error, comment) {
                 if (error) {
                     cb(error);
                 } else if (comment) {
+                    // Remove all child
                     Comment
                         .destroy({commentId: comment.id})
                         .exec(function(error) {
