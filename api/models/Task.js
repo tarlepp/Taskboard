@@ -4,7 +4,10 @@
  * @module      ::  Model
  * @description ::  Model represents single task on taskboard. Tasks are attached to specified user story, phase,
  *                  type and user.
+ * @docs        ::  http://sailsjs.org/#!documentation/models
  */
+"use strict";
+
 var async = require("async");
 var moment = require("moment-timezone");
 
@@ -57,6 +60,16 @@ module.exports = {
         timeEnd: {
             type:       "datetime"
         },
+        createdUserId: {
+            type:       "integer",
+            required:   true
+        },
+        updatedUserId: {
+            type:       "integer",
+            required:   true
+        },
+
+        // Dynamic data attributes
 
         objectTitle: function() {
             return this.title;
@@ -106,7 +119,8 @@ module.exports = {
     // Lifecycle Callbacks
 
     /**
-     * Before create callback. Basically we just want to make sure that isDone bit is set to false.
+     * Before create callback. Basically we just want to make sure that isDone bit is set to false
+     * and new task gets right priority value according to existing tasks in this story.
      *
      * @param   {sails.model.task}  values
      * @param   {Function}          cb
@@ -120,8 +134,10 @@ module.exports = {
             .where({storyId: values.storyId})
             .sort("priority DESC")
             .limit(1)
-            .done(function(error, task) {
+            .exec(function(error, task) {
                 if (error) {
+                    sails.log.error(error);
+
                     cb(error);
                 } else {
                     values.priority = (task[0]) ? task[0].priority + 1 : 1;
@@ -152,8 +168,18 @@ module.exports = {
                         DataService.getTask(values.id, callback);
                     }
                 },
+
+                /**
+                 * Main callback function which is called after all specified parallel
+                 * jobs are done.
+                 *
+                 * @param   {Error|null}    error
+                 * @param   {{}}            data
+                 */
                 function (error, data) {
                     if (error) {
+                        sails.log.error(error);
+
                         cb(error);
                     } else {
                         values.isDone = data.phase.isDone;
@@ -163,9 +189,9 @@ module.exports = {
                         if (data.phase.order === 0) {
                             values.timeStart = null;
                             values.timeEnd = null;
-                        } else if (values.phaseId !== data.task.phaseId // We can assume that this update is from the board, so set start time if needed
+                        } else if (values.phaseId !== data.task.phaseId
                             && (!data.task.timeStart || data.task.timeStart == "0000-00-00 00:00:00")
-                        ) {
+                        ) { // We can assume that this update is from the board, so set start time if needed
                             values.timeStart = new Date();
                         }
 
@@ -185,64 +211,96 @@ module.exports = {
      * If all task are done (isDone === true) we can update current story as done. Note
      * that if story hasn't any task it cannot be "done".
      *
-     * @todo refactor this.
-     *
      * @param   {Number}    taskId
      * @param   {Function}  cb
      */
     beforeDestroy: function(taskId, cb) {
-        Task
-            .findOne(taskId)
-            .done(function(error, /** sails.model.task */task) {
+        async.waterfall(
+            [
+                /**
+                 * Fetch task data.
+                 *
+                 * @param   {Function}  callback
+                 */
+                function(callback) {
+                    DataService.getTask(taskId, function(error, task) {
+                        callback(error, task);
+                    });
+                },
+
+                /**
+                 * Fetch all task data
+                 *
+                 * @param   {sails.model.task}  task
+                 * @param   {Function}          callback
+                 */
+                function(task, callback) {
+                    var where = {
+                        storyId: task.storyId,
+                        id: {"!": task.id}
+                    };
+
+                    DataService.getTasks(where, function(error, tasks) {
+                        callback(error, task, tasks);
+                    })
+                }
+            ],
+
+            /**
+             * Main callback function which is called after all waterfall jobs are done.
+             *
+             * @param   {Error|null}            error
+             * @param   {sails.model.task}      task
+             * @param   {sails.model.task[]}    tasks
+             */
+            function(error, task, tasks) {
                 if (error) {
-                    cb(error)
+                    sails.log.error(error);
+
+                    cb(error);
                 } else {
                     HistoryService.remove("Task", task.id);
-
                     PhaseDurationService.remove({taskId: task.id});
 
-                    Task
-                        .find()
-                        .where({storyId: task.storyId})
-                        .where({id: {"!": task.id}})
-                        .done(function(error, /** sails.model.task[] */tasks) {
-                            var isDone = true;
-                            var timeEnd = null;
+                    var isDone = true;
+                    var timeEnd = null;
 
-                            if (_.size(tasks) > 0) {
-                                // Iterate story tasks
-                                _.each(tasks, function(/** sails.model.task */task) {
-                                    if (!task.isDone) {
-                                        isDone = false;
-                                    }
-                                });
-                            } else { // If there are no tasks, story cannot be done
+                    if (_.size(tasks) > 0) {
+                        // Iterate story tasks
+                        _.each(tasks, function(/** sails.model.task */task) {
+                            if (!task.isDone) {
                                 isDone = false;
                             }
-
-                            if (isDone) {
-                                timeEnd = new Date();
-                            }
-
-                            // Update story data
-                            Story
-                                .update(
-                                    {id: task.storyId},
-                                    {isDone: isDone, timeEnd: timeEnd},
-                                    function(error, /** sails.model.story[] */stories) {
-                                        if (error) {
-                                            cb(error);
-                                        } else {
-                                            _.each(stories, function(story) {
-                                                Story.publishUpdate(story.id, story.toJSON());
-                                            });
-
-                                            cb();
-                                        }
-                                });
                         });
+                    } else { // If there are no tasks, story cannot be done
+                        isDone = false;
+                    }
+
+                    if (isDone) {
+                        timeEnd = new Date();
+                    }
+
+                    Story
+                        .update(
+                            {id: task.storyId},
+                            {isDone: isDone, timeEnd: timeEnd},
+                            function(error, /** sails.model.story[] */stories) {
+                                if (error) {
+                                    sails.log.error(error);
+
+                                    cb(error);
+                                } else {
+                                    _.each(stories, function(story) {
+                                        Story.publishUpdate(story.id, story.toJSON());
+                                    });
+
+                                    cb();
+                                }
+                            }
+                        );
                 }
-            });
+            }
+        );
     },
 
     /**
@@ -263,6 +321,8 @@ module.exports = {
                 {isDone: 0, timeEnd: null},
                 function(error, /** sails.model.story[] */stories) {
                     if (error) {
+                        sails.log.error(error);
+
                         cb(error);
                     } else {
                         _.each(stories, function(story) {
@@ -271,7 +331,8 @@ module.exports = {
 
                         cb();
                     }
-            });
+                }
+            );
     },
 
     /**
@@ -319,6 +380,8 @@ module.exports = {
              */
             function (error, data) {
                 if (error) {
+                    sails.log.error(error);
+
                     cb(error);
                 } else {
                     var isDone = true;
@@ -375,6 +438,8 @@ module.exports = {
             Story
                 .update(where, updateData, function(error, stories) {
                     if (error) {
+                        sails.log.error(error);
+
                         cb(error);
                     } else {
                         _.each(stories, function(story) {
