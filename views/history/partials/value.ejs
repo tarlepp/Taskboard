@@ -1,0 +1,33 @@
+<div class="tooltipDivContainer">
+    <%
+    if (data.valueOld === null || data.valueOld === undefined) {
+        data.valueOld = "<em>none</em>";
+    }
+
+    if (data.valueNew === null || data.valueNew === undefined) {
+        data.valueNew = "<em>none</em>";
+    }
+    %>
+
+    <h1>Change information for '<%= data.column %>' column</h1>
+    <div>
+        <table class="table table-condensed table-history">
+            <tr>
+                <th>Old value</th>
+            </tr>
+            <tr>
+                <td class="text-small">
+                    <%- data.valueOld %>
+                </td>
+            </tr>
+            <tr>
+                <th>New value</th>
+            </tr>
+            <tr>
+                <td class="text-small">
+                    <%- data.valueNew %>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

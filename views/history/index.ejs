@@ -44,7 +44,11 @@
                         <% if (value.columnType == 'relation' || value.columnType == 'boolean') { %>
                             Changed column <span class="text-info"><%= value.column %></span> value from <span class="text-info"><%= value.valueOld %></span> to <span class="text-info"><%= value.valueNew %></span>.
                         <% } else { %>
-                            Changed column <span class="text-info"><%= value.column %></span> value.
+                            Changed column <span class="text-info tooltipDiv">
+                                <%= value.column %>
+
+                                <%- partial("partials/value", {data: value}) %>
+                            </span> value.
                         <% } %>
                     <% } %>
                 </li>
