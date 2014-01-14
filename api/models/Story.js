@@ -52,7 +52,7 @@ module.exports = {
             minLength:  5
         },
         estimate: {
-            type:       "integer",
+            type:       "float",
             required:   true,
             defaultsTo: -1
         },
