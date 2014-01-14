@@ -30,41 +30,14 @@
                     data-qtip-options='{ "position": {"my": "center right", "at": "center left", "adjust": {"y": 7} }, "show": {"delay": 0}, "hide": {"delay": 0} }'
                 >
                     <a class="trunk8"
-                       data-toggle-details="true"
-                       data-details="detailedMilestonesStories_<%= milestone.id %>"
+                        data-toggle-details="true"
+                        data-details="detailedMilestonesStories_<%= milestone.id %>"
                     >
                         <%= milestone.title %>
                         <small>(<%= milestone.stories.cntDone %> / <%= milestone.stories.cntTotal %>)</small>
                     </a>
 
-                    <div class="tooltipDivContainer">
-                        <h1><%= milestone.title %></h1>
-                        <div>
-                            <% if (milestone.description.length > 0) { %>
-                            <%= milestone.description %>
-                            <% } else { %>
-                            <em>No description...</em>
-                            <% } %>
-                            <hr />
-                            <table class="text-medium">
-                                <tr>
-                                    <th class="text-nowrap text-right">Stories:</th>
-                                    <td class="text-nowrap"><%= milestone.stories.cntDone %> / <%= milestone.stories.cntTotal %></td>
-                                </tr>
-                                <tr>
-                                    <th class="text-nowrap text-right">Deadline:</th>
-                                    <td class="text-nowrap">
-                                    <% if (milestone.deadlineObject()) { %>
-                                        <%= milestone.deadlineObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDate) %>,
-                                        <%= milestone.deadlineObject().tz(currentUser.momentTimezone).fromNow() %>
-                                    <% } else { %>
-                                        <em>no deadline</em>
-                                    <% } %>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+                    <%- partial("../partials/tooltip/milestone", {milestone: milestone}) %>
                 </span>
             </div>
 
@@ -84,68 +57,13 @@
             <div class="row">
                 <div class="col-md-4 text-right">
                     <span class="tooltipDiv"
-                          data-qtip-options='{ "position": {"my": "center right", "at": "center left", "adjust": {"y": 7} }, "show": {"delay": 0}, "hide": {"delay": 0} }'
-                            >
+                        data-qtip-options='{ "position": {"my": "center right", "at": "center left", "adjust": {"y": 7} }, "show": {"delay": 0}, "hide": {"delay": 0} }'
+                    >
                         <span class="trunk8">
                             <%= story.title %> <small>(<%= story.tasks.cntDone %> / <%= story.tasks.cntTotal %>)</small>
                         </span>
 
-                        <div class="tooltipDivContainer">
-                            <h1><%= story.title %></h1>
-                            <div>
-                                <% if (story.description.length > 0) { %>
-                                <%= story.description %>
-                                <% } else { %>
-                                <em>No description...</em>
-                                <% } %>
-                                <hr />
-                                <table class="text-medium">
-                                    <tr>
-                                        <th class="text-nowrap text-right">Estimate:</th>
-                                        <td class="text-nowrap"><% if (story.estimate === -1) { %>???<% } else { %><%= story.estimate %> <% } %></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-nowrap text-right">Tasks:</th>
-                                        <td class="text-nowrap"><%= story.tasks.cntDone %> / <%= story.tasks.cntTotal %></td>
-                                    </tr>
-
-                                    <% if (moment.isMoment(story.timeStartObject()) && story.timeStartObject().isValid()) { %>
-                                    <tr>
-                                        <th class="text-nowrap text-right">Started:</th>
-                                        <td class="text-nowrap">
-                                            <%=
-                                            story.timeStartObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDateTime)
-                                            %>
-                                        </td>
-                                    </tr>
-                                    <% } %>
-
-                                    <% if (moment.isMoment(story.timeEndObject()) && story.timeEndObject().isValid()) { %>
-                                    <tr>
-                                        <th class="text-nowrap text-right">Ended:</th>
-                                        <td class="text-nowrap">
-                                            <%=
-                                            story.timeEndObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDateTime)
-                                            %>
-                                        </td>
-                                    </tr>
-                                    <% } %>
-
-                                    <% if (
-                                        (moment.isMoment(story.timeStartObject()) && story.timeStartObject().isValid())
-                                        && (moment.isMoment(story.timeEndObject()) && story.timeEndObject().isValid())
-                                    ) { %>
-                                    <tr>
-                                        <th class="text-nowrap text-right">Duration:</th>
-                                        <td class="text-nowrap">
-                                            <%= story.timeStartObject().from(story.timeEndObject(), true) %>
-                                        </td>
-                                    </tr>
-                                    <% } %>
-
-                                </table>
-                            </div>
-                        </div>
+                        <%- partial("../partials/tooltip/story", {story: story}) %>
                     </span>
                 </div>
 
@@ -204,35 +122,7 @@
                         </span>
                     </a>
 
-                    <div class="tooltipDivContainer">
-                        <h1><%= sprint.title %></h1>
-                        <div>
-                        <% if (sprint.description.length > 0) { %>
-                            <%= sprint.description %>
-                        <% } else { %>
-                            <em>No description...</em>
-                        <% } %>
-                            <hr />
-                            <table class="text-medium">
-                                <tr>
-                                    <td class="text-nowrap text-right">Duration:</td>
-                                    <td class="text-nowrap">
-                                        <%= sprint.dateStartObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDate) %>
-                                        -
-                                        <%= sprint.dateEndObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDate) %>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="text-nowrap text-right"></th>
-                                    <td class="text-nowrap"><%= sprint.durationDays() %> day(s)</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-nowrap text-right">Stories:</td>
-                                    <td class="text-nowrap"><%= sprint.stories.cntDone %> / <%= sprint.stories.cntTotal %></td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+                    <%- partial("../partials/tooltip/sprint", {sprint: sprint}) %>
                 </span>
             </div>
 
@@ -258,62 +148,7 @@
                             <%= story.title %> <small>(<%= story.tasks.cntDone %> / <%= story.tasks.cntTotal %>)</small>
                         </span>
 
-                        <div class="tooltipDivContainer">
-                            <h1><%= story.title %></h1>
-                            <div>
-                                <% if (story.description.length > 0) { %>
-                                <%= story.description %>
-                                <% } else { %>
-                                <em>No description...</em>
-                                <% } %>
-                                <hr />
-                                <table class="text-medium">
-                                    <tr>
-                                        <th class="text-nowrap text-right">Estimate:</th>
-                                        <td class="text-nowrap"><% if (story.estimate === -1) { %>???<% } else { %><%= story.estimate %> <% } %></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-nowrap text-right">Tasks:</th>
-                                        <td class="text-nowrap"><%= story.tasks.cntDone %> / <%= story.tasks.cntTotal %></td>
-                                    </tr>
-
-                                    <% if (moment.isMoment(story.timeStartObject()) && story.timeStartObject().isValid()) { %>
-                                    <tr>
-                                        <th class="text-nowrap text-right">Started:</th>
-                                        <td class="text-nowrap">
-                                            <%=
-                                            story.timeStartObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDateTime)
-                                            %>
-                                        </td>
-                                    </tr>
-                                    <% } %>
-
-                                    <% if (moment.isMoment(story.timeEndObject()) && story.timeEndObject().isValid()) { %>
-                                    <tr>
-                                        <th class="text-nowrap text-right">Ended:</th>
-                                        <td class="text-nowrap">
-                                            <%=
-                                            story.timeEndObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDateTime)
-                                            %>
-                                        </td>
-                                    </tr>
-                                    <% } %>
-
-                                    <% if (
-                                    (moment.isMoment(story.timeStartObject()) && story.timeStartObject().isValid())
-                                    && (moment.isMoment(story.timeEndObject()) && story.timeEndObject().isValid())
-                                    ) { %>
-                                    <tr>
-                                        <th class="text-nowrap text-right">Duration:</th>
-                                        <td class="text-nowrap">
-                                            <%= story.timeStartObject().from(story.timeEndObject(), true) %>
-                                        </td>
-                                    </tr>
-                                    <% } %>
-
-                                </table>
-                            </div>
-                        </div>
+                        <%- partial("../partials/tooltip/story", {story: story}) %>
                     </span>
                 </div>
 
@@ -365,62 +200,7 @@
                         <%= story.title %> <small>(<%= story.tasks.cntDone %> / <%= story.tasks.cntTotal %>)</small>
                     </span>
 
-                    <div class="tooltipDivContainer">
-                        <h1><%= story.title %></h1>
-                        <div>
-                            <% if (story.description.length > 0) { %>
-                            <%= story.description %>
-                            <% } else { %>
-                            <em>No description...</em>
-                            <% } %>
-                            <hr />
-                            <table class="text-medium">
-                                <tr>
-                                    <th class="text-nowrap text-right">Estimate:</th>
-                                    <td class="text-nowrap"><% if (story.estimate === -1) { %>???<% } else { %><%= story.estimate %> <% } %></td>
-                                </tr>
-                                <tr>
-                                    <th class="text-nowrap text-right">Tasks:</th>
-                                    <td class="text-nowrap"><%= story.tasks.cntDone %> / <%= story.tasks.cntTotal %></td>
-                                </tr>
-
-                                <% if (moment.isMoment(story.timeStartObject()) && story.timeStartObject().isValid()) { %>
-                                <tr>
-                                    <th class="text-nowrap text-right">Started:</th>
-                                    <td class="text-nowrap">
-                                        <%=
-                                        story.timeStartObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDateTime)
-                                        %>
-                                    </td>
-                                </tr>
-                                <% } %>
-
-                                <% if (moment.isMoment(story.timeEndObject()) && story.timeEndObject().isValid()) { %>
-                                <tr>
-                                    <th class="text-nowrap text-right">Ended:</th>
-                                    <td class="text-nowrap">
-                                        <%=
-                                        story.timeEndObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDateTime)
-                                        %>
-                                    </td>
-                                </tr>
-                                <% } %>
-
-                                <% if (
-                                (moment.isMoment(story.timeStartObject()) && story.timeStartObject().isValid())
-                                && (moment.isMoment(story.timeEndObject()) && story.timeEndObject().isValid())
-                                ) { %>
-                                <tr>
-                                    <th class="text-nowrap text-right">Duration:</th>
-                                    <td class="text-nowrap">
-                                        <%= story.timeStartObject().from(story.timeEndObject(), true) %>
-                                    </td>
-                                </tr>
-                                <% } %>
-
-                            </table>
-                        </div>
-                    </div>
+                    <%- partial("../partials/tooltip/story", {story: story}) %>
                 </span>
             </div>
 
@@ -460,25 +240,7 @@
         <div class="progress-bar tooltipDiv" style="width: <%= phase.durationPercentage %>%; background-color: <%= phase.backgroundColor %>;">
             <span><%= phase.title %> <%= numeral(phase.durationPercentage).format("0.00") %>%</span>
 
-            <div class="tooltipDivContainer">
-                <h1>Statistics of phase '<%= phase.title %>'</h1>
-                <div>
-                    <table>
-                        <tr>
-                            <th class="text-right">Percentage:</th>
-                            <td class="text-nowrap"><%= numeral(phase.durationPercentage).format("0.00") %>%</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right">Duration:</th>
-                            <td class="text-nowrap"><%= moment().from(moment().add(phase.duration, "seconds"), true) %></td>
-                        </tr>
-                        <tr>
-                            <th class="text-right"></th>
-                            <td class="text-nowrap"><%= numeral(phase.duration).format() %> seconds</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+            <%- partial("../partials/tooltip/phase", {phase: phase}) %>
         </div>
         <% } %>
     <% }); %>

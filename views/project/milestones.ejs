@@ -145,7 +145,15 @@
                                data-story-id="<%= story.id %>"
                                data-action="storyEdit"
                             >
-                                <%= story.title %> (<%= (story.estimate == -1) ? '???' : story.estimate %>)
+                                <%
+                                if (story.estimate == -1) {
+                                    estimate = '';
+                                } else {
+                                    estimate = '(' + story.estimate + ')';
+                                }
+                                %>
+
+                                <%= story.title %> <%= estimate %>
                             </a>
                         </li>
                         <% }) %>

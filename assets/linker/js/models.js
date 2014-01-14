@@ -186,7 +186,11 @@ function Story(data) {
 
     // Formatted story title
     self.formattedTitle = ko.computed(function() {
-        return self.title() + " (" + (self.estimate() == -1 ? '???' : self.estimate()) + ")";
+        if (self.estimate() == -1) {
+            return self.title();
+        } else {
+            return self.title() + " (" + (self.estimate() == -1 ? '???' : self.estimate()) + ")";
+        }
     });
 
     self.storyRowId = ko.computed(function() {
@@ -212,7 +216,9 @@ function Story(data) {
 
         var parts = [];
 
-        parts.push("<tr><th>Estimate:</th><td>" + (self.estimate() == -1 ? "???" : self.estimate()) + "</td></tr>");
+        if (self.estimate() != -1) {
+            parts.push("<tr><th>Estimate:</th><td>" + self.estimate() + "</td></tr>");
+        }
 
         if (moment.isMoment(self.timeStartObject()) && self.timeStartObject().isValid()) {
             parts.push("<tr><th>Started:</th><td>" + self.timeStartObject().tz(myViewModel.user().momentTimezone()).format(myViewModel.user().momentFormatDateTime()) + "</td></tr>");

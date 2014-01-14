@@ -17,7 +17,15 @@
                     data-type="story"
                 ></i>
 
-                <%= story.title %> (<%= story.estimateFormatted() %>)
+                <%
+                if (story.estimate != -1) {
+                    estimate = "(" + story.estimateFormatted() + ")";
+                } else {
+                    estimate = "";
+                }
+                %>
+
+                <%= story.title %> <%= estimate %>
             </li>
             <% } %>
         <% }) %>
@@ -55,7 +63,15 @@
                                     data-type="story"
                                 ></i>
 
-                                <%= story.title %> (<%= story.estimateFormatted() %>)
+                                <%
+                                if (story.estimate != -1) {
+                                    estimate = "(" + story.estimateFormatted() + ")";
+                                } else {
+                                    estimate = "";
+                                }
+                                %>
+
+                                <%= story.title %> <%= estimate %>
                             </li>
                             <% } %>
                         <% }) %>
