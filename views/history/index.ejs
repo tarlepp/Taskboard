@@ -16,6 +16,13 @@
                         Unknown
                     <% } else if (row.user) { %>
                         <%= row.user.fullName() %>
+
+                        <span class="gravatar">
+                            <i class="fa fa-user" style="display: none;"></i>
+
+                            <img src="<%= row.user.gravatarImage(25) %>" onerror="this.style.display = 'none'; this.previousElementSibling.style.display = '';" />
+                        </span>
+
                     <% } %>
                 </small>
             </h4>

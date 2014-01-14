@@ -270,6 +270,22 @@ ul, ol {
     margin-left: 5px;
 }
 
+.history .gravatar {
+    margin-left: 5px;
+}
+
+.history .gravatar i {
+    font-size: 18px;
+    color: #428bca;
+    text-shadow: none;
+}
+
+.history .gravatar img {
+    position: relative;
+    top: -5px;
+    border-radius: 5px 5px 0 0;
+}
+
 .popover.actionMenu {
     z-index: 3000;
     padding: 0;;
