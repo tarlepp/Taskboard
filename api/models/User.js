@@ -83,6 +83,11 @@ module.exports = {
             defaultsTo: "Europe/Mariehamn",
             required:   true
         },
+        taskTemplateChangeLimit: {
+            type:       "integer",
+            defaultsTo: 6,
+            required:   true
+        },
         sessionId: {
             type:       "string",
             defaultsTo: ""
