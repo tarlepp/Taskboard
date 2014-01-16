@@ -18,6 +18,11 @@
                 data-toggle="tab"
             >Language and region</a>
         </li>
+        <li>
+            <a id="boardSettingsTab" href="#boardSettings"
+                data-toggle="tab"
+            >Board settings</a>
+        </li>
     </ul>
 
     <div class="tab-content">
@@ -41,7 +46,7 @@
                         data-validate-type="email,unique"
                         data-model="User"
                     />
-                    <span class="help-block">Email address will not be public.</span>
+                    <span class="help-block">Email address will be used to fetch <a href="http://gravatar.com">Gravatar</a> image.</span>
                 </div>
             </div>
         </div>
@@ -112,6 +117,30 @@
 
                 <div class="col-lg-offset-3 col-lg-9">
                     <span class=" help-block">All date formatting is done with <a href="http://momentjs.com/docs/#/displaying/format/" target="_blank">moment.js</a> library so use it format options with above settings.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane" id="boardSettings">
+            <h4 class="col-lg-offset-3">GUI settings</h4>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label" for="taskTemplateChangeLimit">Task count</label>
+
+                <div class="col-lg-9">
+                    <input id="taskTemplateChangeLimit" name="taskTemplateChangeLimit" type="text" class="form-control form-slider" required="required" value="6"
+                        data-slider-min="2"
+                        data-slider-max="15"
+                        data-slider-step="1"
+                        data-slider-value="6"
+                    />
+                    <span id="taskTemplateChangeLimitValue" class="badge badge-slider">6</span>
+                </div>
+
+                <div class="col-lg-offset-3 col-lg-9">
+                    <span class=" help-block">
+                        Limit count when tasks are drawn into smaller sticky notes on board.
+                    </span>
                 </div>
             </div>
         </div>

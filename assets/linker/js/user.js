@@ -225,7 +225,13 @@ jQuery(document).ready(function() {
         function save(modal, trigger, close) {
             var formBasic = jQuery("#formUserEdit_1", modal);
             var formRegion = jQuery("#formUserEdit_2", modal);
-            var formItems = jQuery.extend({}, formBasic.serializeJSON(), formRegion.serializeJSON());
+            var formSetting = jQuery("#formUserEdit_3", modal);
+            var formItems = jQuery.extend(
+                {},
+                formBasic.serializeJSON(),
+                formRegion.serializeJSON(),
+                formSetting.serializeJSON()
+            );
 
             if (typeof formItems.admin === "object") {
                 formItems.admin = 1;
@@ -430,6 +436,16 @@ function initUserForm(context, parameters) {
 
         progressBar.find("span").html(Math.round(complexity) + "%");
     });
+
+    // Enable slider for task template limit
+    jQuery("#taskTemplateChangeLimit")
+        .slider({
+            tooltip: "hide"
+        })
+        .on("slide", function(sliderEvent) {
+            jQuery("#taskTemplateChangeLimitValue").text(sliderEvent.value);
+        })
+    ;
 }
 
 function timedUpdate () {
