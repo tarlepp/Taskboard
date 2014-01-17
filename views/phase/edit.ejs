@@ -30,12 +30,22 @@
                 <input type="radio" name="isDone[]" value="1" <% if (phase.isDone) { %><%= checked="checked" %><% } %> />
             </td>
             <td style="padding: 0 10px;">
-                <div class="slider slider-phase-task"></div>
-                <input type="hidden" name="tasks[]" value="<%= phase.tasks %>" />
+                <input type="text" name="tasks[]" class="slider slider-phase-task" value="<%= phase.tasks %>"
+                    data-slider-min="0"
+                    data-slider-max="10"
+                    data-slider-step="1"
+                    data-slider-value="<%= phase.tasks %>"
+                >
                 <input type="hidden" name="order[]" value="<%= phase.order %>" />
                 <input type="hidden" name="id[]" value="<%= phase.id %>" />
             </td>
-            <td></td>
+            <td>
+                <% if (phase.tasks) { %>
+                    <%= phase.tasks %>
+                <% } else { %>
+                    unlimited
+                <% } %>
+            </td>
             <td>
                 <button class="btn btn-danger btn-xs phaseDelete tooltipTitle" type="button" title="Delete phase"
                     data-qtip-options='{ "position": {"my": "center left", "at": "center right"} }'
@@ -64,13 +74,17 @@
             <td>
                 <input type="radio" name="isDone[]" value="1" />
             </td>
-            <td>
-                <div class="slider slider-phase-task"></div>
-                <input type="hidden" name="tasks[]" value="" />
+            <td style="padding: 0 10px;">
+                <input type="text" name="tasks[]" class="slider slider-phase-task" value="0"
+                    data-slider-min="0"
+                    data-slider-max="10"
+                    data-slider-step="1"
+                    data-slider-value="0"
+                >
                 <input type="hidden" name="order[]" value="" />
                 <input type="hidden" name="id[]" value="" />
             </td>
-            <td></td>
+            <td>unlimited</td>
             <td>
                 <button class="btn btn-danger btn-xs phaseDelete tooltipTitle" type="button" title="Delete phase"
                         data-qtip-options='{ "position": {"my": "center left", "at": "center right"} }'

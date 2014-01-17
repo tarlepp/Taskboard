@@ -137,26 +137,18 @@ jQuery(document).ready(function() {
                     callback: function() {
                         var newRow = jQuery("#projectPhasesNew", modal).find("tr").clone();
                         var slider = newRow.find(".slider");
-                        var input = slider.next("input");
                         var cellValue = slider.parent().next("td");
 
                         cellValue.html("unlimited");
 
-                        // Init slider
-                        slider.slider({
-                            min: 0,
-                            max: 10,
-                            value: 0,
-                            slide: function(event, ui) {
-                                if (isNaN(ui.value) || ui.value === 0) {
-                                    cellValue.html("unlimited");
-                                } else {
-                                    cellValue.html(ui.value);
-                                }
-
-                                input.val(ui.value);
-                            }
-                        });
+                        slider
+                            .slider({
+                                tooltip: "hide"
+                            })
+                            .on("slide", function(sliderEvent) {
+                                cellValue.text(sliderEvent.value != 0 ? sliderEvent.value : "unlimited");
+                            })
+                        ;
 
                         jQuery(".colorPicker_", newRow).each(function() {
                             // Enable colorpicker
@@ -177,6 +169,8 @@ jQuery(document).ready(function() {
                         });
 
                         jQuery("#projectPhases", modal).find("tbody").append(newRow);
+
+                        modal.find(".slider.slider-horizontal:last").css({ width: "150px" });
 
                         return false;
                     }
@@ -217,31 +211,16 @@ function initProjectPhases(modal) {
     // Initialize jQuery UI sliders for phase task count
     jQuery.each(jQuery("#projectPhases", modal).find(".slider"), function() {
         var slider = jQuery(this);
-        var input = slider.next("input");
-        var currentValue = parseInt(input.val(), 10);
         var cellValue = slider.parent().next("td");
 
-        if (isNaN(currentValue) || currentValue === 0) {
-            cellValue.html("unlimited");
-        } else {
-            cellValue.html(currentValue);
-        }
-
-        // Initialize slider
-        slider.slider({
-            min: 0,
-            max: 10,
-            value: currentValue,
-            slide: function(event, ui) {
-                if (isNaN(ui.value) || ui.value === 0) {
-                    cellValue.html("unlimited");
-                } else {
-                    cellValue.html(ui.value);
-                }
-
-                input.val(ui.value);
-            }
-        });
+        slider
+            .slider({
+                tooltip: "hide"
+            })
+            .on("slide", function(sliderEvent) {
+                cellValue.text(sliderEvent.value != 0 ? sliderEvent.value : "unlimited");
+            })
+        ;
     });
 
     // Fix for jQuery UI sortable helper
