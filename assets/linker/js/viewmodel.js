@@ -362,7 +362,8 @@ function ViewModel() {
      * @returns {string}
      */
     self.getTaskTemplate = function(phaseId, storyId) {
-        return (_.size(self.getTasks(phaseId, storyId)) > 6) ? 'task-template-small' : 'task-template-normal';
+        return (_.size(self.getTasks(phaseId, storyId)) > self.user().taskTemplateChangeLimit())
+            ? 'task-template-small' : 'task-template-normal';
     };
 
     /**
@@ -376,7 +377,7 @@ function ViewModel() {
     self.getTasks = function(phaseId, storyId) {
         var output = [];
 
-        for (var i = 0; i < self.sortedTasks().length; i++) {
+        for (var i = 0; i < self.tasks().length; i++) {
             var task = self.tasks()[i];
 
             if (task.storyId() === storyId && task.phaseId() === phaseId) {
@@ -666,11 +667,20 @@ function ViewModel() {
 
                         // User itself has been updated
                         if (id === self.user().id()) {
+                            var currentTaskTemplateChangeLimit = self.user().taskTemplateChangeLimit();
+
                             // Create new current user object and replace existing one
                             self.user(new User(data));
 
                             // We need to update selects in this case (date formats...)
                             updateSelects = true;
+
+                            // Weird this should be handled via valueHasMutated this will trigger task template change
+                            if (currentTaskTemplateChangeLimit !== self.user().taskTemplateChangeLimit()) {
+                                _.each(self.stories(), function(story) {
+                                    self.stories.replace(story, _.clone(story));
+                                });
+                            }
 
                             // Change moment.js / numeral.js language
                             moment.lang(data.language);

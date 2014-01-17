@@ -320,17 +320,18 @@ function User(data) {
     var self = this;
 
     // Initialize object data
-    self.id                     = ko.observable(data.id);
-    self.username               = ko.observable(data.username);
-    self.firstName              = ko.observable(data.firstName);
-    self.lastName               = ko.observable(data.lastName);
-    self.email                  = ko.observable(data.email);
-    self.admin                  = ko.observable(data.admin);
-    self.language               = ko.observable(data.language);
-    self.momentFormatDate       = ko.observable(data.momentFormatDate);
-    self.momentFormatDateTime   = ko.observable(data.momentFormatDateTime);
-    self.momentFormatTime       = ko.observable(data.momentFormatTime);
-    self.momentTimezone         = ko.observable(data.momentTimezone);
+    self.id                         = ko.observable(data.id);
+    self.username                   = ko.observable(data.username);
+    self.firstName                  = ko.observable(data.firstName);
+    self.lastName                   = ko.observable(data.lastName);
+    self.email                      = ko.observable(data.email);
+    self.admin                      = ko.observable(data.admin);
+    self.language                   = ko.observable(data.language);
+    self.momentFormatDate           = ko.observable(data.momentFormatDate);
+    self.momentFormatDateTime       = ko.observable(data.momentFormatDateTime);
+    self.momentFormatTime           = ko.observable(data.momentFormatTime);
+    self.momentTimezone             = ko.observable(data.momentTimezone);
+    self.taskTemplateChangeLimit    = ko.observable(data.taskTemplateChangeLimit);
 
     // Make formatted fullname
     self.fullName = ko.computed(function() {

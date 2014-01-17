@@ -110,6 +110,7 @@ var sails = {
             momentFormatDateTime: "",
             momentFormatTime: "",
             momentTimezone: "",
+            taskTemplateChangeLimit: "",
             id: "",
             createdAt: "",
             updatedAt: ""
