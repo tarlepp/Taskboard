@@ -40,11 +40,13 @@
     </div>
 
     <div id="board" data-bind="if: $root.sprint() && $root.phases().length">
-        <table class="table table-bordered">
+
+
+        <table id="boardTable" class="table table-bordered">
             <thead>
                 <tr id="boardHeader">
-                    <th style="width:20%">User stories</th>
-                    <td class="addStory"
+                    <th style="width:17%">User stories</th>
+                    <th class="addStory"
                         data-bind="
                             visible: sprint() && $root.role() !== 0,
                             qtip: {
@@ -61,10 +63,10 @@
                         <button data-bind="
                             click: actionStoryAdd.bind($data, $root.project().id(), $root.sprint().id())
                         "><i class="fa fa-plus"></i></button>
-                    </td>
+                    </th>
 
                     <!-- ko foreach: $root.sortedPhases -->
-                    <th data-bind="style: {width: getColumnWidth(20, $root.phases().length)}">
+                    <th data-bind="style: {width: getColumnWidth(17, $root.phases().length)}">
                         <span data-bind="text: title"></span>
                         <span class="phaseTaskCount"
                             data-bind="
@@ -79,7 +81,7 @@
             <tbody data-bind="foreach: $root.sortedStories()">
 
                 <tr data-bind="attr: {'id': storyRowId()}">
-                    <th>
+                    <th style="width:17%">
                         <div class="story alert alert-info taped"
                             data-bind="
                                 template: {
@@ -132,6 +134,9 @@
 
                     <!-- ko foreach: $root.sortedPhases -->
                     <td class="myClass" data-bind="
+                        style: {
+                            width: getColumnWidth(17, $root.phases().length)
+                        },
                         attr: {
                             'data-phase-id': id(),
                             'data-phase-title': title(),

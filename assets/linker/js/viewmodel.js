@@ -315,6 +315,32 @@ function ViewModel() {
                                 });
 
                                 self.tasks(mappedTasks);
+
+                                // Make board header fixed, this is not yet "good" enough...
+                                var table = jQuery("#boardTable");
+                                var widths = [];
+
+                                table.find("tbody tr:first th, tbody tr:first td").each(function(index) {
+                                    var width = jQuery(this).outerWidth() - 2;
+
+                                    widths.push(width);
+                                });
+
+                                table.find("thead tr th").each(function(index) {
+                                    var width = jQuery(this).width();
+
+                                    jQuery(this).width(widths[index]);
+                                });
+
+                                table.find("thead").css({
+                                    position: "fixed",
+                                    "z-index": 200,
+                                    "margin-top": "-44px"
+                                });
+
+                                table.css({
+                                    "margin-top": "44px"
+                                });
                             }
 
                             self.loading.pop();
