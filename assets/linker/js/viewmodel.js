@@ -335,11 +335,12 @@ function ViewModel() {
                                 table.find("thead").css({
                                     position: "fixed",
                                     "z-index": 200,
-                                    "margin-top": "-44px"
+                                    "margin-top": "-39px",
+                                    left: "10px"
                                 });
 
                                 table.css({
-                                    "margin-top": "44px"
+                                    "margin-top": "39px"
                                 });
                             }
 

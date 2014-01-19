@@ -40,16 +40,19 @@
 #board .table thead th {
     text-align: center;
     background: #fafafa linear-gradient(to bottom, #ffffff, #f2f2f2) repeat-x;
-    padding: 8px 0;
+    padding: 5px 0;
     font-size: 20px;
     font-weight: normal;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
-    border-top: 1px solid #dddddd;
     border-bottom: 1px solid #dddddd;
 }
 
 #board .table thead {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+#board .table > tbody > tr > td {
+    border-top: none;
 }
 
 #board .table thead th:nth-child(2) {
