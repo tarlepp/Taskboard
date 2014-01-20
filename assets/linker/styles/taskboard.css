@@ -51,6 +51,12 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
 
+#board .table thead th:nth-child(n+3) {
+    border-left: none;
+    border-right: none;
+}
+
+#board .table > tbody > tr > th,
 #board .table > tbody > tr > td {
     border-top: none;
 }
@@ -61,12 +67,9 @@
     vertical-align: middle;
 }
 
-#board .table thead icon,
-#board .table tbody icon {
+#board .table thead i,
+#board .table tbody i {
     font-size: 14px;
-}
-
-#board .table tbody icon {
     color: green;
 }
 

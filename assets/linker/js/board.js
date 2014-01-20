@@ -73,4 +73,54 @@ jQuery(document).ready(function() {
             }
         }
     });
+
+    jQuery(window).resize(function() {
+        fixBoardWidth();
+    });
 });
+
+/**
+ * Helper function to calculate board thead row cell widths according to
+ * current board and size of current browser window.
+ *
+ * Also note that this function is called every time when user resizes
+ * browser window.
+ */
+function fixBoardWidth() {
+    // Make board header fixed, this is not yet "good" enough...
+    var table = jQuery("#boardTable");
+    var widths = [];
+
+    table.find("tbody tr:first th, tbody tr:first td").each(function(index) {
+        var width = jQuery(this).outerWidth() - 2;
+
+        widths.push(width);
+    });
+
+    table.find("thead tr th").each(function(index) {
+        var width = widths[index];
+
+        console.log(index);
+        console.log(widths.length -1);
+
+        if (index == 0) {
+            width = width + 10;
+        } else if (index == (widths.length - 1)) {
+            width = width + 20;
+        }
+
+        jQuery(this).width(width);
+    });
+
+    table.find("thead").css({
+        position: "fixed",
+        "z-index": 200,
+        "margin-top": "-39px",
+        left: "0px",
+        width: "100%"
+    });
+
+    table.css({
+        "margin-top": "39px"
+    });
+}
