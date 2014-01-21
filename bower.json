@@ -48,6 +48,7 @@
     "highcharts-components": "~3.0.7",
     "numeral": "~1.5.2",
     "evol.colorpicker": "*",
-    "seiyria-bootstrap-slider": "~1.9.5"
+    "seiyria-bootstrap-slider": "~1.9.5",
+    "md5-jkmyers": "~0.0.1"
   }
 }

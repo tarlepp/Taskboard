@@ -66,6 +66,7 @@ module.exports = function (grunt) {
         // Taskboard specified vendor dependencies
 
         // Individual libraries
+        'linker/bower_components/md5-jkmyers/md5.min.js',
         'linker/bower_components/json5/lib/json5.js',
         'linker/bower_components/underscore/underscore-min.js',
         'linker/bower_components/async/lib/async.js',
