@@ -20,7 +20,6 @@ lib-cov
 *.gz
 
 pids
-logs
 results
 
 node_modules
