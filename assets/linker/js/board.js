@@ -100,9 +100,6 @@ function fixBoardWidth() {
     table.find("thead tr th").each(function(index) {
         var width = widths[index];
 
-        console.log(index);
-        console.log(widths.length -1);
-
         if (index == 0) {
             width = width + 10;
         } else if (index == (widths.length - 1)) {
