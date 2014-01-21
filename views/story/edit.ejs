@@ -26,11 +26,16 @@
             <div class="form-group required">
                 <label class="col-lg-3 control-label" for="formStoryEditEstimate">Estimate</label>
                 <div class="col-lg-9">
-                    <div class="col-lg-2">
-                        <input class="form-control sliderValue" type="text" readonly="readonly" value="" />
-                    </div>
-                    <div class="col-lg-10 estimateSlider"></div>
+                    <div class="col-lg-6 estimateSlider"
+                         data-slider-min="0"
+                         data-slider-max="11"
+                         data-slider-step="1"
+                         data-slider-value=""
+                    ></div>
+
                     <input id="formStoryEditEstimate" name="estimate" type="hidden" value="<%= story.estimate %>" />
+
+                    <span class="badge badge-slider sliderValue">???</span>
                 </div>
             </div>
             <div class="form-group">
