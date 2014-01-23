@@ -24,6 +24,11 @@ module.exports = {
             type:       "integer",
             defaultsTo: 0
         },
+        // Relation to User model, this is used to show Gravatar image in board
+        currentUserId: {
+            type:       "integer",
+            defaultsTo: 0
+        },
         // Relation to Phase model
         phaseId: {
             type:       "integer",
