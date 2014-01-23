@@ -42,7 +42,11 @@
                         data-container="body"
                     >
                         <% _.each(users, function(user) { %>
-                        <option value="<%= user.id %>" <%if (user.id === project.managerId) { %>selected="selected"<% } %>><%= user.fullName() %></option>
+                            <% if (currentUser.admin || user.id === project.managerId) { %>
+                                <option value="<%= user.id %>"
+                                    <%if (user.id === project.managerId) { %>selected="selected"<% } %>
+                                ><%= user.fullName() %></option>
+                            <% } %>
                         <% }) %>
                     </select>
                 </div>

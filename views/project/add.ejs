@@ -16,7 +16,11 @@
                 data-live-search="true"
             >
                 <% _.each(users, function(user) { %>
-                <option value="<%= user.id %>"><%= user.fullName() %></option>
+                    <% if (currentUser.admin || user.id === currentUser.id) { %>
+                        <option value="<%= user.id %>"
+                            <% if (user.id === currentUser.id) { %>selected="selected"<% } %>
+                        ><%= user.fullName() %></option>
+                    <% } %>
                 <% }) %>
             </select>
         </div>
