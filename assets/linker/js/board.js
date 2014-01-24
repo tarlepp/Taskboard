@@ -121,3 +121,24 @@ function fixBoardWidth() {
         "margin-top": "39px"
     });
 }
+
+/**
+ * Simple function to return gravatar image url with specified parameters.
+ *
+ * @param   {String}            email
+ * @param   {Number}            size
+ * @param   {String}            defaultImage
+ * @param   {String}            allowedRating
+ * @param   {String|Boolean}    forceDefault
+ *
+ * @returns {string}
+ */
+function getGravatarImageUrl(email, size, defaultImage, allowedRating, forceDefault) {
+    email = email || 'john.doe@example.com';
+    size = (size >= 1 && size <= 2048) ? size : 80;
+    defaultImage = defaultImage || 'mm';
+    allowedRating = allowedRating || 'x';
+    forceDefault = forceDefault === true ? 'y' : 'n';
+
+    return ("https://secure.gravatar.com/avatar/" + md5(email.toLowerCase().trim()) + "?size=" + size + "&default=" + encodeURIComponent(defaultImage) + "&rating=" + allowedRating + (forceDefault === 'y' ? "&forcedefault=" + forceDefault : ''));
+}

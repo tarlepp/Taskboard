@@ -14,3 +14,13 @@
     color: #000;
     padding-right: 5px;
 }
+
+.qtip table.info i {
+    width: 15px;
+    text-align: center;
+    margin-right: 3px;
+}
+
+.qtip table.info a:hover {
+    text-decoration: none;
+}

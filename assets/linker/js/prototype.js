@@ -21,3 +21,19 @@ Array.prototype.unique = function(a) {
 String.prototype.nl2br = function() {
     return this.replace(/\n/g, "<br />");
 };
+
+/**
+ * Simple string truncate helper.
+ *
+ * @param   {number}    length
+ * @param   {boolean}   useWordBoundary
+ *
+ * @returns {string}
+ */
+String.prototype.truncate = function(length, useWordBoundary){
+    var toLong = this.length > length,
+    s_ = toLong ? this.substr(0, length - 1) : this;
+    s_ = useWordBoundary && toLong ? s_.substr(0, s_.lastIndexOf(' ')) : s_;
+
+    return  toLong ? s_ + '&hellip;' : s_;
+};

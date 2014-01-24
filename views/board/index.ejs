@@ -197,6 +197,17 @@
                 },
                 css: taskClass()
             ">
+            <!-- ko if: currentUser -->
+            <div class="gravatar">
+                <img
+                     data-bind="
+                        attr: {
+                            src: currentUser().gravatar()
+                        }
+                    "
+                >
+            </div>
+            <!-- /ko -->
             <h3 data-bind="truncatedText: title"></h3>
         </div>
     </script>

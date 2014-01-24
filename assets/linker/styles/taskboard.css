@@ -61,6 +61,10 @@
     border-top: none;
 }
 
+#board .table > tbody > tr:first-of-type > td:nth-child(n+3) {
+    padding-top: 20px;
+}
+
 #board .table thead th:nth-child(2) {
     padding: 0;
     font-size: 14px;
@@ -140,7 +144,7 @@
     -moz-transform: scale(1.12);
     -o-transform: scale(1.12);
     position: relative;
-    z-index: 5;
+    z-index: 1500;
 }
 
 div.story,
@@ -155,6 +159,24 @@ div.task {
     -ms-user-select: none;
     user-select: none;
     cursor: pointer;
+}
+
+div.task .gravatar {
+    position: absolute;
+    float: right;
+    width: 30px;
+    height: 30px;
+    top: -21px;
+    left: 50%;
+    margin-left: -15px;
+    z-index: 1;
+}
+
+div.task .gravatar img {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    box-shadow: 0 0 10px 3px rgba(0, 0, 0, .4);
 }
 
 div.story {

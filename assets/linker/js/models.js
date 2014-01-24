@@ -271,6 +271,7 @@ function Task(data) {
     self.id             = ko.observable(data.id);
     self.storyId        = ko.observable(data.storyId);
     self.userId         = ko.observable(data.userId);
+    self.currentUserId  = ko.observable(data.currentUserId);
     self.phaseId        = ko.observable(data.phaseId);
     self.typeId         = ko.observable(data.typeId);
     self.title          = ko.observable(data.title);
@@ -292,21 +293,43 @@ function Task(data) {
         return output;
     });
 
-    // Task description tooltip text
-    self.descriptionTooltip = ko.computed(function() {
-        if (self.description().length === 0) {
-            return '';
-        }
-
-        return self.description();
-    });
-
     self.timeStartObject = ko.computed(function() {
         return dateConvertToMoment(self.timeStart());
     });
 
     self.timeEndObject = ko.computed(function() {
         return dateConvertToMoment(self.timeEnd());
+    });
+
+    self.currentUser = ko.computed(function() {
+        return _.find(myViewModel.users(), function(user) { return user.id() === self.currentUserId(); });
+    });
+
+    // Task description tooltip text
+    self.descriptionTooltip = ko.computed(function() {
+        var description = self.description();
+
+        // No description but VF case defined
+        if (_.isUndefined(description) || description.length === 0) {
+            description = "<em>No description...</em>";
+        } else {
+            description = description.truncate(200, true);
+        }
+
+        var parts = [];
+
+        if (self.currentUser()) {
+            parts.push("<tr><th>Author:</th><td>" + self.currentUser().fullName() + "</td></tr>");
+            parts.push("<tr><td colspan='2'><a href='javascript: void(0);' class='text-danger' onclick='myViewModel.releaseTask(" + self.id() + ");'><i class='fa fa-times'></i> Release this</a></td></tr>")
+        }
+
+        parts.push("<tr><td colspan='2'><a href='javascript: void(0);' class='text-success' onclick='myViewModel.takeTask(" + self.id() + ");'><i class='fa fa-thumb-tack'></i> Take this</a> " +
+            "</td></tr>"
+        );
+
+        description += "<hr /><table class='info'>" + parts.join("") + "</table>";
+
+        return description;
     });
 }
 
@@ -336,6 +359,10 @@ function User(data) {
     // Make formatted fullname
     self.fullName = ko.computed(function() {
         return self.firstName() + " " + self.lastName();
+    });
+
+    self.gravatar = ko.computed(function() {
+        return getGravatarImageUrl(self.email());
     });
 }
 

@@ -586,6 +586,14 @@ function ViewModel() {
         jQuery("body").trigger("userList");
     };
 
+    self.releaseTask = function(taskId) {
+        console.log("release: " + taskId);
+    };
+
+    self.takeTask = function(taskId) {
+        console.log("take: " + taskId);
+    };
+
     /**
      * Method to process all socket messages. Basically this will update specified
      * knockout bindings according to message type.
