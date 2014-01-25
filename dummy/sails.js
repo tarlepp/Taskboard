@@ -192,6 +192,7 @@ var sails = {
             timeStart: "",
             timeEnd: "",
             isDone: "",
+            currentUserId: "",
             id: "",
             createdAt: "",
             updatedAt: ""

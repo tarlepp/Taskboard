@@ -453,11 +453,30 @@ function ViewModel() {
             socket.put('/Task/' + arg.item.id(), {phaseId: phase.id, _csrf: getCsrfToken()}, function(/** sails.json.task */response) {
                 if (handleSocketError(response, true)) {
                     // all was ok, nice!
+                    var phaseOld = _.find(self.phases(), function(phase) { return phase.id() === arg.item.phaseId(); });
+
+                    // User moved task from first phase and task has not yet been assigned to any owner
+                    if (phase.order !== 0 && response.currentUserId == 0 && phaseOld.order() === 0) {
+                        jQuery.ajax({
+                            type: "POST",
+                            url: "/Task/takeTask/",
+                            data: {
+                                id: response.id,
+                                _csrf: getCsrfToken()
+                            },
+                            dataType: "json"
+                        })
+                        .done(function(data) {
+                            // All ok, this is just fine :D
+                        })
+                        .fail(function(jqXhr, textStatus, error) {
+                            handleAjaxError(jqXhr, textStatus, error);
+                        });
+                    }
                 }
             });
         }
     };
-
 
     /**#@+
      * Project specified actions that can be triggered via knockout bindings.

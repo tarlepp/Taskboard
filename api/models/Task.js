@@ -190,7 +190,7 @@ module.exports = {
                         values.isDone = data.phase.isDone;
 
                         // Task is done so clear current user data
-                        if (values.isDone) {
+                        if (values.isDone || data.phase.order === 0) {
                             values.currentUserId = 0;
                         }
 
