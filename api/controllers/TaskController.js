@@ -270,6 +270,7 @@ module.exports = {
                 res.send(error.status ? error.status : 500, error.message ? error.message : error);
             } else {
                 task.currentUserId = 0;
+                task.updatedUserId = req.user.id;
 
                 // Save task data
                 task.save(function(error) {
@@ -357,7 +358,7 @@ module.exports = {
                                     Task
                                         .update(
                                             {or: taskIds},
-                                            {currentUserId: 0},
+                                            {currentUserId: 0, updatedUserId: req.user.id},
                                             function(error, tasks) {
                                                 if (error) {
                                                     callback(error, null);
@@ -380,7 +381,7 @@ module.exports = {
                             task: function(callback) {
                                 // Set update data
                                 task.createdUserId = task.createdUserId || req.user.id;
-                                task.updatedUserId = task.updatedUserId || req.user.id;
+                                task.updatedUserId = req.user.id;
                                 task.currentUserId = req.user.id;
 
                                 task.save(function(error) {

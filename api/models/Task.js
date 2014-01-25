@@ -188,7 +188,11 @@ module.exports = {
                         cb(error);
                     } else {
                         values.isDone = data.phase.isDone;
-                        values.timeEnd = values.isDone ? new Date() : null;
+
+                        // Task is done so clear current user data
+                        if (values.isDone) {
+                            values.currentUserId = 0;
+                        }
 
                         // Task is updated to first phase, so set start and end times to null
                         if (data.phase.order === 0) {
@@ -198,6 +202,14 @@ module.exports = {
                             && (!data.task.timeStart || data.task.timeStart == "0000-00-00 00:00:00")
                         ) { // We can assume that this update is from the board, so set start time if needed
                             values.timeStart = new Date();
+                            values.timeEnd = null;
+                        } else if (values.isDone !== data.task.isDone) {
+                            delete values.timeStart;
+
+                            values.timeEnd = values.isDone ? new Date() : null;
+                        } else { // Other
+                            delete values.timeStart;
+                            delete values.timeEnd;
                         }
 
                         cb();

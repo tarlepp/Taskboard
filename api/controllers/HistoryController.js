@@ -267,7 +267,9 @@ module.exports = {
                 var object = data.column.charAt(0).toUpperCase() + data.column.slice(1, -2);
 
                 // In project object managerId refers to User object
-                if (object == "Manager") {
+                if (object == "Manager"
+                    || object == "CurrentUser"
+                ) {
                     object = "User";
                 }
 
