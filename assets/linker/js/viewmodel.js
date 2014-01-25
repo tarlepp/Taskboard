@@ -586,12 +586,50 @@ function ViewModel() {
         jQuery("body").trigger("userList");
     };
 
+    /**
+     * Method to release task from specified user.
+     *
+     * @param   {number}    taskId
+     */
     self.releaseTask = function(taskId) {
-        console.log("release: " + taskId);
+        jQuery.ajax({
+            type: "POST",
+            url: "/Task/releaseTask/",
+            data: {
+                id: taskId,
+                _csrf: getCsrfToken()
+            },
+            dataType: "json"
+        })
+        .done(function(data) {
+            // All ok, this is just fine :D
+        })
+        .fail(function(jqXhr, textStatus, error) {
+            handleAjaxError(jqXhr, textStatus, error);
+        });
     };
 
+    /**
+     * Method to take specified task ownership to user.
+     *
+     * @param   {number}    taskId
+     */
     self.takeTask = function(taskId) {
-        console.log("take: " + taskId);
+        jQuery.ajax({
+            type: "POST",
+            url: "/Task/takeTask/",
+            data: {
+                id: taskId,
+                _csrf: getCsrfToken()
+            },
+            dataType: "json"
+        })
+        .done(function(data) {
+            // All ok, this is just fine :D
+        })
+        .fail(function(jqXhr, textStatus, error) {
+            handleAjaxError(jqXhr, textStatus, error);
+        });
     };
 
     /**

@@ -253,5 +253,165 @@ module.exports = {
                 }
             );
         }
+    },
+
+    /**
+     * Release task owner action.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    releaseTask: function(req, res) {
+        var taskId = parseInt(req.param("id"), 10);
+
+        // Fetch single task data and remove currentUserId (release task) value from it
+        DataService.getTask(taskId, function(error, task) {
+            if (error) {
+                res.send(error.status ? error.status : 500, error.message ? error.message : error);
+            } else {
+                task.currentUserId = 0;
+
+                // Save task data
+                task.save(function(error) {
+                    if (error) {
+                        res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    } else {
+                        // Publish update for this task
+                        Task.publishUpdate(taskId, task.toJSON());
+
+                        res.send(task);
+                    }
+                });
+            }
+        });
+    },
+
+    /**
+     * Action to take task ownership. This will also release all existing
+     * owned task(s) which are in same sprint.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    takeTask: function(req, res) {
+        var taskId = parseInt(req.param("id"), 10);
+
+        // Fetch needed data
+        async.waterfall(
+            [
+                // Current task data
+                function(callback) {
+                    DataService.getTask(taskId, callback);
+                },
+
+                // Fetch task story, this is needed to determine sprint
+                function(task, callback) {
+                    DataService.getStory(task.storyId, function(error, story) {
+                        callback(error, task, story);
+                    });
+                },
+
+                // Fetch all stories that are attached to this sprint
+                function(task, story, callback) {
+                    DataService.getStories({sprintId: story.sprintId}, function(error, stories) {
+                        callback(error, task, stories);
+                    });
+                },
+
+                // Fetch all tasks that are attached to this sprint and current user is owner
+                function(task, stories, callback) {
+                    var storyIds = _.map(stories, function(story) { return {storyId: story.id}; });
+
+                    DataService.getTasks(
+                        {or: storyIds, currentUserId: req.user.id, id: {'!': task.id}},
+                        function(error, tasks) {
+                            callback(error, task, stories, tasks);
+                        }
+                    );
+                }
+            ],
+
+            /**
+             * Main callback function which is called after all waterfall jobs are processed.
+             *
+             * @param   {null|Error}            error   Possible error
+             * @param   {sails.model.task}      task    Main task, which owner current user wants to be
+             * @param   {sails.model.story[]}   stories All stories which belongs to same sprint as main task
+             * @param   {sails.model.task[]}    tasks   All tasks that belongs to same sprint as main task AND current
+             *                                          owner is currently signed in user
+             */
+            function(error, task, stories, tasks) {
+                if (error) {
+                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                } else {
+
+                    // Make necessary updates as parallel
+                    async.parallel(
+                        {
+                            // Update possible existing tasks those ownership is currently signed in user
+                            tasks: function(callback) {
+                                var taskIds = _.map(tasks, function(task) { return {id: task.id}; });
+
+                                // We have some task(s) to update
+                                if (taskIds.length > 0) {
+                                    Task
+                                        .update(
+                                            {or: taskIds},
+                                            {currentUserId: 0},
+                                            function(error, tasks) {
+                                                if (error) {
+                                                    callback(error, null);
+                                                } else {
+                                                    // Iterate updated tasks and publish updates for those
+                                                    _.each(tasks, function(task) {
+                                                        Task.publishUpdate(task.id, task.toJSON());
+                                                    });
+
+                                                    callback(null, tasks);
+                                                }
+                                            }
+                                        );
+                                } else {
+                                    callback(null, []);
+                                }
+                            },
+
+                            // Update main task
+                            task: function(callback) {
+                                // Set update data
+                                task.createdUserId = task.createdUserId || req.user.id;
+                                task.updatedUserId = task.updatedUserId || req.user.id;
+                                task.currentUserId = req.user.id;
+
+                                task.save(function(error) {
+                                    if (error) {
+                                        callback(error, null);
+                                    } else {
+                                        Task.publishUpdate(taskId, task.toJSON());
+
+                                        callback(error, task);
+                                    }
+                                });
+                            }
+                        },
+
+                        /**
+                         * Main callback function which is called after all parallel jobs
+                         * are done. This is the final callback in this action.
+                         *
+                         * @param   {null|Error}    error
+                         * @param   {{}}            data
+                         */
+                        function(error, data) {
+                            if (error) {
+                                res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                            } else {
+                                res.send(200, data);
+                            }
+                        }
+                    )
+                }
+            }
+        );
     }
 };
