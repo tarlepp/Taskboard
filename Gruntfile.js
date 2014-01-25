@@ -78,9 +78,12 @@ module.exports = function (grunt) {
         'linker/bower_components/jquery-ui/ui/minified/jquery-ui.min.js',
         'linker/bower_components/qtip2/jquery.qtip.min.js',
         'linker/bower_components/trunk8/trunk8.js',
+        'linker/bower_components/noty/js/noty/packaged/jquery.noty.packaged.js',
+        /*
         'linker/bower_components/noty/js/noty/jquery.noty.js',
         'linker/bower_components/noty/js/noty/themes/default.js',
         'linker/bower_components/noty/js/noty/layouts/top.js',
+        */
         'linker/bower_components/jquery-selectorator/dist/selectorator.min.js',
         'linker/bower_components/jquery.complexify.js/jquery.complexify.min.js',
         'linker/bower_components/jquery.complexify.js/jquery.complexify.banlist.js',
