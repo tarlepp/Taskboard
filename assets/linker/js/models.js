@@ -319,7 +319,7 @@ function Task(data) {
         var parts = [];
 
         if (self.currentUser()) {
-            parts.push("<tr><th>Author:</th><td>" + self.currentUser().fullName() + "</td></tr>");
+            parts.push("<tr><th>Author:</th><td>" + self.currentUser().fullName() + "</td><td class='gravatar' rowspan='3'><img src='" + self.currentUser().gravatar() + "' /></td></tr>");
             parts.push("<tr><td colspan='2'><a href='javascript: void(0);' class='text-danger' onclick='myViewModel.releaseTask(" + self.id() + ");'><i class='fa fa-times'></i> Release this</a></td></tr>")
         }
 

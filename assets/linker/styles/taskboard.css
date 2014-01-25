@@ -179,6 +179,18 @@ div.task .gravatar img {
     box-shadow: 0 0 10px 3px rgba(0, 0, 0, .4);
 }
 
+div.task.small .gravatar {
+    width: 20px;
+    height: 20px;
+    top: -10px;
+    margin-left: -10px;
+}
+
+div.task.small .gravatar img {
+    width: 20px;
+    height: 20px;
+}
+
 div.story {
     margin: 0 5px 0 0;
 }

@@ -2,11 +2,25 @@
     padding: 0;
     margin: 0;
     line-height: 16px;
+    width: 100%;
 }
 
-.qtip table.info td ,
+
 .qtip table.info th {
     font-weight: normal;
+    white-space: nowrap;
+}
+
+.qtip table.info td {
+    width: 100%;
+}
+
+.qtip table.info td.gravatar img {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    border: 1px solid #dddddd;
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, .4);
 }
 
 .qtip table.info th {
