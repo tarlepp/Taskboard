@@ -60,6 +60,7 @@ function Phase(data) {
     self.description    = ko.observable(data.description);
     self.order          = ko.observable(data.order);
     self.tasks          = ko.observable(data.tasks);
+    self.isDone         = ko.observable(data.isDone);
 
     // Calculate phase column width
     self.getColumnWidth = function(reservedSize, phasesCount) {
@@ -323,11 +324,17 @@ function Task(data) {
             parts.push("<tr><td colspan='2'><a href='javascript: void(0);' class='text-danger' onclick='myViewModel.releaseTask(" + self.id() + ");'><i class='fa fa-times'></i> Release this</a></td></tr>")
         }
 
-        parts.push("<tr><td colspan='2'><a href='javascript: void(0);' class='text-success' onclick='myViewModel.takeTask(" + self.id() + ");'><i class='fa fa-thumb-tack'></i> Take this</a> " +
-            "</td></tr>"
-        );
+        var phase = _.find(myViewModel.phases(), function(phase) { return phase.id() === self.phaseId(); });
 
-        description += "<hr /><table class='info'>" + parts.join("") + "</table>";
+        if (phase.order() !== 0 && !phase.isDone()) {
+            parts.push("<tr><td colspan='2'><a href='javascript: void(0);' class='text-success' onclick='myViewModel.takeTask(" + self.id() + ");'><i class='fa fa-thumb-tack'></i> Take this</a> " +
+                "</td></tr>"
+            );
+        }
+
+        if (parts.length > 0) {
+            description += "<hr /><table class='info'>" + parts.join("") + "</table>";
+        }
 
         return description;
     });
