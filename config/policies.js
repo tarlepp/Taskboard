@@ -32,10 +32,10 @@ module.exports.policies = {
         "*":        false,
 
         // Default handling for blueprints
-        find:       ["flashMessage", "authenticated", "isAjaxOrSocket"], // Todo: try to figure out how to restrict access to all projects
-        create:     ["flashMessage", "authenticated", "isAjaxOrSocket"], // Todo: it is really good that every user can add new project?
-        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin", "addUserDataCreate"],
-        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin", "addUserDataUpdate"],
+        find:       ["flashMessage", "authenticated", "isAjaxOrSocket"],
+        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "addUserDataCreate"],
+        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin", "addUserDataUpdate"],
+        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin"],
 
         // Custom actions
         add:        ["flashMessage", "authenticated", "isAjax"],
