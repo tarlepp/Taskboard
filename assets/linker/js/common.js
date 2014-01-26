@@ -214,6 +214,14 @@ function createBootboxDialog(title, content, buttons, trigger) {
         body.width(body.width() - 2);
     });
 
+    // Generic modal hide event handler
+    modal.on("hide.bs.modal", function() {
+        // This will fix select box show problem
+        jQuery("body").find("div.bootstrap-select.form-control.in-modal").each(function() {
+            jQuery(this).hide();
+        });
+    });
+
     // Return bootbox dialog
     return modal;
 }
