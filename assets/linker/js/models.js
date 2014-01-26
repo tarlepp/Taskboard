@@ -213,6 +213,8 @@ function Story(data) {
         // No description but VF case defined
         if (_.isUndefined(description) || description.length === 0) {
             description = "<em>No description...</em>";
+        } else {
+            description = description.truncate(200, true);
         }
 
         var parts = [];
