@@ -363,7 +363,13 @@ function User(data) {
     self.momentFormatDateTime       = ko.observable(data.momentFormatDateTime);
     self.momentFormatTime           = ko.observable(data.momentFormatTime);
     self.momentTimezone             = ko.observable(data.momentTimezone);
-    self.taskTemplateChangeLimit    = ko.observable(data.taskTemplateChangeLimit);
+    self.taskTemplateChangeLimit    = ko.observable(6);
+
+    var taskTemplateChangeLimit = parseInt(data.taskTemplateChangeLimit);
+
+    if (!isNaN(taskTemplateChangeLimit) && taskTemplateChangeLimit > 0) {
+        self.taskTemplateChangeLimit(taskTemplateChangeLimit);
+    }
 
     // Make formatted fullname
     self.fullName = ko.computed(function() {
