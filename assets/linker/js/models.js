@@ -328,7 +328,7 @@ function Task(data) {
 
         var phase = _.find(myViewModel.phases(), function(phase) { return phase.id() === self.phaseId(); });
 
-        if (phase.order() !== 0 && !phase.isDone()) {
+        if (phase && phase.order() !== 0 && !phase.isDone()) {
             parts.push("<tr><td colspan='2'><a href='javascript: void(0);' class='text-success' onclick='myViewModel.takeTask(" + self.id() + ");'><i class='fa fa-thumb-tack'></i> Take this</a> " +
                 "</td></tr>"
             );
