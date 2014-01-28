@@ -92,8 +92,15 @@ module.exports = {
                 ? DateService.convertDateObjectToUtc(this.timeStart) : null;
         },
         timeEndObject: function() {
-            return (this.timeEnd && this.timeEnd != "0000-00-00 00:00:00")
+            var date = (this.timeEnd && this.timeEnd != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.timeEnd) : null;
+
+            // This check is needed for avoid broken data, see this
+            if (this.isDone && !moment.isMoment(date)) {
+                date = this.timeStartObject();
+            }
+
+            return date;
         },
         timeDuration: function() {
             var output;
