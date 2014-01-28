@@ -209,11 +209,23 @@ module.exports = {
                             && (!data.task.timeStart || data.task.timeStart == "0000-00-00 00:00:00")
                         ) { // We can assume that this update is from the board, so set start time if needed
                             values.timeStart = new Date();
-                            values.timeEnd = null;
-                        } else if (values.isDone !== data.task.isDone) {
+
+                            // This will prevent false data occurs to db in case of direct move to "done" phase
+                            if (values.isDone) {
+                                values.timeEnd = new Date();
+                            } else {
+                                values.timeEnd = null;
+                            }
+                        } else if (values.isDone !== data.task.isDone) { // Task isDone attribute has changed
                             delete values.timeStart;
 
-                            values.timeEnd = values.isDone ? new Date() : null;
+                            // Task is done, so set timeEnd and reset currentUserId values
+                            if (values.isDone) {
+                                values.timeEnd = new Date();
+                                values.currentUserId = 0;
+                            } else {
+                                values.timeEnd = null;
+                            }
                         } else { // Other
                             delete values.timeStart;
                             delete values.timeEnd;

@@ -301,6 +301,7 @@ var sails = {
             isDone: "",
             timeStart: "",
             timeEnd: "",
+            currentUserId: "",
             id: "",
             createdAt: "",
             updatedAt: ""
