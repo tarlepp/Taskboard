@@ -213,19 +213,14 @@ module.exports = {
                             // This will prevent false data occurs to db in case of direct move to "done" phase
                             if (values.isDone) {
                                 values.timeEnd = new Date();
-                            } else {
+                            } else { // Set timeEnd to null and currentUserId values
                                 values.timeEnd = null;
+                                values.currentUserId = values.updatedUserId;
                             }
                         } else if (values.isDone !== data.task.isDone) { // Task isDone attribute has changed
                             delete values.timeStart;
 
-                            // Task is done, so set timeEnd and reset currentUserId values
-                            if (values.isDone) {
-                                values.timeEnd = new Date();
-                                values.currentUserId = 0;
-                            } else {
-                                values.timeEnd = null;
-                            }
+                            values.timeEnd = values.isDone ? new Date() : null;
                         } else { // Other
                             delete values.timeStart;
                             delete values.timeEnd;
@@ -449,43 +444,144 @@ module.exports = {
                                 updateData["timeStart"] = null;
                             }
 
-                            updateStory(data, updateData);
+                            processRelatedData(data, updateData);
                         });
                     } else if ((!data.story.timeStart || data.story.timeStart == "0000-00-00 00:00:00")
                         && data.task.timeStart && data.task.timeStart != "0000-00-00 00:00:00") {
                         updateData["timeStart"] = new Date();
 
-                        updateStory(data, updateData);
+                        processRelatedData(data, updateData);
                     } else {
-                        updateStory(data, updateData);
+                        processRelatedData(data, updateData);
                     }
                 }
             }
         );
 
         /**
-         * Private function to update story data and publish updates via socket.
+         * Private function to process all related data which is attached to current
+         * task main. These are following jobs:
+         *  1) Update story data and publish updates via socket.
+         *  2) Release possible task ownerships
          *
          * @param   {{}}    data
          * @param   {{}}    updateData
          */
-        function updateStory(data, updateData) {
-            var where = {id: data.story.id};
+        function processRelatedData(data, updateData) {
+            // Make parallel jobs
+            async.parallel(
+                {
+                    // Update story data
+                    stories: function(callback) {
+                        Story
+                            .update({id: data.story.id}, updateData, function(error, stories) {
+                                if (error) {
+                                    sails.log.error(error);
 
-            Story
-                .update(where, updateData, function(error, stories) {
-                    if (error) {
-                        sails.log.error(error);
+                                    callback(error, null);
+                                } else {
+                                    _.each(stories, function(story) {
+                                        Story.publishUpdate(story.id, story.toJSON());
+                                    });
 
-                        cb(error);
-                    } else {
-                        _.each(stories, function(story) {
-                            Story.publishUpdate(story.id, story.toJSON());
-                        });
+                                    callback(null, stories);
+                                }
+                            });
+                    },
 
-                        cb();
+                    // Release tasks
+                    tasks: function(callback) {
+                        if (data.task.currentUserId) {
+                            releaseTasks(data, callback);
+                        } else {
+                            callback(null, true);
+                        }
                     }
-                });
+                },
+
+                /**
+                 * Main callback function which is called after all parallel
+                 * jobs are processed
+                 *
+                 * @param   {null|Error}    error
+                 * @param   {null|{}}       data
+                 */
+                function(error, data) {
+                    cb(error);
+                }
+            );
+        }
+
+        /**
+         * Private function to release task(s) ownership from this sprint. This is only
+         * called if task currentUserId is !== 0
+         *
+         * @param   {{}}        data    Main data set
+         * @param   {Function}  next    Callback function to call after releases are done
+         */
+        function releaseTasks(data, next) {
+            // Fetch needed data for release
+            async.waterfall(
+                [
+                    // Fetch all stories that are attached to this sprint
+                    function(callback) {
+                        DataService.getStories({sprintId: data.story.sprintId}, function(error, stories) {
+                            callback(error, stories);
+                        });
+                    },
+
+                    // Fetch all tasks that are attached to this sprint and current user is owner
+                    function(stories, callback) {
+                        var storyIds = _.map(stories, function(story) { return {storyId: story.id}; });
+
+                        DataService.getTasks(
+                            {or: storyIds, currentUserId: data.task.currentUserId, id: {'!': data.task.id}},
+                            function(error, tasks) {
+                                callback(error, stories, tasks);
+                            }
+                        );
+                    }
+                ],
+
+                /**
+                 * Main callback function which is called after all waterfall jobs
+                 * are processed.
+                 *
+                 * @param   {null|Error}            error
+                 * @param   {sails.model.story[]}   stories
+                 * @param   {sails.model.task[]}    tasks
+                 */
+                function(error, stories, tasks) {
+                    if (error) {
+                        next(error, null);
+                    } else {
+                        var taskIds = _.map(tasks, function(task) { return {id: task.id}; });
+
+                        // We have some task(s) to update
+                        if (taskIds.length > 0) {
+                            Task
+                                .update(
+                                {or: taskIds},
+                                {currentUserId: 0, updatedUserId: data.task.currentUserId},
+                                function(error, tasks) {
+                                    if (error) {
+                                        next(error, null);
+                                    } else {
+                                        // Iterate updated tasks and publish updates for those
+                                        _.each(tasks, function(task) {
+                                            Task.publishUpdate(task.id, task.toJSON());
+                                        });
+
+                                        next(null, tasks);
+                                    }
+                                }
+                            );
+                        } else {
+                            next(null, []);
+                        }
+                    }
+                }
+            );
         }
     }
 };
