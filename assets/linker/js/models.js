@@ -214,7 +214,7 @@ function Story(data) {
         if (_.isUndefined(description) || description.length === 0) {
             description = "<em>No description...</em>";
         } else {
-            description = description.truncate(200, true);
+            description = description.stripTags().truncate(200, true).nl2br();
         }
 
         var parts = [];
@@ -316,7 +316,7 @@ function Task(data) {
         if (_.isUndefined(description) || description.length === 0) {
             description = "<em>No description...</em>";
         } else {
-            description = description.truncate(200, true);
+            description = description.stripTags().truncate(200, true).nl2br();
         }
 
         var parts = [];

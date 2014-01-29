@@ -23,6 +23,15 @@ String.prototype.nl2br = function() {
 };
 
 /**
+ * Simple <br /> convert to nt new line (\n)
+ *
+ * @returns {string}
+ */
+String.prototype.br2nl = function() {
+    return this.replace(/<br\s*[\/]?>/gi, "\n");
+};
+
+/**
  * Simple string truncate helper.
  *
  * @param   {number}    length
@@ -30,10 +39,23 @@ String.prototype.nl2br = function() {
  *
  * @returns {string}
  */
-String.prototype.truncate = function(length, useWordBoundary){
+String.prototype.truncate = function(length, useWordBoundary) {
     var toLong = this.length > length,
     s_ = toLong ? this.substr(0, length - 1) : this;
     s_ = useWordBoundary && toLong ? s_.substr(0, s_.lastIndexOf(' ')) : s_;
 
-    return  toLong ? s_ + '&hellip;' : s_;
+    return toLong ? s_ + '&hellip;' : s_;
+};
+
+/**
+ * Simple strip tags helper.
+ *
+ * @returns {string}
+ */
+String.prototype.stripTags = function() {
+    var div = document.createElement("div");
+
+    div.innerHTML = this.br2nl();
+
+    return div.textContent || div.innerText || "";
 };
