@@ -380,14 +380,15 @@ function ViewModel() {
      * @param   {Object}        ui      UI object
      */
     self.taskDraggableStartCallback = function(event, ui) {
+        // Hide all possible open tooltips
+        jQuery(".qtip.qtip-bootstrap").qtip("hide");
+
         self.moveInProcess(true);
 
         // This is to prevent canceled draggable
         setTimeout(function() {
             self.moveInProcess(false);
         }, 5000);
-
-        jQuery('.qtip.qtip-bootstrap').qtip('hide');
     };
 
     /**
@@ -421,7 +422,8 @@ function ViewModel() {
      * @param   {Object}                ui      UI object
      */
     self.taskDraggableAfterMoveCallback = function(arg, event, ui) {
-        self.moveInProcess(false);
+        // Hide all possible open tooltips
+        jQuery(".qtip.qtip-bootstrap").qtip("hide");
 
         // User don't have necessary role to move tasks
         if (self.role() === 0) {
@@ -432,6 +434,8 @@ function ViewModel() {
 
             // Update task data
             socket.put('/Task/' + arg.item.id(), {phaseId: phase.id, _csrf: getCsrfToken()}, function(/** sails.json.task */response) {
+                self.moveInProcess(false);
+
                 if (handleSocketError(response, true)) {
                     // all was ok, nice!
                 }
