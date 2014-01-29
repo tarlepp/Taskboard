@@ -112,7 +112,7 @@ module.exports = {
         gravatarImage: function(size) {
             size = size || 25;
 
-            return gravatar.url(this.email, {s: size, r: "pg", d: "mm"});
+            return gravatar.url(this.email, {s: size, r: "pg", d: "mm"}, true);
         },
 
         // ObjectTitle

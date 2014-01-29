@@ -299,9 +299,7 @@
                 data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
             >
                 <a href="javascript: void(0);" data-user-id="<%= currentUser.id %>">
-                    <i id="user-icon" class="fa fa-user" style="display: none;"></i>
-                    <img src="<%= currentUser.gravatarImage() %>" onerror="this.style.display = 'none'; document.getElementById('user-icon').style.display = '';" />
-
+                    <img src="<%= currentUser.gravatarImage() %>" />
                     <span><%= currentUser.username %></span>
                 </a>
             </li>
