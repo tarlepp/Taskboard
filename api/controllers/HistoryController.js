@@ -239,7 +239,7 @@ module.exports = {
                  */
                 function(error, results) {
                     // Store history row data
-                    historyRow.data = _.compact(results);
+                    historyRow.data = _.groupBy(_.sortBy(_.compact(results), function(result) { }), function(result) { return result.changeType; });
 
                     next(error, historyRow);
                 }
@@ -340,7 +340,11 @@ module.exports = {
                     data.columnType = "normal";
                 }
 
-                next(null, data);
+                if (data.columnType == "normal" && data.valueOld === false && !data.valueNew) {
+                    next(null, null);
+                } else {
+                    next(null, data);
+                }
             }
         }
     }
