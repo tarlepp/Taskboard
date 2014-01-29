@@ -66,19 +66,29 @@ ko.bindingHandlers.changeProject = {
      * Update function for project change
      *
      * @param   {String}    element Name of the current element
+     * @param               valueAccessor
+     * @param               allBindingsAccessor
+     * @param   {ViewModel} viewModel
      */
-    update: function (element) {
-        var elementProject = jQuery(element);
+    update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+        if (viewModel.projects().length) {
+            var elementProject = jQuery(element);
 
-        elementProject.find("option").each(function() {
-            var option = jQuery(this);
+            elementProject.find("option").each(function() {
+                var option = jQuery(this);
 
-            if (option.text() == "Choose project to show") {
-                option.addClass("select-dummy-option text-muted");
+                if (option.text() == "Choose project to show") {
+                    option.addClass("select-dummy-option text-muted");
+                }
+            });
+
+            // Select correct value
+            if (viewModel.selectedProjectId() > 0) {
+                elementProject.val(viewModel.selectedProjectId());
             }
-        });
 
-        elementProject.selectpicker("refresh");
+            elementProject.selectpicker("refresh");
+        }
     }
 };
 
@@ -122,19 +132,29 @@ ko.bindingHandlers.changeSprint = {
      * Update function for sprint change
      *
      * @param   {String}    element Name of the current element
+     * @param               valueAccessor
+     * @param               allBindingsAccessor
+     * @param   {ViewModel} viewModel
      */
-    update: function (element) {
-        var elementSprint = jQuery(element);
+    update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+        if (viewModel.sprints().length) {
+            var elementSprint = jQuery(element);
 
-        elementSprint.find("option").each(function() {
-            var option = jQuery(this);
+            elementSprint.find("option").each(function() {
+                var option = jQuery(this);
 
-            if (option.text() == "Choose sprint to show") {
-                option.addClass("select-dummy-option text-muted");
+                if (option.text() == "Choose sprint to show") {
+                    option.addClass("select-dummy-option text-muted");
+                }
+            });
+
+            // Select correct value
+            if (viewModel.selectedSprintId() > 0) {
+                elementSprint.val(viewModel.selectedSprintId());
             }
-        });
 
-        elementSprint.selectpicker("refresh");
+            elementSprint.selectpicker("refresh");
+        }
     }
 };
 

@@ -58,7 +58,7 @@ function ViewModel() {
     // Observables for different logic contexts
     self.moveInProcess = ko.observable(false);
 
-    // Selected id values, todo: are these really needed?
+    // Selected id values
     self.selectedProjectId = ko.observable(selectedProjectId);
     self.selectedSprintId = ko.observable(selectedSprintId);
 
@@ -126,20 +126,6 @@ function ViewModel() {
             if (self.selectedProjectId() > 0) {
                 self.initProject(self.selectedProjectId());
             }
-
-            var selectProject = jQuery("#selectProject");
-
-            selectProject.val(self.selectedProjectId());
-
-            selectProject.find("option").each(function() {
-                var option = jQuery(this);
-
-                if (option.text() == "Choose project to show") {
-                    option.addClass("select-dummy-option text-muted");
-                }
-            });
-
-            selectProject.selectpicker("refresh");
         }
 
         self.loading.pop();
@@ -194,7 +180,9 @@ function ViewModel() {
 
         // We have a real project
         if (typeof project !== "undefined") {
+            // Update project base data on knockout
             self.project(project);
+            self.selectedProjectId(project.id());
 
             // Push data to loading state
             self.loading.push(true);
@@ -214,41 +202,33 @@ function ViewModel() {
                 self.loading.pop();
             });
 
-
             // Push data to loading state
             self.loading.push(true);
 
             // Get project sprint data via socket
             socket.get("/Sprint", {projectId: projectId}, function(sprints) {
                 if (handleSocketError(sprints)) {
+                    var sprintInit = 0;
+                    var sprintPrevious = parseInt(cookie.get('sprintId_' + self.project().id(), 0), 10);
                     var mappedSprints = ko.utils.arrayMap(sprints, function(/** sails.json.sprint */sprint) {
+                        // Check if sprint is previously or currently selected
+                        if (sprint.id === self.selectedSprintId() || sprint.id === sprintPrevious) {
+                            sprintInit = sprint.id;
+                        }
+
                         return new Sprint(sprint);
                     });
 
                     self.sprints(mappedSprints);
 
-                    if (self.selectedSprintId() > 0) {
-                        self.initSprint(self.selectedSprintId());
+                    // We need to init sprint
+                    if (sprintInit > 0) {
+                        self.initSprint(sprintInit);
                     }
-
-                    var selectSprint = jQuery("#selectSprint");
-
-                    selectSprint.val(self.selectedSprintId());
-
-                    selectSprint.find("option").each(function() {
-                        var option = jQuery(this);
-
-                        if (option.text() == "Choose sprint to show") {
-                            option.addClass("select-dummy-option text-muted");
-                        }
-                    });
-
-                    selectSprint.selectpicker("refresh");
                 }
 
                 self.loading.pop();
             });
-
 
             // Push data to loading state
             self.loading.push(true);
@@ -278,7 +258,9 @@ function ViewModel() {
 
         // We have a real sprint
         if (typeof sprint !== "undefined") {
+            // Update project base data on knockout
             self.sprint(sprint);
+            self.selectedSprintId(sprint.id());
 
             // Push data to loading state
             self.loading.push(true);
@@ -326,7 +308,6 @@ function ViewModel() {
             });
         }
     };
-
 
     /**
      * Method to reset all projects related data.

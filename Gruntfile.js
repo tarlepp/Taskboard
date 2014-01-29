@@ -79,11 +79,6 @@ module.exports = function (grunt) {
         'linker/bower_components/qtip2/jquery.qtip.min.js',
         'linker/bower_components/trunk8/trunk8.js',
         'linker/bower_components/noty/js/noty/packaged/jquery.noty.packaged.js',
-        /*
-        'linker/bower_components/noty/js/noty/jquery.noty.js',
-        'linker/bower_components/noty/js/noty/themes/default.js',
-        'linker/bower_components/noty/js/noty/layouts/top.js',
-        */
         'linker/bower_components/jquery-selectorator/dist/selectorator.min.js',
         'linker/bower_components/jquery.complexify.js/jquery.complexify.min.js',
         'linker/bower_components/jquery.complexify.js/jquery.complexify.banlist.js',
@@ -103,8 +98,7 @@ module.exports = function (grunt) {
         // Knockout specified libraries
         'linker/bower_components/knockout.js/knockout.js',
         'linker/bower_components/knockout-sortable/build/knockout-sortable.min.js',
-        // Cannot use this, yet figure out why this breaks main navigation selects
-        //'linker/bower_components/knockout-deferred-updates/knockout-deferred-updates.min.js',
+        'linker/bower_components/knockout-deferred-updates/knockout-deferred-updates.min.js',
 
         // Other libraries
         'linker/bower_components/highcharts-components/highcharts.src.js',

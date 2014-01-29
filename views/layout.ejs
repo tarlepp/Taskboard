@@ -59,7 +59,7 @@
                         data-live-search="true"
                         data-bind="
                             value: selectedProjectId(),
-                            options: sortedProjects,
+                            options: projects,
                             optionsText: 'title',
                             optionsValue: 'id',
                             optionsCaption: 'Choose project to show',
@@ -182,7 +182,7 @@
                         data-live-search="true"
                         data-bind="
                             value: selectedSprintId(),
-                            options: sortedSprints,
+                            options: sprints,
                             optionsText: 'formattedTitle',
                             optionsValue: 'id',
                             optionsCaption: 'Choose sprint to show',
@@ -399,6 +399,7 @@
 <script src="/linker/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
 <script src="/linker/bower_components/knockout.js/knockout.js"></script>
 <script src="/linker/bower_components/knockout-sortable/build/knockout-sortable.min.js"></script>
+<script src="/linker/bower_components/knockout-deferred-updates/knockout-deferred-updates.min.js"></script>
 <script src="/linker/bower_components/highcharts-components/highcharts.src.js"></script>
 <script src="/linker/bower_components/numeral/min/numeral.min.js"></script>
 <script src="/linker/bower_components/numeral/min/languages.min.js"></script>
