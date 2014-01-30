@@ -216,6 +216,7 @@ module.exports = {
                             } else { // Set timeEnd to null and currentUserId values
                                 values.timeEnd = null;
                                 values.currentUserId = values.updatedUserId;
+                                values.userId = values.updatedUserId;
                             }
                         } else if (values.isDone !== data.task.isDone) { // Task isDone attribute has changed
                             delete values.timeStart;

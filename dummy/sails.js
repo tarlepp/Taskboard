@@ -303,6 +303,8 @@ var sails = {
             timeEnd: "",
             currentUserId: "",
             id: "",
+            updatedUserId: "",
+            createdUserId: "",
             createdAt: "",
             updatedAt: ""
         },

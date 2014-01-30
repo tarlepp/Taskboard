@@ -282,6 +282,7 @@ function Task(data) {
     self.priority       = ko.observable(data.priority);
     self.timeStart      = ko.observable(data.timeStart);
     self.timeEnd        = ko.observable(data.timeEnd);
+    self.timer          = ko.observable(moment());
 
     // Task class determination, basically task type
     self.taskClass = ko.computed(function() {
@@ -304,6 +305,10 @@ function Task(data) {
         return dateConvertToMoment(self.timeEnd());
     });
 
+    self.ownerUser = ko.computed(function() {
+        return _.find(myViewModel.users(), function(user) { return user.id() === self.userId(); });
+    });
+
     self.currentUser = ko.computed(function() {
         return _.find(myViewModel.users(), function(user) { return user.id() === self.currentUserId(); });
     });
@@ -320,6 +325,25 @@ function Task(data) {
         }
 
         var parts = [];
+
+        // Owner block
+        if (self.ownerUser() && moment.isMoment(self.timeStartObject())) {
+            var rowSpan = moment.isMoment(self.timeEndObject()) ? 4 : 3;
+
+            parts.push("<tr><th>Owner:</th><td>" + self.ownerUser().fullName() + "</td><td class='gravatar' rowspan='" + rowSpan + "'><img src='" + self.ownerUser().gravatar() + "' /></td></tr>");
+            parts.push("<tr><th>Started:</th><td>" + self.timeStartObject().tz(myViewModel.user().momentTimezone()).format(myViewModel.user().momentFormatDateTime()) + "</td></tr>");
+
+            if (moment.isMoment(self.timeEndObject())) {
+                parts.push("<tr><th>Finished:</th><td>" + self.timeEndObject().tz(myViewModel.user().momentTimezone()).format(myViewModel.user().momentFormatDateTime()) + "</td></tr>");
+                parts.push("<tr><th>Duration:</th><td>" + self.timeStartObject().from(self.timeEndObject(), true) + "</td></tr>");
+            } else {
+                parts.push("<tr><th>Duration:</th><td>" + self.timeStartObject().from(self.timer(), true) + " <span class='text-muted'>so far</span></td></tr>");
+            }
+
+            description += "<hr /><table class='info'>" + parts.join("") + "</table>";
+        }
+
+        parts = [];
 
         if (self.currentUser()) {
             parts.push("<tr><th>Author:</th><td>" + self.currentUser().fullName() + "</td><td class='gravatar' rowspan='3'><img src='" + self.currentUser().gravatar() + "' /></td></tr>");
@@ -340,6 +364,11 @@ function Task(data) {
 
         return description;
     });
+
+    // Set interval to timer, this is needed to update tooltip duration data on tasks which are started
+    if (moment.isMoment(self.timeStartObject()) && !moment.isMoment(self.timeEndObject())) {
+        window.setInterval(function() { self.timer(moment()); }, 60000);
+    }
 }
 
 /**
