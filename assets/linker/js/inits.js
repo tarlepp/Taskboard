@@ -79,6 +79,19 @@ function initWysiwyg(context) {
         editor.on("focusout", function() {
             textarea.val(editor.find("#" + textareaId).cleanHtml());
         });
+
+        /**
+         * On paste remove all possible text formats from paste
+         *
+         * @see https://github.com/mindmup/bootstrap-wysiwyg/issues/123
+         */
+        editor.on("paste",function(event) {
+            event.preventDefault();
+
+            var text = (event.originalEvent || event).clipboardData.getData("text/plain") || prompt("Paste something..");
+
+            document.execCommand("insertText", false, text);
+        });
     }
 }
 
