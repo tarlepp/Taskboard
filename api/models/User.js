@@ -88,6 +88,11 @@ module.exports = {
             defaultsTo: 6,
             required:   true
         },
+        boardSettingHideDoneStories: {
+            type:       "boolean",
+            defaultsTo: false,
+            required:   true
+        },
         sessionId: {
             type:       "string",
             defaultsTo: ""
