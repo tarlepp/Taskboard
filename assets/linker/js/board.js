@@ -101,7 +101,7 @@ function fixBoardWidth() {
         var width = widths[index];
 
         if (index == 0) {
-            width = width + 10;
+            width = width - 10;
         } else if (index == (widths.length - 1)) {
             width = width + 20;
         }

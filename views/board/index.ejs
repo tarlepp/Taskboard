@@ -41,11 +41,23 @@
 
     <div id="board" data-bind="if: $root.sprint() && $root.phases().length">
 
-
         <table id="boardTable" class="table table-bordered">
             <thead>
                 <tr id="boardHeader">
-                    <th style="width:17%">User stories</th>
+                    <th style="width:17%; text-align: left;">
+                        <div class="pull-right checkbox">
+                            <label>
+                                <input type="checkbox" value="1" class="pull-right" data-bind="
+                                    clickBubble: false,
+                                    checked: user().boardSettingHideDoneStories(),
+                                    click: $root.toggleHideDoneStories(!user().boardSettingHideDoneStories())
+                                " />
+                                hide done stories (<span data-bind="text: $root.doneStoryCount"></span>)
+                            </label>
+                        </div>
+
+                        <span>User stories</span>
+                    </th>
                     <th class="addStory"
                         data-bind="
                             visible: sprint() && $root.role() !== 0,

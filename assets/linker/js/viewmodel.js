@@ -166,6 +166,37 @@ function ViewModel() {
         });
     });
 
+    // Count of done stories
+    self.doneStoryCount = ko.computed(function() {
+        return _.size(_.filter(self.stories(), function(story) { return story.isDone(); } ));
+    });
+
+    /**
+     * For some reason clickBubble doesn't work with this, need more work
+     * over this at somepoint.
+     *
+     * @type {koObservableBool}
+     */
+    self.toggleHideDoneStoriesLoaded = ko.observable(false);
+
+    self.toggleHideDoneStories = function(value) {
+        if (self.toggleHideDoneStoriesLoaded()) {
+            var data = {
+                boardSettingHideDoneStories: value,
+                _csrf: getCsrfToken()
+            };
+
+            // Update user information
+            socket.put("/User/" + self.user().id(), data, function(user) {
+                if (handleSocketError(user)) {
+                    self.processSocketMessage("user", "update", self.user().id(), user);
+                }
+            });
+        } else { // This will prevent first time update problem
+            self.toggleHideDoneStoriesLoaded(true);
+        }
+    };
+
     /**
      * Project initialize method. This method is called when ever user changes project selection.
      *

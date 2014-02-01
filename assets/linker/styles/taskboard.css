@@ -47,8 +47,28 @@
     border-bottom: 1px solid #dddddd;
 }
 
+#board .table thead th:first-of-type {
+    padding: 5px 10px;
+}
+
 #board .table thead {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+#board .table thead div.checkbox {
+    font-size: 14px;
+    margin: 0 0 0 10px;
+    position: relative;
+    top: 6px;
+}
+
+#board .table thead div.checkbox label {
+    margin: 0 8px 0 0;
+    top: -1px;
+}
+
+#board .table thead div.checkbox input[type="checkbox"] {
+    margin-left: 0;
 }
 
 #board .table thead th:nth-child(n+3) {

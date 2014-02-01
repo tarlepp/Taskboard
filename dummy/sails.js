@@ -111,6 +111,7 @@ var sails = {
             momentFormatTime: "",
             momentTimezone: "",
             taskTemplateChangeLimit: "",
+            boardSettingHideDoneStories: "",
             id: "",
             createdAt: "",
             updatedAt: ""

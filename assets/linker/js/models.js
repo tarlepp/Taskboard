@@ -183,6 +183,7 @@ function Story(data) {
     self.vfCase         = ko.observable(data.vfCase);
     self.timeStart      = ko.observable(data.timeStart);
     self.timeEnd        = ko.observable(data.timeEnd);
+    self.isDone         = ko.observable(data.isDone);
     self.tasks          = ko.observableArray([]);
 
     // Formatted story title
@@ -393,6 +394,7 @@ function User(data) {
     self.momentFormatTime           = ko.observable(data.momentFormatTime);
     self.momentTimezone             = ko.observable(data.momentTimezone);
     self.taskTemplateChangeLimit    = ko.observable(6);
+    self.boardSettingHideDoneStories= ko.observable(data.boardSettingHideDoneStories);
 
     var taskTemplateChangeLimit = parseInt(data.taskTemplateChangeLimit);
 
