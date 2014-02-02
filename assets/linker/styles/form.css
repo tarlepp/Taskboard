@@ -84,7 +84,7 @@ select.form-control {
 .col-lg-9 .slider.slider-horizontal {
     position: relative;
     top: 6px;
-    margin-left: 5px;
+    margin-left: 10px;
 }
 
 .col-lg-9 .slider .tooltip-inner {
