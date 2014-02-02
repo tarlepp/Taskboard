@@ -79,24 +79,6 @@
                     </p>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-lg-3 control-label" for="formStoryEditVfCase">ValueFrame case</label>
-                <div class="col-lg-9">
-                    <% if (story.vfCase > 0) { %>
-                    <div class="input-group">
-                        <input id="formStoryEditVfCase" name="vfCase" type="text" value="<%= story.vfCase %>"  placeholder="case #" class="vfCase form-control" />
-
-                        <span class="input-group-link" style="display: inline-block;">
-                            <a href="#" class="btn btn-link">Open case</a>
-                        </span>
-                    </div>
-                    <% } else { %>
-                    <div class="col-lg-4">
-                        <input id="formStoryEditVfCase" name="vfCase" type="text" value=""  placeholder="case #" class="vfCase form-control" />
-                    </div>
-                    <% }  %>
-                </div>
-            </div>
         </form>
     </div>
 

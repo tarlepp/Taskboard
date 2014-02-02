@@ -180,7 +180,6 @@ function Story(data) {
     self.description    = ko.observable(data.description);
     self.estimate       = ko.observable(data.estimate);
     self.priority       = ko.observable(data.priority);
-    self.vfCase         = ko.observable(data.vfCase);
     self.timeStart      = ko.observable(data.timeStart);
     self.timeEnd        = ko.observable(data.timeEnd);
     self.isDone         = ko.observable(data.isDone);
@@ -235,11 +234,6 @@ function Story(data) {
         if ((moment.isMoment(self.timeStartObject()) && self.timeStartObject().isValid())
             && (moment.isMoment(self.timeEndObject()) && self.timeEndObject().isValid())) {
             parts.push("<tr><th>Duration:</th><td>" + self.timeStartObject().from(self.timeEndObject(), true) + "</td></tr>");
-        }
-
-        // ValueFrame case defined
-        if (self.vfCase()) {
-            parts.push("<tr><th>ValueFrame case:</th><td><a href=''>#" + self.vfCase() + "</a></td></tr>");
         }
 
         description += "<hr /><table class='info'>" + parts.join("") + "</table>";

@@ -60,10 +60,6 @@ module.exports = {
             type:       "integer",
             defaultsTo: 0
         },
-        vfCase: {
-            type:       "integer",
-            defaultsTo: 0
-        },
         isDone: {
             type:       "boolean",
             required:   true,
