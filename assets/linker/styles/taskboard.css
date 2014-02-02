@@ -48,7 +48,8 @@
 }
 
 #board .table thead th:first-of-type {
-    padding: 5px 10px;
+    padding: 5px 10px 5px 20px;
+    white-space: nowrap;
 }
 
 #board .table thead {

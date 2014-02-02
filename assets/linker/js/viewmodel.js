@@ -147,7 +147,9 @@ function ViewModel() {
 
     // Sorted story objects
     self.sortedStories = ko.computed(function() {
-        return self.stories().sort(function(a, b) {
+        return _.filter(self.stories(), function(story) {
+            return !(self.user().boardSettingHideDoneStories() && story.isDone());
+        }).sort(function(a, b) {
             return a.priority() > b.priority() ? 1 : -1;
         });
     });
@@ -172,29 +174,27 @@ function ViewModel() {
     });
 
     /**
-     * For some reason clickBubble doesn't work with this, need more work
-     * over this at somepoint.
+     * For some reason clickBubble doesn't work with this, need to do more work
+     * over this at some point.
      *
      * @type {koObservableBool}
      */
     self.toggleHideDoneStoriesLoaded = ko.observable(false);
 
+    // Method which changed hide done stories bit state
     self.toggleHideDoneStories = function(value) {
         if (self.toggleHideDoneStoriesLoaded()) {
-            var data = {
-                boardSettingHideDoneStories: value,
-                _csrf: getCsrfToken()
-            };
-
-            // Update user information
-            socket.put("/User/" + self.user().id(), data, function(user) {
-                if (handleSocketError(user)) {
-                    self.processSocketMessage("user", "update", self.user().id(), user);
-                }
-            });
+            self.user().boardSettingHideDoneStories(value);
         } else { // This will prevent first time update problem
             self.toggleHideDoneStoriesLoaded(true);
         }
+
+        fixBoardWidth();
+
+        // Fix board widths
+        setTimeout(function() {
+            fixBoardWidth();
+        }, 2000);
     };
 
     /**

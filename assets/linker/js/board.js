@@ -97,11 +97,15 @@ function fixBoardWidth() {
         widths.push(width);
     });
 
+    if (widths.length === 0 || widths.length === 1) {
+        return;
+    }
+
     table.find("thead tr th").each(function(index) {
         var width = widths[index];
 
         if (index == 0) {
-            width = width - 10;
+            width = width - 20;
         } else if (index == (widths.length - 1)) {
             width = width + 20;
         }

@@ -57,6 +57,7 @@
                         </div>
 
                         <span>User stories</span>
+                        <span class="phaseTaskCount" data-bind="text: '(' + $root.stories().length + ')'"></span>
                     </th>
                     <th class="addStory"
                         data-bind="
@@ -92,7 +93,10 @@
             </thead>
             <tbody data-bind="foreach: $root.sortedStories()">
 
-                <tr data-bind="attr: {'id': storyRowId()}">
+                <tr data-bind="
+                    visible: ($root.toggleHideDoneStoriesLoaded()),
+                    attr: {'id': storyRowId()}
+                ">
                     <th style="width:17%">
                         <div class="story alert alert-info taped"
                             data-bind="
