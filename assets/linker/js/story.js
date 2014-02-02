@@ -281,7 +281,8 @@ jQuery(document).ready(function() {
 
         // Initialize prompt select
         prompt.on("shown.bs.modal", function() {
-            initSelectPrompt(prompt);
+            // Needed to disable this, otherwise modal didn't contain anything...
+           // initSelectPrompt(prompt);
         });
 
         // Open bootbox prompt modal
