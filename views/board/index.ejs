@@ -46,13 +46,13 @@
                 <tr id="boardHeader">
                     <th style="width:17%; text-align: left;">
                         <div class="pull-right checkbox">
-                            <label>
+                            <label class="tooltipTitle" title="Hide done stories on the board.">
                                 <input type="checkbox" value="1" class="pull-right" data-bind="
                                     clickBubble: false,
                                     checked: user().boardSettingHideDoneStories(),
                                     click: $root.toggleHideDoneStories(!user().boardSettingHideDoneStories())
                                 " />
-                                hide done stories (<span data-bind="text: $root.doneStoryCount"></span>)
+                                <span data-bind="text: '(' + $root.doneStoryCount() +')'"></span>
                             </label>
                         </div>
 
