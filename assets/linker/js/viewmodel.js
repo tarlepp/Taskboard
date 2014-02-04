@@ -513,7 +513,11 @@ function ViewModel() {
         body.trigger("projectSprints", [self.project().id()]);
     };
 
-    // TODO
+    // Method to open project external links configuration
+    self.actionProjectExternalLinks = function() {
+        body.trigger("projectExternalLinks", [self.project().id()]);
+    };
+
     self.actionProjectDelete = function() {
         if (self.role() < -1) {
             body.trigger("projectDelete", [self.project().id()]);

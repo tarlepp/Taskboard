@@ -174,7 +174,6 @@ var sails = {
             description: "",
             estimate: "",
             priority: "",
-            vfCase: "",
             isDone: "",
             timeStart: "",
             timeEnd: "",
@@ -209,7 +208,6 @@ var sails = {
                 description: "",
                 estimate: "",
                 priority: "",
-                vfCase: "",
                 isDone: "",
                 id: "",
                 createdAt: "",
@@ -225,7 +223,6 @@ var sails = {
                 description: "",
                 estimate: "",
                 priority: "",
-                vfCase: "",
                 isDone: "",
                 id: "",
                 createdAt: "",
@@ -283,7 +280,6 @@ var sails = {
             description: "",
             estimate: "",
             priority: "",
-            vfCase: "",
             isDone: "",
             timeStart: "",
             timeEnd: "",
@@ -324,7 +320,15 @@ var sails = {
             objectName: "",
             objectId: "",
             objectData: "",
-            message: "",
+            message: ""
+        },
+        externalLink: {
+            projectId: "",
+            title: "",
+            description: "",
+            link: "",
+            createdUserId: "",
+            updatedUserId:""
         }
     }
 };

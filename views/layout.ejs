@@ -161,6 +161,14 @@
                                     </a>
                                 </li>
                                 <!-- ko if: $root.role() < -1 -->
+                                <li>
+                                    <a href="javascript: void(0);"
+                                       data-bind="click: $root.actionProjectExternalLinks"
+                                    >
+                                        <i class="fa fa-globe"></i>
+                                        External links
+                                    </a>
+                                </li>
                                 <li class="divider"></li>
                                 <li class="nav-header text-info">Danger zone</li>
                                 <li>
@@ -409,6 +417,7 @@
 <script src="/linker/js/date.js"></script>
 <script src="/linker/js/errors.js"></script>
 <script src="/linker/js/events.js"></script>
+<script src="/linker/js/externallink.js"></script>
 <script src="/linker/js/helpers.js"></script>
 <script src="/linker/js/inits.js"></script>
 <script src="/linker/js/knockout.js"></script>

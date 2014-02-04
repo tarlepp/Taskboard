@@ -21,5 +21,43 @@ module.exports = {
      * Overrides for the settings in `config/controllers.js`
      * (specific to ExternalLinkController)
      */
-    _config: {}
+    _config: {},
+
+    /**
+     * External links list action.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    list: function(req, res) {
+        var projectId = parseInt(req.param("projectId"), 10);
+
+        res.view({
+            layout: req.isAjax ? "layout_ajax" : "layout",
+            projectId: projectId
+        });
+    },
+
+    /**
+     * External link add action.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    add: function(req, res) {
+        var projectId = parseInt(req.param("projectId"), 10);
+
+        // Fetch project data
+        DataService.getProject(projectId, function(error, project) {
+            if (error) {
+                res.send(error.status ? error.status : 500, error.message ? error.message : error);
+            } else {
+                res.view({
+                    layout: req.isAjax ? "layout_ajax" : "layout",
+                    project: project,
+                    projectId: projectId
+                });
+            }
+        });
+    }
 };
