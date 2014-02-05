@@ -109,6 +109,7 @@ module.exports = function (grunt) {
         'linker/vendor/moment-timezone-data.js',
         'linker/vendor/cookie.js/cookie.js',
         'linker/vendor/knockout-bootstrap.js',
+        'linker/vendor/jquery.typewatch.js',
 
         // All of the rest of your app scripts imported here
         'linker/js/**/*.js'
