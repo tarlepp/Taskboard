@@ -85,6 +85,9 @@ function validateForm(items, context) {
                 case 'email':
                     method = "validateEmail";
                     break;
+                case 'url':
+                    method = "validateUrl";
+                    break;
                 case "length":
                     method = "validateLength";
                     break;
@@ -368,6 +371,31 @@ function validateEmail(context, input, group, label, email, errors) {
     // Oh nou, not valid email address
     if (!re.test(email)) {
         errors.push("Invalid email address.");
+
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Method validates url input.
+ *
+ * @param   {jQuery}    context Current context
+ * @param   {jQuery}    input   Current input field
+ * @param   {jQuery}    group   Input control group
+ * @param   {String}    label   Input label as a text
+ * @param   {String}    url     Actual url address value from input
+ * @param   {Array}     errors  Array of current errors
+ *
+ * @returns {boolean}
+ */
+function validateUrl(context, input, group, label, url, errors) {
+    var re = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+
+    // Oh nou, not valid URL address
+    if (!re.test(url)) {
+        errors.push("Invalid URL address.");
 
         return false;
     }
