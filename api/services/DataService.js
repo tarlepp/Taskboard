@@ -208,6 +208,31 @@ exports.getComment = function(commentId, callback) {
 };
 
 /**
+ * Service to fetch single project external link from database.
+ *
+ * @param   {Number}    linkId      External link id
+ * @param   {Function}  callback    Callback function to call after query
+ */
+exports.getProjectLink = function(linkId, callback) {
+    ExternalLink
+        .findOne(linkId)
+        .done(function(error, /** sails.model.externalLink */ link) {
+            if (error) {
+                callback(error, null);
+            } else if (!link) {
+                var errorMessage = new Error();
+
+                errorMessage.message = "External project link not found.";
+                errorMessage.status = 404;
+
+                callback(errorMessage, null);
+            } else {
+                callback(null, link);
+            }
+        });
+};
+
+/**
  * Service to fetch project data from database.
  *
  * @param   {{}}        where       Used query conditions
@@ -503,5 +528,23 @@ exports.getComments = function(objectName, objectId, commentId, callback) {
                     }
                 );
             }
+        });
+};
+
+/**
+ * Service to fetch specified project external link data from database.
+ *
+ * @param   {Number}    projectId   Project id
+ * @param   {Function}  callback    Callback function to call after query
+ */
+exports.getProjectLinks = function(projectId, callback) {
+    ExternalLink
+        .find()
+        .where({
+            projectId: projectId
+        })
+        .sort("title ASC")
+        .exec(function(error, links) {
+            callback(error, links);
         });
 };
