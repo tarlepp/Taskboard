@@ -123,4 +123,31 @@ function initProjectExternalLinksList(modal) {
 }
 
 function initProjectExternalLinksForm(modal) {
+    var body = jQuery("body");
+    var elementLink = modal.find("input[name='link']");
+    var elementInfo = modal.find("#decodedUrl");
+
+    elementLink.typeWatch({
+        wait: 150,
+        captureLength: 0,
+        callback: function(value) {
+            var regExp = /:\w+/g;
+            var parameters = value.match(regExp);
+            var info = "";
+
+            if (parameters) {
+                parameters = _.map(parameters, function(parameter) {
+                    return parameter.substring(1);
+                });
+
+                info = "<blockquote style='margin-bottom: 0;'>" + parameters.join("<br />") + "</blockquote>";
+            } else if (value.length === 0) {
+                info = elementInfo.data("text-original");
+            } else {
+                info = elementInfo.data("text-no-parameters");
+            }
+
+            elementInfo.html(info);
+        }
+    });
 }

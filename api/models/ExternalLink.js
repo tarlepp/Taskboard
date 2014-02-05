@@ -27,6 +27,10 @@ module.exports = {
             type:       "string",
             required:   true
         },
+        parameters: {
+            type:       "json",
+            required:   true
+        },
         createdUserId: {
             type:       "integer",
             required:   true
@@ -72,6 +76,25 @@ module.exports = {
         HistoryService.write("ExternalLink", values);
 
         callback();
+    },
+
+    /**
+     * Before validation callback.
+     *
+     * @param   {sails.model.externalLink}  values
+     * @param   {Function}                  callback
+     */
+    beforeValidation: function(values, callback) {
+        var regExp = /:\w+/g;
+        var parameters = values.link.match(regExp);
+
+        if (parameters) {
+            values.parameters = parameters;
+
+            callback();
+        } else {
+            callback("No link parameters.");
+        }
     },
 
     /**

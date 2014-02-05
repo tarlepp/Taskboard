@@ -5,21 +5,26 @@
     <div class="form-group required">
         <label class="col-lg-3 control-label" for="formExternalLinkNewTitle">Title</label>
         <div class="col-lg-9">
-            <input id="formTaskNewTitle" name="title" type="text" placeholder="enter external link title" class="form-control" required="required">
+            <input id="formTaskNewTitle" name="title" type="text" placeholder="enter external link title" class="form-control" required="required" />
         </div>
     </div>
 
     <div class="form-group required">
         <label class="col-lg-3 control-label" for="formTaskNewLink">External link</label>
         <div class="col-lg-9">
-            <input id="formTaskNewLink" name="link" type="text" placeholder="enter base of external link" class="form-control" required="required">
+            <input id="formTaskNewLink" name="link" type="text" placeholder="enter base of external link" class="form-control" required="required"
+                data-validate-type="url"
+            />
         </div>
     </div>
 
     <div class="form-group">
         <label class="col-lg-3 control-label" for="formTaskNewLink">Dynamic parameter(s)</label>
         <div class="col-lg-9">
-            <p class="form-control-static">
+            <p id="decodedUrl" class="form-control-static"
+                data-text-original="<em>Please enter external link</em>"
+                data-text-no-parameters="<em>Given URL doesn't contain any parameters</em>"
+            >
                 <em>Please enter external link</em>
             </p>
         </div>

@@ -327,6 +327,7 @@ var sails = {
             title: "",
             description: "",
             link: "",
+            parameters: "",
             createdUserId: "",
             updatedUserId:""
         }
