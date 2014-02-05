@@ -208,5 +208,22 @@ module.exports.policies = {
         // Custom actions
         isUnique:       ["flashMessage", "authenticated", "isAjax"],
         passwordCheck:  ["flashMessage", "authenticated", "isAjax", "hasUserAdminOrItself"]
+    },
+
+    // ExternalLink controller policies
+    "ExternalLink": {
+        // By default do not allow nothing
+        "*":        false,
+
+        // Default handling for blueprints
+        find:       ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAccess"],
+        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin", "addUserDataCreate"],
+        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin", "addUserDataUpdate"],
+        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin"],
+
+        // Custom actions
+        list:       ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"],
+        add:        ["flashMessage", "authenticated", "isAjax", "hasProjectAdmin"],
+        edit:       ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"]
     }
 };
