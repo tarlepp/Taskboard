@@ -586,11 +586,14 @@ exports.hasPhaseAdmin = function(user, phaseId, next) {
 /**
  * Method checks if specified user has access to specified project external link or not
  *
- * @param   {sails.req.user}    user    Signed in user object
- * @param   {Number}            linkId  Project external link id to check
- * @param   {Function}          next    Main callback function, which is called after checks
+ * @param   {sails.req.user}    user            Signed in user object
+ * @param   {Number}            linkId          Project external link id to check
+ * @param   {Function}          next            Main callback function, which is called after checks
+ * @param   {Boolean}           [returnRole]    Return role in callback not just boolean value
  */
-exports.hasExternalLinkAccess = function(user, linkId, next) {
+exports.hasExternalLinkAccess = function(user, linkId, next, returnRole) {
+    returnRole = returnRole || false;
+
     /**
      * Make waterfall jobs to check if user has access to specified project external link or not:
      *
@@ -615,7 +618,7 @@ exports.hasExternalLinkAccess = function(user, linkId, next) {
              * @param   {Function}                  callback
              */
             function(link, callback) {
-                AuthService.hasProjectAccess(user, link.projectId, callback);
+                AuthService.hasProjectAccess(user, link.projectId, callback, returnRole);
             }
         ],
 

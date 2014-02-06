@@ -25,8 +25,9 @@ module.exports = function hasCommentObjectAccess(request, response, next) {
     sails.log.verbose(" POLICY - api/policies/hasCommentObjectAccess.js");
 
     var objectId = parseInt(request.param("objectId"));
+    var objectName = request.param("objectName");
 
-    switch (request.param("objectName")) {
+    switch (objectName) {
         case "Project":
             AuthService.hasProjectAccess(request.user, objectId, function(error, hasRight) {
                 if (error) { // Error occurred
@@ -85,6 +86,19 @@ module.exports = function hasCommentObjectAccess(request, response, next) {
                     return ErrorService.makeErrorResponse(error.status ? error.status : 500, error, request, response);
                 } else if (!hasRight) { // No access right to task
                     return ErrorService.makeErrorResponse(403, "Insufficient rights to access task.", request, response);
+                } else { // Otherwise all is ok
+                    sails.log.verbose("          OK");
+
+                    return next();
+                }
+            });
+            break;
+        case "ExternalLink":
+            AuthService.hasExternalLinkAccess(request.user, objectId, function(error, hasRight) {
+                if (error) { // Error occurred
+                    return ErrorService.makeErrorResponse(error.status ? error.status : 500, error, request, response);
+                } else if (!hasRight) { // No access right to task
+                    return ErrorService.makeErrorResponse(403, "Insufficient rights to access external link.", request, response);
                 } else { // Otherwise all is ok
                     sails.log.verbose("          OK");
 

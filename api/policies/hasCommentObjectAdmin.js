@@ -17,7 +17,7 @@
  * @param   {Function}  next        Callback function to call if all is ok
  */
 module.exports = function hasCommentObjectAdmin(request, response, next) {
-    sails.log.verbose(" POLICY - api/policies/hasCommentObjectUpdate.js");
+    sails.log.verbose(" POLICY - api/policies/hasCommentObjectAdmin.js");
 
     var commentId = parseInt(request.param("id"), 10);
 

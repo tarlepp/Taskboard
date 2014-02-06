@@ -35,8 +35,9 @@ module.exports = function hasCommentObjectCreate(request, response, next) {
     sails.log.verbose(" POLICY - api/policies/hasCommentObjectCreate.js");
 
     var objectId = parseInt(request.param("objectId"));
+    var objectName = request.param("objectName");
 
-    switch (request.param("objectName")) {
+    switch (objectName) {
         case "Project":
             AuthService.hasProjectAccess(request.user, objectId, function(error, hasRight) {
                 if (error) { // Error occurred
@@ -91,6 +92,19 @@ module.exports = function hasCommentObjectCreate(request, response, next) {
             break;
         case "Task":
             AuthService.hasTaskAccess(request.user, objectId, function(error, hasRight) {
+                if (error) { // Error occurred
+                    return ErrorService.makeErrorResponse(error.status ? error.status : 500, error, request, response);
+                } else if (hasRight) { // User has right
+                    sails.log.verbose("          OK");
+
+                    return next();
+                } else { // No right to project
+                    return ErrorService.makeErrorResponse(403, "Insufficient rights you need to be at least in 'user' role in this project.", request, response);
+                }
+            }, true);
+            break;
+        case "ExternalLink":
+            AuthService.hasExternalLinkAccess(request.user, objectId, function(error, hasRight) {
                 if (error) { // Error occurred
                     return ErrorService.makeErrorResponse(error.status ? error.status : 500, error, request, response);
                 } else if (hasRight) { // User has right
