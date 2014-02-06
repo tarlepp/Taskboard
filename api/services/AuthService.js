@@ -584,6 +584,102 @@ exports.hasPhaseAdmin = function(user, phaseId, next) {
 };
 
 /**
+ * Method checks if specified user has access to specified project external link or not
+ *
+ * @param   {sails.req.user}    user    Signed in user object
+ * @param   {Number}            linkId  Project external link id to check
+ * @param   {Function}          next    Main callback function, which is called after checks
+ */
+exports.hasExternalLinkAccess = function(user, linkId, next) {
+    /**
+     * Make waterfall jobs to check if user has access to specified project external link or not:
+     *
+     *  1)  Fetch external link data (check that link exists)
+     *  2)  Call AuthService.hasProjectAccess to check actual project right
+     */
+    async.waterfall(
+        [
+            /**
+             * Check that phase exists.
+             *
+             * @param   {Function}  callback
+             */
+            function(callback) {
+                DataService.getProjectLink(linkId, callback);
+            },
+
+            /**
+             * Check that user has admin access to phase project.
+             *
+             * @param   {sails.model.externalLink}  link        External link object
+             * @param   {Function}                  callback
+             */
+            function(link, callback) {
+                AuthService.hasProjectAccess(user, link.projectId, callback);
+            }
+        ],
+
+        /**
+         * Callback function which is been called after all jobs are processed.
+         *
+         * @param   {Error|String}  error
+         * @param   {Boolean}       results
+         */
+        function(error, results) {
+            next(error, results);
+        }
+    );
+};
+
+/**
+ * Method checks if specified user has admin access to specified project external link or not
+ *
+ * @param   {sails.req.user}    user    Signed in user object
+ * @param   {Number}            linkId  Project external link id to check
+ * @param   {Function}          next    Main callback function, which is called after checks
+ */
+exports.hasExternalLinkAdmin = function(user, linkId, next) {
+    /**
+     * Make waterfall jobs to check if user has admin access to specified project external link or not:
+     *
+     *  1)  Fetch external link data (check that link exists)
+     *  2)  Call AuthService.hasProjectAccess to check actual project right
+     */
+    async.waterfall(
+        [
+            /**
+             * Check that phase exists.
+             *
+             * @param   {Function}  callback
+             */
+            function(callback) {
+                DataService.hasProjectAdmin(linkId, callback);
+            },
+
+            /**
+             * Check that user has admin access to phase project.
+             *
+             * @param   {sails.model.externalLink}  link        External link object
+             * @param   {Function}                  callback
+             */
+            function(link, callback) {
+                AuthService.hasProjectAdmin(user, link.projectId, callback);
+            }
+        ],
+
+        /**
+         * Callback function which is been called after all jobs are processed.
+         *
+         * @param   {Error|String}  error
+         * @param   {Boolean}       results
+         */
+        function(error, results) {
+            next(error, results);
+        }
+    );
+};
+
+/**
  * Method checks if specified user is administrator or not.
  *
  * @param   {sails.req.user}    user    Signed in user object
