@@ -230,6 +230,18 @@ var sails = {
             },
             tasks: [],
             taskCnt: 0
+        },
+        externalLink: {
+            projectId: "",
+            title: "",
+            description: "",
+            link: "",
+            parameters: "",
+            id: "",
+            updatedUserId: "",
+            createdUserId: "",
+            createdAt: "",
+            updatedAt: ""
         }
     },
 
@@ -328,8 +340,11 @@ var sails = {
             description: "",
             link: "",
             parameters: "",
+            id: "",
+            updatedUserId: "",
             createdUserId: "",
-            updatedUserId:""
+            createdAt: "",
+            updatedAt: ""
         }
     }
 };
