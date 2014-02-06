@@ -653,7 +653,7 @@ exports.hasExternalLinkAdmin = function(user, linkId, next) {
              * @param   {Function}  callback
              */
             function(callback) {
-                DataService.hasProjectAdmin(linkId, callback);
+                DataService.getProjectLink(linkId, callback);
             },
 
             /**
