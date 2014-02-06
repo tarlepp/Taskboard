@@ -216,14 +216,14 @@ module.exports.policies = {
         "*":        false,
 
         // Default handling for blueprints
-        find:       ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAccess"],
-        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin", "addUserDataCreate"],
-        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin", "addUserDataUpdate"],
-        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin"],
+        find:       ["flashMessage", "authenticated", "isAjaxOrSocket", "hasExternalLinkAccess"],
+        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasExternalLinkAdmin", "addUserDataCreate"],
+        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasExternalLinkAdmin", "addUserDataUpdate"],
+        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasExternalLinkAdmin"],
 
         // Custom actions
-        list:       ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"],
-        add:        ["flashMessage", "authenticated", "isAjax", "hasProjectAdmin"],
-        edit:       ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"]
+        list:       ["flashMessage", "authenticated", "isAjax", "hasExternalLinkAccess"],
+        add:        ["flashMessage", "authenticated", "isAjax", "hasExternalLinkAdmin"],
+        edit:       ["flashMessage", "authenticated", "isAjax", "hasExternalLinkAccess"]
     }
 };
