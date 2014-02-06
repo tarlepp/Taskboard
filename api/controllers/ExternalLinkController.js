@@ -16,6 +16,8 @@
  */
 "use strict";
 
+var async = require("async");
+
 module.exports = {
     /**
      * Overrides for the settings in `config/controllers.js`
@@ -32,10 +34,24 @@ module.exports = {
     list: function(req, res) {
         var projectId = parseInt(req.param("projectId"), 10);
 
-        res.view({
-            layout: req.isAjax ? "layout_ajax" : "layout",
-            projectId: projectId
-        });
+        async.parallel(
+            {
+                project: function(callback) {
+                    DataService.getProject(projectId, callback);
+                },
+
+                links: function(callback) {
+                    DataService.getProjectLinks(projectId, callback);
+                }
+            },
+
+            function(error, results) {
+                res.view(_.extend({
+                    layout: req.isAjax ? "layout_ajax" : "layout",
+                    projectId: projectId
+                }, results));
+            }
+        );
     },
 
     /**
@@ -56,6 +72,28 @@ module.exports = {
                     layout: req.isAjax ? "layout_ajax" : "layout",
                     project: project,
                     projectId: projectId
+                });
+            }
+        });
+    },
+
+    /**
+     * External link edit action.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    edit: function(req, res) {
+        var linkId = parseInt(req.param("linkId"), 10);
+
+        // Fetch project data
+        DataService.getProjectLink(linkId, function(error, link) {
+            if (error) {
+                res.send(error.status ? error.status : 500, error.message ? error.message : error);
+            } else {
+                res.view({
+                    layout: req.isAjax ? "layout_ajax" : "layout",
+                    link: link
                 });
             }
         });
