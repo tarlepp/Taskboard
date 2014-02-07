@@ -17,6 +17,8 @@
 
 "use strict";
 
+var async = require("async");
+
 module.exports = {
     /**
      * Overrides for the settings in `config/controllers.js`
@@ -34,10 +36,49 @@ module.exports = {
         var objectId = req.param("objectId");
         var objectName = req.param("objectName");
 
-        res.view({
-            layout: req.isAjax ? "layout_ajax" : "layout",
-            objectId: objectId,
-            objectName: objectName
-        });
+        // Async water fall job to fetch all necessary data for link object view
+        async.waterfall(
+            [
+                /**
+                 * Determine project object by given object name and id.
+                 *
+                 * @param   {Function}  callback
+                 */
+                function(callback) {
+                    DataService.getLinkObjectProject(objectName, objectId, callback);
+                },
+
+                /**
+                 *
+                 * @param   {sails.model.project}   project     Project object
+                 * @param   {Function}              callback
+                 */
+                function(project, callback) {
+                    DataService.getProjectLinks(project.id, function(error, externalLinks) {
+                        callback(error, project, externalLinks);
+                    });
+                }
+            ],
+
+            /**
+             *
+             * @param   {null|Error}                    error
+             * @param   {null|sails.model.project}      project
+             * @param   {null|sails.model.externalLink} externalLinks
+             */
+            function(error, project, externalLinks) {
+                if (error) {
+                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                } else {
+                    res.view({
+                        layout: req.isAjax ? "layout_ajax" : "layout",
+                        objectId: objectId,
+                        objectName: objectName,
+                        project: project,
+                        externalLinks: externalLinks
+                    });
+                }
+            }
+        );
     }
 };

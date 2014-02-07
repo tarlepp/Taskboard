@@ -37,6 +37,7 @@ module.exports.express = {
             res.locals.moment = moment;
             res.locals.numeral = numeral;
             res.locals.packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
+            res.locals.inspect = require("util").inspect;
 
             next();
         });

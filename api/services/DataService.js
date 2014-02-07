@@ -548,3 +548,106 @@ exports.getProjectLinks = function(projectId, callback) {
             callback(error, links);
         });
 };
+
+/**
+ * Service to fetch project object that belongs to specified object (name + id). Basically service this
+ * just fetches necessary data by specified object and process it until we have project.
+ *
+ * Note that this only support following objects at this time:
+ *  - Story
+ *  - Task
+ *
+ * @param   {String}    objectName  Name of the object
+ * @param   {Number}    objectId    Object id
+ * @param   {Function}  callback
+ */
+exports.getLinkObjectProject = function(objectName, objectId, callback) {
+    // Make necessary jobs as waterfall
+    async.waterfall(
+        [
+            /**
+             * First job in main water fall jobs. With this we will determine project id by
+             * specified object. Actual determination is done in separate processes which
+             * uses own async water fall jobs to determine project id.
+             *
+             * @param   {Function}  next
+             */
+            function(next) {
+                switch (objectName) {
+                    case "Story":
+                        // In case of story we just needed to fetch story data
+                        DataService.getStory(objectId, function(error, story) {
+                            next(error, story.projectId ? story.projectId : null);
+                        });
+                        break;
+                    case "Task":
+                        // With task we need to get actual task object and then story object
+                        async.waterfall(
+                            [
+                                /**
+                                 * Fetch task object.
+                                 *
+                                 * @param   {Function}  cb
+                                 */
+                                function(cb) {
+                                    DataService.getTask(objectId, cb);
+                                },
+
+                                /**
+                                 * Fetch story object via task object.
+                                 *
+                                 * @param   {sails.model.task}  task
+                                 * @param   {Function}          cb
+                                 */
+                                function(task, cb) {
+                                    DataService.getStory(task.storyId, function(error, story) {
+                                        cb(error, story.projectId ? story.projectId : null);
+                                    });
+                                }
+                            ],
+
+                            /**
+                             * Task specified water fall callback function which is called after we have
+                             * determined project id via task data or some error has been occurred.
+                             *
+                             * This will call main water fall async job callback function.
+                             *
+                             * Yo dawg, i herd like y ar doing callbacks in your callbacks!
+                             *
+                             * @param   {null|Error}    error
+                             * @param   {null|Number}   projectId
+                             */
+                            function(error, projectId) {
+                                next(error, projectId)
+                            }
+                        );
+                        break;
+                    default:
+                        next("Not supported link object '" + objectName + "' given", null);
+                        break;
+                }
+            },
+
+            /**
+             * Callback function to fetch actual project object, this is called after we have
+             * determined project id from specified object.
+             *
+             * @param   {Number}    projectId   Project id
+             * @param   {Function}  next
+             */
+            function(projectId, next) {
+                DataService.getProject(projectId, next);
+            }
+        ],
+
+        /**
+         * Main callback which is call after all main water fall jobs are done
+         *
+         * @param   {null|Error}                error
+         * @param   {null|sails.model.project}  project
+         */
+        function(error, project) {
+            callback(error, project);
+        }
+    )
+};
