@@ -22,5 +22,22 @@ module.exports = {
      * Overrides for the settings in `config/controllers.js`
      * (specific to LinkController)
      */
-    _config: {}
+    _config: {},
+
+    /**
+     * Main object link action. This will show attached links and new link add form for user.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    index: function(req, res) {
+        var objectId = req.param("objectId");
+        var objectName = req.param("objectName");
+
+        res.view({
+            layout: req.isAjax ? "layout_ajax" : "layout",
+            objectId: objectId,
+            objectName: objectName
+        });
+    }
 };

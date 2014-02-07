@@ -1,4 +1,14 @@
 
+<% if (objectName === "Task" || objectName === "Story") { %>
+    <li>
+        <a href="#links"
+            data-toggle="tab"
+            data-href="/Link?objectName=<%= objectName %>&objectId=<%= objectId %>"
+            data-callback="initCommonTabLinks"
+        >Links</a>
+    </li>
+<% } %>
+
     <li>
         <a href="#comments"
             data-toggle="tab"
