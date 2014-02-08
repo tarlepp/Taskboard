@@ -239,6 +239,7 @@ module.exports.policies = {
         destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasLinkObjectAdmin"],
 
         // Custom actions
-        index:      ["flashMessage", "authenticated", "isAjax", "hasLinkObjectAccess"]
+        index:      ["flashMessage", "authenticated", "isAjax", "hasLinkObjectAccess"],
+        getLinks:   ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"]
     }
 };

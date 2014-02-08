@@ -98,5 +98,57 @@ module.exports = {
                 }
             }
         );
+    },
+
+    /**
+     * Action to fetch object links.
+     *
+     * @todo    Make this only to require projectId parameter, so make all necessary
+     *          data determination within this action.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    getLinks: function(req, res) {
+        var where       = req.param("where");
+        var projectId   = parseInt(req.param("projectId"), 10);
+
+        // Make parallel job to fetch all necessary data
+        async.parallel(
+            {
+                // Fetch attached links
+                attachedLinks: function(callback) {
+                    Link
+                        .find()
+                        .where({or: where})
+                        .sort("link ASC")
+                        .exec(function(error, links) {
+                            callback(error, links);
+                        });
+                },
+
+                // Fetch external link data
+                externalLinks: function(callback) {
+                    DataService.getProjectLinks(projectId, callback);
+                }
+            },
+
+            /**
+             * Main callback function which is processed after all parallel jobs are done.
+             *
+             * @param   {null|Error}    error
+             * @param   {{}}            results
+             */
+            function(error, results) {
+                // Iterate each attached link and add external link data to it
+                _.each(results.attachedLinks, function(link) {
+                    link.externalLink = _.find(results.externalLinks, function(externalLink) {
+                        return externalLink.id === link.externalLinkId;
+                    });
+                });
+
+                res.json(results.attachedLinks);
+            }
+        );
     }
 };

@@ -364,6 +364,39 @@ function Task(data) {
             description += "<hr /><table class='info'>" + parts.join("") + "</table>";
         }
 
+        // Get links that are attached to this object
+        var links = _.filter(myViewModel.links(), function(link) {
+            return link.objectName() === "Task" && link.objectId() === self.id();
+        });
+
+        // Yeah baby, we have some links attached
+        if (links.length > 0) {
+            parts = [];
+
+            // Sort and group links by external link title
+            var groupLinks = _.groupBy(_.sortBy(links, function(link) {
+                return link.externalLink().title;
+            }), function(link) {
+                return link.externalLink().title;
+            });
+
+            // Iterate each link group
+            _.each(groupLinks, function(links, title) {
+                var bits = [];
+
+                // Iterate each links in current group
+                _.each(_.sortBy(links, function(link) {
+                    return link.name();
+                }), function(link) {
+                    bits.push("<a href='" + link.link() +"' target='_blank'>" + link.name() + "</a>");
+                });
+
+                parts.push("<tr><th>" + title + ":</th><td>" + bits.join(", ") + "</td>");
+            });
+
+            description += "<hr /><table class='info'>" + parts.join("") + "</table>";
+        }
+
         return description;
     });
 
@@ -427,4 +460,22 @@ function Type(data) {
     self.title  = ko.observable(data.title);
     self.order  = ko.observable(data.order);
     self.class  = ko.observable(data.class);
+}
+
+/**
+ * Object to present link.
+ *
+ * @param   {sails.json.type}    data
+ * @constructor
+ */
+function Link(data) {
+    var self = this;
+
+    // Initialize object data
+    self.id             = ko.observable(data.id);
+    self.link           = ko.observable(data.link);
+    self.name           = ko.observable(data.name);
+    self.objectId       = ko.observable(data.objectId);
+    self.objectName     = ko.observable(data.objectName);
+    self.externalLink   = ko.observable(data.externalLink);
 }

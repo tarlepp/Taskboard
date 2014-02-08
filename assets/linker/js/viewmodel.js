@@ -36,6 +36,7 @@ function ViewModel() {
     self.sprints    = ko.observableArray([]);   // This is updated when ever user changes project
     self.stories    = ko.observableArray([]);   // This is updated when ever user changes sprint
     self.tasks      = ko.observableArray([]);   // This is updated when ever user changes sprint
+    self.links      = ko.observableArray([]);   // This is updated when ever user changes sprint
 
     // Selected project and sprint objects
     self.project    = ko.observable();
@@ -303,9 +304,14 @@ function ViewModel() {
             socket.get("/Story", {sprintId: sprintId}, function(stories) {
                 if (handleSocketError(stories)) {
                     var storyIds = [];
+                    var whereLinks = [];
 
                     var mappedStories = ko.utils.arrayMap(stories, function(/** sails.json.story */story) {
                         storyIds.push({storyId: story.id});
+                        whereLinks.push({
+                            objectId: story.id,
+                            objectName: "Story"
+                        });
 
                         return new Story(story);
                     });
@@ -324,10 +330,17 @@ function ViewModel() {
                         socket.get('/Task', {where: {or: storyIds}}, function(tasks) {
                             if (handleSocketError(stories)) {
                                 var mappedTasks = ko.utils.arrayMap(tasks, function(/** sails.json.task */task) {
+                                    whereLinks.push({
+                                        objectId: task.id,
+                                        objectName: "Task"
+                                    });
+
                                     return new Task(task);
                                 });
 
                                 self.tasks(mappedTasks);
+
+                                getObjectLinks(whereLinks);
 
                                 fixBoardWidth();
                             }
@@ -336,6 +349,39 @@ function ViewModel() {
                         });
                     }
                 }
+            });
+        }
+
+        /**
+         * Get object links.
+         *
+         * @param   {{}}    where
+         */
+        function getObjectLinks(where) {
+            self.loading.push(true);
+
+            // Fetch links
+            jQuery.ajax({
+                type: "GET",
+                url: "/Link/getLinks",
+                data: {
+                    projectId: self.project().id(),
+                    where: where
+                },
+                dataType: "json"
+            })
+            .done(function(links) {
+                var mappedLinks = ko.utils.arrayMap(links, function(/** sails.json.link */link) {
+                    return new Link(link);
+                });
+
+                self.links(mappedLinks);
+            })
+            .fail(function(jqXhr, textStatus, error) {
+                handleAjaxError(jqXhr, textStatus, error);
+            })
+            .always(function() {
+                self.loading.pop();
             });
         }
     };
@@ -362,9 +408,9 @@ function ViewModel() {
         // Reset sprint related data
         self.stories([]);
         self.tasks([]);
+        self.links([]);
         self.sprint(false);
     };
-
 
     /**
      * Method returns used task template in board cell, used template is changed
