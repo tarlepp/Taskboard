@@ -550,6 +550,31 @@ exports.getProjectLinks = function(projectId, callback) {
 };
 
 /**
+ * Service to fetch single link object from database.
+ *
+ * @param   {Number}    linkId      Link id
+ * @param   {Function}  callback    Callback function to call after query
+ */
+exports.getLink = function(linkId, callback) {
+    Link
+        .findOne(linkId)
+        .exec(function(error, /** sails.model.link */ link) {
+            if (error) {
+                callback(error, null);
+            } else if (!link) {
+                var errorMessage = new Error();
+
+                errorMessage.message = "Link not found.";
+                errorMessage.status = 404;
+
+                callback(errorMessage, null);
+            } else {
+                callback(null, link);
+            }
+        });
+};
+
+/**
  * Service to fetch project object that belongs to specified object (name + id). Basically service this
  * just fetches necessary data by specified object and process it until we have project.
  *

@@ -185,7 +185,7 @@ module.exports.policies = {
         destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "isAdministrator", "addUserDataUpdate"]
     },
 
-    // Story controller policies
+    // Comment controller policies
     "Comment": {
         // By default do not allow nothing
         "*":        false,
@@ -225,5 +225,20 @@ module.exports.policies = {
         list:       ["flashMessage", "authenticated", "isAjax", "hasExternalLinkAccess"],
         add:        ["flashMessage", "authenticated", "isAjax", "hasExternalLinkAdmin"],
         edit:       ["flashMessage", "authenticated", "isAjax", "hasExternalLinkAccess"]
+    },
+
+    // Link controller policies
+    "Link": {
+        // By default do not allow nothing
+        "*":        false,
+
+        // Default handling for blueprints
+        find:       ["flashMessage", "authenticated", "isAjaxOrSocket", "hasLinkObjectAccess"],
+        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasLinkObjectCreate", "addUserDataCreate"],
+        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasLinkObjectAdmin", "addUserDataUpdate"],
+        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasLinkObjectAdmin"],
+
+        // Custom actions
+        index:      ["flashMessage", "authenticated", "isAjax", "hasLinkObjectAccess"]
     }
 };
