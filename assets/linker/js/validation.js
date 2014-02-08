@@ -26,80 +26,53 @@ function validateForm(items, context) {
 
     // Iterate each form item
     jQuery.each(items, function(key, item) {
-        var input = jQuery('#' + key, context);
+        checkItems(key, item);
+    });
 
-        if (input.length === 0) {
-            input = jQuery("[name='"+ key +"']", context);
-        }
-
-        if (input.getType() == 'div') {
-            input = input.find('input');
-        }
-
-        var group = input.closest('.form-group');
-        var label = group.find('label').html();
-        var value = jQuery.trim(input.val());
-        var type = input.data('validateType');
-        var method = null;
-        var types = [];
-        var inputHasError = false;
-
-        if (type) {
-            types = type.split(",");
-        }
-
-        if ((input.prop('required') && value == '')
-            || (input.getType() == 'select' && value == '#')
-        ) {
-            if (label.length > 0) {
-                required.push(label);
-            }
-
-            group.addClass('has-error');
-
-            if (focusSet === false && input.data('focus') !== false) {
-                focusSet = true;
-                input.focus();
-            }
-
-            inputHasError = true;
-            valid = false;
+    /**
+     * Private function to check form items, this is called recursive if input items
+     * has objects in it values.
+     *
+     * @param   {String}                key
+     * @param   {Object|String|Number}  item
+     */
+    function checkItems(key, item) {
+        // We have multiple parameters
+        if (item != null && typeof item === "object") {
+            // Iterate each items and make necessary checks
+            _.each(item, function(_item, _key) {
+                checkItems(key +"[" + _key + "]", _item);
+            });
         } else {
-            group.removeClass('has-error')
-        }
+            var input = jQuery('#' + key.replace(":", ""), context);
 
-        _.each(types, function(type) {
-            switch (type) {
-                case 'date':
-                    method = 'validateDate';
-                    break;
-                case 'daterange':
-                    method = 'validateDateRange';
-                    break;
-                case 'password':
-                    method = "validatePassword";
-                    break;
-                case 'unique':
-                    method = "validateUnique";
-                    break;
-                case 'email':
-                    method = "validateEmail";
-                    break;
-                case 'url':
-                    method = "validateUrl";
-                    break;
-                case "length":
-                    method = "validateLength";
-                    break;
-                case "passwordCurrent":
-                    method = "validateCurrentPassword";
-                    break;
-                default:
-                    throw new Error("Implement '" + type + "' validation!");
-                    break;
+            if (input.length === 0) {
+                input = jQuery("[name='"+ key +"']", context);
             }
 
-            if (!inputHasError && method && dispatch(method, [context, input, group, label, value, errors]) !== true) {
+            if (input.getType() == 'div') {
+                input = input.find('input');
+            }
+
+            var group = input.closest('.form-group');
+            var label = group.find('label').html();
+            var value = jQuery.trim(input.val());
+            var type = input.data('validateType');
+            var method = null;
+            var types = [];
+            var inputHasError = false;
+
+            if (type) {
+                types = type.split(",");
+            }
+
+            if ((input.prop('required') && value == '')
+                || (input.getType() == 'select' && value == '#')
+                ) {
+                if (label.length > 0) {
+                    required.push(label);
+                }
+
                 group.addClass('has-error');
 
                 if (focusSet === false && input.data('focus') !== false) {
@@ -109,11 +82,57 @@ function validateForm(items, context) {
 
                 inputHasError = true;
                 valid = false;
+            } else {
+                group.removeClass('has-error')
             }
-        });
 
-    });
+            _.each(types, function(type) {
+                switch (type) {
+                    case 'date':
+                        method = 'validateDate';
+                        break;
+                    case 'daterange':
+                        method = 'validateDateRange';
+                        break;
+                    case 'password':
+                        method = "validatePassword";
+                        break;
+                    case 'unique':
+                        method = "validateUnique";
+                        break;
+                    case 'email':
+                        method = "validateEmail";
+                        break;
+                    case 'url':
+                        method = "validateUrl";
+                        break;
+                    case "length":
+                        method = "validateLength";
+                        break;
+                    case "passwordCurrent":
+                        method = "validateCurrentPassword";
+                        break;
+                    default:
+                        throw new Error("Implement '" + type + "' validation!");
+                        break;
+                }
 
+                if (!inputHasError && method && dispatch(method, [context, input, group, label, value, errors]) !== true) {
+                    group.addClass('has-error');
+
+                    if (focusSet === false && input.data('focus') !== false) {
+                        focusSet = true;
+                        input.focus();
+                    }
+
+                    inputHasError = true;
+                    valid = false;
+                }
+            });
+        }
+    }
+
+    // Form is not valid
     if (!valid) {
         var message = "Errors in form.<br />";
 
