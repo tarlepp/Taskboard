@@ -446,6 +446,39 @@ function initCommonTabHistory(modal, contentId) {
 }
 
 /**
+ * Function initializes 'Links' tab to use in any modal where it's attached.
+ *
+ * @param   {jQuery|$}  modal       Current modal content
+ * @param   {String}    contentId   Tab content div id
+ */
+function initCommonTabLinks(modal, contentId) {
+    var body = jQuery("body");
+    var container = modal.find(contentId);
+
+    // Remove existing listeners
+    container.off("click", "a[data-add-new-link='true']");
+
+    // User click link add button
+    container.on("click", "a[data-add-new-link='true']", function(event) {
+        event.preventDefault();
+
+        var form = jQuery("#" + jQuery(this).data("formId"), container);
+        var formItems = form.serializeJSON();
+
+        // Form is valid, so we can save the data
+        if (validateForm(formItems, form)) {
+            socket.post("/Link/create", formItems, function(/** sails.json.link */data) {
+                if (handleSocketError(data, true)) {
+                    makeMessage("Object link created successfully.", "success", {});
+
+                    reloadTabContentUrl(modal, contentId);
+                }
+            });
+        }
+    });
+}
+
+/**
  * Function to reload URL tab content again.
  *
  * @param   {jQuery|$}  modal       Current modal content

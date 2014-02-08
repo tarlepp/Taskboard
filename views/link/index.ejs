@@ -1,11 +1,47 @@
-Implement content.
+<div id="objectLinksContainer">
+    <em>Implement attached link list.</em>
+</div>
 
-<h4>project data</h4>
-<pre>
-    <%= inspect(project) %>
-</pre>
+<div id="objectLinkFormContainer">
+    <h4>Add new link</h4>
 
-<h4>project external link data</h4>
-<pre>
-    <%= inspect(externalLinks) %>
-</pre>
+    <% _.each(externalLinks, function(link) { %>
+        <form id="LinkForm_<%= link.id %>" class="form-horizontal objectLinkForm">
+            <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+            <input type="hidden" name="objectName" value="<%= objectName %>" />
+            <input type="hidden" name="objectId" value="<%= objectId %>" />
+            <input type="hidden" name="externalLinkId" value="<%= link.id %>" />
+
+            <div class="form-group" style="margin-bottom: 0;">
+                <div class="col-lg-9 col-lg-offset-2">
+                <% _.each(link.parameters, function(parameter) { %>
+                    <div class="col-lg-2 text-center text-medium">
+                        <%= parameter.substr(1).replace("_", " ") %>
+                    </div>
+                <% }) %>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><%= link.title %></label>
+                <div class="col-lg-9">
+                <% _.each(link.parameters, function(parameter) { %>
+                    <% parameterName = parameter.substr(1); %>
+                    <div class="col-lg-2">
+                        <input id="<%= parameterName %>" name="parameters[<%= parameter %>]" type="text" placeholder="<%= parameterName.replace('_', ' ') %>" class="form-control" required="required" />
+                    </div>
+                <% }) %>
+                    <div class="col-lg-1">
+                        <a href="javascript: void(0);" class="btn btn-default btn-icon tooltipTitle" title="Add new link"
+                            data-qtip-options='{ "position": {"my": "center left", "at": "center right"} }'
+                            data-add-new-link="true"
+                            data-form-id="LinkForm_<%= link.id %>"
+                        >
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    <% }); %>
+</div>

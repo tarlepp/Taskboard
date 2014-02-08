@@ -7,6 +7,7 @@ label {
     font-weight: normal;
 }
 
+label.col-lg-2,
 label.col-lg-3 {
     padding-right: 5px;
 }
@@ -124,6 +125,7 @@ select.form-control {
     padding-right: 15px;
 }
 
+.form-group .col-lg-10,
 .form-group .col-lg-9,
 .form-group .col-lg-8,
 .form-group .col-lg-7,
@@ -136,6 +138,7 @@ select.form-control {
     padding-left: 5px;
 }
 
+.form-group .col-lg-10 div[class*="col-"],
 .form-group .col-lg-9 div[class*="col-"],
 .form-group .col-lg-8 div[class*="col-"],
 .form-group .col-lg-7 div[class*="col-"],
@@ -148,13 +151,21 @@ select.form-control {
     padding-left: 0;
 }
 
+.form-group .col-lg-10,
+.form-group .col-lg-10 .col-lg-2,
+.form-group .col-lg-10 .col-lg-3,
 .form-group .col-lg-9 .col-lg-2,
-.form-group .col-lg-9 .col-lg-3 {
+.form-group .col-lg-9 .col-lg-3,
+.form-group .col-lg-9 .col-lg-10 {
     padding-left: 0;
 }
 
-.form-group  {
+.form-group {
     margin-bottom: 10px;
+}
+
+.form-group.text-medium {
+    margin-bottom: 0;
 }
 
 .form-horizontal .dateInput {
@@ -355,4 +366,23 @@ div[data-role="editor-toolbar"] {
     margin-left: 5px;
     position: relative;
     top: -1px;
+}
+
+#objectLinkFormContainer {
+}
+
+#objectLinkFormContainer h4 {
+    position: relative;
+    top: 18px;
+    margin-top: -18px;
+    margin-bottom: 0;
+}
+
+#objectLinkFormContainer form {
+}
+
+#objectLinkFormContainer form .btn {
+    position: relative;
+    top: 4px;
+    left: -5px;
 }
