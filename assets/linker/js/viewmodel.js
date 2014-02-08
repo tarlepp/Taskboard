@@ -376,8 +376,16 @@ function ViewModel() {
      * @returns {string}
      */
     self.getTaskTemplate = function(phaseId, storyId) {
-        return (_.size(self.getTasks(phaseId, storyId)) > self.user().taskTemplateChangeLimit())
-            ? 'task-template-small' : 'task-template-normal';
+        var phase = _.find(self.phases(), function(phase) { return phase.id() === phaseId; });
+        var template = "task-template-normal";
+
+        if ((phase && phase.isDone())
+            || (_.size(self.getTasks(phaseId, storyId)) > self.user().taskTemplateChangeLimit())
+            ) {
+            template = "task-template-small";
+        }
+
+        return template;
     };
 
     /**
