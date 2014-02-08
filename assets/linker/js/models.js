@@ -292,6 +292,10 @@ function Task(data) {
         return output;
     });
 
+    self.isMine = ko.computed(function() {
+        return self.userId() === myViewModel.user().id();
+    });
+
     self.timeStartObject = ko.computed(function() {
         return dateConvertToMoment(self.timeStart());
     });

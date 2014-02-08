@@ -219,11 +219,13 @@
                 },
                 css: taskClass()
             ">
-            <!-- ko if: currentUser -->
-            <div class="gravatar">
+
+            <div class="gravatar" data-bind="if: currentUser">
                 <img data-bind="attr: { src: currentUser().gravatar() }" />
             </div>
-            <!-- /ko -->
+
+            <i class="fa fa-circle myTask" data-bind="visible: isMine"></i>
+
             <h3 data-bind="truncatedText: title"></h3>
         </div>
     </script>
@@ -258,11 +260,13 @@
                 },
                 css: taskClass()
             ">
-            <!-- ko if: currentUser -->
-            <div class="gravatar">
+
+            <div class="gravatar" data-bind="if: currentUser">
                 <img data-bind="attr: { src: currentUser().gravatar() }" />
             </div>
-            <!-- /ko -->
+
+            <i class="fa fa-circle myTask" data-bind="visible: isMine"></i>
+
             <h3 data-bind="html: title"></h3>
         </div>
     </script>
