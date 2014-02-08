@@ -322,17 +322,20 @@ function Task(data) {
         var parts = [];
 
         // Owner block
-        if (self.ownerUser() && moment.isMoment(self.timeStartObject())) {
+        if (self.ownerUser()) {
             var rowSpan = moment.isMoment(self.timeEndObject()) ? 4 : 3;
 
             parts.push("<tr><th>Owner:</th><td>" + self.ownerUser().fullName() + "</td><td class='gravatar' rowspan='" + rowSpan + "'><img src='" + self.ownerUser().gravatar() + "' /></td></tr>");
-            parts.push("<tr><th>Started:</th><td>" + self.timeStartObject().tz(myViewModel.user().momentTimezone()).format(myViewModel.user().momentFormatDateTime()) + "</td></tr>");
 
-            if (moment.isMoment(self.timeEndObject())) {
-                parts.push("<tr><th>Finished:</th><td>" + self.timeEndObject().tz(myViewModel.user().momentTimezone()).format(myViewModel.user().momentFormatDateTime()) + "</td></tr>");
-                parts.push("<tr><th>Duration:</th><td>" + self.timeStartObject().from(self.timeEndObject(), true) + "</td></tr>");
-            } else {
-                parts.push("<tr><th>Duration:</th><td>" + self.timeStartObject().from(self.timer(), true) + " <span class='text-muted'>so far</span></td></tr>");
+            if (moment.isMoment(self.timeStartObject())) {
+                parts.push("<tr><th>Started:</th><td>" + self.timeStartObject().tz(myViewModel.user().momentTimezone()).format(myViewModel.user().momentFormatDateTime()) + "</td></tr>");
+
+                if (moment.isMoment(self.timeEndObject())) {
+                    parts.push("<tr><th>Finished:</th><td>" + self.timeEndObject().tz(myViewModel.user().momentTimezone()).format(myViewModel.user().momentFormatDateTime()) + "</td></tr>");
+                    parts.push("<tr><th>Duration:</th><td>" + self.timeStartObject().from(self.timeEndObject(), true) + "</td></tr>");
+                } else {
+                    parts.push("<tr><th>Duration:</th><td>" + self.timeStartObject().from(self.timer(), true) + " <span class='text-muted'>so far</span></td></tr>");
+                }
             }
 
             description += "<hr /><table class='info'>" + parts.join("") + "</table>";
