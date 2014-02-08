@@ -532,6 +532,62 @@ exports.getComments = function(objectName, objectId, commentId, callback) {
 };
 
 /**
+ * Service to fetch attached links for specified object.
+ *
+ * @param   {String}    objectName  Name of the object (Project, Sprint, Story, Task, etc.)
+ * @param   {Number}    objectId    Id of the specified object
+ * @param   {Function}  callback    Callback function which is called after comments are fetched
+ */
+exports.getLinks = function(objectName, objectId, callback) {
+    Link
+        .find()
+        .where({
+            objectName: objectName,
+            objectId: objectId
+        })
+        .sort("link ASC")
+        .exec(function(error, links) {
+            if (error) {
+                callback(error, null);
+            } else {
+                // Map all comments and fetch children(s) for those
+                async.map(
+                    links,
+
+                    /**
+                     * Map function to fetch current comment children comments. Note that
+                     * this will actually call service method recursively.
+                     *
+                     * @param   {sails.model.link}  link        Link object
+                     * @param   {Function}          callback    Callback function
+                     */
+                    function(link, callback) {
+                        DataService.getUser(link.createdUserId, function(error, user) {
+                            if (error) {
+                                callback(error, null);
+                            } else {
+                                link.author = user;
+
+                                callback(null, link);
+                            }
+                        });
+                    },
+
+                    /**
+                     * Main callback function for object link mapping.
+                     *
+                     * @param   {Error} error   Possible error object
+                     */
+                    function(error) {
+                        // Just call specified service callback function
+                        callback(error, links);
+                    }
+                );
+            }
+    });
+};
+
+/**
  * Service to fetch specified project external link data from database.
  *
  * @param   {Number}    projectId   Project id

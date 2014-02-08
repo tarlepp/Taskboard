@@ -49,6 +49,7 @@ module.exports = {
                 },
 
                 /**
+                 * Fetch project external links, that can be attached to current object.
                  *
                  * @param   {sails.model.project}   project     Project object
                  * @param   {Function}              callback
@@ -57,16 +58,32 @@ module.exports = {
                     DataService.getProjectLinks(project.id, function(error, externalLinks) {
                         callback(error, project, externalLinks);
                     });
+                },
+
+                /**
+                 * Fetch attached links for current object.
+                 *
+                 * @param   {sails.model.project}           project
+                 * @param   {sails.model.externalLink[]}    externalLinks
+                 * @param   {Function}                      callback
+                 */
+                function(project, externalLinks, callback) {
+                    DataService.getLinks(objectName, objectId, function(error, links) {
+                        callback(error, project, externalLinks, links);
+                    });
                 }
             ],
 
             /**
+             * Main callback function which is called after all water fall jobs are processed
+             * or an error occurred while processing those jobs.
              *
-             * @param   {null|Error}                    error
-             * @param   {null|sails.model.project}      project
-             * @param   {null|sails.model.externalLink} externalLinks
+             * @param   {null|Error}                        error
+             * @param   {null|sails.model.project}          project
+             * @param   {null|sails.model.externalLink[]}   externalLinks
+             * @param   {null|sails.model.link[]}           attachedLinks
              */
-            function(error, project, externalLinks) {
+            function(error, project, externalLinks, attachedLinks) {
                 if (error) {
                     res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
@@ -75,7 +92,8 @@ module.exports = {
                         objectId: objectId,
                         objectName: objectName,
                         project: project,
-                        externalLinks: externalLinks
+                        externalLinks: externalLinks,
+                        attachedLinks: attachedLinks
                     });
                 }
             }

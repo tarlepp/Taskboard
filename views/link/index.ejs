@@ -1,6 +1,37 @@
 <div id="objectLinksContainer">
-    <em>Implement attached link list.</em>
+    <table class="table table-striped table-hover table-condensed">
+        <thead>
+            <tr>
+                <th></th>
+                <th class="col-md-8">Link</th>
+                <th class="col-md-1">Name</th>
+                <th class="col-md-2">Author</th>
+                <th class="col-md-1">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        <% _.each(attachedLinks, function(link) { %>
+            <tr>
+                <td></td>
+                <td>
+                    <a href="<%= link.link %>" target="_blank"><%= link.link %></a>
+                </td>
+                <td class="text-nowrap"><%= link.name %></td>
+                <td class="text-nowrap"><%= link.author.fullName() %></td>
+                <td class="text-nowrap">
+                    <span class="tooltipDiv">
+                    <%= link.createdAtObject().format(currentUser.momentFormatDateTime) %>
+
+                    <%- partial("../partials/tooltip/datetime", {tooltipTitle: false, stamp: link.createdAtObject()}) %>
+                </span>
+                </td>
+            </tr>
+        <% }) %>
+        </tbody>
+    </table>
 </div>
+
+<hr />
 
 <div id="objectLinkFormContainer">
     <h4>Add new link</h4>
