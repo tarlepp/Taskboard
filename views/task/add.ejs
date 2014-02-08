@@ -34,7 +34,7 @@
             >
                 <option value="0" class="select-dummy-option">No specified owner</option>
                 <% _.each(users, function(user) { %>
-                <option value="<%= user.id %>"><%= user.fullName() %></option>
+                <option value="<%= user.id %>" <%if (user.id === currentUser.id) { %>selected="selected"<% } %>><%= user.fullName() %></option>
                 <% }) %>
             </select>
         </div>
