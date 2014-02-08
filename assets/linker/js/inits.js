@@ -455,7 +455,7 @@ function initCommonTabLinks(modal, contentId) {
     var body = jQuery("body");
     var container = modal.find(contentId);
 
-    // Remove existing listeners
+    // Remove existing listeners from add buttons
     container.off("click", "a[data-add-new-link='true']");
 
     // User click link add button
@@ -475,6 +475,51 @@ function initCommonTabLinks(modal, contentId) {
                 }
             });
         }
+    });
+
+    // Remove existing listeners from remove buttons
+    container.off("click", "a[data-remove-link='true']");
+
+    // User click link remove button
+    container.on("click", "a[data-remove-link='true']", function(event) {
+        event.preventDefault();
+
+        var linkId = jQuery(this).data("linkId");
+
+        modal.hide();
+
+        jQuery("body").find(".modal-backdrop.in:first").hide();
+
+        bootbox.confirm({
+            title: "danger - danger - danger",
+            message: "Are you sure of this link delete?",
+            buttons: {
+                cancel: {
+                    label: "Cancel",
+                    className: "btn-default pull-left"
+                },
+                confirm: {
+                    label: "Delete",
+                    className: "btn-danger pull-right"
+                }
+            },
+            callback: function(result) {
+                jQuery("body").find(".modal-backdrop.in").show();
+
+                modal.show();
+
+                if (result) {
+                    // Remove comment via socket
+                    socket.delete("/Link/" + linkId, {_csrf: getCsrfToken()}, function(/** sails.json.link */link) {
+                        if (handleSocketError(link)) {
+                            makeMessage("Link deleted successfully.");
+
+                            reloadTabContentUrl(modal, contentId);
+                        }
+                    });
+                }
+            }
+        });
     });
 }
 
