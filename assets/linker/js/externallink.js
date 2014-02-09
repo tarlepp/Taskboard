@@ -185,6 +185,14 @@ jQuery(document).ready(function() {
 
                             return false;
                         }
+                    },
+                    {
+                        label: "Delete",
+                        className: "btn-danger pull-right",
+                        callback: function() {
+                            // Trigger external link delete event
+                            body.trigger("projectExternalLinksDelete", [linkId, {trigger: "projectExternalLinksEdit", parameters: [linkId, trigger]}]);
+                        }
                     }
                 ];
 
@@ -237,6 +245,46 @@ jQuery(document).ready(function() {
                 });
             }
         }
+    });
+
+    /**
+     * Project external link delete event.
+     *
+     * @param   {jQuery.Event}          event       Event object
+     * @param   {Number}                linkId      Link id
+     * @param   {sails.helper.trigger}  [trigger]   Trigger to process after actions
+     */
+    body.on("projectExternalLinksDelete", function(event, linkId, trigger) {
+        trigger = trigger || false;
+
+        bootbox.confirm({
+            title: "danger - danger - danger",
+            message: "Are you sure of external link delete? Note that all related links are also removed!",
+            buttons: {
+                cancel: {
+                    label: "Cancel",
+                    className: "btn-default pull-left"
+                },
+                confirm: {
+                    label: "Delete",
+                    className: "btn-danger pull-right"
+                }
+            },
+            callback: function(result) {
+                if (result) {
+                    // Remove user via socket
+                    socket.delete("/ExternalLink/" + linkId, {_csrf: getCsrfToken()}, function(/** sails.json.link */link) {
+                        if (handleSocketError(link)) {
+                            makeMessage("External link deleted successfully.");
+
+                            handleEventTrigger(trigger, "projectExternalLinksEdit");
+                        }
+                    });
+                } else {
+                    handleEventTrigger(trigger);
+                }
+            }
+        });
     });
 });
 

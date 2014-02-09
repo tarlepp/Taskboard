@@ -21,7 +21,8 @@
  *          sails.json.task|
  *          sails.json.projectUser|
  *          sails.json.comment|
- *          sails.json.externalLink
+ *          sails.json.externalLink|
+ *          sails.json.link
  *          }                       error
  * @param   {Boolean}               [showMessage]
  */

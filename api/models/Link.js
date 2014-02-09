@@ -187,7 +187,7 @@ module.exports = {
                     sails.log.error(error);
 
                     callback(error);
-                } else {
+                } else if (link) {
                     var message = "Removed link <a hreg='" + link.link + "' target='_blank'>" + link.link + "</a>";
 
                     switch (link.objectName) {
@@ -221,6 +221,8 @@ module.exports = {
                             callback();
                             break;
                     }
+                } else {
+                    callback();
                 }
             });
     }

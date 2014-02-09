@@ -109,11 +109,24 @@ module.exports = {
             .exec(function(error, externalLink) {
                 if (error) {
                     sails.log.error(error);
+
+                    callback(error);
                 } else {
                     HistoryService.remove("ExternalLink", externalLink.id);
-                }
 
-                callback();
+                    // Remove related links
+                    Link
+                        .destroy({
+                            externalLinkId: externalLink.id
+                        })
+                        .exec(function(error, data) {
+                            if (error) {
+                                sails.log.error(error);
+                            }
+
+                            callback(error);
+                        });
+                }
             });
     }
 };
