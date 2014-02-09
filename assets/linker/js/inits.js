@@ -462,6 +462,8 @@ function initCommonTabLinks(modal, contentId) {
     container.on("click", "a[data-add-new-link='true']", function(event) {
         event.preventDefault();
 
+        jQuery(this).qtip("destroy");
+
         var form = jQuery("#" + jQuery(this).data("formId"), container);
         var formItems = form.serializeJSON();
 
@@ -483,6 +485,8 @@ function initCommonTabLinks(modal, contentId) {
     // User click link remove button
     container.on("click", "a[data-remove-link='true']", function(event) {
         event.preventDefault();
+
+        jQuery(this).qtip("destroy");
 
         var linkId = jQuery(this).data("linkId");
 
