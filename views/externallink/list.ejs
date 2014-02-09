@@ -1,3 +1,10 @@
+<p>
+    Below you see all external links that are attached to this project. You can attach any of these
+    links to stories and tasks with specified parameters. Main purpose of these links is to provide
+    means to connect external systems to task and story objects. Attached links are shown in tooltips
+    and in separate tab in modals.
+</p>
+
 <table id="externalLinksTable" class="table table-striped table-hover table-condensed">
     <thead>
         <tr>
@@ -55,5 +62,13 @@
             <td class="text-right text-nowrap"><%= link.attachedLinksCount %></td>
         </tr>
     <% }) %>
+
+    <% if (links.length === 0) { %>
+        <tr>
+            <td colspan="100%" class="text-center">
+                <em class="text-muted">No external links...</em>
+            </td>
+        </tr>
+    <% } %>
     </tbody>
 </table>
