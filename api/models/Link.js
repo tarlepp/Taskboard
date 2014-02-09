@@ -66,7 +66,7 @@ module.exports = {
      * @param   {Function}                  callback
      */
     afterCreate: function(values, callback) {
-        // Todo: write object history
+        var message = "Added link <a hreg='" + values.link + "' target='_blank'>" + values.link + "</a>";
 
         switch (values.objectName) {
             case "Story":
@@ -75,6 +75,8 @@ module.exports = {
                         callback(error);
                     } else {
                         Story.publishUpdate(story.id, story.toJSON());
+
+                        HistoryService.write("Story", story.toJSON(), message);
 
                         callback();
                     }
@@ -86,6 +88,8 @@ module.exports = {
                         callback(error);
                     } else {
                         Task.publishUpdate(task.id, task.toJSON());
+
+                        HistoryService.write("Task", task.toJSON(), message);
 
                         callback();
                     }
@@ -104,7 +108,7 @@ module.exports = {
      * @param   {Function}                  callback
      */
     afterUpdate: function(values, callback) {
-        // Todo: write object history
+        var message = "Updated link <a hreg='" + values.link + "' target='_blank'>" + values.link + "</a>";
 
         switch (values.objectName) {
             case "Story":
@@ -113,6 +117,8 @@ module.exports = {
                         callback(error);
                     } else {
                         Story.publishUpdate(story.id, story.toJSON());
+
+                        HistoryService.write("Story", story.toJSON(), message);
 
                         callback();
                     }
@@ -124,6 +130,8 @@ module.exports = {
                         callback(error);
                     } else {
                         Task.publishUpdate(task.id, task.toJSON());
+
+                        HistoryService.write("Task", task.toJSON(), message);
 
                         callback();
                     }
@@ -142,6 +150,7 @@ module.exports = {
      * @param   {Function}          callback
      */
     beforeValidation: function(values, callback) {
+        // Fetch external link object
         DataService.getProjectLink(values.externalLinkId, function(error, linkObject) {
             if (error) {
                 callback(error);
@@ -149,6 +158,7 @@ module.exports = {
                 var link = linkObject.link;
                 var bits = [];
 
+                // Iterate parameters and make necessary replaces in actual link
                 _.each(values.parameters, function(value, search) {
                     link = link.replace(search, value);
 
@@ -178,7 +188,7 @@ module.exports = {
 
                     callback(error);
                 } else {
-                    // Todo: write object history
+                    var message = "Removed link <a hreg='" + link.link + "' target='_blank'>" + link.link + "</a>";
 
                     switch (link.objectName) {
                         case "Story":
@@ -187,6 +197,8 @@ module.exports = {
                                     callback(error);
                                 } else {
                                     Story.publishUpdate(story.id, story.toJSON());
+
+                                    HistoryService.write("Story", story.toJSON(), message);
 
                                     callback();
                                 }
@@ -198,6 +210,8 @@ module.exports = {
                                     callback(error);
                                 } else {
                                     Task.publishUpdate(task.id, task.toJSON());
+
+                                    HistoryService.write("Task", task.toJSON(), message);
 
                                     callback();
                                 }

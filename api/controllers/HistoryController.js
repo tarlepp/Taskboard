@@ -55,6 +55,7 @@ module.exports = {
                 // Remove duplicate rows
                 _.each(results.histories, function(row, key) {
                     if (key === 0
+                        || row.message
                         || row.objectData !== results.histories[key - 1].objectData
                         || row.message !== results.histories[key - 1].message
                     ) {
@@ -128,7 +129,9 @@ module.exports = {
                     index++;
 
                     // We have no difference so just call callback function with no parameters
-                    if (_.isUndefined(difference)) {
+                    if (historyRow.message) {
+                        callback(null, data);
+                    } else if (_.isUndefined(difference)) {
                         callback(null, null);
                     } else { // Yeah some difference found...
                         var differenceArray = [];

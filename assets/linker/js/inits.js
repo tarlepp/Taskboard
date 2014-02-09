@@ -456,10 +456,10 @@ function initCommonTabLinks(modal, contentId) {
     var container = modal.find(contentId);
 
     // Remove existing listeners from add buttons
-    container.off("click", "a[data-add-new-link='true']");
+    container.off("click", "a[data-add-new-object-link='true']");
 
     // User click link add button
-    container.on("click", "a[data-add-new-link='true']", function(event) {
+    container.on("click", "a[data-add-new-object-link='true']", function(event) {
         event.preventDefault();
 
         jQuery(this).qtip("destroy");

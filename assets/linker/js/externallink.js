@@ -143,6 +143,9 @@ jQuery(document).ready(function() {
                         } else { // Otherwise trigger edit with same trigger
                             body.trigger("projectExternalLinksEdit", [data.id, trigger]);
                         }
+
+                        // Update object links in view model
+                        myViewModel.updateObjectLinks();
                     }
                 });
             }
@@ -227,6 +230,9 @@ jQuery(document).ready(function() {
                         } else { // Otherwise trigger edit with same trigger
                             body.trigger("projectExternalLinksEdit", [data.id, trigger]);
                         }
+
+                        // Update object links in view model
+                        myViewModel.updateObjectLinks();
                     }
                 });
             }
