@@ -34,22 +34,69 @@ module.exports = {
     list: function(req, res) {
         var projectId = parseInt(req.param("projectId"), 10);
 
+        // Parallel jobs to fetch project and actual external link data.
         async.parallel(
             {
+                // Get project data
                 project: function(callback) {
                     DataService.getProject(projectId, callback);
                 },
 
+                // Get external links for current project
                 links: function(callback) {
                     DataService.getProjectLinks(projectId, callback);
                 }
             },
 
+            /**
+             * Main callback function which is called after all parallel jobs are done.
+             *
+             * @param   {null|Error}    error
+             * @param   {{}}            results
+             */
             function(error, results) {
-                res.view(_.extend({
-                    layout: req.isAjax ? "layout_ajax" : "layout",
-                    projectId: projectId
-                }, results));
+                if (error) {
+                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                } else {
+                    // Map founded links
+                    async.map(
+                        results.links,
+
+                        /**
+                         * Iterator function which is called to every link in array. This will just add
+                         * attached link count to each link object.
+                         *
+                         * @param   {sails.model.link}  link
+                         * @param   {Function}          callback
+                         */
+                        function(link, callback) {
+                            Link
+                                .count({externalLinkId: link.id})
+                                .exec(function (error, count) {
+                                    link.attachedLinksCount = count;
+
+                                    callback(error, link);
+                                });
+                        },
+
+                        /**
+                         * Main callback function which is called after all array values are processed.
+                         *
+                         * @param error
+                         * @param data
+                         */
+                        function(error, data) {
+                            if (error) {
+                                res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                            } else {
+                                res.view(_.extend({
+                                    layout: req.isAjax ? "layout_ajax" : "layout",
+                                    projectId: projectId
+                                }, results));
+                            }
+                        }
+                    );
+                }
             }
         );
     },
