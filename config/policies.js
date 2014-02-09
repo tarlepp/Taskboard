@@ -224,7 +224,8 @@ module.exports.policies = {
         // Custom actions
         list:       ["flashMessage", "authenticated", "isAjax", "hasExternalLinkAccess"],
         add:        ["flashMessage", "authenticated", "isAjax", "hasExternalLinkAdmin"],
-        edit:       ["flashMessage", "authenticated", "isAjax", "hasExternalLinkAccess"]
+        edit:       ["flashMessage", "authenticated", "isAjax", "hasExternalLinkAccess"],
+        links:      ["flashMessage", "authenticated", "isAjax", "hasExternalLinkAccess"]
     },
 
     // Link controller policies

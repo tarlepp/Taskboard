@@ -397,3 +397,15 @@ function initProjectExternalLinksForm(context) {
         elementInfo.html(info);
     }
 }
+
+/**
+ * Function to initialize external link modal links tab
+ *
+ * @param   {jQuery|$}  modal       Current modal content
+ * @param   {String}    contentId   Modal tab id name
+ */
+function initExternalLinkTabLinks(modal, contentId) {
+    var body = jQuery("body");
+
+    // TODO: implement actual functionality, if any
+}

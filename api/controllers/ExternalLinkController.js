@@ -144,5 +144,113 @@ module.exports = {
                 });
             }
         });
+    },
+
+    /**
+     * Action to show all links that area attached to specified external link.
+     *
+     * @param   {Request}   req Request object
+     * @param   {Response}  res Response object
+     */
+    links: function(req, res) {
+        var linkId = parseInt(req.param("id"), 10);
+
+        // Make parallel jobs to fetch basic data
+        async.parallel(
+            {
+                // Fetch external link data
+                externalLink: function(callback) {
+                    DataService.getProjectLink(linkId, callback);
+                },
+
+                // Fetch user data
+                users: function(callback) {
+                    DataService.getUsers({}, callback);
+                },
+
+                // Fetch attached links
+                links: function(callback) {
+                    Link
+                        .find()
+                        .where({ externalLinkId: linkId })
+                        .sort("objectName ASC")
+                        .sort("objectId ASC")
+                        .sort("link ASC")
+                        .exec(function(error, links) {
+                            callback(error, links);
+                        });
+                }
+            },
+
+            /**
+             * Main callback function which is called after all parallel jobs are processed.
+             *
+             * @param   {null|Error}    error
+             * @param   {{}}            results
+             */
+            function(error, results) {
+                if (error) {
+                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                } else {
+                    // Map founded links
+                    async.map(
+                        results.links,
+
+                        /**
+                         * Iterator function which is called with every link.
+                         *
+                         * @param   {sails.model.link}  link
+                         * @param   {Function}          callback
+                         */
+                        function(link, callback) {
+                            link.author = _.find(results.users, function(user) {
+                                return user.id === link.createdUserId;
+                            });
+
+                            switch (link.objectName) {
+                                case "Story":
+                                    DataService.getStory(link.objectId, function(error, story) {
+                                        if (error) {
+                                            callback(error, null);
+                                        } else {
+                                            link.objectTitle = story.objectTitle();
+
+                                            callback(null, link);
+                                        }
+                                    });
+                                    break;
+                                case "Task":
+                                    DataService.getTask(link.objectId, function(error, task) {
+                                        if (error) {
+                                            callback(error, null);
+                                        } else {
+                                            link.objectTitle = task.objectTitle();
+
+                                            callback(null, link);
+                                        }
+                                    });
+                                    break;
+                            }
+                        },
+
+                        /**
+                         * Callback function which is called after all links are mapped.
+                         *
+                         * @param   {null|Error}    error
+                         */
+                        function(error) {
+                            if (error) {
+                                res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                            } else {
+                                res.view(_.extend({
+                                    layout: req.isAjax ? "layout_ajax" : "layout",
+                                    linkId: linkId
+                                }, results));
+                            }
+                        }
+                    );
+                }
+            }
+        )
     }
 };

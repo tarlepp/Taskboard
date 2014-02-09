@@ -1,0 +1,30 @@
+<p>
+    Below is list of all attached links that are using this external link. All links are attached to
+    specified object which you can also see in list.
+</p>
+
+<table id="attachedLinksTable" class="table table-striped table-hover table-condensed">
+    <thead>
+        <tr>
+            <th class="col-md-6">Link</th>
+            <th class="col-md-4">Object</th>
+            <th class="col-md-1">Author</th>
+            <th class="col-md-1">Date</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% _.each(links, function(link) { %>
+        <tr>
+            <td><a href="<%= link.link %>" target="_blank"><%= link.link %></a></td>
+            <td><%= link.objectTitle %> (<%= link.objectName %>)</td>
+            <td class="text-nowrap"><%= link.author.fullName() %></td>
+            <td class="text-nowrap">
+                <span class="tooltipDiv">
+                    <%= link.createdAtObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDateTime) %>
+                    <%- partial("../partials/tooltip/datetime", {tooltipTitle: false, stamp: link.createdAtObject()}) %>
+                </span>
+            </td>
+        </tr>
+    <% }) %>
+    </tbody>
+</table>

@@ -29,7 +29,7 @@
                 <td class="text-nowrap"><%= link.author.fullName() %></td>
                 <td class="text-nowrap">
                     <span class="tooltipDiv">
-                    <%= link.createdAtObject().format(currentUser.momentFormatDateTime) %>
+                    <%= link.createdAtObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDateTime) %>
 
                     <%- partial("../partials/tooltip/datetime", {tooltipTitle: false, stamp: link.createdAtObject()}) %>
                 </span>
@@ -63,7 +63,7 @@
             <div class="form-group" style="margin-bottom: 0;">
                 <div class="col-lg-9 col-lg-offset-2">
                 <% _.each(link.parameters, function(parameter) { %>
-                    <div class="col-lg-2 text-center text-medium">
+                    <div class="col-lg-3 text-center text-medium">
                         <%= parameter.substr(1).replace("_", " ") %>
                     </div>
                 <% }) %>
@@ -74,7 +74,7 @@
                 <div class="col-lg-9">
                 <% _.each(link.parameters, function(parameter) { %>
                     <% parameterName = parameter.substr(1); %>
-                    <div class="col-lg-2">
+                    <div class="col-lg-3">
                         <input id="<%= parameterName %>" name="parameters[<%= parameter %>]" type="text" placeholder="<%= parameterName.replace('_', ' ') %>" class="form-control" required="required" />
                     </div>
                 <% }) %>

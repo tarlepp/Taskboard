@@ -2,6 +2,13 @@
     <li class="active">
         <a href="#basic" data-toggle="tab">Basic</a>
     </li>
+    <li>
+        <a id="linksTab" href="#links"
+            data-toggle="tab"
+            data-callback="initExternalLinkTabLinks"
+            data-href="/ExternalLink/links?id=<%= link.id %>"
+        >Attached links</a>
+    </li>
 
     <%- partial("../partials/common_tabs_header", {objectName: "ExternalLink", objectId: link.id}) %>
 </ul>
@@ -57,6 +64,8 @@
             </div>
         </form>
     </div>
+
+    <div class="tab-pane" id="links"></div>
 
     <%- partial("../partials/common_tabs_content") %>
 </div>
