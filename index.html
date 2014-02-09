@@ -511,9 +511,10 @@ vim config/local.js
 </pre></blockquote>
 
                 <p>
-                    Add following lines to your <code>local.js</code> configuration file and make necessary modifications.<br />
+                    Add following lines to your <code>/var/node/config/local.js</code> configuration file and make necessary modifications.<br />
                     <strong>Note:</strong> Use same information that you used in MySQL setup section.<br />
-                    <strong>Note:</strong> You can override any config values in your <code>local.js</code> file
+                    <strong>Note:</strong> You can override any config values in your <code>/var/node/config/local.js</code> file.<br />
+                    <strong>Note:</strong> Actual path of <code>local.js</code> file depends of your installation.
                 </p>
 
 <blockquote><pre class="prettyprint linenums">
@@ -568,9 +569,7 @@ password: taskboardisawesome
 <blockquote><pre>
 cd Taskboard
 vagrant up
-vagrant ssh
-cd /home/vagrant/Taskboard/
-sails lift
+vagrant ssh -c "cd Taskboard && sails lift"
 </pre></blockquote>
 
                 <p>
@@ -646,6 +645,7 @@ sails lift
                     <li>jQuery UI, <a href="http://jqueryui.com/">http://jqueryui.com/</a></li>
                     <li>jQuery Selectorator, <a href="https://github.com/ngs/jquery-selectorator">https://github.com/ngs/jquery-selectorator</a></li>
                     <li>jQuery Complexify, <a href="http://danpalmer.me/jquery-complexify/">http://danpalmer.me/jquery-complexify/</a></li>
+                    <li>jQuery TypeWatch, <a href="https://github.com/dennyferra/TypeWatch">https://github.com/dennyferra/TypeWatch</a></li>
                     <li>qTip2, <a href="http://qtip2.com/">http://qtip2.com/</a></li>
                     <li>trunk8, <a href="http://jrvis.com/trunk8/">http://jrvis.com/trunk8/</a></li>
                     <li>noty, <a href="http://needim.github.io/noty/">http://needim.github.io/noty/</a></li>
