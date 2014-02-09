@@ -184,6 +184,7 @@ function Story(data) {
     self.timeEnd        = ko.observable(data.timeEnd);
     self.isDone         = ko.observable(data.isDone);
     self.tasks          = ko.observableArray([]);
+    self.timer          = ko.observable(moment());
 
     // Formatted story title
     self.formattedTitle = ko.computed(function() {
@@ -223,20 +224,30 @@ function Story(data) {
             parts.push("<tr><th>Estimate:</th><td>" + self.estimate() + "</td></tr>");
         }
 
-        if (moment.isMoment(self.timeStartObject()) && self.timeStartObject().isValid()) {
+        if (moment.isMoment(self.timeStartObject())) {
             parts.push("<tr><th>Started:</th><td>" + self.timeStartObject().tz(myViewModel.user().momentTimezone()).format(myViewModel.user().momentFormatDateTime()) + "</td></tr>");
+
+            if (moment.isMoment(self.timeEndObject())) {
+                parts.push("<tr><th>Finished:</th><td>" + self.timeEndObject().tz(myViewModel.user().momentTimezone()).format(myViewModel.user().momentFormatDateTime()) + "</td></tr>");
+                parts.push("<tr><th>Duration:</th><td>" + self.timeStartObject().from(self.timeEndObject(), true) + "</td></tr>");
+            } else {
+                parts.push("<tr><th>Duration:</th><td>" + self.timeStartObject().from(self.timer(), true) + " <span class='text-muted'>so far</span></td></tr>");
+            }
         }
 
-        if (moment.isMoment(self.timeEndObject()) && self.timeEndObject().isValid()) {
-            parts.push("<tr><th>Ended:</th><td>" + self.timeEndObject().tz(myViewModel.user().momentTimezone()).format(myViewModel.user().momentFormatDateTime()) + "</td></tr>");
+        if (parts.length > 0) {
+            description += "<hr /><table class='info'>" + parts.join("") + "</table>";
         }
 
-        if ((moment.isMoment(self.timeStartObject()) && self.timeStartObject().isValid())
-            && (moment.isMoment(self.timeEndObject()) && self.timeEndObject().isValid())) {
-            parts.push("<tr><th>Duration:</th><td>" + self.timeStartObject().from(self.timeEndObject(), true) + "</td></tr>");
-        }
+        // Get links that are attached to this object
+        var links = _.filter(myViewModel.links(), function(link) {
+            return link.objectName() === "Story" && link.objectId() === self.id();
+        });
 
-        description += "<hr /><table class='info'>" + parts.join("") + "</table>";
+        // Yeah baby, we have some links attached
+        if (links.length > 0) {
+            description += objectLinksTooltip(links);
+        }
 
         return description;
     });
@@ -371,30 +382,7 @@ function Task(data) {
 
         // Yeah baby, we have some links attached
         if (links.length > 0) {
-            parts = [];
-
-            // Sort and group links by external link title
-            var groupLinks = _.groupBy(_.sortBy(links, function(link) {
-                return link.externalLink().title;
-            }), function(link) {
-                return link.externalLink().title;
-            });
-
-            // Iterate each link group
-            _.each(groupLinks, function(links, title) {
-                var bits = [];
-
-                // Iterate each links in current group
-                _.each(_.sortBy(links, function(link) {
-                    return link.name();
-                }), function(link) {
-                    bits.push("<a href='" + link.link() +"' target='_blank'>" + link.name() + "</a>");
-                });
-
-                parts.push("<tr><th>" + title + ":</th><td>" + bits.join(", ") + "</td>");
-            });
-
-            description += "<hr /><table class='info'>" + parts.join("") + "</table>";
+            description += objectLinksTooltip(links);
         }
 
         return description;
@@ -478,4 +466,38 @@ function Link(data) {
     self.objectId       = ko.observable(data.objectId);
     self.objectName     = ko.observable(data.objectName);
     self.externalLink   = ko.observable(data.externalLink);
+}
+
+/**
+ * Helper function to make object links for tooltip, this is used within story and task tooltips.
+ *
+ * @param   {sails.json.link[]} links
+ *
+ * @returns {string}
+ */
+function objectLinksTooltip(links) {
+    var parts = [];
+
+    // Sort and group links by external link title
+    var groupLinks = _.groupBy(_.sortBy(links, function(link) {
+        return link.externalLink().title;
+    }), function(link) {
+        return link.externalLink().title;
+    });
+
+    // Iterate each link group
+    _.each(groupLinks, function(links, title) {
+        var bits = [];
+
+        // Iterate each links in current group
+        _.each(_.sortBy(links, function(link) {
+            return link.name();
+        }), function(link) {
+            bits.push("<a href='" + link.link() +"' target='_blank'>" + link.name() + "</a>");
+        });
+
+        parts.push("<tr><th>" + title + ":</th><td>" + bits.join(", ") + "</td>");
+    });
+
+    return "<hr /><table class='info'>" + parts.join("") + "</table>";
 }
