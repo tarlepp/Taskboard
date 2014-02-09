@@ -66,10 +66,35 @@ module.exports = {
      * @param   {Function}                  callback
      */
     afterCreate: function(values, callback) {
-        // Todo: publish object update
         // Todo: write object history
 
-        callback();
+        switch (values.objectName) {
+            case "Story":
+                DataService.getStory(values.objectId, function(error, story) {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        Story.publishUpdate(story.id, story.toJSON());
+
+                        callback();
+                    }
+                });
+                break;
+            case "Task":
+                DataService.getTask(values.objectId, function(error, task) {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        Task.publishUpdate(task.id, task.toJSON());
+
+                        callback();
+                    }
+                });
+                break;
+            default:
+                callback();
+                break;
+        }
     },
 
     /**
@@ -79,10 +104,35 @@ module.exports = {
      * @param   {Function}                  callback
      */
     afterUpdate: function(values, callback) {
-        // Todo: publish object update
         // Todo: write object history
 
-        callback();
+        switch (values.objectName) {
+            case "Story":
+                DataService.getStory(values.objectId, function(error, story) {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        Story.publishUpdate(story.id, story.toJSON());
+
+                        callback();
+                    }
+                });
+                break;
+            case "Task":
+                DataService.getTask(values.objectId, function(error, task) {
+                    if (error) {
+                        callback(error);
+                    } else {
+                        Task.publishUpdate(task.id, task.toJSON());
+
+                        callback();
+                    }
+                });
+                break;
+            default:
+                callback();
+                break;
+        }
     },
 
     /**
@@ -120,9 +170,44 @@ module.exports = {
      * @param   {Function}  callback
      */
     beforeDestroy: function(terms, callback) {
-        // Todo: publish object update
-        // Todo: write object history
+        Link
+            .findOne(terms)
+            .exec(function(error, link) {
+                if (error) {
+                    sails.log.error(error);
 
-        callback();
+                    callback(error);
+                } else {
+                    // Todo: write object history
+
+                    switch (link.objectName) {
+                        case "Story":
+                            DataService.getStory(link.objectId, function(error, story) {
+                                if (error) {
+                                    callback(error);
+                                } else {
+                                    Story.publishUpdate(story.id, story.toJSON());
+
+                                    callback();
+                                }
+                            });
+                            break;
+                        case "Task":
+                            DataService.getTask(link.objectId, function(error, task) {
+                                if (error) {
+                                    callback(error);
+                                } else {
+                                    Task.publishUpdate(task.id, task.toJSON());
+
+                                    callback();
+                                }
+                            });
+                            break;
+                        default:
+                            callback();
+                            break;
+                    }
+                }
+            });
     }
 };

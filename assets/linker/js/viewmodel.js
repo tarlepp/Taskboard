@@ -304,14 +304,9 @@ function ViewModel() {
             socket.get("/Story", {sprintId: sprintId}, function(stories) {
                 if (handleSocketError(stories)) {
                     var storyIds = [];
-                    var whereLinks = [];
 
                     var mappedStories = ko.utils.arrayMap(stories, function(/** sails.json.story */story) {
                         storyIds.push({storyId: story.id});
-                        whereLinks.push({
-                            objectId: story.id,
-                            objectName: "Story"
-                        });
 
                         return new Story(story);
                     });
@@ -330,17 +325,11 @@ function ViewModel() {
                         socket.get('/Task', {where: {or: storyIds}}, function(tasks) {
                             if (handleSocketError(stories)) {
                                 var mappedTasks = ko.utils.arrayMap(tasks, function(/** sails.json.task */task) {
-                                    whereLinks.push({
-                                        objectId: task.id,
-                                        objectName: "Task"
-                                    });
-
                                     return new Task(task);
                                 });
 
                                 self.tasks(mappedTasks);
-
-                                getObjectLinks(whereLinks);
+                                self.updateObjectLinks();
 
                                 fixBoardWidth();
                             }
@@ -358,31 +347,7 @@ function ViewModel() {
          * @param   {{}}    where
          */
         function getObjectLinks(where) {
-            self.loading.push(true);
 
-            // Fetch links
-            jQuery.ajax({
-                type: "GET",
-                url: "/Link/getLinks",
-                data: {
-                    projectId: self.project().id(),
-                    where: where
-                },
-                dataType: "json"
-            })
-            .done(function(links) {
-                var mappedLinks = ko.utils.arrayMap(links, function(/** sails.json.link */link) {
-                    return new Link(link);
-                });
-
-                self.links(mappedLinks);
-            })
-            .fail(function(jqXhr, textStatus, error) {
-                handleAjaxError(jqXhr, textStatus, error);
-            })
-            .always(function() {
-                self.loading.pop();
-            });
         }
     };
 
@@ -526,6 +491,59 @@ function ViewModel() {
                 }
             });
         }
+    };
+
+    /**
+     * Method to update current link bindings. This method is called in following cases:
+     *
+     *  - Sprint init, self.initSprint()
+     *  - Story update, triggered via socket update
+     *  - Task update, triggered via socket update
+     *
+     * Method will determine all stories and task that we are interested in and fetch
+     * all dynamic link data which is attached to those.
+     */
+    self.updateObjectLinks = function() {
+        if (!(self.stories().length > 0 || self.tasks().length > 0)) {
+            return;
+        }
+
+        var where = [];
+
+        _.each(self.stories(), function(story) {
+            where.push({
+                objectId: story.id(),
+                objectName: "Story"
+            });
+        });
+
+        _.each(self.tasks(), function(task) {
+            where.push({
+                objectId: task.id(),
+                objectName: "Task"
+            });
+        });
+
+        // Fetch links
+        jQuery.ajax({
+            type: "GET",
+            url: "/Link/getLinks",
+            data: {
+                projectId: self.project().id(),
+                where: where
+            },
+            dataType: "json"
+        })
+        .done(function(links) {
+            var mappedLinks = ko.utils.arrayMap(links, function(/** sails.json.link */link) {
+                return new Link(link);
+            });
+
+            self.links(mappedLinks);
+        })
+        .fail(function(jqXhr, textStatus, error) {
+            handleAjaxError(jqXhr, textStatus, error);
+        });
     };
 
     /**#@+
@@ -725,6 +743,7 @@ function ViewModel() {
         console.log("Processing socket message for: '" + model + "' type: '" + type + "' id: '" + id + "'");
 
         var updateSelects = false;
+        var updateObjectLinks = false;
 
         switch (type) {
             // Update events
@@ -763,6 +782,8 @@ function ViewModel() {
 
                         if (typeof story !== 'undefined') {
                             self.stories.replace(story, new Story(data));
+
+                            updateObjectLinks = true;
                         }
                         break;
                     case 'task':
@@ -776,6 +797,8 @@ function ViewModel() {
                             var story = _.find(self.stories(), function(story) { return story.id() === data.storyId; });
 
                             self.stories.replace(story, _.clone(story));
+
+                            updateObjectLinks = true;
                         }
                         break;
                     case 'user':
@@ -836,6 +859,8 @@ function ViewModel() {
                     case 'story':
                         if (self.sprint().id() === data.sprintId) {
                             self.stories.push(new Story(data));
+
+                            updateObjectLinks = true;
                         }
                         break;
                     case 'task':
@@ -844,8 +869,9 @@ function ViewModel() {
 
                         if (typeof story !== 'undefined') {
                             self.tasks.push(new Task(data));
-
                             self.stories.replace(story, _.clone(story));
+
+                            updateObjectLinks = true;
                         }
                         break;
                     case 'user':
@@ -887,6 +913,8 @@ function ViewModel() {
 
                         if (typeof story !== 'undefined') {
                             self.stories.remove(story);
+
+                            updateObjectLinks = true;
                         }
                         break;
                     case 'task':
@@ -900,6 +928,8 @@ function ViewModel() {
                             var story = _.find(self.stories(), function(story) { return story.id() === task.storyId(); });
 
                             self.stories.replace(story, _.clone(story));
+
+                            updateObjectLinks = true;
                         }
                         break;
                     default:
@@ -915,6 +945,10 @@ function ViewModel() {
         if (updateSelects) {
             jQuery("#selectProject").selectpicker("refresh");
             jQuery("#selectSprint").selectpicker("refresh");
+        }
+
+        if (updateObjectLinks) {
+            self.updateObjectLinks();
         }
     };
 }

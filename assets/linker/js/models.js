@@ -465,7 +465,7 @@ function Type(data) {
 /**
  * Object to present link.
  *
- * @param   {sails.json.type}    data
+ * @param   {sails.json.link}    data
  * @constructor
  */
 function Link(data) {
