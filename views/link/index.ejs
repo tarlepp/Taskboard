@@ -12,15 +12,16 @@
         <% _.each(attachedLinks, function(link) { %>
             <tr>
                 <td>
-                <% if (link.author.id == currentUser.id) { %>
-                    <a href="javascript: void(0);" class="btn btn-default btn-icon tooltipTitle" title="Delete link"
-                        data-qtip-options='{ "position": {"my": "center right", "at": "center left"} }'
-                        data-remove-link="true"
-                        data-link-id="<%= link.id %>"
-                    >
-                        <i class="fa fa-times"></i>
-                    </a>
-                <% } %>
+                <% var buttonClass = (link.author.id == currentUser.id) ? "" : "disabled" %>
+
+                <a href="javascript: void(0);" class="btn btn-default btn-icon tooltipTitle <%= buttonClass %>" title="Delete link"
+                    data-qtip-options='{ "position": {"my": "center right", "at": "center left"} }'
+                    data-remove-link="true"
+                    data-link-id="<%= link.id %>"
+                >
+                    <i class="fa fa-times"></i>
+                </a>
+
                 </td>
                 <td class="col-md-8">
                     <a href="<%= link.link %>" target="_blank"><%= link.link %></a>

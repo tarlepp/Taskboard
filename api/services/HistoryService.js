@@ -10,12 +10,16 @@
  *
  * @param   {String}    objectName  Name of the object eg. Task
  * @param   {Object}    object      Actual object
- * @param   {String}    message     Extra message for history row
+ * @param   {String}    [message]   Extra message for history row
+ * @param   {Number}    [userId]    User id of history row, if not given will user updatedUserId from objectData
  */
-exports.write = function(objectName, object, message) {
+exports.write = function(objectName, object, message, userId) {
     var objectId = object.id;
     var objectData = _.clone(object);
-    var userId = objectData.updatedUserId ? objectData.updatedUserId : -1;
+
+    if (!userId) {
+        userId = objectData.updatedUserId ? objectData.updatedUserId : -1;
+    }
 
     // Remove not needed "waste" data
     delete objectData.id;

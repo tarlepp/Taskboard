@@ -62,8 +62,8 @@ module.exports = {
     /**
      * After create callback.
      *
-     * @param   {sails.model.externalLink}  values
-     * @param   {Function}                  callback
+     * @param   {sails.model.link}  values
+     * @param   {Function}          callback
      */
     afterCreate: function(values, callback) {
         var message = "Added link <a hreg='" + values.link + "' target='_blank'>" + values.link + "</a>";
@@ -76,7 +76,7 @@ module.exports = {
                     } else {
                         Story.publishUpdate(story.id, story.toJSON());
 
-                        HistoryService.write("Story", story.toJSON(), message);
+                        HistoryService.write("Story", story.toJSON(), message, values.updatedUserId);
 
                         callback();
                     }
@@ -89,7 +89,7 @@ module.exports = {
                     } else {
                         Task.publishUpdate(task.id, task.toJSON());
 
-                        HistoryService.write("Task", task.toJSON(), message);
+                        HistoryService.write("Task", task.toJSON(), message, values.updatedUserId);
 
                         callback();
                     }
@@ -118,7 +118,7 @@ module.exports = {
                     } else {
                         Story.publishUpdate(story.id, story.toJSON());
 
-                        HistoryService.write("Story", story.toJSON(), message);
+                        HistoryService.write("Story", story.toJSON(), message, values.updatedUserId);
 
                         callback();
                     }
@@ -131,7 +131,7 @@ module.exports = {
                     } else {
                         Task.publishUpdate(task.id, task.toJSON());
 
-                        HistoryService.write("Task", task.toJSON(), message);
+                        HistoryService.write("Task", task.toJSON(), message, values.updatedUserId);
 
                         callback();
                     }
@@ -198,7 +198,7 @@ module.exports = {
                                 } else {
                                     Story.publishUpdate(story.id, story.toJSON());
 
-                                    HistoryService.write("Story", story.toJSON(), message);
+                                    HistoryService.write("Story", story.toJSON(), message, link.updatedUserId);
 
                                     callback();
                                 }
@@ -211,7 +211,7 @@ module.exports = {
                                 } else {
                                     Task.publishUpdate(task.id, task.toJSON());
 
-                                    HistoryService.write("Task", task.toJSON(), message);
+                                    HistoryService.write("Task", task.toJSON(), message, link.updatedUserId);
 
                                     callback();
                                 }
