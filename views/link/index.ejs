@@ -1,4 +1,6 @@
 <div id="objectLinksContainer">
+    <h4>Attached links</h4>
+
     <table class="table table-striped table-hover table-condensed">
         <thead>
             <tr>
@@ -52,7 +54,7 @@
 <hr />
 
 <div id="objectLinkFormContainer">
-    <h4>Add new link</h4>
+    <h4>Attach new link</h4>
 
     <% _.each(externalLinks, function(link) { %>
         <form id="LinkForm_<%= link.id %>" class="form-horizontal objectLinkForm">
@@ -61,8 +63,9 @@
             <input type="hidden" name="objectId" value="<%= objectId %>" />
             <input type="hidden" name="externalLinkId" value="<%= link.id %>" />
 
+            <!-- todo: do we need this?
             <div class="form-group" style="margin-bottom: 0;">
-                <div class="col-lg-9 col-lg-offset-2">
+                <div class="col-lg-10 col-lg-offset-2">
                 <% _.each(link.parameters, function(parameter) { %>
                     <div class="col-lg-3 text-center text-medium">
                         <%= parameter.substr(1).replace("_", " ") %>
@@ -70,15 +73,24 @@
                 <% }) %>
                 </div>
             </div>
+            -->
+
             <div class="form-group">
                 <label class="col-lg-2 control-label"><%= link.title %></label>
-                <div class="col-lg-9">
+                <div class="col-lg-10">
+
                 <% _.each(link.parameters, function(parameter) { %>
                     <% parameterName = parameter.substr(1); %>
                     <div class="col-lg-3">
-                        <input id="<%= parameterName %>" name="parameters[<%= parameter %>]" type="text" placeholder="<%= parameterName.replace('_', ' ') %>" class="form-control" required="required" />
+                        <input id="<%= parameterName %>" name="parameters[<%= parameter %>]" type="text" placeholder="<%= parameterName.replace('_', ' ') %>" class="form-control" required="required"
+                            data-type-watch="true"
+                            data-form-id="LinkForm_<%= link.id %>"
+                            data-link-id="<%= link.id %>"
+                            data-link-url="<%= link.link %>"
+                        />
                     </div>
                 <% }) %>
+
                     <div class="col-lg-1">
                         <a href="javascript: void(0);" class="btn btn-default btn-icon tooltipTitle" title="Add new link"
                             data-qtip-options='{ "position": {"my": "center left", "at": "center right"} }'
@@ -88,9 +100,12 @@
                             <i class="fa fa-plus"></i>
                         </a>
                     </div>
+
+                    <div class="clearfix"></div>
+
+                    <span id="FormattedLink_<%= link.id %>" class="help-block"></span>
                 </div>
             </div>
-
         </form>
     <% }); %>
 </div>

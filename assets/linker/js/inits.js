@@ -525,6 +525,50 @@ function initCommonTabLinks(modal, contentId) {
             }
         });
     });
+
+    // Add type watch listeners to each input which are attached to link
+    container.find("input[data-type-watch='true']").each(function() {
+        var input = jQuery(this);
+        var form = jQuery("#" + input.data("formId"), container);
+        var helper = jQuery("#FormattedLink_" + input.data("linkId"), container);
+        var url = input.data("linkUrl");
+        var formItems;
+
+        // Attach type watch to current input
+        input.typeWatch({
+            wait: 150,
+            captureLength: 0,
+            callback: function(value) {
+                var link = url;
+
+                // Serialize form items
+                formItems = form.serializeJSON();
+
+                // Iterate each link parameter and make necessary replaces to it
+                _.each(formItems.parameters, function(replace, search) {
+                    if (replace.length > 0) {
+                        link = link.replace(search, replace);
+                    }
+                });
+
+                // We have a link!
+                if (link !== url) {
+                    helper.html("Link to attach: ");
+
+                    // Append link to helper block
+                    helper.append(
+                        jQuery("<a>", {
+                            text: link,
+                            href: link,
+                            target: "_blank"
+                        })
+                    );
+                } else { // Otherwise just remove helper block content
+                    helper.html("");
+                }
+            }
+        });
+    });
 }
 
 /**
