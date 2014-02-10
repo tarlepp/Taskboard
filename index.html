@@ -58,7 +58,7 @@
             <div class="article">
                 <h1>What is this?</h1>
                 <p>
-                    a Sails application to mimic "scrum-ban" taskboard. The application is built with <a href="http://sailsjs.org/">Sails.js</a> web framework.
+                    a Sails application to mimic "scrum-ban" taskboard. The application is built with <a href="http://sailsjs.org/" target="_blank">Sails.js</a> web framework.
                 </p>
 
                 <h2>Key features</h2>
@@ -68,6 +68,12 @@
                         <ul>
                             <li>Basically just drag&drop tasks between phases</li>
                             <li>Story / Task edit via double click on the board</li>
+                            <li>Easy understanding of the overall situation
+                                <ul>
+                                    <li><a href="http://gravatar.com/" target="_blank">Gravatar</a> images of task authors and owners</li>
+                                    <li>Easy to see which tasks belongs to you (small indicator for this)</li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
                     <li>Authentication via passport.js, supported strategies
@@ -82,6 +88,12 @@
                             <li>Phases; fully customizable</li>
                             <li>Sprints; time frame, stories</li>
                             <li>Milestones; deadline, stories</li>
+                            <li>External links; add links easily to 3rd party software
+                                <ul>
+                                    <li>Dynamic URL parameters</li>
+                                    <li>Can be used eg. to link GitHub issues to tasks / stories</li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
                     <li>Automatic statistics collection
@@ -94,15 +106,15 @@
                     <li>Localizations
                         <ul>
                             <li><span style="text-decoration:line-through;">Texts</span> need more time for this...</li>
-                            <li>Time and number formats, handled via <a href="http://momentjs.com/">moment.js</a> and <a href="http://numeraljs.com/">numeral.js</a></li>
+                            <li>Time and number formats, handled via <a href="http://momentjs.com/" target="_blank">moment.js</a> and <a href="http://numeraljs.com/" target="_blank">numeral.js</a></li>
                         </ul>
                     </li>
-                    <li>Common object specified functions
+                    <li>Common object specified functions, these are attached to all objects on Taskboard
                         <ul>
-                            <li>History of changes</li>
-                            <li>Commenting</li>
+                            <li>Project, Sprint, Milestone, Story, Task, etc.</li>
+                            <li>History of changes, what has changed and who made those</li>
+                            <li>Comments, nested</li>
                         </ul>
-
                     </li>
                 </ul>
 
