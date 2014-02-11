@@ -31,6 +31,10 @@ module.exports = {
             type:       "date",
             required:   true
         },
+        ignoreWeekends: {
+            type:       "boolean",
+            defaultsTo: false
+        },
         createdUserId: {
             type:       "integer",
             required:   true
@@ -46,7 +50,25 @@ module.exports = {
             return this.title;
         },
         durationDays: function() {
-            return this.dateEndObject().diff(this.dateStartObject(), "days") + 1;
+            var output = 0;
+
+            if (this.ignoreWeekends) {
+                var _start = this.dateStartObject().clone();
+
+                while (this.dateEndObject().diff(_start, "days") > 0) {
+                    var weekDay = _start.isoWeekday();
+
+                    if (weekDay !== 6 && weekDay !== 7) {
+                        output = output + 1;
+                    }
+
+                    _start.add("days", 1);
+                }
+            } else {
+                output = this.dateEndObject().diff(this.dateStartObject(), "days") + 1;
+            }
+
+            return output;
         },
         dateStartObject: function() {
             return (this.dateStart && this.dateStart != "0000-00-00")
