@@ -81,6 +81,8 @@ jQuery(document).ready(function() {
             var form = jQuery("#formProjectNew", modal);
             var formItems = form.serializeJSON();
 
+            formItems.ignoreWeekends = (typeof formItems.ignoreWeekends === "object") ? 1 : 0;
+
             // Validate form and try to create new project
             if (validateForm(formItems, modal)) {
                 // Create new project
@@ -172,8 +174,15 @@ jQuery(document).ready(function() {
          * @param   {boolean}                   close
          */
         function save(modal, trigger, close) {
-            var form = jQuery("#formProjectEdit", modal);
-            var formItems = form.serializeJSON();
+            var formBasic = jQuery("#formProjectEdit_1", modal);
+            var formSprint = jQuery("#formProjectEdit_2", modal);
+            var formItems = jQuery.extend(
+                {},
+                formBasic.serializeJSON(),
+                formSprint.serializeJSON()
+            );
+
+            formItems.ignoreWeekends = (typeof formItems.ignoreWeekends === "object") ? 1 : 0;
 
             // Validate form and try to update project data
             if (validateForm(formItems, modal)) {
