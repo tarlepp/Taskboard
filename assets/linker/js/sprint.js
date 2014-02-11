@@ -85,6 +85,8 @@ jQuery(document).ready(function() {
             var form = jQuery("#formSprintNew", modal);
             var formItems = form.serializeJSON();
 
+            formItems.ignoreWeekends = (typeof formItems.ignoreWeekends === "object") ? 1 : 0;
+
             // Validate form and try to create new sprint
             if (validateForm(formItems, modal)) {
                 // Create new sprint
@@ -180,6 +182,8 @@ jQuery(document).ready(function() {
         function save(modal, trigger, close) {
             var form = jQuery("#formSprintEdit", modal);
             var formItems = form.serializeJSON();
+
+            formItems.ignoreWeekends = (typeof formItems.ignoreWeekends === "object") ? 1 : 0;
 
             // Validate form and try to create new sprint
             if (validateForm(formItems, modal)) {
