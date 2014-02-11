@@ -33,6 +33,10 @@ module.exports = {
             type:       "date",
             required:   true
         },
+        ignoreWeekends: {
+            type:       "boolean",
+            defaultsTo: false
+        },
         createdUserId: {
             type:       "integer",
             required:   true
