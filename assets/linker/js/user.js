@@ -130,11 +130,8 @@ jQuery(document).ready(function() {
             var form = jQuery("#formUserNew", modal);
             var formItems = form.serializeJSON();
 
-            if (typeof formItems.admin === "object") {
-                formItems.admin = 1;
-            } else {
-                formItems.admin = 0;
-            }
+            formItems.admin = (typeof formItems.admin === "object") ? 1 : 0;
+            formItems.boardSettingHideDoneStories = (typeof formItems.boardSettingHideDoneStories === "object") ? 1 : 0;
 
             // Validate current form items and try to update milestone data
             if (validateForm(formItems, modal)) {
@@ -233,11 +230,8 @@ jQuery(document).ready(function() {
                 formSetting.serializeJSON()
             );
 
-            if (typeof formItems.admin === "object") {
-                formItems.admin = 1;
-            } else {
-                formItems.admin = 0;
-            }
+            formItems.admin = (typeof formItems.admin === "object") ? 1 : 0;
+            formItems.boardSettingHideDoneStories = (typeof formItems.boardSettingHideDoneStories === "object") ? 1 : 0;
 
             // Validate current form items and try to update milestone data
             if (validateForm(formItems, modal)) {

@@ -49,8 +49,8 @@
                             <label class="tooltipTitle" title="Hide done stories on the board.">
                                 <input type="checkbox" value="1" class="pull-right" data-bind="
                                     clickBubble: false,
-                                    checked: user().boardSettingHideDoneStories(),
-                                    click: $root.toggleHideDoneStories(!user().boardSettingHideDoneStories())
+                                    click: $root.toggleHideDoneStories($root.toggleHideDoneStoriesLoadedPrevious()),
+                                    checked: user().boardSettingHideDoneStories()
                                 " />
                                 <span data-bind="text: '(' + $root.doneStoryCount() +')'"></span>
                             </label>
@@ -94,7 +94,7 @@
             <tbody data-bind="foreach: $root.sortedStories()">
 
                 <tr data-bind="
-                    visible: ($root.toggleHideDoneStoriesLoaded()),
+                    visible: ($root.showStoryRow(isDone())),
                     attr: {'id': storyRowId()}
                 ">
                     <th style="width:17%">

@@ -180,15 +180,19 @@ function ViewModel() {
      *
      * @type {koObservableBool}
      */
-    self.toggleHideDoneStoriesLoaded = ko.observable(false);
+    self.toggleHideDoneStoriesLoadedCurrent = ko.observable(false);
+    self.toggleHideDoneStoriesLoadedPrevious = ko.observable(true);
 
     // Method which changed hide done stories bit state
-    self.toggleHideDoneStories = function(value) {
-        if (self.toggleHideDoneStoriesLoaded()) {
-            self.user().boardSettingHideDoneStories(value);
-        } else { // This will prevent first time update problem
-            self.toggleHideDoneStoriesLoaded(true);
+    self.toggleHideDoneStories = function(toggleHideDoneStoriesLoadedPrevious) {
+        if (toggleHideDoneStoriesLoadedPrevious && !self.toggleHideDoneStoriesLoadedCurrent()) {
+            self.toggleHideDoneStoriesLoadedCurrent(true);
+            self.toggleHideDoneStoriesLoadedPrevious(false);
+
+            return;
         }
+
+        self.user().boardSettingHideDoneStories(!self.user().boardSettingHideDoneStories());
 
         fixBoardWidth();
 
@@ -196,6 +200,17 @@ function ViewModel() {
         setTimeout(function() {
             fixBoardWidth();
         }, 2000);
+    };
+
+    /**
+     * Method to determine if we want to show story row or not, this depends on user board settings and
+     * actual status of story.
+     *
+     * @param   {boolean}   done    Story done status
+     * @returns {boolean}
+     */
+    self.showStoryRow = function(done) {
+        return !(done && self.user().boardSettingHideDoneStories());
     };
 
     /**
@@ -362,6 +377,8 @@ function ViewModel() {
         self.sprints([]);
         self.project(false);
         self.role(0);
+        self.toggleHideDoneStoriesLoadedPrevious(true);
+        self.toggleHideDoneStoriesLoadedCurrent(false);
 
         self.resetSprint();
     };
