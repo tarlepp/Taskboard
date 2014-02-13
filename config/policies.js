@@ -242,5 +242,20 @@ module.exports.policies = {
         // Custom actions
         index:      ["flashMessage", "authenticated", "isAjax", "hasLinkObjectAccess"],
         getLinks:   ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"]
+    },
+
+    // ExternalLink controller policies
+    "ExcludeSprintDay": {
+        // By default do not allow nothing
+        "*":        false,
+
+        // Default handling for blueprints
+        find:       ["flashMessage", "authenticated", "isAjaxOrSocket", "hasExcludeSprintDayAccess"],
+        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasExcludeSprintDayAdmin", "addUserDataCreate"],
+        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasExcludeSprintDayAdmin", "addUserDataUpdate"],
+        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasExcludeSprintDayAdmin"],
+
+        // Custom actions
+        index:      ["flashMessage", "authenticated", "isAjax", "hasExcludeSprintDayAccess"]
     }
 };
