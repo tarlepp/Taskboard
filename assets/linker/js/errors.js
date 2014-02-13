@@ -22,7 +22,8 @@
  *          sails.json.projectUser|
  *          sails.json.comment|
  *          sails.json.externalLink|
- *          sails.json.link
+ *          sails.json.link|
+ *          sails.json.excludeSprintDay
  *          }                       error
  * @param   {Boolean}               [showMessage]
  */
@@ -30,7 +31,7 @@ function handleSocketError(error, showMessage) {
     showMessage = showMessage || true;
 
     // We have an error!
-    if (error && ((error.status && error.status !== 200) || (error.errors && error.status))) {
+    if (error && ((error.status && error.status !== 200) || (error.errors && error.status) || error.error)) {
         if (showMessage) {
             var message = "";
 
@@ -42,6 +43,8 @@ function handleSocketError(error, showMessage) {
                 if (error.message) {
                     message = (error.message.message) ? error.message.message : error.message;
                     message += " [" + error.status + "]";
+                } else if (error.error) {
+                    message = error.error;
                 } else if (error.status == 404) {
                     message = "Requested page not found [404].";
                 } else if (error.status == 500) {
