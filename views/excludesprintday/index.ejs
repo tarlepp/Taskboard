@@ -1,0 +1,86 @@
+<p>
+    Below you see all excluded days within this sprint. These days are ignored in sprint burndown
+    chart ideal line draw.
+</p>
+
+<table class="table table-striped table-hover table-condensed">
+    <thead>
+        <tr>
+            <th class="col-md-3" colspan="2">Exclude day</th>
+            <th class="col-md-3">Weekday</th>
+            <th class="col-md-4">Author</th>
+            <th class="col-md-2">Date</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% _.each(excludeDays, function(day) { %>
+    <tr>
+        <td>
+            <% var buttonClass = (hasAdmin) ? "" : "disabled" %>
+
+            <a href="javascript: void(0);" class="btn btn-default btn-icon tooltipTitle <%= buttonClass %>" title="Remove exclude day"
+                data-qtip-options='{ "position": {"my": "center right", "at": "center left"} }'
+                data-remove-exclude-day="true"
+                data-day-id="<%= day.id %>"
+            >
+                <i class="fa fa-times"></i>
+            </a>
+        </td>
+        <td class="col-md-3"><%= day.dayObject().format(currentUser.momentFormatDate) %></td>
+        <td class="col-md-3"><%= day.dayObject().format("dddd") %></td>
+        <td class="col-md-4">
+            <% if (day.author) { %>
+                <%= day.author.fullName() %>
+            <% } else { %>
+                Unknown
+            <% } %>
+        </td>
+        <td class="col-md-2">
+            <span class="tooltipDiv">
+                <%= day.createdAtObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDateTime) %>
+
+                <%- partial("../partials/tooltip/datetime", {tooltipTitle: false, stamp: day.createdAtObject()}) %>
+            </span>
+        </td>
+    </tr>
+    <% }) %>
+
+    <% if (excludeDays.length === 0) { %>
+    <tr>
+        <td colspan="100%" class="text-center">
+            <em class="text-muted">Sprint has not excluded days...</em>
+        </td>
+    </tr>
+    <% } %>
+    </tbody>
+</table>
+
+<hr />
+
+<h4>Add new exclude day for sprint</h4>
+
+<form id="SprintExcludeDayForm" class="form-horizontal">
+    <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+    <input type="hidden" name="sprintId" value="<%= sprint.id %>" />
+
+    <div class="form-group">
+        <label class="col-lg-2 control-label">Exclude day</label>
+        <div class="col-lg-10">
+            <div id="SprintExcludeDayFormDay" class="input-group date"
+                data-date-min="<%= sprint.dateStartObject().toISOString() %>"
+                data-date-max="<%= sprint.dateEndObject().toISOString() %>"
+            >
+                <input name="day" type="text" class="form-control dateInput" size="16" required="required" />
+
+                <span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>
+            </div>
+
+            <a href="javascript: void(0);" class="btn btn-default btn-icon tooltipTitle disabled" title="Add sprint exclude day" style="left: -10px;"
+               data-qtip-options='{ "position": {"my": "center left", "at": "center right"} }'
+               data-add-sprint-exclude-day="true"
+            >
+                <i class="fa fa-plus"></i>
+            </a>
+        </div>
+    </div>
+</form>

@@ -55,9 +55,7 @@ select.form-control {
 }
 
 .input-group.date span.input-group-addon {
-    position: relative;
-    left: -3px;
-    padding: 8px 22px 8px 6px;
+    padding: 8px 24px 8px 8px;
 }
 
 .input-group.date span.input-group-addon i {

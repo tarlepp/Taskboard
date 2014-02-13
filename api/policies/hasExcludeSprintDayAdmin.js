@@ -31,7 +31,7 @@ module.exports = function hasExcludeSprintDayAdmin(request, response, next) {
                     return ErrorService.makeErrorResponse(500, error, request, response);
                 } else if (day) {
                     // Check that current user has admin access to specified sprint
-                    AuthService.hasSprintAdmin(request.user, sprintId, function(error, hasRight) {
+                    AuthService.hasSprintAdmin(request.user, day.sprintId, function(error, hasRight) {
                         if (error) { // Error occurred
                             return ErrorService.makeErrorResponse(error.status ? error.status : 500, error, request, response);
                         } else if (!hasRight) { // No admin access right to sprint

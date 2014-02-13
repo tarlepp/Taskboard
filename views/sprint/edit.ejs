@@ -6,6 +6,9 @@
         <a id="backlogTab" href="#backlog" data-toggle="tab" data-callback="initSprintTabBacklog" data-href="/Sprint/Backlog?id=<%= sprint.id %>">Backlog</a>
     </li>
     <li>
+        <a id="excludeDayTab" href="#excludeDay" data-toggle="tab" data-callback="initSprintTabExcludeDay" data-href="/ExcludeSprintDay?sprintId=<%= sprint.id %>">Exclude days</a>
+    </li>
+    <li>
         <a id="chartsTab" href="#charts" data-toggle="tab" data-callback="initSprintTabChart" data-href="/Sprint/Charts?id=<%= sprint.id %>">Charts</a>
     </li>
 
@@ -81,6 +84,8 @@
     </div>
 
     <div class="tab-pane" id="backlog"></div>
+
+    <div class="tab-pane" id="excludeDay"></div>
 
     <div class="tab-pane" id="charts"
         data-sprint-id="<%= sprint.id %>"

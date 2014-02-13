@@ -924,3 +924,134 @@ function initSprintTabChart(modal, contentId) {
             });
     }
 }
+
+/**
+ * Function initializes sprint exclude day tab content to use. Note that
+ * this init can be called multiple times.
+ *
+ * Also note that this init is called dynamic from initTabs() function.
+ *
+ * @param   {jQuery|$}  modal       Current modal content
+ * @param   {String}    contentId   Tab content div id
+ */
+function initSprintTabExcludeDay(modal, contentId) {
+    var body = jQuery("body");
+    var container = modal.find(contentId);
+    var dateInput = container.find("#SprintExcludeDayFormDay");
+    var addButton = container.find("a[data-add-sprint-exclude-day='true']");
+
+    // Create Bootstrap datepicker for date input
+    dateInput.bootstrapDP({
+        format: "yyyy-mm-dd",
+        weekStart: 1,
+        calendarWeeks: true
+    })
+    .on("show", function(event) { // Fix z-index of datepicker
+        jQuery(".datepicker").css("z-index", parseInt(jQuery(this).closest(".modal").css("z-index"), 10) + 1);
+    })
+    .on("changeDate", function(event) {
+        var dateEvent = moment(
+            new Date(
+                Date.UTC(
+                    event.date.getFullYear(),
+                    event.date.getMonth(),
+                    event.date.getDate(),
+                    0,
+                    0,
+                    0
+                )
+            )
+        ).tz("Etc/Universal");
+
+        // Determine min and max dates that the selected date must be between
+        var dateMin = moment(dateInput.data("dateMin")).tz("Etc/Universal").add("days", 1);
+        var dateMax = moment(dateInput.data("dateMax")).tz("Etc/Universal").subtract("days", 1);
+
+        // Selected date is not valid
+        if (dateEvent.isBefore(dateMin, "days") || dateEvent.isAfter(dateMax, "days")) {
+            makeMessage("Exclude date must be between " + dateMin.format(myViewModel.user().momentFormatDate()) + " and " + dateMax.format(myViewModel.user().momentFormatDate()) + ".", "error", {});
+
+            dateInput.closest(".input-group").addClass("has-error");
+            addButton.addClass("disabled");
+        } else {
+            dateInput.closest(".input-group").removeClass("has-error");
+            dateInput.bootstrapDP("hide");
+
+            addButton.removeClass("disabled");
+        }
+    });
+
+    // Remove 'add new' click listeners, this prevents firing this event multiple times
+    addButton.off("click");
+
+    // User wants to add new exclude day for sprint
+    addButton.on("click", function(event) {
+        event.preventDefault();
+
+        jQuery(this).qtip("destroy");
+
+        var form = jQuery("#SprintExcludeDayForm", container);
+        var formItems = form.serializeJSON();
+
+        console.log(formItems);
+
+        // Form is valid, so we can save the data
+        if (validateForm(formItems, form)) {
+            socket.post("/ExcludeSprintDay/create", formItems, function(/** sails.json.excludeSprintDay */data) {
+                console.log(data);
+                if (handleSocketError(data, true)) {
+                    makeMessage("New sprint exclude day added successfully.", "success", {});
+
+                    reloadTabContentUrl(modal, contentId);
+                }
+            });
+        }
+    });
+
+    // Remove existing listeners from remove buttons
+    container.off("click", "a[data-remove-exclude-day='true']");
+
+    // User click sprint exclude day remove button
+    container.on("click", "a[data-remove-exclude-day='true']", function(event) {
+        event.preventDefault();
+
+        jQuery(this).qtip("destroy");
+
+        var dayId = parseInt(jQuery(this).data("dayId"), 10);
+
+        modal.hide();
+
+        jQuery("body").find(".modal-backdrop.in:first").hide();
+
+        bootbox.confirm({
+            title: "danger - danger - danger",
+            message: "Are you sure that you want to remove sprint exclude day?",
+            buttons: {
+                cancel: {
+                    label: "Cancel",
+                    className: "btn-default pull-left"
+                },
+                confirm: {
+                    label: "Delete",
+                    className: "btn-danger pull-right"
+                }
+            },
+            callback: function(result) {
+                jQuery("body").find(".modal-backdrop.in").show();
+
+                modal.show();
+
+                if (result) {
+                    // Remove sprint exclude day via socket
+                    socket.delete("/ExcludeSprintDay/" + dayId, {_csrf: getCsrfToken()}, function(/** sails.json.excludeSprintDay */link) {
+                        if (handleSocketError(link)) {
+                            makeMessage("Sprint exclude day deleted successfully.");
+
+                            reloadTabContentUrl(modal, contentId);
+                        }
+                    });
+                }
+            }
+        });
+    });
+}

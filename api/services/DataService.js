@@ -732,3 +732,19 @@ exports.getLinkObjectProject = function(objectName, objectId, callback) {
         }
     )
 };
+
+/**
+ * Service to fetch sprint exclude day objects from database.
+ *
+ * @param   {Number}    sprintId    Sprint ID
+ * @param   {Function}  callback
+ */
+exports.getSprintExcludeDays = function(sprintId, callback) {
+    ExcludeSprintDay
+        .find()
+        .where({sprintId: sprintId})
+        .sort("day ASC")
+        .exec(function(error, data) {
+            callback(error, data);
+        });
+};
