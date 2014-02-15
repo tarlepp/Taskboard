@@ -68,13 +68,13 @@ module.exports = function (grunt) {
         // Individual libraries
         'linker/bower_components/md5-jkmyers/md5.min.js',
         'linker/bower_components/json5/lib/json5.js',
-        'linker/bower_components/underscore/underscore-min.js',
+        'linker/bower_components/underscore/underscore.js',
         'linker/bower_components/async/lib/async.js',
         'linker/bower_components/momentjs/min/moment-with-langs.min.js',
         'linker/bower_components/moment-timezone/min/moment-timezone.min.js',
 
         // jQuery specified libraries
-        'linker/bower_components/jquery/jquery.min.js',
+        'linker/bower_components/jquery/dist/jquery.min.js',
         'linker/bower_components/jquery-ui/ui/minified/jquery-ui.min.js',
         'linker/bower_components/qtip2/jquery.qtip.min.js',
         'linker/bower_components/trunk8/trunk8.js',
