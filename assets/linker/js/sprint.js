@@ -580,31 +580,68 @@ function initSprintTabChart(modal, contentId) {
             text: "Loading data..."
         },
         subtitle: {
-            text: "Sprint task burndown chart"
+            text: ""
         },
         credits: {
             enabled: false
         },
         xAxis: {
-            type: "datetime",
+            type: "linear",
             startOnTick: false,
             endOnTick: false,
-            tickInterval: 3600 * 1000 * 24,
-            tickmarkPlacement: "on",
+            ordinal: true,
+            tickInterval: 24 * 3600 * 1000,
+            minRange: 1,
             labels: {
                 rotation: -36,
                 useHTML: true,
                 align: "right",
                 formatter: function() {
                     var currentDate = moment(this.value);
-                    var sprintEnd = moment(ajaxData.sprint.dateEnd);
-                    var labelClass = "chartLabel";
+                    var currentPoint = this.value;
+                    var founded = false;
+                    var actualObject;
 
-                    if (currentDate.isAfter(sprintEnd, "day")) {
-                        labelClass += " text-danger";
+                    // Iterate series to determine if this point is to show or not
+                    _.each(chart.series, function(serie) {
+                        // Iterate series x-axel data
+                        _.each(serie.xData, function(pointX, index) {
+                            if (currentPoint === pointX) {
+                                founded = true;
+                            }
+                        });
+                    });
+
+                    // Point founded, so this date is to be shown
+                    if (founded) {
+                        var sprintEnd = moment(ajaxData.sprint.dateEnd);
+                        var labelClass = "chartLabel";
+                        var notPlanned = false;
+
+                        // Current date is after sprint so date is not planned
+                        if (currentDate.isAfter(sprintEnd, "day")) {
+                            notPlanned = true;
+                        } else { // Otherwise we must check if current point is planned or not
+                            actualObject = _.find(chart.series, function(serie) {
+                                return serie.userOptions.name === "Actual";
+                            });
+
+                            // Iterate data points
+                            _.each(actualObject.userOptions.data, function(point) {
+                                // Current point is not planned
+                                if (currentPoint === point.x && point.notPlannedDay) {
+                                    notPlanned = true;
+                                }
+                            });
+                        }
+
+                        // Current point (date) is not planned so add extra class to label
+                        if (notPlanned) {
+                            labelClass += " text-danger";
+                        }
+
+                        return "<span class='" + labelClass + "'>" + currentDate.format(myViewModel.user().momentFormatDate()) + "</span>";
                     }
-
-                    return "<span class='" + labelClass + "'>" + currentDate.format(myViewModel.user().momentFormatDate()) + "</span>";
                 }
             }
         },
@@ -641,14 +678,25 @@ function initSprintTabChart(modal, contentId) {
             borderWidth: 1,
             shadow: false,
             formatter: function() {
+                var dateStart;
                 var dateEnd = moment(this.x);
-                var dateStart = dateEnd.clone().subtract("days", 1);
+
+                _.each(this.points, function(point) {
+                    if (point.point.previousX) {
+                        dateStart = moment(point.point.previousX)
+                    }
+                });
+
+                var titleDate;
+
+                if (moment.isMoment(dateStart) && !dateStart.isSame(dateEnd, "days")) {
+                    titleDate = dateStart.format(myViewModel.user().momentFormatDate()) + " - " + dateEnd.format(myViewModel.user().momentFormatDate());
+                } else {
+                    titleDate = dateEnd.format(myViewModel.user().momentFormatDate());
+                }
+
                 var tooltip = "<div class='chartToolTipTasks'>"
-                        + "<h1>"
-                        + dateStart.format(myViewModel.user().momentFormatDate())
-                        + " - "
-                        + dateEnd.format(myViewModel.user().momentFormatDate())
-                        + "</h1>"
+                        + "<h1>" + titleDate + "</h1>"
                         + "<hr />"
                         + "<table>"
                             + "<tr>"
@@ -660,7 +708,6 @@ function initSprintTabChart(modal, contentId) {
                 var actualDone = 0;
                 var daysSoFar = 0;
                 var daysText = "";
-                var showEstimate = true;
 
                 // Iterate each points and add data to tooltip as a table row
                 _.each(this.points, function(point, i) {
@@ -878,10 +925,23 @@ function initSprintTabChart(modal, contentId) {
             .done(function(data) {
                 ajaxData = data;
 
+                var chartTitle = moment(data.sprint.dateStart).format(myViewModel.user().momentFormatDate())
+                    + " - " + moment(data.sprint.dateEnd).format(myViewModel.user().momentFormatDate())
+                    + " - " + data.sprint.title
+                ;
+
+                var chartSubTitle = "Sprint task burndown chart - duration "
+                    + data.statistics.sprintDays + " days - "
+                    + data.statistics.workDays + " working days "
+                ;
+
                 // Set main title for chart
                 chart.setTitle({
-                    text: moment(data.sprint.dateStart).format(myViewModel.user().momentFormatDate()) + " - " + moment(data.sprint.dateEnd).format(myViewModel.user().momentFormatDate()) + " " + data.sprint.title
+                    text: chartTitle
+                }, {
+                    text: chartSubTitle
                 });
+
 
                 if (data.initTasks > 0) {
                     // Iterate chart data and add new series to chart
