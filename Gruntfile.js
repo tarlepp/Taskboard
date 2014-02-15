@@ -101,7 +101,7 @@ module.exports = function (grunt) {
         'linker/bower_components/knockout-deferred-updates/knockout-deferred-updates.min.js',
 
         // Other libraries
-        'linker/bower_components/highcharts-components/highcharts.src.js',
+        'linker/bower_components/highstock-components/highstock.src.js',
         'linker/bower_components/numeral/min/numeral.min.js',
         'linker/bower_components/numeral/min/languages.min.js',
 

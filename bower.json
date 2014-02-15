@@ -45,11 +45,11 @@
     "knockout-sortable": "~0.8.5",
     "jquery.complexify.js": "*",
     "bootstrap-popover-extra-placements": "*",
-    "highcharts-components": "~3.0.9",
     "numeral": "~1.5.2",
     "evol.colorpicker": "*",
     "seiyria-bootstrap-slider": "~1.9.5",
-    "md5-jkmyers": "~0.0.1"
+    "md5-jkmyers": "~0.0.1",
+    "highstock-components": "~1.3.9"
   },
   "resolutions": {
     "bootstrap": ">=3.0 <4.0"
