@@ -49,13 +49,15 @@ module.exports = {
         objectTitle: function() {
             return this.title;
         },
+
+        // Note that this doesn't account possible sprint exclude days
         durationDays: function() {
             var output = 0;
 
             if (this.ignoreWeekends) {
                 var _start = this.dateStartObject().clone();
 
-                while (this.dateEndObject().diff(_start, "days") > 0) {
+                while (this.dateEndObject().diff(_start, "days") >= 0) {
                     var weekDay = _start.isoWeekday();
 
                     if (weekDay !== 6 && weekDay !== 7) {
