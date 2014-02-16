@@ -52,6 +52,15 @@ jQuery(document).ready(function() {
                     }
                 },
                 {
+                    label: "Save and add new",
+                    className: "btn-primary pull-right",
+                    callback: function() {
+                        save(modal, trigger, null);
+
+                        return false;
+                    }
+                },
+                {
                     label: "Save",
                     className: "btn-primary pull-right",
                     callback: function() {
@@ -83,7 +92,7 @@ jQuery(document).ready(function() {
          *
          * @param   {jQuery|$}                  modal
          * @param   {sails.helper.trigger|bool} trigger
-         * @param   {boolean}                   close
+         * @param   {boolean|null}              close
          */
         function save(modal, trigger, close) {
             var form = jQuery("#formStoryNew", modal);
@@ -101,6 +110,8 @@ jQuery(document).ready(function() {
                         // User wants to close modal so just handle trigger
                         if (close) {
                             handleEventTrigger(trigger);
+                        } else if (close === null) { // User wants to add new story
+                            body.trigger("storyAdd", [projectId, sprintId, trigger, formData]);
                         } else { // Otherwise trigger edit with same trigger
                             body.trigger("storyEdit", [data.id, trigger]);
                         }
