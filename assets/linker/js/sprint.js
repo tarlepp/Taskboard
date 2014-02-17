@@ -326,6 +326,9 @@ function initSprintForm(modal, edit, parameters) {
         weekStart: 1,
         calendarWeeks: true
     })
+    .on("show", function(event) { // Fix z-index of datepicker
+        jQuery(".datepicker").css("z-index", parseInt(jQuery(this).closest(".modal").css("z-index"), 10) + 1);
+    })
     .on("changeDate", function(event) {
         var eventDate = moment(
             new Date(
@@ -372,6 +375,9 @@ function initSprintForm(modal, edit, parameters) {
         format: "yyyy-mm-dd",
         weekStart: 1,
         calendarWeeks: true
+    })
+    .on("show", function(event) { // Fix z-index of datepicker
+        jQuery(".datepicker").css("z-index", parseInt(jQuery(this).closest(".modal").css("z-index"), 10) + 1);
     })
     .on("changeDate", function(event) {
         var eventDate = moment(
