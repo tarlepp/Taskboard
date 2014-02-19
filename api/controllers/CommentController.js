@@ -35,7 +35,6 @@ module.exports = {
         // Fetch specified object and id comments
         DataService.getComments(objectName, objectId, 0, function(error, comments) {
             res.view({
-                layout: req.isAjax ? "layout_ajax" : "layout",
                 objectId: objectId,
                 objectName: objectName,
                 comments: comments

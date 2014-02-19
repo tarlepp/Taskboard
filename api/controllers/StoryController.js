@@ -46,7 +46,6 @@ module.exports = {
                 if (error) {
                     res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
-                    data.layout = req.isAjax ? "layout_ajax" : "layout";
                     data.projectId = projectId;
                     data.sprintId = sprintId;
                     data.formData = formData;
@@ -96,7 +95,6 @@ module.exports = {
                             res.send(error.status ? error.status : 500, error.message ? error.message : error);
                         } else {
                             data.milestones = milestones;
-                            data.layout = req.isAjax ? "layout_ajax" : "layout";
 
                             res.view(data);
                         }
@@ -495,8 +493,6 @@ module.exports = {
 
         function makeView(data) {
             moment.lang(req.user.language);
-
-            data.layout = req.isAjax ? "layout_ajax" : "layout";
 
             var totalTime = _.pluck(data.phases, "duration").reduce(function(memo, i) {return memo + i});
             var totalTimeNoFirst = _.pluck(_.reject(data.phases, function(phase) { return phase.order === 0 } ), "duration").reduce(function(memo, i) {return memo + i});

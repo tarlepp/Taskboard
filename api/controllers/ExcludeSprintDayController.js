@@ -67,8 +67,6 @@ module.exports = {
                         day.author = _.find(data.users, function(user) { return user.id === day.createdUserId; });
                     });
 
-                    data.layout = req.isAjax ? "layout_ajax" : "layout";
-
                     res.view(data);
                 }
             }

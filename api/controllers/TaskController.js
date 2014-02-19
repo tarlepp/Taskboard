@@ -71,7 +71,6 @@ module.exports = {
                 if (error) {
                     res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
-                    data.layout = req.isAjax ? "layout_ajax" : "layout";
                     data.projectId = projectId;
                     data.storyId = storyId;
 
@@ -119,8 +118,6 @@ module.exports = {
                 if (error) {
                     res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
-                    data.layout = req.isAjax ? "layout_ajax" : "layout";
-
                     res.view(data);
                 }
             }
@@ -245,8 +242,6 @@ module.exports = {
                                 });
                             }
                         });
-
-                        data.layout = req.isAjax ? "layout_ajax" : "layout";
 
                         res.view(data);
                     }

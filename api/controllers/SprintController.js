@@ -18,7 +18,6 @@ module.exports = {
         var projectId = parseInt(req.param("projectId"), 10);
 
         res.view({
-            layout: req.isAjax ? "layout_ajax" : "layout",
             projectId: projectId
         });
     },
@@ -56,8 +55,6 @@ module.exports = {
                 if (error) {
                     res.send(error.status ? error.status : 500, error);
                 } else {
-                    data.layout = req.isAjax ? "layout_ajax" : "layout";
-
                     res.view(data);
                 }
             }
@@ -75,7 +72,6 @@ module.exports = {
 
         // Initialize view data object
         var data = {
-            layout: req.isAjax ? "layout_ajax" : "layout",
             stories: false,
             role: 0,
             sprint: {
@@ -292,9 +288,7 @@ module.exports = {
     charts: function(req, res) {
         var sprintId = parseInt(req.param("id"), 10);
 
-        var data = {
-            layout: req.isAjax ? "layout_ajax" : "layout"
-        };
+        var data = {};
 
         // Get sprint and attached stories data
         async.parallel(

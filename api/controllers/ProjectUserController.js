@@ -17,7 +17,6 @@ module.exports = {
     users: function(req, res) {
         var projectId = req.param("projectId");
         var data = {
-            layout: req.isAjax ? "layout_ajax" : "layout",
             users: false,
             project: false,
             role: false

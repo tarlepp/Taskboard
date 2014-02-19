@@ -36,8 +36,6 @@ module.exports = {
                 if (error) {
                     res.send(error, error.status ? error.status : 500);
                 } else {
-                    data.layout = req.isAjax ? "layout_ajax" : "layout";
-
                     res.view(data);
                 }
             }
@@ -84,8 +82,6 @@ module.exports = {
                 if (error) {
                     res.send(error, error.status ? error.status : 500);
                 } else {
-                    data.layout = req.isAjax ? "layout_ajax" : "layout";
-
                     res.view(data);
                 }
             }
@@ -132,8 +128,6 @@ module.exports = {
                 if (error) {
                     res.send(error, error.status ? error.status : 500);
                 } else {
-                    data.layout = req.isAjax ? "layout_ajax" : "layout";
-
                     res.view(data);
                 }
             }
@@ -152,7 +146,6 @@ module.exports = {
         var projectId = parseInt(req.param("id"), 10);
 
         var data = {
-            layout: req.isAjax ? "layout_ajax" : "layout",
             role: 0,
             milestones: false,
             project: false,
@@ -373,8 +366,6 @@ module.exports = {
                 if (error) {
                     res.send(error.status ? error.status : 500, error);
                 } else {
-                    data.layout = req.isAjax ? "layout_ajax" : "layout";
-
                     res.view(data);
                 }
             }
@@ -394,7 +385,6 @@ module.exports = {
 
         // Specify template data to use
         var data = {
-            layout: req.isAjax ? "layout_ajax" : "layout",
             project: {
                 data: false
             },
@@ -723,7 +713,6 @@ module.exports = {
         var projectId = parseInt(req.param('id'), 10);
 
         var data = {
-            layout: req.isAjax ? "layout_ajax" : "layout",
             role: false,
             project: false,
             sprints: false,

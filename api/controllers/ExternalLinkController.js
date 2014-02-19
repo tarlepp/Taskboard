@@ -90,7 +90,6 @@ module.exports = {
                                 res.send(error.status ? error.status : 500, error.message ? error.message : error);
                             } else {
                                 res.view(_.extend({
-                                    layout: req.isAjax ? "layout_ajax" : "layout",
                                     projectId: projectId
                                 }, results));
                             }
@@ -116,7 +115,6 @@ module.exports = {
                 res.send(error.status ? error.status : 500, error.message ? error.message : error);
             } else {
                 res.view({
-                    layout: req.isAjax ? "layout_ajax" : "layout",
                     project: project,
                     projectId: projectId
                 });
@@ -139,7 +137,6 @@ module.exports = {
                 res.send(error.status ? error.status : 500, error.message ? error.message : error);
             } else {
                 res.view({
-                    layout: req.isAjax ? "layout_ajax" : "layout",
                     link: link
                 });
             }
@@ -243,7 +240,6 @@ module.exports = {
                                 res.send(error.status ? error.status : 500, error.message ? error.message : error);
                             } else {
                                 res.view(_.extend({
-                                    layout: req.isAjax ? "layout_ajax" : "layout",
                                     linkId: linkId
                                 }, results));
                             }

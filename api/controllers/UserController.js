@@ -18,8 +18,7 @@ module.exports = {
     add: function(req, res) {
         res.view({
             languages: languages.i18n.locales,
-            timezones: DateService.getTimezones(),
-            layout: req.isAjax ? "layout_ajax" : "layout"
+            timezones: DateService.getTimezones()
         });
     },
 
@@ -44,8 +43,7 @@ module.exports = {
                     res.view({
                         user: user,
                         languages: languages.i18n.locales,
-                        timezones: DateService.getTimezones(),
-                        layout: req.isAjax ? "layout_ajax" : "layout"
+                        timezones: DateService.getTimezones()
                     });
                 }
             });
@@ -128,7 +126,6 @@ module.exports = {
                         res.send(error.status ? error.status : 500, error.message ? error.message : error);
                     } else {
                         res.view({
-                            layout: req.isAjax ? "layout_ajax" : "layout",
                             users: users
                         });
                     }
@@ -170,8 +167,6 @@ module.exports = {
                 if (error) {
                     res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
-                    data.layout = req.isAjax ? "layout_ajax" : "layout";
-
                     moment.lang(req.user.language);
 
                     // Iterate sign in rows and make formatted stamp
@@ -297,7 +292,6 @@ module.exports = {
                  */
                 function(projects) {
                     data.projects = projects;
-                    data.layout = req.isAjax ? "layout_ajax" : "layout";
 
                     res.view(data);
                 }

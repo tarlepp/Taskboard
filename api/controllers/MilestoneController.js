@@ -41,7 +41,6 @@ module.exports = {
                 if (error) {
                     res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
-                    data.layout = req.isAjax ? "layout_ajax" : "layout";
                     data.projectId = projectId;
 
                     res.view(data);
@@ -83,8 +82,6 @@ module.exports = {
                 if (error) {
                     res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
-                    data.layout = req.isAjax ? "layout_ajax" : "layout";
-
                     res.view(data);
                 }
             }
@@ -101,7 +98,6 @@ module.exports = {
         var milestoneId = parseInt(req.param("id"), 10);
 
         var data = {
-            layout: req.isAjax ? "layout_ajax" : "layout",
             role: 0,
             milestone: {
                 data: false,

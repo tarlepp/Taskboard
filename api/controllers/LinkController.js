@@ -88,7 +88,6 @@ module.exports = {
                     res.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
                     res.view({
-                        layout: req.isAjax ? "layout_ajax" : "layout",
                         objectId: objectId,
                         objectName: objectName,
                         project: project,

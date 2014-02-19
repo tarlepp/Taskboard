@@ -162,7 +162,6 @@ module.exports = {
                     } else {
                         // Make view
                         res.view({
-                            layout: req.isAjax ? "layout_ajax" : "layout",
                             data: _.compact(results).reverse()
                         });
                     }
