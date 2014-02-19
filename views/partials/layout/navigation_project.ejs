@@ -1,0 +1,143 @@
+<div class="input-group">
+    <select id="selectProject" class="show-tick show-menu-arrow"
+        data-live-search="true"
+        data-bind="
+            value: selectedProjectId(),
+            options: projects,
+            optionsText: 'title',
+            optionsValue: 'id',
+            optionsCaption: 'Choose project to show',
+            changeProject: 'id'
+        "
+    ></select>
+
+    <span class="input-group-addon dropdown">
+        <div data-bind="visible: !project()">
+            <a href="javascript: void(0);" class="tooltipTitle" title="Add new project"
+                data-placement="bottom"
+                data-bind="click: $root.actionProjectAdd"
+            >
+                <i class="fa fa-plus"></i>
+            </a>
+        </div>
+
+        <div data-bind="visible: project()">
+            <a href="#" class="dropdown-toggle"
+                data-toggle="dropdown"
+                data-hover="dropdown"
+                data-delay="100"
+            >
+                <i class="fa fa-wrench"></i>
+            </a>
+            <ul class="dropdown-menu">
+                <li class="nav-header text-info">Basic functions</li>
+
+                <li>
+                    <a href="javascript: void(0);"
+                        data-bind="click: $root.actionProjectAdd"
+                    >
+                        <i class="fa fa-plus"></i>
+                        Add new project
+                    </a>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);"
+                        data-bind="click: $root.actionProjectEdit"
+                    >
+                        <i class="fa fa-wrench"></i>
+                        Edit project
+                    </a>
+                </li>
+
+                <li class="divider"></li>
+
+                <li class="nav-header text-info">Management</li>
+
+                <li>
+                    <a href="javascript: void(0);"
+                        data-bind="click: $root.actionProjectBacklog"
+                    >
+                        <i class="fa fa-list-ol"></i>
+                        Backlog
+                    </a>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);"
+                        data-bind="click: $root.actionProjectSprints"
+                    >
+                        <i class="fa fa-list-alt"></i>
+                        Sprints
+                    </a>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);"
+                        data-bind="click: $root.actionProjectMilestones"
+                    >
+                        <i class="fa fa-gear"></i>
+                        Milestones
+                    </a>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);"
+                        data-bind="click: $root.actionProjectUsers"
+                    >
+                        <i class="fa fa-user"></i>
+                        Users
+                    </a>
+                </li>
+
+                <li class="divider"></li>
+
+                <li class="nav-header text-info">Advanced</li>
+
+                <!-- ko if: $root.role() < 0 -->
+                <li>
+                    <a href="javascript: void(0);"
+                        data-bind="click: $root.actionPhasesEdit"
+                    >
+                        <i class="fa fa-bars fa-rotate-90"></i>
+                        Edit phases
+                    </a>
+                </li>
+                <!-- /ko -->
+
+                <li>
+                    <a href="javascript: void(0);"
+                        data-bind="click: $root.actionProjectPlanning"
+                    >
+                        <i class="fa fa-cogs"></i>
+                        Planning view
+                    </a>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);"
+                        data-bind="click: $root.actionProjectExternalLinks"
+                    >
+                        <i class="fa fa-globe"></i>
+                        External links
+                    </a>
+                </li>
+
+                <!-- ko if: $root.role() < -1 -->
+                <li class="divider"></li>
+
+                <li class="nav-header text-info">Danger zone</li>
+
+                <li>
+                    <a href="javascript: void(0);" class="text-danger"
+                        data-bind="click: $root.actionProjectDelete"
+                    >
+                        <i class="fa fa-trash-o"></i>
+                        Delete project
+                    </a>
+                </li>
+                <!-- /ko -->
+            </ul>
+        </div>
+    </span>
+</div>

@@ -1,0 +1,15 @@
+<script type="text/javascript">
+<% if (typeof currentUser !== 'undefined') { %>
+    var userObject = <%- JSON.stringify(currentUser) %>;
+    var loggedUserId = <%= currentUser.id %>;
+<% } %>
+
+<% if (typeof projectId !== 'undefined' && typeof sprintId !== 'undefined') { %>
+    var selectedProjectId = <%= projectId %>;
+    var selectedSprintId = <%= sprintId %>;
+<% } %>
+
+<% if (typeof flashMessages !== 'undefined') { %>
+    var messages = <%- JSON.stringify(flashMessages) %>;
+<% } %>
+</script>

@@ -21,9 +21,7 @@ module.exports = {
             res.redirect("/");
         }
 
-        res.view({
-            layout: "layout_login"
-        });
+        res.view();
     },
 
     /**
@@ -51,7 +49,6 @@ module.exports = {
                 req.flash.message("Invalid credentials", "error");
 
                 res.redirect("/login");
-
                 return;
             }
 
