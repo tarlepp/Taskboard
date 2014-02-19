@@ -65,6 +65,11 @@ module.exports = {
             required:   true,
             defaultsTo: 0
         },
+        ignoreInBurnDownChart: {
+            type:       "boolean",
+            required:   true,
+            defaultsTo: false
+        },
         timeStart: {
             type:       "datetime"
         },
