@@ -98,6 +98,8 @@ jQuery(document).ready(function() {
             var form = jQuery("#formStoryNew", modal);
             var formItems = form.serializeJSON();
 
+            formItems.ignoreInBurnDownChart = (typeof formItems.ignoreInBurnDownChart === "object") ? 1 : 0;
+
             // Validate form and try to create new user story
             if (validateForm(formItems, modal)) {
                 // Create new user story
@@ -201,6 +203,8 @@ jQuery(document).ready(function() {
             var formBasic = jQuery("#formStoryEdit_1", modal);
             var formAdvanced = jQuery("#formStoryEdit_2", modal);
             var formItems = jQuery.extend({}, formBasic.serializeJSON(), formAdvanced.serializeJSON());
+
+            formItems.ignoreInBurnDownChart = (typeof formItems.ignoreInBurnDownChart === "object") ? 1 : 0;
 
             // Validate current form items and try to update user story data
             if (validateForm(formItems, modal)) {

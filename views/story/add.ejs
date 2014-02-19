@@ -11,6 +11,7 @@
     <input type="hidden" name="_csrf" value="<%= _csrf %>" />
     <input type="hidden" name="projectId" value="<%= projectId %>" />
     <input type="hidden" name="sprintId" value="<%= sprintId %>" />
+    <input type="hidden" name="ignoreInBurnDownChart" value="0" />
 
     <div class="tab-content">
         <div class="tab-pane active" id="basic">
@@ -73,6 +74,22 @@
                     <p class="help-block">
                         This is the default type for new tasks to this story.
                     </p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-9 col-lg-offset-3">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="ignoreInBurnDownChart" name="ignoreInBurnDownChart" value="1" /> Ignore in burndown chart?
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-lg-offset-3 col-lg-9">
+                    <span class=" help-block">
+                        Ignore all tasks of this story in sprint burndown chart.
+                    </span>
                 </div>
             </div>
         </div>
