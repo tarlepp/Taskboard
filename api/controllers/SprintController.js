@@ -424,7 +424,9 @@ module.exports = {
                     // Fetch tasks that are attached to this sprint
                     tasks: function(callback) {
                         // Determine story id values for task search.
-                        var storyIds = _.map(data.stories, function(story) { return {storyId: story.id}; });
+                        var storyIds = _.compact(_.map(data.stories, function(story) {
+                            return story.ignoreInBurnDownChart ? false : {storyId: story.id};
+                        }));
 
                         if (storyIds.length > 0) {
                             DataService.getTasks({or: storyIds}, callback);
