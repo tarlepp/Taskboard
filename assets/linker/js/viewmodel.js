@@ -543,11 +543,12 @@ function ViewModel() {
 
         // Fetch links
         jQuery.ajax({
-            type: "GET",
+            type: "POST",
             url: "/Link/getLinks",
             data: {
                 projectId: self.project().id(),
-                where: where
+                where: where,
+                _csrf: getCsrfToken()
             },
             dataType: "json"
         })
