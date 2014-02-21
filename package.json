@@ -1,50 +1,35 @@
 {
-  "name": "taskboard",
+  "name": "Taskboard-0.10",
   "private": true,
-  "version": "0.12.2",
-  "description": "a Sails application to mimic 'scrum-ban' taskboard.",
+  "version": "0.0.0",
+  "description": "a Sails application",
+  "keywords": [],
   "dependencies": {
-    "sails": "0.9.8",
-    "grunt": "0.4.1",
-    "sails-mysql": "0.9.7",
-    "optimist": "0.3.4",
-    "ejs": "0.8.4",
-    "jquery": "~1.8.3",
-    "jsondiffpatch": "0.0.8",
-    "bcrypt": "~0.7.7",
-    "passport": "~0.1.17",
-    "passport-local": "~0.1.6",
-    "gravatar": "~1.0.6",
-    "async": "~0.2.9",
-    "moment": "~2.4.0",
-    "moment-timezone": "~0.0.3",
-    "bower": "~1.2.8",
-    "numeral": "~1.5.2"
-  },
-  "devDependencies": {
-    "supertest": "~0.8.0",
-    "mocha": "~1.13.0",
-    "should": "~2.0.1",
-    "chai": "~1.8.1"
-  },
-  "engines": {
-    "node": "0.10.x"
+    "sails": "~0.10.0-rc3",
+    "sails-disk": "~0.10.0",
+    "ejs": "~0.8.4",
+    "grunt": "0.4.2",
+    "grunt-sync": "~0.0.4",
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-contrib-clean": "~0.4.1",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-sails-linker": "~0.9.5",
+    "grunt-contrib-jst": "~0.5.0",
+    "grunt-contrib-watch": "~0.4.4",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-cssmin": "~0.6.1",
+    "grunt-contrib-less": "~0.9.0",
+    "grunt-contrib-coffee": "~0.7.0"
   },
   "scripts": {
     "start": "node app.js",
-    "debug": "node debug app.js",
-    "test": "./node_modules/mocha/bin/mocha",
-    "postinstall": "./node_modules/bower/bin/bower install"
+    "debug": "node debug app.js"
   },
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tarlepp/Taskboard.git"
+    "url": "git://github.com/wunder/Taskboard-0.10.git"
   },
-  "bugs": {
-    "url": "https://github.com/tarlepp/Taskboard/issues"
-  },
-  "homepage": "http://tarlepp.github.io/Taskboard/",
-  "author": "Tarmo Leppänen",
-  "license": "MIT"
+  "author": "wunder",
+  "license": ""
 }

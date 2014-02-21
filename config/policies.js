@@ -1,6 +1,8 @@
 /**
- * Policies are simply Express middleware functions which run before your controllers.
- * You can apply one or more policies for a given controller or action.
+ * Policy mappings (ACL)
+ *
+ * Policies are simply Express middleware functions which run **before** your controllers.
+ * You can apply one or more policies to a given controller, or protect just one of its actions.
  *
  * Any policy file (e.g. `authenticated.js`) can be dropped into the `/policies` folder,
  * at which point it can be accessed below by its filename, minus the extension, (e.g. `authenticated`)
@@ -8,254 +10,74 @@
  * For more information on policies, check out:
  * http://sailsjs.org/#documentation
  */
+
+
 module.exports.policies = {
-    /**
-     * By default require authentication always.
-     *
-     * see api/policies/authenticated.js
-     */
-    "*": ["flashMessage", "authenticated"],
 
-    // whitelist the auth controller, this is used for login
-    "auth": {
-        "*": true,
+  // Default policy for all controllers and actions
+  // (`true` allows public access) 
+  '*': true
 
-        // Custom actions
-        login:          ["flashMessage"],
-        logout:         [true],
-        authenticate:   [true]
-    },
+  /*
+	// Here's an example of adding some policies to a controller
+	RabbitController: {
 
-    // Project controller policies
-    "Project": {
-        // By default do not allow nothing
-        "*":        false,
+		// Apply the `false` policy as the default for all of RabbitController's actions
+		// (`false` prevents all access, which ensures that nothing bad happens to our rabbits)
+		'*': false,
 
-        // Default handling for blueprints
-        find:       ["flashMessage", "authenticated", "isAjaxOrSocket"],
-        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "addUserDataCreate"],
-        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin", "addUserDataUpdate"],
-        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin"],
+		// For the action `nurture`, apply the 'isRabbitMother' policy 
+		// (this overrides `false` above)
+		nurture	: 'isRabbitMother',
 
-        // Custom actions
-        add:        ["flashMessage", "authenticated", "isAjax"],
-        edit:       ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"],
-        backlog:    ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"],
-        milestones: ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"],
-        planning:   ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"],
-        statistics: ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"],
-        sprints:    ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"]
-    },
-
-    // Phase controller policies
-    "Phase": {
-        // By default do not allow nothing
-        "*":        false,
-
-        // Default handling for blueprints
-        find:       ["flashMessage", "authenticated", "isAjaxOrSocket"],
-        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasPhaseAdmin", "addUserDataCreate"],
-        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasPhaseAdmin", "addUserDataUpdate"],
-        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasPhaseAdmin"],
-
-        // Custom actions
-        edit:       ["flashMessage", "authenticated", "isAjax", "hasProjectAdmin"]
-    },
-
-    // Sprint controller policies
-    "Sprint": {
-        // By default do not allow nothing
-        "*":        false,
-
-        // Default handling for blueprints
-        find:       ["flashMessage", "authenticated", "isAjaxOrSocket", "hasSprintAccess"],
-        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasSprintAdmin", "addUserDataCreate"],
-        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasSprintAdmin", "addUserDataUpdate"],
-        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasSprintAdmin"],
-
-        // Custom actions
-        add:            ["flashMessage", "authenticated", "isAjax", "hasSprintAdmin"],
-        edit:           ["flashMessage", "authenticated", "isAjax", "hasSprintAccess"],
-        backlog:        ["flashMessage", "authenticated", "isAjax", "hasSprintAccess"],
-        charts:         ["flashMessage", "authenticated", "isAjax", "hasSprintAccess"],
-        chartDataTasks: ["flashMessage", "authenticated", "isAjax", "hasSprintAccess"]
-    },
-
-    // Milestone controller policies
-    "Milestone": {
-        // By default do not allow nothing
-        "*":        false,
-
-        // Default handling for blueprints
-        find:       ["flashMessage", "authenticated", "isAjaxOrSocket", "hasMilestoneAccess"],
-        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasMilestoneAdmin", "addUserDataCreate"],
-        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasMilestoneAdmin", "addUserDataUpdate"],
-        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasMilestoneAdmin"],
-
-        // Custom actions
-        add:        ["flashMessage", "authenticated", "isAjax", "hasMilestoneAdmin"],
-        edit:       ["flashMessage", "authenticated", "isAjax", "hasMilestoneAccess"],
-        stories:    ["flashMessage", "authenticated", "isAjax", "hasMilestoneAccess"]
-    },
-
-    // Story controller policies
-    "Story": {
-        // By default do not allow nothing
-        "*":        false,
-
-        // Default handling for blueprints
-        find:       ["flashMessage", "authenticated", "isAjaxOrSocket", "hasStoryAccess"],
-        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasStoryAdmin", "addUserDataCreate"],
-        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasStoryAdmin", "addUserDataUpdate"],
-        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasStoryAdmin"],
-
-        // Custom actions
-        add:        ["flashMessage", "authenticated", "isAjax", "hasStoryAdmin"],
-        split:      ["flashMessage", "authenticated", "isAjax", "hasStoryAdmin"],
-        edit:       ["flashMessage", "authenticated", "isAjax", "hasStoryAccess"],
-        tasks:      ["flashMessage", "authenticated", "isAjax", "hasStoryAccess"]
-    },
-
-    // Task controller policies
-    "Task": {
-        // By default do not allow nothing
-        "*":        false,
-
-        // Default handling for blueprints
-        find:       ["flashMessage", "authenticated", "isAjaxOrSocket", "hasTaskAccess"],
-        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasTaskAdmin", "addUserDataCreate"],
-        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasTaskAdmin", "addUserDataUpdate"],
-        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasTaskAdmin"],
-
-        // Custom actions
-        add:        ["flashMessage", "authenticated", "isAjax", "hasTaskAdmin"],
-        edit:       ["flashMessage", "authenticated", "isAjax", "hasTaskAccess"],
-        statistics: ["flashMessage", "authenticated", "isAjax", "hasTaskAccess"],
-        releaseTask:["flashMessage", "authenticated", "isAjax", "hasTaskAccess"],
-        takeTask:   ["flashMessage", "authenticated", "isAjax", "hasTaskAccess"]
-    },
-
-    // User controller policies
-    "User": {
-        // By default do not allow nothing
-        "*":        false,
-
-        // Default handling for blueprints
-        find:       ["flashMessage", "authenticated", "isAjaxOrSocket"],
-        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasUserAdmin", "addUserDataCreate"],
-        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasUserAdminOrItself", "addUserDataUpdate"],
-        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasUserAdmin"],
-
-        // Custom actions
-        list:           ["flashMessage", "authenticated", "isAjax", "hasUserAdmin"],
-        add:            ["flashMessage", "authenticated", "isAjax", "hasUserAdmin"],
-        edit:           ["flashMessage", "authenticated", "isAjax", "hasUserAdminOrItself"],
-        history:        ["flashMessage", "authenticated", "isAjax", "hasUserAdminOrItself"],
-        projects:       ["flashMessage", "authenticated", "isAjax", "hasUserAdminOrItself"],
-        changePassword: ["flashMessage", "authenticated", "isAjax", "hasUserAdminOrItself"]
-    },
-
-    // ProjectUser controller policies
-    "ProjectUser": {
-        // By default do not allow nothing
-        "*":        false,
-
-        // Default handling for blueprints
-        find:       ["flashMessage", "authenticated", "isAjaxOrSocket"],
-        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin", "addUserDataCreate"],
-        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin", "addUserDataUpdate"],
-        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAdmin"],
-
-        // Custom actions
-        users:          ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"],
-        availableUsers: ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAccess"],
-        ownProjects:    ["flashMessage", "authenticated", "isAjaxOrSocket"],
-        getRole:        ["flashMessage", "authenticated", "isAjaxOrSocket", "hasProjectAccess"]
-    },
-
-    // Type controller policies
-    "Type": {
-        // By default do not allow nothing
-        "*":        false,
-
-        // Default handling for blueprints
-        find:       ["flashMessage", "authenticated", "isAjaxOrSocket"],
-        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "isAdministrator"],
-        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "isAdministrator", "addUserDataCreate"],
-        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "isAdministrator", "addUserDataUpdate"]
-    },
-
-    // Comment controller policies
-    "Comment": {
-        // By default do not allow nothing
-        "*":        false,
-
-        // Default handling for blueprints
-        find:       ["flashMessage", "authenticated", "isAjaxOrSocket", "hasCommentObjectAccess"],
-        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasCommentObjectCreate", "addUserDataCreate"],
-        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasCommentObjectAdmin", "addUserDataUpdate"],
-        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasCommentObjectAdmin"],
-
-        // Custom actions
-        index:      ["flashMessage", "authenticated", "isAjax", "hasCommentObjectAccess"]
-    },
-
-    // Validator controller policies
-    "Validator": {
-        // By default do not allow nothing
-        "*":            false,
-
-        // Custom actions
-        isUnique:       ["flashMessage", "authenticated", "isAjax"],
-        passwordCheck:  ["flashMessage", "authenticated", "isAjax", "hasUserAdminOrItself"]
-    },
-
-    // ExternalLink controller policies
-    "ExternalLink": {
-        // By default do not allow nothing
-        "*":        false,
-
-        // Default handling for blueprints
-        find:       ["flashMessage", "authenticated", "isAjaxOrSocket", "hasExternalLinkAccess"],
-        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasExternalLinkAdmin", "addUserDataCreate"],
-        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasExternalLinkAdmin", "addUserDataUpdate"],
-        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasExternalLinkAdmin"],
-
-        // Custom actions
-        list:       ["flashMessage", "authenticated", "isAjax", "hasExternalLinkAccess"],
-        add:        ["flashMessage", "authenticated", "isAjax", "hasExternalLinkAdmin"],
-        edit:       ["flashMessage", "authenticated", "isAjax", "hasExternalLinkAccess"],
-        links:      ["flashMessage", "authenticated", "isAjax", "hasExternalLinkAccess"]
-    },
-
-    // Link controller policies
-    "Link": {
-        // By default do not allow nothing
-        "*":        false,
-
-        // Default handling for blueprints
-        find:       ["flashMessage", "authenticated", "isAjaxOrSocket", "hasLinkObjectAccess"],
-        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasLinkObjectCreate", "addUserDataCreate"],
-        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasLinkObjectAdmin", "addUserDataUpdate"],
-        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasLinkObjectAdmin"],
-
-        // Custom actions
-        index:      ["flashMessage", "authenticated", "isAjax", "hasLinkObjectAccess"],
-        getLinks:   ["flashMessage", "authenticated", "isAjax", "hasProjectAccess"]
-    },
-
-    // ExternalLink controller policies
-    "ExcludeSprintDay": {
-        // By default do not allow nothing
-        "*":        false,
-
-        // Default handling for blueprints
-        find:       ["flashMessage", "authenticated", "isAjaxOrSocket", "hasExcludeSprintDayAccess"],
-        create:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasExcludeSprintDayAdmin", "addUserDataCreate"],
-        update:     ["flashMessage", "authenticated", "isAjaxOrSocket", "hasExcludeSprintDayAdmin", "addUserDataUpdate"],
-        destroy:    ["flashMessage", "authenticated", "isAjaxOrSocket", "hasExcludeSprintDayAdmin"],
-
-        // Custom actions
-        index:      ["flashMessage", "authenticated", "isAjax", "hasExcludeSprintDayAccess"]
-    }
+		// Apply the `isNiceToAnimals` AND `hasRabbitFood` policies
+		// before letting any users feed our rabbits
+		feed : ['isNiceToAnimals', 'hasRabbitFood']
+	}
+	*/
 };
+
+
+/**
+ * Here's what the `isNiceToAnimals` policy from above might look like:
+ * (this file would be located at `policies/isNiceToAnimals.js`)
+ *
+ * We'll make some educated guesses about whether our system will
+ * consider this user someone who is nice to animals.
+ *
+ * Besides protecting rabbits (while a noble cause, no doubt), 
+ * here are a few other example use cases for policies:
+ *
+ *	+ cookie-based authentication
+ *	+ role-based access control
+ *	+ limiting file uploads based on MB quotas
+ *	+ OAuth
+ *	+ BasicAuth
+ *	+ or any other kind of authentication scheme you can imagine
+ *
+ */
+
+/*
+module.exports = function isNiceToAnimals (req, res, next) {
+	
+	// `req.session` contains a set of data specific to the user making this request.
+	// It's kind of like our app's "memory" of the current user.
+	
+	// If our user has a history of animal cruelty, not only will we 
+	// prevent her from going even one step further (`return`), 
+	// we'll go ahead and redirect her to PETA (`res.redirect`).
+	if ( req.session.user.hasHistoryOfAnimalCruelty ) {
+		return res.redirect('http://PETA.org');
+	}
+
+	// If the user has been seen frowning at puppies, we have to assume that
+	// they might end up being mean to them, so we'll 
+	if ( req.session.user.frownsAtPuppies ) {
+		return res.redirect('http://www.dailypuppy.com/');
+	}
+
+	// Finally, if the user has a clean record, we'll call the `next()` function
+	// to let them through to the next policy or our controller
+	next();
+};
+*/

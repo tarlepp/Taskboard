@@ -1,133 +1,96 @@
-<% if (req.isAjax) { %>
-    <%- body %>
-<% } else { %>
-
 <!DOCTYPE html>
 <html>
-<head>
-    <title>
-        <%- title %>
-    </title>
+  <head>
+    <title>New Sails App</title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <link href='//fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,300' rel='stylesheet' type='text/css'>
+    
+    <!--  
+        Stylesheets and Preprocessors
+        ==============================
+
+        You can always bring in CSS files manually with `<link>` tags, or asynchronously
+        using a solution like AMD (RequireJS).  Or, if you like, you can take advantage 
+        of Sails' conventional asset pipeline (boilerplate Gruntfile).
+
+        By default, stylesheets from your `assets/linker/styles` folder are included
+        here automatically (between STYLES and STYLES END). Both CSS (.css) and LESS (.less)
+        are supported. In production, your styles will be minified and concatenated into
+        a single file.
+        
+        To customize any part of the built-in behavior, just edit your Gruntfile.
+        For example, here are a few things you could do:
+            
+            + Change the order of your CSS files
+            + Import stylesheets from other directories
+            + Use a different or additional preprocessor, like SASS, SCSS or Stylus
+    -->
 
     <!--STYLES-->
-    <link rel="stylesheet" href="/linker/bower_components/jquery-ui/themes/base/minified/jquery-ui.min.css">
-    <link rel="stylesheet" href="/linker/bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/linker/bower_components/bootstrap-datepicker/css/datepicker3.css">
-    <link rel="stylesheet" href="/linker/bower_components/bootstrap-select/bootstrap-select.min.css">
-    <link rel="stylesheet" href="/linker/bower_components/bootstrap-popover-extra-placements/source/popover-extra-placements.css">
-    <link rel="stylesheet" href="/linker/bower_components/font-awesome/css/font-awesome.css">
-    <link rel="stylesheet" href="/linker/bower_components/qtip2/jquery.qtip.min.css">
-    <link rel="stylesheet" href="/linker/bower_components/evol.colorpicker/css/evol.colorpicker.css">
-    <link rel="stylesheet" href="/linker/bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css">
-    <link rel="stylesheet" href="/linker/styles/charts.css">
-    <link rel="stylesheet" href="/linker/styles/comment.css">
-    <link rel="stylesheet" href="/linker/styles/form.css">
-    <link rel="stylesheet" href="/linker/styles/jqueryui.css">
-    <link rel="stylesheet" href="/linker/styles/layout.css">
-    <link rel="stylesheet" href="/linker/styles/modal.css">
-    <link rel="stylesheet" href="/linker/styles/qtip2.css">
-    <link rel="stylesheet" href="/linker/styles/responsive.css">
-    <link rel="stylesheet" href="/linker/styles/screen.css">
-    <link rel="stylesheet" href="/linker/styles/signin.css">
-    <link rel="stylesheet" href="/linker/styles/taskboard.css">
+    
     <!--STYLES END-->
+  </head>
 
-    <%- partial("partials/layout/header_javascript") %>
+  <body>
+    <%- body %>
 
-</head>
 
-<body>
 
-<div id="header">
-    <%- partial("partials/layout/header") %>
-</div>
+    <!--
+        Client-side Templates
+        ========================
 
-<div id="container">
-    <div class="container">
-        <%- body %>
-    </div>
-</div>
+        HTML templates are important prerequisites of modern, rich client applications.
+        To work their magic, frameworks like Backbone, Angular, Ember, and Knockout require
+        that you load these templates client-side.
 
-<div id="footer">
-    <%- partial("partials/layout/footer") %>
-</div>
+        By default, your Gruntfile is configured to automatically load and precompile
+        client-side JST templates in your `assets/linker/templates` folder, then
+        include them here automatically (between TEMPLATES and TEMPLATES END).
+        
+        To customize this behavior to fit your needs, just edit your Gruntfile.
+        For example, here are a few things you could do:
 
-<div id="placeholderLoading" class="hidden">
-    <div class="text-center">
-        <i class="fa fa-spinner fa-spin fa-large"></i>&nbsp;&nbsp;&nbsp;<span class="text-muted">Loading data...</span>
-    </div>
-</div>
+            + Import templates from other directories
+            + Use a different template engine (handlebars, jade, dust, etc.)
+            + Internationalize your client-side templates using a server-side
+              stringfile before they're served.
+    -->
 
-<!--TEMPLATES-->
-<script type="text/javascript" src="/jst.js"></script>
-<!--TEMPLATES END-->
+    <!--TEMPLATES-->
+    
+    <!--TEMPLATES END-->
 
-<!--SCRIPTS-->
-<script src="/linker/js/socket.io.js"></script>
-<script src="/linker/js/sails.io.js"></script>
-<script src="/linker/js/app.js"></script>
-<script src="/linker/bower_components/md5-jkmyers/md5.min.js"></script>
-<script src="/linker/bower_components/json5/lib/json5.js"></script>
-<script src="/linker/bower_components/underscore/underscore.js"></script>
-<script src="/linker/bower_components/async/lib/async.js"></script>
-<script src="/linker/bower_components/momentjs/min/moment-with-langs.min.js"></script>
-<script src="/linker/bower_components/moment-timezone/min/moment-timezone.min.js"></script>
-<script src="/linker/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="/linker/bower_components/jquery-ui/ui/minified/jquery-ui.min.js"></script>
-<script src="/linker/bower_components/qtip2/jquery.qtip.min.js"></script>
-<script src="/linker/bower_components/trunk8/trunk8.js"></script>
-<script src="/linker/bower_components/noty/js/noty/packaged/jquery.noty.packaged.js"></script>
-<script src="/linker/bower_components/jquery-selectorator/dist/selectorator.min.js"></script>
-<script src="/linker/bower_components/jquery.complexify.js/jquery.complexify.min.js"></script>
-<script src="/linker/bower_components/jquery.complexify.js/jquery.complexify.banlist.js"></script>
-<script src="/linker/bower_components/evol.colorpicker/js/evol.colorpicker.min.js"></script>
-<script src="/linker/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="/linker/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-<script src="/linker/bower_components/bootstrap-select/bootstrap-select.min.js"></script>
-<script src="/linker/bower_components/bootbox/bootbox.js"></script>
-<script src="/linker/bower_components/bootstrap-wysiwyg/bootstrap-wysiwyg.js"></script>
-<script src="/linker/bower_components/bootstrap-wysiwyg/external/jquery.hotkeys.js"></script>
-<script src="/linker/bower_components/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
-<script src="/linker/bower_components/bootstrap-popover-extra-placements/source/popover-extra-placements.js"></script>
-<script src="/linker/bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
-<script src="/linker/bower_components/knockout.js/knockout.js"></script>
-<script src="/linker/bower_components/knockout-sortable/build/knockout-sortable.min.js"></script>
-<script src="/linker/bower_components/knockout-deferred-updates/knockout-deferred-updates.min.js"></script>
-<script src="/linker/bower_components/highstock-components/highstock.src.js"></script>
-<script src="/linker/bower_components/numeral/min/numeral.min.js"></script>
-<script src="/linker/bower_components/numeral/min/languages.min.js"></script>
-<script src="/linker/vendor/moment-timezone-data.js"></script>
-<script src="/linker/vendor/cookie.js/cookie.js"></script>
-<script src="/linker/vendor/knockout-bootstrap.js"></script>
-<script src="/linker/vendor/jquery.typewatch.js"></script>
-<script src="/linker/js/board.js"></script>
-<script src="/linker/js/common.js"></script>
-<script src="/linker/js/date.js"></script>
-<script src="/linker/js/errors.js"></script>
-<script src="/linker/js/events.js"></script>
-<script src="/linker/js/externallink.js"></script>
-<script src="/linker/js/helpers.js"></script>
-<script src="/linker/js/inits.js"></script>
-<script src="/linker/js/knockout.js"></script>
-<script src="/linker/js/milestone.js"></script>
-<script src="/linker/js/models.js"></script>
-<script src="/linker/js/phase.js"></script>
-<script src="/linker/js/project.js"></script>
-<script src="/linker/js/prototype.js"></script>
-<script src="/linker/js/sprint.js"></script>
-<script src="/linker/js/story.js"></script>
-<script src="/linker/js/task.js"></script>
-<script src="/linker/js/user.js"></script>
-<script src="/linker/js/validation.js"></script>
-<script src="/linker/js/viewmodel.js"></script>
-<!--SCRIPTS END-->
 
-</body>
+    <!--
+
+      Client-side Javascript
+      ========================
+
+      You can always bring in JS files manually with `script` tags, or asynchronously
+      on the client using a solution like AMD (RequireJS).  Or, if you like, you can 
+      take advantage of Sails' conventional asset pipeline (boilerplate Gruntfile).
+
+      By default, filesin your `assets/linker/js` folder are included here
+      automatically (between SCRIPTS and SCRIPTS END).  Both JavaScript (.js) and
+      CoffeeScript (.coffee) are supported. In production, your scripts will be minified
+      and concatenated into a single file.
+      
+      To customize any part of the built-in behavior, just edit your Gruntfile.
+      For example, here are a few things you could do:
+          
+          + Change the order of your scripts
+          + Import scripts from other directories
+          + Use a different preprocessor, like TypeScript
+
+    -->
+
+    <!--SCRIPTS-->
+    <script src="/js/socket.io.js"></script>
+    <script src="/js/sails.io.js"></script>
+    <script src="/js/example.js"></script>
+    <!--SCRIPTS END-->
+  </body>
 </html>
-
-<% } %>
