@@ -819,28 +819,37 @@ module.exports = {
                 while (moment().diff(currentDate, "days") >= 0 && tasks > 0) {
                     // We are only interested days that are before current day
                     if (currentDate.isBefore(moment().add("days", 1), "day")) {
+                        ignore = isDateIgnored(currentDate);
                         date = currentDate.format("YYYY-MM-DD");
 
                         // Determine tasks count
                         tasksDone = objectsTasksDone[date] ? _.size(objectsTasksDone[date]) : 0;
                         tasksOver = objectsTasksOver[date] ? _.size(objectsTasksOver[date]) : 0;
 
-                        // Calculate new task count based to previous tasks, done and added tasks count
-                        tasks = tasks - tasksDone + tasksOver;
+                        // If current date has some tasks done or added, we must drawn this date
+                        if (tasksDone > 0 || tasksOver > 0) {
+                            ignore = false;
+                        }
 
-                        // Add point data to output
-                        output.push({
-                            x: Date.UTC(currentDate.year(), currentDate.month(), currentDate.date()),
-                            y: tasks,
-                            previousX: previousDate ? previousDate : null,
-                            notPlannedDay: true
-                        });
+                        // Date is valid to show
+                        if (!ignore) {
+                            // Calculate new task count based to previous tasks, done and added tasks count
+                            tasks = tasks - tasksDone + tasksOver;
 
-                        // Add workdays
-                        workDays = workDays + 1;
+                            // Add point data to output
+                            output.push({
+                                x: Date.UTC(currentDate.year(), currentDate.month(), currentDate.date()),
+                                y: tasks,
+                                previousX: previousDate ? previousDate : null,
+                                notPlannedDay: true
+                            });
 
-                        // Store new previous date
-                        previousDate = Date.UTC(currentDate.year(), currentDate.month(), currentDate.date());
+                            // Add workdays
+                            workDays = workDays + 1;
+
+                            // Store new previous date
+                            previousDate = Date.UTC(currentDate.year(), currentDate.month(), currentDate.date());
+                        }
                     }
 
                     // Go to next date
