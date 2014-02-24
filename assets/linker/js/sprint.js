@@ -597,7 +597,6 @@ function initSprintTabChart(modal, contentId) {
             endOnTick: false,
             ordinal: true,
             tickInterval: 24 * 3600 * 1000,
-            minRange: 1,
             labels: {
                 rotation: -36,
                 useHTML: true,
@@ -611,8 +610,8 @@ function initSprintTabChart(modal, contentId) {
                     // Iterate series to determine if this point is to show or not
                     _.each(chart.series, function(serie) {
                         // Iterate series x-axel data
-                        _.each(serie.xData, function(pointX, index) {
-                            if (currentPoint === pointX) {
+                        _.each(serie.userOptions.data, function(dataPoint, index) {
+                            if (currentPoint == dataPoint.x) {
                                 founded = true;
                             }
                         });
@@ -629,7 +628,7 @@ function initSprintTabChart(modal, contentId) {
                             notPlanned = true;
                         } else { // Otherwise we must check if current point is planned or not
                             actualObject = _.find(chart.series, function(serie) {
-                                return serie.userOptions.name === "Actual";
+                                return serie.userOptions.name === "Actual" || serie.userOptions.name === "Ideal";
                             });
 
                             // Iterate data points
@@ -664,7 +663,9 @@ function initSprintTabChart(modal, contentId) {
                 pointPadding: 0.1,
                 groupPadding: 0,
                 borderWidth: 0,
-                shadow: false
+                shadow: false,
+                pointRange: 24 * 3600 * 1000,
+                pointInterval: 24 * 3600 * 1000
             }
         },
         legend: {
