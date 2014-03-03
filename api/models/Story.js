@@ -136,6 +136,20 @@ module.exports = {
     // Lifecycle Callbacks
 
     /**
+     * Before validation callback.
+     *
+     * @param   {sails.model.story} values
+     * @param   {Function}          callback
+     */
+    beforeValidation: function(values, callback) {
+        if (typeof values.ignoreInBurnDownChart !== "boolean") {
+            values.ignoreInBurnDownChart = false;
+        }
+
+        callback();
+    },
+
+    /**
      * Before create callback. Basically we want to make sure that isDone bit is set to false
      * and calculate story priority according to same project and sprint stories.
      *

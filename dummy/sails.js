@@ -295,6 +295,7 @@ var sails = {
             isDone: "",
             timeStart: "",
             timeEnd: "",
+            ignoreInBurnDownChart: "",
             id: "",
             createdAt: "",
             updatedAt: ""
