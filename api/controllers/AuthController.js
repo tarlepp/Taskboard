@@ -15,8 +15,7 @@ module.exports = {
      */
     _config: {
         blueprints: {
-            rest: false,
-            shortcuts: false
+            rest: false
         }
     },
 
