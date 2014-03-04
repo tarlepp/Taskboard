@@ -26,8 +26,9 @@ module.exports = {
     _config: {},
 
     /**
-     * Main history action. This will render object specified comment GUI where user
-     * can view, reply and add new comments.
+     * Main action for sprint exclude days GUI. Within this GUI project managers can add
+     * specified days to be ignored in specified sprint. These days will affect mainly to
+     * sprint burndown chart and task duration calculations.
      *
      * @param   {Request}   request     Request object
      * @param   {Response}  response    Response object
