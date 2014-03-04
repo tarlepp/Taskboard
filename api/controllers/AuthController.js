@@ -10,6 +10,17 @@ var passport = require("passport");
 
 module.exports = {
     /**
+     * Overrides for the settings in `config/controllers.js`
+     * (specific to AuthController)
+     */
+    _config: {
+        blueprints: {
+            rest: false,
+            shortcuts: false
+        }
+    },
+
+    /**
      * Login action, this will just shows login screen if user isn't logged in yet.
      *
      * @param   {Request}   request     Request object
