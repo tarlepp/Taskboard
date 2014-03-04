@@ -25,8 +25,15 @@ module.exports = {
      */
     _config: {},
 
-    index: function(req, res) {
-        var sprintId = parseInt(req.param("sprintId"), 10);
+    /**
+     * Main history action. This will render object specified comment GUI where user
+     * can view, reply and add new comments.
+     *
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
+     */
+    index: function(request, response) {
+        var sprintId = parseInt(request.param("sprintId"), 10);
 
         // Make parallel jobs to fetch needed data
         async.parallel(
@@ -48,7 +55,7 @@ module.exports = {
 
                 // Fetch admin right
                 hasAdmin: function(callback) {
-                    AuthService.hasSprintAdmin(req.user, sprintId, callback);
+                    AuthService.hasSprintAdmin(request.user, sprintId, callback);
                 }
             },
 
@@ -56,20 +63,20 @@ module.exports = {
              * Main callback function which is called after all parallel jobs are processed.
              *
              * @param   {Error} error   Possible error object
-             * @param   {{}}    data    Data object that contains 'sprint' and 'excludeDays' data
+             * @param   {{}}    data    Data object that contains all parallel fetched data
              */
             function(error, data) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    response.send(error.status ? error.status : 500, error.message ? error.message : error);
                 } else {
                     // Add author to each sprint exclude day object
                     _.each(data.excludeDays, function(day) {
                         day.author = _.find(data.users, function(user) { return user.id === day.createdUserId; });
                     });
 
-                    res.view(data);
+                    response.view(data);
                 }
             }
-        )
+        );
     }
 };
