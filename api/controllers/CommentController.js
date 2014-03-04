@@ -14,6 +14,7 @@
  *
  * @docs        ::  http://sailsjs.org/#!documentation/controllers
  */
+"use strict";
 
 module.exports = {
     /**
@@ -23,22 +24,27 @@ module.exports = {
     _config: {},
 
     /**
-     * Main history action.
+     * Main history action. This will render object specified comment GUI where user
+     * can view, reply and add new comments.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    index: function(req, res) {
-        var objectId = req.param("objectId");
-        var objectName = req.param("objectName");
+    index: function(request, response) {
+        var objectId = request.param("objectId");
+        var objectName = request.param("objectName");
 
         // Fetch specified object and id comments
         DataService.getComments(objectName, objectId, 0, function(error, comments) {
-            res.view({
-                objectId: objectId,
-                objectName: objectName,
-                comments: comments
-            });
+            if (error) {
+                response.send(error.status ? error.status : 500, error.message ? error.message : error);
+            } else {
+                response.view({
+                    objectId: objectId,
+                    objectName: objectName,
+                    comments: comments
+                });
+            }
         });
     }
 };
