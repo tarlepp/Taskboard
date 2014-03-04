@@ -6,6 +6,10 @@
 var selectedProjectId;
 var selectedSprintId;
 var loggedUserId;
+var __filename;
+var __line;
+var __function;
+var __stack;
 
 var knockout = {
     sortable: {

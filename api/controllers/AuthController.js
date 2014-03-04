@@ -10,70 +10,80 @@ var passport = require("passport");
 
 module.exports = {
     /**
-     * Login action, basically this just shows login screen.
+     * Login action, this will just shows login screen if user isn't logged in yet.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    login: function(req, res) {
+    login: function(request, response) {
         // If user is already signed in redirect to main page
-        if (req.user) {
-            res.redirect("/");
+        if (request.user) {
+            response.redirect("/");
         }
 
-        res.view();
+        response.view();
     },
 
     /**
-     * Logout action, just logout user and then redirect to root.
+     * Logout action, just logout user and then redirect back to login page.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    logout: function(req, res) {
-        req.logout();
+    logout: function(request, response) {
+        request.logout();
 
-        res.redirect("/login");
+        response.redirect("/login");
     },
 
     /**
-     * Authentication action, this uses passport local directive to
-     * check if user is valid user or not.
+     * Authentication action, this uses passport local directive to check if user is valid user or not.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @todo how to support multiple authentication directives?
+     *
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    authenticate: function(req, res) {
+    authenticate: function(request, response) {
         passport.authenticate("local", function(error, user, info) {
             if ((error) || (!user)) {
-                req.flash.message("Invalid credentials", "error");
+                sails.log.error("Login failed: " + __filename + ":" + __line);
+                sails.log.error(info);
 
-                res.redirect("/login");
+                request.flash.message("Invalid credentials", "error");
+
+                response.redirect("/login");
                 return;
             }
 
-            req.logIn(user, function(error) {
+            request.logIn(user, function(error) {
                 if (error) {
-                    req.flash.message("Login fail...", "error");
+                    sails.log.error("Login failed: " + __filename + ":" + __line);
+                    sails.log.error(error);
 
-                    res.redirect("/login");
+                    request.flash.message("Login fail...", "error");
+
+                    response.redirect("/login");
                 } else {
                     // Update current session id to user data
-                    User.update({id: user.id}, {sessionId: req.sessionID}, function(error, users) {
+                    User.update({id: user.id}, {sessionId: request.sessionID}, function(error, users) {
                         // Oh nou error
-                        if (error) {
-                            res.redirect("/logout");
+                        if (error || users.length !== 1) {
+                            sails.log.error("Login failed: " + __filename + ":" + __line);
+                            sails.log.error(error);
+
+                            response.redirect("/logout");
                         } else { // Otherwise redirect user to main page
                             // Write user sign in log
-                            LoggerService.userSignIn(user, req);
+                            LoggerService.userSignIn(user, request);
 
-                            req.flash.message("Successfully sign in", "success");
+                            request.flash.message("Successfully sign in", "success");
 
-                            res.redirect("/");
+                            response.redirect("/");
                         }
                     });
                 }
             });
-        })(req, res);
+        })(request, response);
     }
 };
