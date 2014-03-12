@@ -11,7 +11,7 @@
  *
  * @param   {Error|{}}  error       Error object
  * @param   {Request}   request     Request object
- * @param   {Response}  response    Response objet
+ * @param   {Response}  response    Response object
  *
  * @returns {*}
  */
