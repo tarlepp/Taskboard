@@ -26,13 +26,14 @@ module.exports = {
     _config: {},
 
     /**
-     * External links list action.
+     * External links list action. This action will show user project specified external link list
+     * GUI and user can interact with those.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request Request object
+     * @param   {Response}  response Response object
      */
-    list: function(req, res) {
-        var projectId = parseInt(req.param("projectId"), 10);
+    list: function(request, response) {
+        var projectId = parseInt(request.param("projectId"), 10);
 
         // Parallel jobs to fetch project and actual external link data.
         async.parallel(
@@ -56,65 +57,74 @@ module.exports = {
              */
             function(error, results) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    ResponseService.makeError(error, request, response);
                 } else {
-                    // Map founded links
-                    async.map(
-                        results.links,
-
-                        /**
-                         * Iterator function which is called to every link in array. This will just add
-                         * attached link count to each link object.
-                         *
-                         * @param   {sails.model.link}  link
-                         * @param   {Function}          callback
-                         */
-                        function(link, callback) {
-                            Link
-                                .count({externalLinkId: link.id})
-                                .exec(function (error, count) {
-                                    link.attachedLinksCount = count;
-
-                                    callback(error, link);
-                                });
-                        },
-
-                        /**
-                         * Main callback function which is called after all array values are processed.
-                         *
-                         * @param error
-                         * @param data
-                         */
-                        function(error, data) {
-                            if (error) {
-                                res.send(error.status ? error.status : 500, error.message ? error.message : error);
-                            } else {
-                                res.view(_.extend({
-                                    projectId: projectId
-                                }, results));
-                            }
-                        }
-                    );
+                    processLinks(results);
                 }
             }
         );
+
+        /**
+         * Private function to process links. Basically this will just map all founded links
+         * and fetch actual count for those.
+         *
+         * @param   {{}}    results Project and links data
+         */
+        function processLinks(results) {
+            // Map founded links
+            async.map(
+                results.links,
+
+                /**
+                 * Iterator function which is called to every link in array. This will just add
+                 * attached link count to each link object.
+                 *
+                 * @param   {sails.model.link}  link
+                 * @param   {Function}          callback
+                 */
+                function(link, callback) {
+                    Link
+                        .count({externalLinkId: link.id})
+                        .exec(function (error, count) {
+                            link.attachedLinksCount = count;
+
+                            callback(error, link);
+                        });
+                },
+
+                /**
+                 * Main callback function which is called after all array values are processed.
+                 *
+                 * @param   {null|Error}    error
+                 */
+                function(error) {
+                    if (error) {
+                        ResponseService.makeError(error, request, response);
+                    } else {
+                        response.view(_.extend({
+                            projectId: projectId
+                        }, results));
+                    }
+                }
+            );
+        }
     },
 
     /**
-     * External link add action.
+     * External link add action. This will render GUI for adding new link.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    add: function(req, res) {
-        var projectId = parseInt(req.param("projectId"), 10);
+    add: function(request, response) {
+        var projectId = parseInt(request.param("projectId"), 10);
 
         // Fetch project data
         DataService.getProject(projectId, function(error, project) {
             if (error) {
-                res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                ResponseService.makeError(error, request, response);
             } else {
-                res.view({
+                response.view({
                     project: project,
                     projectId: projectId
                 });
@@ -123,20 +133,20 @@ module.exports = {
     },
 
     /**
-     * External link edit action.
+     * External link edit action. This will render GUI for editing specified link.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    edit: function(req, res) {
-        var linkId = parseInt(req.param("linkId"), 10);
+    edit: function(request, response) {
+        var linkId = parseInt(request.param("linkId"), 10);
 
         // Fetch project data
         DataService.getProjectLink(linkId, function(error, link) {
             if (error) {
-                res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                ResponseService.makeError(error, request, response);
             } else {
-                res.view({
+                response.view({
                     link: link
                 });
             }
@@ -146,11 +156,11 @@ module.exports = {
     /**
      * Action to show all links that area attached to specified external link.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    links: function(req, res) {
-        var linkId = parseInt(req.param("id"), 10);
+    links: function(request, response) {
+        var linkId = parseInt(request.param("id"), 10);
 
         // Make parallel jobs to fetch basic data
         async.parallel(
@@ -187,66 +197,76 @@ module.exports = {
              */
             function(error, results) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    ResponseService.makeError(error, request, response);
                 } else {
-                    // Map founded links
-                    async.map(
-                        results.links,
-
-                        /**
-                         * Iterator function which is called with every link.
-                         *
-                         * @param   {sails.model.link}  link
-                         * @param   {Function}          callback
-                         */
-                        function(link, callback) {
-                            link.author = _.find(results.users, function(user) {
-                                return user.id === link.createdUserId;
-                            });
-
-                            switch (link.objectName) {
-                                case "Story":
-                                    DataService.getStory(link.objectId, function(error, story) {
-                                        if (error) {
-                                            callback(error, null);
-                                        } else {
-                                            link.objectTitle = story.objectTitle();
-
-                                            callback(null, link);
-                                        }
-                                    });
-                                    break;
-                                case "Task":
-                                    DataService.getTask(link.objectId, function(error, task) {
-                                        if (error) {
-                                            callback(error, null);
-                                        } else {
-                                            link.objectTitle = task.objectTitle();
-
-                                            callback(null, link);
-                                        }
-                                    });
-                                    break;
-                            }
-                        },
-
-                        /**
-                         * Callback function which is called after all links are mapped.
-                         *
-                         * @param   {null|Error}    error
-                         */
-                        function(error) {
-                            if (error) {
-                                res.send(error.status ? error.status : 500, error.message ? error.message : error);
-                            } else {
-                                res.view(_.extend({
-                                    linkId: linkId
-                                }, results));
-                            }
-                        }
-                    );
+                    processData(results);
                 }
             }
-        )
+        );
+
+        /**
+         * Private function to process actual link data for GUI render.
+         *
+         * @param   {{}}    results Object that contains all necessary data for rendering view
+         */
+        function processData(results) {
+            // Map founded links
+            async.map(
+                results.links,
+
+                /**
+                 * Iterator function which is called with every link.
+                 *
+                 * @param   {sails.model.link}  link
+                 * @param   {Function}          callback
+                 */
+                function(link, callback) {
+                    // Set author to link
+                    link.author = _.find(results.users, function(user) {
+                        return user.id === link.createdUserId;
+                    });
+
+                    switch (link.objectName) {
+                        case "Story":
+                            DataService.getStory(link.objectId, function(error, story) {
+                                if (error) {
+                                    callback(error, null);
+                                } else {
+                                    link.objectTitle = story.objectTitle();
+
+                                    callback(null, link);
+                                }
+                            });
+                            break;
+                        case "Task":
+                            DataService.getTask(link.objectId, function(error, task) {
+                                if (error) {
+                                    callback(error, null);
+                                } else {
+                                    link.objectTitle = task.objectTitle();
+
+                                    callback(null, link);
+                                }
+                            });
+                            break;
+                    }
+                },
+
+                /**
+                 * Callback function which is called after all links are mapped.
+                 *
+                 * @param   {null|Error}    error
+                 */
+                function(error) {
+                    if (error) {
+                        ResponseService.makeError(error, request, response);
+                    } else {
+                        response.view(_.extend({
+                            linkId: linkId
+                        }, results));
+                    }
+                }
+            );
+        }
     }
 };
