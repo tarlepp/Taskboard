@@ -37,7 +37,7 @@ module.exports = {
         // Fetch specified object and id comments
         DataService.getComments(objectName, objectId, 0, function(error, comments) {
             if (error) {
-                response.send(error.status ? error.status : 500, error.message ? error.message : error);
+                ResponseService.makeError(error, request, response);
             } else {
                 response.view({
                     objectId: objectId,

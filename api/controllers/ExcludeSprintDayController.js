@@ -68,7 +68,7 @@ module.exports = {
              */
             function(error, data) {
                 if (error) {
-                    response.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    ResponseService.makeError(error, request, response);
                 } else {
                     // Add author to each sprint exclude day object
                     _.each(data.excludeDays, function(day) {
