@@ -1,8 +1,18 @@
 /**
  * HistoryController
  *
- * @module      ::  Controller
- * @description ::  Contains logic for handling requests.
+ * @module      :: Controller
+ * @description :: A set of functions called `actions`.
+ *
+ *                 Actions contain code telling Sails how to respond to a certain type of request.
+ *                 (i.e. do stuff, then send some JSON, show an HTML page, or redirect to another URL)
+ *
+ *                 You can configure the blueprint URLs which trigger these actions (`config/controllers.js`)
+ *                 and/or override them with custom routes (`config/routes.js`)
+ *
+ *                 NOTE: The code you write here supports both HTTP and Socket.io automatically.
+ *
+ * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 "use strict";
 
@@ -12,14 +22,27 @@ var async = require("async");
 
 module.exports = {
     /**
-     * Main history action.
-     *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * Overrides for the settings in `config/controllers.js`
+     * (specific to HistoryController)
      */
-    index: function(req, res) {
-        var objectId = req.param("objectId");
-        var objectName = req.param("objectName");
+    _config: {
+        blueprints: {
+            actions: true,
+            rest: false,
+            shortcuts: false
+        }
+    },
+
+    /**
+     * Main history action. This will render a GUI which will show specified object
+     * history data. Actual history data is calculated from database data on each object.
+     *
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
+     */
+    index: function(request, response) {
+        var objectId = request.param("objectId");
+        var objectName = request.param("objectName");
 
         async.parallel(
             {
@@ -50,36 +73,40 @@ module.exports = {
              * @param   {{}}            results
              */
             function(error, results) {
-                var histories = [];
+                if (error) {
+                    ResponseService.makeError(error, request, response);
+                } else {
+                    var historyRows = [];
 
-                // Remove duplicate rows
-                _.each(results.histories, function(row, key) {
-                    if (key === 0
-                        || row.message
-                        || row.objectData !== results.histories[key - 1].objectData
-                        || row.message !== results.histories[key - 1].message
-                    ) {
-                        histories.push(row);
-                    }
-                });
+                    // Remove duplicate rows
+                    _.each(results.histories, function(row, key) {
+                        if (key === 0
+                            || row.message
+                            || row.objectData !== results.histories[key - 1].objectData
+                            || row.message !== results.histories[key - 1].message
+                        ) {
+                            historyRows.push(row);
+                        }
+                    });
 
-                // Process history data
-                processHistoryData(histories, results.users);
+                    // Process history data
+                    processHistoryData(historyRows, results.users);
+                }
             }
         );
 
         /**
          * Function process history rows for specified object.
          *
-         * @param   {sails.model.history[]} histories
+         * @param   {sails.model.history[]} historyRows
          * @param   {sails.model.user[]}    users
          */
-        function processHistoryData(histories, users) {
+        function processHistoryData(historyRows, users) {
             var index = 0;
 
             // Map all history rows to sub-methods
             async.map(
-                histories,
+                historyRows,
 
                 /**
                  * Iterator function to process all history rows for specified object. Note that this
@@ -100,10 +127,10 @@ module.exports = {
                     }
 
                     // Create main data array which contains all necessary data for this history row
-                    var data = {
+                    var historyData = {
                         message: (index === 0) ? "Object created" : historyRow.message,
                         index: index,
-                        stamp: dateObject.tz(req.user.momentTimezone),
+                        stamp: dateObject.tz(request.user.momentTimezone),
                         user: user,
                         data: []
                     };
@@ -113,8 +140,8 @@ module.exports = {
                     var previousRow = {};
 
                     // We have a previous row data defined
-                    if (!_.isUndefined(histories[index - 1])) {
-                        previousRow = JSON.parse(histories[index - 1].objectData);
+                    if (!_.isUndefined(historyRows[index - 1])) {
+                        previousRow = JSON.parse(historyRows[index - 1].objectData);
                     }
 
                     // Iterate ignore values of history data and delete those from current and previous history rows
@@ -130,7 +157,7 @@ module.exports = {
 
                     // We have no difference so just call callback function with no parameters
                     if (historyRow.message) {
-                        callback(null, data);
+                        callback(null, historyData);
                     } else if (_.isUndefined(difference)) {
                         callback(null, null);
                     } else { // Yeah some difference found...
@@ -145,7 +172,7 @@ module.exports = {
                         });
 
                         // Process single history row
-                        processHistoryRow(differenceArray, data, callback);
+                        processHistoryRow(differenceArray, historyData, callback);
                     }
                 },
 
@@ -158,10 +185,10 @@ module.exports = {
                  */
                 function(error, results) {
                     if (error) {
-                        res.send(error.status ? error.status : 500, error);
+                        ResponseService.makeError(error, request, response);
                     } else {
                         // Make view
-                        res.view({
+                        response.view({
                             data: _.compact(results).reverse()
                         });
                     }
@@ -241,7 +268,9 @@ module.exports = {
                  */
                 function(error, results) {
                     // Store history row data
-                    historyRow.data = _.groupBy(_.sortBy(_.compact(results), function(result) { }), function(result) { return result.changeType; });
+                    historyRow.data = _.groupBy(_.compact(results), function(result) {
+                        return result.changeType;
+                    });
 
                     next(error, historyRow);
                 }
