@@ -525,29 +525,13 @@ function ViewModel() {
             return;
         }
 
-        var where = [];
-
-        _.each(self.stories(), function(story) {
-            where.push({
-                objectId: story.id(),
-                objectName: "Story"
-            });
-        });
-
-        _.each(self.tasks(), function(task) {
-            where.push({
-                objectId: task.id(),
-                objectName: "Task"
-            });
-        });
-
         // Fetch links
         jQuery.ajax({
-            type: "POST",
+            type: "GET",
             url: "/Link/getLinks",
             data: {
                 projectId: self.project().id(),
-                where: where,
+                sprintId: self.sprint().id(),
                 _csrf: getCsrfToken()
             },
             dataType: "json"
