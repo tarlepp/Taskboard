@@ -2,7 +2,17 @@
  * MilestoneController
  *
  * @module      :: Controller
- * @description :: Contains logic for handling requests.
+ * @description :: A set of functions called `actions`.
+ *
+ *                 Actions contain code telling Sails how to respond to a certain type of request.
+ *                 (i.e. do stuff, then send some JSON, show an HTML page, or redirect to another URL)
+ *
+ *                 You can configure the blueprint URLs which trigger these actions (`config/controllers.js`)
+ *                 and/or override them with custom routes (`config/routes.js`)
+ *
+ *                 NOTE: The code you write here supports both HTTP and Socket.io automatically.
+ *
+ * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 "use strict";
 
@@ -10,21 +20,29 @@ var async = require("async");
 
 module.exports = {
     /**
-     * Milestone add action.
-     *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * Overrides for the settings in `config/controllers.js`
+     * (specific to MilestoneController)
      */
-    add: function(req, res) {
-        var projectId = parseInt(req.param("projectId"), 10);
+    _config: {},
+
+    /**
+     * Milestone add action. This will render GUI for new milestone add. This GUI is shown
+     * in bootstrap modal in board.
+     *
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
+     */
+    add: function(request, response) {
+        var projectId = parseInt(request.param("projectId"), 10);
 
         // Fetch user role and project data
         async.parallel(
             {
                 // Determine user role in this project
                 role: function(callback) {
-                    AuthService.hasProjectAccess(req.user, projectId, callback, true);
+                    AuthService.hasProjectAccess(request.user, projectId, callback, true);
                 },
+
                 // Fetch project data
                 project: function(callback) {
                     DataService.getProject(projectId, callback);
@@ -34,36 +52,36 @@ module.exports = {
             /**
              * Main callback function which is called after all parallel jobs are processed.
              *
-             * @param   {Error} error   Possible error object
-             * @param   {{}}    data    Data object that contains 'role' and 'project' data
+             * @param   {null|Error}    error   Possible error object
+             * @param   {null|{}}       data    Data object that contains 'role' and 'project' data
              */
             function(error, data) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    ResponseService.makeError(error, request, response);
                 } else {
                     data.projectId = projectId;
 
-                    res.view(data);
+                    response.view(data);
                 }
             }
         );
     },
 
     /**
-     * Milestone edit action.
+     * Milestone edit action. This will render GUI for specified milestone object edit.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    edit: function(req, res) {
-        var milestoneId = parseInt(req.param("id"), 10);
+    edit: function(request, response) {
+        var milestoneId = parseInt(request.param("id"), 10);
 
         // Fetch role and milestone data
         async.parallel(
             {
                 // Determine user role in this milestone
                 role: function(callback) {
-                    AuthService.hasMilestoneAccess(req.user, milestoneId, callback, true);
+                    AuthService.hasMilestoneAccess(request.user, milestoneId, callback, true);
                 },
 
                 // Fetch milestone data
@@ -75,14 +93,14 @@ module.exports = {
             /**
              * Callback function which is called after all parallel jobs are processed.
              *
-             * @param   {Error} error   Possible error object
-             * @param   {{}}    data    Data object that contains 'role' and 'milestone' data
+             * @param   {null|Error}    error   Possible error object
+             * @param   {null|{}}       data    Data object that contains 'role' and 'milestone' data
              */
             function (error, data) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    ResponseService.makeError(error, request, response);
                 } else {
-                    res.view(data);
+                    response.view(data);
                 }
             }
         );
@@ -91,11 +109,11 @@ module.exports = {
     /**
      * Milestone stories action.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    stories: function(req, res) {
-        var milestoneId = parseInt(req.param("id"), 10);
+    stories: function(request, response) {
+        var milestoneId = parseInt(request.param("id"), 10);
 
         var data = {
             role: 0,
@@ -111,55 +129,53 @@ module.exports = {
             stories: false
         };
 
-        // Fetch role and milestone data
+        // Fetch role, milestone and stories data
         async.parallel(
             {
                 // Determine user role in this milestone
                 role: function(callback) {
-                    AuthService.hasMilestoneAccess(req.user, milestoneId, callback, true);
+                    AuthService.hasMilestoneAccess(request.user, milestoneId, callback, true);
                 },
 
                 // Fetch milestone data
                 milestone: function(callback) {
                     DataService.getMilestone(milestoneId, callback)
+                },
+
+                // Fetch stories that are attached to this milestone
+                stories: function(callback) {
+                    DataService.getStories({milestoneId: milestoneId}, callback);
                 }
             },
 
             /**
              * Callback function which is called after all parallel jobs are processed.
              *
-             * @param   {Error} error   Possible error object
-             * @param   {{}}    results Data object that contains 'role' and 'milestone' data
+             * @param   {null|Error}    error   Possible error object
+             * @param   {{}}            results Data object that contains 'role', 'milestone' and 'stories' data
              */
             function (error, results) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    ResponseService.makeError(error, request, response);
                 } else {
                     data.role = results.role;
                     data.milestone.data = results.milestone;
+                    data.stories = results.stories;
 
-                    // Find all user stories which are attached to milestone
-                    Story
-                        .find()
-                        .where({
-                            milestoneId: data.milestone.data.id
-                        })
-                        .sort('title ASC')
-                        .done(function(error, stories) {
-                            data.stories = stories;
-
-                            fetchTasks();
-                        });
+                    fetchTasks();
                 }
             }
         );
 
         /**
          * Private function to fetch tasks of stories in current milestone.
+         *
+         * This will make also required calculations for milestone total and story
+         * specified task statistics data.
          */
         function fetchTasks() {
             data.milestone.cntStoryTotal = data.stories.length;
-            data.milestone.cntStoryDone = _.reduce(data.stories, function (memo, story) {
+            data.milestone.cntStoryDone = _.reduce(data.stories, function(memo, story) {
                 return (story.isDone) ? memo + 1 : memo;
             }, 0);
 
@@ -183,7 +199,7 @@ module.exports = {
                         .where({
                             storyId: story.id
                         })
-                        .sort('title ASC')
+                        .sort("title ASC")
                         .done(function(error, tasks) {
                             if (error) {
                                 callback(error, null);
@@ -213,15 +229,19 @@ module.exports = {
                 /**
                  * Callback function which is call after are stories are processed.
                  *
-                 * @param   {Error}     error   Possible error object
-                 * @param   {Boolean}   result  Result data
+                 * @param   {null|Error}    error   Possible error object
+                 * @param   {null|Boolean}  result  Result data
                  */
                 function(error, result) {
-                    if (data.milestone.cntTaskDone > 0) {
-                        data.milestone.progressTask = Math.round(data.milestone.cntTaskDone  / data.milestone.cntTaskTotal * 100);
-                    }
+                    if (error) {
+                        ResponseService.makeError(error, request, response);
+                    } else {
+                        if (data.milestone.cntTaskDone > 0) {
+                            data.milestone.progressTask = Math.round(data.milestone.cntTaskDone  / data.milestone.cntTaskTotal * 100);
+                        }
 
-                    res.view(data);
+                        response.view(data);
+                    }
                 }
             );
         }
