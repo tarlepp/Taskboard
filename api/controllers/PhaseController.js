@@ -1,8 +1,18 @@
 /**
  * PhaseController
  *
- * @module      ::  Controller
- * @description ::  Contains logic for handling requests.
+ * @module      :: Controller
+ * @description :: A set of functions called `actions`.
+ *
+ *                 Actions contain code telling Sails how to respond to a certain type of request.
+ *                 (i.e. do stuff, then send some JSON, show an HTML page, or redirect to another URL)
+ *
+ *                 You can configure the blueprint URLs which trigger these actions (`config/controllers.js`)
+ *                 and/or override them with custom routes (`config/routes.js`)
+ *
+ *                 NOTE: The code you write here supports both HTTP and Socket.io automatically.
+ *
+ * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 "use strict";
 
@@ -10,13 +20,19 @@ var async = require("async");
 
 module.exports = {
     /**
+     * Overrides for the settings in `config/controllers.js`
+     * (specific to PhaseController)
+     */
+    _config: {},
+
+    /**
      * Project phase edit action.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    edit: function(req, res) {
-        var projectId = parseInt(req.param('id'), 10);
+    edit: function(request, response) {
+        var projectId = parseInt(request.param("id"), 10);
 
         // Fetch project and project phases data async
         async.parallel(
@@ -40,9 +56,9 @@ module.exports = {
              */
             function(error, data) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    ResponseService.makeError(error, request, response);
                 } else {
-                    res.view(data);
+                    response.view(data);
                 }
             }
         );
