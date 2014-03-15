@@ -22,7 +22,7 @@ module.exports = {
      * (specific to PhaseDurationController)
      */
     _config: {
-        shortcuts: false,
+        actions: false,
         rest: false
     }
 };
