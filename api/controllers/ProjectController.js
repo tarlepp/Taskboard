@@ -1,26 +1,38 @@
 /**
  * ProjectController
  *
- * @module      ::  Controller
- * @description ::  Contains logic for handling requests.
+ * @module      :: Controller
+ * @description :: A set of functions called `actions`.
+ *
+ *                 Actions contain code telling Sails how to respond to a certain type of request.
+ *                 (i.e. do stuff, then send some JSON, show an HTML page, or redirect to another URL)
+ *
+ *                 You can configure the blueprint URLs which trigger these actions (`config/controllers.js`)
+ *                 and/or override them with custom routes (`config/routes.js`)
+ *
+ *                 NOTE: The code you write here supports both HTTP and Socket.io automatically.
+ *
+ * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 var async = require("async");
 
 module.exports = {
     /**
-     * Project add action.
-     *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * Overrides for the settings in `config/controllers.js`
+     * (specific to ProjectController)
      */
-    add: function(req, res) {
+    _config: {},
+
+    /**
+     * Project add action. This will render a GUI for new project add.
+     *
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
+     */
+    add: function(request, response) {
         async.parallel(
             {
-                /**
-                 * Fetch taskboard user data.
-                 *
-                 * @param   {Function}  callback
-                 */
+                // Fetch users
                 users: function(callback) {
                     DataService.getUsers({}, callback);
                 }
@@ -29,44 +41,36 @@ module.exports = {
             /**
              * Callback function which is been called after all parallel jobs are processed.
              *
-             * @param   {Error|String}  error
-             * @param   {{}}            data
+             * @param   {null|Error}                    error
+             * @param   {{users: sails.model.user[]}}   data
              */
             function(error, data) {
                 if (error) {
-                    res.send(error, error.status ? error.status : 500);
+                    ResponseService.makeError(error, request, response);
                 } else {
-                    res.view(data);
+                    response.view(data);
                 }
             }
         );
     },
 
     /**
-     * Project edit action.
+     * Project edit action. This will render a GUI for specified project edit.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    edit: function(req, res) {
-        var projectId = parseInt(req.param("id"), 10);
+    edit: function(request, response) {
+        var projectId = parseInt(request.param("id"), 10);
 
         async.parallel(
             {
-                /**
-                 * Fetch project data.
-                 *
-                 * @param   {Function}  callback
-                 */
+                // Fetch project data.
                 project: function(callback) {
                     DataService.getProject(projectId, callback);
                 },
 
-                /**
-                 * Fetch taskboard user data.
-                 *
-                 * @param   {Function}  callback
-                 */
+                // Fetch taskboard user data.
                 users: function(callback) {
                     DataService.getUsers({}, callback);
                 }
@@ -75,33 +79,37 @@ module.exports = {
             /**
              * Callback function which is been called after all parallel jobs are processed.
              *
-             * @param   {Error|String}  error
-             * @param   {{}}            data
+             * @param   {null|Error}    error   Possible error
+             * @param   {{
+             *              project: sails.model.project
+             *              users: sails.model.user[]
+             *          }}              data    Object that contains 'project' and 'users' objects
              */
             function(error, data) {
                 if (error) {
-                    res.send(error, error.status ? error.status : 500);
+                    ResponseService.makeError(error, request, response);
                 } else {
-                    res.view(data);
+                    response.view(data);
                 }
             }
         );
     },
 
     /**
-     * Project backlog action
+     * Project backlog action that will render a GUI that contains all stories
+     * that are not yet assigned to any sprint. These stories are in project backlog.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    backlog: function(req, res) {
-        var projectId = parseInt(req.param("id"), 10);
+    backlog: function(request, response) {
+        var projectId = parseInt(request.param("id"), 10);
 
         async.parallel(
             {
                 // Fetch user role
                 role: function(callback) {
-                    AuthService.hasProjectAccess(req.user, projectId, callback, true);
+                    AuthService.hasProjectAccess(request.user, projectId, callback, true);
                 },
 
                 // Fetch project data.
@@ -121,29 +129,32 @@ module.exports = {
             /**
              * Callback function which is been called after all parallel jobs are processed.
              *
-             * @param   {Error|String}  error
-             * @param   {{}}            data
+             * @param   {null|Error}    error   Possible error
+             * @param   {{
+             *              role: sails.helper.role
+             *              project: sails.model.project
+             *              stories: sails.model.story[]
+             *          }}              data    Data that contains 'role', 'project' and 'stories'
              */
             function(error, data) {
                 if (error) {
-                    res.send(error, error.status ? error.status : 500);
+                    ResponseService.makeError(error, request, response);
                 } else {
-                    res.view(data);
+                    response.view(data);
                 }
             }
         );
     },
 
     /**
-     * Project milestones action
+     * Project milestones action, this will render a GUI that shows all milestones for specified
+     * project and some statistics data of those progress.
      *
-     * @todo this needs dome work
-     *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    milestones: function(req, res) {
-        var projectId = parseInt(req.param("id"), 10);
+    milestones: function(request, response) {
+        var projectId = parseInt(request.param("id"), 10);
 
         var data = {
             role: 0,
@@ -164,7 +175,7 @@ module.exports = {
             {
                 // Fetch user role
                 role: function(callback) {
-                    AuthService.hasProjectAccess(req.user, projectId, callback, true);
+                    AuthService.hasProjectAccess(request.user, projectId, callback, true);
                 },
 
                 // Fetch project data.
@@ -181,157 +192,148 @@ module.exports = {
             /**
              * Callback function which is been called after all parallel jobs are processed.
              *
-             * @param   {Error|String}  error
-             * @param   {{}}            results
+             * @param   {null|Error}    error
+             * @param   {{
+             *              role: sails.helper.role
+             *              project: sails.model.project
+             *              milestones: sails.model.milestone[]
+             *          }}              results
              */
             function(error, results) {
                 if (error) {
-                    res.send(error, error.status ? error.status : 500);
+                    ResponseService.makeError(error, request, response);
                 } else {
                     data.role = results.role;
                     data.project = results.project;
                     data.milestones = results.milestones;
                     data.cntMilestonesTotal = data.milestones.length;
 
-                    fetchStories();
+                    // Iterate each milestones and fetch stories of those
+                    async.each(data.milestones, fetchStories, renderView);
                 }
             }
         );
 
         /**
-         * Function to fetch attached milestone stories.
+         * Private function to fetch all stories that belongs to specified milestone.
+         *
+         * @param   {sails.model.milestone} milestone   Milestone object
+         * @param   {Function}              callback    Callback function to call when processing is done
          */
-        function fetchStories() {
-            // We have no milestones, so make view
-            if (data.milestones.length === 0) {
-                makeView();
-            } else {
-                // Iterate milestones
-                _.each(data.milestones, function(/** sails.model.milestone */milestone) {
-                    // Initialize milestone stories property
-                    milestone.stories = false;
+        function fetchStories(milestone, callback) {
+            milestone.stories = false;
 
-                    // Find all user stories which are attached to current milestone
-                    Story
-                        .find()
-                        .where({
-                            milestoneId: milestone.id
-                        })
-                        .sort("title ASC")
-                        .done(function(error, stories) {
+            // Fetch stories that belongs to specified milestone
+            DataService.getStories({milestoneId: milestone.id}, function(error, stories) {
+                if (error) {
+                    callback(error);
+                } else {
+                    milestone.doneStories = _.reduce(stories, function(memo, story) {
+                        return (story.isDone) ? memo + 1 : memo;
+                    }, 0);
 
-                            milestone.doneStories = _.reduce(stories, function (memo, story) {
-                                return (story.isDone) ? memo + 1 : memo;
-                            }, 0);
+                    data.cntStoriesTotal = data.cntStoriesTotal + stories.length;
+                    data.cntStoriesDone = data.cntStoriesDone + milestone.doneStories;
 
-                            data.cntStoriesTotal = data.cntStoriesTotal + stories.length;
-                            data.cntStoriesDone = data.cntStoriesDone + milestone.doneStories;
+                    if (milestone.doneStories > 0) {
+                        if (stories.length === milestone.doneStories) {
+                            data.cntMilestonesDone = data.cntMilestonesDone + 1;
+                        }
 
-                            if (milestone.doneStories > 0) {
-                                if (stories.length === milestone.doneStories) {
-                                    data.cntMilestonesDone = data.cntMilestonesDone + 1;
-                                }
+                        milestone.progress = Math.round(milestone.doneStories / stories.length * 100);
+                    } else {
+                        milestone.progress = 0;
+                    }
 
-                                milestone.progress = Math.round(milestone.doneStories / stories.length * 100);
-                            } else {
-                                milestone.progress = 0;
-                            }
+                    var storyIds = _.map(stories, function(story) {
+                        return { storyId: story.id };
+                    });
 
-                            var storyIds = _.map(stories, function(story) { return {storyId: story.id}; });
+                    // Add stories to milestone data
+                    milestone.stories = stories;
 
-                            if (storyIds.length > 0) {
-                                // Find story tasks
-                                Task
-                                    .find()
-                                    .where({or: storyIds})
-                                    .done(function(error, tasks) {
-                                        data.cntTasksTotal = data.cntTasksTotal + tasks.length;
-                                        data.cntTasksDone = data.cntTasksDone + _.reduce(tasks, function (memo, task) {
-                                            return (task.isDone) ? memo + 1 : memo;
-                                        }, 0);
+                    // We have some stories, so fetch tasks of those
+                    if (storyIds.length > 0) {
+                        fetchTasks(milestone, storyIds, callback);
+                    } else {
+                        // Add tasks to milestone data
+                        milestone.tasks = [];
 
-                                        // Add tasks to milestone data
-                                        milestone.tasks = tasks;
-
-                                        // Add stories to milestone data
-                                        milestone.stories = stories;
-
-                                        // Call view
-                                        makeView();
-                                    });
-                            } else {
-                                // Add tasks to milestone data
-                                milestone.tasks = [];
-
-                                // Add stories to milestone data
-                                milestone.stories = stories;
-
-                                // Call view
-                                makeView();
-                            }
-                        });
-                });
-            }
+                        callback(null);
+                    }
+                }
+            });
         }
 
         /**
-         * Function to make actual view for project milestone list.
+         * Private function to fetch all tasks that belongs to specified stories.
+         *
+         * @param   {sails.model.milestone} milestone   Milestone object
+         * @param   {{storyId: {Number}}[]} storyIds    Story ids as an array of objects
+         * @param   {Function}              callback    Callback function to call whenever process is "done"
          */
-        function makeView() {
-            var ok = true;
+        function fetchTasks(milestone, storyIds, callback) {
+            // Fetch tasks
+            DataService.getTasks({or: storyIds}, function(error, tasks) {
+                if (error) {
+                   callback(error);
+                } else {
+                    data.cntTasksTotal = data.cntTasksTotal + tasks.length;
 
-            _.each(data, function(data) {
-                if (data === false) {
-                    ok = false;
+                    data.cntTasksDone = data.cntTasksDone + _.reduce(tasks, function(memo, task) {
+                        return (task.isDone) ? memo + 1 : memo;
+                    }, 0);
+
+                    // Add tasks to milestone data
+                    milestone.tasks = tasks;
+
+                    callback(null);
                 }
             });
+        }
 
-            if (ok) {
-                if (data.milestones.length > 0) {
-                    var show = true;
-
-                    _.each(data.milestones, function(/** sails.model.milestone */milestone) {
-                        if (milestone.stories === false) {
-                            show = false;
-                        }
-                    });
-
-                    if (show) {
-                        if (data.cntMilestonesDone > 0) {
-                            data.progressMilestones = Math.round(data.cntMilestonesDone / data.cntMilestonesTotal * 100);
-                        } else {
-                            data.progressMilestones = 0;
-                        }
-
-                        if (data.cntStoriesDone > 0) {
-                            data.progressStories = Math.round(data.cntStoriesDone / data.cntStoriesTotal * 100);
-                        } else {
-                            data.progressStories = 0;
-                        }
-
-                        if (data.cntTasksDone > 0) {
-                            data.progressTasks = Math.round(data.cntTasksDone / data.cntTasksTotal * 100);
-                        } else {
-                            data.progressTasks = 0;
-                        }
-
-                        res.view(data);
-                    }
+        /**
+         * Private function to render actual view. This is called whenever error occurs in
+         * sub-processes or all of those jobs are processed successfully.
+         *
+         * @param   {null|Error}    error   Possible error
+         */
+        function renderView(error) {
+            if (error) {
+                ResponseService.makeError(error, request, response);
+            } else {
+                if (data.cntMilestonesDone > 0) {
+                    data.progressMilestones = Math.round(data.cntMilestonesDone / data.cntMilestonesTotal * 100);
                 } else {
-                    res.view(data);
+                    data.progressMilestones = 0;
                 }
+
+                if (data.cntStoriesDone > 0) {
+                    data.progressStories = Math.round(data.cntStoriesDone / data.cntStoriesTotal * 100);
+                } else {
+                    data.progressStories = 0;
+                }
+
+                if (data.cntTasksDone > 0) {
+                    data.progressTasks = Math.round(data.cntTasksDone / data.cntTasksTotal * 100);
+                } else {
+                    data.progressTasks = 0;
+                }
+
+                response.view(data);
             }
         }
     },
 
     /**
-     * Project planning action.
+     * Project planning action. This will render a simple GUI for project planning
+     * where user can drag&drop stories between sprints and project backlog.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    planning: function(req, res) {
-        var projectId = parseInt(req.param("id"), 10);
+    planning: function(request, response) {
+        var projectId = parseInt(request.param("id"), 10);
 
         async.parallel(
             {
@@ -352,36 +354,43 @@ module.exports = {
 
                 // Fetch user role
                 role: function(callback) {
-                    AuthService.hasProjectAccess(req.user, projectId, callback, true);
+                    AuthService.hasProjectAccess(request.user, projectId, callback, true);
                 }
             },
 
             /**
              * Callback function which is been called after all parallel jobs are processed.
              *
-             * @param   {Error|String}  error
-             * @param   {{}}            data
+             * @param   {null|Error}    error   Possible error
+             * @param   {{
+             *              project: sails.model.project,
+             *              stories: sails.model.story[],
+             *              sprints: sails.model.sprint[],
+             *              role: sails.helper.role
+             *          }}              data    Object that contains 'project', 'stories', 'sprints' and 'role'
              */
             function(error, data) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error);
+                    ResponseService.makeError(error, request, response);
                 } else {
-                    res.view(data);
+                    response.view(data);
                 }
             }
         );
     },
 
     /**
-     * Project statistics action.
+     * Project statistics action. This is really "heavy" action to process because basically we're
+     * fetching whole project data from database and make some calculations for that data.
      *
-     * @todo this needs dome work
+     * @todo should we just return basic data and handle drill downs by clicking on the gui?
+     * @todo should we store some statistic data to main objects, so calculations are not needed?
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    statistics: function(req, res) {
-        var projectId = parseInt(req.param('id'), 10);
+    statistics: function(request, response) {
+        var projectId = parseInt(request.param("id"), 10);
 
         // Specify template data to use
         var data = {
@@ -418,38 +427,22 @@ module.exports = {
 
         async.parallel(
             {
-                /**
-                 * Fetch project data.
-                 *
-                 * @param   {Function}  callback
-                 */
+                // Fetch project data
                 project: function(callback) {
                     DataService.getProject(projectId, callback);
                 },
 
-                /**
-                 * Fetch project milestones.
-                 *
-                 * @param   {Function}  callback
-                 */
+                // Fetch project milestones
                 milestones: function(callback) {
                     DataService.getMilestones({projectId: projectId}, callback);
                 },
 
-                /**
-                 * Fetch project sprint data
-                 *
-                 * @param   {Function}  callback
-                 */
+                // Fetch project sprint data
                 sprints: function(callback) {
                     DataService.getSprints({projectId: projectId}, callback);
                 },
 
-                /**
-                 * Fetch project phases data
-                 *
-                 * @param   {Function}  callback
-                 */
+                // Fetch project phases data
                 phases: function(callback) {
                     DataService.getPhases({projectId: projectId}, callback);
                 }
@@ -458,12 +451,17 @@ module.exports = {
             /**
              * Callback function which is been called after all parallel jobs are processed.
              *
-             * @param   {Error|String}  error
-             * @param   {{}}            results
+             * @param   {null|Error}    error   Possible error
+             * @param   {{
+             *              project: sails.model.project,
+             *              milestones: sails.model.milestone[],
+             *              sprints: sails.model.sprint[],
+             *              phases: sails.model.phase[]
+             *          }}              results Object that contains 'project', 'milestones', 'sprints' and 'phases'
              */
             function(error, results) {
                 if (error) {
-                    res.send(error, error.status ? error.status : 500);
+                    ResponseService.makeError(error, request, response);
                 } else {
                     data.project.data = results.project;
 
@@ -475,16 +473,59 @@ module.exports = {
 
                     data.phases = results.phases;
 
-                    fetchPhaseDuration();
+                    // Fetch needed related data for view
+                    fetchRelatedData();
                 }
             }
         );
 
         /**
+         * Private function to fetch needed related data that are needed for GUI. Related data
+         * are following: sum of phase durations, stories, and tasks that are attached to these
+         * stories.
+         *
+         * Note that tasks are fetched in sub process in story fetching.
+         */
+        function fetchRelatedData() {
+            async.parallel(
+                [
+                    // Determine phase durations
+                    function(callback) {
+                        fetchPhaseDuration(callback);
+                    },
+
+                    // Fetch stories and task data of those
+                    function(callback) {
+                        fetchStories(callback);
+                    }
+                ],
+
+                /**
+                 * Callback function which is called after all parallel jobs are done.
+                 *
+                 * @param   {null|Error}    error   Possible error
+                 */
+                function(error) {
+                    if (error) {
+                        ResponseService.makeError(error, request, response);
+                    } else {
+                        // Calculate statistics data
+                        makeDetailedStatistics();
+
+                        // Render view
+                        response.view(data);
+                    }
+                }
+            );
+        }
+
+        /**
          * Private function to fetch project task phase duration times. This will sum tasks durations
          * for each phase in this project.
+         *
+         * @param   {Function}  next    Main callback function which must be called after all is done
          */
-        function fetchPhaseDuration() {
+        function fetchPhaseDuration(next) {
             async.map(
                 data.phases,
 
@@ -494,7 +535,7 @@ module.exports = {
                  * @param   {sails.model.phase} phase
                  * @param   {Function}          callback
                  */
-                function (phase, callback) {
+                function(phase, callback) {
                     PhaseDuration
                         .find({
                             sum: "duration"
@@ -503,11 +544,11 @@ module.exports = {
                         .where({projectId: data.project.data.id})
                         .done(function(error, result) {
                             if (error) {
-                                callback(error, null);
+                                callback(error);
                             } else {
                                 phase.duration = result[0].duration ? result[0].duration : 0;
 
-                                callback(null, phase.duration);
+                                callback(null);
                             }
                         });
                 },
@@ -515,78 +556,92 @@ module.exports = {
                 /**
                  * Main callback function which is called after all phases are processed.
                  *
-                 * @param   {Error|null}    error
-                 * @param   {{}}            result
+                 * @param   {null|Error}    error   Possible error
                  */
-                    function (error, result) {
-                    if (error) {
-                        res.send(error, error.status ? error.status : 500);
-                    } else {
-                        fetchStories();
-                    }
+                function(error) {
+                    next(error)
                 }
             );
         }
 
-        function fetchStories() {
-            // Fetch project stories
-            Story
-                .find()
-                .where({
-                    projectId: projectId
-                })
-                .sort('isDone DESC')
-                .sort('title ASC')
-                .done(function(error, stories) {
-                    if (error) {
-                        res.send(error, 500);
-                    } else {
-                        data.stories.data = stories;
-                        data.stories.cntTotal = stories.length;
-                        data.stories.cntDone = _.reduce(stories, function (memo, story) {
-                            return (story.isDone) ? memo + 1 : memo;
-                        }, 0);
+        /**
+         * Private function to fetch all stories that are attached to current project. Note that if stories
+         * are found in project function triggers task fetch process, which will eventually call the main
+         * callback function.
+         *
+         * @param   {Function}  next    Main callback function which must be called after all is done
+         */
+        function fetchStories(next) {
+            DataService.getStories({projectId: projectId}, function(error, stories) {
+                if (error) {
+                    next(error)
+                } else {
+                    data.stories.data = stories;
+                    data.stories.cntTotal = stories.length;
+                    data.stories.cntDone = _.reduce(stories, function(memo, story) {
+                        return (story.isDone) ? memo + 1 : memo;
+                    }, 0);
 
-                        if (data.stories.cntDone > 0) {
-                            data.stories.progress = Math.round(data.stories.cntDone / data.stories.cntTotal * 100);
-                        }
-
-                        var storyIds = _.map(stories, function(story) { return {storyId: story.id}; });
-
-                        if (storyIds.length > 0) {
-                            Task
-                                .find()
-                                .where({or: storyIds})
-                                .done(function(error, tasks) {
-                                    data.tasks.data = tasks;
-                                    data.tasks.cntTotal = tasks.length;
-                                    data.tasks.cntDone = _.reduce(tasks, function (memo, task) {
-                                        return (task.isDone) ? memo + 1 : memo;
-                                    }, 0);
-
-                                    if (data.tasks.cntDone > 0) {
-                                        data.tasks.progress = Math.round(data.tasks.cntDone / data.tasks.cntTotal * 100);
-                                    }
-
-                                    makeDetailedStatistics();
-
-                                    res.view(data);
-                                });
-                        } else {
-                            makeDetailedStatistics();
-
-                            res.view(data);
-                        }
+                    if (data.stories.cntDone > 0) {
+                        data.stories.progress = Math.round(data.stories.cntDone / data.stories.cntTotal * 100);
                     }
-                });
+
+                    if (stories.length > 0) {
+                        fetchStoriesTasks(next);
+                    } else {
+                        next(null);
+                    }
+                }
+            });
         }
 
         /**
-         * Function makes detailed statistics from fetched data.
+         * Private function to fetch all tasks that are attached to project stories. This is only
+         * called if project contains any stories.
+         *
+         * @param   {Function}  next    Main callback function which must be called after all is done
+         */
+        function fetchStoriesTasks(next) {
+            var storyIds = _.map(data.stories.data, function(story) {
+                return { storyId: story.id };
+            });
+
+            DataService.getTasks({or: storyIds}, function(error, tasks) {
+                if (error) {
+                    next(error);
+                } else {
+                    data.tasks.data = tasks;
+                    data.tasks.cntTotal = tasks.length;
+                    data.tasks.cntDone = _.reduce(tasks, function(memo, task) {
+                        return (task.isDone) ? memo + 1 : memo;
+                    }, 0);
+
+                    if (data.tasks.cntDone > 0) {
+                        data.tasks.progress = Math.round(data.tasks.cntDone / data.tasks.cntTotal * 100);
+                    }
+
+                    next(null);
+                }
+            });
+        }
+
+        /**
+         * Private function makes detailed statistics from fetched data. This function is
+         * called right before rendering the statistics GUI.
+         *
+         * Basically this is just a data "formatter" function that process fetched data and
+         * make some basic calculations about those.
          */
         function makeDetailedStatistics() {
-            var totalTime = _.pluck(data.phases, "duration").reduce(function(memo, i) {return memo + i});
-            var totalTimeNoFirst = _.pluck(_.reject(data.phases, function(phase) { return phase.order === 0 } ), "duration").reduce(function(memo, i) {return memo + i});
+            var totalTime = _.pluck(data.phases, "duration").reduce(function(memo, i) {
+                return memo + i;
+            });
+
+            var totalTimeNoFirst = _.pluck(_.reject(data.phases, function(phase) {
+                return phase.order === 0;
+            }), "duration").reduce(function(memo, i) {
+                return memo + i;
+            });
 
             data.phaseDuration = {
                 totalTime: totalTime,
@@ -594,7 +649,9 @@ module.exports = {
             };
 
             _.each(data.phases, function(phase) {
-                phase.durationPercentage = (phase.duration > 0 && phase.order !== 0) ? phase.duration / totalTimeNoFirst * 100 : 0;
+                phase.durationPercentage = (phase.duration > 0 && phase.order !== 0)
+                    ? phase.duration / totalTimeNoFirst * 100 : 0;
+
                 phase.durationPercentageTotal = (phase.duration > 0) ? phase.duration / totalTime * 100 : 0;
             });
 
@@ -606,13 +663,13 @@ module.exports = {
                     progress: 0
                 };
 
-                story.tasks.data = _.filter(data.tasks.data, function (task) {
+                story.tasks.data = _.filter(data.tasks.data, function(task) {
                     return task.storyId === story.id;
                 });
 
                 story.tasks.cntTotal = story.tasks.data.length;
 
-                story.tasks.cntDone = _.reduce(story.tasks.data, function (memo, task) {
+                story.tasks.cntDone = _.reduce(story.tasks.data, function(memo, task) {
                     return (task.isDone) ? memo + 1 : memo;
                 }, 0);
 
@@ -621,16 +678,77 @@ module.exports = {
                 }
             });
 
-            // Sort stories by tasks progress
-            data.stories.data.sort(function(a, b) {
-                if (a.tasks.progress < b.tasks.progress) {
-                    return 1;
-                } else if (a.tasks.progress > b.tasks.progress) {
-                    return -1;
-                } else {
-                    return 0;
+            // Sort stories by tasks progress, story title and priority
+            data.stories.data.sort(dynamicSortMultiple("!tasks.progress", "title", "priority"));
+
+            /**
+             * Actual dynamic sort function for specified property. Note that property can be
+             * assigned to sub-object if needed also sort order can be given within property.
+             *
+             * @param   {String}    property
+             *
+             * @returns {Function}
+             */
+            function dynamicSort(property) {
+                return function(obj1, obj2) {
+                    var reverse = (property.indexOf("!") === 0);
+                    var comparisonValue1, comparisonValue2 = '';
+
+                    if (reverse) {
+                        property = property.substr(1);
+                    }
+
+                    if (property.indexOf(".") !== -1) {
+                        var bits = property.split(".");
+
+                        comparisonValue1 = obj1[bits[0]][bits[1]];
+                        comparisonValue2 = obj2[bits[0]][bits[1]];
+                    } else {
+                        comparisonValue1 = obj1[property];
+                        comparisonValue2 = obj2[property];
+                    }
+
+                    return reverse
+                        ? (comparisonValue1 < comparisonValue2 ? 1 : comparisonValue1 > comparisonValue2 ? -1 : 0)
+                        : (comparisonValue1 > comparisonValue2 ? 1 : comparisonValue1 < comparisonValue2 ? -1 : 0);
                 }
-            });
+            }
+
+            /**
+             * Sorter function which can be used to sort given array of objects by multiple object
+             * attributes. Also note that sort order can be specified. Example of usage:
+             *
+             *  yourArray.sort(dynamicSortMultiple(attribute1, attribute2, attribute3));
+             *
+             * Where attribute can be defined as an sub attribute as example below:
+             *
+             *  yourArray.sort(dynamicSortMultiple(attribute1, object.attribute, attribute2));
+             *
+             * Also sort order can be specified for attributes like:
+             *
+             *  yourArray.sort(dynamicSortMultiple(!attribute1, attribute2, !attribute3));
+             *
+             * @returns {Function}
+             */
+            function dynamicSortMultiple() {
+                /**
+                 * save the arguments object as it will be overwritten note that arguments object
+                 * is an array-like object consisting of the names of the properties to sort by
+                 */
+                var props = arguments;
+
+                return function(obj1, obj2) {
+                    var i = 0, result = 0, numberOfProperties = props.length;
+
+                    // try getting a different result from 0 (equal) as long as we have extra properties to compare
+                    while(result === 0 && i < numberOfProperties) {
+                        result = dynamicSort(props[i])(obj1, obj2);
+                        i++;
+                    }
+
+                    return result;
+                }
+            }
 
             /**
              * Iterate fetched sprints and add story data and stories statistics
@@ -644,13 +762,13 @@ module.exports = {
                     progress: 0
                 };
 
-                sprint.stories.data = _.filter(data.stories.data, function (story) {
+                sprint.stories.data = _.filter(data.stories.data, function(story) {
                     return story.sprintId === sprint.id;
                 });
 
                 sprint.stories.cntTotal = sprint.stories.data.length;
 
-                sprint.stories.cntDone = _.reduce(sprint.stories.data, function (memo, story) {
+                sprint.stories.cntDone = _.reduce(sprint.stories.data, function(memo, story) {
                     return (story.isDone) ? memo + 1 : memo;
                 }, 0);
 
@@ -663,7 +781,7 @@ module.exports = {
                 }
             });
 
-            // Calculate sprints total progress if
+            // Calculate sprints total progress if we have any done sprint
             if (data.sprints.cntDone > 0) {
                 data.sprints.progress = Math.round(data.sprints.cntDone / data.sprints.cntTotal * 100);
             }
@@ -676,13 +794,13 @@ module.exports = {
                     progress: 0
                 };
 
-                milestone.stories.data = _.filter(data.stories.data, function (story) {
+                milestone.stories.data = _.filter(data.stories.data, function(story) {
                     return story.milestoneId === milestone.id;
                 });
 
                 milestone.stories.cntTotal = milestone.stories.data.length;
 
-                milestone.stories.cntDone = _.reduce(milestone.stories.data, function (memo, story) {
+                milestone.stories.cntDone = _.reduce(milestone.stories.data, function(memo, story) {
                     return (story.isDone) ? memo + 1 : memo;
                 }, 0);
 
@@ -702,15 +820,14 @@ module.exports = {
     },
 
     /**
-     * Project sprints action.
+     * Project sprints action. This will render a GUI with project sprint progress and list of
+     * those. Within this list user can edit sprints.
      *
-     * @todo this needs dome work
-     *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    sprints: function(req, res) {
-        var projectId = parseInt(req.param('id'), 10);
+    sprints: function(request, response) {
+        var projectId = parseInt(request.param("id"), 10);
 
         var data = {
             role: false,
@@ -733,23 +850,15 @@ module.exports = {
             {
                 // Fetch user role
                 role: function(callback) {
-                    AuthService.hasProjectAccess(req.user, projectId, callback, true);
+                    AuthService.hasProjectAccess(request.user, projectId, callback, true);
                 },
 
-                /**
-                 * Fetch project data.
-                 *
-                 * @param   {Function}  callback
-                 */
+                // Fetch project data.
                 project: function(callback) {
                     DataService.getProject(projectId, callback);
                 },
 
-                /**
-                 * Fetch project sprint data
-                 *
-                 * @param   {Function}  callback
-                 */
+                // Fetch project sprint data
                 sprints: function(callback) {
                     DataService.getSprints({
                         projectId: projectId
@@ -760,43 +869,52 @@ module.exports = {
             /**
              * Callback function which is been called after all parallel jobs are processed.
              *
-             * @param   {Error|String}  error
-             * @param   {{}}            results
+             * @param   {null|Error}    error
+             * @param   {{
+             *              role: sails.helper.role,
+             *              project: sails.model.project,
+             *              sprints: sails.model.sprint[]
+             *          }}              results
              */
             function(error, results) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error);
+                    ResponseService.makeError(error, request, response);
                 } else {
                     data.role = results.role;
                     data.project = results.project;
                     data.sprints = results.sprints;
                     data.cntSprintsTotal = data.sprints.length;
 
-                    fetchStoryAndTaskData();
+                    // Fetch story data
+                    fetchStoryData();
                 }
             }
         );
 
         /**
-         * Private function to fetch project sprints story and task data from database.
+         * Private function to determine attached story data in current project sprints. This
+         * will map each sprints and fetch stories that are attached to them.
          *
-         * Function will also make some calculations for statistics.
+         * If stories are found function will call private function to fetch task data of each
+         * sprint and determine current status of those.
          */
-        function fetchStoryAndTaskData() {
+        function fetchStoryData() {
             async.map(
                 data.sprints,
-                function(sprint, callback) {
-                    Story
-                        .find()
-                        .where({
-                            sprintId: sprint.id
-                        })
-                        .sort("title ASC")
-                        .done(function(error, stories) {
-                            if (error) {
-                                callback(error, null);
-                            }
 
+                /**
+                 * Iterator function which is called to every sprint that project contains. This will
+                 * fetch all attached stories of sprint and after that iterator will call private function
+                 * to fetch tasks that are attached to sprint stories.
+                 *
+                 * @param   {sails.model.sprint}    sprint      Sprint object
+                 * @param   {Function}              callback    Callback function to call after job is done
+                 */
+                function(sprint, callback) {
+                    DataService.getStories({sprintId: sprint.id}, function(error, stories) {
+                        if (error) {
+                            callback(error, null);
+                        } else {
                             // Add stories to sprint data
                             sprint.stories = stories;
 
@@ -820,36 +938,21 @@ module.exports = {
                                 sprint.progress = 0;
                             }
 
-                            // Determine story id values for task data fetch
-                            var storyIds = _.map(stories, function(story) { return { storyId: story.id }; } );
-
-                            if (storyIds.length > 0) {
-                                // Find story tasks
-                                Task
-                                    .find()
-                                    .where({or: storyIds})
-                                    .done(function(error, tasks) {
-                                        data.cntTasksTotal = data.cntTasksTotal + tasks.length;
-                                        data.cntTasksDone = data.cntTasksDone + _.reduce(tasks, function(memo, task) {
-                                            return (task.isDone) ? memo + 1 : memo;
-                                        }, 0);
-
-                                        // Add tasks to sprint data
-                                        sprint.tasks = tasks;
-
-                                        callback(null, sprint);
-                                    });
-                            } else {
-                                // Add tasks to sprint data
-                                sprint.tasks = [];
-
-                                callback(null, sprint);
-                            }
-                        });
+                            // Fetch task data
+                            fetchTaskData(sprint, callback);
+                        }
+                    });
                 },
+
+                /**
+                 * Main callback function which will eventually render the GUI for user.
+                 *
+                 * @param   {null|Error}            error   Possible error
+                 * @param   {sails.model.sprint[]}  results Sprint data
+                 */
                 function(error, results) {
                     if (error) {
-                        res.send(error.status ? error.status : 500, error);
+                        ResponseService.makeError(error, request, response);
                     } else {
                         data.sprints = results;
 
@@ -871,10 +974,46 @@ module.exports = {
                             data.progressTasks = 0;
                         }
 
-                        res.view(data);
+                        response.view(data);
                     }
                 }
-            );
+            )
+        }
+
+        /**
+         * Private function to fetch task data which are attached to current sprint stories.
+         *
+         * @param   {sails.model.sprint}    sprint  Sprint object
+         * @param   {Function}              next    Callback function which must be called after this job
+         */
+        function fetchTaskData(sprint, next) {
+            // Determine story id values for task data fetch
+            var storyIds = _.map(sprint.stories, function(story) {
+                return { storyId: story.id };
+            });
+
+            // We have stories so determine tasks of those stories
+            if (storyIds.length > 0) {
+                DataService.getTasks({or: storyIds}, function(error, tasks) {
+                    if (error) {
+                        next(error, null);
+                    } else {
+                        data.cntTasksTotal = data.cntTasksTotal + tasks.length;
+                        data.cntTasksDone = data.cntTasksDone + _.reduce(tasks, function(memo, task) {
+                            return (task.isDone) ? memo + 1 : memo;
+                        }, 0);
+
+                        // Add tasks to sprint data
+                        sprint.tasks = tasks;
+
+                        next(null, sprint);
+                    }
+                });
+            } else { // Oh nou, no stories on this sprint
+                sprint.tasks = [];
+
+                next(null, sprint);
+            }
         }
     }
 };
