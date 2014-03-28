@@ -2,20 +2,36 @@
  * ProjectUserController
  *
  * @module      :: Controller
- * @description :: Contains logic for handling requests.
+ * @description :: A set of functions called `actions`.
+ *
+ *                 Actions contain code telling Sails how to respond to a certain type of request.
+ *                 (i.e. do stuff, then send some JSON, show an HTML page, or redirect to another URL)
+ *
+ *                 You can configure the blueprint URLs which trigger these actions (`config/controllers.js`)
+ *                 and/or override them with custom routes (`config/routes.js`)
+ *
+ *                 NOTE: The code you write here supports both HTTP and Socket.io automatically.
+ *
+ * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 var async = require("async");
 
 module.exports = {
     /**
+     * Overrides for the settings in `config/controllers.js`
+     * (specific to ProjectUserController)
+     */
+    _config: {},
+
+    /**
      * This actions makes view for project users. Note that 'projectId' parameter is
      * required for this action.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    users: function(req, res) {
-        var projectId = req.param("projectId");
+    users: function(request, response) {
+        var projectId = request.param("projectId");
         var data = {
             users: false,
             project: false,
@@ -31,7 +47,22 @@ module.exports = {
 
                 // Fetch current user role in project
                 role: function(callback) {
-                    AuthService.hasProjectAccess(req.user, projectId, callback, true);
+                    AuthService.hasProjectAccess(request.user, projectId, callback, true);
+                },
+
+                // Fetch project users
+                projectUsers: function(callback) {
+                    DataService.getProjectUsers({projectId: projectId}, callback);
+                },
+
+                // Fetch admin users
+                adminUsers: function(callback) {
+                    DataService.getUsers({ admin: true, username: {"!": "admin"} }, callback);
+                },
+
+                // Fetch all users
+                users: function(callback) {
+                    DataService.getUsers({}, callback);
                 }
             },
 
@@ -39,141 +70,132 @@ module.exports = {
              * Callback function that is called after all parallel jobs are done
              * or some error has happen in those
              *
-             * @param   {Error} error   Error data
-             * @param   {{}}    results Object that contains following data:
-             *                           - project {sails.model.project}
-             *                           - role, User role in current project
+             * @param   {null|Error}    error   Error data
+             * @param   {{
+             *              project: sails.model.project,
+             *              role: sails.helper.role,
+             *              projectUsers: sails.model.projectUser[],
+             *              adminUsers: sails.model.user[],
+             *              users: sails.model.user[]
+             *          }}              results Object that contains all needed data
              */
             function callback(error, results) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    ResponseService.makeError(error, request, response);
                 } else {
                     data.project = results.project;
                     data.role = results.role;
 
-                    fetchProjectUsers();
+                    // Remove possible duplicate users and admin users
+                    results.projectUsers = _.filter(results.projectUsers, function(projectUser) {
+                        var founded = false;
+
+                        if (projectUser.userId === results.project.managerId) {
+                            founded = true;
+                        } else {
+                            var adminUser = _.find(results.adminUsers, function(adminUser) {
+                                return adminUser.id === projectUser.userId;
+                            });
+
+                            if (adminUser) {
+                                founded = true;
+                            }
+                        }
+
+                        return !founded;
+                    });
+
+                    // Add real project main manager to user list
+                    results.projectUsers.push({
+                        projectId: results.project.id,
+                        userId: results.project.managerId,
+                        role: -1,
+                        main: 1
+                    });
+
+                    // Add admin users
+                    _.each(results.adminUsers, function(adminUser) {
+                        var founded = _.find(results.projectUsers, function(projectUser) {
+                            return projectUser.userId === adminUser.id;
+                        });
+
+                        if (!founded) {
+                            results.projectUsers.push({
+                                projectId: results.project.id,
+                                userId: adminUser.id,
+                                role: -1,
+                                main: 0,
+                                admin: true
+                            });
+                        }
+                    });
+
+                    determineUserData(results.projectUsers, results.users);
                 }
             }
         );
 
         /**
-         * Function to fetch project user data. Also note that this will add selected
-         * project manager to this user list.
+         * Private function to determine project user data. This will combine project user and
+         * user data objects for GUI.
          *
-         * todo:    potential bug for duplicate user, eg user is attached to project
-         *          and afterwards this same user has been selected to project manager.
-         *
-         *          This is not a big deal yet, but remember to handle this :D
-         *
-         *          Life cycle callbacks should handle this.
+         * @param   {sails.model.projectUser[]} projectUsers
+         * @param   {sails.model.user[]}        users
          */
-        function fetchProjectUsers() {
-            // Fetch all project user
-            ProjectUser
-                .find()
-                .where({projectId: projectId})
-                .exec(function(error, /** sails.json.projectUser */projectUsers) {
-                    if (error) {
-                        res.send(error.status ? error.status : 500, error.message ? error.message : error);
-                    } else {
-                        data.users = projectUsers;
-
-                        // Add project main manager to project users data
-                        projectUsers.push({
-                            projectId: data.project.id,
-                            userId: data.project.managerId,
-                            role: -1,
-                            main: 1
-                        });
-
-                        // Fetch administrator users, excluding the main admin
-                        User
-                            .find()
-                            .where({
-                                admin: true,
-                                username: {"!": "admin"}
-                            })
-                            .exec(function(error, admins) {
-                                _.each(admins, function(admin) {
-                                    var founded = _.find(data.users, function(user) { return user.userId === admin.id; });
-
-                                    if (founded) {
-                                        founded.admin = true;
-                                    } else {
-                                        projectUsers.push({
-                                            projectId: data.project.id,
-                                            userId: admin.id,
-                                            role: -1,
-                                            main: 0,
-                                            admin: true
-                                        });
-                                    }
-                                });
-
-                                // Fetch detailed user data
-                                fetchUserData();
-                            });
-                    }
-                });
-        }
-
-        /**
-         * Function to fetch detailed user data from database.
-         */
-        function fetchUserData() {
+        function determineUserData(projectUsers, users) {
             async.map(
-                data.users,
+                projectUsers,
 
                 /**
-                 * Iterator function which is called on every user in data.users variable.
+                 * Iterator function to combine project user and main user data.
                  *
                  * @param   {sails.model.projectUser}   projectUser
                  * @param   {Function}                  callback
                  */
                 function(projectUser, callback) {
-                    DataService.getUser(projectUser.userId, function(error, user) {
-                        if (error) {
-                            callback(error, null);
-                        } else {
-                            var roleText = "Unknown";
-
-                            switch (projectUser.role) {
-                                case -1:
-                                    roleText = "Manager";
-                                    break;
-                                case 0:
-                                    roleText = "Viewer";
-                                    break;
-                                case 1:
-                                    roleText = "User";
-                                    break;
-                            }
-
-                            projectUser.roleText = roleText;
-
-                            user.projectUser = projectUser;
-
-                            callback(null, user);
-                        }
+                    var user = _.find(users, function(user) {
+                        return user.id === projectUser.userId;
                     });
+
+                    if (!user) {
+                        callback("User not found, weird this should not happen...", null);
+                    } else {
+                        var roleText = "Unknown";
+
+                        switch (projectUser.role) {
+                            case -1:
+                                roleText = "Manager";
+                                break;
+                            case 0:
+                                roleText = "Viewer";
+                                break;
+                            case 1:
+                                roleText = "User";
+                                break;
+                        }
+
+                        projectUser.roleText = roleText;
+
+                        user.projectUser = projectUser;
+
+                        callback(null, user);
+                    }
                 },
 
                 /**
-                 * Main callback function which is called after all project users have
-                 * been mapped via async.js.
+                 * Main callback function which is called after all project users have been
+                 * processed.
                  *
-                 * @param   {Error|null}        error
-                 * @param   {sails.model.user}  results
+                 * @param   {null|Error}            error
+                 * @param   {sails.model.user[]}    users
                  */
-                function(error, results) {
+                function(error, users) {
                     if (error) {
-                        res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                        ResponseService.makeError(error, request, response);
                     } else {
-                        data.users = _.sortBy(results, function(user) {
-                            return [user.fullName(), user.username].join("|");
-                        });
+                        data.users = users.sort(HelperService.dynamicSortMultiple("lastName", "firstName", "username"));
 
-                        res.view(data);
+                        response.view(data);
                     }
                 }
             );
@@ -184,11 +206,11 @@ module.exports = {
      * This actions fetches available users for specified project. These users can be
      * attached to specified project.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    availableUsers: function(req, res) {
-        var projectId = parseInt(req.param("projectId"), 10);
+    availableUsers: function(request, response) {
+        var projectId = parseInt(request.param("projectId"), 10);
 
         async.parallel(
             {
@@ -199,145 +221,131 @@ module.exports = {
 
                 // Fetch current project users
                 projectUsers: function(callback) {
-                    ProjectUser
-                        .find()
-                        .where({projectId: projectId})
-                        .exec(function(error, projectUsers) {
-                            callback(error, projectUsers)
-                        });
+                    DataService.getProjectUsers({projectId: projectId}, callback);
                 }
             },
 
             /**
              * Main callback function which is called after all parallel jobs are done.
              *
-             * @param   {Error|null}    error
-             * @param   {{}}            results
+             * @param   {null|Error}    error
+             * @param   {{
+             *              project: sails.model.project,
+             *              projectUsers: sails.model.projectUser[]
+             *          }}              results
              */
             function (error, results) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    ResponseService.makeError(error, request, response);
                 } else {
-                    var userIds = _.map(results.projectUsers, function(user) {
-                        return {id: {"!": user.userId}};
-                    });
-
-                    userIds.push({id: {"!": results.project.managerId}});
-
-                    var where = {
-                        and: userIds,
-                        admin: 0
-                    };
-
-                    DataService.getUsers(where, function(error, users) {
-                        if (error) {
-                            res.send(error.status ? error.status : 500, error.message ? error.message : error);
-                        } else {
-                            res.json(users);
-                        }
-                    });
+                    fetchAvailableUsers(results);
                 }
             }
         );
+
+        /**
+         * Private function to fetch available users for this project. Available users are not
+         * yet attached to this project nor user is administrator user. Administrator users have
+         * always access to projects.
+         *
+         * @param   {{
+         *              project: sails.model.project,
+         *              projectUsers: sails.model.projectUser[]
+         *          }}  data
+         */
+        function fetchAvailableUsers(data) {
+            var userIds = _.map(data.projectUsers, function(user) {
+                return {id: {"!": user.userId}};
+            });
+
+            userIds.push({id: {"!": data.project.managerId}});
+
+            var where = {
+                and: userIds,
+                admin: 0
+            };
+
+            // Fetch available users
+            DataService.getUsers(where, function(error, users) {
+                if (error) {
+                    ResponseService.makeError(error, request, response);
+                } else {
+                    response.json(200, users);
+                }
+            });
+        }
     },
 
     /**
      * This actions fetches available users for specified project. These users can be
      * attached to specified project.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    ownProjects: function(req, res) {
-        var projectIds = [];
+    ownProjects: function(request, response) {
+        async.waterfall(
+            [
+                // Fetch project user data
+                function(callback) {
+                    DataService.getProjectUsers({userId: request.user.id}, callback)
+                },
 
-        // Make parallel call
-        async.parallel([
-            /**
-             * First fetch all projects where current user is a contributor in
-             * some role.
-             *
-             * @param   {Function}  callback
-             */
-            function(callback) {
-                ProjectUser
-                    .find()
-                    .where({
-                        userId: req.user.id
-                    })
-                    .done(function(error, /** sails.json.projectUser[] */projectUsers) {
-                        if (error) {
-                            return callback(error)
-                        } else {
-                            _.each(projectUsers, function(/** sails.json.projectUser */projectUser) {
-                                projectIds.push({id: projectUser.projectId})
-                            });
-
-                            callback();
-                        }
+                // Map project user data
+                function(projectUsers, callback) {
+                    var projectIds = _.map(projectUsers, function(projectUser) {
+                        return {id: projectUser.projectId};
                     });
-            },
+
+                    callback(null, projectIds);
+                }
+            ],
 
             /**
-             * Then fetch project id(s) where current user is a primary manager.
+             * Main callback function which is called after all waterfall jobs are done.
              *
-             * @param   {Function}  callback
+             * @param   {null|Error}    error       Possible error
+             * @param   {{}}            conditions  Project conditions
              */
-            function(callback) {
-                Project
-                    .find()
-                    .where({
-                        managerId: req.user.id
-                    })
-                    .done(function(error, /** sails.json.project[] */projects) {
-                        if (error) {
-                            return callback(error)
-                        } else {
-                            _.each(projects, function(/** sails.json.project */project) {
-                                projectIds.push({id: project.id})
-                            });
-
-                            callback();
-                        }
-                    });
-            }
-        ],
-            /**
-             * Callback function which is called when all parallel jobs are processed.
-             *
-             * @param error
-             */
-            function(error) {
+            function(error, conditions) {
                 if (error) {
-                    res.send(error, 500);
+                    ResponseService.makeError(error, request, response);
+                } else {
+                    fetchProjects(conditions);
                 }
-
-                var where = null;
-
-                // Admin user has all projects
-                if (req.user.admin) {
-                    where = {};
-                } else if (projectIds.length > 0) { // Current user has "some" project(s)
-                    where = {
-                        or: projectIds
-                    };
-                } else { // Otherwise just send empty data
-                    res.json([]);
-                }
-
-                // Fetch project data
-                Project
-                    .find()
-                    .where(where)
-                    .done(function(error, /** sails.json.project[] */projects) {
-                        if (error) {
-                            res.send(error, 500);
-                        } else {
-                            res.json(projects);
-                        }
-                    });
             }
         );
+
+        /**
+         * Private function to fetch project data where current user is in some role. Note
+         * that administrator users have all access to all projects.
+         *
+         * @param   {{id: {Number}}[]}  conditions  Project ids as an array of objects
+         */
+        function fetchProjects(conditions) {
+            var where = {};
+
+            // Administrator user has access to all projects
+            if (!request.user.admin) {
+                // Add project manager condition
+                conditions.push({
+                    managerId: request.user.id
+                });
+
+                where = {
+                    or: conditions
+                };
+            }
+
+            // Fetch project data
+            DataService.getProjects(where, function(error, projects) {
+                if (error) {
+                    ResponseService.makeError(error, request, response);
+                } else {
+                    response.json(200, projects);
+                }
+            });
+        }
     },
 
     /**
@@ -352,17 +360,17 @@ module.exports = {
      *
      * false if nothing matches.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      *
      * @constructor
      */
-    getRole: function(req, res) {
-        var projectId = parseInt(req.param("projectId"), 10);
+    getRole: function(request, response) {
+        var projectId = parseInt(request.param("projectId"), 10);
 
         // Admin user, always return -3
-        if (req.user.admin) {
-            res.json(200, -3);
+        if (request.user.admin) {
+            response.json(200, -3);
         } else { // Otherwise fetch user role
             async.parallel(
                 {
@@ -370,66 +378,46 @@ module.exports = {
                      * Function to fetch possible Project object for signed in user and
                      * specified project. User must be project manager.
                      *
-                     * Note that this query may return undefined.
-                     *
                      * @param   {Function}  callback
                      */
                     primary: function(callback) {
-                        Project
-                            .findOne({
-                                id: projectId,
-                                managerId: req.user.id
-                            })
-                            .done(function(error, /** sails.model.project */project) {
-                                if (error) {
-                                    callback(error, null);
-                                } else {
-                                    callback(null, project)
-                                }
-                            });
+                        DataService.getProject({id: projectId, managerId: request.user.id}, callback);
                     },
 
                     /**
                      * Function to fetch possible ProjectUser object for signed in user
                      * and specified project.
                      *
-                     * Note that this query may return undefined.
-                     *
                      * @param   {Function}  callback
                      */
                     contributor: function(callback) {
-                        ProjectUser
-                            .findOne({
-                                projectId: projectId,
-                                userId: req.user.id
-                            })
-                            .done(function(error, /** sails.model.projectUser */projectUser) {
-                                if (error) {
-                                    callback(error, null);
-                                } else {
-                                    callback(null, projectUser)
-                                }
-                            });
+                        DataService.getProjectUser({projectId: projectId, userId: request.user.id}, callback);
                     }
                 },
 
                 /**
-                 * Callback function which is been called after all parallel jobs are
-                 * processed.
+                 * Callback function which is been called after all parallel jobs are processed.
                  *
-                 * @param   {Error} error
-                 * @param   {{}}    results
+                 * @param   {null|Error}    error   Possible error.
+                 * @param   {{
+                 *              primary: sails.model.project
+                 *              contributor: sails.model.projectUser
+                 *          }}              results Fetched data as an object
                  */
                 function(error, results) {
-                    var output = false;
+                    if (error) {
+                        ResponseService.makeError(error, request, response);
+                    } else {
+                        var output = false;
 
-                    if (results.primary) {
-                        output = -2;
-                    } else if (results.contributor) {
-                        output = results.contributor.role;
+                        if (results.primary) {
+                            output = -2;
+                        } else if (results.contributor) {
+                            output = results.contributor.role;
+                        }
+
+                        response.json(200, output);
                     }
-
-                    res.json(200, output);
                 }
             );
         }
