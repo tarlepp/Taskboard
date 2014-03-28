@@ -32,6 +32,20 @@ exports.getProject = function(projectId, callback) {
 };
 
 /**
+ * Service to fetch project users from database by given conditions.
+ *
+ * @param   {{}}        where       Used query conditions
+ * @param   {Function}  callback    Callback function to after query
+ */
+exports.getProjectUser = function(where, callback) {
+    ProjectUser
+        .findOne(where)
+        .exec(function(error, /** sails.model.projectUser */projectUser) {
+            callback(error, projectUser);
+        });
+};
+
+/**
  * Service to fetch single sprint data from database.
  *
  * @param   {Number}    sprintId    Sprint id
@@ -408,6 +422,21 @@ exports.getUsers = function(where, callback) {
             } else {
                 callback(null, users);
             }
+        });
+};
+
+/**
+ * Service to fetch project users from database by given conditions.
+ *
+ * @param   {{}}        where       Used query conditions
+ * @param   {Function}  callback    Callback function to after query
+ */
+exports.getProjectUsers = function(where, callback) {
+    ProjectUser
+        .find()
+        .where(where)
+        .exec(function(error, /** sails.json.projectUser */projectUsers) {
+            callback(error, projectUsers);
         });
 };
 
