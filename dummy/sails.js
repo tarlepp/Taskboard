@@ -266,6 +266,16 @@ var sails = {
      * Sails.js models
      */
     model: {
+        project: {
+            managerId: "",
+            title: "",
+            description: "",
+            dateStart: "",
+            dateEnd: "",
+            id: "",
+            createdAt: "",
+            updatedAt: ""
+        },
         milestone: {
             projectId: "",
             title: "",
@@ -350,6 +360,18 @@ var sails = {
             createdUserId: "",
             createdAt: "",
             updatedAt: ""
+        }
+    },
+
+    controllers: {
+        project: {
+            backlog: {
+                callback: {
+                    role: "",
+                    project: "",
+                    stories: ""
+                }
+            }
         }
     }
 };
