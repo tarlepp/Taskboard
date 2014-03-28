@@ -3,6 +3,8 @@
  *
  * @module      ::  Controller
  * @description ::  Contains logic for handling requests.
+ *
+ * @bugs        :: api/controllers/SprintController.js:262:74
  */
 var async = require("async");
 var moment = require("moment-timezone");
