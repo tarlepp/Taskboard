@@ -3,6 +3,8 @@
  *
  * @module      ::  Controller
  * @description ::  Contains logic for handling requests.
+ *
+ * @bugs        ::  /api/controllers/StoryController.js:498:126)
  */
 "use strict";
 
