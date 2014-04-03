@@ -635,15 +635,20 @@ module.exports = {
          * make some basic calculations about those.
          */
         function makeDetailedStatistics() {
-            var totalTime = _.pluck(data.phases, "duration").reduce(function(memo, i) {
-                return memo + i;
-            });
+            var totalTime = 0;
+            var totalTimeNoFirst = 0;
 
-            var totalTimeNoFirst = _.pluck(_.reject(data.phases, function(phase) {
-                return phase.order === 0;
-            }), "duration").reduce(function(memo, i) {
-                return memo + i;
-            });
+            if (data.phases.length > 0) {
+                totalTime =_.pluck(data.phases, "duration").reduce(function(memo, i) {
+                    return memo + i;
+                });
+
+                totalTimeNoFirst = _.pluck(_.reject(data.phases, function(phase) {
+                    return phase.order === 0;
+                }), "duration").reduce(function(memo, i) {
+                    return memo + i;
+                });
+            }
 
             data.phaseDuration = {
                 totalTime: totalTime,
