@@ -360,6 +360,15 @@ var sails = {
             createdUserId: "",
             createdAt: "",
             updatedAt: ""
+        },
+        excludeSprintDay: {
+            sprintId: "",
+            day: "",
+            id: "",
+            updatedUserId: "",
+            createdUserId: "",
+            createdAt: "",
+            updatedAt: ""
         }
     },
 
