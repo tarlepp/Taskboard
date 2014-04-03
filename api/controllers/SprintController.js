@@ -1,37 +1,51 @@
 /**
  * SprintController
  *
- * @module      ::  Controller
- * @description ::  Contains logic for handling requests.
+ * @module      :: Controller
+ * @description :: A set of functions called `actions`.
  *
- * @bugs        :: api/controllers/SprintController.js:262:74
+ *                 Actions contain code telling Sails how to respond to a certain type of request.
+ *                 (i.e. do stuff, then send some JSON, show an HTML page, or redirect to another URL)
+ *
+ *                 You can configure the blueprint URLs which trigger these actions (`config/controllers.js`)
+ *                 and/or override them with custom routes (`config/routes.js`)
+ *
+ *                 NOTE: The code you write here supports both HTTP and Socket.io automatically.
+ *
+ * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 var async = require("async");
 var moment = require("moment-timezone");
 
 module.exports = {
     /**
-     * Sprint add action.
-     *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * Overrides for the settings in `config/controllers.js`
+     * (specific to SprintController)
      */
-    add: function(req, res) {
-        var projectId = parseInt(req.param("projectId"), 10);
+    _config: {},
 
-        res.view({
+    /**
+     * Sprint add action. This will render a GUI where user can add new sprint to specified project.
+     *
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
+     */
+    add: function(request, response) {
+        var projectId = parseInt(request.param("projectId"), 10);
+
+        response.view({
             projectId: projectId
         });
     },
 
     /**
-     * Sprint edit action.
+     * Sprint edit action. This will render a GUI where user can edit specified sprint.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    edit: function(req, res) {
-        var sprintId = parseInt(req.param("id"), 10);
+    edit: function(request, response) {
+        var sprintId = parseInt(request.param("id"), 10);
 
         // Fetch sprint data for edit action
         async.parallel(
@@ -43,41 +57,46 @@ module.exports = {
 
                 // Determine user role in this sprint
                 role: function(callback) {
-                    AuthService.hasSprintAccess(req.user, sprintId, callback, true);
+                    AuthService.hasSprintAccess(request.user, sprintId, callback, true);
                 }
             },
 
             /**
              * Callback function which is called after all specified parallel jobs are done.
              *
-             * @param   {Error} error   Error object
-             * @param   {{}}    data    Object that contains sprint and role data
+             * @param   {null|Error}    error   Error object
+             * @param   {{
+             *              sprint: sails.model.sprint,
+             *              role: sails.helper.role
+             *          }}              data    Object that contains sprint and role data
              */
             function (error, data) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error);
+                    ResponseService.makeError(error, request, response);
                 } else {
-                    res.view(data);
+                    response.view(data);
                 }
             }
         );
     },
 
     /**
-     * Sprint backlog action.
+     * Sprint backlog action. This action will render a GUI where is listed all stories that are
+     * attached to specified sprint. Within this GUI user can change stories priority, add/edit
+     * those.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    backlog: function(req, res) {
-        var sprintId = parseInt(req.param("id"), 10);
+    backlog: function(request, response) {
+        var sprintId = parseInt(request.param("id"), 10);
 
         // Initialize view data object
         var data = {
-            stories: false,
+            stories: [],
             role: 0,
             sprint: {
-                data: false,
+                data: {},
                 progressStory: 0,
                 progressTask: 0,
                 cntStoryDone: 0,
@@ -89,7 +108,7 @@ module.exports = {
             }
         };
 
-        // Fetch basic data for backlog action parallel
+        // Fetch basic data for backlog action
         async.parallel(
             {
                 // Fetch sprint data.
@@ -104,46 +123,101 @@ module.exports = {
 
                 // Determine user role in this sprint
                 role: function(callback) {
-                    AuthService.hasSprintAccess(req.user, sprintId, callback, true);
+                    AuthService.hasSprintAccess(request.user, sprintId, callback, true);
                 }
             },
 
             /**
              * Callback function which is been called after all parallel jobs are processed.
              *
-             * @param   {Error} error   Error object
-             * @param   {{}}    result  Result object that contains 'sprint', 'stories' and 'role' data
+             * @param   {null|Error}    error   Error object
+             * @param   {{
+             *              sprint: sails.model.sprint,
+             *              stories: sails.model.story[],
+             *              role: sails.helper.role
+             *          }}              result  Result object that contains 'sprint', 'stories' and 'role' data
              */
             function(error, result) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error);
+                    ResponseService.makeError(error, request, response);
                 } else {
-                    DataService.getPhases({projectId: result.sprint.projectId}, function(error, phases) {
-                        if (error) {
-                            res.send(error.status ? error.status : 500, error);
-                        } else {
-                            data.sprint.data = result.sprint;
-                            data.stories = result.stories;
-                            data.phases = phases;
-                            data.role = result.role;
+                    // Store fetched data
+                    data.sprint.data = result.sprint;
+                    data.stories = result.stories;
+                    data.role = result.role;
 
-                            // Fetch task data
-                            fetchPhaseDuration(data);
-                        }
-                    });
+                    // Fetch phase data
+                    fetchRelatedData();
                 }
             }
         );
 
         /**
+         * Private function to fetch all related data for sprint backlog GUI. Note that data in here are
+         * depending on previously fetched data.
+         *
+         * After all jobs are done, function will render actual sprint backlog GUI for user.
+         *
+         * @return  void
+         */
+        function fetchRelatedData() {
+            async.waterfall(
+                [
+                    // Fetch phase data
+                    function(callback) {
+                        DataService.getPhases({projectId: data.sprint.data.projectId}, function(error, phases) {
+                            callback(error, phases);
+                        });
+                    },
+
+                    // Fetch phase duration data
+                    function(phases, callback) {
+                        fetchPhaseDuration(phases, callback);
+                    },
+
+                    // Fetch task data
+                    function(phases, callback) {
+                        // Store phase data
+                        data.phases = phases;
+
+                        fetchTaskData(callback);
+                    }
+                ],
+
+                /**
+                 * Main callback which is called after all waterfall jobs are done, or error occurred
+                 * while processing those.
+                 *
+                 * @param   {null|Error}            error
+                 * @param   {sails.model.story[]}   stories
+                 */
+                function(error, stories) {
+                    if (error) {
+                        ResponseService.makeError(error, request, response);
+                    } else {
+                        data.stories = stories;
+
+                        // Make necessary statistics calculations.
+                        calculateStatisticsData();
+
+                        response.view(data);
+                    }
+                }
+            );
+        }
+
+        /**
          * Private function to fetch sprint task phase duration times. This will sum tasks durations
          * for each phase in this sprint.
          *
-         * @param data
+         * @param   {sails.model.phase[]}   phases  Phase data
+         * @param   {Function}              next    Callback function to call after job is done
+         *
+         * @return  void
          */
-        function fetchPhaseDuration(data) {
+        function fetchPhaseDuration(phases, next) {
             async.map(
-                data.phases,
+                phases,
 
                 /**
                  * Function to determine duration in specified phase.
@@ -151,20 +225,23 @@ module.exports = {
                  * @param   {sails.model.phase} phase
                  * @param   {Function}          callback
                  */
-                function (phase, callback) {
+                function(phase, callback) {
+                    var conditions = {
+                        phaseId: phase.id,
+                        sprintId: data.sprint.data.id
+                    };
+
+                    // Fetch sum of phase duration data
                     PhaseDuration
-                        .find({
-                            sum: "duration"
-                        })
-                        .where({phaseId: phase.id})
-                        .where({sprintId: data.sprint.data.id})
+                        .find({sum: "duration"})
+                        .where(conditions)
                         .done(function(error, result) {
                             if (error) {
                                 callback(error, null);
                             } else {
                                 phase.duration = result[0].duration ? result[0].duration : 0;
 
-                                callback(null, phase.duration);
+                                callback(null, phase);
                             }
                         });
                 },
@@ -172,15 +249,11 @@ module.exports = {
                 /**
                  * Main callback function which is called after all phases are processed.
                  *
-                 * @param   {Error|null}    error
-                 * @param   {{}}            result
+                 * @param   {null|Error}            error
+                 * @param   {sails.model.phase[]}   phases
                  */
-                function (error, result) {
-                    if (error) {
-                        res.send(error, error.status ? error.status : 500);
-                    } else {
-                        fetchTaskData(data);
-                    }
+                function (error, phases) {
+                    next(error, phases);
                 }
             );
         }
@@ -188,20 +261,11 @@ module.exports = {
         /**
          * Private function to fetch task data for each story in specified sprint.
          *
+         * @param   {Function}  next    Callback function to call after job is done
+         *
          * @return  void
          */
-        function fetchTaskData(data) {
-            // Calculate story specified statistics
-            data.sprint.cntStoryTotal = data.stories.length;
-            data.sprint.cntStoryDone = _.reduce(data.stories, function(memo, story) { return (story.isDone) ? memo + 1 : memo; }, 0);
-            data.sprint.cntStoryNotDone = data.sprint.cntStoryTotal - data.sprint.cntStoryDone;
-
-            if (data.sprint.cntStoryDone > 0) {
-                data.sprint.progressStory = Math.round(data.sprint.cntStoryDone / data.sprint.cntStoryTotal * 100);
-            } else {
-                data.sprint.progressStory = 0;
-            }
-
+        function fetchTaskData(next) {
             // Map each sprint story and fetch task data of those
             async.map(
                 data.stories,
@@ -214,83 +278,109 @@ module.exports = {
                  * @param   {Function}          callback    Callback function to call after job is finished
                  */
                 function(story, callback) {
-                    Task
-                        .find()
-                        .where({
-                            storyId: story.id
-                        })
-                        .sort("title ASC")
-                        .done(function(error, tasks) {
-                            if (error) {
-                                callback(error, false);
+                    DataService.getTasks({storyId: story.id}, function(error, tasks) {
+                        if (error) {
+                            callback(error, null);
+                        } else {
+                            // Add tasks to story data
+                            story.tasks = tasks;
+
+                            story.doneTasks = _.reduce(tasks, function(memo, task) {
+                                return (task.isDone) ? memo + 1 : memo;
+                            }, 0);
+
+                            if (story.doneTasks > 0) {
+                                story.progress = Math.round(story.doneTasks / tasks.length * 100);
                             } else {
-                                // Add tasks to story data
-                                story.tasks = tasks;
-                                story.doneTasks = _.reduce(tasks, function(memo, task) { return (task.isDone) ? memo + 1 : memo; }, 0);
-
-                                if (story.doneTasks > 0) {
-                                    story.progress = Math.round(story.doneTasks / tasks.length * 100);
-                                } else {
-                                    story.progress = 0;
-                                }
-
-                                // Add task counts to sprint
-                                data.sprint.cntTaskTotal += story.tasks.length;
-                                data.sprint.cntTaskDone += story.doneTasks;
-
-                                callback(null, true);
+                                story.progress = 0;
                             }
-                        });
+
+                            // Add task counts to sprint
+                            data.sprint.cntTaskTotal = data.sprint.cntTaskTotal + story.tasks.length;
+                            data.sprint.cntTaskDone = data.sprint.cntTaskDone + story.doneTasks;
+
+                            callback(null, story);
+                        }
+                    });
                 },
 
                 /**
                  * Callback function which is been called after all stories are processed.
                  *
-                 * @param   {Error}     error   Error object
-                 * @param   {Boolean}   result
+                 * @param   {null|Error}            error
+                 * @param   {sails.model.story[]}   stories
                  */
-                function(error, result) {
-                    if (error) {
-                        res.send(error.status ? error.status : 500, error);
-                    } else {
-                        data.sprint.cntTaskNotDone = data.sprint.cntTaskTotal - data.sprint.cntTaskDone;
-
-                        if (data.sprint.cntTaskDone > 0) {
-                            data.sprint.progressTask = Math.round(data.sprint.cntTaskDone / data.sprint.cntTaskTotal * 100);
-                        } else {
-                            data.sprint.progressTask = 0;
-                        }
-
-                        var totalTime = _.pluck(data.phases, "duration").reduce(function(memo, i) {return memo + i});
-                        var totalTimeNoFirst = _.pluck(_.reject(data.phases, function(phase) { return phase.order === 0 } ), "duration").reduce(function(memo, i) {return memo + i});
-
-                        data.phaseDuration = {
-                            totalTime: totalTime,
-                            totalTimeNoFirst: totalTimeNoFirst
-                        };
-
-                        _.each(data.phases, function(phase) {
-                            phase.durationPercentage = (phase.duration > 0 && phase.order !== 0) ? phase.duration / totalTimeNoFirst * 100 : 0;
-                            phase.durationPercentageTotal = (phase.duration > 0) ? phase.duration / totalTime * 100 : 0;
-                        });
-
-                        res.view(data);
-                    }
+                function(error, stories) {
+                    next(error, stories);
                 }
             )
+        }
+
+        /**
+         * Private function to calculate some statistics data for sprint backlog GUI. This function
+         * is called right before actual GUI rendering. At this point we have all the necessary data
+         * fetched from database.
+         *
+         * @return  void
+         */
+        function calculateStatisticsData() {
+            var totalTime = 0;
+            var totalTimeNoFirst = 0;
+
+            data.sprint.cntStoryTotal = data.stories.length;
+
+            data.sprint.cntStoryDone = _.reduce(data.stories, function(memo, story) {
+                return (story.isDone) ? memo + 1 : memo;
+            }, 0);
+
+            data.sprint.cntStoryNotDone = data.sprint.cntStoryTotal - data.sprint.cntStoryDone;
+
+            if (data.sprint.cntStoryDone > 0) {
+                data.sprint.progressStory = Math.round(data.sprint.cntStoryDone / data.sprint.cntStoryTotal * 100);
+            } else {
+                data.sprint.progressStory = 0;
+            }
+
+            data.sprint.cntTaskNotDone = data.sprint.cntTaskTotal - data.sprint.cntTaskDone;
+
+            if (data.sprint.cntTaskDone > 0) {
+                data.sprint.progressTask = Math.round(data.sprint.cntTaskDone / data.sprint.cntTaskTotal * 100);
+            } else {
+                data.sprint.progressTask = 0;
+            }
+
+            if (data.phases.length > 0) {
+                totalTime = _.pluck(data.phases, "duration").reduce(function(memo, i) {
+                    return memo + i;
+                });
+
+                totalTimeNoFirst = _.pluck(_.reject(data.phases, function(phase) {
+                        return phase.order === 0;
+                    }), "duration").reduce(function(memo, i) {
+                    return memo + i;
+                });
+            }
+
+            data.phaseDuration = {
+                totalTime: totalTime,
+                totalTimeNoFirst: totalTimeNoFirst
+            };
+
+            _.each(data.phases, function(phase) {
+                phase.durationPercentage = (phase.duration > 0 && phase.order !== 0) ? phase.duration / totalTimeNoFirst * 100 : 0;
+                phase.durationPercentageTotal = (phase.duration > 0) ? phase.duration / totalTime * 100 : 0;
+            });
         }
     },
 
     /**
-     * Sprint charts action.
+     * Sprint charts action. This will render a GUI that shows specified sprint charts.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    charts: function(req, res) {
-        var sprintId = parseInt(req.param("id"), 10);
-
-        var data = {};
+    charts: function(request, response) {
+        var sprintId = parseInt(request.param("id"), 10);
 
         // Get sprint and attached stories data
         async.parallel(
@@ -315,56 +405,64 @@ module.exports = {
              * Callback function which is been called after all parallel jobs are processed.
              *
              * @param   {Error} error   Error object
-             * @param   {{}}    results Result data as an object that contains 'sprint' and 'stories'
+             * @param   {{}}    data Result data as an object that contains 'sprint' and 'stories'
              */
-            function(error, results) {
+            function(error, data) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error);
+                    ResponseService.makeError(error, request, response);
                 } else {
-                    // Store results to data
-                    data.sprint = results.sprint;
-                    data.stories = results.stories;
-                    data.excludeDays = results.excludeDays;
-
-                    getTasks();
+                    getTaskData(data);
                 }
             }
         );
 
         /**
          * Private function to fetch all task data that are attached specified sprint.
+         *
+         * @param   {{
+         *              sprint: sails.model.sprint,
+         *              stories: sails.model.story[],
+         *              excludeDays: sails.model.excludeSprintDay[]
+         *          }}  data
          */
-        function getTasks() {
+        function getTaskData(data) {
             // Determine story id values for task search.
-            var storyIds = _.map(data.stories, function(story) { return {storyId: story.id}; });
+            var storyIds = _.map(data.stories, function(story) {
+                return {storyId: story.id};
+            });
 
+            // We have some stories, so fetch tasks of those.
             if (storyIds.length > 0) {
                 // Fetch stories tasks
                 DataService.getTasks({or: storyIds}, function(error, tasks) {
                     if (error) {
-                        res.send(error.status ? error.status : 500, error);
+                        ResponseService.makeError(error, request, response);
                     } else {
                         data.tasks = tasks;
 
-                        res.view(data);
+                        response.view(data);
                     }
                 });
-            } else {
+            } else { // Otherwise we don't have any tasks so render GUI
                 data.tasks = [];
 
-                res.view(data);
+                response.view(data);
             }
         }
     },
 
     /**
-     * Sprint chartDataTask action.
+     * Sprint chartDataTask action. This action handles the real data determination for sprint chart
+     * GUI. This action is quite heavy because of all calculations what are made in this action.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * I think that there are some optimizations that can be done to this action, but not yet :D
+     * Just leave this alone for a while, because it works like it should.
+     *
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    chartDataTasks: function(req, res) {
-        var sprintId = parseInt(req.param("sprintId"), 10);
+    chartDataTasks: function(request, response) {
+        var sprintId = parseInt(request.param("sprintId"), 10);
         var data = {};
 
         // Get sprint and attached stories data
@@ -399,7 +497,7 @@ module.exports = {
              */
             function(error, results) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    ResponseService.makeError(error, request, response);
                 } else {
                     // Store results to data
                     data.sprint = results.sprint;
@@ -407,15 +505,85 @@ module.exports = {
                     data.stories = results.stories;
                     data.types = results.types;
 
-                    getTaskData();
+                    // Fetch task data
+                    fetchRelatedData();
                 }
             }
         );
 
         /**
-         * Private function to fetch task data.
+         * Private function to fetch all related data for sprint chart GUI. Note that this function
+         * is quite "heavy" to run. First we will need to fetch some related data that we need for
+         * calculations of statistic data.
+         *
+         * @return  void
          */
-        function getTaskData() {
+        function fetchRelatedData() {
+            async.waterfall(
+                [
+                    // Fetch phase and task data
+                    function(callback) {
+                        getPhaseAndTaskData(callback);
+                    },
+
+                    /**
+                     * Job to store task data for GUI and determine task durations in each phase.
+                     *
+                     * @param   {{
+                     *              tasks: sails.model.task[],
+                     *              phases: sails.model.phase[]
+                     *          }}          results
+                     * @param   {Function}  callback
+                     */
+                    function(results, callback) {
+                        data.tasks = _.sortBy(results.tasks, function(task) {
+                            return task.timeEnd;
+                        });
+
+                        data.tasksDone = _.filter(data.tasks, function(task) {
+                            return task.isDone;
+                        });
+
+                        // Determine task durations in each phase
+                        fetchTaskDuration(results.phases, callback);
+                    }
+                ],
+
+                /**
+                 * Main callback function which is called after all waterfall jobs are done. This will store
+                 * determined phase data and then calculate all necessary statistics data for GUI charts.
+                 *
+                 * Necessary statistics calculations are done in separate private function that will process
+                 * all fetched data and create actual chart data.
+                 *
+                 * After that data is processed it's sended back to client as in JSON object.
+                 *
+                 * @param   {null|Error}            error
+                 * @param   {sails.model.phase[]}   phases
+                 */
+                function(error, phases) {
+                    if (error) {
+                        ResponseService.makeError(error, request, response);
+                    } else {
+                        data.phases = phases;
+
+                        parseChartData();
+
+                        response.json(data);
+                    }
+                }
+            );
+        }
+
+        /**
+         * Private function to fetch task data. This is called after we have collect basic data for
+         * the sprint chart GUI.
+         *
+         * @param   {Function}  next    Callback function that will be called after job is done.
+         *
+         * @return  void
+         */
+        function getPhaseAndTaskData(next) {
             async.parallel(
                 {
                     // Fetch project phases data
@@ -427,12 +595,13 @@ module.exports = {
                     tasks: function(callback) {
                         // Determine story id values for task search.
                         var storyIds = _.compact(_.map(data.stories, function(story) {
-                            return story.ignoreInBurnDownChart ? false : {storyId: story.id};
+                            return story.ignoreInBurnDownChart ? false : { storyId: story.id };
                         }));
 
+                        // Yeah, we got some stories, so fetch tasks of those.
                         if (storyIds.length > 0) {
                             DataService.getTasks({or: storyIds}, callback);
-                        } else {
+                        } else { // Otherwise just continue
                             callback(null, []);
                         }
                     }
@@ -441,29 +610,31 @@ module.exports = {
                 /**
                  * Main callback function which is called after all parallel jobs are done.
                  *
-                 * @param   {Error|null}    error
-                 * @param   {{}}            results
+                 * @param   {null|Error}    error
+                 * @param   {{
+                 *              phases: sails.model.phase[],
+                 *              tasks: sails.model.task[]
+                 *          }}            results
                  */
                 function(error, results) {
-                    if (error) {
-                        res.send(error.status ? error.status : 500, error.message ? error.message : error);
-                    } else {
-                        data.phases = results.phases;
-                        data.tasks = _.sortBy(results.tasks, function(task) { return task.timeEnd; } );
-                        data.tasksDone = _.filter(data.tasks, function(task) { return task.isDone; } );
-
-                        fetchTaskDuration();
-                    }
+                    next(error, results);
                 }
             );
         }
 
         /**
-         * Private function to determine tasks durations in each phase.
+         * Private function to determine tasks durations in each phase. This will map all provided
+         * phase objects and adds duration data to each of those.
+         *
+         * After all phases are mapped with duration data function will call provided callback
+         * function with phases data.
+         *
+         * @param   {sails.model.phase[]}   phases  Phase data
+         * @param   {Function}              next    Callback to call after job is done
          */
-        function fetchTaskDuration() {
+        function fetchTaskDuration(phases, next) {
             async.map(
-                data.phases,
+                phases,
 
                 /**
                  * Function to determine duration in current phase.
@@ -471,20 +642,17 @@ module.exports = {
                  * @param   {sails.model.phase} phase
                  * @param   {Function}          callback
                  */
-                function (phase, callback) {
+                function(phase, callback) {
                     PhaseDuration
-                        .find({
-                            sum: "duration"
-                        })
-                        .where({phaseId: phase.id})
-                        .where({sprintId: data.sprint.id})
+                        .find({sum: "duration"})
+                        .where({phaseId: phase.id, sprintId: data.sprint.id})
                         .done(function(error, result) {
                             if (error) {
                                 callback(error, null);
                             } else {
                                 phase.duration = result[0].duration ? result[0].duration : 0;
 
-                                callback(null, phase.duration);
+                                callback(null, phase);
                             }
                         });
                 },
@@ -492,51 +660,11 @@ module.exports = {
                 /**
                  * Main callback function which is called after all phases are processed.
                  *
-                 * @param   {Error|null}    error
-                 * @param   {{}}            result
+                 * @param   {null|Error}            error
+                 * @param   {sails.model.phase[]}   phases
                  */
-                function (error, result) {
-                    if (error) {
-                        res.send(error.status ? error.status : 500, error.message ? error.message : error);
-                    } else {
-                        var totalTime = _.pluck(data.phases, "duration").reduce(function(memo, i) {return memo + i});
-                        var totalTimeNoFirst = _.pluck(_.reject(data.phases, function(phase) { return phase.order === 0 } ), "duration").reduce(function(memo, i) {return memo + i});
-
-                        data.phaseDuration = {
-                            totalTime: totalTime,
-                            totalTimeNoFirst: totalTimeNoFirst
-                        };
-
-                        _.each(data.phases, function(phase) {
-                            phase.durationPercentage = (phase.duration > 0 && phase.order !== 0) ? phase.duration / totalTimeNoFirst * 100 : 0;
-                            phase.durationPercentageTotal = (phase.duration > 0) ? phase.duration / totalTime * 100 : 0;
-                        });
-
-                        data.chartDataPhases = [];
-                        data.chartDataPhasesTotal = [];
-
-                        _.each(data.phases, function(phase) {
-                            if (phase.durationPercentage > 0) {
-                                data.chartDataPhases.push({
-                                    name: phase.title,
-                                    color: phase.backgroundColor,
-                                    y: phase.durationPercentage,
-                                    duration: phase.duration
-                                });
-                            }
-
-                            if (phase.durationPercentageTotal > 0) {
-                                data.chartDataPhasesTotal.push({
-                                    name: phase.title,
-                                    color: phase.backgroundColor,
-                                    y: phase.durationPercentageTotal,
-                                    duration: phase.duration
-                                });
-                            }
-                        });
-
-                        parseData();
-                    }
+                function (error, phases) {
+                    next(error, phases);
                 }
             );
         }
@@ -544,17 +672,70 @@ module.exports = {
         /**
          * Private function to parse actual data for chart.
          */
-        function parseData() {
+        function parseChartData() {
             var initTasks = 0;
             var storyTasks = 0;
+            var totalTimeNoFirst = 0;
+            var totalTime = 0;
             var tasksOver = [];
             var taskCount = _.size(data.tasks);
-            var taskTypes = _.groupBy(data.tasks, function(task) { return task.typeId; } );
+
+            var taskTypes = _.groupBy(data.tasks, function(task) {
+                return task.typeId;
+            });
+
+            if (data.phases.length > 0) {
+                totalTime= _.pluck(data.phases, "duration").reduce(function(memo, i) {
+                    return memo + i;
+                });
+
+                totalTimeNoFirst = _.pluck(_.reject(data.phases, function(phase) {
+                        return phase.order === 0;
+                    }), "duration").reduce(function(memo, i) {
+                    return memo + i;
+                });
+            }
+
+            data.phaseDuration = {
+                totalTime: totalTime,
+                totalTimeNoFirst: totalTimeNoFirst
+            };
+
+            _.each(data.phases, function(phase) {
+                phase.durationPercentage = (phase.duration > 0 && phase.order !== 0) ? phase.duration / totalTimeNoFirst * 100 : 0;
+                phase.durationPercentageTotal = (phase.duration > 0) ? phase.duration / totalTime * 100 : 0;
+            });
+
+            data.chartDataPhases = [];
+            data.chartDataPhasesTotal = [];
+
+            _.each(data.phases, function(phase) {
+                if (phase.durationPercentage > 0) {
+                    data.chartDataPhases.push({
+                        name: phase.title,
+                        color: phase.backgroundColor,
+                        y: phase.durationPercentage,
+                        duration: phase.duration
+                    });
+                }
+
+                if (phase.durationPercentageTotal > 0) {
+                    data.chartDataPhasesTotal.push({
+                        name: phase.title,
+                        color: phase.backgroundColor,
+                        y: phase.durationPercentageTotal,
+                        duration: phase.duration
+                    });
+                }
+            });
 
             data.chartDataTaskTypes = [];
 
             _.each(taskTypes, function(tasks, typeId) {
-                var type = _.find(data.types, function(type) { return type.id == typeId; });
+                var type = _.find(data.types, function(type) {
+                    return type.id == typeId;
+                });
+
                 var count = _.size(tasks);
 
                 if (count > 0) {
@@ -592,7 +773,10 @@ module.exports = {
                 initTasks = initTasks + storyTasks;
             });
 
-            data.tasksOver = _.sortBy(tasksOver, function(task) { return task.createdAt; } );
+            data.tasksOver = _.sortBy(tasksOver, function(task) {
+                return task.createdAt;
+            });
+
             data.initTasks = initTasks;
             data.chartData = [];
 
@@ -659,8 +843,6 @@ module.exports = {
                 zIndex: 0,
                 data: getAddedData()
             });
-
-            res.json(data);
         }
 
         /**
