@@ -354,11 +354,15 @@ module.exports = {
                     return memo + i;
                 });
 
-                totalTimeNoFirst = _.pluck(_.reject(data.phases, function(phase) {
-                        return phase.order === 0;
-                    }), "duration").reduce(function(memo, i) {
-                    return memo + i;
-                });
+                var temp = _.pluck(_.reject(data.phases, function(phase) {
+                    return phase.order === 0;
+                }), "duration");
+
+                if (temp.length > 0) {
+                    totalTimeNoFirst = temp.reduce(function(memo, i) {
+                        return memo + i;
+                    });
+                }
             }
 
             data.phaseDuration = {
@@ -689,11 +693,15 @@ module.exports = {
                     return memo + i;
                 });
 
-                totalTimeNoFirst = _.pluck(_.reject(data.phases, function(phase) {
-                        return phase.order === 0;
-                    }), "duration").reduce(function(memo, i) {
-                    return memo + i;
-                });
+                var temp = _.pluck(_.reject(data.phases, function(phase) {
+                    return phase.order === 0;
+                }), "duration");
+
+                if (temp.length > 0) {
+                    totalTimeNoFirst = temp.reduce(function(memo, i) {
+                        return memo + i;
+                    });
+                }
             }
 
             data.phaseDuration = {
