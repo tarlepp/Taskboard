@@ -416,12 +416,10 @@ exports.getUsers = function(where, callback) {
         .find()
         .where(where)
         .sort("lastName ASC")
+        .sort("firstName ASC")
+        .sort("username ASC")
         .done(function(error, users) {
-            if (error) {
-                callback(error, null);
-            } else {
-                callback(null, users);
-            }
+            callback(error, users);
         });
 };
 
@@ -438,6 +436,120 @@ exports.getProjectUsers = function(where, callback) {
         .exec(function(error, /** sails.json.projectUser */projectUsers) {
             callback(error, projectUsers);
         });
+};
+
+/**
+ * Service to fetch project users. These users are attached in some role to specified project.
+ *
+ * @param   {Number}    projectId   Project id
+ * @param   {Function}  next        Callback function which is called after job is finished
+ * @param   {Boolean}   [noViewers] Skip users that are in 'Viewer' role in this project. Defaults to false.
+ */
+exports.getUsersByProject = function(projectId, next, noViewers) {
+    noViewers = noViewers || false;
+
+    async.parallel(
+        {
+            // Fetch project user data
+            projectUsers: function(callback) {
+                DataService.getProjectUsers({projectId: projectId}, callback);
+            },
+
+            // Fetch project data
+            project: function(callback) {
+                DataService.getProject(projectId, callback);
+            },
+
+            // Fetch admin users
+            adminUsers: function(callback) {
+                var where = {
+                    admin: true
+                };
+
+                DataService.getUsers(where, callback);
+            }
+        },
+
+        /**
+         * Main callback function which is called after all parallel jobs are done or
+         * some error occurred while processing those.
+         *
+         * @param   {null|Error}    error
+         * @param   {{
+         *              projectUsers: sails.model.projectUser[],
+         *              project: sails.model.project,
+         *              adminUsers: sails.model.user[]
+         *          }}              data
+         */
+        function(error, data) {
+            if (error) {
+                next(error, null);
+            } else {
+                var userIds = [];
+
+                // Add project users
+                _.each(data.projectUsers, function(projectUser) {
+                    if (!(noViewers && projectUser.role === 0)) {
+                        userIds.push({id: projectUser.userId});
+                    }
+                });
+
+                // Add project manager
+                userIds.push({id: data.project.managerId});
+
+                // Add admin users
+                _.each(data.adminUsers, function(user) {
+                    if (user.username !== "admin") {
+                        userIds.push({id: user.id});
+                    }
+                });
+
+                // Fetch user objects that are attached to this project
+                DataService.getUsers({or: userIds}, next);
+            }
+        }
+    )
+};
+
+/**
+ * Service to fetch project users by task id. These users are attached in some role to specified project.
+ * This service will eventually call 'getUsersByProject' service method to determine real users.
+ *
+ * @param   {Number}    taskId      Task id
+ * @param   {Function}  next        Callback function which is called after job is finished
+ * @param   {Boolean}   [noViewers] Skip users that are in 'Viewer' role in this project. Defaults to false.
+ */
+exports.getUsersByTask = function(taskId, next, noViewers) {
+    noViewers = noViewers || false;
+
+    async.waterfall(
+        [
+            // Fetch task data
+            function(callback) {
+                DataService.getTask(taskId, callback);
+            },
+
+            // Fetch story data
+            function(task, callback) {
+                DataService.getStory(task.storyId, callback);
+            }
+        ],
+
+        /**
+         * Main callback function which is called after all waterfall jobs are done or
+         * some error occurred while processing them.
+         *
+         * @param   {null|Error}        error
+         * @param   {sails.model.story} story
+         */
+        function(error, story) {
+            if (error) {
+                next(error, null);
+            } else {
+                DataService.getUsersByProject(story.projectId, next, noViewers);
+            }
+        }
+    )
 };
 
 /**
