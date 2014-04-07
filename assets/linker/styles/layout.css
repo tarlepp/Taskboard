@@ -92,6 +92,7 @@
 #navigation .bootstrap-select {
     width: 230px;
     margin-bottom: 0;
+    display: inline-block;
 }
 
 #navigation .bootstrap-select .btn,
@@ -380,6 +381,14 @@ ul, ol {
 .dropdown-menu > li.selected > a,
 .dropdown-menu > li > a:focus {
     background-color: #428bca;
+}
+
+.dropdown-menu > li > a.text-muted,
+.dropdown-menu > li > a.text-muted:hover {
+    color: #999999;
+    background-color: transparent;
+    cursor: default;
+    text-align: center;
 }
 
 .popover.actionMenu .actionMenu-actions > li:hover a,
