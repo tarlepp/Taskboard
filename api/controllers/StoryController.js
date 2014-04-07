@@ -1,10 +1,18 @@
 /**
  * StoryController
  *
- * @module      ::  Controller
- * @description ::  Contains logic for handling requests.
+ * @module      :: Controller
+ * @description :: A set of functions called `actions`.
  *
- * @bugs        ::  /api/controllers/StoryController.js:498:126)
+ *                 Actions contain code telling Sails how to respond to a certain type of request.
+ *                 (i.e. do stuff, then send some JSON, show an HTML page, or redirect to another URL)
+ *
+ *                 You can configure the blueprint URLs which trigger these actions (`config/controllers.js`)
+ *                 and/or override them with custom routes (`config/routes.js`)
+ *
+ *                 NOTE: The code you write here supports both HTTP and Socket.io automatically.
+ *
+ * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 "use strict";
 
@@ -14,15 +22,21 @@ var numeral = require("numeral");
 
 module.exports = {
     /**
-     * Story add action.
-     *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * Overrides for the settings in `config/controllers.js`
+     * (specific to StoryController)
      */
-    add: function(req, res) {
-        var projectId = parseInt(req.param("projectId"), 10);
-        var sprintId = parseInt(req.param("sprintId"), 10);
-        var formData = req.param("formData") || {};
+    _config: {},
+
+    /**
+     * Story add action. This will render a GUI where user and add new story to specified sprint.
+     *
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
+     */
+    add: function(request, response) {
+        var projectId = parseInt(request.param("projectId"), 10);
+        var sprintId = parseInt(request.param("sprintId"), 10);
+        var formData = request.param("formData") || {};
 
         // Make parallel jobs for add action
         async.parallel(
@@ -41,31 +55,34 @@ module.exports = {
             /**
              * Callback function which is called after all parallel jobs have been processed.
              *
-             * @param   {Error} error   Error object
-             * @param   {{}}    data    Object that contains 'milestones' and 'types' data
+             * @param   {null|Error}    error   Error object
+             * @param   {{
+             *              milestones: sails.model.milestone[],
+             *              type: sails.model.type[]
+             *          }}              data    Object that contains 'milestones' and 'types' data
              */
             function(error, data) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    ResponseService.makeError(error, request, response);
                 } else {
                     data.projectId = projectId;
                     data.sprintId = sprintId;
                     data.formData = formData;
 
-                    res.view(data);
+                    response.view(data);
                 }
             }
         );
     },
 
     /**
-     * Story edit action.
+     * Story edit action. This will render a GUI where user can edit specified story.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    edit: function(req, res) {
-        var storyId = parseInt(req.param("id"), 10);
+    edit: function(request, response) {
+        var storyId = parseInt(request.param("id"), 10);
 
         // Make parallel jobs for edit action
         async.parallel(
@@ -84,21 +101,24 @@ module.exports = {
             /**
              * Callback function which is called after all parallel jobs have been processed.
              *
-             * @param   {Error} error   Error object
-             * @param   {{}}    data    Object that contains 'story' and 'types' data
+             * @param   {null|Error}    error   Error object
+             * @param   {{
+             *              story: sails.model.story,
+             *              types: sails.model.type[]
+             *          }}              data    Object that contains 'story' and 'types' data
              */
             function(error, data) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    ResponseService.makeError(error, request, response);
                 } else {
                     // Fetch milestone data which are attached to story project
                     DataService.getMilestones({projectId: data.story.projectId}, function(error, milestones) {
                         if (error) {
-                            res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                            ResponseService.makeError(error, request, response);
                         } else {
                             data.milestones = milestones;
 
-                            res.view(data);
+                            response.view(data);
                         }
                     });
                 }
@@ -107,39 +127,32 @@ module.exports = {
     },
 
     /**
-     * Story split action.
+     * Story split action. This will render a GUI where user can pick a existing sprint or project backlog
+     * where to split specified story.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    split: function(req, res) {
-        var storyId = parseInt(req.param("storyId"), 10);
-        var sprintId = parseInt(req.param("sprintId"), 10);
-        var projectId = parseInt(req.param("projectId"), 10);
+    split: function(request, response) {
+        var storyId = parseInt(request.param("storyId"), 10);
+        var sprintId = parseInt(request.param("sprintId"), 10);
+        var projectId = parseInt(request.param("projectId"), 10);
 
-        if (isNaN(storyId) || isNaN(sprintId) || isNaN(projectId)) {
-            res.send(400, "Required input data missing...");
-        } else {
-            var data = {
-                storyOld: false,
-                storyNew: false,
-                tasks: [],
-                taskCnt: 0
-            };
+        var data = {
+            storyOld: false,
+            storyNew: false,
+            tasks: [],
+            taskCnt: 0
+        };
 
-            // Fetch story data
-            Story
-                .findOne(storyId)
-                .done(function(error, /** sails.model.story */story) {
-                    if (error) {
-                        res.send(500, error);
-                    } else if (!story) {
-                        res.send(404, "Story not found.");
-                    } else {
-                        splitStory(story);
-                    }
-                });
-        }
+        // Get story data
+        DataService.getStory(storyId, function(error, story) {
+            if (error) {
+                ResponseService.makeError(error, request, response);
+            } else {
+                splitStory(story);
+            }
+        });
 
         /**
          * Private function to split specified story to new one.
@@ -179,20 +192,12 @@ module.exports = {
 
                     // Fetch phases data that may contain tasks that we must move to new story
                     phases: function(callback) {
-                        // Fetch phases which tasks are wanted to move to new story
-                        Phase
-                            .find()
-                            .where({
-                                isDone: 0,
-                                projectId: projectId
-                            })
-                            .done(function(error, /** sails.model.phase[] */phases) {
-                                if (error) {
-                                    callback(error, null);
-                                } else {
-                                    callback(null, phases);
-                                }
-                            });
+                        var where = {
+                            isDone: 0,
+                            projectId: projectId
+                        };
+
+                        DataService.getPhases(where, callback);
                     }
                 },
 
@@ -200,14 +205,17 @@ module.exports = {
                  * Callback function that is called after all parallel jobs are done, or
                  * if those generated some error.
                  *
-                 * @param   {Error} error   Error info
-                 * @param   {{}}    results Result object that contains following data:
-                 *                           - newStory = Created new story object
-                 *                           - phases   = Array of phase objects
+                 * @param   {null|Error}    error   Error info
+                 * @param   {{
+                 *              newStory: sails.model.story,
+                 *              phases: sails.model.phase[]
+                 *          }}              results Result object that contains following data:
+                 *                                   - newStory = Created new story object
+                 *                                   - phases   = Array of phase objects
                  */
                 function(error, results) {
                     if (error) {
-                        res.send(500, error);
+                        ResponseService.makeError(error, request, response);
                     } else {
                         data.storyNew = results.newStory;
 
@@ -228,7 +236,10 @@ module.exports = {
          * @param   {sails.model.phase[]}   phases
          */
         function changeTasks(phases) {
-            var phaseIds = _.map(phases, function(phase) { return {phaseId: phase.id}; });
+            var phaseIds = _.map(phases, function(phase) {
+                return { phaseId: phase.id };
+            });
+
             var firstPhase = phases[0];
 
             // Find first phase in this project
@@ -238,108 +249,146 @@ module.exports = {
                 }
             });
 
-            // Fetch tasks which we want to assign to new story
-            Task
-                .find()
-                .where({
-                    storyId: storyId
-                })
-                .where({
-                    or: phaseIds
-                })
-                .done(function(error, /** sails.model.task[] */tasks) {
+            async.waterfall(
+                [
+                    // Waterfall job to fetch all tasks, that should be assigned to new story
+                    function(callback) {
+                        var where = {
+                            storyId: storyId,
+                            or: phaseIds
+                        };
+
+                        DataService.getTasks(where, callback);
+                    },
+
+                    // Move tasks to new story
+                    function(tasks, callback) {
+                        moveTasks(tasks, callback);
+                    }
+                ],
+
+                /**
+                 * Main callback function for async waterfall job.
+                 *
+                 * @param   {null|Error}            error
+                 * @param   {sails.model.task[]}    tasks
+                 */
+                function(error, tasks) {
                     if (error) {
-                        res.send(500, error);
+                        ResponseService.makeError(error, request, response);
                     } else {
+                        data.tasks = tasks;
                         data.taskCnt = tasks.length;
 
-                        if (data.taskCnt === 0) {
-                            finalizeStorySplit();
+                        finalizeStorySplit();
+                    }
+                }
+            );
+
+            /**
+             * Private function to move actual tasks to another story.
+             *
+             * @param   {sails.model.task[]}    tasks   Tasks to move
+             * @param   {Function}              next    Callback function to call after all tasks are processed
+             */
+            function moveTasks(tasks, next) {
+                async.map(
+                    tasks,
+
+                    /**
+                     * Iterator function to move task to another story.
+                     *
+                     * @param   {sails.model.task}  task
+                     * @param   {Function}          callback
+                     */
+                    function(task, callback) {
+                        var taskId = task.id;
+                        var timeStart = task.timeStart;
+                        var phaseId = task.phaseId;
+
+                        // Move to project backlog so time start is null and phase if is first phase
+                        if (data.storyNew.sprintId == 0) {
+                            timeStart = null;
+                            phaseId = firstPhase.id;
                         }
 
-                        async.map(
-                            tasks,
-                            function(task, callback) {
-                                var taskId = task.id;
-                                var timeStart = task.timeStart;
-                                var phaseId = task.phaseId;
+                        // Fetch task object
+                        DataService.getTask(taskId, function(error, task) {
+                            if (error) {
+                                callback(error, null);
+                            } else {
+                                task.storyId = data.storyNew.id;
+                                task.phaseId = phaseId;
+                                task.timeStart = timeStart;
 
-                                // Move to project backlog so time start is null and phase if is first phase
-                                if (data.storyNew.sprintId == 0) {
-                                    timeStart = null;
-                                    phaseId = firstPhase.id;
-                                }
+                                task.save(function(error) {
+                                    if (error) {
+                                        callback(error, null)
+                                    } else {
+                                        /**
+                                         * Send socket message about task update, this is a small hack.
+                                         * First we must publish destroy for "existing" task and after
+                                         * that publish create for the same task.
+                                         */
+                                        Task.publishDestroy(task.id);
+                                        Task.publishCreate(task.toJSON());
 
-                                Task
-                                    .findOne(taskId)
-                                    .done(function(error, task) {
-                                        if (error) {
-                                            res.send(500, error);
-                                        } else {
-                                            task.storyId = data.storyNew.id;
-                                            task.phaseId = phaseId;
-                                            task.timeStart = timeStart;
-
-                                            task.save(function(error) {
-                                                if (error) {
-                                                    callback(error, null)
-                                                } else {
-                                                    /**
-                                                     * Send socket message about task update, this is a small hack.
-                                                     * First we must publish destroy for "existing" task and after
-                                                     * that publish create for the same task.
-                                                     */
-                                                    Task.publishDestroy(task.id);
-                                                    Task.publishCreate(task.toJSON());
-
-                                                    callback(null, task);
-                                                }
-                                            });
-                                        }
-                                    });
-                            },
-                            function(error, tasks) {
-                                if (error) {
-                                    res.send(500, error);
-                                } else {
-                                    data.tasks = tasks;
-
-                                    finalizeStorySplit();
-                                }
+                                        callback(null, task);
+                                    }
+                                });
                             }
-                        );
+                        });
+                    },
+
+                    /**
+                     * Main callback function for async.map process. This is called when all tasks
+                     * are mapped or an error occurred while processing those.
+                     *
+                     * @param   {null|Error}            error
+                     * @param   {sails.model.task[]}    tasks
+                     */
+                    function(error, tasks) {
+                        next(error, tasks);
                     }
-                });
+                );
+            }
         }
 
         /**
-         * Private function to finalize story splitting.
+         * Private function to finalize story splitting. Function will update old and new
+         * story data.
          */
         function finalizeStorySplit() {
             async.parallel(
                 [
+                    // Parallel job to update old story data
                     function (callback) {
+                        var where = {
+                            id: storyId
+                        };
+
+                        var update = {
+                            isDone: true,
+                            timeEnd: new Date()
+                        };
+
                         // Update old story data
                         Story
-                            .update(
-                            {id: storyId},
-                            {
-                                isDone: true,
-                                timeEnd: new Date()
-                            },
-                            function(error, /** sails.model.story[] */stories) {
+                            .update(where, update, function(error, /** sails.model.story[] */stories) {
                                 if (error) {
-                                    callback(error, null);
+                                    callback(error);
                                 } else {
                                     data.storyOld = stories[0];
 
                                     // Publish update for old story object
                                     Story.publishUpdate(storyId, data.storyOld.toJSON());
 
-                                    callback(null, stories);
+                                    callback(null);
                                 }
                             });
                     },
+
+                    // Parallel job to update new story data
                     function(callback) {
                         var timeStart = null;
 
@@ -349,34 +398,38 @@ module.exports = {
                             }
                         });
 
+                        var where = {
+                            id: data.storyNew.id
+                        };
+
+                        var update = {
+                            isDone: false,
+                            timeStart: timeStart,
+                            timeEnd: null
+                        };
+
                         // Update new story data
                         Story
-                            .update(
-                            {id: data.storyNew.id},
-                            {
-                                isDone: false,
-                                timeStart: timeStart,
-                                timeEnd: null
-                            },
-                            function(error, /** sails.model.story[] */stories) {
+                            .update(where, update, function(error, /** sails.model.story[] */stories) {
                                 if (error) {
-                                    callback(error, null);
+                                    callback(error);
                                 } else {
                                     data.storyNew = stories[0];
 
                                     // Publish update for new story object
                                     Story.publishUpdate(data.storyNew.id, data.storyNew.toJSON());
 
-                                    callback(error, stories);
+                                    callback(null);
                                 }
                             });
                     }
                 ],
-                function(error, results) {
+
+                function(error) {
                     if (error) {
-                        res.send(500, error);
+                        ResponseService.makeError(error, request, response);
                     } else {
-                        res.send(data);
+                        response.send(data);
                     }
                 }
             );
@@ -384,19 +437,20 @@ module.exports = {
     },
 
     /**
-     * Story tasks
+     * Story tasks action. This will render a GUI where user can see all tasks that belongs to
+     * specified story.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    tasks: function(req, res) {
-        var storyId = parseInt(req.param('id'), 10);
+    tasks: function(request, response) {
+        var storyId = parseInt(request.param('id'), 10);
 
         async.parallel(
             {
                 // Fetch user role in this story
                 role: function(callback) {
-                    AuthService.hasStoryAccess(req.user, storyId, callback, true);
+                    AuthService.hasStoryAccess(request.user, storyId, callback, true);
                 },
 
                 // Fetch story data
@@ -423,20 +477,24 @@ module.exports = {
             /**
              * Callback function which is been called after all parallel jobs are processed.
              *
-             * @param   {Error|String}  error
-             * @param   {{}}            data
+             * @param   {null|Error}    error
+             * @param   {{
+             *              role: sails.helper.role,
+             *              story: sails.model.story,
+             *              tasks: sails.model.task[],
+             *              users: sails.model.user[],
+             *              types: sails.model.type[]
+             *          }}              data
              */
             function(error, data) {
                 if (error) {
-                    res.send(error, error.status ? error.status : 500);
+                    ResponseService.makeError(error, request, response);
                 } else {
                     DataService.getPhases({projectId: data.story.projectId}, function(error, phases) {
                         if (error) {
-                            res.send(error, error.status ? error.status : 500);
+                            ResponseService.makeError(error, request, response);
                         } else {
-                            data.phases = phases;
-
-                            fetchPhaseDuration(data);
+                            fetchPhaseDuration(phases, data);
                         }
                     });
                 }
@@ -447,11 +505,18 @@ module.exports = {
          * Private function to fetch story task phase duration times. This will sum tasks durations
          * for each phase in this project.
          *
-         * @param data
+         * @param   {sails.model.phase[]}   phases
+         * @param   {{
+         *              role: sails.helper.role,
+         *              story: sails.model.story,
+         *              tasks: sails.model.task[],
+         *              users: sails.model.user[],
+         *              types: sails.model.type[]
+         *          }}                      data
          */
-        function fetchPhaseDuration(data) {
+        function fetchPhaseDuration(phases, data) {
             async.map(
-                data.phases,
+                phases,
 
                 /**
                  * Function to determine duration in current phase.
@@ -460,19 +525,23 @@ module.exports = {
                  * @param   {Function}          callback
                  */
                 function (phase, callback) {
+                    var where = {
+                        phaseId: phase.id,
+                        storyId: data.story.id
+                    };
+
                     PhaseDuration
                         .find({
                             sum: "duration"
                         })
-                        .where({phaseId: phase.id})
-                        .where({storyId: data.story.id})
+                        .where(where)
                         .done(function(error, result) {
                             if (error) {
                                 callback(error, null);
                             } else {
                                 phase.duration = result[0].duration ? result[0].duration : 0;
 
-                                callback(null, phase.duration);
+                                callback(null, phase);
                             }
                         });
                 },
@@ -480,24 +549,54 @@ module.exports = {
                 /**
                  * Main callback function which is called after all phases are processed.
                  *
-                 * @param   {Error|null}    error
-                 * @param   {{}}            result
+                 * @param   {null|Error}            error
+                 * @param   {sails.model.phase[]}   phases
                  */
-                function (error, result) {
+                function(error, phases) {
                     if (error) {
-                        res.send(error, error.status ? error.status : 500);
+                        ResponseService.makeError(error, request, response);
                     } else {
+                        data.phases = phases;
+
                         makeView(data);
                     }
                 }
             );
         }
 
+        /**
+         * Private function to make some calculations about data and render a GUI.
+         *
+         * @param   {{
+         *              role: sails.helper.role,
+         *              story: sails.model.story,
+         *              tasks: sails.model.task[],
+         *              users: sails.model.user[],
+         *              types: sails.model.type[]
+         *              phases: sails.model.phase[]
+         *          }}  data
+         */
         function makeView(data) {
-            moment.lang(req.user.language);
+            moment.lang(request.user.language);
 
-            var totalTime = _.pluck(data.phases, "duration").reduce(function(memo, i) {return memo + i});
-            var totalTimeNoFirst = _.pluck(_.reject(data.phases, function(phase) { return phase.order === 0 } ), "duration").reduce(function(memo, i) {return memo + i});
+            var totalTime = 0;
+            var totalTimeNoFirst = 0;
+
+            if (data.phases.length > 0) {
+                totalTime = _.pluck(data.phases, "duration").reduce(function(memo, i) {
+                    return memo + i;
+                });
+
+                var temp = _.pluck(_.reject(data.phases, function(phase) {
+                    return phase.order === 0;
+                }), "duration");
+
+                if (temp.length > 0) {
+                    totalTimeNoFirst = temp.reduce(function(memo, i) {
+                        return memo + i;
+                    });
+                }
+            }
 
             data.phaseDuration = {
                 totalTime: totalTime,
@@ -511,19 +610,27 @@ module.exports = {
 
             // Add relation data to each tasks
             _.each(data.tasks, function(task) {
-                task.type = _.find(data.types, function(type) { return type.id === task.typeId; });
-                task.user = _.find(data.users, function(user) { return user.id === task.userId; });
-                task.phase = _.find(data.phases, function(phase) { return phase.id === task.phaseId; });
+                task.type = _.find(data.types, function(type) {
+                    return type.id === task.typeId;
+                });
+
+                task.user = _.find(data.users, function(user) {
+                    return user.id === task.userId;
+                });
+
+                task.phase = _.find(data.phases, function(phase) {
+                    return phase.id === task.phaseId;
+                });
 
                 task.timeStartObjectUser = moment.isMoment(task.timeStartObject())
-                    ? task.timeStartObject().tz(req.user.momentTimezone) : null;
+                    ? task.timeStartObject().tz(request.user.momentTimezone) : null;
 
                 task.timeEndObjectUser = moment.isMoment(task.timeEndObject())
-                    ? task.timeEndObject().tz(req.user.momentTimezone) : null;
+                    ? task.timeEndObject().tz(request.user.momentTimezone) : null;
             });
 
             data.cntTaskTotal = data.tasks.length;
-            data.cntTaskDone = _.reduce(data.tasks, function (memo, task) {
+            data.cntTaskDone = _.reduce(data.tasks, function(memo, task) {
                 return (task.isDone) ? memo + 1 : memo;
             }, 0);
 
@@ -533,7 +640,7 @@ module.exports = {
                 data.progressTask = 0;
             }
 
-            res.view(data);
+            response.view(data);
         }
     }
 };
