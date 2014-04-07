@@ -41,15 +41,33 @@ exports.convertDateObjectToUtc = function(date, noTime) {
 
     return moment(new Date(
             Date.UTC(
-                date.getFullYear(),
-                date.getMonth(),
-                date.getDate(),
-                noTime ? 0 : date.getHours(),
-                noTime ? 0 : date.getMinutes(),
-                noTime ? 0 : date.getSeconds()
+                date.getUTCFullYear(),
+                date.getUTCMonth(),
+                date.getUTCDate(),
+                noTime ? 0 : date.getUTCHours(),
+                noTime ? 0 : date.getUTCMinutes(),
+                noTime ? 0 : date.getUTCSeconds()
             )
         )
     ).tz("Etc/Universal");
+};
+
+/**
+ * Helper method to return current time as an UTC time.
+ *
+ * @returns {Date}
+ */
+exports.getCurrentDateAsUtc = function() {
+    var now = new Date();
+
+    return new Date(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate(),
+        now.getUTCHours(),
+        now.getUTCMinutes(),
+        now.getUTCSeconds()
+    );
 };
 
 /**

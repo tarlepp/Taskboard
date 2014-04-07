@@ -125,7 +125,7 @@ module.exports = {
                         .findOne({
                             userId: user.id
                         })
-                        .sort("stamp DESC")
+                        .sort("id DESC")
                         .limit(1)
                         .done(function(error, loginData) {
                             if (error) {
