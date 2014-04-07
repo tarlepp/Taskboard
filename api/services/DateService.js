@@ -39,17 +39,7 @@ exports.convertUTCDateToLocalDate = function(date) {
 exports.convertDateObjectToUtc = function(date, noTime) {
     noTime = noTime || false;
 
-    return moment(new Date(
-            Date.UTC(
-                date.getUTCFullYear(),
-                date.getUTCMonth(),
-                date.getUTCDate(),
-                noTime ? 0 : date.getUTCHours(),
-                noTime ? 0 : date.getUTCMinutes(),
-                noTime ? 0 : date.getUTCSeconds()
-            )
-        )
-    ).tz("Etc/Universal");
+    return moment(date).tz("Etc/Universal");
 };
 
 /**
