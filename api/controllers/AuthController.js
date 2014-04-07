@@ -62,6 +62,7 @@ module.exports = {
 
                 request.flash.message("Invalid credentials", "error");
 
+                response.cookie("message", {message: "Invalid credentials", type: "error", options: {}});
                 response.redirect("/login");
                 return;
             }
@@ -73,6 +74,7 @@ module.exports = {
 
                     request.flash.message("Login fail...", "error");
 
+                    response.cookie("message", {message: "Login fail...", type: "error", options: {}});
                     response.redirect("/login");
                 } else {
                     // Update current session id to user data
@@ -89,6 +91,7 @@ module.exports = {
 
                             request.flash.message("Successfully sign in", "success");
 
+                            response.cookie("message", {message: "Successfully sign in", type: "success", options: {}});
                             response.redirect("/");
                         }
                     });

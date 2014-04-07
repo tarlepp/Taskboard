@@ -12,6 +12,7 @@ module.exports = function flashMessage(request, response, next) {
     sails.log.verbose(" POLICY - api/policies/flashMessage.js");
 
     var session = request.session;
+    var show = false;
 
     /**
      * Setter method for flash messages. This will store message to session and it will
@@ -22,6 +23,7 @@ module.exports = function flashMessage(request, response, next) {
      * @param   {{}}        options Extra options for message
      */
     request.flash.message = function(message, type, options) {
+        console.log("got message: " + message);
         type = type || "success";
         options = options || {};
 
@@ -34,7 +36,15 @@ module.exports = function flashMessage(request, response, next) {
     };
 
     // Get messages from session or initialize message session
-    var messages = session.messages || (session.messages = []);
+    var messages = request.session.messages || (request.session.messages = []);
+
+    if (request.cookies && request.cookies.message) {
+        // Store message to session
+        request.session.messages.push(request.cookies.message);
+
+        // Remove temp cookie
+        response.cookie("message", "", { expires: new Date(Date.now() - 3600) });
+    }
 
     // Store current messages to res.locals so they can be accessed from views
     response.locals.flashMessages = (!messages.length) ? false : messages;
