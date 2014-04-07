@@ -1,88 +1,120 @@
 /**
  * UserController
  *
- * @module      ::  Controller
- * @description ::  Contains logic for handling requests.
+ * @module      :: Controller
+ * @description :: A set of functions called `actions`.
+ *
+ *                 Actions contain code telling Sails how to respond to a certain type of request.
+ *                 (i.e. do stuff, then send some JSON, show an HTML page, or redirect to another URL)
+ *
+ *                 You can configure the blueprint URLs which trigger these actions (`config/controllers.js`)
+ *                 and/or override them with custom routes (`config/routes.js`)
+ *
+ *                 NOTE: The code you write here supports both HTTP and Socket.io automatically.
+ *
+ * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
+"use strict";
+
 var async = require("async");
 var moment = require("moment-timezone");
 var languages = require("./../../config/i18n.js");
 
 module.exports = {
     /**
-     * User add action.
-     *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * Overrides for the settings in `config/controllers.js`
+     * (specific to UserController)
      */
-    add: function(req, res) {
-        res.view({
+    _config: {},
+
+    /**
+     * User add action. This will render a new user add GUI.
+     *
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
+     */
+    add: function(request, response) {
+        response.view({
             languages: languages.i18n.locales,
             timezones: DateService.getTimezones()
         });
     },
 
     /**
-     * User edit action.
+     * User edit action. This will render a user edit GUI.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    edit: function(req, res) {
-        var userId = req.param("id");
+    edit: function(request, response) {
+        var userId = request.param("id");
 
         // Fetch user data
-        User
-            .findOne(userId)
-            .done(function(error, user) {
-                if (error) {
-                    res.send(500, error);
-                } else if (!user) {
-                    res.send(404, "User not found.");
-                } else {
-                    res.view({
-                        user: user,
-                        languages: languages.i18n.locales,
-                        timezones: DateService.getTimezones()
-                    });
-                }
-            });
+        DataService.getUser(userId, function(error, user) {
+            if (error) {
+                ResponseService.makeError(error, request, response);
+            } else {
+                response.view({
+                    user: user,
+                    languages: languages.i18n.locales,
+                    timezones: DateService.getTimezones()
+                });
+            }
+        });
     },
 
     /**
-     * User list action.
+     * User list action. This will render a GUI where all users are shown in list.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    list: function(req, res) {
-        // Fetch user data
-        User
-            .find()
-            .sort("lastName ASC")
-            .sort("firstName ASC")
-            .sort("username ASC")
-            .done(function(error, users) {
-                if (error) {
-                    res.send(500, error);
-                } else {
-                    fetchLastLogin(users);
+    list: function(request, response) {
+        async.waterfall(
+            [
+                // Fetch users
+                function(callback) {
+                    DataService.getUsers({}, callback);
+                },
+
+                // Fetch last logins for users
+                function(users, callback) {
+                    fetchLastSignIn(users, callback);
                 }
-            });
+            ],
+
+            /**
+             * Main callback function which is called after all waterfall jobs are processed
+             * or an error occurred on those.
+             *
+             * @param   {null|Error}            error
+             * @param   {sails.model.user[]}    users
+             */
+            function(error, users) {
+                if (error) {
+                    ResponseService.makeError(error, request, response);
+                } else {
+                    response.view({
+                        users: users
+                    });
+                }
+            }
+        );
 
         /**
-         * Private function to fetch last login of each user.
+         * Private function to fetch last sign in data for each user.
          *
          * @param   {sails.model.user[]}    users
+         * @param   {Function}              next
          */
-        function fetchLastLogin(users) {
+        function fetchLastSignIn(users, next) {
             // Map users
             async.map(
                 users,
 
                 /**
                  * Iterator function which is called with every user object in input array.
-                 * Function will fetch last login information of current user.
+                 * Function will fetch last sign in information of current user.
                  *
                  * @param   {sails.model.user}  user        User object
                  * @param   {Function}          callback    Callback function to call after job is finished
@@ -103,10 +135,10 @@ module.exports = {
                                 user.lastLogin = (!loginData) ? null : loginData.stamp;
 
                                 if (user.lastLogin !== null) {
-                                    moment.lang(req.user.language);
+                                    moment.lang(request.user.language);
 
                                     user.lastLogin = DateService.convertDateObjectToUtc(user.lastLogin);
-                                    user.lastLogin.tz(req.user.momentTimezone);
+                                    user.lastLogin.tz(request.user.momentTimezone);
                                 }
 
                                 callback(null, user);
@@ -118,30 +150,25 @@ module.exports = {
                  * Callback function which is called after all users have been processed with iterator
                  * function.
                  *
-                 * @param   {Error}                 error   Error object
+                 * @param   {null|Error}            error   Error object
                  * @param   {sails.model.user[]}    users   User objects extended by 'lastLogin' information
                  */
                 function(error, users) {
-                    if (error) {
-                        res.send(error.status ? error.status : 500, error.message ? error.message : error);
-                    } else {
-                        res.view({
-                            users: users
-                        });
-                    }
+                    next(error, users);
                 }
             );
         }
     },
 
     /**
-     * User sign in history action.
+     * User sign in history action. This will render a GUI where is shown specified user sign in
+     * history data. This data contains
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request Request object
+     * @param   {Response}  response Response object
      */
-    history: function(req, res) {
-        var userId = req.param("id");
+    history: function(request, response) {
+        var userId = request.param("id");
 
         // Make parallel jobs for history action
         async.parallel(
@@ -165,14 +192,14 @@ module.exports = {
              */
             function (error, data) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    ResponseService.makeError(error, request, response);
                 } else {
-                    moment.lang(req.user.language);
+                    moment.lang(request.user.language);
 
                     // Iterate sign in rows and make formatted stamp
                     _.each(data.history, function(row) {
                         row.stamp = DateService.convertDateObjectToUtc(row.stamp);
-                        row.stamp.tz(req.user.momentTimezone);
+                        row.stamp.tz(request.user.momentTimezone);
                     });
 
                     // Group sign in data by IP addresses
@@ -185,7 +212,7 @@ module.exports = {
                         return row.agent;
                     });
 
-                    res.view(data);
+                    response.view(data);
                 }
             }
         );
@@ -195,11 +222,11 @@ module.exports = {
      * User projects action. Basically this action will show all projects that current user
      * is affected to in some role.
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
      */
-    projects: function(req, res) {
-        var userId = req.param("id");
+    projects: function(request, response) {
+        var userId = request.param("id");
 
         // Make parallel jobs for 'projects' action
         async.parallel(
@@ -218,12 +245,15 @@ module.exports = {
             /**
              * Callback function which is called after all parallel jobs have been processed.
              *
-             * @param   {Error} error   Error object
-             * @param   {{}}    data    Object that contains 'user' and 'projects' data
+             * @param   {null|Error}    error   Error object
+             * @param   {{
+             *              user: sails.model.user,
+             *              projects: sails.model.project[]
+             *          }}              data    Object that contains 'user' and 'projects' data
              */
             function (error, data) {
                 if (error) {
-                    res.send(error.status ? error.status : 500, error.message ? error.message : error);
+                    ResponseService.makeError(error, request, response);
                 } else {
                     filterOutInvalidProjects(data);
                 }
@@ -236,7 +266,7 @@ module.exports = {
          * @param   {{}}    data
          */
         function filterOutInvalidProjects(data) {
-            moment.lang(req.user.language);
+            moment.lang(request.user.language);
 
             async.filter(
                 data.projects,
@@ -254,10 +284,10 @@ module.exports = {
                             project.roleText = "Unknown";
 
                             project.dateStart = DateService.convertDateObjectToUtc(project.dateStart);
-                            project.dateStart.tz(req.user.momentTimezone);
+                            project.dateStart.tz(request.user.momentTimezone);
 
                             project.dateEnd = DateService.convertDateObjectToUtc(project.dateEnd);
-                            project.dateEnd.tz(req.user.momentTimezone);
+                            project.dateEnd.tz(request.user.momentTimezone);
 
                             switch (project.role) {
                                 case -3:
@@ -293,7 +323,7 @@ module.exports = {
                 function(projects) {
                     data.projects = projects;
 
-                    res.view(data);
+                    response.view(data);
                 }
             );
         }
@@ -304,43 +334,41 @@ module.exports = {
      *
      * todo add support for admin users to change anyone password
      *
-     * @param   {Request}   req Request object
-     * @param   {Response}  res Response object
+     * @param   {Request}   request Request object
+     * @param   {Response}  response Response object
      */
-    changePassword: function(req, res) {
-        var userId = req.param("userId");
-        var passwordCurrent = req.param("passwordCurrent");
-        var passwordNew = req.param("password");
-        var passwordReType = req.param("passwordReType");
+    changePassword: function(request, response) {
+        var userId = request.param("userId");
+        var passwordCurrent = request.param("passwordCurrent");
+        var passwordNew = request.param("password");
+        var passwordReType = request.param("passwordReType");
 
         if (passwordNew !== passwordReType) {
-            return res.send(400, "Given passwords doesn't match.");
+            response.send(400, "Given passwords doesn't match.");
         } else if (passwordNew.length < 10) {
-            return res.send(400, "Given new password is too short.");
+            response.send(400, "Given new password is too short.");
         } else if (passwordCurrent.length < 10) {
-            return res.send(400, "Given current password is too short.");
+            response.send(400, "Given current password is too short.");
+        } else {
+            // Get user object
+            DataService.getUser(userId, function(error, user) {
+                if (error) {
+                    ResponseService.makeError(error, request, response);
+                } else if (!user.validPassword(passwordCurrent)) {
+                    response.send(400, "Given current password value doesn't match.");
+                } else {
+                    // Set new password value for user
+                    user.password = passwordNew;
+
+                    user.save(function(error) {
+                        if (error) {
+                            ResponseService.makeError(error, request, response);
+                        } else {
+                            response.json(true);
+                        }
+                    });
+                }
+            });
         }
-
-        // Get user object
-        DataService.getUser(userId, function(error, user) {
-            if (error) {
-                return res.send(error.status ? error.status : 500, error.message ? error.message : error);
-            } else if (!user) {
-                return res.send(404, "User not found");
-            } else if (!user.validPassword(passwordCurrent)) {
-                return res.send(400, "Given current password value doesn't match.");
-            } else {
-                // Set new password value for user
-                user.password = passwordNew;
-
-                user.save(function(error) {
-                    if (error) {
-                        return res.send(error.status ? error.status : 500, error.message ? error.message : error);
-                    } else {
-                        return res.json(true);
-                    }
-                });
-            }
-        });
     }
 };
