@@ -9,8 +9,9 @@
  */
 "use strict";
 
-module.exports = {
-    schema: true,
+var _ = require("lodash");
+
+module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
     attributes: {
         objectName: {
             type:       "string",
@@ -27,25 +28,6 @@ module.exports = {
         comment: {
             type:       "text",
             required:   true
-        },
-        createdUserId: {
-            type:       "integer",
-            required:   true
-        },
-        updatedUserId: {
-            type:       "integer",
-            required:   true
-        },
-
-        // Dynamic model data attributes
-
-        createdAtObject: function () {
-            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.createdAt) : null;
-        },
-        updatedAtObject: function () {
-            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         }
     },
 
@@ -54,26 +36,26 @@ module.exports = {
     /**
      * Before destroy callback, which will destroy all comment siblings.
      *
-     * @param   {Object}    terms
-     * @param   {Function}  cb
+     * @param   {{}}        terms
+     * @param   {Function}  next
      */
-    beforeDestroy: function(terms, cb) {
+    beforeDestroy: function(terms, next) {
         // Fetch comment itself
         Comment
             .findOne(terms)
             .exec(function(error, comment) {
                 if (error) {
-                    cb(error);
+                    next(error);
                 } else if (comment) {
-                    // Remove all child
+                    // Remove siblings
                     Comment
                         .destroy({commentId: comment.id})
                         .exec(function(error) {
-                            cb(error);
+                            next(error);
                         });
                 } else {
-                    cb();
+                    next();
                 }
             });
     }
-};
+});
