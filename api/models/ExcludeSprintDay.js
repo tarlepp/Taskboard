@@ -7,8 +7,9 @@
  */
 "use strict";
 
-module.exports = {
-    schema: true,
+var _ = require("lodash");
+
+module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
     attributes: {
         sprintId: {
             type:       "integer",
@@ -18,28 +19,11 @@ module.exports = {
             type:       "date",
             required:   true
         },
-        createdUserId: {
-            type:       "integer",
-            required:   true
-        },
-        updatedUserId: {
-            type:       "integer",
-            required:   true
-        },
 
         // Dynamic model data attributes
 
         dayObject: function() {
             return DateService.convertDateObjectToUtc(this.day, true);
-        },
-
-        createdAtObject: function() {
-            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.createdAt) : null;
-        },
-        updatedAtObject: function() {
-            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         }
     }
-};
+});
