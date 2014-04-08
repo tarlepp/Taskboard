@@ -7,8 +7,9 @@
  */
 "use strict";
 
-module.exports = {
-    schema: true,
+var _ = require("lodash");
+
+module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
     attributes: {
         projectId: {
             type:       "integer",
@@ -30,25 +31,6 @@ module.exports = {
         parameters: {
             type:       "json",
             required:   true
-        },
-        createdUserId: {
-            type:       "integer",
-            required:   true
-        },
-        updatedUserId: {
-            type:       "integer",
-            required:   true
-        },
-
-        // Dynamic model data attributes
-
-        createdAtObject: function () {
-            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.createdAt) : null;
-        },
-        updatedAtObject: function () {
-            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         }
     },
 
@@ -58,42 +40,42 @@ module.exports = {
      * After create callback.
      *
      * @param   {sails.model.externalLink}  values
-     * @param   {Function}                  callback
+     * @param   {Function}                  next
      */
-    afterCreate: function(values, callback) {
+    afterCreate: function(values, next) {
         HistoryService.write("ExternalLink", values);
 
-        callback();
+        next();
     },
 
     /**
      * After update callback.
      *
      * @param   {sails.model.externalLink}  values
-     * @param   {Function}                  callback
+     * @param   {Function}                  next
      */
-    afterUpdate: function(values, callback) {
+    afterUpdate: function(values, next) {
         HistoryService.write("ExternalLink", values);
 
-        callback();
+        next();
     },
 
     /**
      * Before validation callback.
      *
      * @param   {sails.model.externalLink}  values
-     * @param   {Function}                  callback
+     * @param   {Function}                  next
      */
-    beforeValidation: function(values, callback) {
+    beforeValidation: function(values, next) {
         var regExp = /:\w+/g;
         var parameters = values.link.match(regExp);
 
         if (parameters) {
             values.parameters = parameters;
 
-            callback();
+            next();
         } else {
-            callback("No link parameters.");
+            next("No link parameters.");
         }
     },
 
@@ -101,32 +83,30 @@ module.exports = {
      * Before destroy callback.
      *
      * @param   {Object}    terms
-     * @param   {Function}  callback
+     * @param   {Function}  next
      */
-    beforeDestroy: function(terms, callback) {
+    beforeDestroy: function(terms, next) {
         ExternalLink
             .findOne(terms)
             .exec(function(error, externalLink) {
                 if (error) {
                     sails.log.error(error);
 
-                    callback(error);
+                    next(error);
                 } else {
                     HistoryService.remove("ExternalLink", externalLink.id);
 
                     // Remove related links
                     Link
-                        .destroy({
-                            externalLinkId: externalLink.id
-                        })
-                        .exec(function(error, data) {
+                        .destroy({externalLinkId: externalLink.id})
+                        .exec(function(error) {
                             if (error) {
                                 sails.log.error(error);
                             }
 
-                            callback(error);
+                            next(error);
                         });
                 }
             });
     }
-};
+});
