@@ -7,9 +7,11 @@
  */
 "use strict";
 
-module.exports = {
+var _ = require("lodash");
+
+module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
     attributes: {
-        // Name of the object where link is attached
+        // Name of the object where link is attached, Story or Task
         objectName: {
             type:       "string",
             required:   true
@@ -38,22 +40,6 @@ module.exports = {
         link: {
             type:       "string",
             required:   true
-        },
-        createdUserId: {
-            type:       "integer",
-            required:   true
-        },
-        updatedUserId: {
-            type:       "integer",
-            required:   true
-        },
-        createdAtObject: function () {
-            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.createdAt) : null;
-        },
-        updatedAtObject: function () {
-            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         }
     },
 
@@ -63,40 +49,44 @@ module.exports = {
      * After create callback.
      *
      * @param   {sails.model.link}  values
-     * @param   {Function}          callback
+     * @param   {Function}          next
      */
-    afterCreate: function(values, callback) {
+    afterCreate: function(values, next) {
         var message = "Added link <a hreg='" + values.link + "' target='_blank'>" + values.link + "</a>";
 
         switch (values.objectName) {
             case "Story":
                 DataService.getStory(values.objectId, function(error, story) {
                     if (error) {
-                        callback(error);
+                        sails.log.error(error);
+
+                        next(error);
                     } else {
                         Story.publishUpdate(story.id, story.toJSON());
 
                         HistoryService.write("Story", story.toJSON(), message, values.updatedUserId);
 
-                        callback();
+                        next();
                     }
                 });
                 break;
             case "Task":
                 DataService.getTask(values.objectId, function(error, task) {
                     if (error) {
-                        callback(error);
+                        sails.log.error(error);
+
+                        next(error);
                     } else {
                         Task.publishUpdate(task.id, task.toJSON());
 
                         HistoryService.write("Task", task.toJSON(), message, values.updatedUserId);
 
-                        callback();
+                        next();
                     }
                 });
                 break;
             default:
-                callback();
+                next();
                 break;
         }
     },
@@ -104,41 +94,45 @@ module.exports = {
     /**
      * After update callback.
      *
-     * @param   {sails.model.externalLink}  values
-     * @param   {Function}                  callback
+     * @param   {sails.model.link}  values
+     * @param   {Function}          next
      */
-    afterUpdate: function(values, callback) {
+    afterUpdate: function(values, next) {
         var message = "Updated link <a hreg='" + values.link + "' target='_blank'>" + values.link + "</a>";
 
         switch (values.objectName) {
             case "Story":
                 DataService.getStory(values.objectId, function(error, story) {
                     if (error) {
-                        callback(error);
+                        sails.log.error(error);
+
+                        next(error);
                     } else {
                         Story.publishUpdate(story.id, story.toJSON());
 
                         HistoryService.write("Story", story.toJSON(), message, values.updatedUserId);
 
-                        callback();
+                        next();
                     }
                 });
                 break;
             case "Task":
                 DataService.getTask(values.objectId, function(error, task) {
                     if (error) {
-                        callback(error);
+                        sails.log.error(error);
+
+                        next(error);
                     } else {
                         Task.publishUpdate(task.id, task.toJSON());
 
                         HistoryService.write("Task", task.toJSON(), message, values.updatedUserId);
 
-                        callback();
+                        next();
                     }
                 });
                 break;
             default:
-                callback();
+                next();
                 break;
         }
     },
@@ -147,13 +141,15 @@ module.exports = {
      * Before validation callback.
      *
      * @param   {sails.model.link}  values
-     * @param   {Function}          callback
+     * @param   {Function}          next
      */
-    beforeValidation: function(values, callback) {
+    beforeValidation: function(values, next) {
         // Fetch external link object
         DataService.getProjectLink(values.externalLinkId, function(error, linkObject) {
             if (error) {
-                callback(error);
+                sails.log.error(error);
+
+                next(error);
             } else {
                 var link = linkObject.link;
                 var bits = [];
@@ -168,7 +164,7 @@ module.exports = {
                 values.link = link;
                 values.name = bits.join(",");
 
-                callback();
+                next();
             }
         });
     },
@@ -176,17 +172,17 @@ module.exports = {
     /**
      * Before destroy callback.
      *
-     * @param   {Object}    terms
-     * @param   {Function}  callback
+     * @param   {{}}        terms
+     * @param   {Function}  next
      */
-    beforeDestroy: function(terms, callback) {
+    beforeDestroy: function(terms, next) {
         Link
             .findOne(terms)
             .exec(function(error, link) {
                 if (error) {
                     sails.log.error(error);
 
-                    callback(error);
+                    next(error);
                 } else if (link) {
                     var message = "Removed link <a hreg='" + link.link + "' target='_blank'>" + link.link + "</a>";
 
@@ -194,36 +190,40 @@ module.exports = {
                         case "Story":
                             DataService.getStory(link.objectId, function(error, story) {
                                 if (error) {
-                                    callback(error);
+                                    sails.log.error(error);
+
+                                    next(error);
                                 } else {
                                     Story.publishUpdate(story.id, story.toJSON());
 
                                     HistoryService.write("Story", story.toJSON(), message, link.updatedUserId);
 
-                                    callback();
+                                    next();
                                 }
                             });
                             break;
                         case "Task":
                             DataService.getTask(link.objectId, function(error, task) {
                                 if (error) {
-                                    callback(error);
+                                    sails.log.error(error);
+
+                                    next(error);
                                 } else {
                                     Task.publishUpdate(task.id, task.toJSON());
 
                                     HistoryService.write("Task", task.toJSON(), message, link.updatedUserId);
 
-                                    callback();
+                                    next();
                                 }
                             });
                             break;
                         default:
-                            callback();
+                            next();
                             break;
                     }
                 } else {
-                    callback();
+                    next();
                 }
             });
     }
-};
+});
