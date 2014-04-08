@@ -13,18 +13,22 @@ var _ = require("lodash");
 
 module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
     attributes: {
+        // Name of the object where comment belongs to
         objectName: {
             type:       "string",
             required:   true
         },
+        // Object id
         objectId: {
             type:       "integer",
             required:   true
         },
+        // Parent comment id
         commentId: {
             type:       "integer",
             defaultsTo: 0
         },
+        // Actual comment
         comment: {
             type:       "text",
             required:   true
