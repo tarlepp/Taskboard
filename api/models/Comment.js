@@ -45,12 +45,18 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
             .findOne(terms)
             .exec(function(error, comment) {
                 if (error) {
+                    sails.log.error(error);
+
                     next(error);
                 } else if (comment) {
                     // Remove siblings
                     Comment
                         .destroy({commentId: comment.id})
                         .exec(function(error) {
+                            if (error) {
+                                sails.log.error(error);
+                            }
+
                             next(error);
                         });
                 } else {
