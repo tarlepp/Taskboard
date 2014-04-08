@@ -11,23 +11,28 @@ var _ = require("lodash");
 
 module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
     attributes: {
+        // Reference to project
         projectId: {
             type:       "integer",
             required:   true
         },
+        // Link title
         title: {
             type:       "string",
             required:   true,
             minLength:  4
         },
+        // Description of the link
         description: {
             type:       "text",
             defaultsTo: ""
         },
+        // Actual link with parameters on it, like http://foo.bar/:someParam
         link: {
             type:       "string",
             required:   true
         },
+        // Link parameters as an JSON object
         parameters: {
             type:       "json",
             required:   true
