@@ -22,14 +22,15 @@ module.exports = {
             type:       "integer",
             required:   true
         },
+        // Object data which was saved, optionally with message
         objectData: {
-            type:       "text",
-            required:   true
+            type:       "text"
         },
+        // History message, optionally with objectData
         message: {
             type:       "text"
         },
-        // Relation to user id
+        // Relation to user object
         userId: {
             type:       "integer",
             required:   true
