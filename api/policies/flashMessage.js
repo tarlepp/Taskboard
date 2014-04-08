@@ -11,9 +11,6 @@
 module.exports = function flashMessage(request, response, next) {
     sails.log.verbose(" POLICY - api/policies/flashMessage.js");
 
-    var session = request.session;
-    var show = false;
-
     /**
      * Setter method for flash messages. This will store message to session and it will
      * be shown in next request. Actual messages are shown via noty in client side.
@@ -23,7 +20,6 @@ module.exports = function flashMessage(request, response, next) {
      * @param   {{}}        options Extra options for message
      */
     request.flash.message = function(message, type, options) {
-        console.log("got message: " + message);
         type = type || "success";
         options = options || {};
 
