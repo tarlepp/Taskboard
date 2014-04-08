@@ -11,10 +11,12 @@ var _ = require("lodash");
 
 module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
     attributes: {
+        // Reference to sprint model
         sprintId: {
             type:       "integer",
             required:   true
         },
+        // Day that is excluded
         day: {
             type:       "date",
             required:   true
