@@ -4,12 +4,24 @@
  * @module      ::  Model
  * @description ::  This is a base model for all models to use. Purpose of this is to provide
  *                  some common attributes (static / dynamic) for all models that application
- *                  uses.
+ *                  uses. Usage in actual models:
+ *
+ *                  var _ = require("lodash");
+ *
+ *                  module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
+ *                      attributes: {
+ *                          ...
+ *                      }
+ *                  });
+ *
  * @docs        ::  http://sailsjs.org/#!documentation/models
+ *                  https://groups.google.com/forum/#!topic/sailsjs/GTGoOGHAEvE
  */
 "use strict";
 
 module.exports = {
+    schema: true,
+
     attributes: {
         createdUserId: {
             type:       "integer",
