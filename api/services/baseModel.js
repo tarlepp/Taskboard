@@ -39,6 +39,8 @@ module.exports = {
 
             if (this.title) {
                 output = this.title;
+            } else if (this.lastName) { // Small hack for User model
+                output = this.lastName + " " + this.firstName;
             }
 
             return output;
