@@ -7,8 +7,9 @@
  */
 "use strict";
 
-module.exports = {
-    schema: true,
+var _ = require("lodash");
+
+module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
     attributes: {
         // Relation to Project model
         projectId: {
@@ -21,7 +22,7 @@ module.exports = {
             required:   true
         },
         /**
-         * Relation type:
+         * User role in project:
          *  -1 = admin, he/she has _all_ rights
          *   0 = view only user, can only view data nothing else
          *   1 = normal user, can add and edit stories and tasks objects
@@ -29,25 +30,6 @@ module.exports = {
         role: {
             type:       "integer",
             defaultsTo: 0
-        },
-        createdUserId: {
-            type:       "integer",
-            required:   true
-        },
-        updatedUserId: {
-            type:       "integer",
-            required:   true
-        },
-
-        // Dynamic data attributes
-
-        createdAtObject: function () {
-            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.createdAt) : null;
-        },
-        updatedAtObject: function () {
-            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         }
     }
-};
+});
