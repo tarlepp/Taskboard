@@ -553,6 +553,31 @@ exports.getUsersByTask = function(taskId, next, noViewers) {
 };
 
 /**
+ * Service to fetch single type data from database.
+ *
+ * @param   {Number}    typeId      Type id to fetch
+ * @param   {Function}  callback    Callback function to call after query
+ */
+exports.getType = function(typeId, callback) {
+    Type
+        .findOne(typeId)
+        .done(function(error, /** sails.model.type */ type) {
+            if (error) {
+                callback(error, null);
+            } else if (!type) {
+                var errorMessage = new Error();
+
+                errorMessage.message = "Task type not found.";
+                errorMessage.status = 404;
+
+                callback(errorMessage, null);
+            } else {
+                callback(null, type);
+            }
+        });
+};
+
+/**
  * Service to fetch type data from database.
  *
  * @param   {{}}        where       Used query conditions
