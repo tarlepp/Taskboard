@@ -6,55 +6,40 @@
  *                   - 1 = normal
  *                   - 2 = bug
  *                   - 3 = test
- *                  Todo: make types to be project specified.
+ * @todo        ::  1) Make types to be project specified.
+ *                  2) Remove class and classText attributes and replace those by color definitions.
  * @docs        ::  http://sailsjs.org/#!documentation/models
  */
 "use strict";
 
-module.exports = {
-    schema: true,
+var _ = require("lodash");
+
+module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
     attributes: {
+        // Title of type
         title: {
             type:       "string",
             required:   true
         },
+        // Order of type
         order: {
             type:       "integer",
             required:   true
         },
+        // Type color in charts
         chartColor: {
             type:       "string",
             required:   true
         },
+        // CSS class of type
         class: {
             type:       "string",
             required:   true
         },
+        // CSS class for type text
         classText: {
             type:       "string",
             required:   true
-        },
-        createdUserId: {
-            type:       "integer",
-            required:   true
-        },
-        updatedUserId: {
-            type:       "integer",
-            required:   true
-        },
-
-        // Dynamic data attributes
-
-        objectTitle: function() {
-            return this.title;
-        },
-        createdAtObject: function () {
-            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.createdAt) : null;
-        },
-        updatedAtObject: function () {
-            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         }
     },
 
@@ -64,43 +49,43 @@ module.exports = {
      * After create callback.
      *
      * @param   {sails.model.type}  values
-     * @param   {Function}          cb
+     * @param   {Function}          next
      */
-    afterCreate: function(values, cb) {
+    afterCreate: function(values, next) {
         HistoryService.write("Type", values);
 
-        cb();
+        next();
     },
 
     /**
      * After update callback.
      *
      * @param   {sails.model.type}  values
-     * @param   {Function}          cb
+     * @param   {Function}          next
      */
-    afterUpdate: function(values, cb) {
+    afterUpdate: function(values, next) {
         HistoryService.write("Type", values);
 
-        cb();
+        next();
     },
 
     /**
      * Before destroy callback.
      *
-     * @param   {Object}    terms
-     * @param   {Function}  cb
+     * @param   {{}}        terms
+     * @param   {Function}  next
      */
-    beforeDestroy: function(terms, cb) {
+    beforeDestroy: function(terms, next) {
         Type
             .findOne(terms)
             .exec(function(error, type) {
                 if (error) {
                     sails.log.error(error);
-                } else {
+                } else if (type) {
                     HistoryService.remove("Type", type.id);
                 }
 
-                cb();
+                next(error);
             });
     }
-};
+});
