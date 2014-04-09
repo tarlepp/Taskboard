@@ -17,18 +17,15 @@ module.exports = {
     attributes: {
         // Relation to Project model
         projectId: {
-            type:       "integer",
-            required:   true
+            type:       "integer"
         },
         // Relation to Sprint model
         sprintId: {
-            type:       "integer",
-            required:   true
+            type:       "integer"
         },
         // Relation to Story model
         storyId: {
-            type:       "integer",
-            required:   true
+            type:       "integer"
         },
         // Relation to Task model
         taskId: {
