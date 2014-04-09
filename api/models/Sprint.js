@@ -109,33 +109,27 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
      * @param   {Function}  next
      */
     beforeDestroy: function(terms, next) {
-        // Remove history data
-        Sprint
-            .findOne(terms)
-            .exec(function(error, sprint) {
-                if (error) {
-                    sails.log.error(error);
+        DataService.getSprint(terms, function(error, sprint) {
+            if (!error) {
+                HistoryService.remove("Sprint", sprint.id);
 
-                    next(error);
-                } else if (sprint) {
-                    HistoryService.remove("Sprint", sprint.id);
+                // Update all stories sprint id to 0 which belongs to delete sprint
+                Story
+                    .update(
+                    {sprintId: sprint.id},
+                    {sprintId: 0},
+                    function(error) {
+                        if (error) {
+                            sails.log.error(__filename + ":" + __line + " [Sprint story updates failed.]");
+                            sails.log.error(error);
+                        }
 
-                    // Update all stories sprint id to 0 which belongs to delete sprint
-                    Story
-                        .update(
-                            {sprintId: sprint.id},
-                            {sprintId: 0},
-                            function(error) {
-                                if (error) {
-                                    sails.log.error(error);
-                                }
-
-                                next(error);
-                            }
-                        );
-                } else {
-                    next();
-                }
-            });
+                        next(error);
+                    }
+                );
+            } else {
+                next(error);
+            }
+        });
     }
 });

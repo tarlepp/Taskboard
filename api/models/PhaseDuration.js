@@ -149,18 +149,17 @@ module.exports = {
              */
             function(error, task, story, sprint) {
                 if (error) {
+                    sails.log.error(__filename + ":" + __line + " [Relation data fetch failed, see log above.]");
                     sails.log.error(error);
-
-                    next(error);
                 } else {
                     // Add relation information to current values
                     values.projectId = sprint.projectId;
                     values.sprintId = sprint.id;
                     values.storyId = story.id;
                     values.phaseId = task.phaseId;
-
-                    next();
                 }
+
+                next(error);
             }
         )
     },

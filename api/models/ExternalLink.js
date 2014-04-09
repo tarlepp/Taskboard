@@ -95,6 +95,7 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
             .findOne(terms)
             .exec(function(error, externalLink) {
                 if (error) {
+                    sails.log.error(__filename + ":" + __line + " [External link fetch failed]");
                     sails.log.error(error);
 
                     next(error);
@@ -106,6 +107,7 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
                         .destroy({externalLinkId: externalLink.id})
                         .exec(function(error) {
                             if (error) {
+                                sails.log.error(__filename + ":" + __line + " [Failed to delete external link links]");
                                 sails.log.error(error);
                             }
 

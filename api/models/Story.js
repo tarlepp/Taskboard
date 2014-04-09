@@ -162,6 +162,7 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
             .sort("priority DESC")
             .exec(function(error, story) {
                 if (error) {
+                    sails.log.error(__filename + ":" + __line + " [Story fetch failed.]");
                     sails.log.error(error);
                 } else if (!story) {
                     values.priority = 0;
@@ -204,16 +205,12 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
      * @param   {Function}  next
      */
     beforeDestroy: function(terms, next) {
-        Story
-            .findOne(terms)
-            .exec(function(error, story) {
-                if (error) {
-                    sails.log.error(error);
-                } else if (story) {
-                    HistoryService.remove("Story", story.id);
-                }
+        DataService.getStory(terms, function(error, story) {
+            if (!error) {
+                HistoryService.remove("Story", story.id);
+            }
 
-                next(error);
-            });
+            next(error);
+        });
     }
 });

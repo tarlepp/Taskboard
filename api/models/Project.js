@@ -89,16 +89,12 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
      * @param   {Function}  next
      */
     beforeDestroy: function(terms, next) {
-        Project
-            .findOne(terms)
-            .exec(function(error, project) {
-                if (error) {
-                    sails.log.error(error);
-                } else if (project) {
-                    HistoryService.remove("Project", project.id);
-                }
+        DataService.getProject(terms, function(error, project) {
+            if (!error) {
+                HistoryService.remove("Project", project.id);
+            }
 
-                next(error);
-            });
+            next(error);
+        });
     }
 });

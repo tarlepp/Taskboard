@@ -129,15 +129,16 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
 
         // Fetch latest task and determine new task priority from that
         Task
-            .find()
-            .where({storyId: values.storyId})
+            .findOne({storyId: values.storyId})
             .sort("priority DESC")
-            .limit(1)
             .exec(function(error, task) {
                 if (error) {
+                    sails.log.error(__filename + ":" + __line + " [Task fetch failed.]");
                     sails.log.error(error);
+                } else if (!task) {
+                    values.priority = 0;
                 } else {
-                    values.priority = (task[0]) ? task[0].priority + 1 : 1;
+                    values.priority = task.priority + 1;
                 }
 
                 next(error);
@@ -176,9 +177,7 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
                  *          }}              data
                  */
                 function(error, data) {
-                    if (error) {
-                        sails.log.error(error);
-                    } else {
+                    if (!error) {
                         values.isDone = data.phase.isDone;
 
                         // Task is done so clear current user data
@@ -270,11 +269,7 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
              * @param   {sails.model.story}     story
              */
             function(error, task, tasks, story) {
-                if (error) {
-                    sails.log.error(error);
-
-                    next(error);
-                } else {
+                if (!error) {
                     HistoryService.remove("Task", task.id);
                     PhaseDurationService.remove({taskId: task.id});
 
@@ -302,6 +297,7 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
                             {isDone: isDone, timeEnd: timeEnd},
                             function(error, /** sails.model.story[] */stories) {
                                 if (error) {
+                                    sails.log.error(__filename + ":" + __line + " [Story update failed.]");
                                     sails.log.error(error);
                                 } else {
                                     _.each(stories, function(story) {
@@ -315,6 +311,8 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
                     } else { // No need to update story.
                         next();
                     }
+                } else {
+                    next(error);
                 }
             }
         );
@@ -328,16 +326,11 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
      */
     afterCreate: function(values, next) {
         HistoryService.write("Task", values);
-
         PhaseDurationService.write(values);
 
         // Fetch story data
         DataService.getStory(values.storyId, function(error, story) {
-            if (error) {
-                sails.log.error(error);
-
-                next(error);
-            } else if (story.isDone) { // Story is done, so we must change it
+            if (!error && story.isDone) { // Story is done, so we must change it
                 // Update story data
                 Story
                     .update(
@@ -345,6 +338,7 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
                     {isDone: 0, timeEnd: null, updatedUserId: values.updatedUserId ? values.updatedUserId : -1},
                     function(error, /** sails.model.story[] */stories) {
                         if (error) {
+                            sails.log.error(__filename + ":" + __line + " [Story update failed.]");
                             sails.log.error(error);
                         } else {
                             _.each(stories, function(story) {
@@ -356,7 +350,7 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
                     }
                 );
             } else { // No need to update task story data
-                next();
+                next(error);
             }
         });
     },
@@ -372,7 +366,6 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
      */
     afterUpdate: function(values, next) {
         HistoryService.write("Task", values);
-
         PhaseDurationService.write(values);
 
         async.parallel(
@@ -410,11 +403,7 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
              *          }}              data
              */
             function(error, data) {
-                if (error) {
-                    sails.log.error(error);
-
-                    next(error);
-                } else {
+                if (!error) {
                     var isDone = true;
                     var timeEnd = new Date();
                     var taskPhases = [];
@@ -453,6 +442,8 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
                     }
 
                     processRelatedData(data, updateData);
+                } else {
+                    next(error);
                 }
             }
         );
@@ -498,6 +489,7 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
                  */
                 function(error) {
                     if (error) {
+                        sails.log.error(__filename + ":" + __line + " [Task related data process failed.]");
                         sails.log.error(error);
                     }
 

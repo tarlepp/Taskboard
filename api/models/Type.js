@@ -76,16 +76,12 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
      * @param   {Function}  next
      */
     beforeDestroy: function(terms, next) {
-        Type
-            .findOne(terms)
-            .exec(function(error, type) {
-                if (error) {
-                    sails.log.error(error);
-                } else if (type) {
-                    HistoryService.remove("Type", type.id);
-                }
+        DataService.getType(terms, function(error, type) {
+            if (!error) {
+                HistoryService.remove("Type", type.id);
+            }
 
-                next(error);
-            });
+            next(error);
+        });
     }
 });

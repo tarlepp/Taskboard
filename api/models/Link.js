@@ -57,32 +57,24 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
         switch (values.objectName) {
             case "Story":
                 DataService.getStory(values.objectId, function(error, story) {
-                    if (error) {
-                        sails.log.error(error);
-
-                        next(error);
-                    } else {
+                    if (!error) {
                         Story.publishUpdate(story.id, story.toJSON());
 
                         HistoryService.write("Story", story.toJSON(), message, values.updatedUserId);
-
-                        next();
                     }
+
+                    next(error);
                 });
                 break;
             case "Task":
                 DataService.getTask(values.objectId, function(error, task) {
-                    if (error) {
-                        sails.log.error(error);
-
-                        next(error);
-                    } else {
+                    if (!error) {
                         Task.publishUpdate(task.id, task.toJSON());
 
                         HistoryService.write("Task", task.toJSON(), message, values.updatedUserId);
-
-                        next();
                     }
+
+                    next(error);
                 });
                 break;
             default:
@@ -103,32 +95,24 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
         switch (values.objectName) {
             case "Story":
                 DataService.getStory(values.objectId, function(error, story) {
-                    if (error) {
-                        sails.log.error(error);
-
-                        next(error);
-                    } else {
+                    if (!error) {
                         Story.publishUpdate(story.id, story.toJSON());
 
                         HistoryService.write("Story", story.toJSON(), message, values.updatedUserId);
-
-                        next();
                     }
+
+                    next(error);
                 });
                 break;
             case "Task":
                 DataService.getTask(values.objectId, function(error, task) {
-                    if (error) {
-                        sails.log.error(error);
-
-                        next(error);
-                    } else {
+                    if (!error) {
                         Task.publishUpdate(task.id, task.toJSON());
 
                         HistoryService.write("Task", task.toJSON(), message, values.updatedUserId);
-
-                        next();
                     }
+
+                    next(error);
                 });
                 break;
             default:
@@ -146,11 +130,7 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
     beforeValidation: function(values, next) {
         // Fetch external link object
         DataService.getProjectLink(values.externalLinkId, function(error, linkObject) {
-            if (error) {
-                sails.log.error(error);
-
-                next(error);
-            } else {
+            if (!error) {
                 var link = linkObject.link;
                 var bits = [];
 
@@ -163,9 +143,9 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
 
                 values.link = link;
                 values.name = bits.join(",");
-
-                next();
             }
+
+            next(error);
         });
     },
 
@@ -176,54 +156,40 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
      * @param   {Function}  next
      */
     beforeDestroy: function(terms, next) {
-        Link
-            .findOne(terms)
-            .exec(function(error, link) {
-                if (error) {
-                    sails.log.error(error);
+        DataService.getLink(terms, function(error, link) {
+            if (!error) {
+                var message = "Removed link <a hreg='" + link.link + "' target='_blank'>" + link.link + "</a>";
 
-                    next(error);
-                } else if (link) {
-                    var message = "Removed link <a hreg='" + link.link + "' target='_blank'>" + link.link + "</a>";
+                switch (link.objectName) {
+                    case "Story":
+                        DataService.getStory(link.objectId, function(error, story) {
+                            if (!error) {
+                                Story.publishUpdate(story.id, story.toJSON());
 
-                    switch (link.objectName) {
-                        case "Story":
-                            DataService.getStory(link.objectId, function(error, story) {
-                                if (error) {
-                                    sails.log.error(error);
+                                HistoryService.write("Story", story.toJSON(), message, link.updatedUserId);
+                            }
 
-                                    next(error);
-                                } else {
-                                    Story.publishUpdate(story.id, story.toJSON());
+                            next(error);
+                        });
+                        break;
+                    case "Task":
+                        DataService.getTask(link.objectId, function(error, task) {
+                            if (!error) {
+                                Task.publishUpdate(task.id, task.toJSON());
 
-                                    HistoryService.write("Story", story.toJSON(), message, link.updatedUserId);
+                                HistoryService.write("Task", task.toJSON(), message, link.updatedUserId);
+                            }
 
-                                    next();
-                                }
-                            });
-                            break;
-                        case "Task":
-                            DataService.getTask(link.objectId, function(error, task) {
-                                if (error) {
-                                    sails.log.error(error);
-
-                                    next(error);
-                                } else {
-                                    Task.publishUpdate(task.id, task.toJSON());
-
-                                    HistoryService.write("Task", task.toJSON(), message, link.updatedUserId);
-
-                                    next();
-                                }
-                            });
-                            break;
-                        default:
-                            next();
-                            break;
-                    }
-                } else {
-                    next();
+                            next(error);
+                        });
+                        break;
+                    default:
+                        next();
+                        break;
                 }
-            });
+            } else {
+                next(error);
+            }
+        });
     }
 });

@@ -49,6 +49,7 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
             .findOne(terms)
             .exec(function(error, comment) {
                 if (error) {
+                    sails.log.error(__filename + ":" + __line + " [Comment fetch failed]");
                     sails.log.error(error);
 
                     next(error);
@@ -58,6 +59,7 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
                         .destroy({commentId: comment.id})
                         .exec(function(error) {
                             if (error) {
+                                sails.log.error(__filename + ":" + __line + " [Failed to delete comment siblings]");
                                 sails.log.error(error);
                             }
 
