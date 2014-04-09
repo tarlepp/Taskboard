@@ -8,27 +8,32 @@
  */
 "use strict";
 
-module.exports = {
-    schema: true,
+var _ = require("lodash");
+
+module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
     attributes: {
         // Relation to Project model
         projectId: {
             type:       "integer",
             required:   true
         },
+        // Phase title
         title: {
             type:       "string",
             required:   true,
-            minLength:  4
+            minLength:  2
         },
+        // Description of the phase
         description: {
             type:       "text",
             defaultsTo: ""
         },
+        // Background color which is used
         backgroundColor: {
             type:       "string",
             defaultsTo: "#428bca"
         },
+        // Phase order
         order: {
             type:       "integer",
             defaultsTo: 0
@@ -42,28 +47,6 @@ module.exports = {
         isDone: {
             type:       "boolean",
             defaultsTo: false
-        },
-        createdUserId: {
-            type:       "integer",
-            required:   true
-        },
-        updatedUserId: {
-            type:       "integer",
-            required:   true
-        },
-
-        // Dynamic data attributes
-
-        objectTitle: function() {
-            return this.title;
-        },
-        createdAtObject: function () {
-            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.createdAt) : null;
-        },
-        updatedAtObject: function () {
-            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         }
     },
 
@@ -73,43 +56,43 @@ module.exports = {
      * After create callback.
      *
      * @param   {sails.model.phase}     values
-     * @param   {Function}              cb
+     * @param   {Function}              next
      */
-    afterCreate: function(values, cb) {
+    afterCreate: function(values, next) {
         HistoryService.write("Phase", values);
 
-        cb();
+        next();
     },
 
     /**
      * After update callback.
      *
      * @param   {sails.model.phase}     values
-     * @param   {Function}              cb
+     * @param   {Function}              next
      */
-    afterUpdate: function(values, cb) {
+    afterUpdate: function(values, next) {
         HistoryService.write("Phase", values);
 
-        cb();
+        next();
     },
 
     /**
      * Before destroy callback.
      *
-     * @param   {Object}    terms
-     * @param   {Function}  cb
+     * @param   {{}}        terms
+     * @param   {Function}  next
      */
-    beforeDestroy: function(terms, cb) {
+    beforeDestroy: function(terms, next) {
         Phase
             .findOne(terms)
-            .done(function(error, phase) {
+            .exec(function(error, phase) {
                 if (error) {
                     sails.log.error(error);
-                } else {
+                } else if (phase) {
                     HistoryService.remove("Phase", phase.id);
                 }
 
-                cb();
+                next();
             });
     }
-};
+});
