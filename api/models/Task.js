@@ -10,9 +10,9 @@
 
 var async = require("async");
 var moment = require("moment-timezone");
+var _ = require("lodash");
 
-module.exports = {
-    schema: true,
+module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
     attributes: {
         // Relation to Story model
         storyId: {
@@ -41,52 +41,39 @@ module.exports = {
             required:   true,
             defaultsTo: 1
         },
+        // Task title
         title: {
             type:       "string",
             required:   true,
-            minLength:  5
+            minLength:  4
         },
+        // Description of the task
         description: {
             type:       "text",
             defaultsTo: ""
         },
+        // Task priority on story
         priority: {
             type:       "integer",
             defaultsTo: 0
         },
+        // Is task done, this is updated automatic within life cycle callbacks
         isDone: {
             type:       "boolean",
             required:   true,
-            defaultsTo: 0
+            defaultsTo: false
         },
+        // Task start time, this is updated automatic when task is moved from phase to another one
         timeStart: {
             type:       "datetime"
         },
+        // Task end time, this is updated automatic when task is moved to "done" phase
         timeEnd: {
             type:       "datetime"
-        },
-        createdUserId: {
-            type:       "integer",
-            required:   true
-        },
-        updatedUserId: {
-            type:       "integer",
-            required:   true
         },
 
         // Dynamic data attributes
 
-        objectTitle: function() {
-            return this.title;
-        },
-        createdAtObject: function () {
-            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.createdAt) : null;
-        },
-        updatedAtObject: function () {
-            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
-        },
         timeStartObject: function() {
             return (this.timeStart && this.timeStart != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.timeStart) : null;
@@ -95,7 +82,7 @@ module.exports = {
             var date = (this.timeEnd && this.timeEnd != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.timeEnd) : null;
 
-            // This check is needed for avoid broken data, see this
+            // This check is needed for avoid broken data
             if (this.isDone && !moment.isMoment(date)) {
                 date = this.timeStartObject();
             }
@@ -135,9 +122,9 @@ module.exports = {
      * and new task gets right priority value according to existing tasks in this story.
      *
      * @param   {sails.model.task}  values
-     * @param   {Function}          cb
+     * @param   {Function}          next
      */
-    beforeCreate: function(values, cb) {
+    beforeCreate: function(values, next) {
         values.isDone = false;
 
         // Fetch latest task and determine new task priority from that
@@ -149,13 +136,11 @@ module.exports = {
             .exec(function(error, task) {
                 if (error) {
                     sails.log.error(error);
-
-                    cb(error);
                 } else {
                     values.priority = (task[0]) ? task[0].priority + 1 : 1;
-
-                    cb();
                 }
+
+                next(error);
             });
     },
 
@@ -164,9 +149,9 @@ module.exports = {
      * update task data with that.
      *
      * @param   {sails.model.task}  values
-     * @param   {Function}          cb
+     * @param   {Function}          next
      */
-    beforeUpdate: function(values, cb) {
+    beforeUpdate: function(values, next) {
         if (values.phaseId) {
             async.parallel(
                 {
@@ -182,17 +167,17 @@ module.exports = {
                 },
 
                 /**
-                 * Main callback function which is called after all specified parallel
-                 * jobs are done.
+                 * Main callback function which is called after all specified parallel jobs are done.
                  *
-                 * @param   {Error|null}    error
-                 * @param   {{}}            data
+                 * @param   {null|Error}    error
+                 * @param   {{
+                 *              phase: sails.model.phase[],
+                 *              task: sails.model.task
+                 *          }}              data
                  */
-                function (error, data) {
+                function(error, data) {
                     if (error) {
                         sails.log.error(error);
-
-                        cb(error);
                     } else {
                         values.isDone = data.phase.isDone;
 
@@ -226,13 +211,13 @@ module.exports = {
                             delete values.timeStart;
                             delete values.timeEnd;
                         }
-
-                        cb();
                     }
+
+                    next(error);
                 }
             );
         } else {
-            cb();
+            next();
         }
     },
 
@@ -244,28 +229,19 @@ module.exports = {
      * that if story hasn't any task it cannot be "done".
      *
      * @param   {Number}    taskId
-     * @param   {Function}  cb
+     * @param   {Function}  next
      */
-    beforeDestroy: function(taskId, cb) {
+    beforeDestroy: function(taskId, next) {
         async.waterfall(
             [
-                /**
-                 * Fetch task data.
-                 *
-                 * @param   {Function}  callback
-                 */
+                // Fetch task data which is going to be deleted
                 function(callback) {
                     DataService.getTask(taskId, function(error, task) {
                         callback(error, task);
                     });
                 },
 
-                /**
-                 * Fetch all task data
-                 *
-                 * @param   {sails.model.task}  task
-                 * @param   {Function}          callback
-                 */
+                // Fetch all another tasks that belongs to same story
                 function(task, callback) {
                     var where = {
                         storyId: task.storyId,
@@ -275,27 +251,34 @@ module.exports = {
                     DataService.getTasks(where, function(error, tasks) {
                         callback(error, task, tasks);
                     })
+                },
+
+                // Fetch story data
+                function(task, tasks, callback) {
+                    DataService.getStory(task.storyId, function(error, story) {
+                        callback(error, task, tasks, story);
+                    });
                 }
             ],
 
             /**
              * Main callback function which is called after all waterfall jobs are done.
              *
-             * @param   {Error|null}            error
+             * @param   {null|Error}            error
              * @param   {sails.model.task}      task
              * @param   {sails.model.task[]}    tasks
+             * @param   {sails.model.story}     story
              */
-            function(error, task, tasks) {
+            function(error, task, tasks, story) {
                 if (error) {
                     sails.log.error(error);
 
-                    cb(error);
+                    next(error);
                 } else {
                     HistoryService.remove("Task", task.id);
                     PhaseDurationService.remove({taskId: task.id});
 
                     var isDone = true;
-                    var timeEnd = null;
 
                     if (_.size(tasks) > 0) {
                         // Iterate story tasks
@@ -308,28 +291,30 @@ module.exports = {
                         isDone = false;
                     }
 
-                    if (isDone) {
-                        timeEnd = new Date();
-                    }
+                    // Determine time end value
+                    var timeEnd = (isDone) ? new Date() : null;
 
-                    Story
-                        .update(
+                    // We need to update story data
+                    if (timeEnd !== story.timeEnd || isDone !== story.isDone) {
+                        Story
+                            .update(
                             {id: task.storyId},
                             {isDone: isDone, timeEnd: timeEnd},
                             function(error, /** sails.model.story[] */stories) {
                                 if (error) {
                                     sails.log.error(error);
-
-                                    cb(error);
                                 } else {
                                     _.each(stories, function(story) {
                                         Story.publishUpdate(story.id, story.toJSON());
                                     });
-
-                                    cb();
                                 }
+
+                                next(error);
                             }
                         );
+                    } else { // No need to update story.
+                        next();
+                    }
                 }
             }
         );
@@ -339,32 +324,41 @@ module.exports = {
      * After task creation we can set current story automatic to not done status (isDone = false).
      *
      * @param   {sails.model.task}  values
-     * @param   {Function}          cb
+     * @param   {Function}          next
      */
-    afterCreate: function(values, cb) {
+    afterCreate: function(values, next) {
         HistoryService.write("Task", values);
 
         PhaseDurationService.write(values);
 
-        // Update story data
-        Story
-            .update(
-                {id: values.storyId},
-                {isDone: 0, timeEnd: null, updatedUserId: values.updatedUserId ? values.updatedUserId : -1},
-                function(error, /** sails.model.story[] */stories) {
-                    if (error) {
-                        sails.log.error(error);
+        // Fetch story data
+        DataService.getStory(values.storyId, function(error, story) {
+            if (error) {
+                sails.log.error(error);
 
-                        cb(error);
-                    } else {
-                        _.each(stories, function(story) {
-                            Story.publishUpdate(story.id, story.toJSON());
-                        });
+                next(error);
+            } else if (story.isDone) { // Story is done, so we must change it
+                // Update story data
+                Story
+                    .update(
+                    {id: values.storyId},
+                    {isDone: 0, timeEnd: null, updatedUserId: values.updatedUserId ? values.updatedUserId : -1},
+                    function(error, /** sails.model.story[] */stories) {
+                        if (error) {
+                            sails.log.error(error);
+                        } else {
+                            _.each(stories, function(story) {
+                                Story.publishUpdate(story.id, story.toJSON());
+                            });
+                        }
 
-                        cb();
+                        next(error);
                     }
-                }
-            );
+                );
+            } else { // No need to update task story data
+                next();
+            }
+        });
     },
 
     /**
@@ -374,9 +368,9 @@ module.exports = {
      * If all task are done (isDone === true) we can update current story as done.
      *
      * @param   {sails.model.task}  values
-     * @param   {Function}          cb
+     * @param   {Function}          next
      */
-    afterUpdate: function(values, cb) {
+    afterUpdate: function(values, next) {
         HistoryService.write("Task", values);
 
         PhaseDurationService.write(values);
@@ -407,14 +401,19 @@ module.exports = {
             /**
              * Main callback function which is called after all parallel jobs are done.
              *
-             * @param   {Error|null}    error
-             * @param   {{}}            data
+             * @param   {null|Error}    error
+             * @param   {{
+             *              story: sails.model.story,
+             *              task: sails.model.task,
+             *              tasks: sails.model.task[],
+             *              phases: sails.model.phase[]
+             *          }}              data
              */
-            function (error, data) {
+            function(error, data) {
                 if (error) {
                     sails.log.error(error);
 
-                    cb(error);
+                    next(error);
                 } else {
                     var isDone = true;
                     var timeEnd = new Date();
@@ -434,27 +433,26 @@ module.exports = {
                     var updateData = {
                         isDone: isDone,
                         timeEnd: timeEnd,
+                        timeStart: data.story.timeStart,
                         updatedUserId: values.updatedUserId ? values.updatedUserId : -1
                     };
 
                     if (taskPhases.length === 1) {
-                        DataService.getPhase(taskPhases[0], function(error, phase) {
-                            if (error) {
-                                cb(error);
-                            } else if (phase.order == 0) {
-                                updateData["timeStart"] = null;
-                            }
-
-                            processRelatedData(data, updateData);
+                        var phase = _.find(data.phases, function(phase) {
+                            return phase.id === taskPhases[0];
                         });
+
+                        if (phase && phase.order === 0) {
+                            updateData["timeStart"] = null;
+                        } else if (!data.story.timeStart || data.story.timeStart == "0000-00-00 00:00:00") {
+                            updateData["timeStart"] = new Date();
+                        }
                     } else if ((!data.story.timeStart || data.story.timeStart == "0000-00-00 00:00:00")
                         && data.task.timeStart && data.task.timeStart != "0000-00-00 00:00:00") {
                         updateData["timeStart"] = new Date();
-
-                        processRelatedData(data, updateData);
-                    } else {
-                        processRelatedData(data, updateData);
                     }
+
+                    processRelatedData(data, updateData);
                 }
             }
         );
@@ -465,8 +463,18 @@ module.exports = {
          *  1) Update story data and publish updates via socket.
          *  2) Release possible task ownerships
          *
-         * @param   {{}}    data
-         * @param   {{}}    updateData
+         * @param   {{
+         *              story: sails.model.story,
+         *              task: sails.model.task,
+         *              tasks: sails.model.task[],
+         *              phases: sails.model.phase[]
+         *          }}      data
+         * @param   {{
+         *              isDone: Boolean,
+         *              timeEnd: null|Date,
+         *              timeStart: null|Date,
+         *              updatedUserId: Number
+         *          }}      updateData
          */
         function processRelatedData(data, updateData) {
             // Make parallel jobs
@@ -474,115 +482,146 @@ module.exports = {
                 {
                     // Update story data
                     stories: function(callback) {
-                        Story
-                            .update({id: data.story.id}, updateData, function(error, stories) {
-                                if (error) {
-                                    sails.log.error(error);
-
-                                    callback(error, null);
-                                } else {
-                                    _.each(stories, function(story) {
-                                        Story.publishUpdate(story.id, story.toJSON());
-                                    });
-
-                                    callback(null, stories);
-                                }
-                            });
+                        updateStory(data, updateData, callback);
                     },
 
                     // Release tasks
                     tasks: function(callback) {
-                        if (data.task.currentUserId) {
-                            releaseTasks(data, callback);
-                        } else {
-                            callback(null, true);
-                        }
+                        releaseTasks(data, callback);
                     }
                 },
 
                 /**
-                 * Main callback function which is called after all parallel
-                 * jobs are processed
+                 * Main callback function which is called after all parallel jobs are processed
                  *
                  * @param   {null|Error}    error
-                 * @param   {null|{}}       data
                  */
-                function(error, data) {
-                    cb(error);
+                function(error) {
+                    if (error) {
+                        sails.log.error(error);
+                    }
+
+                    next(error);
                 }
             );
+        }
+
+        /**
+         * Private function to update story data if it needs to be updated.
+         *
+         * @param   {{
+         *              story: sails.model.story,
+         *              task: sails.model.task,
+         *              tasks: sails.model.task[],
+         *              phases: sails.model.phase[]
+         *          }}          data
+         * @param   {{
+         *              isDone: Boolean,
+         *              timeEnd: null|Date,
+         *              timeStart: null|Date,
+         *              updatedUserId: Number
+         *          }}          updateData
+         * @param   {Function}  next    Callback function to call after releases are done
+         */
+        function updateStory(data, updateData, next) {
+            // We need to update story because data has been changed
+            if (data.story.isDone !== updateData.isDone
+                || data.story.timeEnd !== updateData.timeEnd
+                || data.story.timeStart !== updateData.timeStart
+            ) {
+                Story
+                    .update({id: data.story.id}, updateData, function(error, stories) {
+                        if (!error) {
+                            _.each(stories, function(story) {
+                                Story.publishUpdate(story.id, story.toJSON());
+                            });
+                        }
+
+                        next(error);
+                    });
+            } else {
+                next(null);
+            }
         }
 
         /**
          * Private function to release task(s) ownership from this sprint. This is only
          * called if task currentUserId is !== 0
          *
-         * @param   {{}}        data    Main data set
+         * @param   {{
+         *              story: sails.model.story,
+         *              task: sails.model.task,
+         *              tasks: sails.model.task[],
+         *              phases: sails.model.phase[]
+         *          }}          data
          * @param   {Function}  next    Callback function to call after releases are done
          */
         function releaseTasks(data, next) {
-            // Fetch needed data for release
-            async.waterfall(
-                [
-                    // Fetch all stories that are attached to this sprint
-                    function(callback) {
-                        DataService.getStories({sprintId: data.story.sprintId}, function(error, stories) {
-                            callback(error, stories);
-                        });
-                    },
+            if (data.task.currentUserId) {
+                // Fetch needed data for release
+                async.waterfall(
+                    [
+                        // Fetch all stories that are attached to this sprint
+                        function(callback) {
+                            DataService.getStories({sprintId: data.story.sprintId}, function(error, stories) {
+                                callback(error, stories);
+                            });
+                        },
 
-                    // Fetch all tasks that are attached to this sprint and current user is owner
-                    function(stories, callback) {
-                        var storyIds = _.map(stories, function(story) { return {storyId: story.id}; });
+                        // Fetch all tasks that are attached to this sprint and current user is owner
+                        function(stories, callback) {
+                            var storyIds = _.map(stories, function(story) { return {storyId: story.id}; });
 
-                        DataService.getTasks(
-                            {or: storyIds, currentUserId: data.task.currentUserId, id: {'!': data.task.id}},
-                            function(error, tasks) {
-                                callback(error, stories, tasks);
-                            }
-                        );
-                    }
-                ],
-
-                /**
-                 * Main callback function which is called after all waterfall jobs
-                 * are processed.
-                 *
-                 * @param   {null|Error}            error
-                 * @param   {sails.model.story[]}   stories
-                 * @param   {sails.model.task[]}    tasks
-                 */
-                function(error, stories, tasks) {
-                    if (error) {
-                        next(error, null);
-                    } else {
-                        var taskIds = _.map(tasks, function(task) { return {id: task.id}; });
-
-                        // We have some task(s) to update
-                        if (taskIds.length > 0) {
-                            Task
-                                .update(
-                                {or: taskIds},
-                                {currentUserId: 0, updatedUserId: data.task.currentUserId},
+                            DataService.getTasks(
+                                {or: storyIds, currentUserId: data.task.currentUserId, id: {'!': data.task.id}},
                                 function(error, tasks) {
-                                    if (error) {
-                                        next(error, null);
-                                    } else {
-                                        // Iterate updated tasks and publish updates for those
-                                        _.each(tasks, function(task) {
-                                            Task.publishUpdate(task.id, task.toJSON());
-                                        });
-
-                                        next(null, tasks);
-                                    }
+                                    callback(error, tasks);
                                 }
                             );
+                        }
+                    ],
+
+                    /**
+                     * Main callback function which is called after all waterfall jobs
+                     * are processed.
+                     *
+                     * @param   {null|Error}            error   Possible error
+                     * @param   {sails.model.task[]}    tasks   Array of tasks that belongs to user
+                     */
+                    function(error, tasks) {
+                        if (error) {
+                            next(error);
                         } else {
-                            next(null, []);
+                            var taskIds = _.map(tasks, function(task) {
+                                return {id: task.id};
+                            });
+
+                            // We have some task(s) to update
+                            if (taskIds.length > 0) {
+                                Task
+                                    .update(
+                                    {or: taskIds},
+                                    {currentUserId: 0, updatedUserId: data.task.currentUserId},
+                                    function(error, tasks) {
+                                        if (!error) {
+                                            // Iterate updated tasks and publish updates for those
+                                            _.each(tasks, function(task) {
+                                                Task.publishUpdate(task.id, task.toJSON());
+                                            });
+                                        }
+
+                                        next(error);
+                                    }
+                                );
+                            } else {
+                                next(null);
+                            }
                         }
                     }
-                }
-            );
+                );
+            } else {
+                next(null);
+            }
         }
     }
-};
+});
