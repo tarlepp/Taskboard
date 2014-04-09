@@ -87,7 +87,7 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
     /**
      * Before destroy callback.
      *
-     * @param   {Object}    terms
+     * @param   {{}}        terms
      * @param   {Function}  next
      */
     beforeDestroy: function(terms, next) {
@@ -98,7 +98,7 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
                     sails.log.error(error);
 
                     next(error);
-                } else {
+                } else if (externalLink) {
                     HistoryService.remove("ExternalLink", externalLink.id);
 
                     // Remove related links
@@ -111,6 +111,8 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
 
                             next(error);
                         });
+                } else {
+                    next();
                 }
             });
     }
