@@ -7,50 +7,45 @@
  */
 "use strict";
 
-module.exports = {
-    schema: true,
+var _ = require("lodash");
+
+module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
     attributes: {
         // Relation to User model
         managerId: {
             type:       "integer",
             required:   true
         },
+        // Project title
         title: {
             type:       "string",
             required:   true,
-            minLength:  5
+            minLength:  4
         },
+        // Description of the project
         description: {
             type:       "text",
             required:   true,
             defaultsTo: ""
         },
+        // Project start date
         dateStart: {
             type:       "date",
             required:   true
         },
+        // Project end date
         dateEnd: {
             type:       "date",
             required:   true
         },
+        // Ignore weekends on this project, affects to burndown chart and phase duration calculations
         ignoreWeekends: {
             type:       "boolean",
             defaultsTo: false
         },
-        createdUserId: {
-            type:       "integer",
-            required:   true
-        },
-        updatedUserId: {
-            type:       "integer",
-            required:   true
-        },
 
         // Dynamic data attributes
 
-        objectTitle: function() {
-            return this.title;
-        },
         dateStartObject: function() {
             return (this.dateStart && this.dateStart != "0000-00-00")
                 ? DateService.convertDateObjectToUtc(this.dateStart) : null;
@@ -58,14 +53,6 @@ module.exports = {
         dateEndObject: function() {
             return (this.dateEnd && this.dateEnd != "0000-00-00")
                 ? DateService.convertDateObjectToUtc(this.dateEnd) : null;
-        },
-        createdAtObject: function () {
-            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.createdAt) : null;
-        },
-        updatedAtObject: function () {
-            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         }
     },
 
@@ -75,43 +62,43 @@ module.exports = {
      * After create callback.
      *
      * @param   {sails.model.project}   values
-     * @param   {Function}              cb
+     * @param   {Function}              next
      */
-    afterCreate: function(values, cb) {
+    afterCreate: function(values, next) {
         HistoryService.write("Project", values);
 
-        cb();
+        next();
     },
 
     /**
      * After update callback.
      *
      * @param   {sails.model.project}   values
-     * @param   {Function}              cb
+     * @param   {Function}              next
      */
-    afterUpdate: function(values, cb) {
+    afterUpdate: function(values, next) {
         HistoryService.write("Project", values);
 
-        cb();
+        next();
     },
 
     /**
      * Before destroy callback.
      *
-     * @param   {Object}    terms
-     * @param   {Function}  cb
+     * @param   {{}}        terms
+     * @param   {Function}  next
      */
-    beforeDestroy: function(terms, cb) {
+    beforeDestroy: function(terms, next) {
         Project
             .findOne(terms)
-            .done(function(error, project) {
+            .exec(function(error, project) {
                 if (error) {
                     sails.log.error(error);
-                } else {
+                } else if (project) {
                     HistoryService.remove("Project", project.id);
                 }
 
-                cb();
+                next(error);
             });
     }
-};
+});
