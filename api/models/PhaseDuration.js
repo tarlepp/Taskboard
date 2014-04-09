@@ -17,27 +17,34 @@ module.exports = {
     attributes: {
         // Relation to Project model
         projectId: {
-            type:       "integer"
+            type:       "integer",
+            required:   true
         },
         // Relation to Sprint model
         sprintId: {
-            type:       "integer"
+            type:       "integer",
+            required:   true
         },
         // Relation to Story model
         storyId: {
-            type:       "integer"
+            type:       "integer",
+            required:   true
         },
         // Relation to Task model
         taskId: {
-            type:       "integer"
+            type:       "integer",
+            required:   true
         },
         // Relation to Phase model
         phaseId: {
-            type:       "integer"
+            type:       "integer",
+            required:   true
         },
+        // Phase start datetime
         timeStart: {
             type:       "datetime"
         },
+        // Phase end datetime
         timeEnd: {
             type:       "datetime"
         },
@@ -49,6 +56,7 @@ module.exports = {
         durationRelative: {
             type:       "integer"
         },
+        // Is task duration still open, eg. it has only timeStart value
         open: {
             type:       "boolean",
             defaultsTo: true
@@ -131,40 +139,25 @@ module.exports = {
                     DataService.getSprint(story.sprintId, function(error, sprint) {
                         callback(error, task, story, sprint);
                     });
-                },
-
-                /**
-                 * Fetch project data.
-                 *
-                 * @param   {sails.model.task}      task
-                 * @param   {sails.model.story}     story
-                 * @param   {sails.model.sprint}    sprint
-                 * @param   {Function}              callback
-                 */
-                function(task, story, sprint, callback) {
-                    DataService.getProject(sprint.projectId, function(error, project) {
-                        callback(error, task, story, sprint, project);
-                    });
                 }
             ],
 
             /**
              * Main callback function which is called after last waterfall job is finished.
              *
-             * @param   {Error|null}            error
+             * @param   {null|Error}            error
              * @param   {sails.model.task}      task
              * @param   {sails.model.story}     story
              * @param   {sails.model.sprint}    sprint
-             * @param   {sails.model.project}   project
              */
-            function(error, task, story, sprint, project) {
+            function(error, task, story, sprint) {
                 if (error) {
                     sails.log.error(error);
 
                     next(error);
                 } else {
                     // Add relation information to current values
-                    values.projectId = project.id;
+                    values.projectId = sprint.projectId;
                     values.sprintId = sprint.id;
                     values.storyId = story.id;
                     values.phaseId = task.phaseId;
@@ -173,5 +166,18 @@ module.exports = {
                 }
             }
         )
+    },
+
+    /**
+     * Before update lifecycle callback. This will calculate relative duration for
+     * current row.
+     *
+     * @todo implement this later
+     *
+     * @param   {sails.model.phaseDuration} values
+     * @param   {Function}                  next
+     */
+    beforeUpdate: function(values, next) {
+        next();
     }
 };
