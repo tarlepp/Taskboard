@@ -10,9 +10,9 @@
 "use strict";
 
 var moment = require("moment-timezone");
+var _ = require("lodash");
 
-module.exports = {
-    schema: true,
+module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
     attributes: {
         // Relation to Project model
         projectId: {
@@ -41,65 +41,60 @@ module.exports = {
             defaultsTo: 0,
             required:   true
         },
+        // Story title
         title: {
             type:       "string",
             required:   true,
-            minLength:  5
+            minLength:  4
         },
+        // Description of the story
         description: {
             type:       "text",
             required:   true,
-            minLength:  5
+            defaultsTo: ""
         },
+        // Story estimate as in fibonacci number. -1 means ??? eg. no estimate
         estimate: {
             type:       "float",
             required:   true,
             defaultsTo: -1
         },
+        // Story priority
         priority: {
             type:       "integer",
             defaultsTo: 0
         },
+        // Is story done or not, this is updated automatic via Task model life cycle callbacks
         isDone: {
             type:       "boolean",
             required:   true,
-            defaultsTo: 0
+            defaultsTo: false
         },
+        // Ignore story in burndown chart
         ignoreInBurnDownChart: {
             type:       "boolean",
             required:   true,
             defaultsTo: false
         },
+        /**
+         * Story start time, this is set when first task is moved to another phase and
+         * reset if all tasks are moved back to first phase.
+         */
         timeStart: {
             type:       "datetime"
         },
+        /**
+         * Story stop time, this is set when all tasks are moved to "done" phase and
+         * reset in other moves.
+         */
         timeEnd: {
             type:       "datetime"
-        },
-        createdUserId: {
-            type:       "integer",
-            required:   true
-        },
-        updatedUserId: {
-            type:       "integer",
-            required:   true
         },
 
         // Dynamic data attributes
 
-        objectTitle: function() {
-            return this.title;
-        },
         estimateFormatted: function() {
             return (parseInt(this.estimate, 10) === -1) ? "???" : this.estimate;
-        },
-        createdAtObject: function() {
-            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.createdAt) : null;
-        },
-        updatedAtObject: function() {
-            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         },
         timeStartObject: function() {
             return (this.timeStart && this.timeStart != "0000-00-00 00:00:00")
@@ -139,24 +134,24 @@ module.exports = {
      * Before validation callback.
      *
      * @param   {sails.model.story} values
-     * @param   {Function}          callback
+     * @param   {Function}          next
      */
-    beforeValidation: function(values, callback) {
+    beforeValidation: function(values, next) {
         if (typeof values.ignoreInBurnDownChart !== "boolean") {
             values.ignoreInBurnDownChart = false;
         }
 
-        callback();
+        next();
     },
 
     /**
      * Before create callback. Basically we want to make sure that isDone bit is set to false
-     * and calculate story priority according to same project and sprint stories.
+     * and determine story priority according to same project and sprint stories.
      *
      * @param   {sails.model.story} values
-     * @param   {Function}          cb
+     * @param   {Function}          next
      */
-    beforeCreate: function(values, cb) {
+    beforeCreate: function(values, next) {
         values.isDone = false;
 
         Story
@@ -166,21 +161,15 @@ module.exports = {
             })
             .sort("priority DESC")
             .exec(function(error, story) {
-                var priority;
-
                 if (error) {
                     sails.log.error(error);
-
-                    cb(error)
                 } else if (!story) {
-                    priority = 0;
+                    values.priority = 0;
                 } else {
-                    priority = story.priority + 1;
+                    values.priority = story.priority + 1;
                 }
 
-                values.priority = priority;
-
-                cb();
+                next(error);
             });
     },
 
@@ -188,43 +177,43 @@ module.exports = {
      * After create callback
      *
      * @param   {sails.model.story} values
-     * @param   {Function}          cb
+     * @param   {Function}          next
      */
-    afterCreate: function(values, cb) {
+    afterCreate: function(values, next) {
         HistoryService.write("Story", values);
 
-        cb();
+        next();
     },
 
     /**
      * After update callback
      *
      * @param   {sails.model.story} values
-     * @param   {Function}          cb
+     * @param   {Function}          next
      */
-    afterUpdate: function(values, cb) {
+    afterUpdate: function(values, next) {
         HistoryService.write("Story", values);
 
-        cb();
+        next();
     },
 
     /**
      * Before destroy callback
      *
-     * @param   {Object}    terms
-     * @param   {Function}  cb
+     * @param   {{}}        terms
+     * @param   {Function}  next
      */
-    beforeDestroy: function(terms, cb) {
+    beforeDestroy: function(terms, next) {
         Story
             .findOne(terms)
             .exec(function(error, story) {
                 if (error) {
                     sails.log.error(error);
-                } else {
+                } else if (story) {
                     HistoryService.remove("Story", story.id);
                 }
 
-                cb();
+                next(error);
             });
     }
-};
+});
