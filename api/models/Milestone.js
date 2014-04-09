@@ -79,7 +79,7 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
             .exec(function(error, milestone) {
                 if (error) {
                     sails.log.error(error);
-                } else {
+                } else if (milestone) {
                     HistoryService.remove("Milestone", milestone.id);
                 }
 
