@@ -9,7 +9,7 @@
 
 var bcrypt = require("bcrypt");
 var gravatar = require("gravatar");
-var async = require("async");
+var _ = require("lodash");
 
 /**
  * Generic password hash function.
@@ -18,9 +18,12 @@ var async = require("async");
  * @param   {Function}          next
  */
 function hashPassword(values, next) {
-    bcrypt.hash(values.password, 10, function(err, hash) {
-        if (err) {
-            return next(err);
+    bcrypt.hash(values.password, 10, function(error, hash) {
+        if (error) {
+            sails.log.error(__filename + ":" + __line + " [Password hashing failed]");
+            sails.log.error(error);
+
+            return next(error);
         }
 
         values.password = hash;
@@ -29,8 +32,7 @@ function hashPassword(values, next) {
     });
 }
 
-module.exports = {
-    schema: true,
+module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
     attributes: {
         username: {
             type:       "string",
@@ -97,14 +99,6 @@ module.exports = {
             type:       "string",
             defaultsTo: ""
         },
-        createdUserId: {
-            type:       "integer",
-            required:   true
-        },
-        updatedUserId: {
-            type:       "integer",
-            required:   true
-        },
 
         // Dynamic data attributes
 
@@ -118,19 +112,6 @@ module.exports = {
             size = size || 25;
 
             return gravatar.url(this.email, {s: size, r: "pg", d: "mm"}, true);
-        },
-
-        // ObjectTitle
-        objectTitle: function() {
-            return this.lastName + " " + this.firstName;
-        },
-        createdAtObject: function () {
-            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.createdAt) : null;
-        },
-        updatedAtObject: function () {
-            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         },
 
         // Override toJSON instance method to remove password value
@@ -173,25 +154,23 @@ module.exports = {
      * @param   {Function}          next
      */
     beforeUpdate: function(values, next) {
-        if (values.password) {
-            hashPassword(values, next);
-        } else if (values.id) {
-            User
-                .findOne(values.id)
-                .done(function(err, user) {
-                    if (err) {
-                        next(err);
+        if (values.id) {
+            DataService.getUser(values.id, function(error, user) {
+                if (!error) {
+                    // User try to make himself an administrator user, no-way-hose :D
+                    if (values.admin && !user.admin) {
+                        values.admin = false;
+                    }
+
+                    if (values.password) {
+                        return hashPassword(values, next);
                     } else {
                         values.password = user.password;
-
-                        // User try to make himself an administrator user, no-way-hose :D
-                        if (values.admin && !user.admin) {
-                            values.admin = false;
-                        }
-
-                        next();
                     }
-                });
+                }
+
+                return next(error);
+            });
         } else {
             next();
         }
@@ -201,43 +180,39 @@ module.exports = {
      * After create callback.
      *
      * @param   {sails.model.user}  values
-     * @param   {Function}          cb
+     * @param   {Function}          next
      */
-    afterCreate: function(values, cb) {
+    afterCreate: function(values, next) {
         HistoryService.write("User", values);
 
-        cb();
+        next();
     },
 
     /**
      * After update callback.
      *
      * @param   {sails.model.user}  values
-     * @param   {Function}          cb
+     * @param   {Function}          next
      */
-    afterUpdate: function(values, cb) {
+    afterUpdate: function(values, next) {
         HistoryService.write("User", values);
 
-        cb();
+        next();
     },
 
     /**
      * Before destroy callback.
      *
-     * @param   {Object}    terms
-     * @param   {Function}  cb
+     * @param   {{}}        terms
+     * @param   {Function}  next
      */
-    beforeDestroy: function(terms, cb) {
-        User
-            .findOne(terms)
-            .done(function(error, user) {
-                if (error) {
-                    sails.log.error(error);
-                } else {
-                    HistoryService.remove("User", user.id);
-                }
+    beforeDestroy: function(terms, next) {
+        DataService.getUser(terms, function(error, user) {
+            if (!error) {
+                HistoryService.remove("User", user.id);
+            }
 
-                cb();
-            });
+            next(error);
+        });
     }
-};
+});
