@@ -34,6 +34,16 @@ module.exports = {
 
         // Dynamic model data attributes
 
+        objectTitle: function() {
+            var output = null;
+
+            if (this.title) {
+                output = this.title;
+            }
+
+            return output;
+        },
+
         createdAtObject: function() {
             return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.createdAt) : null;
