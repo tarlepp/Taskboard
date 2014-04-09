@@ -7,48 +7,42 @@
  */
 "use strict";
 
-module.exports = {
-    schema: true,
+var _ = require("lodash");
+
+module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
     attributes: {
         // Relation to Project model
         projectId: {
             type:       "integer",
             required:   true
         },
+        // Sprint title
         title: {
             type:       "string",
             required:   true
         },
+        // Description of the sprint
         description: {
             type:       "text",
             defaultsTo: ""
         },
+        // Sprint start date
         dateStart: {
             type:       "date",
             required:   true
         },
+        // Sprint end date
         dateEnd: {
             type:       "date",
             required:   true
         },
+        // Ignore weekends on sprint, this will affect to burndown charts and phase duration calculations
         ignoreWeekends: {
             type:       "boolean",
             defaultsTo: false
         },
-        createdUserId: {
-            type:       "integer",
-            required:   true
-        },
-        updatedUserId: {
-            type:       "integer",
-            required:   true
-        },
 
         // Dynamic data attributes
-
-        objectTitle: function() {
-            return this.title;
-        },
 
         // Note that this doesn't account possible sprint exclude days
         durationDays: function() {
@@ -79,14 +73,6 @@ module.exports = {
         dateEndObject: function() {
             return (this.dateEnd && this.dateEnd != "0000-00-00")
                 ? DateService.convertDateObjectToUtc(this.dateEnd, true) : null;
-        },
-        createdAtObject: function () {
-            return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.createdAt) : null;
-        },
-        updatedAtObject: function () {
-            return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
-                ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
         }
     },
 
@@ -96,33 +82,33 @@ module.exports = {
      * After create callback.
      *
      * @param   {sails.model.sprint}    values
-     * @param   {Function}              cb
+     * @param   {Function}              next
      */
-    afterCreate: function(values, cb) {
+    afterCreate: function(values, next) {
         HistoryService.write("Sprint", values);
 
-        cb();
+        next();
     },
 
     /**
      * After update callback.
      *
      * @param   {sails.model.sprint}    values
-     * @param   {Function}              cb
+     * @param   {Function}              next
      */
-    afterUpdate: function(values, cb) {
+    afterUpdate: function(values, next) {
         HistoryService.write("Sprint", values);
 
-        cb();
+        next();
     },
 
     /**
      * Before destroy callback.
      *
-     * @param   {Object}    terms
-     * @param   {Function}  cb
+     * @param   {{}}        terms
+     * @param   {Function}  next
      */
-    beforeDestroy: function(terms, cb) {
+    beforeDestroy: function(terms, next) {
         // Remove history data
         Sprint
             .findOne(terms)
@@ -130,8 +116,8 @@ module.exports = {
                 if (error) {
                     sails.log.error(error);
 
-                    cb();
-                } else {
+                    next(error);
+                } else if (sprint) {
                     HistoryService.remove("Sprint", sprint.id);
 
                     // Update all stories sprint id to 0 which belongs to delete sprint
@@ -139,15 +125,17 @@ module.exports = {
                         .update(
                             {sprintId: sprint.id},
                             {sprintId: 0},
-                            function(error, stories) {
+                            function(error) {
                                 if (error) {
                                     sails.log.error(error);
                                 }
 
-                                cb();
+                                next(error);
                             }
                         );
+                } else {
+                    next();
                 }
             });
     }
-};
+});
