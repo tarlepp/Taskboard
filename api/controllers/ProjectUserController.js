@@ -391,7 +391,7 @@ module.exports = {
                      * @param   {Function}  callback
                      */
                     contributor: function(callback) {
-                        DataService.getProjectUser({projectId: projectId, userId: request.user.id}, callback);
+                        DataService.getProjectUser({projectId: projectId, userId: request.user.id}, callback, true);
                     }
                 },
 

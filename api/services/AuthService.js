@@ -59,7 +59,7 @@ exports.hasProjectAccess = function(user, projectId, next, returnRole) {
 
             // Fetch project user data for current project and user
             contributor: function(callback) {
-                DataService.getProjectUser({projectId: projectId, userId: user.id}, callback);
+                DataService.getProjectUser({projectId: projectId, userId: user.id}, callback, true);
             }
         },
 

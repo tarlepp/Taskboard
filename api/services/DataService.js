@@ -2,6 +2,19 @@
  * /api/services/DataService.js
  *
  * Generic data service, which is used to fetch generic data and call defined callback after data fetching.
+ * This contains basically all data fetch that Taskboard needs. Services contains fetch of one and multiple
+ * objects.
+ *
+ * Single object fetch:
+ *  get{ObjectName}(terms, next, [noExistCheck])
+ *
+ * Multiple object fetch
+ *  get{ObjectName}s(terms, next)
+ *
+ * All data service methods will write error log if some error occurs. In all cases callback function 'next'
+ * is called with two arguments: possible error and actual result.
+ *
+ * Note that with multiple object fetch service will attach "default" sort conditions for results.
  */
 
 var async = require("async");
@@ -9,362 +22,505 @@ var async = require("async");
 /**
  * Service to fetch single project data from database.
  *
- * @param   {Number}    projectId   Project id
- * @param   {Function}  callback    Callback function to call after query
+ * @param   {Number|{}} where           Used query conditions
+ * @param   {Function}  next            Callback function to call after query
+ * @param   {Boolean}   [noExistsCheck] If data is not found, skip error
  */
-exports.getProject = function(projectId, callback) {
+exports.getProject = function(where, next, noExistsCheck) {
+    noExistsCheck = noExistsCheck || false;
+
     Project
-        .findOne(projectId)
-        .done(function(error, /** sails.model.project */ project) {
-            if (error) {
-                callback(error, null);
-            } else if (!project) {
-                var errorMessage = new Error();
-
-                errorMessage.message = "Project not found.";
-                errorMessage.status = 404;
-
-                callback(errorMessage, null);
-            } else {
-                callback(null, project);
-            }
-        });
-};
-
-/**
- * Service to fetch project users from database by given conditions.
- *
- * @param   {{}}        where       Used query conditions
- * @param   {Function}  callback    Callback function to after query
- */
-exports.getProjectUser = function(where, callback) {
-    ProjectUser
         .findOne(where)
-        .exec(function(error, /** sails.model.projectUser */projectUser) {
-            callback(error, projectUser);
-        });
-};
-
-/**
- * Service to fetch single sprint data from database.
- *
- * @param   {Number}    sprintId    Sprint id
- * @param   {Function}  callback    Callback function to call after query
- */
-exports.getSprint = function(sprintId, callback) {
-    Sprint
-        .findOne(sprintId)
-        .done(function(error, /** sails.model.sprint */ sprint) {
+        .exec(function(error, /** sails.model.project */ project) {
             if (error) {
-                callback(error, null);
-            } else if (!sprint) {
-                var errorMessage = new Error();
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch project data]");
+                sails.log.error(error);
+            } else if (!project && !noExistsCheck) {
+                error = new Error();
 
-                errorMessage.message = "Sprint not found.";
-                errorMessage.status = 404;
-
-                callback(errorMessage, null);
-            } else {
-                callback(null, sprint);
+                error.message = "Project not found.";
+                error.status = 404;
             }
-        });
-};
 
-/**
- * Service to fetch single milestone data from database.
- *
- * @param   {Number}    milestoneId Milestone id
- * @param   {Function}  callback    Callback function to call after query
- */
-exports.getMilestone = function(milestoneId, callback) {
-    Milestone
-        .findOne(milestoneId)
-        .done(function(error, /** sails.model.milestone */ milestone) {
-            if (error) {
-                callback(error, null);
-            } else if (!milestone) {
-                var errorMessage = new Error();
 
-                errorMessage.message = "Milestone not found.";
-                errorMessage.status = 404;
 
-                callback(errorMessage, null);
-            } else {
-                callback(null, milestone);
-            }
-        });
-};
-
-/**
- * Service to fetch single story data from database.
- *
- * @param   {Number}    storyId     Story id
- * @param   {Function}  callback    Callback function to call after query
- */
-exports.getStory = function(storyId, callback) {
-    Story
-        .findOne(storyId)
-        .done(function(error, /** sails.model.story */ story) {
-            if (error) {
-                callback(error, null);
-            } else if (!story) {
-                var errorMessage = new Error();
-
-                errorMessage.message = "Story not found.";
-                errorMessage.status = 404;
-
-                callback(errorMessage, null);
-            } else {
-                callback(null, story);
-            }
-        });
-};
-
-/**
- * Service to fetch single task data from database.
- *
- * @param   {Number}    taskId      Task id
- * @param   {Function}  callback    Callback function to call after query
- */
-exports.getTask = function(taskId, callback) {
-    Task
-        .findOne(taskId)
-        .done(function(error, /** sails.model.task */ task) {
-            if (error) {
-                callback(error, null);
-            } else if (!task) {
-                var errorMessage = new Error();
-
-                errorMessage.message = "Task not found.";
-                errorMessage.status = 404;
-
-                callback(errorMessage, null);
-            } else {
-                callback(null, task);
-            }
-        });
-};
-
-/**
- * Service to fetch single user data from database.
- *
- * @param   {Number}    userId      User id
- * @param   {Function}  callback    Callback function to call after query
- */
-exports.getUser = function(userId, callback) {
-    User
-        .findOne(userId)
-        .done(function(error, /** sails.model.user */ user) {
-            if (error) {
-                callback(error, null);
-            } else if (!user) {
-                var errorMessage = new Error();
-
-                errorMessage.message = "User not found.";
-                errorMessage.status = 404;
-
-                callback(errorMessage, null);
-            } else {
-                callback(null, user);
-            }
-        });
-};
-
-/**
- * Service to fetch single phase data from database.
- *
- * @param   {Number}    phaseId     Phase id
- * @param   {Function}  callback    Callback function to call after query
- */
-exports.getPhase = function(phaseId, callback) {
-    Phase
-        .findOne(phaseId)
-        .done(function(error, /** sails.model.phase */ phase) {
-            if (error) {
-                callback(error, null);
-            } else if (!phase) {
-                var errorMessage = new Error();
-
-                errorMessage.message = "Phase not found.";
-                errorMessage.status = 404;
-
-                callback(errorMessage, null);
-            } else {
-                callback(null, phase);
-            }
-        });
-};
-
-/**
- * Service to fetch single comment from database. Note that this won't fetch
- * siblings and author data
- *
- * @param   {Number}    commentId   Comment id
- * @param   {Function}  callback    Callback function to call after query
- */
-exports.getComment = function(commentId, callback) {
-    Comment
-        .findOne(commentId)
-        .done(function(error, /** sails.model.comment */ comment) {
-            if (error) {
-                callback(error, null);
-            } else if (!comment) {
-                var errorMessage = new Error();
-
-                errorMessage.message = "Comment not found.";
-                errorMessage.status = 404;
-
-                callback(errorMessage, null);
-            } else {
-                callback(null, comment);
-            }
-        });
-};
-
-/**
- * Service to fetch single project external link from database.
- *
- * @param   {Number}    linkId      External link id
- * @param   {Function}  callback    Callback function to call after query
- */
-exports.getProjectLink = function(linkId, callback) {
-    ExternalLink
-        .findOne(linkId)
-        .done(function(error, /** sails.model.externalLink */ link) {
-            if (error) {
-                callback(error, null);
-            } else if (!link) {
-                var errorMessage = new Error();
-
-                errorMessage.message = "External project link not found.";
-                errorMessage.status = 404;
-
-                callback(errorMessage, null);
-            } else {
-                callback(null, link);
-            }
+            next(error, project);
         });
 };
 
 /**
  * Service to fetch project data from database.
  *
- * @param   {{}}        where       Used query conditions
- * @param   {Function}  callback    Callback function to call after query
+ * @param   {{}}        where   Used query conditions
+ * @param   {Function}  next    Callback function to call after query
  */
-exports.getProjects = function(where, callback) {
+exports.getProjects = function(where, next) {
     Project
         .find()
         .where(where)
         .sort("title ASC")
-        .done(function(error, /** sails.model.project[] */ projects) {
+        .exec(function(error, /** sails.model.project[] */ projects) {
             if (error) {
-                callback(error, null);
-            } else {
-                callback(null, projects);
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch project data]");
+                sails.log.error(error);
             }
+
+            next(error, projects);
         });
 };
 
 /**
- * Service to fetch milestone data from database.
+ * Service to fetch project object that belongs to specified object (name + id). Basically service this
+ * just fetches necessary data by specified object and process it until we have project.
  *
- * @param   {{}}        where       Used query conditions
- * @param   {Function}  callback    Callback function to call after query
+ * Note that this only support following objects at this time:
+ *  - Story
+ *  - Task
+ *
+ * @param   {String}    objectName  Name of the object
+ * @param   {Number}    objectId    Object id
+ * @param   {Function}  next
  */
-exports.getMilestones = function(where, callback) {
-    Milestone
+exports.getProjectByLink = function(objectName, objectId, next) {
+    // Make necessary jobs as waterfall
+    async.waterfall(
+        [
+            /**
+             * First job in main water fall jobs. With this we will determine project id by
+             * specified object. Actual determination is done in separate processes which
+             * uses own async water fall jobs to determine project id.
+             *
+             * @param   {Function}  callback
+             */
+            function(callback) {
+                switch (objectName) {
+                    case "Story":
+                        // In case of story we just needed to fetch story data
+                        DataService.getStory(objectId, callback);
+                        break;
+                    case "Task":
+                        // With task we need to get actual task object and then story object
+                        async.waterfall(
+                            [
+                                // Fetch task
+                                function(cb) {
+                                    DataService.getTask(objectId, cb);
+                                },
+
+                                // Fetch story object via task object.
+                                function(task, cb) {
+                                    DataService.getStory(task.storyId, cb);
+                                }
+                            ],
+
+                            /**
+                             * Task specified water fall callback function which is called after we have
+                             * determined project id via task data or some error has been occurred.
+                             *
+                             * This will call main water fall async job callback function.
+                             *
+                             * Yo dawg, i herd like y ar doing callbacks in your callbacks!
+                             *
+                             * @param   {null|Error}        error   Possible error
+                             * @param   {sails.model.story} story   Story object
+                             */
+                            function(error, story) {
+                                callback(error, story);
+                            }
+                        );
+                        break;
+                    default:
+                        callback("Not supported link object '" + objectName + "' given", null);
+                        break;
+                }
+            },
+
+            /**
+             * Callback function to fetch actual project object, this is called after we have
+             * determined project id from specified object.
+             *
+             * @param   {sails.model.story} story       Story object
+             * @param   {Function}          callback    Callback function to call after job is done
+             */
+            function(story, callback) {
+                DataService.getProject(story.projectId, callback);
+            }
+        ],
+
+        /**
+         * Main callback which is call after all main water fall jobs are done
+         *
+         * @param   {null|Error}            error
+         * @param   {sails.model.project}   project
+         */
+        function(error, project) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch project data by link, see errors above.]");
+            }
+
+            next(error, project);
+        }
+    )
+};
+
+/**
+ * Service to fetch single project user from database by given conditions.
+ *
+ * @param   {Number|{}} where           Used query conditions
+ * @param   {Function}  next            Callback function to after query
+ * @param   {Boolean}   [noExistsCheck] If data is not found, skip error
+ */
+exports.getProjectUser = function(where, next, noExistsCheck) {
+    noExistsCheck = noExistsCheck || false;
+
+    ProjectUser
+        .findOne(where)
+        .exec(function(error, /** sails.model.projectUser */ projectUser) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch project user data]");
+                sails.log.error(error);
+            } else if (!projectUser && !noExistsCheck) {
+                error = new Error();
+
+                error.message = "Project user not found.";
+                error.status = 404;
+            }
+
+            next(error, projectUser);
+        });
+};
+
+/**
+ * Service to fetch project users from database by given conditions.
+ *
+ * @param   {{}}        where   Used query conditions
+ * @param   {Function}  next    Callback function to after query
+ */
+exports.getProjectUsers = function(where, next) {
+    ProjectUser
         .find()
         .where(where)
-        .sort("deadline ASC")
-        .sort("title ASC")
-        .done(function(error, milestones) {
+        .exec(function(error, /** sails.model.projectUser[] */ projectUsers) {
             if (error) {
-                callback(error, null);
-            } else {
-                callback(null, milestones);
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch project user data]");
+                sails.log.error(error);
             }
+
+            next(error, projectUsers);
+        });
+};
+
+/**
+ * Service to fetch single project external link from database.
+ *
+ * @param   {Number|{}} where           Used query conditions
+ * @param   {Function}  next            Callback function to call after query
+ * @param   {Boolean}   [noExistsCheck] If data is not found, skip error
+ */
+exports.getProjectLink = function(where, next, noExistsCheck) {
+    noExistsCheck = noExistsCheck || false;
+
+    ExternalLink
+        .findOne(where)
+        .exec(function(error, /** sails.model.externalLink */ externalLink) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch external link data]");
+                sails.log.error(error);
+            } else if (!projectUser && !noExistsCheck) {
+                error = new Error();
+
+                error.message = "External link not found.";
+                error.status = 404;
+            }
+
+            next(error, externalLink);
+        });
+};
+
+/**
+ * Service to fetch specified project external link data from database.
+ *
+ * @param   {Number}    projectId   Project id
+ * @param   {Function}  next        Callback function to call after query
+ */
+exports.getProjectLinks = function(projectId, next) {
+    ExternalLink
+        .find()
+        .where({projectId: projectId})
+        .sort("title ASC")
+        .exec(function(error, /** sails.model.externalLink[] */ links) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch external link data]");
+                sails.log.error(error);
+            }
+
+            next(error, links);
+        });
+};
+
+/**
+ * Service to fetch single sprint data from database.
+ *
+ * @param   {Number|{}} where           Used query conditions
+ * @param   {Function}  next            Callback function to call after query
+ * @param   {Boolean}   [noExistsCheck] If data is not found, skip error
+ */
+exports.getSprint = function(where, next, noExistsCheck) {
+    noExistsCheck = noExistsCheck || false;
+
+    Sprint
+        .findOne(where)
+        .exec(function(error, /** sails.model.sprint */ sprint) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch sprint data]");
+                sails.log.error(error);
+            } else if (!sprint && !noExistsCheck) {
+                error = new Error();
+
+                error.message = "Sprint not found.";
+                error.status = 404;
+            }
+
+            next(error, sprint);
         });
 };
 
 /**
  * Service to fetch sprint data from database.
  *
- * @param   {{}}        where       Used query conditions
- * @param   {Function}  callback    Callback function to call after query
+ * @param   {{}}        where   Used query conditions
+ * @param   {Function}  next    Callback function to call after query
  */
-exports.getSprints = function(where, callback) {
+exports.getSprints = function(where, next) {
     Sprint
         .find()
         .where(where)
         .sort("dateStart ASC")
-        .done(function(error, sprints) {
+        .sort("dateEnd ASC")
+        .sort("title ASC")
+        .exec(function(error, /** sails.model.sprint[] */ sprints) {
             if (error) {
-                callback(error, null);
-            } else {
-                callback(null, sprints);
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch sprint data]");
+                sails.log.error(error);
             }
+
+            next(error, sprints);
+        });
+};
+
+/**
+ * Service to fetch sprint exclude day objects from database.
+ *
+ * @param   {Number}    sprintId    Sprint ID
+ * @param   {Function}  next        Callback function to call after query
+ */
+exports.getSprintExcludeDays = function(sprintId, next) {
+    ExcludeSprintDay
+        .find()
+        .where({sprintId: sprintId})
+        .sort("day ASC")
+        .exec(function(error, /** sails.model.excludeSprintDay[] */ excludeSprintDay) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch sprint exclude day data]");
+                sails.log.error(error);
+            }
+
+            next(error, excludeSprintDay);
+        });
+};
+
+/**
+ * Service to fetch single milestone data from database.
+ *
+ * @param   {Number|{}} where           Used query conditions
+ * @param   {Function}  next            Callback function to call after query
+ * @param   {Boolean}   [noExistsCheck] If data is not found, skip error
+ */
+exports.getMilestone = function(where, next, noExistsCheck) {
+    noExistsCheck = noExistsCheck || false;
+
+    Milestone
+        .findOne(where)
+        .exec(function(error, /** sails.model.milestone */ milestone) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch milestone data]");
+                sails.log.error(error);
+            } else if (!milestone && !noExistsCheck) {
+                error = new Error();
+
+                error.message = "Milestone not found.";
+                error.status = 404;
+            }
+
+            next(error, milestone);
+        });
+};
+
+/**
+ * Service to fetch milestone data from database.
+ *
+ * @param   {{}}        where   Used query conditions
+ * @param   {Function}  next    Callback function to call after query
+ */
+exports.getMilestones = function(where, next) {
+    Milestone
+        .find()
+        .where(where)
+        .sort("deadline ASC")
+        .sort("title ASC")
+        .exec(function(error, /** sails.model.milestone[] */  milestones) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch milestone data]");
+                sails.log.error(error);
+            }
+
+            next(error, milestones);
+        });
+};
+
+/**
+ * Service to fetch single story data from database.
+ *
+ * @param   {Number|{}} where           Used query conditions
+ * @param   {Function}  next            Callback function to call after query
+ * @param   {Boolean}   [noExistsCheck] If data is not found, skip error
+ */
+exports.getStory = function(where, next, noExistsCheck) {
+    noExistsCheck = noExistsCheck || false;
+
+    Story
+        .findOne(where)
+        .exec(function(error, /** sails.model.story */ story) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch story data]");
+                sails.log.error(error);
+            } else if (!story && !noExistsCheck) {
+                error = new Error();
+
+                error.message = "Story not found.";
+                error.status = 404;
+            }
+
+            next(error, story);
         });
 };
 
 /**
  * Service to fetch story data from database.
  *
- * @param   {{}}        where       Used query conditions
- * @param   {Function}  callback    Callback function to call after query
+ * @param   {{}}        where   Used query conditions
+ * @param   {Function}  next    Callback function to call after query
  */
-exports.getStories = function(where, callback) {
+exports.getStories = function(where, next) {
     Story
         .find()
         .where(where)
         .sort("priority ASC")
         .sort("title ASC")
-        .done(function(error, stories) {
+        .exec(function(error, /** sails.model.story[] */ stories) {
             if (error) {
-                callback(error, null);
-            } else {
-                callback(null, stories);
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch story data]");
+                sails.log.error(error);
             }
+
+            next(error, stories);
+        });
+};
+
+/**
+ * Service to fetch single task data from database.
+ *
+ * @param   {Number|{}} where           Used query conditions
+ * @param   {Function}  next            Callback function to call after query
+ * @param   {Boolean}   [noExistsCheck] If data is not found, skip error
+ */
+exports.getTask = function(where, next, noExistsCheck) {
+    noExistsCheck = noExistsCheck || false;
+
+    Task
+        .findOne(where)
+        .exec(function(error, /** sails.model.task */ task) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch task data]");
+                sails.log.error(error);
+            } else if (!task && !noExistsCheck) {
+                error = new Error();
+
+                error.message = "Task not found.";
+                error.status = 404;
+            }
+
+            next(error, task);
         });
 };
 
 /**
  * Service to fetch task data from database.
  *
- * @param   {{}}        where       Used query conditions
- * @param   {Function}  callback    Callback function to call after query
+ * @param   {{}}        where   Used query conditions
+ * @param   {Function}  next    Callback function to call after query
  */
-exports.getTasks = function(where, callback) {
+exports.getTasks = function(where, next) {
     Task
         .find()
         .where(where)
         .sort("priority ASC")
-        .done(function(error, tasks) {
+        .sort("title ASC")
+        .exec(function(error, /** sails.model.task[] */ tasks) {
             if (error) {
-                callback(error, null);
-            } else {
-                callback(null, tasks);
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch task data]");
+                sails.log.error(error);
             }
+
+            next(error, tasks);
+        });
+};
+
+/**
+ * Service to fetch single phase data from database.
+ *
+ * @param   {Number|{}} where           Used query conditions
+ * @param   {Function}  next            Callback function to call after query
+ * @param   {Boolean}   [noExistsCheck] If data is not found, skip error
+ */
+exports.getPhase = function(where, next, noExistsCheck) {
+    noExistsCheck = noExistsCheck || false;
+
+    Phase
+        .findOne(where)
+        .exec(function(error, /** sails.model.phase */ phase) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch phase data]");
+                sails.log.error(error);
+            } else if (!phase && !noExistsCheck) {
+                error = new Error();
+
+                error.message = "Phase not found.";
+                error.status = 404;
+            }
+
+            next(error, phase);
         });
 };
 
 /**
  * Service to fetch phase data from database.
  *
- * @param   {{}}        where       Used query conditions
- * @param   {Function}  callback    Callback function to call after query
+ * @param   {{}}        where   Used query conditions
+ * @param   {Function}  next    Callback function to call after query
  */
-exports.getPhases = function(where, callback) {
+exports.getPhases = function(where, next) {
     Phase
         .find()
         .where(where)
         .sort("order ASC")
-        .done(function(error, phases) {
+        .exec(function(error, /** sails.model.phase[] */ phases) {
             if (error) {
-                callback(error, null);
-            } else {
-                callback(null, phases);
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch phase data]");
+                sails.log.error(error);
             }
+
+            next(error, phases);
         });
 };
 
@@ -396,45 +552,407 @@ exports.getPhasesForTask = function(taskId, next) {
         /**
          * Main callback function which is called after all jobs are done and processed.
          *
-         * @param   {Error|null}            error
-         * @param   {sails.model.phase[]}   data
+         * @param   {null|Error}            error   Possible error
+         * @param   {sails.model.phase[]}   phases  Determined phases for task
          */
-        function (error, data) {
-            next(error, data);
+        function(error, phases) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch phases for task, check errors above]");
+            }
+
+            next(error, phases);
         }
     );
 };
 
 /**
+ * Service to fetch single comment from database. Note that this won't fetch comment
+ * siblings nor author data
+ *
+ * @param   {Number|{}} where           Used query conditions
+ * @param   {Function}  next            Callback function to call after query
+ * @param   {Boolean}   [noExistsCheck] If data is not found, skip error
+ */
+exports.getComment = function(where, next, noExistsCheck) {
+    noExistsCheck = noExistsCheck || false;
+
+    Comment
+        .findOne(where)
+        .exec(function(error, /** sails.model.comment */ comment) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch comment data]");
+                sails.log.error(error);
+            } else if (!comment && !noExistsCheck) {
+                error = new Error();
+
+                error.message = "Comment not found.";
+                error.status = 404;
+            }
+
+            next(error, comment);
+        });
+};
+
+/**
+ * Service to fetch comments for specified object. Note that service calls itself recursive to
+ * fetch all nested comments. Note that service fetches all users for performance reasons so we
+ * don't have to make n single user queries to database.
+ *
+ * @param   {String}                objectName  Name of the object (Project, Sprint, Story, Task, etc.)
+ * @param   {Number}                objectId    Id of the specified object
+ * @param   {Number}                commentId   Possible parent comment id
+ * @param   {Function}              next        Callback function which is called after comments are fetched
+ * @param   {sails.model.user[]}    [users]     User objects or empty array
+ */
+exports.getComments = function(objectName, objectId, commentId, next, users) {
+    users = users || false;
+
+    async.parallel(
+        {
+            // Fetch comments
+            comments: function(callback) {
+                Comment
+                    .find()
+                    .where({
+                        objectName: objectName,
+                        objectId: objectId,
+                        commentId: commentId
+                    })
+                    .sort("createdAt ASC")
+                    .exec(function(error, /** sails.model.comment[] */ comments) {
+                        callback(error, comments);
+                    });
+            },
+
+            // Fetch users, note this is done only with first iteration
+            users: function(callback) {
+                if (users) {
+                    callback(null, users);
+                } else {
+                    DataService.getUsers({}, callback);
+                }
+            }
+        },
+
+        /**
+         * Main callback function which is called after all parallel jobs are done or
+         * an error has occurred within those.
+         *
+         * @param   {null|Error}    error
+         * @param   {{
+         *              comments: sails.model.comment[],
+         *              users: sails.model.user[]
+         *          }}              data
+         */
+        function(error, data) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch comment data]");
+                sails.log.error(error);
+
+                next(error, null);
+            } else {
+                fetchSiblingsAndAttachUsers(data);
+            }
+        }
+    );
+
+    /**
+     * Private helper function to attach user object to each comment and fetch
+     * siblings by calling service method itself with current comment data.
+     *
+     * @param   {{
+     *              comments: sails.model.comment[],
+     *              users: sails.model.user[]
+     *          }}  data
+     */
+    function fetchSiblingsAndAttachUsers(data) {
+        async.map(
+            data.comments,
+
+            /**
+             * Iterator function which will attach user object to processed link object. Users
+             * are simply searched from user array which is fetched in main async parallel call.
+             *
+             * @param   {sails.model.comment}   comment     Comment object
+             * @param   {Function}              callback    Callback function to call after job is done.
+             */
+            function(comment, callback) {
+                comment.author = _.find(data.users, function(user) {
+                    return user.id === comment.createdUserId;
+                });
+
+                // Call service itself recursive, note that we pass the users to service
+                DataService.getComments(objectName, objectId, comment.id, function(error, comments) {
+                    if (!error) {
+                        comment.comments = comments;
+                    }
+
+                    callback(error, comment);
+                }, data.users);
+            },
+
+            /**
+             * Main callback function which is called after all links are mapped. In this
+             * comments contains author and siblings data.
+             *
+             * @param   {null|Error}            error   Possible error
+             * @param   {sails.model.comment[]} comment Processed comments
+             */
+            function(error, comment) {
+                if (error) {
+                    sails.log.error(__filename + ":" + __line + " [Failed to fetch comment sibling data]");
+                    sails.log.error(error);
+                }
+
+                next(error, comment);
+            }
+        );
+    }
+};
+
+/**
+ * Service to fetch single task type data from database.
+ *
+ * @param   {Number|{}} where           Used query conditions
+ * @param   {Function}  next            Callback function to call after query
+ * @param   {Boolean}   [noExistsCheck] If data is not found, skip error
+ */
+exports.getType = function(where, next, noExistsCheck) {
+    noExistsCheck = noExistsCheck || false;
+
+    Type
+        .findOne(where)
+        .exec(function(error, /** sails.model.type */ type) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch type data]");
+                sails.log.error(error);
+            } else if (!type && !noExistsCheck) {
+                error = new Error();
+
+                error.message = "Task type not found.";
+                error.status = 404;
+            }
+
+            next(error, type);
+        });
+};
+
+/**
+ * Service to fetch type data from database.
+ *
+ * @param   {{}}        where   Used query conditions
+ * @param   {Function}  next    Callback function to call after query
+ */
+exports.getTypes = function(where, next) {
+    Type
+        .find()
+        .where(where)
+        .sort("order ASC")
+        .sort("title ASC")
+        .exec(function(error, /** sails.model.type[] */ types) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch type data]");
+                sails.log.error(error);
+            }
+
+            next(error, types);
+        });
+};
+
+/**
+ * Service to fetch single link object from database.
+ *
+ * @param   {Number|{}} where           Used query conditions
+ * @param   {Function}  next            Callback function to call after query
+ * @param   {Boolean}   [noExistsCheck] If data is not found, skip error
+ */
+exports.getLink = function(where, next, noExistsCheck) {
+    noExistsCheck = noExistsCheck || false;
+
+    Link
+        .findOne(where)
+        .exec(function(error, /** sails.model.link */ link) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch link data]");
+                sails.log.error(error);
+            } else if (!link && !noExistsCheck) {
+                error = new Error();
+
+                error.message = "Link not found.";
+                error.status = 404;
+            }
+
+            next(error, link);
+        });
+};
+
+/**
+ * Service to fetch attached links for specified object. For performance reasons service
+ * will simply fetch all users from database and then map those to actual links. This will
+ * save a whole lot queries to database.
+ *
+ * @param   {String}    objectName  Name of the object (Story, Task, etc.)
+ * @param   {Number}    objectId    Id of the specified object
+ * @param   {Function}  next        Callback function which is called after links are fetched
+ */
+exports.getLinks = function(objectName, objectId, next) {
+    async.parallel(
+        {
+            // Fetch links
+            links: function(callback) {
+                Link
+                    .find()
+                    .where({
+                        objectName: objectName,
+                        objectId: objectId
+                    })
+                    .sort("link ASC")
+                    .sort("createdAt ASC")
+                    .exec(function(error, /** sails.model.link[] */ links) {
+                        callback(error, links);
+                    });
+            },
+
+            // Fetch users
+            users: function(callback) {
+                DataService.getUsers({}, callback);
+            }
+        },
+
+        /**
+         * Main callback which is called after all parallel jobs are done or an
+         * error has occurred while processing those.
+         *
+         * @param   {null|Error}    error
+         * @param   {{
+         *              links: sails.model.link[],
+         *              users: sails.model.user[]
+         *          }}              data
+         */
+        function(error, data) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch link data]");
+                sails.log.error(error);
+
+                next(error, null);
+            } else {
+                attachUsers(data);
+            }
+        }
+    );
+
+    /**
+     * Private helper function to attach user data to each link. This is much faster than
+     * fetching user data for each link separately.
+     *
+     * After we have added author (user) data to each link function will call callback
+     * function that has been provided to service.
+     *
+     * @param   {{
+     *              links: sails.model.link[],
+     *              users: sails.model.user[]
+     *          }}  data
+     */
+    function attachUsers(data) {
+        async.map(
+            data.links,
+
+            /**
+             * Iterator function which will attach user object to processed link object. Users
+             * are simply searched from user array which is fetched in main async parallel call.
+             *
+             * @param   {sails.model.link}  link        Link object
+             * @param   {Function}          callback    Callback function to call after job is done.
+             */
+            function(link, callback) {
+                link.author = _.find(data.users, function(user) {
+                    return user.id === link.createdUserId;
+                });
+
+                callback(null, link);
+            },
+
+            /**
+             * Main callback function which is called after all links are mapped.
+             *
+             * @param   {null}                  error   In this case error is always null
+             * @param   {sails.model.link[]}    links   Processed links
+             */
+            function(error, links) {
+                next(error, links);
+            }
+        )
+    }
+};
+
+/**
+ * Service to fetch single user data from database.
+ *
+ * @param   {Number|{}} where           Used query conditions
+ * @param   {Function}  next            Callback function to call after query
+ * @param   {Boolean}   [noExistsCheck] If data is not found, skip error
+ */
+exports.getUser = function(where, next, noExistsCheck) {
+    noExistsCheck = noExistsCheck || false;
+
+    User
+        .findOne(where)
+        .exec(function(error, /** sails.model.user */ user) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch user data]");
+                sails.log.error(error);
+            } else if (!user && !noExistsCheck) {
+                error = new Error();
+
+                error.message = "User not found.";
+                error.status = 404;
+            }
+
+            next(error, user);
+        });
+};
+
+/**
+ * Service to fetch specified user sign in data from database.
+ *
+ * @param   {Number}    userId  User id
+ * @param   {Function}  next    Callback function to call after query
+ */
+exports.getUserSignInData = function(userId, next) {
+    UserLogin
+        .find()
+        .where({userId: userId})
+        .sort("stamp DESC")
+        .exec(function(error, /** sails.model.userLogin[] */ userLogin) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch user login data]");
+                sails.log.error(error);
+            }
+
+            next(error, userLogin);
+        });
+};
+
+/**
  * Service to fetch user data from database.
  *
- * @param   {{}}        where       Used query conditions
- * @param   {Function}  callback    Callback function to call after query
+ * @param   {{}}        where   Used query conditions
+ * @param   {Function}  next    Callback function to call after query
  */
-exports.getUsers = function(where, callback) {
+exports.getUsers = function(where, next) {
     User
         .find()
         .where(where)
         .sort("lastName ASC")
         .sort("firstName ASC")
         .sort("username ASC")
-        .done(function(error, users) {
-            callback(error, users);
-        });
-};
+        .exec(function(error, users) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch user data]");
+                sails.log.error(error);
+            }
 
-/**
- * Service to fetch project users from database by given conditions.
- *
- * @param   {{}}        where       Used query conditions
- * @param   {Function}  callback    Callback function to after query
- */
-exports.getProjectUsers = function(where, callback) {
-    ProjectUser
-        .find()
-        .where(where)
-        .exec(function(error, /** sails.json.projectUser */projectUsers) {
-            callback(error, projectUsers);
+            next(error, users);
         });
 };
 
@@ -483,6 +1001,9 @@ exports.getUsersByProject = function(projectId, next, noViewers) {
          */
         function(error, data) {
             if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch project users data, see errors above]");
+                sails.log.error(error);
+
                 next(error, null);
             } else {
                 var userIds = [];
@@ -544,373 +1065,13 @@ exports.getUsersByTask = function(taskId, next, noViewers) {
          */
         function(error, story) {
             if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch project users by task, see errors above]");
+                sails.log.error(error);
+
                 next(error, null);
             } else {
                 DataService.getUsersByProject(story.projectId, next, noViewers);
             }
         }
     )
-};
-
-/**
- * Service to fetch single type data from database.
- *
- * @param   {Number}    typeId      Type id to fetch
- * @param   {Function}  callback    Callback function to call after query
- */
-exports.getType = function(typeId, callback) {
-    Type
-        .findOne(typeId)
-        .done(function(error, /** sails.model.type */ type) {
-            if (error) {
-                callback(error, null);
-            } else if (!type) {
-                var errorMessage = new Error();
-
-                errorMessage.message = "Task type not found.";
-                errorMessage.status = 404;
-
-                callback(errorMessage, null);
-            } else {
-                callback(null, type);
-            }
-        });
-};
-
-/**
- * Service to fetch type data from database.
- *
- * @param   {{}}        where       Used query conditions
- * @param   {Function}  callback    Callback function to call after query
- */
-exports.getTypes = function(where, callback) {
-    Type
-        .find()
-        .where(where)
-        .sort("order ASC")
-        .done(function(error, types) {
-            if (error) {
-                callback(error, null);
-            } else {
-                callback(null, types);
-            }
-        });
-};
-
-/**
- * Service to fetch specified user sign in data from database.
- *
- * @param   {Number}    userId      User id
- * @param   {Function}  callback    Callback function to call after query
- */
-exports.getUserSignInData = function(userId, callback) {
-    UserLogin
-        .find()
-        .where({userId: userId})
-        .sort("stamp DESC")
-        .done(function(error, data) {
-            if (error) {
-                callback(error, null);
-            } else {
-                callback(null, data);
-            }
-        });
-};
-
-/**
- * Service to fetch comments for specified object. Note that service calls itself
- * recursive to fetch all nested comments.
- *
- * @param   {String}    objectName  Name of the object (Project, Sprint, Story, Task, etc.)
- * @param   {Number}    objectId    Id of the specified object
- * @param   {Number}    commentId   Possible parent comment id
- * @param   {Function}  callback    Callback function which is called after comments are fetched
- */
-exports.getComments = function(objectName, objectId, commentId, callback) {
-    Comment
-        .find()
-        .where({
-            objectName: objectName,
-            objectId: objectId,
-            commentId: commentId
-        })
-        .sort("createdAt ASC")
-        .exec(function(error, comments) {
-            if (error) {
-                callback(error, null);
-            } else {
-                // Map all comments and fetch children(s) for those
-                async.map(
-                    comments,
-
-                    /**
-                     * Map function to fetch current comment children comments. Note that
-                     * this will actually call service method recursively.
-                     *
-                     * @param   {sails.model.comment}   comment Comment object
-                     * @param   {Function}              callback      Callback function
-                     */
-                    function(comment, callback) {
-                        async.parallel(
-                            {
-                                // Fetch comment author data
-                                author: function(callback) {
-                                    DataService.getUser(comment.createdUserId, callback);
-                                },
-
-                                // Fetch children comments
-                                comments: function(callback) {
-                                    DataService.getComments(objectName, objectId, comment.id, callback);
-                                }
-                            },
-
-                            /**
-                             * Main callback function which is called after parallel jobs are done.
-                             *
-                             * @param   {Error|null}    error
-                             * @param   {{}}            results
-                             */
-                            function(error, results) {
-                                if (error) {
-                                    callback(error, null);
-                                } else {
-                                    comment.author = results.author;
-                                    comment.comments = results.comments;
-
-                                    callback(null, results);
-                                }
-                            }
-                        );
-                    },
-
-                    /**
-                     * Main callback function for comment mapping.
-                     *
-                     * @param   {Error} error   Possible error object
-                     */
-                    function(error) {
-                        // Just call specified service callback function
-                        callback(error, comments);
-                    }
-                );
-            }
-        });
-};
-
-/**
- * Service to fetch attached links for specified object.
- *
- * @param   {String}    objectName  Name of the object (Project, Sprint, Story, Task, etc.)
- * @param   {Number}    objectId    Id of the specified object
- * @param   {Function}  callback    Callback function which is called after comments are fetched
- */
-exports.getLinks = function(objectName, objectId, callback) {
-    Link
-        .find()
-        .where({
-            objectName: objectName,
-            objectId: objectId
-        })
-        .sort("link ASC")
-        .exec(function(error, links) {
-            if (error) {
-                callback(error, null);
-            } else {
-                // Map all comments and fetch children(s) for those
-                async.map(
-                    links,
-
-                    /**
-                     * Map function to fetch current comment children comments. Note that
-                     * this will actually call service method recursively.
-                     *
-                     * @param   {sails.model.link}  link        Link object
-                     * @param   {Function}          callback    Callback function
-                     */
-                    function(link, callback) {
-                        DataService.getUser(link.createdUserId, function(error, user) {
-                            if (error) {
-                                callback(error, null);
-                            } else {
-                                link.author = user;
-
-                                callback(null, link);
-                            }
-                        });
-                    },
-
-                    /**
-                     * Main callback function for object link mapping.
-                     *
-                     * @param   {Error} error   Possible error object
-                     */
-                    function(error) {
-                        // Just call specified service callback function
-                        callback(error, links);
-                    }
-                );
-            }
-    });
-};
-
-/**
- * Service to fetch specified project external link data from database.
- *
- * @param   {Number}    projectId   Project id
- * @param   {Function}  callback    Callback function to call after query
- */
-exports.getProjectLinks = function(projectId, callback) {
-    ExternalLink
-        .find()
-        .where({
-            projectId: projectId
-        })
-        .sort("title ASC")
-        .exec(function(error, links) {
-            callback(error, links);
-        });
-};
-
-/**
- * Service to fetch single link object from database.
- *
- * @param   {Number}    linkId      Link id
- * @param   {Function}  callback    Callback function to call after query
- */
-exports.getLink = function(linkId, callback) {
-    Link
-        .findOne(linkId)
-        .exec(function(error, /** sails.model.link */ link) {
-            if (error) {
-                callback(error, null);
-            } else if (!link) {
-                var errorMessage = new Error();
-
-                errorMessage.message = "Link not found.";
-                errorMessage.status = 404;
-
-                callback(errorMessage, null);
-            } else {
-                callback(null, link);
-            }
-        });
-};
-
-/**
- * Service to fetch project object that belongs to specified object (name + id). Basically service this
- * just fetches necessary data by specified object and process it until we have project.
- *
- * Note that this only support following objects at this time:
- *  - Story
- *  - Task
- *
- * @param   {String}    objectName  Name of the object
- * @param   {Number}    objectId    Object id
- * @param   {Function}  callback
- */
-exports.getLinkObjectProject = function(objectName, objectId, callback) {
-    // Make necessary jobs as waterfall
-    async.waterfall(
-        [
-            /**
-             * First job in main water fall jobs. With this we will determine project id by
-             * specified object. Actual determination is done in separate processes which
-             * uses own async water fall jobs to determine project id.
-             *
-             * @param   {Function}  next
-             */
-            function(next) {
-                switch (objectName) {
-                    case "Story":
-                        // In case of story we just needed to fetch story data
-                        DataService.getStory(objectId, function(error, story) {
-                            next(error, story.projectId ? story.projectId : null);
-                        });
-                        break;
-                    case "Task":
-                        // With task we need to get actual task object and then story object
-                        async.waterfall(
-                            [
-                                /**
-                                 * Fetch task object.
-                                 *
-                                 * @param   {Function}  cb
-                                 */
-                                function(cb) {
-                                    DataService.getTask(objectId, cb);
-                                },
-
-                                /**
-                                 * Fetch story object via task object.
-                                 *
-                                 * @param   {sails.model.task}  task
-                                 * @param   {Function}          cb
-                                 */
-                                function(task, cb) {
-                                    DataService.getStory(task.storyId, function(error, story) {
-                                        cb(error, story.projectId ? story.projectId : null);
-                                    });
-                                }
-                            ],
-
-                            /**
-                             * Task specified water fall callback function which is called after we have
-                             * determined project id via task data or some error has been occurred.
-                             *
-                             * This will call main water fall async job callback function.
-                             *
-                             * Yo dawg, i herd like y ar doing callbacks in your callbacks!
-                             *
-                             * @param   {null|Error}    error
-                             * @param   {null|Number}   projectId
-                             */
-                            function(error, projectId) {
-                                next(error, projectId)
-                            }
-                        );
-                        break;
-                    default:
-                        next("Not supported link object '" + objectName + "' given", null);
-                        break;
-                }
-            },
-
-            /**
-             * Callback function to fetch actual project object, this is called after we have
-             * determined project id from specified object.
-             *
-             * @param   {Number}    projectId   Project id
-             * @param   {Function}  next
-             */
-            function(projectId, next) {
-                DataService.getProject(projectId, next);
-            }
-        ],
-
-        /**
-         * Main callback which is call after all main water fall jobs are done
-         *
-         * @param   {null|Error}                error
-         * @param   {null|sails.model.project}  project
-         */
-        function(error, project) {
-            callback(error, project);
-        }
-    )
-};
-
-/**
- * Service to fetch sprint exclude day objects from database.
- *
- * @param   {Number}    sprintId    Sprint ID
- * @param   {Function}  callback
- */
-exports.getSprintExcludeDays = function(sprintId, callback) {
-    ExcludeSprintDay
-        .find()
-        .where({sprintId: sprintId})
-        .sort("day ASC")
-        .exec(function(error, data) {
-            callback(error, data);
-        });
 };

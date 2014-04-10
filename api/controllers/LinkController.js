@@ -44,7 +44,7 @@ module.exports = {
                  * @param   {Function}  callback
                  */
                 function(callback) {
-                    DataService.getLinkObjectProject(objectName, objectId, callback);
+                    DataService.getProjectByLink(objectName, objectId, callback);
                 },
 
                 /**
