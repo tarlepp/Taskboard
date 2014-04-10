@@ -42,8 +42,6 @@ exports.getProject = function(where, next, noExistsCheck) {
                 error.status = 404;
             }
 
-
-
             next(error, project);
         });
 };
