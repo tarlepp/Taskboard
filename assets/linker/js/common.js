@@ -282,23 +282,6 @@ function eraseCookie(name) {
 }
 
 /**
- * Method converts UTC date object to local date object
- *
- * @param   {Date}  date
- *
- * @returns {Date}
- */
-function convertUTCDateToLocalDate(date) {
-    var newDate = new Date(date.getTime());
-    var offset = date.getTimezoneOffset() / 60;
-    var hours = date.getHours();
-
-    newDate.setHours(hours - offset);
-
-    return newDate;
-}
-
-/**
  * Function fetches CSRF token from sails.js server for AJAX and socket
  * requests. Token is fetched from server via simple request, note that
  * this call is not async.
