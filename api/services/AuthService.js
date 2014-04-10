@@ -1,8 +1,14 @@
 /**
  * /api/services/AuthService.js
  *
- * Generic auth service, which is used to check .
+ * Generic auth service, which is used to check if user has access to asked object or which role
+ * he / she is attached to that object.
+ *
+ * Basically all service methods uses finally either 'hasProjectAccess' or 'hasProjectAdmin' methods
+ * to determine actual access to asked object.
  */
+"use strict";
+
 var async = require("async");
 
 /**
@@ -17,6 +23,9 @@ var async = require("async");
  *   1      = User
  *   false  = No access
  *
+ * This is the main auth method that all other methods will use to determine if user has access or
+ * not to specified object.
+ *
  * @param   {sails.req.user}    user            Signed in user object
  * @param   {Number}            projectId       Project id to check
  * @param   {Function}          next            Main callback function, which is called after checks
@@ -28,100 +37,61 @@ exports.hasProjectAccess = function(user, projectId, next, returnRole) {
     /**
      * Make parallel jobs to determine if user has access to specified project or not.
      *
-     *  1)  Fetch project data (check that project exists)
-     *  2)  Fetch project primary manager data (project id + current user id)
-     *  3)  Fetch project contributor data (project id + current user id)
+     *  1)  Fetch project data (check that project exists, this will contain also manager data)
+     *  2)  Fetch project contributor data (project id + current user id)
      *
-     * In other words we need basically check if user is
+     * In other words we need basically make following checks:
      *
-     *  a) primary project manager
-     *  b) attached to project in some role
+     *  a) project exists
+     *  b) user is primary project manager
+     *  c) user is attached to project in some role
      *
-     * If current user is either of these provided next callback is called by false.
+     * If current user is none of those provided callback function is called by false.
      *
      * Note that administrator users have always access to all existing projects.
      */
     async.parallel(
         {
-            /**
-             * Check that specified project exists.
-             *
-             * @param   {Function}  callback
-             */
+            // Fetch project data, this is needed to check that project exists.
             project: function(callback) {
                 DataService.getProject(projectId, callback);
             },
 
-            /**
-             * Function to fetch possible Project object for signed in user and specified project.
-             * User must be project manager.
-             *
-             * Note that this query may return undefined.
-             *
-             * @param   {Function}  callback
-             */
-            primary: function(callback) {
-                Project
-                    .findOne({
-                        id: projectId,
-                        managerId: user.id
-                    })
-                    .done(function(error, /** sails.model.project */project) {
-                        if (error) {
-                            callback(error, null);
-                        } else {
-                            callback(null, project)
-                        }
-                    });
-            },
-
-            /**
-             * Function to fetch possible ProjectUser object for signed in user and specified project.
-             *
-             * Note that this query may return undefined.
-             *
-             * @param   {Function}  callback
-             */
+            // Fetch project user data for current project and user
             contributor: function(callback) {
-                ProjectUser
-                    .findOne({
-                        projectId: projectId,
-                        userId: user.id
-                    })
-                    .done(function(error, /** sails.model.projectUser */projectUser) {
-                        if (error) {
-                            callback(error, null);
-                        } else {
-                            callback(null, projectUser)
-                        }
-                    });
+                DataService.getProjectUser({projectId: projectId, userId: user.id}, callback);
             }
         },
 
         /**
          * Callback function which is been called after all parallel jobs are processed.
          *
-         * @param   {Error|string}  error
-         * @param   {{}}            results
+         * @param   {null|Error}  error
+         * @param   {{
+         *              project: sails.model.project,
+         *              contributor: sails.model.projectUser
+         *          }}            data
          */
-        function(error, results) {
+        function(error, data) {
             var output = false;
 
-            // User is administrator, primary project manager or contributor in project
-            if (user.admin || results.primary || results.contributor) {
-                output = true
-            }
+            if (!error) {
+                // User is administrator, primary project manager or contributor in project
+                if (user.admin || data.project.managerId === user.id || data.contributor) {
+                    output = true
+                }
 
-            // We want to return role
-            if (returnRole && output) {
-                if (user.admin) {
-                    output = -3;
-                } else if (results.primary) {
-                    output = -2;
-                } else if (results.contributor) {
-                    output = results.contributor.role;
-                } else {
-                    output = false;
+                // We want to return role
+                if (returnRole && output) {
+                    if (user.admin) {
+                        output = -3;
+                    } else if (data.project.managerId === user.id) {
+                        output = -2;
+                    } else if (data.contributor) {
+                        output = data.contributor.role;
+                    } else {
+                        output = false;
+                    }
                 }
             }
 
@@ -131,7 +101,11 @@ exports.hasProjectAccess = function(user, projectId, next, returnRole) {
 };
 
 /**
- * Method checks if specified user has administrator access to specified project or not.
+ * Method checks if specified user has administrator access to specified project or not. This will
+ * simply call 'hasProjectAccess' method to fetch user role in specified project.
+ *
+ * Specified callback function (next) is always called with two parameters: error (Error object)
+ * and hasAdmin (boolean) values.
  *
  * @param   {sails.req.user}    user            Signed in user object
  * @param   {Number}            projectId       Project id to check
@@ -141,7 +115,7 @@ exports.hasProjectAdmin = function(user, projectId, next) {
     /**
      * Get user role in specified project with main right service method. User
      * has administrator rights to project if he/she is at least project manager.
-     * Basically following roles grants user administrator right to project:
+     * Basically following roles grants administrator right to project:
      *
      *  -3  = Administrator
      *  -2  = Project manager primary
@@ -150,7 +124,7 @@ exports.hasProjectAdmin = function(user, projectId, next) {
     AuthService.hasProjectAccess(user, projectId, function(error, role) {
         var output = false;
 
-        if (role !== false && role < 0) {
+        if (!error && role !== false && role < 0) {
             output = true;
         }
 
@@ -159,7 +133,9 @@ exports.hasProjectAdmin = function(user, projectId, next) {
 };
 
 /**
- * Method checks if specified user has access to specified sprint or not.
+ * Method checks if specified user has access to specified sprint or not. Service method will simply call
+ * 'hasProjectAccess' method after it is determined that sprint exists. Project id is a property of sprint
+ * object which is passed to main determination method.
  *
  * @param   {sails.req.user}    user            Signed in user object
  * @param   {Number}            sprintId        Sprint id to check
@@ -179,11 +155,7 @@ exports.hasSprintAccess = function(user, sprintId, next, returnRole) {
      */
     async.waterfall(
         [
-            /**
-             * Check that sprint exists.
-             *
-             * @param   {Function}  callback
-             */
+            // Fetch sprint data
             function(callback) {
                 DataService.getSprint(sprintId, callback);
             },
@@ -192,7 +164,7 @@ exports.hasSprintAccess = function(user, sprintId, next, returnRole) {
              * Check that user has access to sprint project.
              *
              * @param   {sails.model.sprint}    sprint      Sprint data
-             * @param   {Function}              callback
+             * @param   {Function}              callback    Callback function to call after job is done
              */
             function(sprint, callback) {
                 AuthService.hasProjectAccess(user, sprint.projectId, callback, returnRole);
@@ -202,17 +174,21 @@ exports.hasSprintAccess = function(user, sprintId, next, returnRole) {
         /**
          * Callback function which is been called after all parallel jobs are processed.
          *
-         * @param   {Error|String}  error
-         * @param   {Boolean}       results
+         * @param   {null|Error}        error   Possible error
+         * @param   {Boolean|Number}    result  Either boolean or role value (-3, -2, -1, 0, 1)
          */
-        function(error, results) {
-            next(error, results);
+        function(error, result) {
+            next(error, result);
         }
     );
 };
 
 /**
- * Method checks if specified user has admin access to specified sprint or not.
+ * Method checks if specified user has admin access to specified sprint or not. Actual check is done
+ * via 'hasSprintAccess' method.
+ *
+ * Specified callback function (next) is always called with two parameters: error (Error object)
+ * and hasAdmin (boolean) values.
  *
  * @param   {sails.req.user}    user        Signed in user object
  * @param   {Number}            sprintId    Sprint id to check
@@ -232,7 +208,7 @@ exports.hasSprintAdmin = function(user, sprintId, next) {
     AuthService.hasSprintAccess(user, sprintId, function(error, role) {
         var output = false;
 
-        if (role !== false && role < 0) {
+        if (!error && role !== false && role < 0) {
             output = true;
         }
 
@@ -241,7 +217,8 @@ exports.hasSprintAdmin = function(user, sprintId, next) {
 };
 
 /**
- * Method checks if specified user has access to specified milestone or not.
+ * Method checks if specified user has access to specified milestone or not. Actual access check
+ * is done via 'hasProjectAccess' method.
  *
  * @param   {sails.req.user}    user            Signed in user object
  * @param   {Number}            milestoneId     Milestone id to check
@@ -261,11 +238,7 @@ exports.hasMilestoneAccess = function(user, milestoneId, next, returnRole) {
      */
     async.waterfall(
         [
-            /**
-             * Check that milestone exists.
-             *
-             * @param   {Function}  callback
-             */
+            // Fetch milestone data
             function(callback) {
                 DataService.getMilestone(milestoneId, callback);
             },
@@ -274,7 +247,7 @@ exports.hasMilestoneAccess = function(user, milestoneId, next, returnRole) {
              * Check that user has access to milestone project.
              *
              * @param   {sails.model.milestone} milestone   Milestone data
-             * @param   {Function}              callback
+             * @param   {Function}              callback    Callback function to call after job is done
              */
             function(milestone, callback) {
                 AuthService.hasProjectAccess(user, milestone.projectId, callback, returnRole);
@@ -284,17 +257,21 @@ exports.hasMilestoneAccess = function(user, milestoneId, next, returnRole) {
         /**
          * Callback function which is been called after all jobs are processed.
          *
-         * @param   {Error|String}  error
-         * @param   {Boolean}       results
+         * @param   {null|Error}        error   Possible error
+         * @param   {Boolean|Number}    result  Either boolean or role value (-3, -2, -1, 0, 1)
          */
-        function(error, results) {
-            next(error, results);
+        function(error, result) {
+            next(error, result);
         }
     );
 };
 
 /**
- * Method checks if specified user has admin access to specified milestone or not.
+ * Method checks if specified user has admin access to specified milestone or not. This method
+ * uses 'hasMilestoneAccess' method to determine real data.
+ *
+ * Specified callback function (next) is always called with two parameters: error (Error object)
+ * and hasAdmin (boolean) values.
  *
  * @param   {sails.req.user}    user        Signed in user object
  * @param   {Number}            milestoneId Milestone id to check
@@ -314,7 +291,7 @@ exports.hasMilestoneAdmin = function(user, milestoneId, next) {
     AuthService.hasMilestoneAccess(user, milestoneId, function(error, role) {
         var output = false;
 
-        if (role !== false && role < 0) {
+        if (!error && role !== false && role < 0) {
             output = true;
         }
 
@@ -323,7 +300,8 @@ exports.hasMilestoneAdmin = function(user, milestoneId, next) {
 };
 
 /**
- * Method checks if specified user has access to specified story or not.
+ * Method checks if specified user has access to specified story or not. This method uses
+ * 'hasProjectAccess' method to determine actual access to specified story on taskboard.
  *
  * @param   {sails.req.user}    user            Signed in user object
  * @param   {Number}            storyId         Story id to check
@@ -341,11 +319,7 @@ exports.hasStoryAccess = function(user, storyId, next, returnRole) {
      */
     async.waterfall(
         [
-            /**
-             * Check that milestone exists.
-             *
-             * @param   {Function}  callback
-             */
+            // Fetch story data
             function(callback) {
                 DataService.getStory(storyId, callback);
             },
@@ -354,7 +328,7 @@ exports.hasStoryAccess = function(user, storyId, next, returnRole) {
              * Check that user has access to story project
              *
              * @param   {sails.model.story} story       Story data
-             * @param   {Function}          callback
+             * @param   {Function}          callback    Callback function to call after job is done
              */
             function(story, callback) {
                 AuthService.hasProjectAccess(user, story.projectId, callback, returnRole);
@@ -362,19 +336,23 @@ exports.hasStoryAccess = function(user, storyId, next, returnRole) {
         ],
 
         /**
-         * Callback function which is been called after all jobs are processed.
+         * Callback function which is been called after all waterfall jobs are processed.
          *
-         * @param   {Error|String}  error
-         * @param   {Boolean}       results
+         * @param   {null|Error}        error   Possible error
+         * @param   {Boolean|Number}    result  Either boolean or role value (-3, -2, -1, 0, 1)
          */
-        function(error, results) {
-            next(error, results);
+        function(error, result) {
+            next(error, result);
         }
     );
 };
 
 /**
- * Method checks if specified user has admin access to specified story or not.
+ * Method checks if specified user has admin access to specified story or not. This method uses
+ * 'hasStoryAccess' method to determine user role within this specified story.
+ *
+ * Specified callback function (next) is always called with two parameters: error (Error object)
+ * and hasAdmin (boolean) values.
  *
  * @param   {sails.req.user}    user    Signed in user object
  * @param   {Number}            storyId Story id to check
@@ -395,7 +373,7 @@ exports.hasStoryAdmin = function(user, storyId, next) {
     AuthService.hasStoryAccess(user, storyId, function(error, role) {
         var output = false;
 
-        if (role !== false && role !== 0) {
+        if (!error && role !== false && role !== 0) {
             output = true;
         }
 
@@ -404,7 +382,8 @@ exports.hasStoryAdmin = function(user, storyId, next) {
 };
 
 /**
- * Method checks if specified user has access to specified task or not.
+ * Method checks if specified user has access to specified task or not. This method relies to
+ * 'hasStoryAccess' method to do actual access check.
  *
  * @param   {sails.req.user}    user            Signed in user object
  * @param   {Number}            taskId          Task id to check
@@ -422,11 +401,7 @@ exports.hasTaskAccess = function(user, taskId, next, returnRole) {
      */
     async.waterfall(
         [
-            /**
-             * Check that milestone exists.
-             *
-             * @param   {Function}  callback
-             */
+            // Fetch task data
             function(callback) {
                 DataService.getTask(taskId, callback);
             },
@@ -435,7 +410,7 @@ exports.hasTaskAccess = function(user, taskId, next, returnRole) {
              * Check that user has access to task story.
              *
              * @param   {sails.model.task}  task        Task data
-             * @param   {Function}          callback
+             * @param   {Function}          callback    Callback function to call after job is done
              */
             function(task, callback) {
                 AuthService.hasStoryAccess(user, task.storyId, callback, returnRole);
@@ -445,17 +420,21 @@ exports.hasTaskAccess = function(user, taskId, next, returnRole) {
         /**
          * Callback function which is been called after all jobs are processed.
          *
-         * @param   {Error|String}  error
-         * @param   {Boolean}       results
+         * @param   {null|Error}        error   Possible error
+         * @param   {Boolean|Number}    result  Either boolean or role value (-3, -2, -1, 0, 1)
          */
-        function(error, results) {
-            next(error, results);
+        function(error, result) {
+            next(error, result);
         }
     );
 };
 
 /**
- * Method checks if specified user has admin access to specified task or not.
+ * Method checks if specified user has admin access to specified task or not. This method uses
+ * 'hasTaskAccess' method to determine user role in task project.
+ *
+ * Specified callback function (next) is always called with two parameters: error (Error object)
+ * and hasAdmin (boolean) values.
  *
  * @param   {sails.req.user}    user    Signed in user object
  * @param   {Number}            taskId  Task id to check
@@ -476,7 +455,7 @@ exports.hasTaskAdmin = function(user, taskId, next) {
     AuthService.hasTaskAccess(user, taskId, function(error, role) {
         var output = false;
 
-        if (role !== false && role !== 0) {
+        if (!error && role !== false && role !== 0) {
             output = true;
         }
 
@@ -485,7 +464,8 @@ exports.hasTaskAdmin = function(user, taskId, next) {
 };
 
 /**
- * Method checks if specified user has access to specified phase or not.
+ * Method checks if specified user has access to specified phase or not. This method uses
+ * 'hasProjectAccess' method to determine if current user has the access or not.
  *
  * @param   {sails.req.user}    user            Signed in user object
  * @param   {Number}            phaseId         Phase id to check
@@ -503,20 +483,16 @@ exports.hasPhaseAccess = function(user, phaseId, next, returnRole) {
      */
     async.waterfall(
         [
-            /**
-             * Check that phase exists.
-             *
-             * @param   {Function}  callback
-             */
+            // Fetch phase data
             function(callback) {
                 DataService.getPhase(phaseId, callback);
             },
 
             /**
-             * Check that user has access to phase project
+             * Check that user has access to project phase
              *
              * @param   {sails.model.phase} phase       Phase data
-             * @param   {Function}          callback
+             * @param   {Function}          callback    Callback function to call after job is done
              */
             function(phase, callback) {
                 AuthService.hasProjectAccess(user, phase.projectId, callback, returnRole);
@@ -526,17 +502,21 @@ exports.hasPhaseAccess = function(user, phaseId, next, returnRole) {
         /**
          * Callback function which is been called after all jobs are processed.
          *
-         * @param   {Error|String}  error
-         * @param   {Boolean}       results
+         * @param   {null|Error}        error   Possible error
+         * @param   {Boolean|Number}    result  Either boolean or role value (-3, -2, -1, 0, 1)
          */
-        function(error, results) {
-            next(error, results);
+        function(error, result) {
+            next(error, result);
         }
     );
 };
 
 /**
- * Method checks if specified user has admin access to specified phase or not.
+ * Method checks if specified user has admin access to specified phase or not. This method uses
+ * 'hasProjectAccess' method to determine user actual role within phase specified phase.
+ *
+ * Specified callback function (next) is always called with two parameters: error (Error object)
+ * and hasAdmin (boolean) values.
  *
  * @param   {sails.req.user}    user    Signed in user object
  * @param   {Number}            phaseId Phase id to check
@@ -551,20 +531,16 @@ exports.hasPhaseAdmin = function(user, phaseId, next) {
      */
     async.waterfall(
         [
-            /**
-             * Check that phase exists.
-             *
-             * @param   {Function}  callback
-             */
+            // Fetch project data
             function(callback) {
                 DataService.getPhase(phaseId, callback);
             },
 
             /**
-             * Check that user has admin access to phase project.
+             * Check that user has admin access to project phase.
              *
              * @param   {sails.model.phase} phase       Phase data
-             * @param   {Function}          callback
+             * @param   {Function}          callback    Callback function to call after job is done
              */
             function(phase, callback) {
                 AuthService.hasProjectAdmin(user, phase.projectId, callback);
@@ -574,17 +550,18 @@ exports.hasPhaseAdmin = function(user, phaseId, next) {
         /**
          * Callback function which is been called after all jobs are processed.
          *
-         * @param   {Error|String}  error
-         * @param   {Boolean}       results
+         * @param   {null|Error}    error   Possible error
+         * @param   {Boolean}       result  Information if user has admin access or not
          */
-        function(error, results) {
-            next(error, results);
+        function(error, result) {
+            next(error, result);
         }
     );
 };
 
 /**
- * Method checks if specified user has access to specified project external link or not
+ * Method checks if specified user has access to specified project external link or not. Actual
+ * check is done with 'hasProjectAccess' method.
  *
  * @param   {sails.req.user}    user            Signed in user object
  * @param   {Number}            linkId          Project external link id to check
@@ -602,20 +579,16 @@ exports.hasExternalLinkAccess = function(user, linkId, next, returnRole) {
      */
     async.waterfall(
         [
-            /**
-             * Check that phase exists.
-             *
-             * @param   {Function}  callback
-             */
+            // Get project link data
             function(callback) {
                 DataService.getProjectLink(linkId, callback);
             },
 
             /**
-             * Check that user has admin access to phase project.
+             * Check if user has access to project where link is attached
              *
              * @param   {sails.model.externalLink}  link        External link object
-             * @param   {Function}                  callback
+             * @param   {Function}                  callback    Callback function to call after job is done
              */
             function(link, callback) {
                 AuthService.hasProjectAccess(user, link.projectId, callback, returnRole);
@@ -625,17 +598,18 @@ exports.hasExternalLinkAccess = function(user, linkId, next, returnRole) {
         /**
          * Callback function which is been called after all jobs are processed.
          *
-         * @param   {Error|String}  error
-         * @param   {Boolean}       results
+         * @param   {null|Error}        error   Possible error
+         * @param   {Boolean|Number}    result  Either boolean or role value (-3, -2, -1, 0, 1)
          */
-        function(error, results) {
-            next(error, results);
+        function(error, result) {
+            next(error, result);
         }
     );
 };
 
 /**
- * Method checks if specified user has admin access to specified project external link or not
+ * Method checks if specified user has admin access to specified project external link or not.
+ * Actual check is done via 'hasProjectAdmin' method.
  *
  * @param   {sails.req.user}    user    Signed in user object
  * @param   {Number}            linkId  Project external link id to check
@@ -650,20 +624,16 @@ exports.hasExternalLinkAdmin = function(user, linkId, next) {
      */
     async.waterfall(
         [
-            /**
-             * Check that phase exists.
-             *
-             * @param   {Function}  callback
-             */
+            // Get project link data
             function(callback) {
                 DataService.getProjectLink(linkId, callback);
             },
 
             /**
-             * Check that user has admin access to phase project.
+             * Check if user has access to project where link is attached
              *
              * @param   {sails.model.externalLink}  link        External link object
-             * @param   {Function}                  callback
+             * @param   {Function}                  callback    Callback function to call after job is done
              */
             function(link, callback) {
                 AuthService.hasProjectAdmin(user, link.projectId, callback);
@@ -673,11 +643,11 @@ exports.hasExternalLinkAdmin = function(user, linkId, next) {
         /**
          * Callback function which is been called after all jobs are processed.
          *
-         * @param   {Error|String}  error
-         * @param   {Boolean}       results
+         * @param   {null|Error}    error   Possible error
+         * @param   {Boolean}       result  Has admin or not
          */
-        function(error, results) {
-            next(error, results);
+        function(error, result) {
+            next(error, result);
         }
     );
 };
