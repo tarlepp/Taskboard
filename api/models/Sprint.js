@@ -68,11 +68,11 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
         },
         dateStartObject: function() {
             return (this.dateStart && this.dateStart != "0000-00-00")
-                ? DateService.convertDateObjectToUtc(this.dateStart, true) : null;
+                ? DateService.convertDateObjectToUtc(this.dateStart) : null;
         },
         dateEndObject: function() {
             return (this.dateEnd && this.dateEnd != "0000-00-00")
-                ? DateService.convertDateObjectToUtc(this.dateEnd, true) : null;
+                ? DateService.convertDateObjectToUtc(this.dateEnd) : null;
         }
     },
 

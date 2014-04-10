@@ -1,7 +1,7 @@
 /**
  * /api/services/DateService.js
  *
- * Generic date service.
+ * Generic date service which contains helper methods for date and time handling.
  */
 "use strict";
 
@@ -9,36 +9,13 @@ var moment = require("moment-timezone");
 var fs = require("fs");
 
 /**
- * Method converts UTC date object to local date object
+ * Method converts given date object to real UTC date (actually moment) object.
  *
- * @todo    refactor this...
+ * @param   {Date}  date    Date object convert
  *
- * @param   {Date}  date
- *
- * @returns {Date}
+ * @returns {moment}
  */
-exports.convertUTCDateToLocalDate = function(date) {
-    var newDate = new Date(date.getTime());
-    var offset = date.getTimezoneOffset() / 60;
-    var hours = date.getHours();
-
-    newDate.setHours(hours - offset);
-
-    return newDate;
-};
-
-/**
- * Method converts given date object to real UTC date object. This is required
- * for moment.js library to work.
- *
- * @param   {Date}      date        Date object convert
- * @param   {Boolean}   [noTime]    Set true if you're handling only dates
- *
- * @returns {Date}
- */
-exports.convertDateObjectToUtc = function(date, noTime) {
-    noTime = noTime || false;
-
+exports.convertDateObjectToUtc = function(date) {
     return moment(date).tz("Etc/Universal");
 };
 
@@ -62,12 +39,12 @@ exports.getCurrentDateAsUtc = function() {
 
 /**
  * Method returns available timezones. Data is read from moment-timezone.json and parsed to array of
- * objects which can be used easily every where in application!
+ * objects which can be used easily everywhere in application!
  *
- * @returns {Array}
+ * @returns {[]}    Array of timezone data
  */
 exports.getTimezones = function() {
-    var timezoneData = JSON.parse(fs.readFileSync('node_modules/moment-timezone/moment-timezone.json', 'utf8'));
+    var timezoneData = JSON.parse(fs.readFileSync("node_modules/moment-timezone/moment-timezone.json", "utf8"));
     var timezones = [];
 
     _.each(timezoneData.links, function(value, key) {
@@ -77,5 +54,7 @@ exports.getTimezones = function() {
         });
     });
 
-    return _.uniq(_.sortBy(timezones, "name"), false, function(timezone) { return timezone.name; } );
+    return _.uniq(_.sortBy(timezones, "name"), false, function(timezone) {
+        return timezone.name;
+    });
 };

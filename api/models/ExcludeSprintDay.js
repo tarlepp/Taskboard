@@ -25,7 +25,7 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
         // Dynamic model data attributes
 
         dayObject: function() {
-            return DateService.convertDateObjectToUtc(this.day, true);
+            return DateService.convertDateObjectToUtc(this.day);
         }
     }
 });
