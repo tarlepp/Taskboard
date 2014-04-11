@@ -1,15 +1,16 @@
 /**
  * /api/services/HistoryService.js
  *
- * History service.
+ * History service which handles object history write / delete to database. Note that these
+ * services just "run" when
  */
+"use strict";
 
 /**
- * Method writes new history data. Note that we have to clone actual object
- * otherwise we will mess things up.
+ * Method writes new history data. Note that we have to clone actual object otherwise we will mess things up.
  *
  * @param   {String}    objectName  Name of the object eg. Task
- * @param   {Object}    object      Actual object
+ * @param   {{}}        object      Actual object data
  * @param   {String}    [message]   Extra message for history row
  * @param   {Number}    [userId]    User id of history row, if not given will user updatedUserId from objectData
  */
@@ -40,8 +41,9 @@ exports.write = function(objectName, object, message, userId) {
             userId: userId,
             message: message
         })
-        .exec(function(error, data) {
+        .exec(function(error) {
             if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to write object history data]");
                 sails.log.error(error);
             }
         });
@@ -60,8 +62,9 @@ exports.remove = function(objectName, objectId) {
             objectId: objectId,
             objectName: objectName
         })
-        .exec(function(error, data) {
+        .exec(function(error) {
             if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to remove object history data]");
                 sails.log.error(error);
             }
         });
