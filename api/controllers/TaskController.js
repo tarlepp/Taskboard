@@ -262,15 +262,20 @@ module.exports = {
          *          }}  data
          */
         function makeView(data) {
-            var totalTime = _.pluck(data.phases, "duration").reduce(function(memo, i) {
-                return memo + i;
-            });
+            var totalTime = 0;
+            var totalTimeNoFirst = 0;
 
-            var totalTimeNoFirst = _.pluck(_.reject(data.phases, function(phase) {
-                return phase.order === 0;
-            }), "duration").reduce(function(memo, i) {
-                return memo + i;
-            });
+            if (data.phases.length > 0) {
+                var temp = _.pluck(_.reject(data.phases, function(phase) {
+                    return phase.order === 0;
+                }), "duration");
+
+                if (temp.length > 0) {
+                    totalTimeNoFirst = temp.reduce(function(memo, i) {
+                        return memo + i;
+                    });
+                }
+            }
 
             data.phaseDuration = {
                 totalTime: totalTime,
