@@ -3,6 +3,7 @@
  *
  * Generic helper service, which contains a punch of methods that can be used in application.
  */
+"use strict";
 
 /**
  * Sorter function which can be used to sort given array of objects by multiple object
@@ -53,7 +54,7 @@ exports.dynamicSortMultiple = function() {
 exports.dynamicSort = function(property) {
     return function(obj1, obj2) {
         var reverse = (property.indexOf("!") === 0);
-        var comparisonValue1, comparisonValue2 = '';
+        var comparisonValue1, comparisonValue2 = "";
 
         if (reverse) {
             property = property.substr(1);
