@@ -16,6 +16,9 @@
  * @returns {*}
  */
 exports.makeError = function(error, request, response) {
+    sails.log.error(__filename + ":" + __line + " [Error triggered]");
+    sails.log.error(error);
+
     if (request.isAjax || request.isJson || request.isSocket) {
         var errorMessage = new Error();
 
