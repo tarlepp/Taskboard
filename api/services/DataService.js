@@ -564,6 +564,54 @@ exports.getPhasesForTask = function(taskId, next) {
 };
 
 /**
+ * Service to fetch single phase duration data from database.
+ *
+ * @param   {Number|{}} where           Used query conditions
+ * @param   {Function}  next            Callback function to call after query
+ * @param   {Boolean}   [noExistsCheck] If data is not found, skip error
+ */
+exports.getPhaseDuration = function(where, next, noExistsCheck) {
+    noExistsCheck = noExistsCheck || false;
+
+    PhaseDuration
+        .findOne(where)
+        .exec(function(error, /** sails.model.phaseDuration */ phaseDuration) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch phase duration data]");
+                sails.log.error(error);
+            } else if (!phaseDuration && !noExistsCheck) {
+                error = new Error();
+
+                error.message = "Phase duration not found.";
+                error.status = 404;
+            }
+
+            next(error, phaseDuration);
+        });
+};
+
+/**
+ * Service to fetch phase duration data from database.
+ *
+ * @param   {{}}        where   Used query conditions
+ * @param   {Function}  next    Callback function to call after query
+ */
+exports.getPhaseDurations = function(where, next) {
+    PhaseDuration
+        .find()
+        .where(where)
+        .sort("order ASC")
+        .exec(function(error, /** sails.model.phaseDuration[] */ phaseDurations) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch phase duration data]");
+                sails.log.error(error);
+            }
+
+            next(error, phaseDurations);
+        });
+};
+
+/**
  * Service to fetch single comment from database. Note that this won't fetch comment
  * siblings nor author data
  *
