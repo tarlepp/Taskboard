@@ -23,40 +23,29 @@ exports.write = function(task) {
      */
     async.parallel(
         {
-            /**
-             * Fetch task phase data.
-             *
-             * @param   {Function}  callback    Function to call after job is done.
-             */
+            // Fetch task phase data
             phase: function(callback) {
                 DataService.getPhase(task.phaseId, callback);
             },
 
-            /**
-             * Job to fetch latest "open" phase duration row.
-             *
-             * @param   {Function}  callback    Function to call after job is done.
-             */
+            // fetch latest "open" phase duration row.
             current: function(callback) {
-                PhaseDuration
-                    .findOne()
-                    .where({
-                        taskId: task.id,
-                        open: true
-                    })
-                    .sort("id DESC")
-                    .done(callback);
+                DataService.getPhaseDuration({taskId: task.id, open: true}, callback, true);
             }
         },
 
         /**
          * Main callback function which is called after all parallel jobs are done.
          *
-         * @param   {Error|null}    error
-         * @param   {{}}            data
+         * @param   {null|Error}    error
+         * @param   {{
+         *              phase: sails.model.phase,
+         *              current: sails.model.phaseDuration
+         *          }}              data
          */
         function(error, data) {
             if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch necessary data for phase duration service]");
                 sails.log.error(error);
             } else {
                 // We have existing row AND task phase is changed, so close existing duration row
@@ -73,8 +62,8 @@ exports.write = function(task) {
     );
 
     /**
-     * Private function to start new task duration. This will just
-     * add new row to 'PhaseDuration' table with current task data.
+     * Private function to start new task duration. This will just add new row to
+     * 'PhaseDuration' table with current task data.
      */
     function durationStart() {
         PhaseDuration
@@ -83,8 +72,9 @@ exports.write = function(task) {
                 phaseId: task.phaseId,
                 timeStart: new Date()
             })
-            .done(function(error, row) {
+            .exec(function(error) {
                 if (error) {
+                    sails.log.error(__filename + ":" + __line + " [Failed to insert new phase duration row]");
                     sails.log.error(error);
                 }
             });
@@ -93,7 +83,7 @@ exports.write = function(task) {
     /**
      * Private function to end specified task duration row.
      *
-     * @param   {{}}    current
+     * @param   {sails.model.phaseDuration} current
      */
     function durationEnd(current) {
         // Set required data for updated object
@@ -104,6 +94,7 @@ exports.write = function(task) {
         // Save object
         current.save(function(error) {
             if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to update phase duration row]");
                 sails.log.error(error);
             }
         });
@@ -118,8 +109,9 @@ exports.write = function(task) {
 exports.remove = function(where) {
     PhaseDuration
         .destroy(where)
-        .done(function(error, data) {
+        .exec(function(error) {
             if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to delete phase duration row]");
                 sails.log.error(error);
             }
         });
