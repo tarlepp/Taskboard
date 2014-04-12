@@ -57,31 +57,29 @@ exports.init = function(next) {
  * @param   {Function}  next    Callback function to call after jobs
  */
 exports.createAdmin = function(next) {
-    User
-        .findOne({username: "admin"})
-        .exec(function(error, user) {
-            if (error) {
-                next(error, null);
-            } else if (!user) {
-                // Create admin user with default data
-                User
-                    .create({
-                        username: "admin",
-                        firstName: "John",
-                        lastName: "Doe",
-                        email: "john.doe@localhost.com",
-                        admin: true,
-                        password: "taskboardisawesome",
-                        createdUserId: 1,
-                        updatedUserId: 1
-                    })
-                    .exec(function(error, user) {
-                        next(error, user);
-                    });
-            } else {
-                next(null, user);
-            }
-        });
+    DataService.getUser({username: "admin"}, function(error, user) {
+        if (error) {
+            next(error, null);
+        } else if (!user) {
+            // Create admin user with default data
+            User
+                .create({
+                    username: "admin",
+                    firstName: "John",
+                    lastName: "Doe",
+                    email: "john.doe@localhost.com",
+                    admin: true,
+                    password: "taskboardisawesome",
+                    createdUserId: 1,
+                    updatedUserId: 1
+                })
+                .exec(function(error, user) {
+                    next(error, user);
+                });
+        } else {
+            next(null, user);
+        }
+    }, true);
 };
 
 /**
@@ -90,37 +88,35 @@ exports.createAdmin = function(next) {
  * @param   {Function}  next    Callback function to call after jobs
  */
 exports.createTypes = function(next) {
-    Type
-        .find()
-        .exec(function(error, types) {
-            if (error) {
-                next(error, null);
-            } else if (_.size(types) === 0) {
-                // Specify "default" type data
-                var defaultTypes = [
-                    {title: "Task", order: "1", createdUserId: 1, updatedUserId: 1, chartColor: '#548dd4', class: "alert alert-warning", classText: "text-warning"},
-                    {title: "Test", order: "2", createdUserId: 1, updatedUserId: 1, chartColor: '#8db3e2', class: "alert alert-success", classText: "text-success"},
-                    {title: "Bug",  order: "3", createdUserId: 1, updatedUserId: 1, chartColor: '#92cddc', class: "alert alert-danger",  classText: "text-danger"}
-                ];
+    DataService.getTypes({}, function(error, types) {
+        if (error) {
+            next(error, null);
+        } else if (_.size(types) === 0) {
+            // Specify "default" type data
+            var defaultTypes = [
+                {title: "Task", order: "1", createdUserId: 1, updatedUserId: 1, chartColor: '#548dd4', class: "alert alert-warning", classText: "text-warning"},
+                {title: "Test", order: "2", createdUserId: 1, updatedUserId: 1, chartColor: '#8db3e2', class: "alert alert-success", classText: "text-success"},
+                {title: "Bug",  order: "3", createdUserId: 1, updatedUserId: 1, chartColor: '#92cddc', class: "alert alert-danger",  classText: "text-danger"}
+            ];
 
-                // Create default types and pass those to callback function
-                async.map(
-                    defaultTypes,
-                    function(type, callback) {
-                        Type
-                            .create(type)
-                            .exec(function(error, type) {
-                                callback(error, type);
-                            });
-                    },
-                    function(error, types) {
-                        next(error, types)
-                    }
-                )
-            } else {
-                next(null, types);
-            }
-        });
+            // Create default types and pass those to callback function
+            async.map(
+                defaultTypes,
+                function(type, callback) {
+                    Type
+                        .create(type)
+                        .exec(function(error, type) {
+                            callback(error, type);
+                        });
+                },
+                function(error, types) {
+                    next(error, types)
+                }
+            );
+        } else {
+            next(null, types);
+        }
+    });
 };
 
 /**
@@ -141,7 +137,7 @@ exports.initDemoProject = function(data, next) {
             },
 
             // Create phases for project
-            function (project, callback) {
+            function(project, callback) {
                 if (!project) {
                     callback(null, null, null);
                 } else {
@@ -180,22 +176,14 @@ exports.initDemoProject = function(data, next) {
         /**
          * Callback function which is been called after all specified jobs are processed.
          *
-         * @param   {Error|String}              error
-         * @param   {Null|sails.model.project}  project Project object
-         * @param   {Null|sails.model.phase[]}  phases  Phase objects as an array
-         * @param   {Null|sails.model.sprint}   sprint  Sprint object
-         * @param   {Null|sails.model.story[]}  stories Story objects as an array
-         * @param   {Null|sails.model.task[]}   tasks   Task objects as an array
+         * @param   {null|Error}            error
+         * @param   {sails.model.project}   project Project object
+         * @param   {sails.model.phase[]}   phases  Phase objects as an array
+         * @param   {sails.model.sprint}    sprint  Sprint object
+         * @param   {sails.model.story[]}   stories Story objects as an array
+         * @param   {sails.model.task[]}    tasks   Task objects as an array
          */
         function(error, project, phases, sprint, stories, tasks) {
-            var output = {
-                project: project,
-                phases: phases,
-                sprint: sprint,
-                stories: stories,
-                tasks: tasks
-            };
-
             next(error);
         }
     );
@@ -210,33 +198,31 @@ exports.initDemoProject = function(data, next) {
  * @param   {Function}  next    Callback function to call after job is finished
  */
 exports.createProject = function(data, next) {
-    Project
-        .find()
-        .exec(function(error, projects) {
-            if (error) {
-                next(error, null);
-            } else if (_.size(projects) === 0) { // No project(s) found create demo project
-                // Specify demo project data
-                var projectData = {
-                    managerId: data.admin.id,
-                    title: "Demo project",
-                    description: "This is a demo project, which is created automatic if any other projects doesn't exists yet.",
-                    dateStart: moment().format("YYYY-MM-DD"),
-                    dateEnd: moment().add("years", 1).format("YYYY-MM-DD"),
-                    createdUserId: 1,
-                    updatedUserId: 1
-                };
+    DataService.getProjects({}, function(error, projects) {
+        if (error) {
+            next(error, null);
+        } else if (_.size(projects) === 0) { // No project(s) found create demo project
+            // Specify demo project data
+            var projectData = {
+                managerId: data.admin.id,
+                title: "Demo project",
+                description: "This is a demo project, which is created automatic if any other projects doesn't exists yet.",
+                dateStart: moment().format("YYYY-MM-DD"),
+                dateEnd: moment().add("years", 1).format("YYYY-MM-DD"),
+                createdUserId: data.admin.id,
+                updatedUserId: data.admin.id
+            };
 
-                // Create demo project
-                Project
-                    .create(projectData)
-                    .exec(function(error, project) {
-                        next(error, project);
-                    });
-            } else { // Database contains projects so skip demo project init
-                next(null, null);
-            }
-        });
+            // Create demo project
+            Project
+                .create(projectData)
+                .exec(function(error, project) {
+                    next(error, project);
+                });
+        } else { // Database contains projects so skip demo project init
+            next(null, null);
+        }
+    });
 };
 
 /**
@@ -248,11 +234,11 @@ exports.createProject = function(data, next) {
 exports.createPhases = function(project, next) {
     // Specify project phase data
     var phaseData = [
-        {projectId: project.id, createdUserId: 1, updatedUserId: 1, title: "Tasks",      backgroundColor: "#c6d9f0", order: 1, tasks: 0, isDone: false},
-        {projectId: project.id, createdUserId: 1, updatedUserId: 1, title: "In process", backgroundColor: "#92cddc", order: 2, tasks: 3, isDone: false},
-        {projectId: project.id, createdUserId: 1, updatedUserId: 1, title: "To review",  backgroundColor: "#8db3e2", order: 3, tasks: 3, isDone: false},
-        {projectId: project.id, createdUserId: 1, updatedUserId: 1, title: "Reviewed",   backgroundColor: "#548dd4", order: 4, tasks: 6, isDone: false},
-        {projectId: project.id, createdUserId: 1, updatedUserId: 1, title: "Done",       backgroundColor: "#0070c0", order: 5, tasks: 0, isDone: true}
+        {projectId: project.id, createdUserId: project.managerId, updatedUserId: project.managerId, title: "Tasks",      backgroundColor: "#c6d9f0", order: 1, tasks: 0, isDone: false},
+        {projectId: project.id, createdUserId: project.managerId, updatedUserId: project.managerId, title: "In process", backgroundColor: "#92cddc", order: 2, tasks: 3, isDone: false},
+        {projectId: project.id, createdUserId: project.managerId, updatedUserId: project.managerId, title: "To review",  backgroundColor: "#8db3e2", order: 3, tasks: 3, isDone: false},
+        {projectId: project.id, createdUserId: project.managerId, updatedUserId: project.managerId, title: "Reviewed",   backgroundColor: "#548dd4", order: 4, tasks: 6, isDone: false},
+        {projectId: project.id, createdUserId: project.managerId, updatedUserId: project.managerId, title: "Done",       backgroundColor: "#0070c0", order: 5, tasks: 0, isDone: true}
     ];
 
     // Create specified phases
@@ -268,15 +254,15 @@ exports.createPhases = function(project, next) {
         function(phase, callback) {
             Phase
                 .create(phase)
-                .exec(function(error, story) {
-                    callback(error, story);
+                .exec(function(error, phase) {
+                    callback(error, phase);
                 });
         },
 
         /**
          * Main callback function which is called after all specified phases are iterated.
          *
-         * @param   {Error|null}            error
+         * @param   {null|Error}            error
          * @param   {sails.model.phase[]}   phases
          */
         function(error, phases) {
@@ -300,8 +286,8 @@ exports.createSprint = function(project, phases, next) {
         description: "This is a first sprint in demo project.",
         dateStart: moment(project.dateStart).format("YYYY-MM-DD"),
         dateEnd: moment(project.dateStart).add("days", 30).format("YYYY-MM-DD"),
-        createdUserId: 1,
-        updatedUserId: 1
+        createdUserId: project.managerId,
+        updatedUserId: project.managerId
     };
 
     // Create new sprint
@@ -338,8 +324,8 @@ exports.createStories = function(data, project, phases, sprint, next) {
             description: "This is a basic user story where you can add new tasks.",
             estimate: 5,
             priority: 1,
-            createdUserId: 1,
-            updatedUserId: 1
+            createdUserId: project.managerId,
+            updatedUserId: project.managerId
         },
         {
             projectId: project.id,
@@ -350,8 +336,8 @@ exports.createStories = function(data, project, phases, sprint, next) {
             description: "You can add new user stories to current sprint by clicking '+' button on the board header row.",
             estimate: -1,
             priority: 2,
-            createdUserId: 1,
-            updatedUserId: 1
+            createdUserId: project.managerId,
+            updatedUserId: project.managerId
         },
         {
             projectId: project.id,
@@ -362,8 +348,8 @@ exports.createStories = function(data, project, phases, sprint, next) {
             description: "This user story has no relation to any existing sprint, so it is in project backlog, where you can prioritize it.",
             estimate: 5,
             priority: 1,
-            createdUserId: 1,
-            updatedUserId: 1
+            createdUserId: project.managerId,
+            updatedUserId: project.managerId
         }
     ];
 
@@ -425,8 +411,8 @@ exports.createTasks = function(data, project, phases, sprint, stories, next) {
             typeId: typeTask.id,
             title: "Normal task",
             description: "This is a 'normal' task, which you can drag around the board.",
-            createdUserId: 1,
-            updatedUserId: 1
+            createdUserId: project.managerId,
+            updatedUserId: project.managerId
         },
         {
             storyId: storyFirst.id,
@@ -435,8 +421,8 @@ exports.createTasks = function(data, project, phases, sprint, stories, next) {
             typeId: typeTest.id,
             title: "Test task",
             description: "This is a 'test' task, usually this means writing some kind of test to this user story.",
-            createdUserId: 1,
-            updatedUserId: 1
+            createdUserId: project.managerId,
+            updatedUserId: project.managerId
         },
         {
             storyId: storyFirst.id,
@@ -445,8 +431,8 @@ exports.createTasks = function(data, project, phases, sprint, stories, next) {
             typeId: typeBug.id,
             title: "Major bug in app",
             description: "This is a 'bug' task, you can track bugs with these tasks in each user story.",
-            createdUserId: 1,
-            updatedUserId: 1
+            createdUserId: project.managerId,
+            updatedUserId: project.managerId
         }
     ];
 
