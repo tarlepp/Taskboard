@@ -38,7 +38,8 @@
                     <li>
                         <% if (changeType == 'insert') { %>
                             <% if (value.columnType == 'parent') { %>
-                                Copied object from <span class="text-info"><%= value.valueNew %></span>.
+                                Copied object from <span class="text-info"><%= value.valueNew %></span>
+                                <span class="text-small text-muted">[<%= value.valueIdNew %>]</span>.
                             <% } else if (value.columnType == 'relation' || value.columnType == 'boolean') { %>
                                 Added column <span class="text-info"><%= value.column %></span> with value
                                 <span class="text-info"><%= value.valueNew %></span>.
