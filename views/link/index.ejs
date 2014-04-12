@@ -32,9 +32,9 @@
                 <td class="text-nowrap"><%= link.author.fullName() %></td>
                 <td class="text-nowrap">
                     <span class="tooltipDiv">
-                    <%= link.createdAtObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDateTime) %>
+                    <%= link.stampObject().tz(currentUser.momentTimezone).format(currentUser.momentFormatDateTime) %>
 
-                    <%- partial("../partials/tooltip/datetime", {tooltipTitle: false, stamp: link.createdAtObject()}) %>
+                    <%- partial("../partials/tooltip/datetime", {tooltipTitle: false, stamp: link.stampObject()}) %>
                 </span>
                 </td>
             </tr>
@@ -62,18 +62,6 @@
             <input type="hidden" name="objectName" value="<%= objectName %>" />
             <input type="hidden" name="objectId" value="<%= objectId %>" />
             <input type="hidden" name="externalLinkId" value="<%= link.id %>" />
-
-            <!-- todo: do we need this?
-            <div class="form-group" style="margin-bottom: 0;">
-                <div class="col-lg-10 col-lg-offset-2">
-                <% _.each(link.parameters, function(parameter) { %>
-                    <div class="col-lg-3 text-center text-medium">
-                        <%= parameter.substr(1).replace("_", " ") %>
-                    </div>
-                <% }) %>
-                </div>
-            </div>
-            -->
 
             <div class="form-group">
                 <label class="col-lg-2 control-label"><%= link.title %></label>

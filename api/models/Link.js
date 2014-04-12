@@ -40,6 +40,17 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
         link: {
             type:       "string",
             required:   true
+        },
+        // Timestamp of the link
+        stamp: {
+            type:       "datetime"
+        },
+
+        // Dynamic model data attributes
+
+        stampObject: function() {
+            return (this.stamp && this.stamp != "0000-00-00 00:00:00")
+                ? DateService.convertDateObjectToUtc(this.stamp) : this.createdAtObject();
         }
     },
 
@@ -147,6 +158,20 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
 
             next(error);
         });
+    },
+
+    /**
+     * Before create callback.
+     *
+     * @param   {sails.model.link}  values
+     * @param   {Function}          next
+     */
+    beforeCreate: function(values, next) {
+        if (!values.stamp) {
+            values.stamp = new Date();
+        }
+
+        next();
     },
 
     /**

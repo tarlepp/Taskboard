@@ -16,9 +16,9 @@
                     <span class="text-medium tooltipDiv"
                         data-qtip-options='{ "position": { "at": "top center", "my": "bottom center" } }'
                     >
-                        <%= comment.createdAtObject().fromNow() %>
+                        <%= comment.stampObject().fromNow() %>
 
-                        <%- partial("../../partials/tooltip/datetime", {tooltipTitle: false, stamp: comment.createdAtObject()}) %>
+                        <%- partial("../../partials/tooltip/datetime", {tooltipTitle: false, stamp: comment.stampObject()}) %>
                     </span>
 
                     <span class="pull-right text-no-shadow text-small action-images">

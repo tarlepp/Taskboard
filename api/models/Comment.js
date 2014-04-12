@@ -32,10 +32,35 @@ module.exports = _.merge(_.cloneDeep(require("../services/baseModel")), {
         comment: {
             type:       "text",
             required:   true
+        },
+        // Timestamp of the comment
+        stamp: {
+            type:       "datetime"
+        },
+
+        // Dynamic model data attributes
+
+        stampObject: function() {
+            return (this.stamp && this.stamp != "0000-00-00 00:00:00")
+                ? DateService.convertDateObjectToUtc(this.stamp) : this.createdAtObject();
         }
     },
 
     // Lifecycle callbacks
+
+    /**
+     * Before create callback.
+     *
+     * @param   {sails.model.link}  values
+     * @param   {Function}          next
+     */
+    beforeCreate: function(values, next) {
+        if (!values.stamp) {
+            values.stamp = new Date();
+        }
+
+        next();
+    },
 
     /**
      * Before destroy callback, which will destroy all comment siblings.
