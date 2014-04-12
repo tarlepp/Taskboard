@@ -224,7 +224,7 @@ exports.getProjectLink = function(where, next, noExistsCheck) {
             if (error) {
                 sails.log.error(__filename + ":" + __line + " [Failed to fetch external link data]");
                 sails.log.error(error);
-            } else if (!projectUser && !noExistsCheck) {
+            } else if (!externalLink && !noExistsCheck) {
                 error = new Error();
 
                 error.message = "External link not found.";
