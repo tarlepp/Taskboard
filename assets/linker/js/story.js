@@ -396,8 +396,10 @@ function initStoryForm(modal, parameters) {
             tooltip: "hide"
         })
         .on("slide", function(sliderEvent) {
-            show.text(values[sliderEvent.value] == -1 ? "???" : values[sliderEvent.value]);
-            input.val(values[sliderEvent.value]);
+            if (values[sliderEvent.value]) {
+                show.text(values[sliderEvent.value] == -1 ? "???" : values[sliderEvent.value]);
+                input.val(values[sliderEvent.value]);
+            }
         })
     ;
 
