@@ -178,7 +178,7 @@ module.exports = {
                         // Create new story
                         Story
                             .create(story.toJSON())
-                            .done(function(error, /** sails.model.story */story) {
+                            .exec(function(error, /** sails.model.story */story) {
                                 if (error) {
                                     callback(error, null);
                                 } else  {
@@ -355,82 +355,229 @@ module.exports = {
         }
 
         /**
-         * Private function to finalize story splitting. Function will update old and new
-         * story data.
+         * Private function to finalize story splitting. This function will do following jobs:
+         *
+         *  1) Update old story data
+         *  2) Update new story data
+         *  3) Copy links of old story to new one
+         *  3) Copy comments of old story to new one
+         *
+         * All of these jobs are done parallel and after all jobs are done send response to client.
          */
         function finalizeStorySplit() {
             async.parallel(
-                [
+                {
                     // Parallel job to update old story data
-                    function (callback) {
-                        var where = {
-                            id: storyId
-                        };
-
-                        var update = {
-                            isDone: true,
-                            timeEnd: new Date()
-                        };
-
-                        // Update old story data
-                        Story
-                            .update(where, update, function(error, /** sails.model.story[] */stories) {
-                                if (error) {
-                                    callback(error);
-                                } else {
-                                    data.storyOld = stories[0];
-
-                                    // Publish update for old story object
-                                    Story.publishUpdate(storyId, data.storyOld.toJSON());
-
-                                    callback(null);
-                                }
-                            });
+                    storyOld: function (callback) {
+                        updateOldStoryData(storyId, callback);
                     },
 
                     // Parallel job to update new story data
-                    function(callback) {
-                        var timeStart = null;
+                    storyNew: function(callback) {
+                        updateNewStoryData(data.storyNew.id, callback);
+                    },
 
-                        _.each(data.tasks, function(task) {
-                            if (task.timeStart > timeStart) {
-                                timeStart = task.timeStart;
-                            }
-                        });
+                    // Job to copy attached story links to new story
+                    links: function(callback) {
+                        copyObjectLinks("Story", storyId, data.storyNew.id, callback);
+                    },
 
-                        var where = {
-                            id: data.storyNew.id
-                        };
-
-                        var update = {
-                            isDone: false,
-                            timeStart: timeStart,
-                            timeEnd: null
-                        };
-
-                        // Update new story data
-                        Story
-                            .update(where, update, function(error, /** sails.model.story[] */stories) {
-                                if (error) {
-                                    callback(error);
-                                } else {
-                                    data.storyNew = stories[0];
-
-                                    // Publish update for new story object
-                                    Story.publishUpdate(data.storyNew.id, data.storyNew.toJSON());
-
-                                    callback(null);
-                                }
-                            });
+                    // Job to copy attached story comments to new story
+                    comments: function(callback) {
+                        copyObjectComments("Story", storyId, data.storyNew.id, callback);
                     }
-                ],
+                },
 
-                function(error) {
+                function(error, results) {
                     if (error) {
                         ResponseService.makeError(error, request, response);
                     } else {
+                        data.storyNew = results.storyNew;
+                        data.storyOld = results.storyOld;
+
+                        // Publish update for old and new story object
+                        Story.publishUpdate(data.storyOld.id, data.storyOld.toJSON());
+                        Story.publishUpdate(data.storyNew.id, data.storyNew.toJSON());
+
                         response.send(data);
                     }
+                }
+            );
+        }
+
+        /**
+         * Private function to update old story data.
+         *
+         * @param   {Number}    storyId Story id to update
+         * @param   {Function}  next    Callback function to call after job is done
+         */
+        function updateOldStoryData(storyId, next) {
+            var where = {
+                id: storyId
+            };
+
+            var update = {
+                isDone: true,
+                timeEnd: new Date()
+            };
+
+            // Update old story data
+            Story
+                .update(where, update, function(error, /** sails.model.story[] */stories) {
+                    var story = null;
+
+                    if (!error && stories[0]) {
+                        story = stories[0];
+                    }
+
+                    next(error, story);
+                });
+        }
+
+        /**
+         * Private function to update new story data.
+         *
+         * @param   {Number}    storyId Story id to update
+         * @param   {Function}  next    Callback function to call after job is done
+         */
+        function updateNewStoryData(storyId, next) {
+            var timeStart = null;
+
+            if (data.tasks.length > 0) {
+                var tasks = _.filter(data.tasks, function(task) {
+                    return task.timeStartObject() !== null;
+                });
+
+                if (tasks.length > 0) {
+                    timeStart = _.min(_.pluck(tasks, "timeStart"));
+                }
+            }
+
+            var where = {
+                id: storyId
+            };
+
+            var update = {
+                isDone: false,
+                timeStart: timeStart,
+                timeEnd: null
+            };
+
+            // Update new story data
+            Story
+                .update(where, update, function(error, /** sails.model.story[] */ stories) {
+                    var story = null;
+
+                    if (!error && stories[0]) {
+                        story = stories[0];
+                    }
+
+                    next(error, story);
+                });
+        }
+
+        /**
+         * Private function to copy specified object links to new one
+         *
+         * @param   {String}    objectName      Name of the object
+         * @param   {Number}    objectId        Object id
+         * @param   {Number}    destinationId   Destination object id
+         * @param   {Function}  next            Callback function to call after copy is done
+         */
+        function copyObjectLinks(objectName, objectId, destinationId, next) {
+            DataService.getLinks(objectName, objectId, function(error, links) {
+                if (!error && links && links.length > 0) {
+                    async.map(
+                        links,
+
+                        function(link, callback) {
+                            delete link.id;
+
+                            link.objectId = destinationId;
+
+                            Link
+                                .create(link.toJSON())
+                                .exec(function(error, /** sails.model.link */ link) {
+                                    callback(error, link);
+                                });
+                        },
+
+                        function(error, links) {
+                            next(error, links);
+                        }
+                    )
+                } else {
+                    next(error, null);
+                }
+            });
+        }
+
+        /**
+         * Private function to copy specified object comments to new one. This function will just
+         * fetch comments that are attached to specified object.
+         *
+         * @param   {String}    objectName      Name of the object
+         * @param   {Number}    objectId        Object id
+         * @param   {Number}    destinationId   Destination object id
+         * @param   {Function}  next            Callback function to call after copy is done
+         */
+        function copyObjectComments(objectName, objectId, destinationId, next) {
+            DataService.getComments(objectName, objectId, 0, function(error, comments) {
+                if (!error && comments && comments.length > 0) {
+                    processCommentCopy(comments, destinationId, 0, function(error) {
+                        if (!error) {
+                            DataService.getComments(objectName, destinationId, 0, next);
+                        } else {
+                            next(error, null);
+                        }
+                    });
+                } else {
+                    next(error, null);
+                }
+            });
+        }
+
+        /**
+         * Private function to iterate comments and attach those to destination object. Note that
+         * this function will call itself recursively to attach possible comment siblings right.
+         * Basically we need to reserve parent comment relations right.
+         *
+         * @param   {sails.model.comment[]} comments        Array of comment objects
+         * @param   {Number}                destinationId   Destination object id
+         * @param   {Number}                parentCommentId Parent comment id
+         * @param   {Function}              next            Callback function to call after comments are processed
+         */
+        function processCommentCopy(comments, destinationId, parentCommentId, next) {
+            async.each(
+                comments,
+
+                /**
+                 * Iterator function to create new comment and process possible sibling comments.
+                 *
+                 * @param   {sails.model.comment}   comment     Single comment object
+                 * @param   {Function}              callback    Callback function which
+                 */
+                function(comment, callback) {
+                    delete comment.id;
+
+                    // Change necessary comment data
+                    comment.objectId = destinationId;
+                    comment.commentId = parentCommentId;
+
+                    // Create new comment
+                    Comment
+                        .create(comment.toJSON())
+                        .exec(function(error, newComment) {
+                            if (!error && comment.comments && comment.comments.length > 0) {
+                                processCommentCopy(comment.comments, destinationId, newComment.id, callback);
+                            } else {
+                                callback(error);
+                            }
+                        });
+                },
+
+                function(error) {
+                    next(error);
                 }
             );
         }
@@ -535,7 +682,7 @@ module.exports = {
                             sum: "duration"
                         })
                         .where(where)
-                        .done(function(error, result) {
+                        .exec(function(error, result) {
                             if (error) {
                                 callback(error, null);
                             } else {
