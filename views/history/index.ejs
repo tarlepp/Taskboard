@@ -4,6 +4,7 @@
     </p>
 <% } else { %>
     <% _.each(data, function(row) { %>
+        <% if (_.size(row.data) || row.message) { %>
         <div class="history">
             <h4>
                 <span class="tooltipDiv">
@@ -18,14 +19,13 @@
                         <%= row.user.fullName() %>
 
                         <span class="gravatar">
-                            <img src="<%= row.user.gravatarImage(25) %>" />
+                            <img src="<%- row.user.gravatarImage(25) %>" />
                         </span>
 
                     <% } %>
                 </small>
             </h4>
 
-            <% if (row.data) { %>
             <ul class="list-unstyled">
                 <% if (row.message) { %>
                 <li>
@@ -40,7 +40,8 @@
                             <% if (value.columnType == 'parent') { %>
                                 Copied object from <span class="text-info"><%= value.valueNew %></span>.
                             <% } else if (value.columnType == 'relation' || value.columnType == 'boolean') { %>
-                                Added column <span class="text-info"><%= value.column %></span> with value <span class="text-info"><%= value.valueNew %></span>.
+                                Added column <span class="text-info"><%= value.column %></span> with value
+                                <span class="text-info"><%= value.valueNew %></span>.
                             <% } else { %>
                                 Added column <span class="text-info tooltipDiv">
                                     <%= value.column %>
@@ -52,7 +53,9 @@
                             Removed column <span class="text-info"><%= value.column %></span> value.
                         <% } else { %>
                             <% if (value.columnType == 'relation' || value.columnType == 'boolean') { %>
-                                Changed column <span class="text-info"><%= value.column %></span> value from <span class="text-info"><%= value.valueOld %></span> to <span class="text-info"><%= value.valueNew %></span>.
+                                Changed column <span class="text-info"><%= value.column %></span> value from
+                                <span class="text-info"><%= value.valueOld %></span> <span class="text-small text-muted">[<%= value.valueIdOld %>]</span> to
+                                <span class="text-info"><%= value.valueNew %></span> <span class="text-small text-muted">[<%= value.valueIdNew %>]</span>.
                             <% } else { %>
                                 Changed column <span class="text-info tooltipDiv">
                                     <%= value.column %>
@@ -65,7 +68,7 @@
                     <% }); %>
                 <% }); %>
             </ul>
-            <% } %>
         </div>
+        <% } %>
     <% }); %>
 <% } %>
