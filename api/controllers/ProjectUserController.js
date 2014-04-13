@@ -381,7 +381,7 @@ module.exports = {
                      * @param   {Function}  callback
                      */
                     primary: function(callback) {
-                        DataService.getProject({id: projectId, managerId: request.user.id}, callback);
+                        DataService.getProject({id: projectId, managerId: request.user.id}, callback, true);
                     },
 
                     /**
