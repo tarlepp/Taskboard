@@ -19,13 +19,32 @@ module.exports = function(request, response, next) {
          * Note that this doesn't work on socket request, have to solve this someway later...
          */
         if (request.sessionID && request.sessionID !== request.user.sessionId) {
-            request.flash.message("Someone else have been signed in with same credentials.", "error");
+            // User has remember me cookie set, so we need to update session data
+            if (request.cookies && request.cookies.remember_me) {
+                User.update({id: request.user.id}, {sessionId: request.sessionID}, function(error, users) {
+                    if (error) {
+                        sails.log.error("Login failed: " + __filename + ":" + __line);
+                        sails.log.error(error);
 
-            return response.redirect("/logout");
+                        response.redirect("/logout");
+
+                        return response.redirect("/logout");
+                    }
+
+                    sails.log.verbose("          OK");
+
+                    next();
+                });
+            } else {
+                request.flash.message("Someone else have been signed in with same credentials.", "error");
+
+                return response.redirect("/logout");
+            }
+        } else {
+            sails.log.verbose("          OK");
+
+            next();
         }
-
-        sails.log.verbose("          OK");
-        next();
     } else { // User not authenticated, redirect to login
         return response.redirect("/login");
     }

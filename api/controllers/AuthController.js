@@ -41,6 +41,7 @@ module.exports = {
      * @param   {Response}  response    Response object
      */
     logout: function(request, response) {
+        response.clearCookie("remember_me");
         request.logout();
 
         response.redirect("/login");
@@ -64,6 +65,7 @@ module.exports = {
 
                 response.cookie("message", {message: "Invalid credentials", type: "error", options: {}});
                 response.redirect("/login");
+
                 return;
             }
 
@@ -88,6 +90,17 @@ module.exports = {
                         } else { // Otherwise redirect user to main page
                             // Write user sign in log
                             LoggerService.userSignIn(user, request);
+
+                            if (request.param("remember_me")) {
+                                AuthService.issueToken(user, function(error, token) {
+                                    if (error) {
+                                        sails.log.error("Login failed issueToken: " + __filename + ":" + __line);
+                                        sails.log.error(error);
+                                    } else {
+                                        response.cookie("remember_me", token, { path: "/", httpOnly: true, maxAge: 604800000 });
+                                    }
+                                });
+                            }
 
                             request.flash.message("Successfully sign in", "success");
 

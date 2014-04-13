@@ -16,6 +16,7 @@ module.exports.express = {
         // Add passport middleware and initialize it
         app.use(passport.initialize());
         app.use(passport.session());
+        app.use(passport.authenticate("remember-me"));
 
         // Add some basic data for all views
         app.use(function(req, res, next) {
