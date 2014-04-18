@@ -1,12 +1,12 @@
 {
-  "name": "Taskboard-0.10",
+  "name": "taskboard",
   "private": true,
   "version": "0.0.0",
-  "description": "a Sails application",
+  "description": "a Sails application to mimic 'scrum-ban' taskboard.",
   "keywords": [],
   "dependencies": {
-    "sails": "~0.10.0-rc3",
-    "sails-disk": "~0.10.0",
+    "sails": "~0.10.0-rc5",
+    "sails-mysql": "~0.10.0-rc5",
     "ejs": "~0.8.4",
     "grunt": "0.4.2",
     "grunt-sync": "~0.0.4",
@@ -19,17 +19,33 @@
     "grunt-contrib-uglify": "~0.2.2",
     "grunt-contrib-cssmin": "~0.6.1",
     "grunt-contrib-less": "~0.9.0",
+    "grunt-contrib-sass": "~0.7.3",
     "grunt-contrib-coffee": "~0.7.0"
+  },
+  "devDependencies": {
+    "supertest": "~0.8.0",
+    "mocha": "~1.13.0",
+    "should": "~2.0.1",
+    "chai": "~1.8.1"
+  },
+  "engines": {
+    "node": "0.10.x"
   },
   "scripts": {
     "start": "node app.js",
-    "debug": "node debug app.js"
+    "debug": "node debug app.js",
+    "test": "./node_modules/mocha/bin/mocha",
+    "postinstall": "./node_modules/bower/bin/bower install"
   },
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/wunder/Taskboard-0.10.git"
+    "url": "https://github.com/tarlepp/Taskboard.git"
   },
-  "author": "wunder",
-  "license": ""
+  "bugs": {
+    "url": "https://github.com/tarlepp/Taskboard/issues"
+  },
+  "homepage": "http://tarlepp.github.io/Taskboard/",
+  "author": "Tarmo Leppänen",
+  "license": "MIT"
 }
