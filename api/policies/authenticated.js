@@ -1,7 +1,7 @@
 // api/policies/authenticated.js
 
 /**
- * Policy to check if user is signed in or not. We use passport to determine if user is authenticated.
+ * Policy to check if user is signed in or not. Taskboard uses passport to determine if user is authenticated.
  *
  * @param   {Request}   request     Request object
  * @param   {Response}  response    Response object
@@ -23,22 +23,22 @@ module.exports = function(request, response, next) {
             if (request.cookies && request.cookies.remember_me) {
                 User.update({id: request.user.id}, {sessionId: request.sessionID}, function(error, users) {
                     if (error) {
-                        sails.log.error("Login failed: " + __filename + ":" + __line);
+                        sails.log.error(__filename + ":" + __line + " [Auth failed - user data update]");
                         sails.log.error(error);
 
                         response.redirect("/logout");
+                    } else {
+                        sails.log.verbose("          OK");
 
-                        return response.redirect("/logout");
+                        next();
                     }
-
-                    sails.log.verbose("          OK");
-
-                    next();
                 });
             } else {
+                sails.log.warning(__filename + ":" + __line + " [Auth failed - user signed in elsewhere]");
+
                 request.flash.message("Someone else have been signed in with same credentials.", "error");
 
-                return response.redirect("/logout");
+                response.redirect("/logout");
             }
         } else {
             sails.log.verbose("          OK");
@@ -46,6 +46,8 @@ module.exports = function(request, response, next) {
             next();
         }
     } else { // User not authenticated, redirect to login
-        return response.redirect("/login");
+        sails.log.warning(__filename + ":" + __line + " [Auth failed - user not authenticated]");
+
+        response.redirect("/login");
     }
 };
