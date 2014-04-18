@@ -41,6 +41,18 @@ jQuery(document).ready(function() {
                         var errors = false;
                         var lines = jQuery("#projectPhases", modal).find("tbody tr");
                         var phases = [];
+                        var isChecked = false;
+                        var inputsIsDone = jQuery("#projectPhases", modal).find("input[type=radio]");
+
+                        inputsIsDone.each(function() {
+                            if (jQuery(this).is(":checked")) {
+                                isChecked = true;
+                            }
+                        });
+
+                        if (inputsIsDone.length > 0 && isChecked === false) {
+                            inputsIsDone.last().attr("checked", "checked");
+                        }
 
                         // Iterate each lines
                         lines.each(function(key) {
@@ -63,7 +75,7 @@ jQuery(document).ready(function() {
                                 phases.push({
                                     id: phaseId,
                                     title: title,
-                                    backgroundColor: backgroundColor,
+                                    backgroundColor: "#" + backgroundColor,
                                     order: key,
                                     tasks: isNaN(tasks) ? 0 : tasks,
                                     isDone: isDone,
@@ -150,27 +162,47 @@ jQuery(document).ready(function() {
                             })
                         ;
 
-                        jQuery(".colorPicker_", newRow).each(function() {
-                            // Enable colorpicker
-                            jQuery(this)
-                                .addClass("colorPicker")
-                                .removeClass("colorPicker_")
-                                .colorpicker({
-                                    displayIndicator: false,
-                                    show: 'both',
-                                    history: false
-                                });
+                        jQuery(".colorPicker", newRow).each(function() {
+                            var input = jQuery(this);
+                            var colorContainer = input.parent().find("span.color");
+                            var color = input.val();
 
-                            // Fix positions
-                            jQuery(this)
-                                .parent()
-                                .width(106)
-                                .css("margin-bottom", 0);
+                            colorContainer.css("background-color", color);
+
+                            input.val(color.substr(1));
+
+                            input.colpick({
+                                layout: "hex",
+                                colorScheme: "light",
+                                onChange: function(hsb, hex, rgb, element, bySetColor) {
+                                    colorContainer.css("background-color", "#" + hex);
+
+                                    // Fill the text box just if the color was set using the picker, and not the colpickSetColor function.
+                                    if (!bySetColor) {
+                                        jQuery(element).val(hex);
+                                    }
+                                }
+                            }).keyup(function(){
+                                jQuery(this).colpickSetColor(this.value);
+                            });
+
+                            input.colpickSetColor(input.val());
                         });
 
                         jQuery("#projectPhases", modal).find("tbody").append(newRow);
 
-                        modal.find(".slider.slider-horizontal:last").css({ width: "150px" });
+                        var isChecked = false;
+                        var inputsIsDone = jQuery("#projectPhases", modal).find("input[type=radio]");
+
+                        inputsIsDone.each(function() {
+                            if (jQuery(this).is(":checked")) {
+                                isChecked = true;
+                            }
+                        });
+
+                        if (inputsIsDone.length > 0 && isChecked === false) {
+                            inputsIsDone.last().attr("checked", "checked");
+                        }
 
                         return false;
                     }
@@ -201,11 +233,33 @@ jQuery(document).ready(function() {
 function initProjectPhases(modal) {
     // Initialize colorpicker
     jQuery(".colorPicker", modal).each(function() {
-        jQuery(this).colorpicker({
-            displayIndicator: false,
-            show: 'both',
-            history: false
+        var input = jQuery(this);
+        var colorContainer = input.parent().find("span.color");
+        var color = input.val();
+
+        colorContainer.css("background-color", color);
+
+        input.val(color.substr(1));
+
+        input.colpick({
+            layout: "hex",
+            colorScheme: "light",
+            onChange: function(hsb, hex, rgb, element, bySetColor) {
+                colorContainer.css("background-color", "#" + hex);
+
+                // Fill the text box just if the color was set using the picker, and not the colpickSetColor function.
+                if (!bySetColor) {
+                    jQuery(element).val(hex);
+                }
+            },
+            onSubmit: function() {
+                input.colpickHide();
+            }
+        }).keyup(function(){
+            jQuery(this).colpickSetColor(this.value);
         });
+
+        input.colpickSetColor(input.val());
     });
 
     // Initialize jQuery UI sliders for phase task count
@@ -237,6 +291,7 @@ function initProjectPhases(modal) {
     // Make phases to be sortable
     sortable.sortable({
         helper: fixHelper,
+        handle: 'td:first',
         axis: 'y',
         cursor: 'move',
         stop: function() {

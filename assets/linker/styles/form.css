@@ -65,15 +65,19 @@ select.form-control {
     cursor: pointer;
 }
 
+.colpick {
+    z-index: 3000;
+}
+
+.input-group .input-group-addon.hex {
+    font-size: 20px;
+}
+
 .form-control.colorPicker {
-    display: inline-block;
     width: 80px;
     font-family: monospace;
     font-size: 13px;
-    border-bottom-right-radius: 0;
-    border-top-right-radius: 0;
-    padding-left: 2px;
-    padding-right: 2px;
+    cursor: pointer;
 }
 
 .form-control.form-slider {

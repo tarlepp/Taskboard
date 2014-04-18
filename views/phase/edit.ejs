@@ -24,7 +24,11 @@
                 <input type="text" name="title[]" class="form-control" value="<%= phase.title %>" placeholder="enter phase name" />
             </td>
             <td class="text-nowrap">
-                <input type="text" name="backgroundColor[]" class="form-control text-center colorPicker" value="<%= phase.backgroundColor %>" />
+                <div class="input-group">
+                    <span class="input-group-addon hex">#</span>
+                    <input type="text" name="backgroundColor[]" class="form-control text-center colorPicker" value="<%= phase.backgroundColor %>" />
+                    <span class="input-group-addon color">&NonBreakingSpace;</span>
+                </div>
             </td>
             <td>
                 <input type="radio" name="isDone[]" value="1" <% if (phase.isDone) { %><%= checked="checked" %><% } %> />
@@ -69,7 +73,11 @@
                 <input type="text" name="title[]" class="form-control" value="" placeholder="enter phase name" />
             </td>
             <td class="text-nowrap">
-                <input type="text" name="backgroundColor[]" class="form-control text-center colorPicker_" value="#428bca" />
+                <div class="input-group">
+                    <span class="input-group-addon hex">#</span>
+                    <input type="text" name="backgroundColor[]" class="form-control text-center colorPicker" value="#428bca" />
+                    <span class="input-group-addon color">&NonBreakingSpace;</span>
+                </div>
             </td>
             <td>
                 <input type="radio" name="isDone[]" value="1" />
@@ -87,8 +95,8 @@
             <td>unlimited</td>
             <td>
                 <button class="btn btn-danger btn-xs phaseDelete tooltipTitle" type="button" title="Delete phase"
-                        data-qtip-options='{ "position": {"my": "center left", "at": "center right"} }'
-                        >
+                    data-qtip-options='{ "position": {"my": "center left", "at": "center right"} }'
+                >
                     <i class="fa fa-trash-o"></i>
                 </button>
             </td>

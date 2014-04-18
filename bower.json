@@ -46,10 +46,10 @@
     "jquery.complexify.js": "*",
     "bootstrap-popover-extra-placements": "*",
     "numeral": "~1.5.2",
-    "evol.colorpicker": "*",
     "seiyria-bootstrap-slider": "~3.0.1",
     "md5-jkmyers": "~0.0.1",
-    "highstock-components": "~1.3.10"
+    "highstock-components": "~1.3.10",
+    "colpick": "~2.0.2"
   },
   "resolutions": {
     "bootstrap": "3.1.1"
