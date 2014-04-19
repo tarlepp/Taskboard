@@ -22,6 +22,19 @@
 
 module.exports.routes = {
     "/": {
-        view: "homepage"
+        controller: "BoardController",
+        action:     "index"
+    },
+    "/logout": {
+        controller: "AuthController",
+        action:     "logout"
+    },
+    "get /login": {
+        controller: "AuthController",
+        action:     "login"
+    },
+    "post /login": {
+        controller: "AuthController",
+        action:     "authenticate"
     }
 };

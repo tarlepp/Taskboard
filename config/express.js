@@ -6,6 +6,8 @@
  */
 "use strict";
 
+var fs = require("fs");
+
 module.exports.express = {
     // The middleware function used for parsing the HTTP request body.
     // (this most commonly comes up in the context of file uploads)
@@ -64,6 +66,14 @@ module.exports.express = {
     //
     // Example override:
     // methodOverride: (function customMethodOverride (req, res, next) {})()
+
+    customMiddleware: function(app) {
+        app.use(function(req, res, next) {
+            res.locals.packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
+
+            next();
+        });
+    }
 };
 
 /**

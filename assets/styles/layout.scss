@@ -1,0 +1,155 @@
+@import "mixins";
+
+body {
+  cursor: default;
+  overflow-y: scroll;
+  background-image: url("/images/layout/background-body.png");
+  font-family: "Yanone Kaffeesatz", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+a {
+  cursor: pointer;
+}
+
+*:focus,
+a:focus,
+.btn:focus {
+  outline: none;
+}
+
+a.icon:hover,
+a.icon:focus {
+  text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @include text-shadow(1px, 1px, 0px, $colorBoxShadow);
+  color: $colorTextNavigation;
+  letter-spacing: -1px;
+  margin: 0 0 10px 0;
+}
+
+#container,
+#footer,
+#header {
+  .container {
+    width: 100%;
+  }
+}
+
+#header,
+#footer {
+  font-family: "Maven Pro", sans-serif;
+
+  a,
+  a:hover,
+  a:focus {
+    color: $colorTextNavigation;
+  }
+
+  .nav {
+    &> li,
+    &> li a {
+      color: $colorTextNavigation;
+    }
+
+    &> li:hover,
+    &> li:focus,
+    &> li a:hover,
+    &> li a:focus {
+      color: $colorTextNavigation;
+    }
+
+    &> li > a {
+      padding: 0 10px;
+    }
+
+    &> li > a:hover,
+    &> li > a:focus {
+      background-color: transparent;
+      color: $colorTextLight;
+
+    }
+
+    li .fa {
+      @include text-shadow(0px, 1px, 0px, $colorBoxShadow);
+      margin-right: 5px;
+      color: $colorTextNavigation;
+      position: relative;
+      top: 2px;
+      font-size: 16px;
+    }
+  }
+}
+
+#header {
+  .navbar {
+    @include noSelect();
+    @include box-shadow(0, 1px, 20px);
+    @include linear-gradient($colorBackgroundGradientStart, $colorBackgroundGradientEnd);
+    border-bottom: 1px solid $colorBorder;
+  }
+
+  .navbar-brand {
+    @include text-shadow(1px, 1px, 3px, $colorBoxShadow);
+    color: $colorTextLight;
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -3px;
+
+    span {
+      font-weight: 400;
+    }
+
+    &:hover {
+      color: $colorTextLight;
+    }
+  }
+}
+
+#footer {
+  line-height: 30px;
+  font-size: 12px;
+
+  .navbar {
+    @include box-shadow(-1px, 0, 20px);
+    @include linear-gradient($colorBackgroundGradientEnd, $colorBackgroundGradientStart);
+    border-top: 1px solid $colorBorder;
+    min-height: 30px;
+    max-height: 30px;
+
+    .navbar-text {
+      color: $colorTextNavigation;
+    }
+  }
+
+  .navbar-text {
+    margin: 0;
+  }
+
+  .container {
+    text-align: center;
+  }
+
+  .nav-pills > li {
+    float: none;
+    display: inline-block;
+  }
+}
+
+#container {
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
+
+.text-medium {
+  font-size: 90%;
+}
+
+.text-small {
+  font-size: 80%;
+}
+
+.text-tiny {
+  font-size: 75%;
+}

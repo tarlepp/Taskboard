@@ -10,6 +10,15 @@
 "use strict";
 
 var cssFilesToInject = [
+    // Bootstrap specified libraries
+    "bower_components/bootstrap/dist/css/bootstrap.min.css",
+    "bower_components/bootstrap/dist/css/bootstrap-theme.min.css",
+    "bower_components/bootstrap-datepicker/css/datepicker3.css",
+    "bower_components/bootstrap-select/js/bootstrap-select.min.css",
+
+    // Individual libraries
+    "bower_components/font-awesome/css/font-awesome.min.css",
+
     "styles/**/*.css"
 ];
 
@@ -31,7 +40,31 @@ var jsFilesToInject = [
     // then beef it up with some convenience logic for talking to Sails.js
     "js/sails.io.js",
 
-    // *->    put other dependencies here   <-*
+    // Individual libraries
+    "bower_components/async/lib/async.js",
+    "bower_components/json5/lib/json5.js",
+
+    // jQuery specified libraries
+    "bower_components/jquery/dist/jquery.min.js",
+
+    // Angular specified libraries
+    "bower_components/angular/angular.min.js",
+    "bower_components/angular-bootstrap/angular-bootstrap-tpls.min.js",
+    "bower_components/angular-cookie/angular-cookie.min.js",
+    "bower_components/angular-resource/angular-resource.min.js",
+    "bower_components/angular-route/angular-route.min.js",
+    "bower_components/angular-route-segment/build/angular-route-segment.js",
+    "bower_components/angular-sanitize/angular-sanitize.min.js",
+
+    // Bootstrap specified libraries
+    "bower_components/bootstrap/dist/js/bootstrap.min.js",
+    "bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js",
+    "bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fi.js",
+    "bower_components/bootstrap-select/js/bootstrap-select.min.js",
+
+    // TaskBoard application specified files that must be loaded in this order
+    "js/application.js",
+    "js/taskboard.js",
 
     // All of the rest of your app scripts imported here
     "js/**/*.js"

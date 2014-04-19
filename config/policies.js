@@ -15,5 +15,15 @@
 module.exports.policies = {
     // Default policy for all controllers and actions
     // (`true` allows public access)
-    "*": true
+    "*": [true],
+
+    // whitelist the auth controller, this is used for login
+    "Auth": {
+        "*": true,
+
+        // Custom actions
+        login:          [true],
+        logout:         [true],
+        authenticate:   [true]
+    }
 };
