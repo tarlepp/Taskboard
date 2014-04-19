@@ -26,10 +26,7 @@ angular.module("TaskBoardControllers")
                         })
                         .error(function(data, status, headers, config) {
                             // Error: authentication failed
-                            $rootScope.message = {
-                                message: data,
-                                type: "error"
-                            };
+                            $rootScope.message = data;
 
                             $location.url("/login");
                         });
