@@ -7,19 +7,32 @@ angular.module("TaskBoardControllers")
             function($scope, $rootScope, $http, $location) {
                 $scope.user = {};
 
+                if ($location.$$path == "/logout") {
+                    $rootScope.logout();
+                }
+
                 $scope.login = function() {
                     $http
-                    .post('/login', $scope.user)
-                    .success(function(user) {
-                        // No error: authentication OK
-                        $rootScope.message = 'Authentication successful!';
-                        $location.url("/");
-                    })
-                    .error(function() {
-                        // Error: authentication failed
-                        $rootScope.message = 'Authentication failed.';
-                        $location.url("/login");
-                    });
+                        .post("/Auth/login", {
+                            username: $scope.user.username,
+                            password: $scope.user.password,
+                            rememberMe: $scope.user.rememberMe,
+                            _csrf: $rootScope.csrfToken
+                        })
+                        .success(function(user) {
+                            // No error: authentication OK
+                            $rootScope.message = "Signed in successfully";
+                            $location.url("/");
+                        })
+                        .error(function(data, status, headers, config) {
+                            // Error: authentication failed
+                            $rootScope.message = {
+                                message: data,
+                                type: "error"
+                            };
+
+                            $location.url("/login");
+                        });
                 };
             }
         ]

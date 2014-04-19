@@ -29,12 +29,8 @@ module.exports.routes = {
         controller: "AuthController",
         action:     "logout"
     },
-    "get /login": {
-        controller: "AuthController",
-        action:     "login"
-    },
     "post /login": {
         controller: "AuthController",
-        action:     "authenticate"
+        action:     "login"
     }
 };

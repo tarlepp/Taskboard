@@ -36,6 +36,8 @@
     "async": "~0.7.0",
     "angular-bootstrap": "~0.10.0",
     "angular-ui-router": "~0.2.10",
-    "angular-cookies": "~1.2.16"
+    "angular-cookies": "~1.2.16",
+    "noty": "~2.2.2",
+    "lodash": "~2.4.1"
   }
 }

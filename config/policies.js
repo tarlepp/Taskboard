@@ -19,11 +19,6 @@ module.exports.policies = {
 
     // whitelist the auth controller, this is used for login
     "Auth": {
-        "*": true,
-
-        // Custom actions
-        login:          [true],
-        logout:         [true],
-        authenticate:   [true]
+        "*": true
     }
 };

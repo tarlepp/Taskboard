@@ -43,9 +43,11 @@ var jsFilesToInject = [
     // Individual libraries
     "bower_components/async/lib/async.js",
     "bower_components/json5/lib/json5.js",
+    "bower_components/lodash/dist/lodash.min.js",
 
     // jQuery specified libraries
     "bower_components/jquery/dist/jquery.min.js",
+    "bower_components/noty/js/noty/packaged/jquery.noty.packaged.js",
 
     // Angular specified libraries
     "bower_components/angular/angular.js",
