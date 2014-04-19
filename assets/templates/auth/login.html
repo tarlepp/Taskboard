@@ -1,0 +1,21 @@
+<form class="form-signin" method="post" data-ng-submit="login()">
+
+    <h2>Please sign in</h2>
+
+    <input type="text" name="username" class="form-control" placeholder="enter username" autofocus autocomplete="off"
+        data-ng-model="user.username"
+    />
+    <input type="password" name="password" class="form-control" placeholder="enter password"
+        data-ng-model="user.password"
+    />
+
+    <div class="checkbox text-center">
+        <label>
+            <input type="checkbox" name="remember_me" value="1" style="float: none; position: relative; top: 1px;"
+                data-ng-model="user.rememberMe"
+            /> Remember me
+        </label>
+    </div>
+
+    <input type="submit" value="Sign in" class="btn btn-lg btn-primary btn-block" />
+</form>

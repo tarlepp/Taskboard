@@ -5,7 +5,7 @@ angular.module("TaskBoardControllers")
         [
             "$scope",
             function($scope) {
-                console.log("ddd");
+                console.log("BoardController");
             }
         ]
     );

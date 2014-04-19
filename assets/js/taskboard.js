@@ -2,8 +2,11 @@
 
 angular.module("TaskBoard", [
     "ngRoute",
+    "ngCookies",
+    "ngResource",
     "route-segment",
     "view-segment",
+    "ui.router",
     "TaskBoardControllers",
     "TaskBoardServices",
     "TaskBoardFilters",

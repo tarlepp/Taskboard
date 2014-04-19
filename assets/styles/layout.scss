@@ -23,9 +23,11 @@ a.icon:focus {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  @include text-shadow(1px, 1px, 0px, $colorBoxShadow);
-  color: $colorTextNavigation;
-  letter-spacing: -1px;
+ // @include text-shadow(1px, 1px, 0px, $colorBackgroundGradientEnd);
+  font-family: "Maven Pro", sans-serif;
+ // color: $colorBackgroundGradientStart;
+  color: $colorBackgroundGradientEnd;
+  letter-spacing: -3px;
   margin: 0 0 10px 0;
 }
 
