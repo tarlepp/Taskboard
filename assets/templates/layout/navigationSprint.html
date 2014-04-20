@@ -1,0 +1,18 @@
+
+<div class="input-group">
+    <select class="selectpicker show-tick show-menu-arrow"
+        data-live-search="true"
+        data-selectpicker
+        data-collection-name="sharedData.options.sprints"
+        data-disable-attribute="sharedData.filters.projectId"
+        data-ng-disabled="!sharedData.filters.projectId"
+        data-ng-model="sharedData.filters.sprintId"
+        data-ng-options="sprint.id as sprint.name for sprint in sharedData.options.sprints"
+    >
+        <option style="display:none" value="" class="text-muted">Choose sprint to show</option>
+    </select>
+
+    <span class="input-group-addon">
+        {{sharedData.filters.projectId}}
+    </span>
+</div>

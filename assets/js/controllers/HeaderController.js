@@ -3,9 +3,13 @@
 angular.module("TaskBoardControllers")
     .controller("HeaderController",
         [
-            "$scope",
-            function($scope) {
-                $scope.title = "Task<span>Board</span>";
+            "$scope", "SharedDataService",
+            function($scope, SharedDataService) {
+                $scope.sharedData = SharedDataService.data;
+
+                $scope.$watch("sharedData.filters.projectId", function(newValue, oldValue) {
+                    console.log(newValue);
+                });
             }
         ]
     );

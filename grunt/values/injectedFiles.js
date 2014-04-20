@@ -14,7 +14,7 @@ var cssFilesToInject = [
     "bower_components/bootstrap/dist/css/bootstrap.min.css",
     "bower_components/bootstrap/dist/css/bootstrap-theme.min.css",
     "bower_components/bootstrap-datepicker/css/datepicker3.css",
-    "bower_components/bootstrap-select/js/bootstrap-select.min.css",
+    "bower_components/bootstrap-select/bootstrap-select.min.css",
 
     // Individual libraries
     "bower_components/font-awesome/css/font-awesome.min.css",
@@ -59,12 +59,13 @@ var jsFilesToInject = [
     "bower_components/angular-route-segment/build/angular-route-segment.js",
     "bower_components/angular-sanitize/angular-sanitize.js",
     "bower_components/angular-ui-router/release/angular-ui-router.js",
+    "bower_components/angularjs-gravatar/dist/angularjs-gravatardirective.min.js",
 
     // Bootstrap specified libraries
     "bower_components/bootstrap/dist/js/bootstrap.min.js",
     "bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js",
     "bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fi.js",
-    "bower_components/bootstrap-select/js/bootstrap-select.min.js",
+    "bower_components/bootstrap-select/bootstrap-select.min.js",
 
     // TaskBoard application specified files that must be loaded in this order
     "js/application.js",

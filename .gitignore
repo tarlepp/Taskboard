@@ -36,7 +36,7 @@ npm-debug.log
 .netbeans
 nbproject
 .idea
-assets/linker/bower_components/*
+assets/bower_components/*
 
 
 ########################

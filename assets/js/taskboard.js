@@ -7,6 +7,7 @@ angular.module("TaskBoard", [
     "route-segment",
     "view-segment",
     "ui.router",
+    "angularjs-gravatardirective",
     "TaskBoardControllers",
     "TaskBoardServices",
     "TaskBoardFilters",

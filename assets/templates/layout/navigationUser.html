@@ -1,0 +1,47 @@
+<ul id="navigation-static" class="nav nav-pills pull-right">
+<li class="dropdown">
+    <a class="dropdown-toggle"
+        data-toggle="dropdown"
+        data-hover="dropdown"
+        data-delay="50"
+    >
+        Settings
+        <b class="caret"></b>
+    </a>
+
+    <ul class="dropdown-menu">
+        <li>
+            <a>
+                <i class="fa fa-user"></i>
+                Users
+            </a>
+        </li>
+    </ul>
+</li>
+
+<li class="navbar-icon navbar-user tooltipTitle" title="Edit your profile settings"
+    data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
+>
+    <a>
+        <gravatar-image data-gravatar-email="currentUser.email" data-gravatar-size="35" data-gravatar-rating="pg" data-gravatar-default="mm" data-gravatar-secure="true"></gravatar-image>
+
+        <span>{{currentUser.username}}</span>
+    </a>
+</li>
+
+<li id="functionHelp" class="navbar-icon tooltipTitle" title="Show help"
+    data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
+        >
+    <a href="javascript: void(0);">
+        <i class="fa fa-question-circle"></i>
+    </a>
+</li>
+
+<li class="navbar-icon tooltipTitle" title="Sign out"
+    data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
+        >
+    <a data-ng-click="logout()">
+        <i class="fa fa-sign-out text-danger"></i>
+    </a>
+</li>
+</ul>

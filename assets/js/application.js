@@ -229,6 +229,7 @@ angular.module("TaskBoardApplication")
                  */
                 $rootScope.logout = function() {
                     $rootScope.message = "Signed out successfully";
+                    $rootScope.currentUser = "";
                     $http.post("/logout", {_csrf: $rootScope.csrfToken});
                     $location.url("/login");
                 };

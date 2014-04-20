@@ -1,0 +1,15 @@
+
+<div class="input-group">
+    <select class="selectpicker show-tick show-menu-arrow"
+        data-live-search="true"
+        data-selectpicker
+        data-collection-name="sharedData.options.projects"
+        data-ng-model="sharedData.filters.projectId"
+        data-ng-options="project.id as project.name for project in sharedData.options.projects"
+    >
+          <option style="display:none" value="" class="text-muted">Choose project to show</option>
+    </select>
+
+    <span class="input-group-addon">
+    </span>
+</div>

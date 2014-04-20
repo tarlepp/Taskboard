@@ -75,11 +75,6 @@ h1, h2, h3, h4, h5, h6 {
 
     li .fa {
       @include text-shadow(0px, 1px, 0px, $colorBoxShadow);
-      margin-right: 5px;
-      color: $colorTextNavigation;
-      position: relative;
-      top: 2px;
-      font-size: 16px;
     }
   }
 }
@@ -98,6 +93,8 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 32px;
     font-weight: 600;
     letter-spacing: -3px;
+    padding: 0 15px;
+    line-height: 50px;
 
     span {
       font-weight: 400;
@@ -106,6 +103,79 @@ h1, h2, h3, h4, h5, h6 {
     &:hover {
       color: $colorTextLight;
     }
+  }
+
+  .nav>li {
+    display: table;
+    line-height: 50px;
+  }
+
+  #navigation {
+    .input-group .form-control {
+      width: 250px;
+    }
+  }
+
+  .nav,
+  &.nav {
+    li.active,
+    li.active a {
+      color: white;
+    }
+
+    &> li,
+    &> li a {
+      color: $colorTextNavigation;
+    }
+
+    &> li:hover,
+    &> li:focus,
+    &> li a:hover,
+    &> li a:focus {
+      color: white;
+    }
+
+    .open>a,
+    .open>a:hover,
+    .open>a:focus {
+      background-color: transparent;
+      border-color: transparent;
+    }
+
+    ul.dropdown-menu {
+      a {
+        color: $colorBackgroundGradientEnd;
+      }
+
+      i.fa {
+        font-size: 18px;
+        top: 0;
+        margin-right: 5px;
+        margin-left: -5px;
+        color: $colorTextDark;
+      }
+    }
+  }
+
+  .input-group {
+    position: relative;
+    top: 8px;
+    margin-right: 10px;
+
+    .btn {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  .bootstrap-select {
+    width: 250px;
+  }
+
+  li .fa {
+    position: relative;
+    top: 3px;
+    font-size: 22px;
   }
 }
 
@@ -137,6 +207,14 @@ h1, h2, h3, h4, h5, h6 {
     float: none;
     display: inline-block;
   }
+
+  li .fa {
+    color: $colorTextNavigation;
+    position: relative;
+    top: 2px;
+    font-size: 16px;
+    margin-right: 5px;
+  }
 }
 
 #container {
@@ -154,4 +232,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .text-tiny {
   font-size: 75%;
+}
+
+.gravatar-icon {
+  border-radius: 6px;
 }

@@ -1,0 +1,26 @@
+@import "mixins";
+
+.input-group {
+  .bootstrap-select-searchbox {
+    .form-control {
+      border-radius: 4px;
+      margin-bottom: 5px;
+    }
+  }
+}
+
+.bootstrap-select{
+  &.btn-group {
+    .dropdown-menu {
+      li > a {
+        line-height: 20px;
+      }
+    }
+
+    &.show-tick {
+      li.selected a i.check-mark {
+        top: 3px;
+      }
+    }
+  }
+}
