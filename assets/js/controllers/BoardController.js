@@ -3,9 +3,9 @@
 angular.module("TaskBoardControllers")
     .controller("BoardController",
         [
-            "$scope",
-            function($scope) {
-                console.log("BoardController");
+            "$scope", "SharedDataService",
+            function($scope, SharedDataService) {
+                $scope.sharedData = SharedDataService.data;
             }
         ]
     );

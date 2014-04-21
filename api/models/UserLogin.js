@@ -10,17 +10,25 @@ module.exports = {
     schema: true,
 
     attributes: {
-        userId: {
-            type:   "integer"
-        },
+        // IP address where user has signed in
         ip: {
             type:   "string"
         },
+        // User agent of browser
         agent: {
             type:   "text"
         },
+        // Signed in timestamp
         stamp: {
             type:   "datetime"
+        },
+
+        // Below is all specification for relations to another models
+
+        // Relation to user model
+        user: {
+            model:      "User",
+            columnName: "userId"
         },
 
         // Dynamic data attributes

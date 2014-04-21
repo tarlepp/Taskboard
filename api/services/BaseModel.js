@@ -23,17 +23,20 @@ module.exports = {
     schema: true,
 
     attributes: {
-        createdUserId: {
-            type:       "integer",
-            required:   true
+        // Relation to User object via created user id
+        createdUser: {
+            model:      "User",
+            columnName: "createdUserId"
         },
-        updatedUserId: {
-            type:       "integer",
-            required:   true
+        // Relation to User object via updated user id
+        updatedUser: {
+            model:      "User",
+            columnName: "updatedUserId"
         },
 
         // Dynamic model data attributes
 
+        // Object title normalization
         objectTitle: function() {
             var output = null;
 
@@ -46,10 +49,13 @@ module.exports = {
             return output;
         },
 
+        // Created timestamp as moment object
         createdAtObject: function() {
             return (this.createdAt && this.createdAt != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.createdAt) : null;
         },
+
+        // Updated timestamp as moment object
         updatedAtObject: function() {
             return (this.updatedAt && this.updatedAt != "0000-00-00 00:00:00")
                 ? DateService.convertDateObjectToUtc(this.updatedAt) : null;

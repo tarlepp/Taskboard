@@ -8,6 +8,8 @@ angular.module("TaskBoard", [
     "view-segment",
     "ui.router",
     "angularjs-gravatardirective",
+    "ngSails",
+    "angularMoment",
     "TaskBoardControllers",
     "TaskBoardServices",
     "TaskBoardFilters",

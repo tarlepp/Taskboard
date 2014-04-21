@@ -28,7 +28,7 @@ module.exports = {
             if (request.isAuthenticated()) {
                 response.json(request.user, 200);
             } else {
-                sails.log.warning(__filename + ":" + __line + " [User is not authenticated]");
+                sails.log.warn(__filename + ":" + __line + " [User is not authenticated]");
 
                 response.json(false, 401);
             }

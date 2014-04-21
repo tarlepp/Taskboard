@@ -94,7 +94,8 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
     letter-spacing: -3px;
     padding: 0 15px;
-    line-height: 50px;
+    line-height: 47px;
+    margin-right: 10px;
 
     span {
       font-weight: 400;
@@ -108,12 +109,6 @@ h1, h2, h3, h4, h5, h6 {
   .nav>li {
     display: table;
     line-height: 50px;
-  }
-
-  #navigation {
-    .input-group .form-control {
-      width: 250px;
-    }
   }
 
   .nav,

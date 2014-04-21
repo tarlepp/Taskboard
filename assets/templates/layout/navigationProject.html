@@ -5,7 +5,7 @@
         data-selectpicker
         data-collection-name="sharedData.options.projects"
         data-ng-model="sharedData.filters.projectId"
-        data-ng-options="project.id as project.name for project in sharedData.options.projects"
+        data-ng-options="project.id as project.title for project in sharedData.options.projects|orderBy:'title'"
     >
           <option style="display:none" value="" class="text-muted">Choose project to show</option>
     </select>

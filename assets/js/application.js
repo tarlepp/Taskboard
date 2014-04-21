@@ -196,8 +196,8 @@ angular.module("TaskBoardApplication")
 angular.module("TaskBoardApplication")
     .run(
         [
-            "$rootScope", "$http", "$location",
-            function($rootScope, $http, $location) {
+            "$rootScope", "$http", "$location",  "amMoment",
+            function($rootScope, $http, $location, amMoment) {
                 // Initialize global attributes
                 $rootScope.message = "";
                 $rootScope.currentUser = "";
@@ -217,6 +217,20 @@ angular.module("TaskBoardApplication")
                 $rootScope.$watch("message", function(newValue, oldValue) {
                     if (newValue) {
                         $rootScope.makeMessage(newValue);
+                    }
+                });
+
+                /**
+                 * Watcher for root scope currentUser attribute. When this is changed we must change
+                 * user localization setting so that moment.js and numeral.js can show values right.
+                 *
+                 * @todo
+                 *  1) How to change moment timezone setting?
+                 *  2) Add handling for numeral.js
+                 */
+                $rootScope.$watch("currentUser", function(newValue, oldValue) {
+                    if (newValue) {
+                        amMoment.changeLanguage(newValue.language);
                     }
                 });
 

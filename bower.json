@@ -39,6 +39,9 @@
     "angular-cookies": "~1.2.16",
     "noty": "~2.2.2",
     "lodash": "~2.4.1",
-    "angularjs-gravatar": "~1.3.2"
+    "angularjs-gravatar": "~1.3.2",
+    "angular-moment": "~0.7.0",
+    "moment-timezone": "~0.0.6",
+    "moment": "~2.6.0"
   }
 }

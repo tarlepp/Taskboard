@@ -36,6 +36,7 @@ npm-debug.log
 .netbeans
 nbproject
 .idea
+.sass-cache
 assets/bower_components/*
 
 

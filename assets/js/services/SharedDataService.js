@@ -3,15 +3,38 @@
 angular.module("TaskBoardServices")
     .factory('SharedDataService',
         [
-            "$http",
-            function($http) {
+            "$rootScope", "$cookies", "$sails",
+            function($rootScope, $cookies, $sails) {
                 var shared = {};
 
-                var projects = [
-                    {id: 1, name: "test"},
-                    {id: 2, name: "test2"},
-                    {id: 3, name: "test3"}
-                ];
+                $rootScope.$watch("currentUser", function(newValue, oldValue) {
+                    if (newValue) {
+                        $sails.get("/Project")
+                            .success(function(data) {
+                                shared.data.options.projects = data;
+
+                                var projectId = parseInt($cookies.projectId, 10);
+                                var project = _.find(data, function(project) {
+                                    return project.id === projectId;
+                                });
+
+                                if (project) {
+                                    shared.data.filters.projectId = projectId;
+
+                                    var cookie = "sprintId_" +  projectId;
+
+                                    if ($cookies[cookie]) {
+                                        shared.data.filters.sprintId = parseInt($cookies[cookie], 10);
+                                    } else {
+                                        shared.data.filters.sprintId = "";
+                                    }
+                                }
+                            })
+                            .error(function(data) {
+                                console.log("error");
+                            });
+                    }
+                });
 
                 shared.data = {
                     filters: {
@@ -19,7 +42,7 @@ angular.module("TaskBoardServices")
                         sprintId: ""
                     },
                     options: {
-                        projects: projects,
+                        projects: [],
                         sprints: []
                     }
                 };

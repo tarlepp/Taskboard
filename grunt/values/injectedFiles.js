@@ -44,6 +44,8 @@ var jsFilesToInject = [
     "bower_components/async/lib/async.js",
     "bower_components/json5/lib/json5.js",
     "bower_components/lodash/dist/lodash.min.js",
+    "bower_components/moment/min/moment-with-langs.min.js",
+    "bower_components/moment-timezone/min/moment-timezone.min.js",
 
     // jQuery specified libraries
     "bower_components/jquery/dist/jquery.min.js",
@@ -54,9 +56,11 @@ var jsFilesToInject = [
     "bower_components/angular-bootstrap/angular-bootstrap-tpls.js",
     "bower_components/angular-cookie/angular-cookie.js",
     "bower_components/angular-cookies/angular-cookies.js",
+    "bower_components/angular-moment/angular-moment.min.js",
     "bower_components/angular-resource/angular-resource.js",
     "bower_components/angular-route/angular-route.min.js",
     "bower_components/angular-route-segment/build/angular-route-segment.js",
+    "bower_components/angular-sails/dist/angular-sails.min.js",
     "bower_components/angular-sanitize/angular-sanitize.js",
     "bower_components/angular-ui-router/release/angular-ui-router.js",
     "bower_components/angularjs-gravatar/dist/angularjs-gravatardirective.min.js",

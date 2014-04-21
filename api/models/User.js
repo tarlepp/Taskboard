@@ -99,6 +99,37 @@ module.exports = _.merge(_.cloneDeep(require("../services/BaseModel")), {
             defaultsTo: ""
         },
 
+        // Below is all specification for relations to another models
+
+        createdProjects: {
+            collection: "Project",
+            via: "createdUser"
+        },
+        updatedProjects: {
+            collection: "Project",
+            via: "updatedUser"
+        },
+        createdSprints: {
+            collection: "Sprint",
+            via: "createdUser"
+        },
+        updatedSprints: {
+            collection: "Sprint",
+            via: "updatedUser"
+        },
+        createdUsers: {
+            collection: "User",
+            via: "createdUser"
+        },
+        updatedUsers: {
+            collection: "User",
+            via: "updatedUser"
+        },
+        projectManager: {
+            collection: "Project",
+            via: "manager"
+        },
+
         // Dynamic data attributes
 
         // Computed user fullName string

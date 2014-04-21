@@ -7,12 +7,20 @@
         data-disable-attribute="sharedData.filters.projectId"
         data-ng-disabled="!sharedData.filters.projectId"
         data-ng-model="sharedData.filters.sprintId"
-        data-ng-options="sprint.id as sprint.name for sprint in sharedData.options.sprints"
     >
+        <option value="{{sprint.id}}"
+            data-ng-repeat="sprint in sharedData.options.sprints|orderBy:'dateStart':true"
+            data-ng-selected="{{sprint.id == sharedData.filters.sprintId}}"
+        >
+           {{sprint.dateStart|amDateFormat:currentUser.momentFormatDate}} - {{sprint.dateEnd|amDateFormat:currentUser.momentFormatDate}} {{sprint.title}}
+        </option>
+
         <option style="display:none" value="" class="text-muted">Choose sprint to show</option>
     </select>
 
     <span class="input-group-addon">
         {{sharedData.filters.projectId}}
+        -
+        {{sharedData.filters.sprintId}}
     </span>
 </div>
