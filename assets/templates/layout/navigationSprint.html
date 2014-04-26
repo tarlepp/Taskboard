@@ -26,16 +26,16 @@
         </div>
 
         <div data-ng-show="sharedData.filters.projectId">
-            <span data-ng-show="!sprints.length">
+            <span data-ng-show="!sprints.length || !sharedData.filters.sprintId">
                 <a class="tooltipTitle" title="Add new sprint">
                     <i class="fa fa-plus"></i>
                 </a>
             </span>
 
-            <span data-ng-show="sprints.length">
+            <span data-ng-show="sprints.length && sharedData.filters.sprintId">
                 <a class="dropdown-toggle"
+                    data-dropdown-menu
                     data-toggle="dropdown"
-                    data-hover="dropdown"
                     data-delay="100"
                 >
                     <i class="fa fa-wrench"></i>

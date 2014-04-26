@@ -1,8 +1,8 @@
 <ul id="navigation-static" class="nav nav-pills pull-right">
 <li class="dropdown">
     <a class="dropdown-toggle"
+        data-dropdown-menu
         data-toggle="dropdown"
-        data-hover="dropdown"
         data-delay="50"
     >
         Settings
@@ -39,9 +39,9 @@
 
 <li class="navbar-icon tooltipTitle" title="Sign out"
     data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
-        >
-    <a data-ng-click="logout()">
-        <i class="fa fa-sign-out text-danger"></i>
+>
+    <a class="text-danger" data-ng-click="logout()">
+        <i class="fa fa-sign-out"></i>
     </a>
 </li>
 </ul>

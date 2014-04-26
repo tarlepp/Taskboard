@@ -69,6 +69,8 @@ var jsFilesToInject = [
     "bower_components/bootstrap/dist/js/bootstrap.min.js",
     "bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js",
     "bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fi.js",
+    "bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.en.js",
+    "bower_components/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js",
     "bower_components/bootstrap-select/bootstrap-select.min.js",
 
     // TaskBoard application specified files that must be loaded in this order
