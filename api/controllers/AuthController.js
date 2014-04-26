@@ -73,7 +73,7 @@ module.exports = {
                     sails.log.error(info);
                 }
 
-                message = {message: "Invalid credentials", type: "error", options: {}};
+                message = {text: "Invalid credentials", type: "error", options: {}};
 
                 response.json(message, 401);
 
@@ -85,7 +85,7 @@ module.exports = {
                     sails.log.error(__filename + ":" + __line + " [Login failed]");
                     sails.log.error(error);
 
-                    message = {message: "Sign in failed...", type: "error", options: {}};
+                    message = {text: "Sign in failed...", type: "error", options: {}};
 
                     response.json(message, 401);
                 } else {
@@ -96,7 +96,7 @@ module.exports = {
                             sails.log.error(__filename + ":" + __line + " [Login failed - cannot update user data]");
                             sails.log.error(error);
 
-                            message = {message: "Sign in failed...", type: "error", options: {}};
+                            message = {text: "Sign in failed...", type: "error", options: {}};
 
                             response.json(message, 401);
                         } else { // Otherwise redirect user to main page
@@ -114,7 +114,7 @@ module.exports = {
                                 });
                             }
 
-                            message = {message: "Successfully sign in", type: "success", options: {}};
+                            message = {text: "Successfully sign in", type: "success", options: {}};
 
                             response.json(users[0]);
                         }

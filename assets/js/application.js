@@ -229,10 +229,20 @@ angular.module("TaskBoardApplication")
                  * Logout is also done if you change URL to /#/logout
                  */
                 $rootScope.logout = function() {
-                    $rootScope.message = "Signed out successfully";
                     $rootScope.currentUser = "";
-                    $http.post("/logout", {_csrf: $rootScope.csrfToken});
-                    $location.url("/login");
+
+                    $http
+                        .post("/logout", {_csrf: $rootScope.csrfToken})
+                        .success(function() {
+                            $rootScope.message = "Signed out successfully";
+
+                            $location.url("/login");
+                        })
+                        .error(function(data) {
+                            $rootScope.message = data;
+
+                            $location.url("/login");
+                        });
                 };
 
                 /**

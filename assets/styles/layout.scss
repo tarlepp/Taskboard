@@ -78,6 +78,11 @@ h1, h2, h3, h4, h5, h6 {
       .input-group {
         .input-group-addon {
           padding: 6px 10px;
+
+          &.disabled {
+            opacity: .65;
+            cursor: not-allowed;
+          }
         }
 
         .fa {
@@ -110,6 +115,13 @@ h1, h2, h3, h4, h5, h6 {
     padding: 0 15px;
     line-height: 47px;
     margin-right: 10px;
+
+    img {
+      position: relative;
+      top: -2px;
+      width: 45px;
+      margin-right: -5px;
+    }
 
     span {
       font-weight: 400;
@@ -291,6 +303,14 @@ h1, h2, h3, h4, h5, h6 {
   & > li > a {
     color: $colorBoxShadow;
     padding: 3px 15px;
+
+    &.text-danger {
+      color: $colorTextDanger;
+
+      .fa {
+        color: $colorTextDanger;
+      }
+    }
 
     &:hover,
     &:focus {

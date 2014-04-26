@@ -36,9 +36,6 @@ npm-debug.log
 .netbeans
 nbproject
 .idea
-.sass-cache
-assets/bower_components/*
-
 
 ########################
 # local config
@@ -49,3 +46,10 @@ config/local.js
 # vagrant
 ########################
 .vagrant
+
+########################
+# Taskboard specified
+########################
+.sass-cache
+assets/bower_components/*
+assets/styles/*.css
