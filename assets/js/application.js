@@ -1,5 +1,3 @@
-"use strict";
-
 // Specify TaskBoard application dependencies
 angular.module("TaskBoardApplication", ["TaskBoard"]);
 
@@ -8,6 +6,11 @@ angular.module("TaskBoardApplication")
         [
             "$routeProvider", "$routeSegmentProvider", "$locationProvider", "$httpProvider",
             function($routeProvider, $routeSegmentProvider, $locationProvider, $httpProvider) {
+                "use strict";
+
+                $locationProvider.html5Mode(false);
+
+                var getCsrfToken, checkAuthStatus;
 
                 /**
                  * Private function to inject CSRF token to $rootScope, this is needed with every
@@ -25,21 +28,21 @@ angular.module("TaskBoardApplication")
                  *
                  * @returns {Deferred.promise|*}
                  */
-                var getCsrfToken = function($q, $timeout, $http, $location, $rootScope) {
+                getCsrfToken = function($q, $timeout, $http, $location, $rootScope) {
                     // Initialize a new promise
                     var deferred = $q.defer();
 
                     // Fetch CSRF token for this session
                     $http
                         .get("/csrfToken")
-                        .success(function(data, status, headers, config) {
+                        .success(function(data) {
                             $timeout(deferred.resolve, 0);
 
                             $rootScope.csrfToken = data._csrf;
                         })
-                        .error(function(data, status, headers, config) {
+                        .error(function(data) {
                             $rootScope.makeMessage({
-                                message: data,
+                                text: data,
                                 type: "error"
                             });
 
@@ -68,43 +71,30 @@ angular.module("TaskBoardApplication")
                  *
                  * @returns {Deferred.promise|*}
                  */
-                var checkAuthStatus = function($q, $timeout, $http, $location, $rootScope) {
+                checkAuthStatus = function ($q, $timeout, $http, $location, $rootScope) {
                     // Initialize a new promise
                     var deferred = $q.defer();
 
                     $http
                         .get("/Auth/authenticate")
-                        .success(function(data, status, headers, config) {
+                        .success(function(data) {
                             // Authenticated
-                            if (data != "false") {
-                                $timeout(deferred.resolve, 0);
+                            $timeout(deferred.resolve, 0);
 
-                                $rootScope.currentUser = data;
-                            } else { // Not Authenticated
-                                $rootScope.message = {
-                                    message: "You need to sign in",
-                                    type: "error"
-                                };
-
-                                $timeout(function() {
-                                    deferred.reject();
-                                }, 0);
-
-                                $location.url("/login");
-                            }
+                            $rootScope.currentUser = data;
                         })
-                        .error(function(data, status, headers, config) {
+                        .error(function() {
                             $rootScope.message = {
-                                message: "You need to sign in",
+                                text: "You need to sign in",
                                 type: "error"
                             };
 
-                            $timeout(function() {
+                            $timeout(function () {
                                 deferred.reject();
                             }, 0);
 
                             $location.url("/login");
-                         });
+                        });
 
                     return deferred.promise;
                 };
@@ -130,7 +120,7 @@ angular.module("TaskBoardApplication")
                                 return $q.reject(response);
                             }
                         );
-                    }
+                    };
                 });
 
                 // Load used templates automatic
@@ -147,8 +137,9 @@ angular.module("TaskBoardApplication")
                     .when("/login",  "auth.login")
                     .when("/logout", "auth.login")
 
-                    .when("/",      "board.main")
                     .when("/board", "board.main")
+                    .when("/board/:projectId", "board.main")
+                    .when("/board/:projectId/sprint/:sprintId", "board.main")
 
                     .segment("auth", {
                         templateUrl: "templates/auth/index.html",
@@ -160,9 +151,7 @@ angular.module("TaskBoardApplication")
                     })
 
                     .within()
-                        .segment("login", {
-                            templateUrl: "templates/auth/login.html"
-                        })
+                        .segment("login", {templateUrl: "templates/auth/login.html"})
 
                     .up()
 
@@ -177,18 +166,14 @@ angular.module("TaskBoardApplication")
                     })
 
                     .within()
-                        .segment("main", {
-                            templateUrl: "templates/board/board.html"
-                        })
+                        .segment("main", {templateUrl: "templates/board/board.html"})
 
-                    .up()
-                ;
+                    .up();
 
                 $routeProvider
                     .otherwise({
-                        redirectTo: "/"
-                    })
-                ;
+                        redirectTo: "/board"
+                    });
             }
         ]
     );
@@ -198,6 +183,8 @@ angular.module("TaskBoardApplication")
         [
             "$rootScope", "$http", "$location",  "amMoment",
             function($rootScope, $http, $location, amMoment) {
+                "use strict";
+
                 // Initialize global attributes
                 $rootScope.message = "";
                 $rootScope.currentUser = "";
@@ -214,7 +201,7 @@ angular.module("TaskBoardApplication")
                  * Basically this watcher will just call makeMessage function from the rootScope.
                  * Note that you can use also that everywhere in app.
                  */
-                $rootScope.$watch("message", function(newValue, oldValue) {
+                $rootScope.$watch("message", function(newValue) {
                     if (newValue) {
                         $rootScope.makeMessage(newValue);
                     }
@@ -228,7 +215,7 @@ angular.module("TaskBoardApplication")
                  *  1) How to change moment timezone setting?
                  *  2) Add handling for numeral.js
                  */
-                $rootScope.$watch("currentUser", function(newValue, oldValue) {
+                $rootScope.$watch("currentUser", function(newValue) {
                     if (newValue) {
                         amMoment.changeLanguage(newValue.language);
                     }
@@ -257,20 +244,20 @@ angular.module("TaskBoardApplication")
                  *
                  * Note that actual message can be an object or simple string.
                  *
-                 * @param {sails.helper.message|String} message
+                 * @param {helper.message|{}|String} message
                  */
                 $rootScope.makeMessage = function(message) {
-                    var text = message.message || message;
-                    var type = message.type || "success";
-                    var layout = message.layout || "top";
-                    var timeout = message.timeout || 6000;
-                    var options = message.options || {};
+                    var text = message.text || message,
+                        type = message.type || "success",
+                        layout = message.layout || "top",
+                        timeout = message.timeout || 6000,
+                        options = message.options || {};
 
                     if (!message.timeout) {
                         switch (type) {
-                            case "success":
-                                timeout = 3000;
-                                break;
+                        case "success":
+                            timeout = 3000;
+                            break;
                         }
                     }
 
@@ -281,7 +268,7 @@ angular.module("TaskBoardApplication")
                         layout: layout,
                         timeout: timeout
                     }, options));
-                }
+                };
             }
         ]
     );

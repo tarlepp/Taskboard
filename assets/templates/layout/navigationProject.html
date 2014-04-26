@@ -1,15 +1,114 @@
 
 <div class="input-group">
-    <select class="selectpicker show-tick show-menu-arrow"
+    <select class="show-tick show-menu-arrow"
         data-live-search="true"
-        data-selectpicker
-        data-collection-name="sharedData.options.projects"
+        data-bootstrap-select
+        data-collection-name="projects"
         data-ng-model="sharedData.filters.projectId"
-        data-ng-options="project.id as project.title for project in sharedData.options.projects|orderBy:'title'"
+        data-ng-options="project.id as project.title for project in projects|orderBy:'title'"
     >
           <option style="display:none" value="" class="text-muted">Choose project to show</option>
     </select>
 
-    <span class="input-group-addon">
+    <span class="input-group-addon dropdown">
+        <div data-ng-show="!sharedData.filters.projectId">
+            <a class="tooltipTitle" title="Add new project">
+                <i class="fa fa-plus"></i>
+            </a>
+        </div>
+
+        <div data-ng-show="sharedData.filters.projectId">
+            <a class="dropdown-toggle"
+               data-toggle="dropdown"
+               data-hover="dropdown"
+               data-delay="100"
+            >
+                <i class="fa fa-wrench"></i>
+            </a>
+            <ul class="dropdown-menu">
+                <li class="nav-header text-info">Basic functions</li>
+                <li>
+                    <a>
+                        <i class="fa fa-plus"></i>
+                        Add new project
+                    </a>
+                </li>
+
+                <li>
+                    <a>
+                        <i class="fa fa-wrench"></i>
+                        Edit project
+                    </a>
+                </li>
+
+                <li class="divider"></li>
+
+                <li class="nav-header text-info">Management</li>
+
+                <li>
+                    <a>
+                        <i class="fa fa-list-ol"></i>
+                        Backlog
+                    </a>
+                </li>
+
+                <li>
+                    <a>
+                        <i class="fa fa-list-alt"></i>
+                        Sprints
+                    </a>
+                </li>
+
+                <li>
+                    <a>
+                        <i class="fa fa-gear"></i>
+                        Milestones
+                    </a>
+                </li>
+
+                <li>
+                    <a>
+                        <i class="fa fa-user"></i>
+                        Users
+                    </a>
+                </li>
+
+                <li class="divider"></li>
+
+                <li class="nav-header text-info">Advanced</li>
+
+                <li>
+                    <a>
+                        <i class="fa fa-bars fa-rotate-90" style=""></i>
+                        Edit phases
+                    </a>
+                </li>
+
+                <li>
+                    <a>
+                        <i class="fa fa-cogs"></i>
+                        Planning view
+                    </a>
+                </li>
+
+                <li>
+                    <a>
+                        <i class="fa fa-globe"></i>
+                        External links
+                    </a>
+                </li>
+
+                <li class="divider"></li>
+
+                <li class="nav-header text-info">Danger zone</li>
+
+                <li>
+                    <a class="text-danger">
+                        <i class="fa fa-trash-o"></i>
+                        Delete project
+                    </a>
+                </li>
+            </ul>
+        </div>
     </span>
 </div>

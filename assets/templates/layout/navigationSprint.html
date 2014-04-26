@@ -1,21 +1,23 @@
 
 <div class="input-group">
-    <select class="selectpicker show-tick show-menu-arrow"
+    <select class="show-tick show-menu-arrow"
         data-live-search="true"
-        data-selectpicker
-        data-collection-name="sharedData.options.sprints"
+        data-bootstrap-select
+        data-collection-name="sprints"
         data-disable-attribute="sharedData.filters.projectId"
-        data-ng-disabled="!sharedData.filters.projectId"
+        data-ng-disabled="!sharedData.filters.projectId || !sprints.length"
         data-ng-model="sharedData.filters.sprintId"
     >
         <option value="{{sprint.id}}"
-            data-ng-repeat="sprint in sharedData.options.sprints|orderBy:'dateStart':true"
+            data-ng-repeat="sprint in sprints|orderBy:'dateStart':true"
             data-ng-selected="{{sprint.id == sharedData.filters.sprintId}}"
         >
            {{sprint.dateStart|amDateFormat:currentUser.momentFormatDate}} - {{sprint.dateEnd|amDateFormat:currentUser.momentFormatDate}} {{sprint.title}}
         </option>
 
-        <option style="display:none" value="" class="text-muted">Choose sprint to show</option>
+        <option style="display:none" value="" class="text-muted">
+            {{sprintSelectText()}}
+        </option>
     </select>
 
     <span class="input-group-addon">

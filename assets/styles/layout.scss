@@ -23,10 +23,8 @@ a.icon:focus {
 }
 
 h1, h2, h3, h4, h5, h6 {
- // @include text-shadow(1px, 1px, 0px, $colorBackgroundGradientEnd);
   font-family: "Maven Pro", sans-serif;
- // color: $colorBackgroundGradientStart;
-  color: $colorBackgroundGradientEnd;
+  color: $colorTextShadow;
   letter-spacing: -3px;
   margin: 0 0 10px 0;
 }
@@ -39,10 +37,8 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-#header,
-#footer {
-  font-family: "Maven Pro", sans-serif;
-
+.header,
+.footer {
   a,
   a:hover,
   a:focus {
@@ -70,16 +66,33 @@ h1, h2, h3, h4, h5, h6 {
     &> li > a:focus {
       background-color: transparent;
       color: $colorTextLight;
-
     }
 
-    li .fa {
-      @include text-shadow(0px, 1px, 0px, $colorBoxShadow);
+    li {
+      font-size: 16px;
+
+      .fa {
+        @include text-shadow(0px, 1px, 0px, $colorBoxShadow);
+      }
+
+      .input-group {
+        .input-group-addon {
+          padding: 6px 10px;
+        }
+
+        .fa {
+          top: 1px;
+          left: 1px;
+          font-size: 16px;
+          color: $colorTextLight;
+          @include text-shadow(0px, 0px, 2px, $colorTextShadow);
+        }
+      }
     }
   }
 }
 
-#header {
+.header {
   .navbar {
     @include noSelect();
     @include box-shadow(0, 1px, 20px);
@@ -89,6 +102,7 @@ h1, h2, h3, h4, h5, h6 {
 
   .navbar-brand {
     @include text-shadow(1px, 1px, 3px, $colorBoxShadow);
+    font-family: "Maven Pro", sans-serif;
     color: $colorTextLight;
     font-size: 32px;
     font-weight: 600;
@@ -128,6 +142,17 @@ h1, h2, h3, h4, h5, h6 {
     &> li a:hover,
     &> li a:focus {
       color: white;
+
+      .dropdown-toggle {
+        .fa {
+          color: $colorTextLight;
+          @include text-shadow(0px, 0px, 2px, $colorTextShadow);
+        }
+      }
+
+      .gravatar-icon {
+        @include box-shadow(0px, 0px, 8px, rgba(255, 255, 255, .9));
+      }
     }
 
     .open>a,
@@ -136,25 +161,11 @@ h1, h2, h3, h4, h5, h6 {
       background-color: transparent;
       border-color: transparent;
     }
-
-    ul.dropdown-menu {
-      a {
-        color: $colorBackgroundGradientEnd;
-      }
-
-      i.fa {
-        font-size: 18px;
-        top: 0;
-        margin-right: 5px;
-        margin-left: -5px;
-        color: $colorTextDark;
-      }
-    }
   }
 
   .input-group {
     position: relative;
-    top: 8px;
+    top: 7px;
     margin-right: 10px;
 
     .btn {
@@ -165,6 +176,14 @@ h1, h2, h3, h4, h5, h6 {
 
   .bootstrap-select {
     width: 250px;
+    min-width: 250px;
+    max-width: 250px;
+  }
+
+  .gravatar-icon {
+    @include box-shadow(0px, 0px, 8px, rgba(255, 255, 255, .6));
+    margin-top: -2px;
+    margin-right: 10px;
   }
 
   li .fa {
@@ -196,6 +215,12 @@ h1, h2, h3, h4, h5, h6 {
 
   .container {
     text-align: center;
+  }
+
+  .nav {
+    li {
+      font-size: 12px;
+    }
   }
 
   .nav-pills > li {
@@ -231,4 +256,98 @@ h1, h2, h3, h4, h5, h6 {
 
 .gravatar-icon {
   border-radius: 6px;
+}
+
+.nav .dropdown-menu,
+.dropdown-menu {
+  .divider {
+    margin: 5px 0;
+  }
+
+  li {
+    text-align: left;
+    font-size: 14px;
+
+    &.nav-header {
+      @include text-shadow(0px, 0px, 0px, $colorBoxShadow);
+      padding: 3px 15px;
+      font-size: 18px;
+      font-weight: normal;
+      line-height: 18px;
+      text-transform: none;
+    }
+  }
+
+  .fa {
+    top: 0;
+    width: 18px;
+    margin-right: 5px;
+    text-align: center;
+    font-size: 14px;
+    color: $colorTextDark;
+    @include text-shadow(0px, 0px, 1px, $colorBoxShadow);
+  }
+
+  & > li > a {
+    color: $colorBoxShadow;
+    padding: 3px 15px;
+
+    &:hover,
+    &:focus {
+      color: white;
+      @include linear-gradient($colorTextLight, $colorTextDark);
+
+      .fa {
+        color: white;
+      }
+    }
+  }
+
+  & > .active > a,
+  & > .active > a:hover,
+  & > .active > a:focus {
+    color: white;
+    @include linear-gradient($colorTextLight, $colorTextDark);
+
+    .fa {
+      color: white;
+    }
+  }
+
+  &:before {
+    position: absolute;
+    top: -7px;
+    left: 9px;
+    display: inline-block;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid #ccc;
+    border-left: 7px solid transparent;
+    border-bottom-color: rgba(0, 0, 0, 0.2);
+    content: '';
+  }
+
+  &:after {
+    position: absolute;
+    top: -6px;
+    left: 10px;
+    display: inline-block;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #ffffff;
+    border-left: 6px solid transparent;
+    content: '';
+  }
+
+  &.pull-right:before {
+    right: 9px;
+    left: auto;
+  }
+
+  &.pull-right:after {
+    right: 10px;
+    left: auto;
+  }
+}
+
+.ng-cloak {
+  display: none !important;
 }
