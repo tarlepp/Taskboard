@@ -1,47 +1,50 @@
 <ul id="navigation-static" class="nav nav-pills pull-right">
-<li class="dropdown">
-    <a class="dropdown-toggle"
-        data-dropdown-menu
-        data-toggle="dropdown"
-        data-delay="50"
-    >
-        Settings
-        <b class="caret"></b>
-    </a>
-
-    <ul class="dropdown-menu pull-right">
-        <li>
-            <a>
-                <i class="fa fa-user"></i>
-                Users
-            </a>
-        </li>
-    </ul>
-</li>
-
-<li class="navbar-icon navbar-user tooltipTitle" title="Edit your profile settings"
-    data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
->
-    <a>
-        <gravatar-image data-gravatar-email="currentUser.email" data-gravatar-size="35" data-gravatar-rating="pg" data-gravatar-default="mm" data-gravatar-secure="true"></gravatar-image>
-
-        <span>{{currentUser.username}}</span>
-    </a>
-</li>
-
-<li id="functionHelp" class="navbar-icon tooltipTitle" title="Show help"
-    data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
+    <li class="dropdown">
+        <a class="dropdown-toggle"
+            data-dropdown-menu
+            data-toggle="dropdown"
+            data-delay="50"
         >
-    <a href="javascript: void(0);">
-        <i class="fa fa-question-circle"></i>
-    </a>
-</li>
+            Settings
+            <b class="caret"></b>
+        </a>
 
-<li class="navbar-icon tooltipTitle" title="Sign out"
-    data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
->
-    <a class="text-danger" data-ng-click="logout()">
-        <i class="fa fa-sign-out"></i>
-    </a>
-</li>
+        <ul class="dropdown-menu pull-right">
+            <li>
+                <a>
+                    <i class="fa fa-user"></i>
+                    Users
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li class="navbar-icon navbar-user" id="qtip-trigger-user-profile"
+        data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
+    >
+        <div data-qtip data-qtip-id="user-profile">Edit <span class="text-primary">your</span> profile settings</div>
+        <a>
+            <gravatar-image data-gravatar-email="currentUser.email" data-gravatar-size="35" data-gravatar-rating="pg" data-gravatar-default="mm" data-gravatar-secure="true"></gravatar-image>
+
+            <span>{{currentUser.username}}</span>
+        </a>
+    </li>
+
+    <li class="navbar-icon" id="qtip-trigger-show-help"
+        data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
+    >
+        <div data-qtip data-qtip-id="show-help">Show <span class="text-primary">Taskboard</span> help</div>
+        <a href="javascript: void(0);">
+            <i class="fa fa-question-circle"></i>
+        </a>
+    </li>
+
+    <li class="navbar-icon tooltipTitle" id="qtip-trigger-sign-out"
+        data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
+    >
+        <div data-qtip data-qtip-id="sign-out">Sign out from <span class="text-primary">Taskboard</span></div>
+        <a class="text-danger" data-ng-click="logout()">
+            <i class="fa fa-sign-out"></i>
+        </a>
+    </li>
 </ul>

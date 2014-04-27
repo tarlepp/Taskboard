@@ -10,6 +10,9 @@
 "use strict";
 
 var cssFilesToInject = [
+    // jQuery specified libraries
+    "bower_components/qtip2/jquery.qtip.min.css",
+
     // Bootstrap specified libraries
     "bower_components/bootstrap/dist/css/bootstrap.min.css",
     "bower_components/bootstrap/dist/css/bootstrap-theme.min.css",
@@ -19,6 +22,7 @@ var cssFilesToInject = [
     // Individual libraries
     "bower_components/font-awesome/css/font-awesome.min.css",
 
+    // Add everything else
     "styles/**/*.css"
 ];
 
@@ -50,6 +54,7 @@ var jsFilesToInject = [
     // jQuery specified libraries
     "bower_components/jquery/dist/jquery.min.js",
     "bower_components/noty/js/noty/packaged/jquery.noty.packaged.js",
+    "bower_components/qtip2/jquery.qtip.min.js",
 
     // Angular specified libraries
     "bower_components/angular/angular.js",
