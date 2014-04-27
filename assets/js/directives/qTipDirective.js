@@ -1,3 +1,11 @@
+/**
+ * Angular directive for qTip2 library. Usage example:
+ *
+ *  <a id="qtip-trigger-tooltipContainer">
+ *      foo bar
+ *      <div data-qtip data-qtip-id="tooltipContainer">Tooltip content here</div>
+ *  </a>
+ */
 "use strict";
 
 angular.module("TaskBoardDirectives")
@@ -11,11 +19,11 @@ angular.module("TaskBoardDirectives")
             transclude: true,
             replace: true,
             templateUrl: "/templates/directives/qtip.html",
-            link: function(scope, element, attrs) {
-                scope.parentId = "#qtip-trigger-" + attrs.qtipId;
-                scope.closeButton = (attrs.closeButton);
+            link: function(scope, element, attributes) {
+                scope.parentId = "#qtip-trigger-" + attributes.qtipId;
+                scope.closeButton = (attributes.closeButton);
 
-                switch (attrs.position) {
+                switch (attributes.position) {
                     case "top":
                         scope.qtipPointerPos = "bottom center";
                         scope.qtipContentPos = "top center";
@@ -42,7 +50,7 @@ angular.module("TaskBoardDirectives")
                         break;
                 }
 
-                jQuery(scope.parentId).each(function () {
+                jQuery(scope.parentId).each(function() {
                     jQuery(this).qtip({
                         metadata: {
                             type: "html5",      // Use HTML5 data-* attributes
@@ -50,7 +58,7 @@ angular.module("TaskBoardDirectives")
                         },
                         content: {
                             text: jQuery(element),
-                            title: attrs.qtipTitle,
+                            title: attributes.qtipTitle,
                             button: scope.closeButton
                         },
                         style: {
@@ -69,10 +77,10 @@ angular.module("TaskBoardDirectives")
                         },
                         position: {
                             viewport: jQuery(window),
-                            target: (attrs.target ? attrs.target : "event"),
+                            target: (attributes.target ? attributes.target : "event"),
                             adjust: {
                                 method: "flipinvert",
-                                mouse: (attrs.static === null)
+                                mouse: (attributes.static === null)
                             },
                             my: scope.qtipPointerPos,
                             at: scope.qtipContentPos
@@ -85,8 +93,9 @@ angular.module("TaskBoardDirectives")
                     });
                 });
 
-                scope.$on("$destroy", function () {
-                    $(scope.parentId).qtip('destroy', true); // Immediately destroy all tooltips belonging to the selected elements
+                // Immediately destroy all tooltips belonging to the selected elements
+                scope.$on("$destroy", function() {
+                    jQuery(scope.parentId).qtip("destroy", true);
                 });
             }
         };
