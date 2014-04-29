@@ -5,6 +5,17 @@
  */
 
 var __line = "";
+
+var interceptorHttpConfig = {
+    headers: {},
+    method: "",
+    params: {},
+    data: {},
+    transformRequest: [],
+    transformResponse: [],
+    url: ""
+};
+
 var helper = {
         message: {
             text: "",
