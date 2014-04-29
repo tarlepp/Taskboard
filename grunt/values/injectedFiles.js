@@ -58,7 +58,7 @@ var jsFilesToInject = [
 
     // Angular specified libraries
     "bower_components/angular/angular.js",
-    "bower_components/angular-bootstrap/angular-bootstrap-tpls.js",
+    "bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
     "bower_components/angular-cookie/angular-cookie.js",
     "bower_components/angular-cookies/angular-cookies.js",
     "bower_components/angular-moment/angular-moment.min.js",
@@ -77,6 +77,10 @@ var jsFilesToInject = [
     "bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.en.js",
     "bower_components/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js",
     "bower_components/bootstrap-select/bootstrap-select.min.js",
+
+    // Individual components, that doesn't have bower sources.
+    "vendor/angularSails/dist/ngsails.js",
+    "vendor/angularSails/dist/ngsails.resource.js",
 
     // TaskBoard application specified files that must be loaded in this order
     "js/application.js",

@@ -21,6 +21,7 @@
          <link rel="stylesheet" href="/styles/forms.css" />
          <link rel="stylesheet" href="/styles/layout.css" />
          <link rel="stylesheet" href="/styles/mixins.css" />
+         <link rel="stylesheet" href="/styles/modal.css" />
          <!--STYLES END-->
     </head>
 
@@ -55,6 +56,7 @@
         <script src="/bower_components/noty/js/noty/packaged/jquery.noty.packaged.js"></script>
         <script src="/bower_components/qtip2/jquery.qtip.min.js"></script>
         <script src="/bower_components/angular/angular.js"></script>
+        <script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
         <script src="/bower_components/angular-cookie/angular-cookie.js"></script>
         <script src="/bower_components/angular-cookies/angular-cookies.js"></script>
         <script src="/bower_components/angular-moment/angular-moment.min.js"></script>
@@ -70,18 +72,21 @@
         <script src="/bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.fi.js"></script>
         <script src="/bower_components/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
         <script src="/bower_components/bootstrap-select/bootstrap-select.min.js"></script>
+        <script src="/vendor/angularSails/dist/ngsails.js"></script>
+        <script src="/vendor/angularSails/dist/ngsails.resource.js"></script>
         <script src="/js/application.js"></script>
         <script src="/js/taskboard.js"></script>
         <script src="/js/controllers/AuthController.js"></script>
         <script src="/js/controllers/BoardController.js"></script>
         <script src="/js/controllers/HeaderController.js"></script>
+        <script src="/js/controllers/UserController.js"></script>
         <script src="/js/directives/DropdownDirective.js"></script>
         <script src="/js/directives/SelectDirective.js"></script>
         <script src="/js/directives/TemplateDirective.js"></script>
         <script src="/js/directives/qTipDirective.js"></script>
-        <script src="/js/example.js"></script>
         <script src="/js/services/AuthService.js"></script>
         <script src="/js/services/SharedDataService.js"></script>
+        <script src="/js/services/TaskboardSocketInterceptor.js"></script>
         <!--SCRIPTS END-->
     </body>
 </html>
