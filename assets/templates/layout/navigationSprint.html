@@ -4,7 +4,9 @@
         data-live-search="true"
         data-bootstrap-select
         data-collection-name="sprints"
-        data-disable-attribute="sharedData.filters.projectId"
+        data-tb-collection="sprints"
+        data-tb-selected="sharedData.filters.sprintId"
+        data-tb-disabled="sharedData.filters.projectId"
         data-ng-disabled="!sharedData.filters.projectId || !sprints.length"
         data-ng-model="sharedData.filters.sprintId"
     >

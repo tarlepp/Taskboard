@@ -3,7 +3,8 @@
     <select class="show-tick show-menu-arrow"
         data-live-search="true"
         data-bootstrap-select
-        data-collection-name="projects"
+        data-tb-collection="projects"
+        data-tb-selected="sharedData.filters.projectId"
         data-ng-model="sharedData.filters.projectId"
         data-ng-options="project.id as project.title for project in projects|orderBy:'title'"
     >
