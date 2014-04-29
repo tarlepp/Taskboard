@@ -3,8 +3,8 @@
 angular.module("TaskBoardControllers")
     .controller("HeaderController",
         [
-            "$scope", "$rootScope", "$location", "$sails", "$cookieStore", "SharedDataService",
-            function($scope, $rootScope, $location, $sails, $cookieStore, SharedDataService) {
+            "$scope", "$rootScope", "$location", "$sailsSocket", "$timeout", "$q", "$cookieStore", "$modal", "SharedDataService",
+            function($scope, $rootScope, $location, $sailsSocket, $timeout, $q, $cookieStore, $modal, SharedDataService) {
                 $scope.sharedData = SharedDataService.data;
 
                 /**
@@ -37,6 +37,24 @@ angular.module("TaskBoardControllers")
                     return output;
                 };
 
+                $scope.openUserProfile = function() {
+                    var modalInstance = $modal.open({
+                        templateUrl: "templates/user/profile.html",
+                        controller: "UserController",
+                        resolve: {
+                            user: "foo"
+                        }
+                    });
+
+                    modalInstance.result
+                        .then(
+                            function(selectedItem) {
+                            },
+                            function() {
+                            }
+                        );
+                };
+
                 /**
                  * Watcher for currentUser attribute, if this is set or changed we must fetch
                  * project data from server. Note that this watcher will also set selected
@@ -45,7 +63,8 @@ angular.module("TaskBoardControllers")
                  */
                 $rootScope.$watch("currentUser", function(newValue, oldValue) {
                     if (newValue && newValue !== oldValue) {
-                        $sails.get("/Project")
+
+                        $sailsSocket.get("/Project")
                             .success(function(data) {
                                 var project = _.find(data, function(project) {
                                     return project.id == $scope.sharedData.filters.projectId;
@@ -87,7 +106,8 @@ angular.module("TaskBoardControllers")
                         $cookieStore.put("projectId", newValue);
 
                         // Fetch project sprints
-                        $sails.get("/Sprint/", {project: newValue})
+                        $sailsSocket
+                            .get("/Sprint/", {params: {project: newValue}})
                             .success(function(data) {
                                 var sprint = _.find(data, function(sprint) {
                                     return sprint.id == $scope.sharedData.filters.sprintId;
@@ -145,6 +165,41 @@ angular.module("TaskBoardControllers")
                         $location.path("/board/" + $scope.sharedData.filters.projectId + "/sprint/" + sprintId);
                     }
                 });
+
+
+                // Below is just some demo stuff
+
+                $sailsSocket.subscribe("sprint", function(message) {
+                    console.log(message);
+                });
+
+                $sailsSocket
+                    .get("/Sprint/subscribe")
+                    .success(function(data) {
+                    })
+                    .error(function(data) {
+                    });
+
+                $scope.testFoo  = function() {
+                    var foo = {
+                       // title: "testi",
+                        dateStart: "2014-01-01",
+                        dateEnd: "2014-02-01"
+                    };
+
+                $sailsSocket
+                    .post("/Sprint", foo)
+                    .success(function(data){
+                        console.log("success");
+                        console.log(data);
+                        console.log(foo);
+                    })
+                    .error(function(data) {
+                        console.log("error");
+                        console.log(data);
+                        console.log(foo);
+                    });
+                };
             }
         ]
     );
