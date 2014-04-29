@@ -4,11 +4,37 @@ angular.module("TaskBoardApplication", ["TaskBoard"]);
 angular.module("TaskBoardApplication")
     .config(
         [
-            "$routeProvider", "$routeSegmentProvider", "$locationProvider", "$httpProvider",
-            function($routeProvider, $routeSegmentProvider, $locationProvider, $httpProvider) {
+            "$routeProvider", "$routeSegmentProvider", "$locationProvider", "$httpProvider", "$sailsSocketProvider",
+            function($routeProvider, $routeSegmentProvider, $locationProvider, $httpProvider, $sailsSocketProvider) {
                 "use strict";
 
                 $locationProvider.html5Mode(false);
+
+                $sailsSocketProvider.interceptors.push("TaskboardSocketInterceptor");
+
+                /**
+                 * HTTP interceptor to check that current user is really signed in to
+                 * Taskboard application. If not redirect user back to sign in page.
+                 */
+                $httpProvider.responseInterceptors.push(function($q, $location) {
+                    return function(promise) {
+                        return promise.then(
+                            // Success: just return the response
+                            function(response) {
+                                return response;
+                            },
+
+                            // Error: check the error status to get only the 401
+                            function(response) {
+                                if (response.status === 401) {
+                                    $location.url("/login");
+                                }
+
+                                return $q.reject(response);
+                            }
+                        );
+                    };
+                });
 
                 var getCsrfToken, checkAuthStatus;
 
@@ -99,30 +125,6 @@ angular.module("TaskBoardApplication")
                     return deferred.promise;
                 };
 
-                /**
-                 * HTTP interceptor to check that current user is really signed in to
-                 * Taskboard application. If not redirect user back to sign in page.
-                 */
-                $httpProvider.responseInterceptors.push(function($q, $location) {
-                    return function(promise) {
-                        return promise.then(
-                            // Success: just return the response
-                            function(response) {
-                                return response;
-                            },
-
-                            // Error: check the error status to get only the 401
-                            function(response) {
-                                if (response.status === 401) {
-                                    $location.url("/login");
-                                }
-
-                                return $q.reject(response);
-                            }
-                        );
-                    };
-                });
-
                 // Load used templates automatic
                 $routeSegmentProvider.options.autoLoadTemplates = true;
 
@@ -187,6 +189,7 @@ angular.module("TaskBoardApplication")
 
                 // Initialize global attributes
                 $rootScope.message = "";
+                $rootScope.error = "";
                 $rootScope.currentUser = "";
                 $rootScope.csrfToken = "";
 
@@ -218,6 +221,19 @@ angular.module("TaskBoardApplication")
                 $rootScope.$watch("currentUser", function(newValue) {
                     if (newValue) {
                         amMoment.changeLanguage(newValue.language);
+                    }
+                });
+
+                /**
+                 * Watcher for root scope error message attribute. This is updated whenever $sailsSocket
+                 * query fails.
+                 *
+                 * @todo add real handling for this.
+                 */
+                $rootScope.$watch("error", function(newValue) {
+                    if (newValue) {
+                        console.log("Socket ERROR");
+                        console.log(newValue);
                     }
                 });
 
