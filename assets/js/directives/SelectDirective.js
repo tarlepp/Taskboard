@@ -1,3 +1,21 @@
+/**
+ * Angular directive for bootstrap-select library. Usage example:
+ *
+ *  <select class="show-tick show-menu-arrow"
+ *      data-live-search="true"
+ *      data-bootstrap-select
+ *      data-collection-name="sprints"
+ *      data-tb-collection="sprints"
+ *      data-tb-selected="sharedData.filters.sprintId"
+ *      data-tb-disabled="sharedData.filters.projectId"
+ *      data-ng-disabled="!sharedData.filters.projectId || !sprints.length"
+ *      data-ng-model="sharedData.filters.sprintId"
+ *  >
+ *      <option style="display:none" value="" class="text-muted">Choose sprint to show</option>
+ *  </select>
+ *
+ * @see http://silviomoreto.github.io/bootstrap-select/
+ */
 "use strict";
 
 angular.module("TaskBoardDirectives")
@@ -7,39 +25,38 @@ angular.module("TaskBoardDirectives")
             function($timeout) {
                 return {
                     restrict: "A",
-                    scope: true,
-                    require: ["?ngModel", "?collectionName"],
+                    scope: {
+                        tbCollection: "=",
+                        tbSelected: "=",
+                        tbDisabled: "="
+                    },
                     compile: function(tElement, tAttributes) {
-                        if (angular.isUndefined(tAttributes.ngModel)) {
-                            throw new Error("Please add ng-model attribute!");
-                        } else if (angular.isUndefined(tAttributes.collectionName)) {
-                            throw new Error("Please add data-collection-name attribute!");
-                        }
+                        tElement.selectpicker();
 
-                        return function(scope, element, attributes, ngModel) {
-                            if (angular.isUndefined(ngModel)){
-                                return;
-                            }
-
-                            scope.$watch(attributes.disableAttribute, function() {
-                                $timeout(function() {
-                                    element.selectpicker("refresh");
-                                });
-                            });
-
-                            scope.$watch(attributes.ngModel, function(newValue, oldValue) {
-                                if (newValue && newValue != oldValue) {
+                        return function(scope, element, attributes) {
+                            scope.$watch("tbCollection", function(valueNew, valueOld) {
+                                if (valueNew) {
                                     $timeout(function() {
                                         element.selectpicker("refresh");
                                     });
                                 }
-                            });
+                            }, true);
 
-                            scope.$watch(attributes.collectionName, function() {
-                                $timeout(function() {
-                                    element.selectpicker("refresh");
-                                });
-                            });
+                            scope.$watch("tbSelected", function(valueNew, valueOld) {
+                                if (valueNew != valueOld) {
+                                    $timeout(function() {
+                                        element.selectpicker("refresh");
+                                    });
+                                }
+                            }, true);
+
+                            scope.$watch("tbDisabled", function(valueNew, valueOld) {
+                                if (valueNew != valueOld) {
+                                    $timeout(function() {
+                                        element.selectpicker("refresh");
+                                    });
+                                }
+                            }, true);
                         };
                     }
                 };
