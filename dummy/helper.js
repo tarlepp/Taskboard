@@ -16,6 +16,38 @@ var interceptorHttpConfig = {
     url: ""
 };
 
+var interceptorHttpResponse = {
+    config: {
+        headers: {},
+        method: "",
+        params: {},
+        data: {},
+        transformRequest: [],
+        transformResponse: [],
+        url: ""
+    },
+    data: {},
+    headers: "",
+    status: "",
+    statusText: ""
+};
+
+var interceptorHttpRejection = {
+    config: {
+        headers: {},
+        method: "",
+        params: {},
+        data: {},
+        transformRequest: [],
+        transformResponse: [],
+        url: ""
+    },
+    data: {},
+    headers: "",
+    status: "",
+    statusText: ""
+};
+
 var helper = {
         message: {
             text: "",
