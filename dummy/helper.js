@@ -48,6 +48,14 @@ var interceptorHttpRejection = {
     statusText: ""
 };
 
+var sailsSocketError = {
+    error: "",
+    invalidAttributes: [],
+    model: "",
+    status: "",
+    summary: ""
+};
+
 var helper = {
         message: {
             text: "",
