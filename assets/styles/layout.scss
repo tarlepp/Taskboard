@@ -4,8 +4,9 @@ body {
   cursor: default;
   overflow-y: scroll;
   background-image: url("/images/layout/background-body.png");
-  font-family: "Yanone Kaffeesatz", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 16px;
+  font-size: 14px;
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+
 }
 
 a {
@@ -74,7 +75,7 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     li {
-      font-size: 16px;
+      font-size: 14px;
 
       .fa {
         @include text-shadow(0px, 1px, 0px, $colorBoxShadow);
@@ -93,7 +94,7 @@ h1, h2, h3, h4, h5, h6 {
         .fa {
           top: 1px;
           left: 1px;
-          font-size: 16px;
+          font-size: 14px;
           color: $colorTextLight;
           @include text-shadow(0px, 0px, 2px, $colorTextShadow);
         }
@@ -188,7 +189,7 @@ h1, h2, h3, h4, h5, h6 {
 
   .input-group {
     position: relative;
-    top: 7px;
+    top: 9px;
     margin-right: 10px;
 
     .btn {
@@ -218,7 +219,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #footer {
   line-height: 30px;
-  font-size: 12px;
+  font-size: 11px;
 
   .navbar {
     @include box-shadow(-1px, 0, 20px);
@@ -242,7 +243,7 @@ h1, h2, h3, h4, h5, h6 {
 
   .nav {
     li {
-      font-size: 12px;
+      font-size: 11px;
     }
   }
 
@@ -289,13 +290,12 @@ h1, h2, h3, h4, h5, h6 {
 
   li {
     text-align: left;
-    font-size: 14px;
+    font-size: 12px;
 
     &.nav-header {
       @include text-shadow(0px, 0px, 0px, $colorBoxShadow);
       padding: 3px 15px;
-      font-size: 18px;
-      font-weight: normal;
+      font-size: 14px;
       line-height: 18px;
       text-transform: none;
     }
@@ -314,6 +314,7 @@ h1, h2, h3, h4, h5, h6 {
   & > li > a {
     color: $colorBoxShadow;
     padding: 3px 15px;
+    line-height: 18px;
 
     &.text-danger {
       color: $colorTextDanger;

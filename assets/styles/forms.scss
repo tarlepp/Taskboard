@@ -1,1 +1,14 @@
 @import "mixins";
+
+.form-control,
+.checkbox label {
+  font-size: 12px;
+}
+
+.radio input[type=radio],
+.radio-inline input[type=radio],
+.checkbox input[type=checkbox],
+.checkbox-inline input[type=checkbox] {
+  position: relative;
+  top: 2px;
+}

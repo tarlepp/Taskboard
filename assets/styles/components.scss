@@ -1,21 +1,22 @@
 @import "mixins";
 
 .noty_text {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .bootstrap-select {
-  font-size: 16px;
+  font-size: 14px;
 
   .btn {
-    font-size: 16px;
+    font-size: 14px;
+    line-height: 18px;
   }
 
   &.btn-group {
     .dropdown-menu {
       li > a {
-        line-height: 22px;
-        font-size: 16px;
+        line-height: 20px;
+        font-size: 14px;
       }
     }
 
@@ -28,7 +29,7 @@
 
     &.show-tick {
       li.selected a i.check-mark {
-        top: 4px;
+        top: 2px;
       }
     }
   }
