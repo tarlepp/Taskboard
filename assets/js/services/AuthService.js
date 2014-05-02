@@ -1,54 +1,43 @@
+/**
+ * Taskboard angular service to check if current user is authenticated or not. This service
+ * is called with route resolve method with specified routes. After successfully authentication
+ * service will attach user object to $rootScope.currentUser where it's usable all over the
+ * application.
+ *
+ * Note that you have to add this function call to all routes which needs to be authenticated on
+ * server side.
+ *
+ * @todo It's not recommend to store data in services, figure this out.
+ */
+"use strict";
+
 angular.module("TaskBoardServices")
-    .factory('Auth',
+    .factory("AuthService",
         [
-            "$http", "$cookieStore",
-            function($http, $cookieStore) {
-                var currentUser = $cookieStore.get('user') || null;
+            "$q", "$http", "$rootScope",
+            function($q, $http, $rootScope) {
+                // Initialize a new promise
+                var deferred = $q.defer();
 
-                $cookieStore.remove('user');
+                $http
+                    .get("/Auth/authenticate")
+                    .success(function(data) { // Authenticated
+                        $rootScope.currentUser = data;
 
-                function changeUser(user) {
-                    angular.extend(currentUser, user);
-                }
+                        deferred.resolve(data);
+                    })
+                    .error(function() {
+                        $rootScope.message = {
+                            text: "You need to sign in",
+                            type: "error"
+                        };
 
-                return {
-                    authorize: function(accessLevel, role) {
-                        if(role === undefined) {
-                            role = currentUser.role;
-                        }
+                        $rootScope.logout(true);
 
-                        return true;
-                    },
-                    isLoggedIn: function(user) {
-                        if (user === undefined) {
-                            user = currentUser;
-                        }
+                        deferred.reject();
+                    });
 
-                        return user.role.title === userRoles.user.title || user.role.title === userRoles.admin.title;
-                    },
-                    register: function(user, success, error) {
-                        $http.post('/register', user).success(function(res) {
-                            changeUser(res);
-                            success();
-                        }).error(error);
-                    },
-                    login: function(user, success, error) {
-                        $http.post('/login', user).success(function(user){
-                            changeUser(user);
-                            success(user);
-                        }).error(error);
-                    },
-                    logout: function(success, error) {
-                        $http.post('/logout').success(function(){
-                            changeUser({
-                                username: '',
-                            });
-                            success();
-                        }).error(error);
-                    },
-
-                    user: currentUser
-                };
+                return deferred.promise;
             }
         ]
     );

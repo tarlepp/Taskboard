@@ -1,5 +1,5 @@
 /**
- * Common sailsSocket interceptor to handle pre-processing of requests and post-processing of
+ * Common interceptor for $sailSocket  to handle pre-processing of requests and post-processing of
  * responses. Before actual request interceptor will add required CSRF token to each request so
  * those can be made to server side.
  *
@@ -11,8 +11,8 @@
  */
 "use strict";
 
-angular.module("TaskBoardServices")
-    .factory('TaskboardSocketInterceptor',
+angular.module("TaskBoardInterceptors")
+    .factory("SocketInterceptor",
         [
             "$rootScope", "$q",
             function($rootScope, $q) {
@@ -63,6 +63,10 @@ angular.module("TaskBoardServices")
                      */
                     request: function(config) {
                         if (config.method == "POST" || config.method == "PUT" || config.method == "DELETE") {
+                            if (!config.data) {
+                                config.data = {};
+                            }
+
                             config.data._csrf = $rootScope.csrfToken;
                         }
 

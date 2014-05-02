@@ -1,3 +1,5 @@
+"use strict";
+
 // Specify TaskBoard application dependencies
 angular.module("TaskBoardApplication", ["TaskBoard"]);
 
@@ -6,127 +8,20 @@ angular.module("TaskBoardApplication")
         [
             "$routeProvider", "$routeSegmentProvider", "$locationProvider", "$httpProvider", "$sailsSocketProvider",
             function($routeProvider, $routeSegmentProvider, $locationProvider, $httpProvider, $sailsSocketProvider) {
-                "use strict";
-
+                // Cannot use HTML5 mode with sails... yet
                 $locationProvider.html5Mode(false);
-
-                $sailsSocketProvider.interceptors.push("TaskboardSocketInterceptor");
-
-                /**
-                 * HTTP interceptor to check that current user is really signed in to
-                 * Taskboard application. If not redirect user back to sign in page.
-                 */
-                $httpProvider.responseInterceptors.push(function($q, $location) {
-                    return function(promise) {
-                        return promise.then(
-                            // Success: just return the response
-                            function(response) {
-                                return response;
-                            },
-
-                            // Error: check the error status to get only the 401
-                            function(response) {
-                                if (response.status === 401) {
-                                    $location.url("/login");
-                                }
-
-                                return $q.reject(response);
-                            }
-                        );
-                    };
-                });
-
-                var getCsrfToken, checkAuthStatus;
-
-                /**
-                 * Private function to inject CSRF token to $rootScope, this is needed with every
-                 * $http request otherwise those will fail at sails.js endpoint. Function will set
-                 * provided CSRF token to $rootScope.csrfToken attribute where it's usable from
-                 * anywhere in the application.
-                 *
-                 * Function is called with route resolve callbacks within necessary routes.
-                 *
-                 * @param $q
-                 * @param $timeout
-                 * @param $http
-                 * @param $location
-                 * @param $rootScope
-                 *
-                 * @returns {Deferred.promise|*}
-                 */
-                getCsrfToken = function($q, $timeout, $http, $location, $rootScope) {
-                    // Initialize a new promise
-                    var deferred = $q.defer();
-
-                    // Fetch CSRF token for this session
-                    $http
-                        .get("/csrfToken")
-                        .success(function(data) {
-                            $timeout(deferred.resolve, 0);
-
-                            $rootScope.csrfToken = data._csrf;
-                        })
-                        .error(function(data) {
-                            $rootScope.makeMessage({
-                                text: data,
-                                type: "error"
-                            });
-
-                            $timeout(function() {
-                                deferred.reject();
-                            }, 0);
-                        });
-
-                    return deferred.promise;
-                };
-
-                /**
-                 * Private function to check if current user is authenticated or not. This function
-                 * is called with route resolve method with specified routes. After successfully
-                 * authentication function will attach user object to $rootScope.currentUser where
-                 * it's usable all over the application.
-                 *
-                 * Note that you have to add this function call to all routes which needs to be
-                 * authenticated on server side.
-                 *
-                 * @param $q
-                 * @param $timeout
-                 * @param $http
-                 * @param $location
-                 * @param $rootScope
-                 *
-                 * @returns {Deferred.promise|*}
-                 */
-                checkAuthStatus = function ($q, $timeout, $http, $location, $rootScope) {
-                    // Initialize a new promise
-                    var deferred = $q.defer();
-
-                    $http
-                        .get("/Auth/authenticate")
-                        .success(function(data) {
-                            // Authenticated
-                            $timeout(deferred.resolve, 0);
-
-                            $rootScope.currentUser = data;
-                        })
-                        .error(function() {
-                            $rootScope.message = {
-                                text: "You need to sign in",
-                                type: "error"
-                            };
-
-                            $timeout(function () {
-                                deferred.reject();
-                            }, 0);
-
-                            $location.url("/login");
-                        });
-
-                    return deferred.promise;
-                };
 
                 // Load used templates automatic
                 $routeSegmentProvider.options.autoLoadTemplates = true;
+
+                /**
+                 * Add taskboard specified interceptors for $http and $sailsSocket. These will
+                 * add necessary CSRF token to POST, PUT and DELETE queries and adds common
+                 * error handling for $http and $sailsSocket usage.
+                 */
+                $httpProvider.interceptors.push("HttpInterceptor");
+                $sailsSocketProvider.interceptors.push("SocketInterceptor");
+
 
                 /**
                  * Route configurations.
@@ -147,7 +42,7 @@ angular.module("TaskBoardApplication")
                         templateUrl: "templates/auth/index.html",
                         controller: "AuthController",
                         resolve: {
-                            csrfToken: getCsrfToken
+                            csrfToken: "CsrfTokenService"
                         },
                         resolveFailed: {}
                     })
@@ -161,8 +56,8 @@ angular.module("TaskBoardApplication")
                         templateUrl: "templates/board/index.html",
                         controller: "BoardController",
                         resolve: {
-                            authStatus: checkAuthStatus,
-                            csrfToken: getCsrfToken
+                            csrfToken: "CsrfTokenService",
+                            authStatus: "AuthService"
                         },
                         resolveFailed: {}
                     })
@@ -185,11 +80,8 @@ angular.module("TaskBoardApplication")
         [
             "$rootScope", "$http", "$location",  "amMoment",
             function($rootScope, $http, $location, amMoment) {
-                "use strict";
-
                 // Initialize global attributes
                 $rootScope.message = "";
-                $rootScope.error = "";
                 $rootScope.currentUser = "";
                 $rootScope.csrfToken = "";
 
@@ -225,37 +117,30 @@ angular.module("TaskBoardApplication")
                 });
 
                 /**
-                 * Watcher for root scope error message attribute. This is updated whenever $sailsSocket
-                 * query fails.
-                 *
-                 * @todo add real handling for this.
-                 */
-                $rootScope.$watch("error", function(newValue) {
-                    if (newValue) {
-                        console.log("Socket ERROR");
-                        console.log(newValue);
-                    }
-                });
-
-                /**
                  * Logout function which is available in every application page. Usage example:
                  *
                  *  <a data-ng-click="logout()">Sign out</a>
                  *
                  * Logout is also done if you change URL to /#/logout
                  */
-                $rootScope.logout = function() {
+                $rootScope.logout = function(noMessage) {
+                    noMessage = noMessage || false;
+
                     $rootScope.currentUser = "";
 
                     $http
-                        .post("/logout", {_csrf: $rootScope.csrfToken})
+                        .post("/logout")
                         .success(function() {
-                            $rootScope.message = "Signed out successfully";
+                            if (!noMessage) {
+                                $rootScope.message = "Signed out successfully";
+                            }
 
                             $location.url("/login");
                         })
                         .error(function(data) {
-                            $rootScope.message = data;
+                            if (!noMessage) {
+                                $rootScope.message = data;
+                            }
 
                             $location.url("/login");
                         });
@@ -281,9 +166,9 @@ angular.module("TaskBoardApplication")
 
                     if (!message.timeout) {
                         switch (type) {
-                        case "success":
-                            timeout = 3000;
-                            break;
+                            case "success":
+                                timeout = 3000;
+                                break;
                         }
                     }
 

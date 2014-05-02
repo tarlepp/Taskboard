@@ -25,16 +25,22 @@ angular.module("TaskBoardControllers")
                         .post("/Auth/login", {
                             username: $scope.user.username,
                             password: $scope.user.password,
-                            rememberMe: $scope.user.rememberMe,
-                            _csrf: $rootScope.csrfToken
+                            rememberMe: $scope.user.rememberMe
                         })
                         .success(function() {
                             $rootScope.message = "Signed in successfully";
 
                             $location.url("/board");
                         })
-                        .error(function(data) {
-                            $rootScope.message = data;
+                        .error(function(response) {
+                            if (response.message && response.status) {
+                                $rootScope.message = {
+                                    text: response.message,
+                                    type: "error"
+                                };
+                            } else {
+                                $rootScope.message = response;
+                            }
 
                             $location.url("/login");
                         });

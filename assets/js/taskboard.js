@@ -14,10 +14,12 @@ angular.module("TaskBoard", [
     "TaskBoardControllers",
     "TaskBoardServices",
     "TaskBoardFilters",
-    "TaskBoardDirectives"
+    "TaskBoardDirectives",
+    "TaskBoardInterceptors"
 ]);
 
 angular.module("TaskBoardControllers", []);
 angular.module("TaskBoardServices", []);
 angular.module("TaskBoardFilters", []);
 angular.module("TaskBoardDirectives", []);
+angular.module("TaskBoardInterceptors", []);
