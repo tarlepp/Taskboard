@@ -22,7 +22,6 @@ angular.module("TaskBoardApplication")
                 $httpProvider.interceptors.push("HttpInterceptor");
                 $sailsSocketProvider.interceptors.push("SocketInterceptor");
 
-
                 /**
                  * Route configurations.
                  *
@@ -42,7 +41,9 @@ angular.module("TaskBoardApplication")
                         templateUrl: "templates/auth/index.html",
                         controller: "AuthController",
                         resolve: {
-                            csrfToken: "CsrfTokenService"
+                            csrfToken: ["CsrfTokenService", function(CsrfTokenService) {
+                                return CsrfTokenService.get();
+                            }]
                         },
                         resolveFailed: {}
                     })
@@ -56,8 +57,12 @@ angular.module("TaskBoardApplication")
                         templateUrl: "templates/board/index.html",
                         controller: "BoardController",
                         resolve: {
-                            csrfToken: "CsrfTokenService",
-                            authStatus: "AuthService"
+                            csrfToken: ["CsrfTokenService", function(CsrfTokenService) {
+                                return CsrfTokenService.get();
+                            }],
+                            currentUser: ["AuthService", function(AuthService) {
+                                return AuthService.authenticate();
+                            }]
                         },
                         resolveFailed: {}
                     })
@@ -78,8 +83,8 @@ angular.module("TaskBoardApplication")
 angular.module("TaskBoardApplication")
     .run(
         [
-            "$rootScope", "$http", "$location",  "amMoment",
-            function($rootScope, $http, $location, amMoment) {
+            "$rootScope", "$http", "$location",  "amMoment", "AuthService",
+            function($rootScope, $http, $location, amMoment, AuthService) {
                 // Initialize global attributes
                 $rootScope.message = "";
                 $rootScope.currentUser = "";
@@ -125,12 +130,12 @@ angular.module("TaskBoardApplication")
                  */
                 $rootScope.logout = function(noMessage) {
                     noMessage = noMessage || false;
-
                     $rootScope.currentUser = "";
 
                     $http
                         .post("/logout")
                         .success(function() {
+                            console.log("ddd");
                             if (!noMessage) {
                                 $rootScope.message = "Signed out successfully";
                             }

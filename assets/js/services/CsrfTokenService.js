@@ -14,29 +14,33 @@ angular.module("TaskBoardServices")
         [
             "$q", "$http", "$rootScope",
             function($q, $http, $rootScope) {
-                // Initialize a new promise
-                var deferred = $q.defer();
+                return {
+                    get: function() {
+                        // Initialize a new promise
+                        var deferred = $q.defer();
 
-                // Fetch CSRF token for this session
-                $http
-                    .get("/csrfToken")
-                    .success(function(data) {
-                        $rootScope.csrfToken = data._csrf;
+                        // Fetch CSRF token for this session
+                        $http
+                            .get("/csrfToken")
+                            .success(function(data) {
+                                $rootScope.csrfToken = data._csrf;
 
-                        deferred.resolve(data._csrf);
-                    })
-                    .error(function(data) {
-                        $rootScope.csrfToken = "";
+                                deferred.resolve(data._csrf);
+                            })
+                            .error(function(data) {
+                                $rootScope.csrfToken = "";
 
-                        $rootScope.makeMessage({
-                            text: data,
-                            type: "error"
-                        });
+                                $rootScope.makeMessage({
+                                    text: data,
+                                    type: "error"
+                                });
 
-                        deferred.reject(data);
-                    });
+                                deferred.reject(data);
+                            });
 
-                return deferred.promise;
+                        return deferred.promise;
+                    }
+                };
             }
         ]
     );

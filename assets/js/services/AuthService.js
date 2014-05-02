@@ -14,30 +14,35 @@
 angular.module("TaskBoardServices")
     .factory("AuthService",
         [
-            "$q", "$http", "$rootScope",
-            function($q, $http, $rootScope) {
-                // Initialize a new promise
-                var deferred = $q.defer();
+            "$q", "$http", "$rootScope", "$location",
+            function($q, $http, $rootScope, $location) {
+                return {
+                    authenticate: function() {
+                        // Initialize a new promise
+                        var deferred = $q.defer();
 
-                $http
-                    .get("/Auth/authenticate")
-                    .success(function(data) { // Authenticated
-                        $rootScope.currentUser = data;
+                        $http
+                            .get("/Auth/authenticate")
+                            .success(function(data) { // Authenticated
+                                $rootScope.currentUser = data;
 
-                        deferred.resolve(data);
-                    })
-                    .error(function() {
-                        $rootScope.message = {
-                            text: "You need to sign in",
-                            type: "error"
-                        };
+                                deferred.resolve(data);
+                            })
+                            .error(function() {
+                                $rootScope.currentUser = "";
+                                $rootScope.message = {
+                                    text: "You need to sign in",
+                                    type: "error"
+                                };
 
-                        $rootScope.logout(true);
+                                $location.url("/login");
 
-                        deferred.reject();
-                    });
+                                deferred.reject();
+                            });
 
-                return deferred.promise;
+                        return deferred.promise;
+                    }
+                };
             }
         ]
     );
