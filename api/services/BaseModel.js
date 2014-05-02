@@ -26,12 +26,14 @@ module.exports = {
         // Relation to User object via created user id
         createdUser: {
             model:      "User",
-            columnName: "createdUserId"
+            columnName: "createdUserId",
+            required:   true
         },
         // Relation to User object via updated user id
         updatedUser: {
             model:      "User",
-            columnName: "updatedUserId"
+            columnName: "updatedUserId",
+            required:   true
         },
 
         // Dynamic model data attributes

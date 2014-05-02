@@ -13,7 +13,8 @@ module.exports = _.merge(_.cloneDeep(require("../services/BaseModel")), {
         // Sprint title
         title: {
             type:       "string",
-            required:   true
+            required:   true,
+            minLength:  4
         },
         // Description of the sprint
         description: {
@@ -41,7 +42,8 @@ module.exports = _.merge(_.cloneDeep(require("../services/BaseModel")), {
         // Relation to Project model
         project: {
             model:      "Project",
-            columnName: "projectId"
+            columnName: "projectId",
+            required:   true
         },
 
         // Dynamic data attributes
@@ -68,15 +70,15 @@ module.exports = _.merge(_.cloneDeep(require("../services/BaseModel")), {
 
             return output;
         },
+
         dateStartObject: function() {
             return (this.dateStart && this.dateStart != "0000-00-00")
                 ? DateService.convertDateObjectToUtc(this.dateStart) : null;
         },
+
         dateEndObject: function() {
             return (this.dateEnd && this.dateEnd != "0000-00-00")
                 ? DateService.convertDateObjectToUtc(this.dateEnd) : null;
         }
     }
 });
-
-
