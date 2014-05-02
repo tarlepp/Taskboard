@@ -6,25 +6,62 @@
 
 .modal-header,
 .modal-footer {
-  background-color: #f5f5f5;
+  @include noSelect();
+}
+
+.modal-body {
+  padding: 5px 10px;
+  overflow-x: auto;
+  overflow-y: scroll;
+
+  ul.nav {
+    @include noSelect();
+
+    & > li > a {
+      padding: 5px 10px;
+      letter-spacing: -1px;
+
+      &:hover,
+      &:focus {
+        border-color: #f7f7f7 #f7f7f7 #dddddd;
+        background-color: #f7f7f7;
+      }
+    }
+  }
+
+  .nav-tabs {
+    & > li.active > a,
+    & > li.active > a:hover,
+    & > li.active > a:focus {
+      background-color: #ffffff;
+      border-color: #dddddd #dddddd #ffffff;
+    }
+  }
 }
 
 .modal-header {
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid #b9b9b9;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
   padding: 8px 8px 8px 12px;
+  @include linear-gradient(#c3c3c3, #e1e1e1);
 
   h3 {
     margin: 0;
+    @include text-shadow(1px, 1px, 1px, $colorBoxShadow);
+    font-family: "Maven Pro", sans-serif;
+    color: $colorTextLight;
+    letter-spacing: -2px;
   }
 }
 
 .modal-footer {
+  margin-top: 0;
   padding: 8px;
-  border-top: 1px solid #dddddd;
+  border-top: 1px solid #b9b9b9;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
+  @include linear-gradient(#e1e1e1, #c3c3c3);
 }
 
 .modal {
