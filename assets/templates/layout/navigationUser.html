@@ -23,7 +23,8 @@
         data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
     >
         <div data-qtip data-qtip-id="user-profile">Edit <span class="text-primary">your</span> profile settings</div>
-        <a>
+
+        <a data-ng-click="openUserProfile()">
             <gravatar-image data-gravatar-email="currentUser.email" data-gravatar-size="35" data-gravatar-rating="pg" data-gravatar-default="mm" data-gravatar-secure="true"></gravatar-image>
 
             <span>{{currentUser.username}}</span>
@@ -34,7 +35,7 @@
         data-qtip-options='{ "position": { "at": "bottom center", "my": "top right" } }'
     >
         <div data-qtip data-qtip-id="show-help">Show <span class="text-primary">Taskboard</span> help</div>
-        <a href="javascript: void(0);">
+        <a href="javascript: void(0);" data-ng-click="testFoo()">
             <i class="fa fa-question-circle"></i>
         </a>
     </li>
