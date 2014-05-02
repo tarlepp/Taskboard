@@ -13,6 +13,7 @@
   padding: 5px 10px;
   overflow-x: auto;
   overflow-y: scroll;
+  background-image: url("/images/layout/background-body.png");
 
   ul.nav {
     @include noSelect();
@@ -21,10 +22,10 @@
       padding: 5px 10px;
       letter-spacing: -1px;
 
-      &:hover,
-      &:focus {
-        border-color: #f7f7f7 #f7f7f7 #dddddd;
-        background-color: #f7f7f7;
+      .fa {
+        margin-right: 3px;
+        color: $colorTextDark;
+        @include text-shadow(0, 0, 1px, $colorTextShadow);
       }
     }
   }
@@ -33,8 +34,8 @@
     & > li.active > a,
     & > li.active > a:hover,
     & > li.active > a:focus {
-      background-color: #ffffff;
-      border-color: #dddddd #dddddd #ffffff;
+      background-color: transparent;
+      background-image: url("/images/layout/background-body.png");
     }
   }
 }
