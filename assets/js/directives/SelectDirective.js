@@ -31,8 +31,6 @@ angular.module("TaskBoardDirectives")
                         tbDisabled: "="
                     },
                     compile: function(tElement, tAttributes) {
-                        tElement.selectpicker();
-
                         return function(scope, element, attributes) {
                             scope.$watch("tbCollection", function(valueNew, valueOld) {
                                 if (valueNew) {
