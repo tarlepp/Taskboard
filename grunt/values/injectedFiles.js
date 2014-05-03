@@ -19,6 +19,9 @@ var cssFilesToInject = [
     "bower_components/bootstrap-datepicker/css/datepicker3.css",
     "bower_components/bootstrap-select/bootstrap-select.min.css",
 
+    // Angular specified libraries
+    "bower_components/ng-prettyjson/dist/ng-prettyjson.min.css",
+
     // Individual libraries
     "bower_components/font-awesome/css/font-awesome.min.css",
 
@@ -69,6 +72,7 @@ var jsFilesToInject = [
     "bower_components/angular-sanitize/angular-sanitize.js",
     "bower_components/angular-ui-router/release/angular-ui-router.js",
     "bower_components/angularjs-gravatar/dist/angularjs-gravatardirective.min.js",
+    "bower_components/ng-prettyjson/dist/ng-prettyjson.min.js",
 
     // Bootstrap specified libraries
     "bower_components/bootstrap/dist/js/bootstrap.min.js",
