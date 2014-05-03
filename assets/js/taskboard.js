@@ -11,6 +11,7 @@ angular.module("TaskBoard", [
     "angularjs-gravatardirective",
     "angularMoment",
     "sails.io",
+    "ngPrettyJson",
     "TaskBoardControllers",
     "TaskBoardServices",
     "TaskBoardFilters",
