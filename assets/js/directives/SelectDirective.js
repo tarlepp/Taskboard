@@ -30,32 +30,30 @@ angular.module("TaskBoardDirectives")
                         tbSelected: "=",
                         tbDisabled: "="
                     },
-                    compile: function(tElement, tAttributes) {
-                        return function(scope, element, attributes) {
-                            scope.$watch("tbCollection", function(valueNew, valueOld) {
-                                if (valueNew) {
-                                    $timeout(function() {
-                                        element.selectpicker("refresh");
-                                    });
-                                }
-                            }, true);
+                    link: function(scope, element, attributes) {
+                        scope.$watch("tbCollection", function(valueNew, valueOld) {
+                            if (valueNew) {
+                                $timeout(function() {
+                                    element.selectpicker("refresh");
+                                });
+                            }
+                        }, true);
 
-                            scope.$watch("tbSelected", function(valueNew, valueOld) {
-                                if (valueNew != valueOld) {
-                                    $timeout(function() {
-                                        element.selectpicker("refresh");
-                                    });
-                                }
-                            }, true);
+                        scope.$watch("tbSelected", function(valueNew, valueOld) {
+                            if (valueNew != valueOld) {
+                                $timeout(function() {
+                                    element.selectpicker("refresh");
+                                });
+                            }
+                        }, true);
 
-                            scope.$watch("tbDisabled", function(valueNew, valueOld) {
-                                if (valueNew != valueOld) {
-                                    $timeout(function() {
-                                        element.selectpicker("refresh");
-                                    });
-                                }
-                            }, true);
-                        };
+                        scope.$watch("tbDisabled", function(valueNew, valueOld) {
+                            if (valueNew != valueOld) {
+                                $timeout(function() {
+                                    element.selectpicker("refresh");
+                                });
+                            }
+                        }, true);
                     }
                 };
             }
