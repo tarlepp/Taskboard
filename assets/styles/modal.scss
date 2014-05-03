@@ -38,6 +38,14 @@
       background-image: url("/images/layout/background-body.png");
     }
   }
+
+  .tab-pane {
+    margin-top: 5px;
+
+    h4 {
+      margin-top: 13px;
+    }
+  }
 }
 
 .modal-header {
@@ -53,6 +61,12 @@
     font-family: "Maven Pro", sans-serif;
     color: $colorTextLight;
     letter-spacing: -2px;
+  }
+
+  .fa {
+    margin-right: 5px;
+    font-size: 28px;
+    line-height: 34px;
   }
 }
 
