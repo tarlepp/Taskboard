@@ -1,6 +1,7 @@
 @import "mixins";
 
 .form-signin {
+  @include noSelect();
   max-width: 250px;
   padding: 15px;
   margin: 50px auto 0 auto;
@@ -32,5 +33,10 @@
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+  }
+
+  input[type="checkbox"] {
+    position: relative;
+    top: 2px;
   }
 }

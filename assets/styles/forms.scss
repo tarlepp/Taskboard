@@ -4,6 +4,10 @@ label {
   color: $colorTextDark;
 }
 
+.btn-default {
+  border-color: #ababab;
+}
+
 .help-block {
   margin-bottom: 0;
 }
@@ -37,6 +41,18 @@ label {
     .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
       padding-left: 5px;
       padding-right: 5px;
+    }
+  }
+
+  .form-control {
+    &.progress {
+      padding: 0;
+      margin-bottom: 0;
+      height: 32px;
+
+      .progress-bar {
+        line-height: 32px;
+      }
     }
   }
 
