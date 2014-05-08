@@ -3,8 +3,8 @@
 angular.module("TaskBoardControllers")
     .controller("HeaderController",
         [
-            "$scope", "$rootScope", "$location", "$sailsSocket", "$timeout", "$q", "$cookieStore", "$modal", "SharedDataService",
-            function($scope, $rootScope, $location, $sailsSocket, $timeout, $q, $cookieStore, $modal, SharedDataService) {
+            "$scope", "$rootScope", "$location", "$sailsSocket", "$cookieStore", "$modal", "SharedDataService", "AuthService", "DateService",
+            function($scope, $rootScope, $location, $sailsSocket, $cookieStore, $modal, SharedDataService, AuthService, DateService) {
                 $scope.sharedData = SharedDataService.data;
 
                 /**
@@ -41,18 +41,16 @@ angular.module("TaskBoardControllers")
                     var modalInstance = $modal.open({
                         templateUrl: "templates/user/profile.html",
                         controller: "UserController",
+                        backdrop: "static",
                         resolve: {
-                            user: "foo"
+                            user: function() {
+                                return AuthService.authenticate();
+                            },
+                            timezones: function() {
+                                return DateService.getTimezones();
+                            }
                         }
                     });
-
-                    modalInstance.result
-                        .then(
-                            function(selectedItem) {
-                            },
-                            function() {
-                            }
-                        );
                 };
 
                 /**
@@ -63,7 +61,6 @@ angular.module("TaskBoardControllers")
                  */
                 $rootScope.$watch("currentUser", function(newValue, oldValue) {
                     if (newValue && newValue !== oldValue) {
-
                         $sailsSocket.get("/Project")
                             .success(function(data) {
                                 var project = _.find(data, function(project) {
@@ -182,23 +179,26 @@ angular.module("TaskBoardControllers")
 
                 $scope.testFoo  = function() {
                     var foo = {
-                       // title: "testi",
+                        title: "testi",
                         dateStart: "2014-01-01",
-                        dateEnd: "2014-02-01"
+                        dateEnd: "2014-02-01",
+                        project: 1,
+                        createdUser: 1,
+                        updatedUser: 1
                     };
 
-                $sailsSocket
-                    .post("/Sprint", foo)
-                    .success(function(data){
-                        console.log("success");
-                        console.log(data);
-                        console.log(foo);
-                    })
-                    .error(function(data) {
-                        console.log("error");
-                        console.log(data);
-                        console.log(foo);
-                    });
+                    $sailsSocket
+                        .post("/Sprint", foo)
+                        .success(function(data){
+                            console.log("success");
+                            console.log(data);
+                            console.log(foo);
+                        })
+                        .error(function(data) {
+                            console.log("error");
+                            console.log(data);
+                            console.log(foo);
+                        });
                 };
             }
         ]
