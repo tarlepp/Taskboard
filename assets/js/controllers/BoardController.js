@@ -7,6 +7,10 @@ angular.module("TaskBoardControllers")
             function($scope, $rootScope, $cookieStore, $routeParams, SharedDataService) {
                 $scope.sharedData = SharedDataService.data;
 
+                $rootScope.$watch("currentUser", function(valueNew) {
+                    $scope.test = {json: valueNew};
+                });
+
                 // Initialize project and sprint id
                 var projectId = parseInt($routeParams.projectId, 10),
                     sprintId = parseInt($routeParams.sprintId, 10);
