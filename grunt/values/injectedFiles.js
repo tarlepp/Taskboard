@@ -58,10 +58,13 @@ var jsFilesToInject = [
     "bower_components/jquery/dist/jquery.min.js",
     "bower_components/noty/js/noty/packaged/jquery.noty.packaged.js",
     "bower_components/qtip2/jquery.qtip.min.js",
+    "bower_components/jquery.complexify.js/jquery.complexify.banlist.js",
+    "bower_components/jquery.complexify.js/jquery.complexify.min.js",
 
     // Angular specified libraries
     "bower_components/angular/angular.js",
     "bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
+    "bower_components/angular-bootstrap-show-errors/src/showErrors.min.js",
     "bower_components/angular-cookie/angular-cookie.js",
     "bower_components/angular-cookies/angular-cookies.js",
     "bower_components/angular-moment/angular-moment.min.js",

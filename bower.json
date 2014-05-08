@@ -44,6 +44,8 @@
     "moment-timezone": "~0.0.6",
     "moment": "~2.6.0",
     "qtip2": "~2.2.0",
-    "ng-prettyjson": "*"
+    "ng-prettyjson": "*",
+    "jquery.complexify.js": "*",
+    "angular-bootstrap-show-errors": "~1.0.0"
   }
 }
