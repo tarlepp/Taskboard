@@ -12,7 +12,7 @@ module.exports = function(grunt) {
         "uglify",
         "cssmin",
         "sails-linker:prodJs",
-        "sails-linker:proStyles",
+        "sails-linker:prodStyles",
         "sails-linker:devTpl"
     ]);
 };

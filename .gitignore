@@ -52,4 +52,5 @@ config/local.js
 ########################
 .sass-cache
 assets/bower_components/*
+assets/linker/bower_components/*
 assets/styles/*.css
