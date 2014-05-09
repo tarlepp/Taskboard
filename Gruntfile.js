@@ -1,64 +1,77 @@
-var includeAll = require('sails/node_modules/include-all')
-	, path = require('path');
-
 /**
  * Gruntfile
  *
- * By default, the Gruntfile in new Sails projects comes with a `linker`
- * task, which will automatically inject client-side scripts, styles, and templates
- * from your `assets` folder into specific regions of certain EJS and HTML files
- * specified below.  This behavior is completely optional, but here for convenience.
+ * This Node script is executed when you run `grunt` or `sails lift`.
+ * It's purpose is to load the Grunt tasks in your project's `tasks`
+ * folder, and allow you to add and remove tasks as you see fit.
+ * For more information on how this works, check out the `README.md`
+ * file that was generated in your `tasks` folder.
  *
- * At the top part of this file, you'll find a few of the most commonly
- * configured options, but Sails' integration with Grunt is also fully
- * customizable.  If you'd like to work with your assets differently
- * you can change this file to do anything you like!
- *
- * More information on using Grunt to work with static assets:
- * http://gruntjs.com/configuring-tasks
+ * WARNING:
+ * Unless you know what you're doing, you shouldn't change this file.
+ * Check out the `tasks` directory instead.
  */
+'use strict';
 
 module.exports = function(grunt) {
+    // Load the include-all library in order to require all of our grunt
+    // configurations and task registrations dynamically.
+    var includeAll;
 
+    try {
+        includeAll = require('include-all');
+    } catch (e0) {
+        try {
+            includeAll = require('sails/node_modules/include-all');
+        } catch (e1) {
+            console.error('Could not find `include-all` module.');
+            console.error('Skipping grunt tasks...');
+            console.error('To fix this, please run:');
+            console.error('npm install include-all --save`');
+            console.error();
 
+            grunt.registerTask('default', []);
 
-  configureGruntfile();
-
-  /**
-   * Load CommonJS submodules from the specified
-   * relative path.
-   *
-   * @return {Object}
-   */
-  function loadTasks (relPath) {
-    return includeAll({
-      dirname: path.resolve(__dirname, relPath),
-      filter: /(.+)\.js$/
-    });
-  }
-
-  /**
-   * Invokes the config function for the task config and register definitions.
-   * Make sure to pass in grunt.
-   *
-   * @param  {Object} tasks [Grunt object that each task will need]
-   */
-  function invokeConfigFn (tasks) {
-    for (var taskName in tasks) {
-      if (tasks.hasOwnProperty(taskName)) {
-        tasks[taskName](grunt);
-      }
+            return;
+        }
     }
-  }
 
-  /**
-   * Configure the gruntfile.
-   */
-  function configureGruntfile () {
-    var taskConfigurations = loadTasks('./grunt/config'),
-        registerDefinitions = loadTasks('./grunt/register');
 
+    /**
+     * Loads Grunt configuration modules from the specified
+     * relative path. These modules should export a function
+     * that, when run, should either load/configure or register
+     * a Grunt task.
+     */
+    function loadTasks(relPath) {
+        return includeAll({
+            dirname: require('path').resolve(__dirname, relPath),
+            filter: /(.+)\.js$/
+        }) || {};
+    }
+
+    /**
+     * Invokes the function from a Grunt configuration module with
+     * a single argument - the `grunt` object.
+     */
+    function invokeConfigFn(tasks) {
+        for (var taskName in tasks) {
+            if (tasks.hasOwnProperty(taskName)) {
+                tasks[taskName](grunt);
+            }
+        }
+    }
+
+    // Load task functions
+    var taskConfigurations = loadTasks('./tasks/config'),
+        registerDefinitions = loadTasks('./tasks/register');
+
+    // (ensure that a default task exists)
+    if (!registerDefinitions.default) {
+        registerDefinitions.default = function(grunt) { grunt.registerTask('default', []); };
+    }
+
+    // Run task functions to configure Grunt.
     invokeConfigFn(taskConfigurations);
     invokeConfigFn(registerDefinitions);
-  }
 };

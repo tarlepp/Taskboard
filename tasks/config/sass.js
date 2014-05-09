@@ -6,22 +6,22 @@
  *
  * @param grunt
  */
-"use strict";
+'use strict';
 
 module.exports = function(grunt) {
-    grunt.config.set("sass", {
+    grunt.config.set('sass', {
         dev: {
             files: [
                 {
                     expand: true,
-                    cwd: "assets/styles/",
-                    src: ["*.scss", "*.sass"],
-                    dest: ".tmp/public/styles/",
-                    ext: ".css"
+                    cwd: 'assets/styles/',
+                    src: ['*.scss', '*.sass'],
+                    dest: '.tmp/public/styles/',
+                    ext: '.css'
                 }
             ]
         }
     });
 
-    grunt.loadNpmTasks("grunt-contrib-sass");
+    grunt.loadNpmTasks('grunt-contrib-sass');
 };

@@ -8,5 +8,5 @@
 "use strict";
 
 module.exports.models = {
-    connection: "mysql"
+    connection: "someMysqlServer"
 };

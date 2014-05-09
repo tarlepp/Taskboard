@@ -5,8 +5,8 @@
   "description": "a Sails application to mimic 'scrum-ban' taskboard.",
   "keywords": [],
   "dependencies": {
-    "sails": "~0.10.0-rc5",
-    "sails-mysql": "~0.10.0-rc5",
+    "sails": "~0.10.0-rc7",
+    "sails-mysql": "~0.10.0-rc6",
     "ejs": "~0.8.4",
     "grunt": "0.4.2",
     "grunt-sync": "~0.0.4",

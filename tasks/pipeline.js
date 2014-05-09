@@ -1,14 +1,20 @@
 /**
- * CSS files to inject in order
- * (uses Grunt-style wildcard/glob/splat expressions)
+ * grunt/pipeline.js
  *
- * By default, Sails also supports LESS in development and production.
- * To use SASS/SCSS, Stylus, etc., edit the `sails-linker:devStyles` task
- * below for more options.  For this to work, you may need to install new
- * dependencies, e.g. `npm install grunt-contrib-sass`
+ * The order in which your css, javascript, and template files should be
+ * compiled and linked from your views and static HTML files.
+ *
+ * (Note that you can take advantage of Grunt-style wildcard/glob/splat expressions
+ * for matching multiple files.)
  */
-"use strict";
+'use strict';
 
+/**
+ * CSS files to inject in order
+ *
+ * (if you're using LESS with the built-in default config, you'll want to
+ * change `assets/styles/importer.less` instead.)
+ */
 var cssFilesToInject = [
     // jQuery specified libraries
     "bower_components/qtip2/jquery.qtip.min.css",
@@ -30,13 +36,9 @@ var cssFilesToInject = [
 ];
 
 /**
- * Javascript files to inject in order
+ * Client-side javascript files to inject in order
  * (uses Grunt-style wildcard/glob/splat expressions)
- *
- * To use client-side CoffeeScript, TypeScript, etc., edit the
- * `sails-linker:devJs` task below for more options.
  */
-
 var jsFilesToInject = [
     // Below, as a demonstration, you"ll see the built-in dependencies
     // linked in the proper order order
@@ -99,29 +101,32 @@ var jsFilesToInject = [
 
 /**
  * Client-side HTML templates are injected using the sources below
- * The ordering of these templates shouldn"t matter.
+ * The ordering of these templates shouldn't matter.
  * (uses Grunt-style wildcard/glob/splat expressions)
  *
  * By default, Sails uses JST templates and precompiles them into
  * functions for you.  If you want to use jade, handlebars, dust, etc.,
- * edit the relevant sections below.
+ * with the linker, no problem-- you'll just want to make sure the precompiled
+ * templates get spit out to the same file.  Be sure and check out `tasks/README.md`
+ * for information on customizing and installing new tasks.
  */
-var templateFilesToInject = [
-    "template/**/*.html"
+ var templateFilesToInject = [
+    'templates/**/*.html'
 ];
 
-module.exports = {
-    // Modify css file injection paths to use
-    cssFilesToInject: cssFilesToInject.map(function(path) {
-        return ".tmp/public/" + path;
-    }),
+/**
+ * Prefix relative paths to source files so they point to the proper locations
+ * (i.e. where the other Grunt tasks spit them out, or in some cases, where
+ * they reside in the first place)
+ */
+module.exports.cssFilesToInject = cssFilesToInject.map(function(path) {
+    return '.tmp/public/' + path;
+});
 
-    // Modify js file injection paths to use
-    jsFilesToInject: jsFilesToInject.map(function(path) {
-        return ".tmp/public/" + path;
-    }),
+module.exports.jsFilesToInject = jsFilesToInject.map(function(path) {
+    return '.tmp/public/' + path;
+});
 
-    templateFilesToInject: templateFilesToInject.map(function(path) {
-        return "assets/" + path;
-    })
-};
+module.exports.templateFilesToInject = templateFilesToInject.map(function(path) {
+    return 'assets/' + path;
+});
