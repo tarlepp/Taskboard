@@ -17,12 +17,10 @@ angular.module('TaskBoardDirectives')
                 },
                 template: '<progressbar class="form-control" value="complexity" type="{{type}}">{{complexity|number:1}}%</progressbar>',
                 link: function link(scope, element, attributes) {
-                    var inputElement = jQuery('#' + attributes.input);
-
                     scope.complexity = 0;
                     scope.type = 'danger';
 
-                    inputElement.complexify({}, function(valid, complexity) {
+                    jQuery('#' + attributes.input).complexify({}, function(valid, complexity) {
                         scope.complexity = complexity;
 
                         if (complexity < 33) {
