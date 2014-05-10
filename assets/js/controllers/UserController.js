@@ -28,7 +28,8 @@ angular.module('TaskBoardControllers')
                     {
                         title: 'Change password',
                         template: 'user/profile_change_password',
-                        buttonSet: 'password'
+                        buttonSet: 'password',
+                        form: 'userPassword'
                     },
                     {
                         title: 'Projects',

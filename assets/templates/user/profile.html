@@ -17,7 +17,7 @@
             <tab-heading>
                 <span
                     data-ng-bind-html="tab.title"
-                    data-ng-class="{'text-danger': (form[tab.form] && !form[tab.form].$valid)}"
+                    data-ng-class="{'text-danger': (form[tab.form] && !form[tab.form].$valid && !form[tab.form].$pristine)}"
                 ></span>
 
             </tab-heading>
@@ -47,7 +47,6 @@
     </div>
 
     <div data-ng-show="activeTab.buttonSet == 'password'">
-        {{passwordStrength}}
         <button class="btn btn-primary"
             data-ng-click="changePassword()"
             data-ng-disabled="!form.userPassword.$valid"
