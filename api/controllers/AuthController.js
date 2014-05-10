@@ -49,7 +49,11 @@ module.exports = {
         response.clearCookie("remember_me");
         request.logout();
 
-        response.send(200);
+        if (request.wantsJSON) {
+            response.send(true, 200);
+        } else {
+            response.redirect("/");
+        }
     },
 
     /**
@@ -122,5 +126,31 @@ module.exports = {
                 }
             });
         })(request, response);
+    },
+
+    /**
+     * Action to check if given password matches with currently signed in user password or not.
+     * This action is used in user profile change password action.
+     *
+     * @param   {Request}   request
+     * @param   {Response}  response
+     */
+    checkPassword: function(request, response) {
+        var passwordToCheck = request.param("password");
+
+        User
+            .findOne()
+            .where({id: request.user.id})
+            .exec(function(error, user) {
+                if (error) {
+                    response.json(error, 500);
+                } else if (!user) {
+                    response.json('user not found.', 404);
+                } else if (user.validPassword(passwordToCheck)) {
+                    response.json(true, 200);
+                } else {
+                    response.json('password don\'t match...', 400);
+                }
+            });
     }
 };
