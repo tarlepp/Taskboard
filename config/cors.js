@@ -1,5 +1,6 @@
 /**
- * Cross-Origin Resource Sharing (CORS)
+ * Cross-Origin Resource Sharing (CORS) Settings
+ * (sails.config.cors)
  *
  * CORS is like a more modern version of JSONP-- it allows your server/API
  * to successfully respond to requests from client-side JavaScript code
@@ -9,19 +10,19 @@
  * For more information on CORS, check out:
  * http://en.wikipedia.org/wiki/Cross-origin_resource_sharing
  *
- * Note that any of these settings (besides "allRoutes") can be changed on a per-route basis
+ * Note that any of these settings (besides 'allRoutes') can be changed on a per-route basis
  * by adding a "cors" object to the route configuration:
  *
- * "/get foo": {
- *   controller: "foo",
- *   action: "bar",
+ * '/get foo': {
+ *   controller: 'foo',
+ *   action: 'bar',
  *   cors: {
- *     origin: "http://foobar.com,https://owlhoot.com"	
+ *     origin: 'http://foobar.com,https://owlhoot.com'
  *   }
  *  }
  *
  */
-"use strict";
+'use strict';
 
 module.exports.cors = {
     // Allow CORS on all routes by default?  If not, you must enable CORS on a
@@ -33,16 +34,16 @@ module.exports.cors = {
     // Which domains which are allowed CORS access?
     // This can be a comma-delimited list of hosts (beginning with http:// or https://)
     // or "*" to allow all domains CORS access.
-    origin: "*",
+    origin: '*',
 
     // Allow cookies to be shared for CORS requests?
     credentials: true,
 
     // Which methods should be allowed for CORS requests?  This is only used
     // in response to preflight requests (see article linked above for more info)
-    methods: "GET, POST, PUT, DELETE, OPTIONS, HEAD",
+    methods: 'GET, POST, PUT, DELETE, OPTIONS, HEAD',
 
     // Which headers should be allowed for CORS requests?  This is only used
     // in response to preflight requests.
-    headers: "content-type"
+    headers: 'content-type'
 };

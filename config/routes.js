@@ -1,5 +1,6 @@
 /**
- * Routes
+ * Route Mappings
+ * (sails.config.routes)
  *
  * Your routes map URLs to views and controllers.
  *
@@ -16,21 +17,25 @@
  * CoffeeScript for the front-end.
  *
  * For more information on routes, check out:
- * http://sailsjs.org/#documentation
+ * http://links.sailsjs.org/docs/config/routes
  */
-"use strict";
+'use strict';
 
 module.exports.routes = {
-    "/": {
-        controller: "BoardController",
-        action:     "index"
+    '/': {
+        controller: 'BoardController',
+        action:     'index'
     },
-    "/logout": {
-        controller: "AuthController",
-        action:     "logout"
+    '/logout': {
+        controller: 'AuthController',
+        action:     'logout'
     },
-    "post /login": {
-        controller: "AuthController",
-        action:     "login"
+    'get /login': {
+        controller: 'AuthController',
+        action:     'logout'
+    },
+    'post /login': {
+        controller: 'AuthController',
+        action:     'login'
     }
 };

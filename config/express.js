@@ -4,12 +4,12 @@
  * For more information on configuration, check out:
  * http://sailsjs.org/#documentation
  */
-"use strict";
+'use strict';
 
-var passport = require("passport");
-var moment = require("moment-timezone");
-var numeral = require("numeral");
-var fs = require("fs");
+var passport = require('passport');
+var moment = require('moment-timezone');
+var numeral = require('numeral');
+var fs = require('fs');
 
 module.exports.express = {
     // The middleware function used for parsing the HTTP request body.
@@ -49,14 +49,12 @@ module.exports.express = {
     // silenceMultipartWarning: true,
     // ======================================================================
 
-
     // Cookie parser middleware to use (or false to disable)
     //
     // Defaults to `express.cookieParser`
     //
     // Example override:
     // cookieParser: (function customMethodOverride (req, res, next) {})(),
-
 
     // HTTP method override middleware (or false to disable)
     //
@@ -74,7 +72,7 @@ module.exports.express = {
         // Add passport middleware and initialize it
         app.use(passport.initialize());
         app.use(passport.session());
-        app.use(passport.authenticate("remember-me"));
+        app.use(passport.authenticate('remember-me'));
 
         app.use(function(req, res, next) {
             if (req.user && req.user.language) {
@@ -83,7 +81,7 @@ module.exports.express = {
 
                 try {
                     // Change numeral language
-                    numeral.language(req.user.language, require("../node_modules/numeral/languages/" + req.user.language + ".js"));
+                    numeral.language(req.user.language, require('../node_modules/numeral/languages/' + req.user.language + '.js'));
                     numeral.language(req.user.language);
                 } catch (error) {
                     // Just silently ignore this error...
@@ -94,32 +92,10 @@ module.exports.express = {
             res.locals.currentUser = req.user;
             res.locals.moment = moment;
             res.locals.numeral = numeral;
-            res.locals.packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
-            res.locals.inspect = require("util").inspect;
+            res.locals.packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            res.locals.inspect = require('util').inspect;
 
             next();
         });
     }
-};
-
-/**
- * HTTP Flat-File Cache
- *
- * These settings are for Express' static middleware- the part that serves
- * flat-files like images, css, client-side templates, favicons, etc.
- *
- * In Sails, this affects the files in your app's `assets` directory.
- * By default, Sails uses your project's Gruntfile to compile/copy those
- * assets to `.tmp/public`, where they're accessible to Express.
- *
- * The HTTP static cache is only active in a 'production' environment,
- * since that's the only time Express will cache flat-files.
- *
- * For more information on configuration, check out:
- * http://sailsjs.org/#documentation
- */
-module.exports.cache = {
-    // The number of seconds to cache files being served from disk
-    // (only works in production mode)
-    maxAge: 31557600000
 };

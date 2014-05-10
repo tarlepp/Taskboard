@@ -1,15 +1,14 @@
 /**
- * Configurations for global libraries that are accessible everywhere inside application.
+ * Global Variable Configuration
+ * (sails.config.globals)
  *
- * @type {{
- *          _: boolean,
- *          async: boolean,
- *          sails: boolean,
- *          services: boolean,
- *          models: boolean
- *      }}
+ * Configure which global variables which will be exposed
+ * automatically by Sails.
+ *
+ * For more information on configuration, check out:
+ * http://links.sailsjs.org/docs/config/globals
  */
-"use strict";
+'use strict';
 
 module.exports.globals = {
     _: true,
