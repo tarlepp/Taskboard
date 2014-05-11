@@ -1,0 +1,14 @@
+<div>
+    <i id="qtip-trigger-{{id}}" class="fa fa-angle-down btn btn-default"
+        data-qtip-options='{ "style": { "classes": "qtip-rounded qtip-shadow qtip-bootstrap qtip-action-menu" }, "hide": { "fixed": true, "delay": 200 } }'
+    ></i>
+
+    <div
+        data-ng-if="id"
+        data-qtip
+        data-qtip-id="{{id}}"
+        data-position="bottomRight"
+    >
+        <div data-ng-transclude></div>
+    </div>
+</div>
