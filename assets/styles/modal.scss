@@ -57,9 +57,9 @@
 
   h3 {
     margin: 0;
-    @include text-shadow(1px, 1px, 1px, $colorBoxShadow);
+    @include text-shadow(0, 0, 1px, rgba(0, 0, 0, .5));
     font-family: "Maven Pro", sans-serif;
-    color: $colorTextLight;
+    color: #555555;
     letter-spacing: -2px;
   }
 

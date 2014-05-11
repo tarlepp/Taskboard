@@ -278,6 +278,10 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 75%;
 }
 
+.text-nowrap {
+  white-space: nowrap;
+}
+
 .gravatar-icon {
   border-radius: 6px;
 }
@@ -380,6 +384,106 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+ul.action-menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 5px 0;
+
+  li {
+    &.divider {
+      height: 1px;
+      overflow: hidden;
+      background-color: #e5e5e5;
+      margin: 5px 0;
+    }
+  }
+
+  & > li > a {
+    color: $colorBoxShadow;
+    padding: 3px 15px 3px 10px;
+    display: inline-block;
+    width: 100%;
+    font-size: 14px;
+    line-height: 20px;
+
+    .fa {
+      width: 18px;
+      margin-right: 5px;
+      text-align: center;
+      font-size: 14px;
+      color: $colorTextDark;
+      @include text-shadow(0px, 0px, 1px, $colorBoxShadow);
+    }
+
+    &.text-danger {
+      color: $colorTextDanger;
+
+      .fa {
+        color: $colorTextDanger;
+      }
+    }
+
+    &:hover,
+    &:focus {
+      color: white;
+      text-decoration: none;
+      @include linear-gradient($colorTextLight, $colorTextDark);
+
+      .fa {
+        color: white;
+      }
+    }
+  }
+
+  & > .active > a,
+  & > .active > a:hover,
+  & > .active > a:focus {
+    color: white;
+    @include linear-gradient($colorTextLight, $colorTextDark);
+
+    .fa {
+      color: white;
+    }
+  }
+}
+
 .ng-cloak {
   display: none !important;
+}
+
+
+
+.table {
+  margin-bottom: 0;
+
+  > thead > tr > th,
+  > thead > tr > td,
+  > tbody > tr > th,
+  > tbody > tr > td,
+  > tfoot > tr > th,
+  > tfoot > tr > td {
+    vertical-align: middle;
+  }
+
+  thead {
+    background-color: #ebebeb;
+    @include noSelect();
+
+    .fa {
+      margin-left: 5px;
+
+      &.btn {
+        margin-left: 0;
+        font-weight: normal;
+        color: #666666;
+      }
+    }
+
+    a {
+      &:hover,
+      &:focus {
+        text-decoration: none;
+      }
+    }
+  }
 }
