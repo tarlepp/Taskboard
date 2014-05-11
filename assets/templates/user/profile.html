@@ -13,13 +13,11 @@
             data-ng-repeat="tab in tabs"
             data-select="selectTab(tab)"
         >
-
             <tab-heading>
                 <span
                     data-ng-bind-html="tab.title"
                     data-ng-class="{'text-danger': (form[tab.form] && !form[tab.form].$valid && !form[tab.form].$pristine)}"
                 ></span>
-
             </tab-heading>
 
             <tb-template data-template="{{tab.template}}"></tb-template>
