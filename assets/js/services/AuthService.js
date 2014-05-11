@@ -14,8 +14,8 @@
 angular.module("TaskBoardServices")
     .factory("AuthService",
         [
-            "$q", "$http", "$rootScope", "$location",
-            function($q, $http, $rootScope, $location) {
+            "$q", "$http", "$rootScope", "$location", "User",
+            function($q, $http, $rootScope, $location, User) {
                 return {
                     authenticate: function() {
                         // Initialize a new promise
@@ -26,10 +26,12 @@ angular.module("TaskBoardServices")
                             .success(function(data) { // Authenticated
                                 $rootScope.currentUser = data;
 
+                                User.current = data;
+
                                 deferred.resolve(data);
                             })
                             .error(function() {
-                                $rootScope.currentUser = "";
+                                //$rootScope.currentUser = "";
                                 $rootScope.message = {
                                     text: "You need to sign in",
                                     type: "error"
