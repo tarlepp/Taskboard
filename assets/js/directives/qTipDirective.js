@@ -1,60 +1,66 @@
 /**
  * Angular directive for qTip2 library. Usage example:
  *
- *  <a id="qtip-trigger-tooltipContainer">
+ *  <a id='qtip-trigger-tooltipContainer'>
  *      foo bar
- *      <div data-qtip data-qtip-id="tooltipContainer">Tooltip content here</div>
+ *      <div data-qtip data-qtip-id='tooltipContainer'>Tooltip content here</div>
  *  </a>
+ *
+ * @see http://qtip2.com/
  */
-"use strict";
+'use strict';
 
-angular.module("TaskBoardDirectives")
-    .directive("qtip", function() {
+angular.module('TaskBoardDirectives')
+    .directive('qtip', function() {
         return {
-            restrict: "A",
+            restrict: 'A',
             scope: {
-                qtipId: "@",
-                qtipContent: "@"
+                qtipId: '@',
+                qtipContent: '@'
             },
             transclude: true,
             replace: true,
-            templateUrl: "/templates/directives/qtip.html",
+            templateUrl: '/templates/directives/qtip.html',
             link: function(scope, element, attributes) {
-                scope.parentId = "#qtip-trigger-" + attributes.qtipId;
+                scope.parentId = '#qtip-trigger-' + attributes.qtipId;
                 scope.closeButton = (attributes.closeButton);
 
                 switch (attributes.position) {
-                    case "top":
-                        scope.qtipPointerPos = "bottom center";
-                        scope.qtipContentPos = "top center";
+                    case 'top':
+                        scope.qtipPointerPos = 'bottom center';
+                        scope.qtipContentPos = 'top center';
                         break;
-                    case "bottom":
-                        scope.qtipPointerPos = "top center";
-                        scope.qtipContentPos = "bottom center";
+                    case 'bottom':
+                        scope.qtipPointerPos = 'top center';
+                        scope.qtipContentPos = 'bottom center';
                         break;
-                    case "bottomright":
-                        scope.qtipPointerPos = "top left";
-                        scope.qtipContentPos = "bottom right";
+                    case 'bottomRight':
+                        scope.qtipPointerPos = 'top left';
+                        scope.qtipContentPos = 'bottom center';
                         break;
-                    case "left":
-                        scope.qtipPointerPos = "bottom right";
-                        scope.qtipContentPos = "top left";
+                    case 'left':
+                        scope.qtipPointerPos = 'bottom right';
+                        scope.qtipContentPos = 'top left';
                         break;
-                    case "right":
-                        scope.qtipPointerPos = "center left";
-                        scope.qtipContentPos = "center right";
+                    case 'leftMiddle':
+                        scope.qtipPointerPos = 'center right';
+                        scope.qtipContentPos = 'center left';
+                        break;
+                    case 'right':
+                        scope.qtipPointerPos = 'center left';
+                        scope.qtipContentPos = 'center right';
                         break;
                     default:
-                        scope.qtipPointerPos = "bottom left";
-                        scope.qtipContentPos = "top right";
+                        scope.qtipPointerPos = 'bottom left';
+                        scope.qtipContentPos = 'top right';
                         break;
                 }
 
-                jQuery(scope.parentId).each(function() {
+                jQuery('body').find(scope.parentId).each(function() {
                     jQuery(this).qtip({
                         metadata: {
-                            type: "html5",      // Use HTML5 data-* attributes
-                            name: "qtipOptions" // Grab the metadata from the data-qtip-options HTML5 attribute
+                            type: 'html5',      // Use HTML5 data-* attributes
+                            name: 'qtipOptions' // Grab the metadata from the data-qtip-options HTML5 attribute
                         },
                         content: {
                             text: jQuery(element),
@@ -65,7 +71,7 @@ angular.module("TaskBoardDirectives")
                             tip: {
                                 corner: true
                             },
-                            classes: "qtip-rounded qtip-shadow qtip-bootstrap"
+                            classes: 'qtip-rounded qtip-shadow qtip-bootstrap'
                         },
                         show: {
                             solo: true,
@@ -77,9 +83,9 @@ angular.module("TaskBoardDirectives")
                         },
                         position: {
                             viewport: jQuery(window),
-                            target: (attributes.target ? attributes.target : "event"),
+                            target: (attributes.target ? attributes.target : 'event'),
                             adjust: {
-                                method: "flipinvert",
+                                method: 'flipinvert',
                                 mouse: (attributes.static === null)
                             },
                             my: scope.qtipPointerPos,
@@ -87,15 +93,15 @@ angular.module("TaskBoardDirectives")
                         },
                         events: {
                             hide: function() {
-                                element.qtip("destroy");
+                                element.qtip('destroy');
                             }
                         }
                     });
                 });
 
                 // Immediately destroy all tooltips belonging to the selected elements
-                scope.$on("$destroy", function() {
-                    jQuery(scope.parentId).qtip("destroy", true);
+                scope.$on('$destroy', function() {
+                    jQuery('body').find(scope.parentId).qtip('destroy', true);
                 });
             }
         };
