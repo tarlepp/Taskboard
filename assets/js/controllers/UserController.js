@@ -75,16 +75,16 @@ angular.module('TaskBoardControllers')
                     }
                 };
 
-                $scope.$watch('userForm', function(valueNew, valueOld) {
-                    console.log(valueNew);
-                });
-
                 $scope.$watch('user', function(valueNew, valueOld) {
                     $scope.formChanged = !_.isEqual(valueNew, user);
                 }, true);
 
                 $scope.selectTab = function(tab) {
                     $scope.activeTab = tab;
+
+                    if (tab.onSelect) {
+                        $scope[tab.onSelect]();
+                    }
                 };
 
                 $scope.timeUpdate = $interval(function() {
@@ -98,13 +98,10 @@ angular.module('TaskBoardControllers')
                     $scope.momentDateTime = now.format($scope.user.momentFormatDateTime);
                 }, 1000);
 
-
                 $scope.passwordNew = "";
                 $scope.passwordCheck = "";
 
                 $scope.reset();
-
-
             }
         ]
     );

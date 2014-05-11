@@ -42,6 +42,7 @@ angular.module("TaskBoardControllers")
                         templateUrl: "templates/user/profile.html",
                         controller: "UserController",
                         backdrop: "static",
+                        windowClass: "modal fade in",
                         resolve: {
                             user: function() {
                                 return AuthService.authenticate();
