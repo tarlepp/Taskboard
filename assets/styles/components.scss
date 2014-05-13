@@ -1,5 +1,10 @@
 @import "mixins";
 
+.pagination {
+  margin: 5px 0 10px 0;
+  @include noSelect();
+}
+
 .noty_text {
   font-size: 14px;
 }
