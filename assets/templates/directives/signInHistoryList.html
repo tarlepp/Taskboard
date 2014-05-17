@@ -38,9 +38,9 @@
                     </th>
                 </tr>
             </thead>
-            <tbody class=" text-small">
+            <tbody class="text-small">
                 <tr
-                    data-ng-repeat="row in item.rows | filter:search:strict | orderBy:item.sort.column:item.sort.direction | slice:(item.page - 1):(item.page - 1) + itemsPerPage"
+                    data-ng-repeat="row in item.rows | filter:search:strict | orderBy:item.sort.column:item.sort.direction | slice:(item.page - 1):((item.page - 1) + itemsPerPage)"
                 >
                     <td class="text-nowrap">{{row.stamp | amDateFormat:user.momentFormatDateTime }}</td>
                     <td class="text-nowrap">{{row.ip}}</td>
@@ -53,7 +53,6 @@
         </table>
 
         <pagination class="pagination-sm"
-            data-ng-show="items.length"
             data-total-items="(item.rows | filter:search:strict).length"
             data-ng-model="item.page"
             data-items-per-page="itemsPerPage"
