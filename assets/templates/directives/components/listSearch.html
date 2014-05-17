@@ -1,0 +1,32 @@
+<div class="input-group">
+    <input class="form-control input-sm" type="text" placeholder="search filter"
+        data-ng-model="filters.searchWord"
+    />
+    <span id="qtip-trigger-search-columns" class="input-group-addon search"
+        data-qtip-options='{ "hide": { "delay": 200, "fixed": true } }'
+    >
+        <i class="fa fa-chevron-down text-info"></i>
+
+        <div
+            data-qtip
+            data-qtip-id="search-columns"
+            data-qtip-title="Columns where search affects"
+            data-class="qtip-action-menu list-search"
+            data-position="bottomRight"
+        >
+            <ul class="action-menu search-columns">
+                <li data-ng-repeat="column in filters.columns">
+                    <a
+                        data-ng-click="column.inSearch = !column.inSearch"
+                    >
+                        <i class="fa "
+                            data-ng-class="{'fa-check': column.inSearch}"
+                        ></i>
+
+                        <span>{{column.title}}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </span>
+</div>
