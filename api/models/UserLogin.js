@@ -8,6 +8,7 @@
 
 module.exports = {
     schema: true,
+    migrate: 'safe',
 
     attributes: {
         // IP address where user has signed in

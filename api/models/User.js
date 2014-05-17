@@ -32,6 +32,9 @@ function hashPassword(values, next) {
 }
 
 module.exports = _.merge(_.cloneDeep(require("../services/BaseModel")), {
+    schema: true,
+    migrate: 'safe',
+
     attributes: {
         username: {
             type:       "string",
@@ -128,6 +131,10 @@ module.exports = _.merge(_.cloneDeep(require("../services/BaseModel")), {
         projectManager: {
             collection: "Project",
             via: "manager"
+        },
+        histories: {
+            collection: "History",
+            via: "user"
         },
 
         // Dynamic data attributes

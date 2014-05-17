@@ -9,6 +9,9 @@
 var _ = require("lodash");
 
 module.exports = _.merge(_.cloneDeep(require("../services/BaseModel")), {
+    schema: true,
+    migrate: 'safe',
+
     attributes: {
         // Project title
         title: {
