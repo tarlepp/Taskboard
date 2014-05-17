@@ -15,6 +15,25 @@
       padding: 0;
     }
   }
+
+  &.json {
+    max-width: 400px;
+
+    .qtip-content {
+      padding: 0;
+
+      pre {
+        background-color: #ffffff;
+        border: none;
+        padding: 0;
+        outline: none;
+
+        span {
+          //display: table-cell;
+        }
+      }
+    }
+  }
 }
 
 .bootstrap-select {
