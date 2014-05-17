@@ -6,9 +6,10 @@ Note this is a heavy devel branch, most likely nothing works... yet
 Main goal in this branch is:
  - Sails.js 0.10.x branch
  - Knockout => Angular.js
- - Require.js
  - SCSS / SASS support
  - This list will be updated...
 
 Not much, just a little bit of work :D
+
+**Note** Do not use this in production, basically this is just a proto nothing else at this moment...
 
