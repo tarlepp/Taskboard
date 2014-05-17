@@ -37,6 +37,11 @@ angular.module('TaskBoardControllers')
                         buttonSet: ''
                     },
                     {
+                        title: 'Activity',
+                        template: 'user/profile_activity',
+                        buttonSet: ''
+                    },
+                    {
                         title: 'Sign in history',
                         template: 'user/profile_sign_in_history'
                     },
