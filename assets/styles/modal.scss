@@ -2,6 +2,15 @@
 
 .modal-dialog {
   width: 950px;
+
+  .data-loading {
+    z-index: 5000;
+    position: absolute;
+    top: 80px;
+    width: 300px;
+    left: 50%;
+    margin-left: -150px;
+  }
 }
 
 .modal-header,
