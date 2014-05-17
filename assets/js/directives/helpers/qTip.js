@@ -6,6 +6,22 @@
  *      <div data-qtip data-qtip-id='tooltipContainer'>Tooltip content here</div>
  *  </a>
  *
+ * Directive supports following data-attributes:
+ *  data-position   =   Pre-defined positions supported values: 'top', 'bottom',
+ *                      'bottomRight', 'left', 'leftMiddle' and 'Right'
+ *  data-class      =   Custom class to attach to qTip tooltip container, usefully
+ *                      when using custom styling on tooltip content
+ *
+ * Also you can override all qTip options via 'data-qtip-options' attribute on
+ * element which triggers qTip tooltip to show. Usage example:
+ *
+ *  <span id="qtip-trigger-search-columns" class="input-group-addon search"
+ *      data-qtip-options='{ "hide": { "delay": 200, "fixed": true } }'
+ *  >Foo</span>
+ *
+ * This is very usefully when you need to use some qTip specified options on
+ * your tooltip.
+ *
  * @see http://qtip2.com/
  */
 'use strict';
@@ -24,6 +40,12 @@ angular.module('TaskBoardDirectives')
             link: function(scope, element, attributes) {
                 scope.parentId = '#qtip-trigger-' + attributes.qtipId;
                 scope.closeButton = (attributes.closeButton);
+
+                var classes = '';
+
+                if (attributes.class) {
+                    classes = attributes.class;
+                }
 
                 switch (attributes.position) {
                     case 'top':
@@ -71,7 +93,7 @@ angular.module('TaskBoardDirectives')
                             tip: {
                                 corner: true
                             },
-                            classes: 'qtip-rounded qtip-shadow qtip-bootstrap'
+                            classes: 'qtip-rounded qtip-shadow qtip-bootstrap ' + classes
                         },
                         show: {
                             solo: true,
