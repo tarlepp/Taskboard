@@ -27,7 +27,7 @@ angular.module('TaskBoardDirectives')
                     userId: '@'
                 },
                 replace: true,
-                templateUrl: '/templates/directives/signInHistoryList.html',
+                templateUrl: '/templates/directives/components/signInHistoryList.html',
                 controller: [
                     '$scope', '$sailsSocket', 'User',
                     function($scope, $sailsSocket, User) {
@@ -112,10 +112,6 @@ angular.module('TaskBoardDirectives')
                                     $scope.items[0].rows = formatIpData(response);
                                     $scope.items[1].rows = formatAgentData(response);
                                     $scope.items[2].rows = response;
-                                })
-                                .error(function(response) {
-                                    console.log("error");
-                                    console.log(response);
                                 });
                         };
 
