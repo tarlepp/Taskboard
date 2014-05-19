@@ -9,19 +9,9 @@
 var JsonDiffPatch = require('jsondiffpatch');
 var moment = require('moment-timezone');
 var async = require('async');
-var actionUtil = require('sails/lib/hooks/blueprints/actionUtil');
+var _ = require('lodash');
 
-module.exports = {
-    count: function(request, response) {
-        var Model = actionUtil.parseModel(request);
-
-        Model
-            .count(actionUtil.parseCriteria(request))
-            .exec(function found(error, count) {
-                response.json({count: count});
-            });
-    },
-
+module.exports = _.merge(_.cloneDeep(require('../services/BaseController')), {
     /**
      * Main history action. This will render a GUI which will show specified object
      * history data. Actual history data is calculated from database data on each object.
@@ -61,7 +51,7 @@ module.exports = {
              * @param   {Error|null}    error
              * @param   {{}}            results
              */
-                function(error, results) {
+            function(error, results) {
                 if (error) {
                     ResponseService.makeError(error, request, response);
                 } else {
@@ -340,7 +330,7 @@ module.exports = {
                          * @param   {Error} error   Possible error
                          * @param   {{}}    results Actual data results
                          */
-                            function(error, results) {
+                        function(error, results) {
                             data.valueNew = (!results.dataNew) ? 'none' : results.dataNew.objectTitle();
                             data.valueOld = (!results.dataOld) ? 'none' : results.dataOld.objectTitle();
 
@@ -354,7 +344,7 @@ module.exports = {
                 // Determine column type
                 if (data.valueOld === true && data.valueNew === false
                     || data.valueOld === false && data.valueNew === true
-                    ) {
+                ) {
                     data.columnType = 'boolean';
                 } else {
                     data.columnType = 'normal';
@@ -368,4 +358,4 @@ module.exports = {
             }
         }
     }
-};
+});

@@ -4,7 +4,9 @@
  * @description ::
  * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
-"use strict";
+'use strict';
 
-module.exports = {
-};
+var _ = require('lodash');
+
+module.exports = _.merge(_.cloneDeep(require('../services/BaseController')), {
+});
