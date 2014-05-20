@@ -6,8 +6,8 @@
  * On response event interceptor will handle possible sails.js specified errors and activate
  * show of those via $rootScope.message model.
  *
- * @link    https://docs.angularjs.org/api/ng/service/$http#interceptors
- * @see     /assets/js/application.js
+ * @see https://docs.angularjs.org/api/ng/service/$http#interceptors
+ * @see /assets/js/application.js
  */
 "use strict";
 
@@ -18,6 +18,8 @@ angular.module("TaskBoardInterceptors")
             function($rootScope, $q) {
                 /**
                  * Private helper function to make human readable error string of sails socket errors.
+                 *
+                 * todo: add better message formatting.
                  *
                  * @param   {sailsSocketError}    error
                  *
@@ -82,6 +84,11 @@ angular.module("TaskBoardInterceptors")
                      * @returns {Promise}
                      */
                     requestError: function(rejection) {
+                        $rootScope.message = {
+                            text: parseSailsError(rejection.data),
+                            type: "error"
+                        };
+
                         return $q.reject(rejection);
                     },
 
@@ -118,6 +125,11 @@ angular.module("TaskBoardInterceptors")
                      * @returns {Promise}
                      */
                     responseError: function(rejection) {
+                        $rootScope.message = {
+                            text: parseSailsError(rejection.data),
+                            type: "error"
+                        };
+
                         return $q.reject(rejection);
                     }
                 };
