@@ -1,8 +1,8 @@
 {
   "name": "taskboard",
   "private": true,
-  "version": "0.0.0",
-  "description": "a Sails application to mimic 'scrum-ban' taskboard.",
+  "version": "0.10.0",
+  "description": "A Sails application to mimic 'scrum-ban' taskboards.",
   "keywords": [],
   "dependencies": {
     "sails": "~0.10.0-rc7",
@@ -58,6 +58,17 @@
     "url": "https://github.com/tarlepp/Taskboard/issues"
   },
   "homepage": "http://tarlepp.github.io/Taskboard/",
-  "author": "Tarmo Leppänen",
+  "contributors": [
+    {
+      "name": "Tarmo Leppänen",
+      "email": "",
+      "url": "https://github.com/tarlepp/"
+    },
+    {
+      "name": "Alfonso E Martinez, III",
+      "email": "alfonso@opensaurusrex.com",
+      "url": "http://opensaurusrex.com"
+    }
+  ],
   "license": "MIT"
 }
