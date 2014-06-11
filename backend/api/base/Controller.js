@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * BaseController.js
+ * /api/base/controller.js
  *
  * Base controller for all sails.js controllers. This just contains some common code
  * that every controller uses
