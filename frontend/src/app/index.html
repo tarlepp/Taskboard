@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html data-ng-app="Taskboard">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Taskboard</title>
+
+        <link href="//fonts.googleapis.com/css?family=Maven+Pro:400,500,700,900" rel="stylesheet" type="text/css" />
+        <link href="//fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+
+        <!-- inject:vendor:css -->
+        <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" href="/bootswatch-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/fontawesome/css/font-awesome.min.css">
+        <!-- endinject -->
+
+        <!-- inject:css -->
+        <link rel="stylesheet" href="/css/app.css">
+        <link rel="stylesheet" href="/css/login/login.css">
+        <link rel="stylesheet" href="/css/styles/modal.css">
+        <!-- endinject -->
+    </head>
+    <body>
+        <navigation-header></navigation-header>
+
+        <div id="container" class="container-fluid main-container">
+            <div data-ui-view></div>
+        </div>
+
+        <navigation-footer></navigation-footer>
+
+        <!-- inject:vendor:js -->
+        <script src="/jquery/dist/jquery.js"></script>
+        <script src="/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="/bootswatch-dist/js/bootstrap.min.js"></script>
+        <script src="/noty/js/noty/packaged/jquery.noty.packaged.min.js"></script>
+        <script src="/lodash/dist/lodash.compat.js"></script>
+        <script src="/angular/angular.js"></script>
+        <script src="/angular-ui-router/release/angular-ui-router.js"></script>
+        <script src="/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
+        <script src="/moment/moment.js"></script>
+        <script src="/angular-moment/angular-moment.js"></script>
+        <script src="/angular-bootstrap-show-errors/src/showErrors.js"></script>
+        <script src="/angular-sanitize/angular-sanitize.js"></script>
+        <script src="/sails.io.js/dist/sails.io.js"></script>
+        <script src="/angularSails/dist/ngsails.io.js"></script>
+        <script src="/angular-linkify/angular-linkify.js"></script>
+        <!-- endinject -->
+
+        <!-- TODO: Add here your backend API URL without trailing slashes -->
+        <script>
+            io.sails.useCORSRouteToGetCookie = false;
+            io.sails.url = 'http://wunder.sytes.net:1339';
+        </script>
+
+        <!-- inject:js -->
+        <script src="/Taskboard-templates.js"></script>
+        <script src="/app.js"></script>
+        <script src="/angular/Constants/AccessLevels.js"></script>
+        <script src="/angular/Constants/BackendConfig.js"></script>
+        <script src="/angular/Directives/KeyPress.js"></script>
+        <script src="/angular/Directives/NavigationFooter.js"></script>
+        <script src="/angular/Directives/NavigationHeader.js"></script>
+        <script src="/angular/Directives/Template.js"></script>
+        <script src="/angular/Filters/newLines.js"></script>
+        <script src="/angular/Interceptors/AuthInterceptor.js"></script>
+        <script src="/angular/Interceptors/ErrorInterceptor.js"></script>
+        <script src="/angular/Services/Auth.js"></script>
+        <script src="/angular/Services/CurrentUser.js"></script>
+        <script src="/angular/Services/DataService.js"></script>
+        <script src="/angular/Services/Message.js"></script>
+        <script src="/angular/Services/Storage.js"></script>
+        <script src="/board/board-controller.js"></script>
+        <script src="/login/login-controller.js"></script>
+        <!-- endinject -->
+
+    </body>
+</html>
