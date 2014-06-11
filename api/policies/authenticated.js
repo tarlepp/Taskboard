@@ -46,7 +46,7 @@ module.exports = function(request, response, next) {
             next();
         }
     } else { // User not authenticated, redirect to login
-        sails.log.warning(__filename + ":" + __line + " [Auth failed - user not authenticated]");
+        sails.log.warn(__filename + ":" + __line + " [Auth failed - user not authenticated]");
 
         response.redirect("/login");
     }
