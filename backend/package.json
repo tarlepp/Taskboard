@@ -1,9 +1,9 @@
 {
-  "name": "server",
+  "name": "taskboard-backend",
   "private": true,
   "version": "0.0.0",
-  "description": "a Sails application",
-  "keywords": [],
+  "description": "a Sails application to mimic 'scrum-ban' taskboard.",
+  "keywords": ["TaskBoard", "scrum", "kanban", "sails.js"],
   "dependencies": {
     "sails": "~0.10.0-rc7",
     "sails-disk": "~0.10.0",
@@ -22,20 +22,34 @@
     "validator": "~3.12.0",
     "jsonwebtoken": "~0.4.0",
     "barrels": "0.0.3",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "moment": "~2.6.0",
+    "moment-timezone": "0.0.6"
   },
   "devDependencies": {
-    "sails-generate-auth": "~0.1.4"
+    "sails-generate-auth": "~0.1.4",
+    "supertest": "~0.8.0",
+    "mocha": "~1.13.0",
+    "should": "~2.0.1",
+    "chai": "~1.8.1"
+  },
+  "engines": {
+    "node": "0.10.x"
   },
   "scripts": {
     "start": "node app.js",
-    "debug": "node debug app.js"
+    "debug": "node debug app.js",
+    "test": "./node_modules/mocha/bin/mocha"
   },
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/wunder/server.git"
+    "url": "git://github.com/tarlepp/Taskboard.git"
   },
-  "author": "wunder",
-  "license": ""
+  "bugs": {
+    "url": "https://github.com/tarlepp/Taskboard/issues"
+  },
+  "homepage": "http://tarlepp.github.io/Taskboard/",
+  "author": "Tarmo Leppänen",
+  "license": "MIT"
 }
