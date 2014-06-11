@@ -30,9 +30,17 @@
                     $scope.login = function() {
                         Auth
                             .login($scope.credentials)
-                            .success(
+                            .then(
                                 function() {
                                     $state.go('board.main');
+                                },
+                                function() {
+                                    $scope.credentials = {
+                                        identifier: '',
+                                        password: ''
+                                    };
+
+                                    angular.element('input[name=username]').focus();
                                 }
                             );
                     };
