@@ -18,6 +18,7 @@ var bcrypt = require('bcrypt');
  */
 var Passport = {
     schema: true,
+    migrate: 'alter',
 
     attributes: {
         /**
