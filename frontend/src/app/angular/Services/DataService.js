@@ -10,16 +10,21 @@
     angular.module('Taskboard.services')
         .factory('DataService',
             [
-                '$q', '$sailsSocket', 'BackendConfig',
-                function($q, $sailsSocket, BackendConfig) {
+                '$q', '$sailsSocket', '_', 'BackendConfig',
+                function($q, $sailsSocket, _, BackendConfig) {
                     /**
                      * Helper function to get "proper" end point url for sails backend API.
                      *
                      * @param   {string}    endPoint    Name of the end point
+                     * @param   {number}    identifier  Identifier of endpoint object
                      *
                      * @returns {string}
                      */
-                    function parseEndPointUrl(endPoint) {
+                    function parseEndPointUrl(endPoint, identifier) {
+                        if (!_.isUndefined(identifier)) {
+                            endPoint = endPoint + '/' + identifier;
+                        }
+
                         return BackendConfig.url + '/' + endPoint;
                     }
 
@@ -43,7 +48,7 @@
                          * @param   {string}    endPoint    Name of the end point
                          * @param   {{}}        parameters  Used query parameters
                          *
-                         * @returns {HttpPromise}
+                         * @returns {Promise|*}
                          */
                         count: function(endPoint, parameters) {
                             parameters = parameters || {};
@@ -58,9 +63,9 @@
                          * @param   {string}    endPoint    Name of the end point
                          * @param   {{}}        parameters  Used query parameters
                          *
-                         * @returns {HttpPromise}
+                         * @returns {Promise|*}
                          */
-                        get: function(endPoint, parameters) {
+                        collection: function(endPoint, parameters) {
                             parameters = parameters || {};
 
                             return $sailsSocket.get(parseEndPointUrl(endPoint), parseParameters(parameters));
@@ -71,22 +76,15 @@
                          * record as an object.
                          *
                          * @param   {string}    endPoint    Name of the end point
+                         * @param   {number}    identifier  Identifier of endpoint object
                          * @param   {{}}        parameters  Used query parameters
                          *
-                         * @returns {HttpPromise}
+                         * @returns {Promise|*}
                          */
-                        getOne: function(endPoint, parameters) {
+                        fetch: function(endPoint, identifier, parameters) {
                             parameters = parameters || {};
 
-                            var deferred = $q.defer();
-
-                            $sailsSocket
-                                .get(parseEndPointUrl(endPoint), parseParameters(parameters))
-                                .success(function(data) {
-                                    deferred.resolve(data[0] || data);
-                                });
-
-                            return deferred.promise;
+                            return $sailsSocket.get(parseEndPointUrl(endPoint, identifier), parseParameters(parameters));
                         }
                     };
                 }
