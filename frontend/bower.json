@@ -1,8 +1,8 @@
 {
   "name": "Taskboard",
   "main": [
-    "/dist/frontend.min.js",
-    "/dist/frontend.min.css"
+    "/dist/taskboard.min.js",
+    "/dist/taskboard.min.css"
   ],
   "version": "0.1.0",
   "description": "TODO",
@@ -32,7 +32,8 @@
     "angular-sanitize": "~1.2.16",
     "sails.io.js": "~0.10.0-rc4",
     "angularSails": "*",
-    "angular-linkify": "~0.3.3"
+    "angular-linkify": "~0.3.3",
+    "bootstrap-select": "~1.5.2"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.14"

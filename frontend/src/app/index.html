@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.css">
         <link rel="stylesheet" href="/bootswatch-dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="/fontawesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/bootstrap-select/bootstrap-select.css">
         <!-- endinject -->
 
         <!-- inject:css -->
@@ -44,6 +45,7 @@
         <script src="/sails.io.js/dist/sails.io.js"></script>
         <script src="/angularSails/dist/ngsails.io.js"></script>
         <script src="/angular-linkify/angular-linkify.js"></script>
+        <script src="/bootstrap-select/bootstrap-select.js"></script>
         <!-- endinject -->
 
         <!-- TODO: Add here your backend API URL without trailing slashes -->
@@ -55,8 +57,11 @@
         <!-- inject:js -->
         <script src="/Taskboard-templates.js"></script>
         <script src="/app.js"></script>
+        <script src="/dummy.js"></script>
         <script src="/angular/Constants/AccessLevels.js"></script>
         <script src="/angular/Constants/BackendConfig.js"></script>
+        <script src="/angular/Constants/UserRoles.js"></script>
+        <script src="/angular/Directives/BootstrapSelect.js"></script>
         <script src="/angular/Directives/KeyPress.js"></script>
         <script src="/angular/Directives/NavigationFooter.js"></script>
         <script src="/angular/Directives/NavigationHeader.js"></script>
@@ -64,10 +69,15 @@
         <script src="/angular/Filters/newLines.js"></script>
         <script src="/angular/Interceptors/AuthInterceptor.js"></script>
         <script src="/angular/Interceptors/ErrorInterceptor.js"></script>
+        <script src="/angular/Models/Project.js"></script>
+        <script src="/angular/Models/Sprint.js"></script>
         <script src="/angular/Services/Auth.js"></script>
         <script src="/angular/Services/CurrentUser.js"></script>
         <script src="/angular/Services/DataService.js"></script>
+        <script src="/angular/Services/LoDash.js"></script>
         <script src="/angular/Services/Message.js"></script>
+        <script src="/angular/Services/Noty.js"></script>
+        <script src="/angular/Services/SharedData.js"></script>
         <script src="/angular/Services/Storage.js"></script>
         <script src="/board/board-controller.js"></script>
         <script src="/login/login-controller.js"></script>
