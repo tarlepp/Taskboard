@@ -5,7 +5,9 @@
  * After successfully login, Auth service will store user data and JWT token via 'Storage'
  * service where those are asked whenever needed in application.
  *
- * @todo    Different authentication providers?
+ * @todo    - Different authentication providers?
+ *          - Which ones we want to support?
+ *          - User registration?
  */
 (function() {
     'use strict';
