@@ -78,25 +78,6 @@ h1, h2, h3, h4, h5, h6 {
       .fa {
         @include text-shadow(0px, 1px, 0px, $colorBoxShadow);
       }
-
-      .input-group {
-        .input-group-addon {
-          padding: 6px 10px;
-
-          &.disabled {
-            opacity: .65;
-            cursor: not-allowed;
-          }
-        }
-
-        .fa {
-          top: 1px;
-          left: 1px;
-          font-size: 14px;
-          color: $colorTextLight;
-          @include text-shadow(0px, 0px, 2px, $colorTextShadow);
-        }
-      }
     }
   }
 }
@@ -176,6 +157,10 @@ h1, h2, h3, h4, h5, h6 {
       line-height: 50px;
     }
 
+    &> li {
+      padding: 0 5px;
+    }
+
     &> li,
     &> li a {
       color: $colorTextNavigation;
@@ -195,13 +180,6 @@ h1, h2, h3, h4, h5, h6 {
     &> li a:focus {
       color: white;
 
-      .dropdown-toggle {
-        .fa {
-          color: $colorTextLight;
-          @include text-shadow(0px, 0px, 2px, $colorTextShadow);
-        }
-      }
-
       .gravatar-icon {
         @include box-shadow(0px, 0px, 8px, rgba(255, 255, 255, .9));
       }
@@ -216,20 +194,37 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .input-group {
-    position: relative;
-    top: 9px;
-    margin-right: 10px;
-
-    .btn {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
+    .form-control {
+      background-color: transparent;
     }
   }
 
-  .bootstrap-select {
-    width: 250px;
-    min-width: 250px;
-    max-width: 250px;
+  .input-group-btn {
+    position: relative;
+    top: 6px;
+    margin-right: 10px;
+
+    &.bootstrap-select .btn {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    a {
+      padding: 0;
+      line-height: 36px;
+      width: 40px;
+
+      &.btn {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+
+      .fa {
+        position: relative;
+        top: 2px;
+        font-size: 18px;
+      }
+    }
   }
 
   .gravatar-icon {
@@ -317,4 +312,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .loading-fade {
   opacity: .5;
+}
+
+.bootstrap-select {
+  .btn:focus {
+    outline: none;
+    outline: none !important;
+  }
 }
