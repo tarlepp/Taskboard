@@ -29,13 +29,12 @@
                         restrict: 'A',
                         scope: {
                             collection: '=',
-                            selected: '=',
-                            disabled: '=',
-                            ngModel: '='
+                            ngModel: '=',
+                            ngDisabled: '='
                         },
-                        compile: function(tElement, tAttributes) {
-                            return function(scope, element, attributes) {
-                                scope.$watch('collection', function(valueNew, valueOld) {
+                        compile: function() {
+                            return function(scope, element) {
+                                scope.$watch('collection', function(valueNew) {
                                     if (valueNew) {
                                         $timeout(function() {
                                             element.selectpicker('refresh');
@@ -43,7 +42,7 @@
                                     }
                                 }, true);
 
-                                scope.$watch('selected', function(valueNew, valueOld) {
+                                scope.$watch('ngDisabled', function(valueNew , valueOld) {
                                     if (valueNew != valueOld) {
                                         $timeout(function() {
                                             element.selectpicker('refresh');
@@ -51,15 +50,7 @@
                                     }
                                 }, true);
 
-                                scope.$watch('disabled', function(valueNew, valueOld) {
-                                    //if (valueNew != valueOld) {
-                                        $timeout(function() {
-                                            element.selectpicker('refresh');
-                                        });
-                                    //}
-                                }, true);
-
-                                scope.$watch('ngModel', function(valueNew , valueOld) {
+                                scope.$watch('ngModel', function(valueNew) {
                                     if (valueNew) {
                                         $timeout(function() {
                                             element.selectpicker('refresh');
