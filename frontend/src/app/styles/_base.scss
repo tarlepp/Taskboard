@@ -44,6 +44,11 @@ h1, h2, h3, h4, h5, h6 {
     color: $colorTextNavigation;
   }
 
+  .navbar {
+    border: none;
+    border-radius: 0;
+  }
+
   .navbar-nav {
     float: none;
 
@@ -83,12 +88,116 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .header {
+  .navbar-nav,
+  .input-group-btn {
+    .dropdown {
+      &.open {
+        .btn-default {
+          background-image: -webkit-linear-gradient(#636565, #3d3f3f 50%, #333434);
+          background-image: linear-gradient(#636565, #3d3f3f 50%, #333434);
+          background-repeat: no-repeat;
+          filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff636565', endColorstr='#ff333434', GradientType=0);
+          filter: none;
+          border: 1px solid #242525;
+        }
+      }
+    }
+
+    .dropdown-menu {
+      border-top-right-radius: 4px;
+      border-top-left-radius: 4px;
+
+      &.dropdown-menu-left:after {
+        left: 13px;
+      }
+
+      &.dropdown-menu-right:after {
+        right: 13px;
+      }
+
+      &:after {
+        position: absolute;
+        top: -6px;
+        display: inline-block;
+        border-right: 6px solid transparent;
+        border-bottom: 6px solid white;
+        border-left: 6px solid transparent;
+        content: '';
+      }
+
+      &> li:hover,
+      &> li:hover a,
+      &> li:hover a.text-danger {
+        cursor: pointer;
+        color: white;
+        background-color: #446e9b;
+
+        i {
+          color: #bfbfbf;
+        }
+      }
+
+      &> li.nav-header {
+        @include text-shadow(1px, 1px, 5px, rgba(0, 0, 0, .3));
+        cursor: default;
+        font-weight: bold;
+        color: #446e9b;
+        background-color: transparent;
+        padding: 2px 10px;
+        text-transform: uppercase;
+      }
+
+      &> li.divider {
+        cursor: default;
+        margin: 5px 0;
+        background-color: #dfdfdf;
+      }
+
+      &> li > a {
+        line-height: 20px;
+        font-size: 13px;
+        padding: 3px 15px 3px 5px;
+        color: #666;
+
+        &.text-danger {
+          color: $colorTextDanger;
+
+          i {
+            color: $colorTextDanger;
+          }
+        }
+
+        i {
+          position: relative;
+          top: 1px;
+          width: 30px;
+          line-height: 20px;
+          text-align: center;
+          font-size: 16px;
+          margin-right: 3px;
+          color: $colorTextDark;
+          @include text-shadow(1px, 1px, 5px, rgba(0, 0, 0, .3));
+        }
+      }
+    }
+  }
+}
+
+.header {
   .navbar {
     @include noSelect();
     @include box-shadow(0, 1px, 20px);
     @include linear-gradient($colorBackgroundGradientStart, $colorBackgroundGradientEnd);
     border-bottom: 1px solid $colorBorder;
     margin-bottom: 0;
+
+    .caret,
+    .caret:hover {
+      -webkit-transition: none;
+      transition: none;
+      border-width: 5px;
+      margin-left: 5px;
+    }
 
     .navbar-collapse {
       border: none;
@@ -190,6 +299,7 @@ h1, h2, h3, h4, h5, h6 {
     .open>a:focus {
       background-color: transparent;
       border-color: transparent;
+      color: white;
     }
   }
 
@@ -316,7 +426,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .bootstrap-select {
   .btn:focus {
-    outline: none;
     outline: none !important;
+  }
+
+  &.btn-group.show-tick {
+    .dropdown-menu li.selected a i.check-mark {
+      margin-top: 4px;
+    }
   }
 }
