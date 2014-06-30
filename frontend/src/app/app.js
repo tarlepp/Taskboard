@@ -15,6 +15,7 @@
         'ui.bootstrap',
         'ui.bootstrap.showErrors',
         'angularMoment',
+        'angularjs-gravatardirective',
         'linkify',
         'sails.io',
         'Taskboard-templates',
