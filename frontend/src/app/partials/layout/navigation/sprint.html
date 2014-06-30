@@ -1,0 +1,90 @@
+
+<div class="input-group"
+    data-ng-show="projects"
+>
+    <select class="show-tick show-menu-arrow form-control"
+        data-live-search="true"
+        data-container="body"
+        data-bootstrap-select
+        data-collection="sprints"
+        data-ng-disabled="!(sharedData.projectId && sprints.length)"
+        data-ng-model="sharedData.sprintId"
+        data-ng-options="sprint.id as getSprintTitle(sprint) for sprint in sprints | orderBy:'title'"
+    >
+        <option style="display:none" value="" class="text-muted">Choose project to show</option>
+    </select>
+
+    <span class="input-group-btn">
+        <a class="btn btn-default dropdown-toggle"
+            data-ng-class="{disabled: !(sharedData.projectId && sprints.length)}"
+            data-ng-show="!sharedData.projectId"
+        >
+            <i class="fa fa-wrench"></i>
+        </a>
+
+        <div data-ng-show="sharedData.projectId">
+            <span data-ng-show="!sprints.length || !sharedData.sprintId">
+                <a class="btn btn-default tooltipTitle" title="Add new sprint">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </span>
+
+            <span data-ng-show="(sharedData.projectId && sharedData.sprintId)">
+                <a class="btn btn-default dropdown-toggle"
+                   data-dropdown-menu
+                   data-toggle="dropdown"
+                   data-delay="100"
+                >
+                    <i class="fa fa-wrench"></i>
+                </a>
+
+                <ul class="dropdown-menu">
+                    <li class="nav-header text-info">Basic functions</li>
+
+                    <li>
+                        <a>
+                            <i class="fa fa-plus"></i>
+                            Add new sprint
+                        </a>
+                    </li>
+
+                    <li>
+                        <a>
+                            <i class="fa fa-wrench"></i>
+                            Edit sprint
+                        </a>
+                    </li>
+
+                    <li class="divider"></li>
+
+                    <li class="nav-header text-info">Management</li>
+
+                    <li>
+                        <a>
+                            <i class="fa fa-list-ol"></i>
+                            Backlog
+                        </a>
+                    </li>
+
+                    <li>
+                        <a>
+                            <i class="fa fa-bar-chart-o"></i>
+                            Charts
+                        </a>
+                    </li>
+
+                    <li class="divider"></li>
+
+                    <li class="nav-header text-info">Danger zone</li>
+
+                    <li>
+                        <a class="text-danger">
+                            <i class="fa fa-trash-o"></i>
+                            Delete sprint
+                        </a>
+                    </li>
+                </ul>
+            </span>
+        </div>
+    </span>
+</div>

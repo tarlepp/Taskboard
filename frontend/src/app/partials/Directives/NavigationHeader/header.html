@@ -18,23 +18,26 @@
             </div>
 
             <div id="header-navigation-collapse" class="collapse navbar-collapse">
-                <ul class="nav navbar-nav navbar-collapse">
-                    <li
-                        data-ui-sref-active="active"
-                        data-ng-show="auth.isAuthenticated()"
-                    >
-                        <a href="#" data-ui-sref="board.main">Board</a>
+                <ul class="nav navbar-nav navbar-collapse"
+                    data-ng-show="auth.isAuthenticated()"
+                >
+                    <li class="col-md-2">
+                        <template src="layout/navigation/project"></template>
                     </li>
 
-                    <li class="pull-right"
-                        data-ng-show="auth.isAuthenticated()"
-                    >
+                    <li class="col-md-2">
+                        <template src="layout/navigation/sprint"></template>
+                    </li>
+
+                    <li class="pull-right">
                         <a href="#" data-ng-click="logout()">Logout</a>
                     </li>
-
+                </ul>
+                <ul class="nav navbar-nav navbar-collapse"
+                    data-ng-show="!auth.isAuthenticated()"
+                >
                     <li class="pull-right"
                         data-ui-sref-active="active"
-                        data-ng-show="!auth.isAuthenticated()"
                     >
                         <a href="#" data-ui-sref="anon.login">Login</a>
                     </li>
