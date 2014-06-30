@@ -32,7 +32,50 @@
                     <li class="pull-right">
                         <a href="#" data-ng-click="logout()">Logout</a>
                     </li>
+
+                    <li class="pull-right">
+                        <a href="#" data-ng-click="openUserProfile()">
+                            <gravatar-image data-gravatar-email="user().email" data-gravatar-size="35" data-gravatar-rating="pg" data-gravatar-default="mm" data-gravatar-secure="true"></gravatar-image>
+
+                            {{user().username}}
+                        </a>
+                    </li>
+
+                    <li class="dropdown pull-right"
+                        data-ng-show="user().admin"
+                    >
+                        <a class="dropdown-toggle"
+                            data-dropdown-menu
+                            data-toggle="dropdown"
+                            data-delay="50"
+                        >
+                            Settings
+                            <b class="caret"></b>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a data-ng-click="openUsers()">
+                                    <i class="fa fa-users"></i>
+                                    Taskboard users
+                                </a>
+                            </li>
+                            <li>
+                                <a data-ng-click="openGeneralSettings()">
+                                    <i class="fa fa-wrench"></i>
+                                    General settings
+                                </a>
+                            </li>
+                            <li>
+                                <a data-ng-click="openAuthenticationServers()">
+                                    <i class="fa fa-cogs"></i>
+                                    Authentication servers
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
+
                 <ul class="nav navbar-nav navbar-collapse"
                     data-ng-show="!auth.isAuthenticated()"
                 >

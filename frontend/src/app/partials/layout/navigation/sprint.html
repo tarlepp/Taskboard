@@ -7,29 +7,35 @@
         data-container="body"
         data-bootstrap-select
         data-collection="sprints"
+        data-refresh="sprintSelectText"
         data-ng-disabled="!(sharedData.projectId && sprints.length)"
         data-ng-model="sharedData.sprintId"
         data-ng-options="sprint.id as getSprintTitle(sprint) for sprint in sprints | orderBy:'title'"
     >
-        <option style="display:none" value="" class="text-muted">Choose project to show</option>
+        <option style="display:none" value="" class="text-muted">{{sprintSelectText}}</option>
     </select>
 
     <span class="input-group-btn">
-        <a class="btn btn-default dropdown-toggle"
-            data-ng-class="{disabled: !(sharedData.projectId && sprints.length)}"
-            data-ng-show="!sharedData.projectId"
-        >
-            <i class="fa fa-wrench"></i>
-        </a>
+        <div data-ng-show="!sharedData.projectId">
+            <a class="btn btn-default dropdown-toggle"
+                data-ng-class="{disabled: !(sharedData.projectId && sprints.length)}"
+            >
+                <i class="fa fa-wrench"></i>
+            </a>
+        </div>
 
         <div data-ng-show="sharedData.projectId">
             <span data-ng-show="!sprints.length || !sharedData.sprintId">
-                <a class="btn btn-default tooltipTitle" title="Add new sprint">
+                <a class="btn btn-default tooltipTitle" title="Add new sprint"
+                    data-ng-click="openSprintAdd()"
+                >
                     <i class="fa fa-plus"></i>
                 </a>
             </span>
 
-            <span data-ng-show="(sharedData.projectId && sharedData.sprintId)">
+            <div class="dropdown"
+                data-ng-show="(sharedData.projectId && sharedData.sprintId)"
+            >
                 <a class="btn btn-default dropdown-toggle"
                    data-dropdown-menu
                    data-toggle="dropdown"
@@ -38,18 +44,18 @@
                     <i class="fa fa-wrench"></i>
                 </a>
 
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu dropdown-menu-right">
                     <li class="nav-header text-info">Basic functions</li>
 
                     <li>
-                        <a>
+                        <a data-ng-click="openSprintAdd()">
                             <i class="fa fa-plus"></i>
                             Add new sprint
                         </a>
                     </li>
 
                     <li>
-                        <a>
+                        <a data-ng-click="openSprintEdit()">
                             <i class="fa fa-wrench"></i>
                             Edit sprint
                         </a>
@@ -60,14 +66,14 @@
                     <li class="nav-header text-info">Management</li>
 
                     <li>
-                        <a>
+                        <a data-ng-click="openSprintBacklog()">
                             <i class="fa fa-list-ol"></i>
                             Backlog
                         </a>
                     </li>
 
                     <li>
-                        <a>
+                        <a data-ng-click="openSprintCharts()">
                             <i class="fa fa-bar-chart-o"></i>
                             Charts
                         </a>
@@ -78,13 +84,15 @@
                     <li class="nav-header text-info">Danger zone</li>
 
                     <li>
-                        <a class="text-danger">
+                        <a class="text-danger"
+                            data-ng-click="openSprintDelete()"
+                        >
                             <i class="fa fa-trash-o"></i>
                             Delete sprint
                         </a>
                     </li>
                 </ul>
-            </span>
+            </div>
         </div>
     </span>
 </div>

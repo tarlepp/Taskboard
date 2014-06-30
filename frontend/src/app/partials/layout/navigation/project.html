@@ -13,33 +13,37 @@
         <option style="display:none" value="" class="text-muted">Choose project to show</option>
     </select>
 
-
     <span class="input-group-btn">
         <div data-ng-show="!sharedData.projectId">
-            <a class="btn btn-default tooltipTitle" title="Add new project">
+            <a class="btn btn-default tooltipTitle" title="Add new project"
+                data-ng-click="openProjectAdd()"
+            >
                 <i class="fa fa-plus"></i>
             </a>
         </div>
 
-        <div data-ng-show="sharedData.projectId">
+        <div class="dropdown"
+            data-ng-show="sharedData.projectId"
+        >
             <a class="btn btn-default dropdown-toggle"
-               data-dropdown-menu
-               data-toggle="dropdown"
-               data-delay="100"
-                    >
+                data-dropdown-menu
+                data-toggle="dropdown"
+                data-delay="100"
+            >
                 <i class="fa fa-wrench"></i>
             </a>
-            <ul class="dropdown-menu">
+
+            <ul class="dropdown-menu dropdown-menu-right">
                 <li class="nav-header text-info">Basic functions</li>
                 <li>
-                    <a>
+                    <a data-ng-click="openProjectAdd()">
                         <i class="fa fa-plus"></i>
                         Add new project
                     </a>
                 </li>
 
                 <li>
-                    <a>
+                    <a data-ng-click="openProjectEdit()">
                         <i class="fa fa-wrench"></i>
                         Edit project
                     </a>
@@ -50,28 +54,35 @@
                 <li class="nav-header text-info">Management</li>
 
                 <li>
-                    <a>
+                    <a data-ng-click="openProjectBacklog()">
                         <i class="fa fa-list-ol"></i>
                         Backlog
                     </a>
                 </li>
 
                 <li>
-                    <a>
+                    <a data-ng-click="openProjectSprints()">
                         <i class="fa fa-list-alt"></i>
                         Sprints
                     </a>
                 </li>
 
                 <li>
-                    <a>
+                    <a data-ng-click="openProjectEpics()">
+                        <i class="fa fa-sitemap"></i>
+                        Epics
+                    </a>
+                </li>
+
+                <li>
+                    <a data-ng-click="openProjectMilestones()">
                         <i class="fa fa-gear"></i>
                         Milestones
                     </a>
                 </li>
 
                 <li>
-                    <a>
+                    <a data-ng-click="openProjectUsers()">
                         <i class="fa fa-user"></i>
                         Users
                     </a>
@@ -82,21 +93,21 @@
                 <li class="nav-header text-info">Advanced</li>
 
                 <li>
-                    <a>
+                    <a data-ng-click="openProjectPhases()">
                         <i class="fa fa-bars fa-rotate-90" style="position: relative; top: 0;"></i>
                         Edit phases
                     </a>
                 </li>
 
                 <li>
-                    <a>
+                    <a data-ng-click="openProjectPlanning()">
                         <i class="fa fa-cogs"></i>
                         Planning view
                     </a>
                 </li>
 
                 <li>
-                    <a>
+                    <a data-ng-click="openProjectExternalLinks()">
                         <i class="fa fa-globe"></i>
                         External links
                     </a>
@@ -107,7 +118,9 @@
                 <li class="nav-header text-info">Danger zone</li>
 
                 <li>
-                    <a class="text-danger">
+                    <a class="text-danger"
+                        data-ng-click="openProjectDelete()"
+                    >
                         <i class="fa fa-trash-o"></i>
                         Delete project
                     </a>

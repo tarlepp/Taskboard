@@ -30,6 +30,7 @@
                         $scope.auth = Auth;
                         $scope.projects = [];
                         $scope.sprints = [];
+                        $scope.sprintSelectText = 'Choose project to show';
 
                         // Function to logout current user from taskboard
                         $scope.logout = function() {
@@ -38,6 +39,92 @@
                             $scope.sprints = [];
 
                             Auth.logout();
+                        };
+
+                        // Todo: this sucks add some modal service to handle all this shit...
+
+                        // Function to open user profile modal
+                        $scope.openUserProfile = function() {
+                            console.log('todo: openUserProfile');
+                        };
+
+                        // Function to open user profile modal
+                        $scope.openUsers = function() {
+                            console.log('todo: openUsers');
+                        };
+
+                        // Function to open general settings modal
+                        $scope.openGeneralSettings = function() {
+                            console.log('todo: openGeneralSettings');
+                        };
+
+                        // Function to open general settings modal
+                        $scope.openAuthenticationServers = function() {
+                            console.log('todo: openAuthenticationServers');
+                        };
+
+                        $scope.openProjectAdd = function() {
+                            console.log('todo: openProjectAdd');
+                        };
+
+                        $scope.openProjectEdit = function() {
+                            console.log('todo: openProjectEdit');
+                        };
+
+                        $scope.openProjectBacklog = function() {
+                            console.log('todo: openProjectBacklog');
+                        };
+
+                        $scope.openProjectSprints = function() {
+                            console.log('todo: openProjectSprints');
+                        };
+
+                        $scope.openProjectEpics = function() {
+                            console.log('todo: openProjectEpics');
+                        };
+
+                        $scope.openProjectMilestones = function() {
+                            console.log('todo: openProjectMilestones');
+                        };
+
+                        $scope.openProjectUsers = function() {
+                            console.log('todo: openProjectUsers');
+                        };
+
+                        $scope.openProjectPhases = function() {
+                            console.log('todo: openProjectPhases');
+                        };
+
+                        $scope.openProjectPlanning = function() {
+                            console.log('todo: openProjectPlanning');
+                        };
+
+                        $scope.openProjectExternalLinks = function() {
+                            console.log('todo: openProjectExternalLinks');
+                        };
+
+                        $scope.openProjectDelete = function() {
+                            console.log('todo: openProjectDelete');
+                        };
+
+                        $scope.openSprintAdd = function() {
+                            console.log('todo: openSprintAdd');
+                        };
+
+                        $scope.openSprintEdit = function() {
+                            console.log('todo: openSprintEdit');
+                        };
+
+                        $scope.openSprintBacklog = function() {
+                            console.log('todo: openSprintBacklog');
+                        };
+
+                        $scope.openSprintCharts = function() {
+                            console.log('todo: openSprintCharts');
+                        };
+
+                        $scope.openSprintDelete = function() {
+                            console.log('todo: openSprintDelete');
                         };
 
                         /**
@@ -95,6 +182,11 @@
                                 Sprint
                                     .load({projectId: valueNew})
                                     .success(function(sprints) {
+                                        $scope.sprintSelectText = sprints.length > 0
+                                            ? 'Choose sprint to show'
+                                            : 'No sprints in this project'
+                                        ;
+
                                         $scope.sprints = sprints;
                                     });
                             }
