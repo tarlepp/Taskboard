@@ -19,7 +19,7 @@
 (function() {
     'use strict';
 
-    angular.module('Taskboard.services')
+    angular.module('Taskboard.components')
         .factory('_',
             [
                 '$window',

@@ -8,8 +8,20 @@
 (function() {
     'use strict';
 
-    // Create frontend module and specify dependencies for that
+    // Create Taskboard module and specify dependencies for that
     angular.module('Taskboard', [
+        'Taskboard-templates',
+        'Taskboard.libraries',
+        'Taskboard.controllers',
+        'Taskboard.components',
+        'Taskboard.directives',
+        'Taskboard.filters',
+        'Taskboard.interceptors',
+        'Taskboard.services'
+    ]);
+
+    // Initialize 3rd party libraries
+    angular.module('Taskboard.libraries', [
         'ngSanitize',
         'ui.router',
         'ui.bootstrap',
@@ -17,17 +29,12 @@
         'angularMoment',
         'angularjs-gravatardirective',
         'linkify',
-        'sails.io',
-        'Taskboard-templates',
-        'Taskboard.controllers',
-        'Taskboard.directives',
-        'Taskboard.filters',
-        'Taskboard.interceptors',
-        'Taskboard.services'
+        'sails.io'
     ]);
 
-    // Initialize used frontend specified modules
+    // Initialize used Taskboard specified modules
     angular.module('Taskboard.controllers', []);
+    angular.module('Taskboard.components', []);
     angular.module('Taskboard.directives', []);
     angular.module('Taskboard.filters', []);
     angular.module('Taskboard.interceptors', []);
@@ -42,83 +49,86 @@
      *  4) Set up application routes
      */
     angular.module('Taskboard')
-        .config([
-            '$stateProvider', '$locationProvider', '$urlRouterProvider', '$httpProvider', '$sailsSocketProvider',
-            'AccessLevels',
-            function($stateProvider, $locationProvider, $urlRouterProvider, $httpProvider, $sailsSocketProvider,
+        .config(
+            [
+                '$stateProvider', '$locationProvider', '$urlRouterProvider', '$httpProvider', '$sailsSocketProvider',
+                'AccessLevels',
+                function($stateProvider, $locationProvider, $urlRouterProvider, $httpProvider, $sailsSocketProvider,
                      AccessLevels
-            ) {
-                $httpProvider.defaults.useXDomain = true;
+                ) {
+                    $httpProvider.defaults.useXDomain = true;
 
-                delete $httpProvider.defaults.headers.common['X-Requested-With'];
+                    delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
-                // Add interceptors for $httpProvider and $sailsSocketProvider
-                $httpProvider.interceptors.push('AuthInterceptor');
-                $httpProvider.interceptors.push('ErrorInterceptor');
+                    // Add interceptors for $httpProvider and $sailsSocketProvider
+                    $httpProvider.interceptors.push('AuthInterceptor');
+                    $httpProvider.interceptors.push('ErrorInterceptor');
 
-                $sailsSocketProvider.interceptors.push('AuthInterceptor');
-                $sailsSocketProvider.interceptors.push('ErrorInterceptor');
+                    $sailsSocketProvider.interceptors.push('AuthInterceptor');
+                    $sailsSocketProvider.interceptors.push('ErrorInterceptor');
 
+                    // Yeah we wanna to use HTML5 urls!
+                    $locationProvider
+                        .html5Mode(true)
+                        .hashPrefix('!')
+                    ;
 
-                // Yeah we wanna to use HTML5 urls!
-                $locationProvider
-                    .html5Mode(true)
-                    .hashPrefix('!')
-                ;
+                    // Routes that are accessible by anyone
+                    $stateProvider
+                        .state('anon', {
+                            abstract: true,
+                            template: '<ui-view/>',
+                            data: {
+                                access: AccessLevels.anon
+                            }
+                        })
+                        .state('anon.login', {
+                            url: '/login',
+                            templateUrl: '/Taskboard/login/index.html',
+                            controller: 'LoginController'
+                        })
+                    ;
 
-                // Routes that are accessible by anyone
-                $stateProvider
-                    .state('anon', {
-                        abstract: true,
-                        template: '<ui-view/>',
-                        data: {
-                            access: AccessLevels.anon
-                        }
-                    })
-                    .state('anon.login', {
-                        url: '/login',
-                        templateUrl: '/Taskboard/login/index.html',
-                        controller: 'LoginController'
-                    })
-                ;
+                    // Routes that needs authenticated user
+                    $stateProvider
+                        .state('board', {
+                            abstract: true,
+                            template: '<ui-view/>',
+                            data: {
+                                access: AccessLevels.user
+                            }
+                        })
+                        .state('board.main', {
+                            url: '/board',
+                            templateUrl: '/Taskboard/board/index.html',
+                            controller: 'BoardController'
+                        })
+                    ;
 
-                // Routes that needs authenticated user
-                $stateProvider
-                    .state('board', {
-                        abstract: true,
-                        template: '<ui-view/>',
-                        data: {
-                            access: AccessLevels.user
-                        }
-                    })
-                    .state('board.main', {
-                        url: '/board',
-                        templateUrl: '/Taskboard/board/index.html',
-                        controller: 'BoardController'
-                    })
-                ;
-
-                // For any unmatched url, redirect to /board
-                $urlRouterProvider.otherwise('/board');
-            }
-        ]);
+                    // For any unmatched url, redirect to /board
+                    $urlRouterProvider.otherwise('/board');
+                }
+            ]
+        );
 
     /**
      * Frontend application run hook configuration. This will attach auth status
      * check whenever application changes URL states.
      */
     angular.module('Taskboard')
-        .run([
-            '$rootScope', '$state', 'Auth',
-            function($rootScope, $state, Auth) {
-                // And when ever route changes we must check authenticate status
-                $rootScope.$on('$stateChangeStart', function(event, toState) {
-                    if (!Auth.authorize(toState.data.access)) {
-                        event.preventDefault();
+        .run(
+            [
+                '$rootScope', '$state', 'Auth',
+                function($rootScope, $state, Auth) {
+                    // And when ever route changes we must check authenticate status
+                    $rootScope.$on('$stateChangeStart', function(event, toState) {
+                        if (!Auth.authorize(toState.data.access)) {
+                            event.preventDefault();
 
-                        $state.go('anon.login');
-                    }
-                });
-            }
-        ]);
+                            $state.go('anon.login');
+                        }
+                    });
+                }
+            ]
+        );
 }());
