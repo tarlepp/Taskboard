@@ -156,7 +156,7 @@ h1, h2, h3, h4, h5, h6 {
       &> li > a {
         line-height: 20px;
         font-size: 13px;
-        padding: 3px 15px 3px 5px;
+        padding: 3px 15px 3px 10px;
         color: #666;
 
         &.text-danger {
@@ -170,9 +170,7 @@ h1, h2, h3, h4, h5, h6 {
         i {
           position: relative;
           top: 1px;
-          width: 30px;
           line-height: 20px;
-          text-align: center;
           font-size: 16px;
           margin-right: 3px;
           color: $colorTextDark;
