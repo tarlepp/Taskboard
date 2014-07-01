@@ -1,0 +1,55 @@
+
+<form name="form.userBasic" class="form-horizontal" novalidate="novalidate">
+
+    <div class="form-group">
+        <label class="col-xs-3 control-label">Username</label>
+        <div class="col-xs-3">
+            <p class="form-control-static">{{user.username}}</p>
+        </div>
+    </div>
+
+    <div class="form-group" data-show-errors>
+        <label class="col-xs-3 control-label">First name</label>
+        <div class="col-xs-9">
+            <input type="text" class="form-control" placeholder="enter first name" required="required" name="user.firstName"
+                data-ng-model="user.firstName"
+            />
+        </div>
+    </div>
+
+    <div class="form-group" data-show-errors>
+        <label class="col-xs-3 control-label">Last name</label>
+        <div class="col-xs-9">
+            <input type="text" class="form-control" placeholder="enter last name" required="required" name="user.lastName"
+                data-ng-model="user.lastName"
+            />
+        </div>
+    </div>
+
+    <div class="form-group" data-show-errors>
+        <label class="col-xs-3 control-label">Email address</label>
+        <div class="col-xs-9">
+            <input type="email" class="form-control" placeholder="enter email" required="required" name="user.email"
+                data-ng-model="user.email"
+            />
+            <span class="help-block">Email address will be used to fetch <a href="http://gravatar.com">Gravatar</a> image.</span>
+        </div>
+    </div>
+
+    <div class="form-group"
+        data-ng-show="auth.isAdmin()"
+    >
+        <div class="col-xs-9 col-xs-offset-3">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"
+                        data-ng-model="user.admin"
+                    /> Administrator user
+                </label>
+            </div>
+
+            <span class="help-block text-nowrap">Administrator users have access to all projects in Taskboard.</span>
+        </div>
+    </div>
+
+</form>

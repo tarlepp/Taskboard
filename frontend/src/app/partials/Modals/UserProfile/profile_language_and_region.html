@@ -1,0 +1,81 @@
+<form name="form.userLanguageRegion" class="form-horizontal" novalidate="novalidate">
+
+    <h4 class="col-lg-offset-3">General settings</h4>
+
+    <div class="form-group">
+        <label class="col-lg-3 control-label">Language</label>
+        <div class="col-lg-9">
+            <select class="form-control in-modal show-tick show-menu-arrow" name="user.language"
+                data-live-search="true"
+                data-container="body"
+                data-bootstrap-select
+                data-tb-collection="languages"
+                data-tb-selected="user.language"
+                data-ng-model="user.language"
+                data-ng-options="language.id as (language.name + ' (' + language.id + ')') for language in languages"
+            ></select>
+
+            <span class="help-block">This will affect to text / time localizations.</span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-lg-3 control-label" f>Timezone</label>
+        <div class="col-lg-9">
+            <select class="form-control in-modal show-tick show-menu-arrow" name="user.momentTimezone"
+                data-live-search="true"
+                data-container="body"
+                data-bootstrap-select
+                data-tb-collection="timezones"
+                data-tb-selected="user.momentTimezone"
+                data-ng-model="user.momentTimezone"
+                data-ng-options="timezone.id as timezone.name for timezone in timezones"
+            ></select>
+
+            <span class="help-block">This will affect to datetime strings.</span>
+        </div>
+    </div>
+
+    <h4 class="col-lg-offset-3">Date and time formats</h4>
+
+    <div class="form-group" data-show-errors>
+        <label class="col-lg-3 control-label">Date format</label>
+        <div class="col-lg-9 input-group">
+            <input type="text" class="form-control" placeholder="enter date format" required="required" name="user.momentFormatDate"
+                data-ng-model="user.momentFormatDate"
+            />
+
+            <span id="momentFormatDateShow" class="input-group-addon">{{momentDate}}</span>
+        </div>
+    </div>
+
+    <div class="form-group" data-show-errors>
+        <label class="col-lg-3 control-label" >Time format</label>
+        <div class="col-lg-9 input-group">
+            <input type="text" class="form-control" placeholder="enter time format" required="required" name="user.momentFormatTime"
+                data-ng-model="user.momentFormatTime"
+            />
+
+            <span id="momentFormatTimeShow" class="input-group-addon">{{momentTime}}</span>
+        </div>
+    </div>
+
+    <div class="form-group" data-show-errors>
+        <label class="col-lg-3 control-label">Datetime format</label>
+        <div class="col-lg-9 input-group">
+            <input type="text" class="form-control" placeholder="enter datetime format" required="required" name="user.momentFormatDateTime"
+                data-ng-model="user.momentFormatDateTime"
+            />
+
+            <span id="momentFormatDateTimeShow" class="input-group-addon">{{momentDateTime}}</span>
+        </div>
+
+        <div class="col-lg-offset-3 col-lg-9">
+            <span class=" help-block">
+                All date formatting is done with <a href="http://momentjs.com/docs/#/displaying/format/" target="_blank">moment.js</a>
+                library so use it format options with above settings.
+            </span>
+        </div>
+    </div>
+
+</form>

@@ -19,10 +19,10 @@
                 templateUrl: '/Taskboard/partials/Directives/NavigationHeader/header.html',
                 controller: [
                     '$scope', '$filter',
-                    'CurrentUser', 'Auth', 'SharedData', '_',
+                    'CurrentUser', 'Auth', 'SharedData', 'ModalService', '_',
                     'Project', 'Sprint',
                     function($scope, $filter,
-                             CurrentUser, Auth, SharedData, _,
+                             CurrentUser, Auth, SharedData, ModalService, _,
                              Project, Sprint
                     ) {
                         $scope.sharedData = SharedData.data;
@@ -45,7 +45,7 @@
 
                         // Function to open user profile modal
                         $scope.openUserProfile = function() {
-                            console.log('todo: openUserProfile');
+                            var modalInstance = ModalService.userProfile($scope.user().id);
                         };
 
                         // Function to open user profile modal

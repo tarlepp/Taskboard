@@ -1,0 +1,56 @@
+<div class="modal-header" xmlns="http://www.w3.org/1999/html">
+    <a class="pull-right close"
+        data-ng-click="close()"
+    >
+        <i class="fa fa-times"></i>
+    </a>
+    <h3>Profile settings</h3>
+</div>
+
+<div class="modal-body">
+    <tabset>
+        <tab class="{{tab.class}}"
+            data-ng-repeat="tab in tabs"
+            data-select="selectTab(tab)"
+        >
+            <tab-heading>
+                <span
+                    data-ng-bind-html="tab.title"
+                    data-ng-class="{'text-danger': (form[tab.form] && !form[tab.form].$valid && !form[tab.form].$pristine)}"
+                ></span>
+            </tab-heading>
+
+            <div class="container-fluid">
+                <template data-src="{{tab.template}}"></template>
+            </div>
+        </tab>
+    </tabset>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default pull-left" data-ng-click="close()">Close</button>
+
+    <div data-ng-show="activeTab.buttonSet == 'main'">
+        <button class="btn btn-primary"
+            data-ng-click="reset()"
+            data-ng-disabled="!formChanged"
+        >Reset</button>
+
+        <button class="btn btn-primary"
+            data-ng-click="save()"
+            data-ng-disabled="!formChanged || !(form.userBasic.$valid && form.userLanguageRegion.$valid)"
+        >Save</button>
+
+        <button class="btn btn-primary"
+            data-ng-click="save(true)"
+            data-ng-disabled="!formChanged || !(form.userBasic.$valid && form.userLanguageRegion.$valid)"
+        >Save and close</button>
+    </div>
+
+    <div data-ng-show="activeTab.buttonSet == 'password'">
+        <button class="btn btn-primary"
+            data-ng-click="changePassword()"
+            data-ng-disabled="!form.userPassword.$valid"
+        >Change password</button>
+    </div>
+</div>

@@ -12,34 +12,142 @@
   overflow: scroll;
 }
 
+.modal-dialog {
+
+  .data-loading {
+    z-index: 5000;
+    position: absolute;
+    top: 80px;
+    width: 300px;
+    left: 50%;
+    margin-left: -150px;
+  }
+}
+
 .modal-header,
 .modal-footer {
   @include noSelect();
-  border-color: #cccccc;
+  border-color: #b9b9b9;
 }
 
 .modal-header {
-  @include linear-gradient(#ffffff, #eeeeee);
-  padding: 10px 15px;
+  @include linear-gradient(#c3c3c3, #e1e1e1);
+  padding: 8px 8px 8px 12px;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
+
+  h3 {
+    margin: 0;
+    @include text-shadow(0, 0, 1px, rgba(0, 0, 0, .5));
+    font-family: $taskBoardFontMaven;
+    color: #555555;
+    letter-spacing: -2px;
+  }
+
+  .fa {
+    margin-right: 5px;
+    font-size: 28px;
+    line-height: 34px;
+  }
 }
 
 .modal-body {
   @include noSelect();
-  padding: 0;
+  padding: 5px 10px;
   overflow-x: auto;
   overflow-y: scroll;
+  background-image: url("/assets/layout/background-body.png");
 
-  &.modal-help {
-    padding: 0 15px;
+  ul.nav {
+    @include noSelect();
+
+    & > li > a {
+      padding: 5px 10px;
+      letter-spacing: -1px;
+      color: $colorTextDark;
+
+      .fa {
+        margin-right: 3px;
+        @include text-shadow(0, 0, 1px, $colorTextShadow);
+      }
+    }
+  }
+
+  .nav-tabs {
+    & > li.active > a,
+    & > li.active > a:hover,
+    & > li.active > a:focus {
+
+      color: $colorTextDark;
+      background-color: transparent;
+      background-image: url("/assets/layout/background-body.png");
+    }
+  }
+
+  .tab-pane {
+    margin-top: 10px;
+
+    h4 {
+      margin-top: 20px;
+      color: $colorTextDark;
+      @include text-shadow(1px, 1px, 3px, $colorTextShadow);
+      font-weight: bold;
+      font-size: 17px;
+      font-family: $taskBoardFontPT;
+      letter-spacing: 0;
+    }
+
+    h4:first-of-type {
+      margin-top: 0;
+    }
+  }
+
+  .row.table-header {
+    margin: 0;
+
+    h4 {
+      margin: 0;
+      line-height: 25px;
+    }
+
+    .input-group {
+      top: 1px;
+      right: -1px;
+
+      .form-control {
+        &:first-child {
+          border-bottom-left-radius: 0;
+        }
+      }
+
+      .input-group-addon {
+        padding: 6px 8px;
+
+        &.search {
+          cursor: pointer;
+        }
+
+        &:last-child {
+          border-bottom-right-radius: 0;
+        }
+      }
+    }
+
+    .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2,
+    .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4,
+    .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6,
+    .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8,
+    .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10,
+    .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+      padding: 0;
+    }
   }
 }
 
 .modal-footer {
-  @include linear-gradient(#eeeeee, #ffffff);
+  @include linear-gradient(#e1e1e1, #c3c3c3);
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   margin-top: 0;
-  padding: 10px;
+  padding: 8px;
 }
