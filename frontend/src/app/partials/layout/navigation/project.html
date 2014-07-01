@@ -1,16 +1,16 @@
 
-<div class="input-group"
-    data-ng-show="projects"
->
+<div class="input-group">
     <select class="show-tick show-menu-arrow form-control"
         data-live-search="true"
         data-container="body"
         data-bootstrap-select
         data-collection="projects"
+        data-refresh="projectSelectText"
+        data-ng-disabled="!(projects.length)"
         data-ng-model="sharedData.projectId"
         data-ng-options="project.id as project.title for project in projects | orderBy:'title'"
     >
-        <option style="display:none" value="" class="text-muted">Choose project to show</option>
+        <option style="display:none" value="" class="text-muted">{{projectSelectText}}</option>
     </select>
 
     <span class="input-group-btn">

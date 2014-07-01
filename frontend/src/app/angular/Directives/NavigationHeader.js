@@ -31,6 +31,7 @@
                         $scope.projects = [];
                         $scope.sprints = [];
                         $scope.sprintSelectText = 'Choose project to show';
+                        $scope.projectSelectText = 'No projects yet...';
 
                         // Function to logout current user from taskboard
                         $scope.logout = function() {
@@ -45,7 +46,7 @@
 
                         // Function to open user profile modal
                         $scope.openUserProfile = function() {
-                            var modalInstance = ModalService.userProfile($scope.user().id);
+                            ModalService.userProfile($scope.user().id);
                         };
 
                         // Function to open user profile modal
@@ -160,6 +161,9 @@
                                 Project
                                     .load()
                                     .success(function(projects) {
+                                        $scope.projectSelectText = projects.length > 0 ?
+                                            'Choose project to show' : 'No projects yet...';
+
                                         $scope.projects = projects;
                                     });
                             }
@@ -182,7 +186,8 @@
                                 Sprint
                                     .load({projectId: valueNew})
                                     .success(function(sprints) {
-                                        $scope.sprintSelectText = sprints.length > 0 ? 'Choose sprint to show' : 'No sprints in this project';
+                                        $scope.sprintSelectText = sprints.length > 0 ?
+                                            'Choose sprint to show' : 'No sprints in this project';
 
                                         $scope.sprints = sprints;
                                     });

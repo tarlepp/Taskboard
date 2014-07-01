@@ -8,10 +8,10 @@
         .controller('ModalUserProfileController',
             [
                 '$scope', '$interval', '$modalInstance',
-                'Auth',
+                'Auth', 'moment', '_',
                 'user', 'timezones', 'languages',
                 function($scope, $interval, $modalInstance,
-                         Auth,
+                         Auth, moment, _,
                          user, timezones, languages
                 ) {
                     $scope.auth = Auth;
@@ -79,7 +79,7 @@
                             console.log('implement data save');
                             console.log($scope.user);
                         } else {
-                            console.log("validation error");
+                            console.log('validation error');
                         }
 
                         if (close) {
@@ -110,8 +110,8 @@
                         $scope.momentDateTime = now.format($scope.user.momentFormatDateTime);
                     }, 1000);
 
-                    $scope.passwordNew = "";
-                    $scope.passwordCheck = "";
+                    $scope.passwordNew = '';
+                    $scope.passwordCheck = '';
 
                     $scope.reset();
                 }
