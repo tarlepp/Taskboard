@@ -73,7 +73,7 @@
                             timeout: 3000
                         };
 
-                        Noty(_.assign(defaultOptions, options));
+                        new Noty(_.assign(defaultOptions, options));
                     };
 
                     return service;

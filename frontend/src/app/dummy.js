@@ -3,23 +3,25 @@
  *
  * Purpose of this file is to help IDE to use autocomplete features.
  */
+/* jshint ignore:start */
 var models = {
     project: {
-        id:             "{Number}",
-        title:          "{String}",
-        description:    "{String}",
-        dateStart:      "{Date}",
-        dateEnd:        "{Date}",
-        ignoreWeekends: "{Boolean}",
-        sprints:        "{models.sprint[]}"
+        id:             '{Number}',
+        title:          '{String}',
+        description:    '{String}',
+        dateStart:      '{Date}',
+        dateEnd:        '{Date}',
+        ignoreWeekends: '{Boolean}',
+        sprints:        '{models.sprint[]}'
     },
     sprint: {
-        id:             "{Number}",
-        title:          "{String}",
-        description:    "{String}",
-        dateStart:      "{Date}",
-        dateEnd:        "{Date}",
-        ignoreWeekends: "{Boolean}",
-        project:        "{models.project}"
+        id:             '{Number}',
+        title:          '{String}',
+        description:    '{String}',
+        dateStart:      '{Date}',
+        dateEnd:        '{Date}',
+        ignoreWeekends: '{Boolean}',
+        project:        '{models.project}'
     }
 };
+/* jshint ignore:end */

@@ -19,10 +19,10 @@
                 templateUrl: '/Taskboard/partials/Directives/NavigationHeader/header.html',
                 controller: [
                     '$scope', '$filter',
-                    'CurrentUser', 'Auth', 'SharedData',
+                    'CurrentUser', 'Auth', 'SharedData', '_',
                     'Project', 'Sprint',
                     function($scope, $filter,
-                             CurrentUser, Auth, SharedData,
+                             CurrentUser, Auth, SharedData, _,
                              Project, Sprint
                     ) {
                         $scope.sharedData = SharedData.data;
@@ -182,10 +182,7 @@
                                 Sprint
                                     .load({projectId: valueNew})
                                     .success(function(sprints) {
-                                        $scope.sprintSelectText = sprints.length > 0
-                                            ? 'Choose sprint to show'
-                                            : 'No sprints in this project'
-                                        ;
+                                        $scope.sprintSelectText = sprints.length > 0 ? 'Choose sprint to show' : 'No sprints in this project';
 
                                         $scope.sprints = sprints;
                                     });

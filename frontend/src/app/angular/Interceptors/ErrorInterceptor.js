@@ -47,7 +47,7 @@
                             } else if (response.data.message) {
                                 message = response.data.message;
                             } else if (response.status === 0) {
-                                message = "Connection refused, Internet connection problem?";
+                                message = 'Connection refused, Internet connection problem?';
                             } else {
                                 message = response.statusText + ' <span class="text-medium">(HTTP status ' + response.status + ')</span>';
                             }

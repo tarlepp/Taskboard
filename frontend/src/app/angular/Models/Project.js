@@ -11,8 +11,8 @@
     angular.module('Taskboard.services')
         .factory('Project',
             [
-                '$sailsSocket', 'DataService',
-                function($sailsSocket, DataService) {
+                '$sailsSocket', 'DataService', '_',
+                function($sailsSocket, DataService, _) {
                     var endpoint = 'project';
                     var project = {};
                     var projects = [];
@@ -25,8 +25,8 @@
 
                     // Handler for 'updated' event
                     handlers.updated = function(project) {
-                        handlers['removed'](project);
-                        handlers['created'](project);
+                        handlers.removed(project);
+                        handlers.created(project);
                     };
 
                     // Handler for 'removed' event
