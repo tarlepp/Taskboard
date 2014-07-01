@@ -3,9 +3,9 @@
 var _ = require('lodash');
 
 /**
- * UserController
+ * CommentController
  *
- * @description :: Server-side logic for managing Users
+ * @description :: Server-side logic for managing Comments
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {

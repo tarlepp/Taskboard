@@ -25,6 +25,7 @@ var sails = {
             momentTimezone:             '{string}',
             passports:                  '{sails.model.passport[]}',
             histories:                  '{sails.model.history[]}',
+            logins:                     '{sails.model.userLogin[]}',
             projectManager:             '{sails.model.project[]}',
             createdUsers:               '{sails.model.user[]}',
             updatedUsers:               '{sails.model.user[]}',
@@ -346,6 +347,17 @@ var sails = {
             timeEndObject:              '{function}',
             timeDuration:               '{function}',
             timeDurationHuman:          '{function}',
+            createdAtObject:            '{function}',
+            updatedAtObject:            '{function}'
+        },
+        userLogin: {
+            id:                         '{number}',
+            createdAt:                  '{date}',
+            updatedAt:                  '{date}',
+            ip:                         '{string}',
+            host:                       '{string}',
+            agent:                      '{string}',
+            user:                       '{sails.model.user}',
             createdAtObject:            '{function}',
             updatedAtObject:            '{function}'
         }

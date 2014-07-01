@@ -3,9 +3,9 @@
 var _ = require('lodash');
 
 /**
- * UserController
+ * ExcludeSprintDayController
  *
- * @description :: Server-side logic for managing Users
+ * @description :: Server-side logic for managing Excludesprintdays
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {

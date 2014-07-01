@@ -30,10 +30,9 @@ var Passport = {
          * party service (e.g. 'oauth', 'oauth2', 'openid').
          */
         protocol: {
-            type: 'alphanumeric',
-            required: true
+            type:       'alphanumeric',
+            required:   true
         },
-
         /**
          * Local field: Password
          *
@@ -41,10 +40,9 @@ var Passport = {
          * means of authentication along with either a username or an email.
          */
         password: {
-            type: 'string',
-            minLength: 8
+            type:       'string',
+            minLength:  8
         },
-
         /**
          * Provider fields: Provider, identifer and tokens
          *
@@ -61,15 +59,12 @@ var Passport = {
         provider: {
             type: 'alphanumericdashed'
         },
-
         identifier: {
             type: 'string'
         },
-
         tokens: {
             type: 'json'
         },
-
         /**
          * Associations
          *
@@ -80,10 +75,9 @@ var Passport = {
          * https://github.com/balderdashy/waterline
          */
         user: {
-            model: 'User',
-            required: true
+            model:      'User',
+            required:   true
         },
-
         /**
          * Validate password used by the local strategy.
          *

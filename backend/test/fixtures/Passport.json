@@ -1,12 +1,14 @@
 [
     {
+        "id":       1,
         "protocol": "local",
         "password": "taskboardisawesome",
-        "user": 1
+        "user":     1
     },
     {
+        "id":       2,
         "protocol": "local",
         "password": "demodemodemo",
-        "user": 2
+        "user":     2
     }
 ]

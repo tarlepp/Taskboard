@@ -1,13 +1,13 @@
 'use strict';
 
+var _ = require('lodash');
+
 /**
 * Sprint.js
 *
 * @description :: TODO: You might write a short summary of how this model works and what it represents here.
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
-var _ = require('lodash');
-
 module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
     attributes: {
         // Sprint title
@@ -45,10 +45,29 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
             columnName: 'projectId',
             required:   true
         },
+        // Story objects that are related to sprint
+        stories: {
+            collection: 'Story',
+            via:        'sprint'
+        },
+        // Story objects that are related to sprint
+        excludeSprintDays: {
+            collection: 'excludeSprintDay',
+            via:        'sprint'
+        },
+        // PhaseDuration object that are related to sprint
+        phaseDurations: {
+            collection: 'PhaseDuration',
+            via:        'sprint'
+        },
 
         // Dynamic data attributes
 
-        // Note that this doesn't account possible sprint exclude days
+        /**
+         * Sprint duration as in days.
+         *
+         * Note that this doesn't account possible sprint exclude days
+         */
         durationDays: function() {
             var output = 0;
 
@@ -70,16 +89,97 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
 
             return output;
         },
-
+        // Date start as moment object.
         dateStartObject: function() {
             return (this.dateStart && this.dateStart != '0000-00-00')
                 ? DateService.convertDateObjectToUtc(this.dateStart) : null;
         },
-
+        // Date end as moment object.
         dateEndObject: function() {
             return (this.dateEnd && this.dateEnd != '0000-00-00')
                 ? DateService.convertDateObjectToUtc(this.dateEnd) : null;
         }
+    },
+
+    // Lifecycle Callbacks
+
+    /**
+     * Before validation callback.
+     *
+     * @param   {sails.model.sprint}    values  Values to create / update
+     * @param   {Function}              next    Callback function
+     */
+    beforeValidation: function(values, next) {
+        next();
+    },
+
+    /**
+     * Before create callback.
+     *
+     * @param   {sails.model.sprint}    values  Values to create
+     * @param   {Function}              next    Callback function
+     */
+    beforeCreate: function(values, next) {
+        next();
+    },
+
+    /**
+     * Before update callback.
+     *
+     * @param   {sails.model.sprint}    values  Values to update
+     * @param   {Function}              next    Callback function
+     */
+    beforeUpdate: function(values, next) {
+        next();
+    },
+
+    /**
+     * Before destroy callback.
+     *
+     * @param   {{}}        criteria    Delete criteria
+     * @param   {Function}  next        Callback function
+     */
+    beforeDestroy: function(criteria, next) {
+        next();
+    },
+
+    /**
+     * After validation callback.
+     *
+     * @param   {sails.model.sprint}    values  Values to create / update
+     * @param   {Function}              next    Callback function
+     */
+    afterValidation: function(values, next) {
+        next();
+    },
+
+    /**
+     * After create callback.
+     *
+     * @param   {sails.model.sprint}    record  Newly inserted record
+     * @param   {Function}              next    Callback function
+     */
+    afterCreate: function(record, next) {
+        next();
+    },
+
+    /**
+     * After update callback.
+     *
+     * @param   {sails.model.sprint}    record  Updated record
+     * @param   {Function}              next    Callback function
+     */
+    afterUpdate: function(record, next) {
+        next();
+    },
+
+    /**
+     * After destroy callback.
+     *
+     * @param   {sails.model.sprint[]}  records Destroyed records
+     * @param   {Function}              next    Callback function
+     */
+    afterDestroy: function(records, next) {
+        next();
     }
 });
-
