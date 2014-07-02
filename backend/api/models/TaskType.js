@@ -30,13 +30,18 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
             type:       'string',
             required:   true
         },
+        // Type color task container border in board
+        colorBorder: {
+            type:       'string',
+            required:   true
+        },
         // Type color task container in board
-        colorTaskContainer: {
+        colorContainer: {
             type:       'string',
             required:   true
         },
         // Type text color task container in board
-        colorTaskText: {
+        colorText: {
             type:       'string',
             required:   true
         },

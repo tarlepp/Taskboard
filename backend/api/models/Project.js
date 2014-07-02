@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var async = require('async');
 
 /**
 * /api/models/Project.js
@@ -179,17 +180,36 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
     },
 
     /**
-     * After create callback.
+     * After create callback. This will create necessary project specified relation
+     * data so that users have a mock project at their hand after creation. Basically
+     * We will create following project related data automatic:
      *
-     * @todo    Add created user as project manager?
-     *          Add default phases
-     *          Add default task types
+     *  1)  Attach create user as in 'Manager' role to project
+     *  2)  Create default project phases
+     *  3)  Create default project task types
+     *
+     * After creation of those, user can start work with created project right a way.
      *
      * @param   {sails.model.project}   record  Newly inserted record
      * @param   {Function}              next    Callback function
      */
     afterCreate: function(record, next) {
-        next();
+        async.parallel(
+            {
+                users: function(callback) {
+                    ProjectService.addDefaultProjectManager(record, callback);
+                },
+                phases: function(callback) {
+                    ProjectService.addDefaultPhases(record, callback);
+                },
+                taskTypes: function(callback) {
+                    ProjectService.addDefaultTaskTypes(record, callback);
+                }
+            },
+            function(error) {
+                next(error);
+            }
+        );
     },
 
     /**
