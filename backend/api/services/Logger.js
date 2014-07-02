@@ -16,7 +16,7 @@
  * @param   {Request}           request     Request object
  */
 exports.userLogin = function(user, request) {
-    sails.log.error(__filename + ':' + __line + ' [Service.Logger.userLogin() called]');
+    sails.log.verbose(__filename + ':' + __line + ' [Service.Logger.userLogin() called]');
 
     // Parse detailed information from user-agent string
     var r = require('ua-parser').parse(request.headers['user-agent']);
