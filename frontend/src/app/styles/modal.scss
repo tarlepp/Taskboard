@@ -90,13 +90,15 @@
     margin-top: 10px;
 
     h4 {
-      margin-top: 20px;
-      color: $colorTextDark;
-      @include text-shadow(1px, 1px, 3px, $colorTextShadow);
+      @include text-shadow(1px, 1px, 5px, rgba(0, 0, 0, .3));
+      cursor: default;
       font-weight: bold;
-      font-size: 17px;
-      font-family: $taskBoardFontPT;
-      letter-spacing: 0;
+      font-size: 14px;
+      color: #446e9b;
+      background-color: transparent;
+      margin-top: 20px;
+      padding: 2px 10px;
+      text-transform: uppercase;
     }
 
     h4:first-of-type {

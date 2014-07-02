@@ -90,10 +90,10 @@ h1, h2, h3, h4, h5, h6 {
     .dropdown {
       &.open {
         .btn-default {
-          background-image: -webkit-linear-gradient(#636565, #3d3f3f 50%, #333434);
-          background-image: linear-gradient(#636565, #3d3f3f 50%, #333434);
+          background-image: -webkit-linear-gradient(#818383, #5b5d5d 50%, #515252);
+          background-image: linear-gradient(#818383, #5b5d5d 50%, #515252);
           background-repeat: no-repeat;
-          filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff636565', endColorstr='#ff333434', GradientType=0);
+          filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff818383', endColorstr='#ff515252', GradientType=0);
           filter: none;
           border: 1px solid #242525;
         }

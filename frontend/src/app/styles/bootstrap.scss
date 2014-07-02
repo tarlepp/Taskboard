@@ -1,0 +1,18 @@
+.btn-default {
+    background-image: -webkit-linear-gradient(#8b8e8e, #656767 50%, #5c5e5e);
+    background-image: linear-gradient(#8b8e8e, #656767 50%, #5c5e5e);
+    background-repeat: no-repeat;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff8b8e8e', endColorstr='#ff5c5e5e', GradientType=0);
+    filter: none;
+    border: 1px solid #2e2f2f;
+
+    &:hover {
+      background-image: -webkit-linear-gradient(#818383, #5b5d5d 50%, #515252);
+      background-image: linear-gradient(#818383, #5b5d5d 50%, #515252);
+      background-repeat: no-repeat;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff818383', endColorstr='#ff515252', GradientType=0);
+      filter: none;
+      border: 1px solid #242525;
+    }
+}
+
