@@ -1,0 +1,12 @@
+[
+    {
+        "id":               1,
+        "title":            "Taskboard",
+        "description":      "A Task",
+        "dateStart":        "2014-01-01",
+        "dateEnd":          "2015-01-01",
+        "ignoreWeekends":   false,
+        "createdUser":      1,
+        "updatedUser":      1
+    }
+]
