@@ -53,7 +53,7 @@
 
 .modal-body {
   @include noSelect();
-  padding: 5px 10px;
+  padding: 5px 0;
   overflow-x: auto;
   overflow-y: scroll;
   background-image: url("/assets/layout/background-body.png");
@@ -74,6 +74,8 @@
   }
 
   .nav-tabs {
+    padding: 0 2px 0 5px;
+
     & > li.active > a,
     & > li.active > a:hover,
     & > li.active > a:focus {
