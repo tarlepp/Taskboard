@@ -75,7 +75,9 @@ var AuthController = {
                 // take care of rendering the error messages.
                 if (error) {
                     response.json(401, error);
-                } else { // Upon successful login, send the user to the homepage were request.user will available.
+                } else { // Upon successful login, send back user data and JWT token
+                    Logger.userLogin(user, request);
+
                     response.json(200, {user: user, token: tokenService.issueToken(user.id)});
                 }
             });

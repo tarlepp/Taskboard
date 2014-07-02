@@ -5,6 +5,14 @@
  *
  * Purpose of this file is to help IDE to use autocomplete features.
  */
+
+// Debug / log helpers, see /config/application.js
+var __filename;
+var __line;
+var __function;
+var __stack;
+
+// Sails specified helpers
 var sails = {
     model: {
         user: {
