@@ -1,0 +1,62 @@
+[
+    {
+        "title":                    "Create GitHub IO page",
+        "description":              "Create GitHub IO page with some real content, this is needed - really.",
+        "estimate":                 5,
+        "priority":                 1,
+        "isDone":                   false,
+        "ignoreInBurnDownChart":    false,
+        "project":                  1,
+        "sprint":                   1,
+        "createdUser":              1,
+        "updatedUser":              1
+    },
+    {
+        "title":                    "Installation guide",
+        "description":              "Add basics about required environment and other stuff. Remember to add examples.",
+        "estimate":                 3,
+        "priority":                 2,
+        "isDone":                   false,
+        "ignoreInBurnDownChart":    false,
+        "project":                  1,
+        "sprint":                   1,
+        "createdUser":              1,
+        "updatedUser":              1
+    },
+    {
+        "title":                    "Vagrant image",
+        "description":              "Make Vagrant image to help people to make contributions and just to try Taskboard.",
+        "estimate":                 3,
+        "priority":                 2,
+        "isDone":                   false,
+        "ignoreInBurnDownChart":    false,
+        "project":                  1,
+        "sprint":                   1,
+        "createdUser":              1,
+        "updatedUser":              1
+    },
+    {
+        "title":                    "Great story of humans!",
+        "description":              "Our future depends on this, please make this work! Kill those aliens!",
+        "estimate":                 3,
+        "priority":                 1,
+        "isDone":                   false,
+        "ignoreInBurnDownChart":    false,
+        "project":                  2,
+        "sprint":                   5,
+        "createdUser":              1,
+        "updatedUser":              1
+    },
+    {
+        "title":                    "Great story of aliens!",
+        "description":              "tlhab 'oS 'Iw; HoHwI' So' batlh.",
+        "estimate":                 5,
+        "priority":                 2,
+        "isDone":                   false,
+        "ignoreInBurnDownChart":    false,
+        "project":                  2,
+        "sprint":                   5,
+        "createdUser":              1,
+        "updatedUser":              1
+    }
+]

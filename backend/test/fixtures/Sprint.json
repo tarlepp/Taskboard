@@ -1,0 +1,82 @@
+[
+    {
+        "id":               1,
+        "title":            "Eka sprint",
+        "dateStart":        "2014-01-01",
+        "dateEnd":          "2014-01-31",
+        "ignoreWeekends":   false,
+        "project":          1,
+        "createdUser":      1,
+        "updatedUser":      1
+    },
+    {
+        "id":               2,
+        "title":            "Toka sprint",
+        "dateStart":        "2014-02-01",
+        "dateEnd":          "2014-02-28",
+        "ignoreWeekends":   false,
+        "project":          1,
+        "createdUser":      1,
+        "updatedUser":      1
+    },
+    {
+        "id":               3,
+        "title":            "Kolmas sprint",
+        "dateStart":        "2014-03-01",
+        "dateEnd":          "2014-03-31",
+        "ignoreWeekends":   false,
+        "project":          1,
+        "createdUser":      1,
+        "updatedUser":      1
+    },
+    {
+        "id":               4,
+        "title":            "Neljäs sprint",
+        "dateStart":        "2014-04-01",
+        "dateEnd":          "2014-04-30",
+        "ignoreWeekends":   false,
+        "project":          1,
+        "createdUser":      1,
+        "updatedUser":      1
+    },
+    {
+        "id":               5,
+        "title":            "First sprint",
+        "dateStart":        "2014-01-01",
+        "dateEnd":          "2014-01-31",
+        "ignoreWeekends":   false,
+        "project":          2,
+        "createdUser":      1,
+        "updatedUser":      1
+    },
+    {
+        "id":               6,
+        "title":            "Second sprint",
+        "dateStart":        "2014-02-01",
+        "dateEnd":          "2014-02-28",
+        "ignoreWeekends":   false,
+        "project":          2,
+        "createdUser":      1,
+        "updatedUser":      1
+    },
+    {
+        "id":               7,
+        "title":            "Third sprint",
+        "dateStart":        "2014-03-01",
+        "dateEnd":          "2014-03-31",
+        "ignoreWeekends":   false,
+        "project":          2,
+        "createdUser":      1,
+        "updatedUser":      1
+    },
+    {
+        "id":               8,
+        "title":            "Fourth sprint",
+        "dateStart":        "2014-04-01",
+        "dateEnd":          "2014-04-30",
+        "ignoreWeekends":   false,
+        "project":          2,
+        "createdUser":      1,
+        "updatedUser":      1
+    }
+]

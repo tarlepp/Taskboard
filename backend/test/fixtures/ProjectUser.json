@@ -1,0 +1,16 @@
+[
+    {
+        "role":         0,
+        "project":      1,
+        "user":         2,
+        "createdUser":  1,
+        "updatedUser":  1
+    },
+    {
+        "role":         1,
+        "project":      2,
+        "user":         2,
+        "createdUser":  1,
+        "updatedUser":  1
+    }
+]

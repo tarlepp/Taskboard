@@ -2,7 +2,17 @@
     {
         "id":               1,
         "title":            "Taskboard",
-        "description":      "A Task",
+        "description":      "Application to mimic 'scrum-ban' taskboard.",
+        "dateStart":        "2014-01-01",
+        "dateEnd":          "2015-01-01",
+        "ignoreWeekends":   false,
+        "createdUser":      1,
+        "updatedUser":      1
+    },
+    {
+        "id":               2,
+        "title":            "Demo project",
+        "description":      "Demo project, just for demo purposes.",
         "dateStart":        "2014-01-01",
         "dateEnd":          "2015-01-01",
         "ignoreWeekends":   false,
