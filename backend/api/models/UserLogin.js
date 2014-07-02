@@ -23,8 +23,40 @@ module.exports = {
             type:       'text',
             required:   true
         },
+        // User browser
+        browser: {
+            type:       'string',
+            defaultsTo: 'Unknown'
+        },
+        // User browser version
+        browserVersion: {
+            type:       'string',
+            defaultsTo: 'Unknown'
+        },
+        // User browser family
+        browserFamily: {
+            type:       'string',
+            defaultsTo: 'Unknown'
+        },
+        // User operation system
+        os: {
+            type:       'string',
+            defaultsTo: 'Unknown'
+        },
+        // User operation system version
+        osVersion: {
+            type:       'string',
+            defaultsTo: 'Unknown'
+        },
+        // User operation system family
+        osFamily: {
+            type:       'string',
+            defaultsTo: 'Unknown'
+        },
 
         // Below is all specification for relations to another models
+
+        // Attached User object of this UserLogin
         user: {
             model:      'User',
             columnName: 'userId',
