@@ -53,7 +53,7 @@ module.exports = {
      * @param   {sails.model.userLogin} values  Values to create / update
      * @param   {Function}              next    Callback function
      */
-    beforeValidation: function(values, next) {
+    beforeValidate: function(values, next) {
         next();
     },
 
@@ -93,7 +93,7 @@ module.exports = {
      * @param   {sails.model.userLogin} values  Values to create / update
      * @param   {Function}              next    Callback function
      */
-    afterValidation: function(values, next) {
+    afterValidate: function(values, next) {
         next();
     },
 

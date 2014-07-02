@@ -40,10 +40,10 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
 
         // Below is all specification for relations to another models
 
-        // Relation to User model
-        manager: {
-            model:      'User',
-            columnName: 'managerId'
+        // ProjectUser objects that are related to project
+        projectUsers: {
+            collection: 'ProjectUser',
+            via:        'project'
         },
         // Phase objects that are related to project
         phases: {
@@ -134,7 +134,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {sails.model.project}   values  Values to create / update
      * @param   {Function}              next    Callback function
      */
-    beforeValidation: function(values, next) {
+    beforeValidate: function(values, next) {
         next();
     },
 
@@ -174,7 +174,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {sails.model.project}   values  Values to create / update
      * @param   {Function}              next    Callback function
      */
-    afterValidation: function(values, next) {
+    afterValidate: function(values, next) {
         next();
     },
 

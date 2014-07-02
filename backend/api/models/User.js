@@ -71,10 +71,10 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
             collection: 'UserLogin',
             via:        'user'
         },
-        // Projects where manager
-        projectManager: {
-            collection: 'Project',
-            via:        'manager'
+        // ProjectUser objects that are related to User
+        projectUsers: {
+            collection: 'ProjectUser',
+            via:        'user'
         },
         // Created Users
         createdUsers: {
@@ -94,6 +94,26 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
         // Updated Projects (latest update)
         updatedProjects: {
             collection: 'Project',
+            via:        'updatedUser'
+        },
+        // Created ProjectUsers
+        createdProjectUsers: {
+            collection: 'ProjectUser',
+            via:        'createdUser'
+        },
+        // Updated Projects (latest update)
+        updatedProjectUsers: {
+            collection: 'ProjectUser',
+            via:        'updatedUser'
+        },
+        // Created Phases
+        createdPhases: {
+            collection: 'Phase',
+            via:        'createdUser'
+        },
+        // Updated Phases (latest update)
+        updatedPhases: {
+            collection: 'Phase',
             via:        'updatedUser'
         },
         // Created Sprints
@@ -223,7 +243,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {sails.model.user}      values  Values to create / update
      * @param   {Function}              next    Callback function
      */
-    beforeValidation: function(values, next) {
+    beforeValidate: function(values, next) {
         next();
     },
 
@@ -263,7 +283,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {sails.model.user}      values  Values to create / update
      * @param   {Function}              next    Callback function
      */
-    afterValidation: function(values, next) {
+    afterValidate: function(values, next) {
         next();
     },
 
