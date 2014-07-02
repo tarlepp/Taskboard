@@ -122,9 +122,7 @@ exports.addDefaultPhases = function(project, next) {
         function(phase, callback) {
             Phase
                 .create(phase)
-                .exec(function(error) {
-                    callback(error);
-                });
+                .exec(callback);
         },
 
         /**
@@ -207,9 +205,7 @@ exports.addDefaultTaskTypes = function(project, next) {
         function(taskType, callback) {
             TaskType
                 .create(taskType)
-                .exec(function(error) {
-                    callback(error);
-                });
+                .exec(callback);
         },
 
         /**
