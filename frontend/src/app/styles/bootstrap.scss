@@ -1,3 +1,5 @@
+@import "_mixins";
+
 .btn-default {
     background-image: -webkit-linear-gradient(#9a9d9d, #747676 50%, #686a6a);
     background-image: linear-gradient(#9a9d9d, #747676 50%, #686a6a);
@@ -16,3 +18,36 @@
     }
 }
 
+.table {
+  margin-bottom: 0;
+
+  > thead > tr > th,
+  > thead > tr > td,
+  > tbody > tr > th,
+  > tbody > tr > td,
+  > tfoot > tr > th,
+  > tfoot > tr > td {
+    vertical-align: middle;
+  }
+
+  thead {
+    background-color: #ebebeb;
+    @include noSelect();
+
+    .fa {
+      margin-left: 5px;
+
+      &.btn {
+        margin-left: 0;
+        font-weight: normal;
+      }
+    }
+
+    a {
+      &:hover,
+      &:focus {
+        text-decoration: none;
+      }
+    }
+  }
+}

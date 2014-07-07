@@ -1,0 +1,35 @@
+@import "_mixins";
+
+.pagination {
+  margin: 5px 0 0 0;
+  @include noSelect();
+}
+
+.noty_text {
+  font-size: 14px;
+}
+
+.qtip-bootstrap {
+  padding: 0;
+
+  &.qtip-action-menu {
+    .qtip-content {
+      padding: 0;
+    }
+  }
+
+  &.json {
+    max-width: 400px;
+
+    .qtip-content {
+      padding: 0;
+
+      pre {
+        background-color: #ffffff;
+        border: none;
+        padding: 0;
+        outline: none;
+      }
+    }
+  }
+}
