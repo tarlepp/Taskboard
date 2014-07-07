@@ -64,9 +64,19 @@
                             });
                     }
 
+                    // Return count of projects
+                    function count(parameters) {
+                        return DataService
+                            .count(endpoint, parameters)
+                            .success(function(response) {
+                                return response;
+                            });
+                    }
+
                     return {
                         load: load,
-                        fetch: fetch
+                        fetch: fetch,
+                        count: count
                     };
                 }
             ]
