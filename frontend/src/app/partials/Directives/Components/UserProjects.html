@@ -64,6 +64,13 @@
             </thead>
             <tbody>
                 <tr
+                    data-ng-if="items.length == 0"
+                >
+                    <td colspan="6" class="text-center text-medium text-muted">
+                        <em>No projects found...</em>
+                    </td>
+                </tr>
+                <tr
                     data-ng-repeat="project in items"
                 >
                     <td>
