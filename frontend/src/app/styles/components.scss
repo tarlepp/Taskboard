@@ -1,8 +1,27 @@
 @import "_mixins";
 
-.pagination {
-  margin: 5px 0 0 0;
+.pagination,
+.pagination-lg,
+.pagination-sm {
+  margin: 0;
+  position: relative;
+  top: -1px;
+  border-radius: 0;
   @include noSelect();
+}
+
+.pagination,
+.pagination-lg,
+.pagination-sm {
+  & > li:first-child > a,
+  & > li:first-child > span {
+    border-top-left-radius: 0;
+  }
+
+  & > li:last-child > a,
+  & > li:last-child > span {
+    border-top-right-radius: 0;
+  }
 }
 
 .noty_text {

@@ -6,6 +6,11 @@
   .modal-title {
     margin: 0;
   }
+
+  .container-fluid {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }
 
 .modal-open {
@@ -132,7 +137,7 @@
       }
 
       .input-group-addon {
-        padding: 6px 8px;
+        padding: 6px;
 
         &.search {
           cursor: pointer;
