@@ -50,11 +50,13 @@
                             data-ng-class="{'text-muted': item.searchable && !item.inSearch}"
                             data-ng-bind-html="item.title"
                         ></a>
-                            <span class="text-info"
-                                data-ng-show="!item.sortable"
-                                data-ng-class="{'text-muted': item.searchable && !item.inSearch}"
-                                data-ng-bind-html="item.title"
-                            ></span>
+
+                        <span class="text-info"
+                            data-ng-show="!item.sortable"
+                            data-ng-class="{'text-muted': item.searchable && !item.inSearch}"
+                            data-ng-bind-html="item.title"
+                        ></span>
+
                         <i class="fa"
                             data-ng-show="sort.column == item.column"
                             data-ng-class="{'fa-angle-down': !sort.direction, 'fa-angle-up': sort.direction}"
