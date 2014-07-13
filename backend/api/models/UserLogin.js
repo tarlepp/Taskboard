@@ -53,6 +53,10 @@ module.exports = {
             type:       'string',
             defaultsTo: 'Unknown'
         },
+        count: {
+            type:       'integer',
+            defaultsTo: 1
+        },
 
         // Below is all specification for relations to another models
 
