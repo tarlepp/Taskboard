@@ -30,8 +30,7 @@ exports.getCollection = function(request, extraCriteria, next) {
 
     // Fetch data from database
     model
-        .find()
-        .where(criteria)
+        .find(criteria)
         .exec(function found(error, items) {
             next(error, items);
         });
