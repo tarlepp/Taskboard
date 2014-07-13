@@ -28,27 +28,27 @@
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-default pull-left" data-ng-click="close()">Close</button>
+    <button class="btn btn-sm btn-default pull-left" data-ng-click="close()">Close</button>
 
     <div data-ng-show="activeTab.buttonSet == 'main'">
-        <button class="btn btn-primary"
+        <button class="btn btn-sm btn-primary"
             data-ng-click="reset()"
             data-ng-disabled="!formChanged"
         >Reset</button>
 
-        <button class="btn btn-primary"
+        <button class="btn btn-sm btn-primary"
             data-ng-click="save()"
             data-ng-disabled="!formChanged || !(form.userBasic.$valid && form.userLanguageRegion.$valid)"
         >Save</button>
 
-        <button class="btn btn-primary"
+        <button class="btn btn-sm btn-primary"
             data-ng-click="save(true)"
             data-ng-disabled="!formChanged || !(form.userBasic.$valid && form.userLanguageRegion.$valid)"
         >Save and close</button>
     </div>
 
     <div data-ng-show="activeTab.buttonSet == 'password'">
-        <button class="btn btn-primary"
+        <button class="btn btn-sm btn-primary"
             data-ng-click="changePassword()"
             data-ng-disabled="!form.userPassword.$valid"
         >Change password</button>
