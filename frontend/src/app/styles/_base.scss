@@ -1,8 +1,13 @@
 @import "mixins";
 
+html {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
 body {
   cursor: default;
-  overflow-y: scroll;
+  overflow: hidden;
   background-image: url("/assets/layout/background-body.png");
   font-size: 14px;
   font-family: $taskBoardFontPT;

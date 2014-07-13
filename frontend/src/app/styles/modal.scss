@@ -14,10 +14,11 @@
 }
 
 .modal-open {
-  overflow: scroll;
+  overflow: hidden;
 }
 
 .modal-dialog {
+  margin: 30px auto 0;
 
   .data-loading {
     z-index: 5000;
