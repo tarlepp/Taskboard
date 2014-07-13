@@ -55,7 +55,7 @@ exports.sortAndPaginate = function(items, request) {
 
     items = _.sortBy(items, sort[0]);
 
-    if (sort[1] === 'ASC') {
+    if (sort[1] === 'DESC') {
         items.reverse();
     }
 
