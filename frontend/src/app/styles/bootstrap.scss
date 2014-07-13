@@ -20,6 +20,16 @@
 
 .table {
   margin-bottom: 0;
+  -webkit-transition: opacity .2s ease-in-out;
+  -moz-transition: opacity .2s ease-in-out;
+  -ms-transition: opacity .2s ease-in-out;
+  -o-transition: opacity .2s ease-in-out;
+  transition: opacity .2s ease-in-out;
+  opacity: 1;
+
+  &.loading-fade {
+    opacity: .5;
+  }
 
   > thead:first-child > tr:first-child > th {
     border-top: 1px solid #cccccc;
