@@ -49,8 +49,8 @@
                             buttonSet: ''
                         },
                         {
-                            title: 'Sign in history',
-                            template: 'Modals/UserProfile/profile_sign_in_history'
+                            title: 'Login history',
+                            template: 'Modals/UserProfile/profile_login_history'
                         },
                         {
                             title: '<i class="fa fa-clock-o"></i> History',
