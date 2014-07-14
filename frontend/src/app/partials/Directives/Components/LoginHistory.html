@@ -3,86 +3,103 @@
         <template data-src="layout/loading"></template>
     </div>
 
-    <div data-ng-show="!loading">
-        <div data-ng-repeat="item in items">
-            <div class="row table-header">
-                <div class="col-md-9">
-                    <h4>
-                        {{item.title}}
+    <tabset>
+        <tab class="{{tab.class}}"
+            data-ng-repeat="item in items"
+        >
+            <tab-heading>
+                <span>
+                    {{item.titleTab}}
+                </span>
+            </tab-heading>
 
-                        <span>({{item.itemCount}})</span>
-                    </h4>
-                </div>
+            <div class="container-fluid">
+                <div class="row table-header">
+                    <div class="col-md-9">
+                        <h4>
+                            {{item.title}}
 
-                <div class="col-md-3 pull-right">
-                    <div class="input-group">
-                        <input class="form-control input-sm" type="text" placeholder="search filter"
-                            data-ng-model="item.searchWord"
-                        />
-                        <span class="input-group-addon"><i class="fa fa-search text-muted"></i></span>
+                            <span>({{item.itemCount}})</span>
+                        </h4>
+                    </div>
+
+                    <div class="col-md-3 pull-right">
+                        <div class="input-group">
+                            <input class="form-control input-sm" type="text" placeholder="search filter"
+                                data-ng-model="item.searchWord"
+                            />
+                            <span class="input-group-addon"><i class="fa fa-search text-muted"></i></span>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <table class="table table-striped table-hover table-condensed"
+                    data-ng-class="{'loading-fade': item.loading}"
+                >
+                    <thead>
+                        <tr>
+                            <th class="text-nowrap"
+                                data-ng-repeat="column in item.columns"
+                                data-ng-class="column.class"
+                            >
+                                <a
+                                    data-ng-click="changeSort(column, item)"
+                                    data-ng-bind-html="column.title"
+                                ></a>
 
-            <table class="table table-striped table-hover table-condensed"
-               data-ng-class="{'loading-fade': item.loading}"
-            >
-                <thead>
-                    <tr>
-                        <th class="text-nowrap"
-                            data-ng-repeat="column in item.columns"
-                            data-ng-class="column.class"
+                                <i class="fa"
+                                    data-ng-show="item.sort.column == column.column"
+                                    data-ng-class="{'fa-angle-down': item.sort.direction, 'fa-angle-up': !item.sort.direction}"
+                                ></i>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-small">
+                        <tr
+                            data-ng-repeat="row in item.items"
                         >
-                            <a
-                                data-ng-click="changeSort(column, item)"
-                                data-ng-bind-html="column.title"
-                            ></a>
+                            <td class="text-nowrap"
+                                data-ng-if="row.createdAt"
+                            >{{row.createdAt | amDateFormat:user.momentFormatDateTime }}</td>
 
-                            <i class="fa"
-                                data-ng-show="item.sort.column == column.column"
-                                data-ng-class="{'fa-angle-down': item.sort.direction, 'fa-angle-up': !item.sort.direction}"
-                            ></i>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="text-small opacity50">
-                    <tr
-                        data-ng-repeat="row in item.items"
-                    >
-                        <td class="text-nowrap"
-                            data-ng-if="row.createdAt"
-                        >{{row.createdAt | amDateFormat:user.momentFormatDateTime }}</td>
+                            <td class="text-nowrap"
+                                data-ng-if="row.ip"
+                            >{{row.ip}}</td>
 
-                        <td class="text-nowrap"
-                            data-ng-if="row.ip"
-                        >{{row.ip}}</td>
+                            <td style="width: 100%"
+                                data-ng-if="row.agent"
+                            >{{row.agent}}</td>
 
-                        <td style="width: 100%"
-                            data-ng-if="row.agent"
-                        >{{row.agent}}</td>
+                            <td style="width: 100%"
+                                data-ng-if="row.browserFamily && item.methodLoad === 'loadBrowserFamily'"
+                            >{{row.browserFamily}}</td>
 
-                        <td class="text-nowrap text-right"
-                            data-ng-if="item.methodLoad == 'loadIp' || item.methodLoad == 'loadAgent'"
-                        >{{row.count}}</td>
-                    </tr>
-                    <tr
-                        data-ng-if="item.items.length === 0"
-                    >
-                        <td colspan="100%" class="text-muted text-center">
-                            <em>No results...</em>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            <td style="width: 100%"
+                                data-ng-if="row.osFamily && item.methodLoad === 'loadOsFamily'"
+                            >{{row.osFamily}}</td>
 
-            <pagination class="pagination-sm"
-                data-total-items="item.itemCount"
-                data-ng-model="item.currentPage"
-                data-items-per-page="itemsPerPage"
-                data-max-size="10"
-                data-boundary-links="true"
-                data-rotate="false"
-            ></pagination>
-        </div>
-    </div>
+                            <td class="text-nowrap text-right"
+                                data-ng-if="item.showCount"
+                            >{{row.count}}</td>
+                        </tr>
+                        <tr
+                            data-ng-if="item.items.length === 0"
+                        >
+                            <td colspan="100%" class="text-muted text-center">
+                                <em>No results...</em>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <pagination class="pagination-sm"
+                    data-total-items="item.itemCount"
+                    data-ng-model="item.currentPage"
+                    data-items-per-page="itemsPerPage"
+                    data-max-size="10"
+                    data-boundary-links="true"
+                    data-rotate="false"
+                ></pagination>
+            </div>
+        </tab>
+    </tabset>
 </div>

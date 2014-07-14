@@ -9,9 +9,11 @@
  * This will render a three data tables which contains following user login
  * data:
  *
- *  1) Unique IP-addresses
- *  2) Unique user-agents
- *  3) Full login list
+ *  1) Full login list
+ *  2) Unique IP-addresses
+ *  3) Unique user-agents
+ *  4) Unique browser families
+ *  5) Unique operation system families
  *
  * Users can sort and search there items as they like.
  */
@@ -44,41 +46,8 @@
                             // Specify list initial data
                             $scope.items = [
                                 {
-                                    title: 'Unique login IP-addresses',
-                                    columns: [
-                                        {title: 'IP-address', column: 'ip'},
-                                        {title: 'Count', column: 'count', class: 'text-right'}
-                                    ],
-                                    sort: {
-                                        column: 'count',
-                                        direction: true
-                                    },
-                                    methodLoad: 'loadIp',
-                                    methodCount: 'countIp',
-                                    searchWord: '',
-                                    items: [],
-                                    itemCount: 0,
-                                    currentPage: 1
-                                },
-                                {
-                                    title: 'Unique login user-agents',
-                                    columns: [
-                                        {title: 'User-agent', column: 'agent'},
-                                        {title: 'Count', column: 'count', class: 'text-right'}
-                                    ],
-                                    sort: {
-                                        column: 'count',
-                                        direction: true
-                                    },
-                                    methodLoad: 'loadAgent',
-                                    methodCount: 'countAgent',
-                                    searchWord: '',
-                                    items: [],
-                                    itemCount: 0,
-                                    currentPage: 1
-                                },
-                                {
                                     title: 'Full login list',
+                                    titleTab: 'Full list',
                                     columns: [
                                         {title: 'Login time', column: 'createdAt'},
                                         {title: 'IP-address', column: 'ip'},
@@ -90,6 +59,83 @@
                                     },
                                     methodLoad: 'load',
                                     methodCount: 'count',
+                                    showCount: false,
+                                    searchWord: '',
+                                    items: [],
+                                    itemCount: 0,
+                                    currentPage: 1
+                                },
+                                {
+                                    title: 'Unique IP-addresses',
+                                    titleTab: 'IP-addresses',
+                                    columns: [
+                                        {title: 'IP-address', column: 'ip'},
+                                        {title: 'Count', column: 'count', class: 'text-right'}
+                                    ],
+                                    sort: {
+                                        column: 'count',
+                                        direction: true
+                                    },
+                                    methodLoad: 'loadIp',
+                                    methodCount: 'countIp',
+                                    showCount: true,
+                                    searchWord: '',
+                                    items: [],
+                                    itemCount: 0,
+                                    currentPage: 1
+                                },
+                                {
+                                    title: 'Unique user-agents',
+                                    titleTab: 'User-agents',
+                                    columns: [
+                                        {title: 'User-agent', column: 'agent'},
+                                        {title: 'Count', column: 'count', class: 'text-right'}
+                                    ],
+                                    sort: {
+                                        column: 'count',
+                                        direction: true
+                                    },
+                                    methodLoad: 'loadAgent',
+                                    methodCount: 'countAgent',
+                                    showCount: true,
+                                    searchWord: '',
+                                    items: [],
+                                    itemCount: 0,
+                                    currentPage: 1
+                                },
+                                {
+                                    title: 'Used browsers',
+                                    titleTab: 'Browsers',
+                                    columns: [
+                                        {title: 'Browser', column: 'browserFamily'},
+                                        {title: 'Count', column: 'count', class: 'text-right'}
+                                    ],
+                                    sort: {
+                                        column: 'count',
+                                        direction: true
+                                    },
+                                    methodLoad: 'loadBrowserFamily',
+                                    methodCount: 'countBrowserFamily',
+                                    showCount: true,
+                                    searchWord: '',
+                                    items: [],
+                                    itemCount: 0,
+                                    currentPage: 1
+                                },
+                                {
+                                    title: 'Operation systems',
+                                    titleTab: 'OS',
+                                    columns: [
+                                        {title: 'Operation system', column: 'osFamily'},
+                                        {title: 'Count', column: 'count', class: 'text-right'}
+                                    ],
+                                    sort: {
+                                        column: 'count',
+                                        direction: true
+                                    },
+                                    methodLoad: 'loadOsFamily',
+                                    methodCount: 'countOsFamily',
+                                    showCount: true,
                                     searchWord: '',
                                     items: [],
                                     itemCount: 0,
@@ -121,7 +167,7 @@
                              * @returns {Deferred.promise|*}
                              */
                             $scope.loadIp = function() {
-                                return loadData($scope.items[0]);
+                                return loadData($scope.items[1]);
                             };
 
                             /**
@@ -130,7 +176,25 @@
                              * @returns {Deferred.promise|*}
                              */
                             $scope.loadAgent = function() {
-                                return loadData($scope.items[1]);
+                                return loadData($scope.items[2]);
+                            };
+
+                            /**
+                             * Scope method to fetch browser family specified login data from server.
+                             *
+                             * @returns {Deferred.promise|*}
+                             */
+                            $scope.loadBrowserFamily = function() {
+                                return loadData($scope.items[3]);
+                            };
+
+                            /**
+                             * Scope method to fetch OS family specified login data from server.
+                             *
+                             * @returns {Deferred.promise|*}
+                             */
+                            $scope.loadOsFamily = function() {
+                                return loadData($scope.items[4]);
                             };
 
                             /**
@@ -139,7 +203,7 @@
                              * @returns {Deferred.promise|*}
                              */
                             $scope.load = function() {
-                                return loadData($scope.items[2]);
+                                return loadData($scope.items[0]);
                             };
 
                             /**
@@ -152,9 +216,11 @@
                              */
                             $q
                                 .all([
+                                    $scope.load(),
                                     $scope.loadIp(),
                                     $scope.loadAgent(),
-                                    $scope.load()
+                                    $scope.loadBrowserFamily(),
+                                    $scope.loadOsFamily()
                                 ])
                                 .then(function(result) {
                                     $scope.loading = false;
@@ -202,9 +268,11 @@
                              * data again with new values. Basically this will first call one
                              * of following scope methods:
                              *
+                             *  $scope.load()
                              *  $scope.loadIp()
                              *  $scope.loadAgent()
-                             *  $scope.load()
+                             *  $scope.loadBrowserFamily(),
+                             *  $scope.loadOsFamily()
                              *
                              * And those will call loadData function with specified item.
                              *

@@ -10,6 +10,16 @@
   .container-fluid {
     padding-left: 10px;
     padding-right: 10px;
+
+    .container-fluid {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .nav-tabs {
+      margin-left: -10px;
+      margin-right: -10px;
+    }
   }
 }
 
@@ -85,7 +95,6 @@
     & > li.active > a,
     & > li.active > a:hover,
     & > li.active > a:focus {
-
       color: $colorTextDark;
       background-color: transparent;
       background-image: url("/assets/layout/background-body.png");
@@ -104,7 +113,6 @@
       background-color: transparent;
       margin-top: 20px;
       padding: 0 0 5px 0;
-
       text-transform: uppercase;
     }
 
@@ -116,6 +124,12 @@
 
     h4:first-of-type {
       margin-top: 0;
+    }
+  }
+
+  .tab-content {
+    .tab-pane {
+      margin-top: 5px;
     }
   }
 
