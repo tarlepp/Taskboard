@@ -5,8 +5,11 @@ var _ = require('lodash');
 /**
  * UserLoginController
  *
- * @description :: Server-side logic for managing UserLogins
- * @help        :: See http://links.sailsjs.org/docs/controllers
+ * @description ::  Server-side logic for managing UserLogins
+ * @help        ::  See http://links.sailsjs.org/docs/controllers
+ *
+ * @todo            Seems like there is a much copy-paste code right now....
+ *                  Really, please refactor this...
  */
 module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
     /**
@@ -82,6 +85,78 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
     },
 
     /**
+     * Action to fetch user login data grouped by browserFamily. Note that this
+     * action handles sort and pagination via helper function because .sort(),
+     * .limit() and .skip() doesn't work with 'groupBy' criteria.
+     *
+     * Sent response is an array of objects in following format:
+     *
+     *  [
+     *      {
+     *          browserFamily: "Chrome",
+     *          count: 3
+     *      },
+     *      {
+     *          browserFamily: "Firefox",
+     *          count: 1
+     *      }
+     *  ]
+     *
+     * If error occurs while fetching data function will sent error object with
+     * HTTP status 500.
+     *
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
+     */
+    dataBrowserFamily: function(request, response) {
+        var extraCriteria = {groupBy: ['browserFamily'], sum: ['count']};
+
+        DataService.getCollection(request, extraCriteria, function(error, items) {
+            if (error) {
+                response.json(500, error);
+            } else {
+                response.json(200, DataService.sortAndPaginate(items, request));
+            }
+        });
+    },
+
+    /**
+     * Action to fetch user login data grouped by osFamily. Note that this action
+     * handles sort and pagination via helper function because .sort(), .limit()
+     * and .skip() doesn't work with 'groupBy' criteria.
+     *
+     * Sent response is an array of objects in following format:
+     *
+     *  [
+     *      {
+     *          osFamily: "Ubuntu",
+     *          count: 3
+     *      },
+     *      {
+     *          osFamily: "Windows",
+     *          count: 1
+     *      }
+     *  ]
+     *
+     * If error occurs while fetching data function will sent error object with
+     * HTTP status 500.
+     *
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
+     */
+    dataOsFamily: function(request, response) {
+        var extraCriteria = {groupBy: ['osFamily'], sum: ['count']};
+
+        DataService.getCollection(request, extraCriteria, function(error, items) {
+            if (error) {
+                response.json(500, error);
+            } else {
+                response.json(200, DataService.sortAndPaginate(items, request));
+            }
+        });
+    },
+
+    /**
      * Action to fetch count of unique IP addresses of specified user. Sent response
      * is an object in following format:
      *
@@ -123,6 +198,58 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
      */
     countAgent: function(request, response) {
         var extraCriteria = {groupBy: ['agent'], sum: ['count']};
+
+        DataService.getCollection(request, extraCriteria, function(error, items) {
+            if (error) {
+                response.json(500, error);
+            } else {
+                response.json(200, {count: items.length});
+            }
+        });
+    },
+
+    /**
+     * Action to fetch count of unique browserFamily of specified user. Sent response
+     * is an object in following format:
+     *
+     *  {
+     *      count: 12
+     *  }
+     *
+     * If error occurs while fetching data function will sent error object with HTTP
+     * status 500.
+     *
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
+     */
+    countBrowserFamily: function(request, response) {
+        var extraCriteria = {groupBy: ['browserFamily'], sum: ['count']};
+
+        DataService.getCollection(request, extraCriteria, function(error, items) {
+            if (error) {
+                response.json(500, error);
+            } else {
+                response.json(200, {count: items.length});
+            }
+        });
+    },
+
+    /**
+     * Action to fetch count of unique osFamily of specified user. Sent response is an
+     * object in following format:
+     *
+     *  {
+     *      count: 12
+     *  }
+     *
+     * If error occurs while fetching data function will sent error object with HTTP
+     * status 500.
+     *
+     * @param   {Request}   request     Request object
+     * @param   {Response}  response    Response object
+     */
+    countOsFamily: function(request, response) {
+        var extraCriteria = {groupBy: ['osFamily'], sum: ['count']};
 
         DataService.getCollection(request, extraCriteria, function(error, items) {
             if (error) {
