@@ -35,6 +35,7 @@
     "angularjs-gravatar": "~1.3.2",
     "bootstrap-hover-dropdown": "~2.0.11",
     "qtip2": "~2.2.0",
+    "jquery.complexify.js": "*",
     "angularSails": "*",
     "sails.io.js": "~0.10.0-rc4"
   },
@@ -59,9 +60,15 @@
       "main": "dist/angularjs-gravatardirective.min.js"
     },
     "qtip2": {
+      "main": [
+        "jquery.qtip.min.js",
+        "jquery.qtip.min.css"
+      ]
+    },
+    "jquery.complexify.js": {
         "main": [
-            "jquery.qtip.min.js",
-            "jquery.qtip.min.css"
+            "jquery.complexify.banlist.js",
+            "jquery.complexify.min.js"
         ]
     }
   }
