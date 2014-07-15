@@ -50,7 +50,7 @@ exports.getTimezones = function() {
 
     _.each(timezoneData.links, function(value, key) {
         timezones.push({
-            key: key,
+            id: key,
             name: value
         });
     });
