@@ -1,0 +1,16 @@
+[
+    {
+        "id":           1,
+        "code":         "fi",
+        "title":        "Suomi",
+        "createdUser":  1,
+        "updatedUser":  1
+    },
+    {
+        "id":           2,
+        "code":         "en",
+        "title":        "English",
+        "createdUser":  1,
+        "updatedUser":  1
+    }
+]
