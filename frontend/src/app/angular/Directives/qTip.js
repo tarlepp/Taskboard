@@ -1,3 +1,4 @@
+/* global jQuery */
 /**
  * Angular directive for qTip2 library. Usage example:
  *

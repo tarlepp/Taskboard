@@ -160,14 +160,14 @@
                             $scope.changeSort = function(item) {
                                 var sort = $scope.sort;
 
-                                if (sort.column == item.column) {
+                                if (sort.column === item.column) {
                                     sort.direction = !sort.direction;
                                 } else {
                                     sort.column = item.column;
                                     sort.direction = true;
                                 }
 
-                                if ($scope.currentPage == 1) {
+                                if ($scope.currentPage === 1) {
                                     $scope.fetchData();
                                 } else {
                                     $scope.currentPage = 1;
@@ -210,7 +210,7 @@
                                         $scope.loaded = true;
                                         $scope.loading = false;
                                     })
-                                    .error(function(response) {
+                                    .error(function() {
                                         $scope.loaded = true;
                                         $scope.loading = false;
                                     });
@@ -228,7 +228,7 @@
                              * If those are ok, then watcher will call scope 'fetchData' function.
                              */
                             $scope.$watch('filters.searchWord', function(valueNew, valueOld) {
-                                if (valueNew != valueOld) {
+                                if (valueNew !== valueOld) {
                                     if (searchWordTimer) {
                                         $timeout.cancel(searchWordTimer);
                                     }
@@ -249,7 +249,7 @@
                              * If those are ok, then watcher will call scope 'fetchData' function.
                              */
                             $scope.$watch('filters.columns', function(valueNew, valueOld) {
-                                if (valueNew != valueOld && $scope.filters.searchWord) {
+                                if (valueNew !== valueOld && $scope.filters.searchWord) {
                                     if (searchWordTimer) {
                                         $timeout.cancel(searchWordTimer);
                                     }

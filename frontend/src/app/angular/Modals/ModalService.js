@@ -14,10 +14,10 @@
             [
                 '$modal', '$q',
                 '_',
-                'CurrentUser', 'Auth', 'Message',
+                'CurrentUser',
                 function($modal, $q,
                          _,
-                         CurrentUser, Auth, Message
+                         CurrentUser
                 ) {
                     return {
                         /**
