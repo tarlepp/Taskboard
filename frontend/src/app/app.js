@@ -118,8 +118,21 @@
     angular.module('Taskboard')
         .run(
             [
-                '$rootScope', '$state', 'Auth',
-                function($rootScope, $state, Auth) {
+                '$rootScope', '$state',
+                'amMoment',
+                'Auth', 'CurrentUser',
+                function($rootScope, $state,
+                         amMoment,
+                         Auth, CurrentUser
+                ) {
+                    $rootScope.currentUser = CurrentUser.user;
+
+                    $rootScope.$watch('currentUser()', function(valueNew) {
+                        if (valueNew && valueNew.language) {
+                            amMoment.changeLanguage(valueNew.language);
+                        }
+                    }, true);
+
                     // And when ever route changes we must check authenticate status
                     $rootScope.$on('$stateChangeStart', function(event, toState) {
                         if (!Auth.authorize(toState.data.access)) {

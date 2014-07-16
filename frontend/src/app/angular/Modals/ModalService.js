@@ -14,10 +14,10 @@
             [
                 '$modal', '$q',
                 '_',
-                'CurrentUser',
+                'CurrentUser', 'TimeZone', 'Language',
                 function($modal, $q,
                          _,
-                         CurrentUser
+                         CurrentUser, TimeZone, Language
                 ) {
                     return {
                         /**
@@ -52,20 +52,19 @@
                                     user: function() {
                                         var currentUser = CurrentUser.user();
 
+                                        // By default we want to open modal with current user data on it
                                         if (_.isUndefined(userId) || userId === currentUser.id) {
                                             return angular.copy(currentUser);
-                                        } else {
+                                        } else { // Otherwise fetch another user from server
                                             // todo
                                             return {};
                                         }
                                     },
                                     timezones: function() {
-                                        // todo
-                                        return [];
+                                        return TimeZone.get();
                                     },
                                     languages: function() {
-                                        // todo
-                                        return [];
+                                        return Language.get();
                                     }
                                 }
                             });
