@@ -1,5 +1,21 @@
 /**
- * @todo    add docs
+ * Controller for user profile which is shown on modal. This controller needs following data
+ * to be resolved before usage:
+ *
+ *  1)  user, either current user or specified user object
+ *  2)  timezones, Promise of TimeZone factory .get() method
+ *  3)  languages, Promise of Language factory .get() method
+ *
+ * Modal will contain all information about specified user, all of those are shown on our tabs
+ * on modal. Data which is shown is following:
+ *
+ *  1)  Basic (user basic data)
+ *  2)  Language and region
+ *  3)  Password change
+ *  4)  Projects where user is in some role
+ *  5)  Activity log (what user has done lately)
+ *  6)  Login history
+ *  7)  User object history
  */
 (function() {
     'use strict';
@@ -15,8 +31,8 @@
                          user, timezones, languages
                 ) {
                     $scope.auth = Auth;
-                    $scope.languages = languages;
-                    $scope.timezones = timezones;
+                    $scope.languages = languages.data;
+                    $scope.timezones = timezones.data;
                     $scope.form = {};
 
                     $scope.tabs = [
@@ -87,10 +103,6 @@
                         }
                     };
 
-                    $scope.$watch('user', function(valueNew) {
-                        $scope.formChanged = !_.isEqual(valueNew, user);
-                    }, true);
-
                     $scope.selectTab = function(tab) {
                         $scope.activeTab = tab;
 
@@ -99,16 +111,30 @@
                         }
                     };
 
-                    $scope.timeUpdate = $interval(function() {
-                        moment.lang($scope.user.language);
+                    $scope.$watch('user', function(valueNew) {
+                        $scope.formChanged = !_.isEqual(valueNew, user);
+                    }, true);
 
+                    $scope.$watch('user.language', function(valueNew) {
+                        moment.lang(valueNew);
+
+                        updateTimes();
+                    }, true);
+
+                    $scope.$watch('user.momentTimezone', function(valueNew) {
+                        updateTimes();
+                    }, true);
+
+                    $scope.timeUpdate = $interval(updateTimes, 1000);
+
+                    function updateTimes() {
                         // Create new UTC time
-                        var now = moment().utc();
+                        var now = moment().utc().tz($scope.user.momentTimezone);
 
                         $scope.momentDate = now.format($scope.user.momentFormatDate);
                         $scope.momentTime = now.format($scope.user.momentFormatTime);
                         $scope.momentDateTime = now.format($scope.user.momentFormatDateTime);
-                    }, 1000);
+                    }
 
                     $scope.passwordNew = '';
                     $scope.passwordCheck = '';
