@@ -70,6 +70,9 @@
             "jquery.complexify.banlist.js",
             "jquery.complexify.min.js"
         ]
+    },
+    "moment": {
+        "main": "min/moment-with-langs.min.js"
     }
   }
 }
