@@ -61,3 +61,58 @@ exports.sortAndPaginate = function(items, request) {
 
     return items.slice(skip, (skip + limit));
 };
+
+/**
+ * Service method to fetch single user data from database.
+ *
+ * @param   {Number|Object} where           Used query conditions
+ * @param   {Function}      next            Callback function to call after query
+ * @param   {Boolean}       [noExistsCheck] If data is not found, skip error
+ */
+exports.getUser = function(where, next, noExistsCheck) {
+    noExistsCheck = noExistsCheck || false;
+
+    User
+        .findOne(where)
+        .populate('passports')
+        .exec(function(error, /** sails.model.user */ user) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch user data]");
+                sails.log.error(error);
+            } else if (!user && !noExistsCheck) {
+                error = new Error();
+
+                error.message = "User not found.";
+                error.status = 404;
+            }
+
+            next(error, user);
+        });
+};
+
+/**
+ * Service method to fetch single passport data from database.
+ *
+ * @param   {Number|Object} where           Used query conditions
+ * @param   {Function}      next            Callback function to call after query
+ * @param   {Boolean}       [noExistsCheck] If data is not found, skip error
+ */
+exports.getPassport = function(where, next, noExistsCheck) {
+    noExistsCheck = noExistsCheck || false;
+
+    Passport
+        .findOne(where)
+        .exec(function(error, /** sails.model.passport */ passport) {
+            if (error) {
+                sails.log.error(__filename + ":" + __line + " [Failed to fetch passport data]");
+                sails.log.error(error);
+            } else if (!passport && !noExistsCheck) {
+                error = new Error();
+
+                error.message = "Passport not found.";
+                error.status = 404;
+            }
+
+            next(error, passport);
+        });
+};

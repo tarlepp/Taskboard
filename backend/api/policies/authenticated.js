@@ -11,6 +11,8 @@
  * @returns {*}
  */
 module.exports = function(request, response, next) {
+    sails.log.verbose(' POLICY - api/policies/authenticated.js');
+
     var token;
 
     // Yeah we got required 'authorization' header
@@ -25,6 +27,8 @@ module.exports = function(request, response, next) {
                 token = credentials;
             }
         } else {
+            sails.log.verbose('     ERROR - Format is Authorization: Bearer [token]');
+
             return response.json(401, {message: 'Format is Authorization: Bearer [token]'});
         }
     } else if (request.param('token')) { // JWT token sent by parameter
@@ -34,14 +38,21 @@ module.exports = function(request, response, next) {
         delete request.query.token;
         delete request.body.token;
     } else { // Otherwise request didn't contain required JWT token
+        sails.log.verbose('     ERROR - No Authorization header was found');
+
         return response.json(401, {message: 'No Authorization header was found'});
     }
 
     // Verify JWT token via service
     tokenService.verifyToken(token, function(error, token) {
         if (error) {
+            sails.log.verbose('     ERROR - The token is not valid');
+
             return response.json(401, {message: 'The token is not valid'});
         } else {
+            sails.log.verbose('     OK');
+
+            // Store user id to request object
             request.token = token;
 
             return next();
