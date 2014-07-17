@@ -34,6 +34,8 @@
 
                         /**
                          * Interceptor method that is triggered whenever response error occurs on $http requests.
+                         * Also note that by default this interceptor will trigger a Noty message about the error
+                         * but this can be avoided by setting 'showErrorMessage' to request config.
                          *
                          * @param   {*} response
                          *
@@ -41,6 +43,11 @@
                          */
                         responseError: function(response) {
                             var message = '';
+                            var showErrorMessage = true;
+
+                            if (angular.isDefined(response.config.showErrorMessage)) {
+                                showErrorMessage = response.config.showErrorMessage;
+                            }
 
                             if (response.data.error) {
                                 message = response.data.error;
@@ -52,7 +59,7 @@
                                 message = response.statusText + ' <span class="text-medium">(HTTP status ' + response.status + ')</span>';
                             }
 
-                            if (message) {
+                            if (message && showErrorMessage) {
                                 Message.error(message);
                             }
 
