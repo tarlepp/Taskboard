@@ -24,9 +24,16 @@ label {
   color: #555555;
 }
 
+.input-spinner {
+  display: none;
+  position: relative;
+  top: -36px;
+  right: 8px;
+  font-size: 20px;
+  line-height: 36px;
+}
+
 .form-horizontal {
-
-
   .form-group {
     margin-left: 0;
     margin-right: 0;
