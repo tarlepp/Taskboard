@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var async = require('async');
 var moment = require('moment-timezone');
 
 /**
@@ -125,6 +126,8 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
     /**
      * Before create callback.
      *
+     * @todo; determine first phase and remove taskType
+     *
      * @param   {sails.model.task}      values  Values to create
      * @param   {Function}              next    Callback function
      */
@@ -173,7 +176,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterCreate: function(record, next) {
-        next();
+        HistoryService.write('Task', record, 'Added new task', 0, next);
     },
 
     /**
@@ -183,7 +186,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterUpdate: function(record, next) {
-        next();
+        HistoryService.write('Task', record, 'Updated task data', 0, next);
     },
 
     /**
@@ -193,6 +196,14 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterDestroy: function(records, next) {
-        next();
+        async.each(
+            records,
+            function(record, callback) {
+                HistoryService.write('Task', record, 'Removed task', 0, callback);
+            },
+            function(error) {
+                next(error);
+            }
+        );
     }
 });

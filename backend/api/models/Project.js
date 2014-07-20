@@ -196,6 +196,9 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
     afterCreate: function(record, next) {
         async.parallel(
             {
+                history: function(callback) {
+                    HistoryService.write('Project', record, 'Added new project', 0, callback);
+                },
                 users: function(callback) {
                     ProjectService.addDefaultProjectManager(record, callback);
                 },
@@ -219,7 +222,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterUpdate: function(record, next) {
-        next();
+        HistoryService.write('Project', record, 'Updated project data', 0, next);
     },
 
     /**
@@ -229,6 +232,14 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterDestroy: function(records, next) {
-        next();
+        async.each(
+            records,
+            function(record, callback) {
+                HistoryService.write('Project', record, 'Removed project', 0, callback);
+            },
+            function(error) {
+                next(error);
+            }
+        );
     }
 });

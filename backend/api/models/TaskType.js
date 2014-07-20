@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var async = require('async');
 
 /**
  * TaskType.js
@@ -120,7 +121,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterCreate: function(record, next) {
-        next();
+        HistoryService.write('TaskType', record, 'Added new task type', 0, next);
     },
 
     /**
@@ -130,7 +131,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterUpdate: function(record, next) {
-        next();
+        HistoryService.write('TaskType', record, 'Updated task type data', 0, next);
     },
 
     /**
@@ -140,6 +141,14 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}                  next    Callback function
      */
     afterDestroy: function(records, next) {
-        next();
+        async.each(
+            records,
+            function(record, callback) {
+                HistoryService.write('TaskType', record, 'Removed task type', 0, callback);
+            },
+            function(error) {
+                next(error);
+            }
+        );
     }
 });

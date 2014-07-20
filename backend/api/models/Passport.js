@@ -76,6 +76,7 @@ var Passport = {
          */
         user: {
             model:      'User',
+            columnName: 'userId',
             required:   true
         },
         /**

@@ -110,7 +110,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterCreate: function(record, next) {
-        next();
+        HistoryService.write('File', record, 'Added new file', 0, next);
     },
 
     /**
@@ -120,7 +120,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterUpdate: function(record, next) {
-        next();
+        HistoryService.write('File', record, 'Updated file data', 0, next);
     },
 
     /**
@@ -130,6 +130,14 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterDestroy: function(records, next) {
-        next();
+        async.each(
+            records,
+            function(record, callback) {
+                HistoryService.write('File', record, 'Removed file', 0, callback);
+            },
+            function(error) {
+                next(error);
+            }
+        );
     }
 });

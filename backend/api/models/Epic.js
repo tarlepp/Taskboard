@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var async = require('async');
 
 /**
  * Epic.js
@@ -108,7 +109,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterCreate: function(record, next) {
-        next();
+        HistoryService.write('Epic', record, 'Added new epic', 0, next);
     },
 
     /**
@@ -118,7 +119,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterUpdate: function(record, next) {
-        next();
+        HistoryService.write('Epic', record, 'Updated epic data', 0, next);
     },
 
     /**
@@ -128,6 +129,14 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterDestroy: function(records, next) {
-        next();
+        async.each(
+            records,
+            function(record, callback) {
+                HistoryService.write('Epic', record, 'Removed epic', 0, callback);
+            },
+            function(error) {
+                next(error);
+            }
+        );
     }
 });

@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var async = require('async');
 
 /**
  * Story.js
@@ -197,7 +198,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterCreate: function(record, next) {
-        next();
+        HistoryService.write('Story', record, 'Added new story', 0, next);
     },
 
     /**
@@ -207,7 +208,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterUpdate: function(record, next) {
-        next();
+        HistoryService.write('Story', record, 'Updated story data', 0, next);
     },
 
     /**
@@ -217,6 +218,14 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterDestroy: function(records, next) {
-        next();
+        async.each(
+            records,
+            function(record, callback) {
+                HistoryService.write('Sprint', record, 'Removed story', 0, callback);
+            },
+            function(error) {
+                next(error);
+            }
+        );
     }
 });

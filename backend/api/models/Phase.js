@@ -121,7 +121,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterCreate: function(record, next) {
-        next();
+        HistoryService.write('Phase', record, 'Added new phase', 0, next);
     },
 
     /**
@@ -131,7 +131,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterUpdate: function(record, next) {
-        next();
+        HistoryService.write('Phase', record, 'Updated phase data', 0, next);
     },
 
     /**
@@ -141,7 +141,15 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterDestroy: function(records, next) {
-        next();
+        async.each(
+            records,
+            function(record, callback) {
+                HistoryService.write('Phase', record, 'Removed phase', 0, callback);
+            },
+            function(error) {
+                next(error);
+            }
+        );
     }
 });
 

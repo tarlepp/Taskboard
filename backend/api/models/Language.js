@@ -83,7 +83,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterCreate: function(record, next) {
-        next();
+        HistoryService.write('Language', record, 'Added new language', 0, next);
     },
 
     /**
@@ -93,7 +93,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterUpdate: function(record, next) {
-        next();
+        HistoryService.write('Language', record, 'Updated language data', 0, next);
     },
 
     /**
@@ -103,6 +103,14 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterDestroy: function(records, next) {
-        next();
+        async.each(
+            records,
+            function(record, callback) {
+                HistoryService.write('Language', record, 'Removed language', 0, callback);
+            },
+            function(error) {
+                next(error);
+            }
+        );
     }
 });

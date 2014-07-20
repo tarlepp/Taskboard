@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var async = require('async');
 
 /**
  * ProjectUser.js
@@ -93,7 +94,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterCreate: function(record, next) {
-        next();
+        HistoryService.write('ProjectUser', record, 'Added new project user', 0, next);
     },
 
     /**
@@ -103,7 +104,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}                  next    Callback function
      */
     afterUpdate: function(record, next) {
-        next();
+        HistoryService.write('ProjectUser', record, 'Updated project user data', 0, next);
     },
 
     /**
@@ -113,6 +114,14 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}                  next    Callback function
      */
     afterDestroy: function(records, next) {
-        next();
+        async.each(
+            records,
+            function(record, callback) {
+                HistoryService.write('ProjectUser', record, 'Removed project user', 0, callback);
+            },
+            function(error) {
+                next(error);
+            }
+        );
     }
 });

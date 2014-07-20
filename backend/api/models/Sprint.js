@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var async = require('async');
 
 /**
 * Sprint.js
@@ -160,7 +161,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterCreate: function(record, next) {
-        next();
+        HistoryService.write('Sprint', record, 'Added new sprint', 0, next);
     },
 
     /**
@@ -170,7 +171,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterUpdate: function(record, next) {
-        next();
+        HistoryService.write('Sprint', record, 'Updated sprint data', 0, next);
     },
 
     /**
@@ -180,6 +181,14 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterDestroy: function(records, next) {
-        next();
+        async.each(
+            records,
+            function(record, callback) {
+                HistoryService.write('Sprint', record, 'Removed sprint', 0, callback);
+            },
+            function(error) {
+                next(error);
+            }
+        );
     }
 });

@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var async = require('async');
 
 /**
  * ExcludeSprintDay.js
@@ -92,7 +93,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}                      next    Callback function
      */
     afterCreate: function(record, next) {
-        next();
+        HistoryService.write('ExcludeSprintDay', record, 'Added new exclude sprint day', 0, next);
     },
 
     /**
@@ -102,7 +103,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}                      next    Callback function
      */
     afterUpdate: function(record, next) {
-        next();
+        HistoryService.write('ExcludeSprintDay', record, 'Updated exclude sprint day data', 0, next);
     },
 
     /**
@@ -112,6 +113,14 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}                          next    Callback function
      */
     afterDestroy: function(records, next) {
-        next();
+        async.each(
+            records,
+            function(record, callback) {
+                HistoryService.write('ExcludeSprintDay', record, 'Removed exclude sprint day', 0, callback);
+            },
+            function(error) {
+                next(error);
+            }
+        );
     }
 });

@@ -108,7 +108,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}                  next    Callback function
      */
     afterCreate: function(record, next) {
-        next();
+        HistoryService.write('ExternalLink', record, 'Added new external link', 0, next);
     },
 
     /**
@@ -118,7 +118,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}                  next    Callback function
      */
     afterUpdate: function(record, next) {
-        next();
+        HistoryService.write('ExternalLink', record, 'Updated external link data', 0, next);
     },
 
     /**
@@ -128,6 +128,14 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}                      next    Callback function
      */
     afterDestroy: function(records, next) {
-        next();
+        async.each(
+            records,
+            function(record, callback) {
+                HistoryService.write('ExternalLink', record, 'Removed external link', 0, callback);
+            },
+            function(error) {
+                next(error);
+            }
+        );
     }
 });
