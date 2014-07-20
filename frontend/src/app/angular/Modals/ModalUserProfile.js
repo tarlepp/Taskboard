@@ -121,7 +121,7 @@
                         updateTimes();
                     }, true);
 
-                    $scope.$watch('user.momentTimezone', function(valueNew) {
+                    $scope.$watch('user.momentTimezone', function() {
                         updateTimes();
                     }, true);
 
