@@ -33,17 +33,28 @@
                                 return column.inSearch;
                             });
 
-                            // Yeah we have some columns and search word so add OR condition to output
-                            if (columns.length > 0 && filters.searchWord !== '') {
-                                output.or = _.map(columns, function(column) {
-                                    var temp = {};
+                            var words = _.filter(filters.searchWord.split(' '));
 
-                                    temp[column.column] = {
-                                        contains: filters.searchWord
-                                    };
+                            if (columns.length > 0 && words.length > 0) {
+                                var conditions = [];
 
-                                    return temp;
-                                });
+                                for (var i = 0; i < words.length; i++) {
+                                    (function(index) {
+                                        var conditionOr = _.map(columns, function(column) {
+                                            var condition = {};
+
+                                            condition[column.column] = {
+                                                contains: words[index]
+                                            };
+
+                                            return condition;
+                                        });
+
+                                        conditions.push({or: conditionOr});
+                                    })(i);
+                                }
+
+                                output.and = conditions;
                             }
 
                             return output;
