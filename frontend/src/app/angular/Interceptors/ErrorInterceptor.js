@@ -11,8 +11,8 @@
     angular.module('Taskboard.interceptors')
         .factory('ErrorInterceptor',
             [
-                '$q', 'Message',
-                function($q, Message) {
+                '$q', 'Message', 'HttpStatus',
+                function($q, Message, HttpStatus) {
                     return {
                         /**
                          * Interceptor method which is triggered whenever response occurs on $http queries. Note
@@ -55,8 +55,10 @@
                                 message = response.data.message;
                             } else if (response.status === 0) {
                                 message = 'Connection refused, Internet connection problem?';
-                            } else {
+                            } else if (response.statusText) {
                                 message = response.statusText + ' <span class="text-medium">(HTTP status ' + response.status + ')</span>';
+                            } else {
+                                message = HttpStatus.getText(response.status) + ' <span class="text-medium">(HTTP status ' + response.status + ')</span>';
                             }
 
                             if (message && showErrorMessage) {
