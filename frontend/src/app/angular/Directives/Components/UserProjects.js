@@ -12,10 +12,10 @@
                     replace: true,
                     templateUrl: '/Taskboard/partials/Directives/Components/UserProjects.html',
                     controller: [
-                        '$scope', '$timeout',
+                        '$scope', '$timeout', '$q',
                         '_',
                         'CurrentUser', 'UserRoles', 'Project', 'SocketWhereCondition',
-                        function($scope, $timeout,
+                        function($scope, $timeout, $q,
                                  _,
                                  CurrentUser, UserRoles, Project, SocketWhereCondition
                         ) {
@@ -194,25 +194,20 @@
                                     sort: $scope.sort.column + ' ' + ($scope.sort.direction ? 'ASC' : 'DESC')
                                 };
 
-
-
-                                // Fetch data count
-                                Project
-                                    .count(commonParameters)
-                                    .success(function(response) {
-                                        $scope.itemCount = response.count;
-                                    });
-
-                                // Fetch data items
-                                Project
-                                    .load(_.merge(commonParameters, getParameters))
-                                    .success(function(response) {
-                                        $scope.items = response;
+                                $q
+                                    .all({
+                                        count: Project.count(commonParameters),
+                                        items: Project.load(_.merge(commonParameters, getParameters))
+                                    })
+                                    .then(function(response) {
+                                        $scope.itemCount = response.count.data.count;
+                                        $scope.items = response.items.data;
 
                                         $scope.loaded = true;
                                         $scope.loading = false;
-                                    })
-                                    .error(function() {
+                                    }, function(error) {
+                                        console.log(error);
+
                                         $scope.loaded = true;
                                         $scope.loading = false;
                                     });
