@@ -26,6 +26,7 @@
         'ui.router',
         'ui.bootstrap',
         'ui.bootstrap.showErrors',
+        'ngPrettyJson',
         'angularMoment',
         'angularjs-gravatardirective',
         'linkify',

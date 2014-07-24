@@ -31,6 +31,7 @@
     "angular-bootstrap-show-errors": "~1.0.2",
     "angular-sanitize": "~1.2.16",
     "angular-linkify": "~0.3.3",
+    "ng-prettyjson": "~0.1.1",
     "bootstrap-select": "~1.5.2",
     "angularjs-gravatar": "~1.3.2",
     "bootstrap-hover-dropdown": "~2.0.11",
@@ -74,6 +75,12 @@
     },
     "moment": {
       "main": "min/moment-with-langs.min.js"
+    },
+    "ng-prettyjson": {
+      "main": [
+          "dist/ng-prettyjson.min.css",
+          "dist/ng-prettyjson.min.js"
+      ]
     }
   }
 }

@@ -38,16 +38,31 @@
   }
 
   &.json {
-    max-width: 400px;
+    max-width: 450px;
 
     .qtip-content {
       padding: 0;
 
       pre {
-        background-color: #ffffff;
-        border: none;
-        padding: 0;
-        outline: none;
+        font-size: 10px;
+      }
+    }
+  }
+}
+
+pre {
+  &.json {
+    background-color: #ffffff;
+    border: none;
+    padding: 0;
+    outline: none;
+    text-align: left;
+
+    span {
+      display: table-cell;
+
+      &.key {
+        padding-left: 20px;
       }
     }
   }
