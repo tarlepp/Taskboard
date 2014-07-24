@@ -154,8 +154,8 @@
 
                                         $scope.loaded = true;
                                         $scope.loading = false;
-                                    }, function(response) {
-                                        console.log(response);
+                                    }, function(error) {
+                                        console.log(error);
 
                                         $scope.loaded = true;
                                         $scope.loading = false;

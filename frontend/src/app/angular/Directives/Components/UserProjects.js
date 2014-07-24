@@ -194,6 +194,8 @@
                                     sort: $scope.sort.column + ' ' + ($scope.sort.direction ? 'ASC' : 'DESC')
                                 };
 
+
+
                                 // Fetch data count
                                 Project
                                     .count(commonParameters)
