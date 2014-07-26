@@ -19,9 +19,10 @@
         </div>
 
         <div class="data-loading"
+            data-ng-class="{'loading-fade': loading}"
             data-ng-show="loading"
         >
-            <tb-template data-template="layout/loading"></tb-template>
+            <template data-src="layout/loading"></template>
         </div>
 
         <table class="table table-striped table-hover table-condensed"

@@ -6,7 +6,7 @@
  *
  *  <login-history data-user-id="12"></login-history>
  *
- * This will render a three data tables which contains following user login
+ * This will render a five data tables which contains following user login
  * data:
  *
  *  1) Full login list
@@ -15,7 +15,7 @@
  *  4) Unique browser families
  *  5) Unique operation system families
  *
- * Users can sort and search there items as they like.
+ * Users can sort and search these items as they like.
  */
 (function() {
     'use strict';
@@ -31,117 +31,20 @@
                     replace: true,
                     templateUrl: '/Taskboard/partials/Directives/Components/LoginHistory.html',
                     controller: [
-                        '$scope', '$sailsSocket', '$timeout', '$q',
+                        '$scope', '$timeout', '$q',
                         '_', 'SocketWhereCondition',
-                        'CurrentUser', 'UserLogin',
-                        function($scope, $sailsSocket, $timeout, $q,
+                        'CurrentUser', 'ListTitleItem', 'UserLogin',
+                        function($scope, $timeout, $q,
                                  _, SocketWhereCondition,
-                                 CurrentUser, UserLogin
+                                 CurrentUser, ListTitleItem, UserLogin
                         ) {
                             $scope.user = CurrentUser.user();
-                            $scope.itemsPerPage = 10;
+                            $scope.itemsPerPage = 15;
                             $scope.loading = true;
                             $scope.loaded = false;
 
                             // Specify list initial data
-                            $scope.items = [
-                                {
-                                    title: 'Full login list',
-                                    titleTab: 'Full list',
-                                    columns: [
-                                        {title: 'Login time', column: 'createdAt'},
-                                        {title: 'IP-address', column: 'ip'},
-                                        {title: 'User-agent', column: 'agent'}
-                                    ],
-                                    sort: {
-                                        column: 'createdAt',
-                                        direction: true
-                                    },
-                                    methodLoad: 'load',
-                                    methodCount: 'count',
-                                    showCount: false,
-                                    searchWord: '',
-                                    items: [],
-                                    itemCount: 0,
-                                    currentPage: 1
-                                },
-                                {
-                                    title: 'Unique IP-addresses',
-                                    titleTab: 'IP-addresses',
-                                    columns: [
-                                        {title: 'IP-address', column: 'ip'},
-                                        {title: 'Count', column: 'count', class: 'text-right'}
-                                    ],
-                                    sort: {
-                                        column: 'count',
-                                        direction: true
-                                    },
-                                    methodLoad: 'loadIp',
-                                    methodCount: 'countIp',
-                                    showCount: true,
-                                    searchWord: '',
-                                    items: [],
-                                    itemCount: 0,
-                                    currentPage: 1
-                                },
-                                {
-                                    title: 'Unique user-agents',
-                                    titleTab: 'User-agents',
-                                    columns: [
-                                        {title: 'User-agent', column: 'agent'},
-                                        {title: 'Count', column: 'count', class: 'text-right'}
-                                    ],
-                                    sort: {
-                                        column: 'count',
-                                        direction: true
-                                    },
-                                    methodLoad: 'loadAgent',
-                                    methodCount: 'countAgent',
-                                    showCount: true,
-                                    searchWord: '',
-                                    items: [],
-                                    itemCount: 0,
-                                    currentPage: 1
-                                },
-                                {
-                                    title: 'Used browsers',
-                                    titleTab: 'Browsers',
-                                    columns: [
-                                        {title: 'Browser', column: 'browserFamily'},
-                                        {title: 'Count', column: 'count', class: 'text-right'}
-                                    ],
-                                    sort: {
-                                        column: 'count',
-                                        direction: true
-                                    },
-                                    methodLoad: 'loadBrowserFamily',
-                                    methodCount: 'countBrowserFamily',
-                                    showCount: true,
-                                    searchWord: '',
-                                    items: [],
-                                    itemCount: 0,
-                                    currentPage: 1
-                                },
-                                {
-                                    title: 'Operation systems',
-                                    titleTab: 'OS',
-                                    columns: [
-                                        {title: 'Operation system', column: 'osFamily'},
-                                        {title: 'Count', column: 'count', class: 'text-right'}
-                                    ],
-                                    sort: {
-                                        column: 'count',
-                                        direction: true
-                                    },
-                                    methodLoad: 'loadOsFamily',
-                                    methodCount: 'countOsFamily',
-                                    showCount: true,
-                                    searchWord: '',
-                                    items: [],
-                                    itemCount: 0,
-                                    currentPage: 1
-                                }
-                            ];
+                            $scope.items = ListTitleItem.getUserLoginHistory();
 
                             // Function to change sort column / direction on list
                             $scope.changeSort = function(column, item) {
@@ -159,6 +62,15 @@
                                 } else {
                                     item.currentPage = 1;
                                 }
+                            };
+
+                            /**
+                             * Scope method to fetch full user login data from server.
+                             *
+                             * @returns {Deferred.promise|*}
+                             */
+                            $scope.load = function() {
+                                return loadData($scope.items[0]);
                             };
 
                             /**
@@ -198,21 +110,14 @@
                             };
 
                             /**
-                             * Scope method to fetch full user login data from server.
-                             *
-                             * @returns {Deferred.promise|*}
-                             */
-                            $scope.load = function() {
-                                return loadData($scope.items[0]);
-                            };
-
-                            /**
                              * First we must fetch all login data from server, note that we have
-                             * three (3) different login data collection:
+                             * five (5) different login data collection:
                              *
+                             *  Full login list
                              *  Unique IP-addresses
                              *  Unique user-agents
-                             *  Full login list
+                             *  Browser families
+                             *  OS families
                              */
                             $q
                                 .all([
@@ -229,6 +134,11 @@
                                     _.each(result, function(data, key) {
                                         _.merge($scope.items[key], data);
                                     });
+                                }, function(error) {
+                                    $scope.loading = false;
+                                    $scope.loaded = true;
+
+                                    console.log(error);
                                 });
 
                             /**
@@ -251,7 +161,7 @@
                                             $timeout.cancel(searchWordTimer);
                                         }
 
-                                        searchWordTimer = $timeout(function() { fetchData(item); }, 350);
+                                        searchWordTimer = $timeout(function() { fetchData(item); }, 400);
                                     }
                                 }, true);
 
@@ -276,11 +186,10 @@
                              *
                              * And those will call loadData function with specified item.
                              *
-                             * @param   {{}}    item    Item object
+                             * @param   {services.ListConfig.getDefault}    item    Item object
                              */
                             function fetchData(item) {
                                 item.loading = true;
-                                item.loaded = false;
 
                                 // Call specified scope method
                                 $scope[item.methodLoad]()
@@ -290,6 +199,9 @@
 
                                         item.items = data.items;
                                         item.itemCount = data.itemCount;
+                                    }, function() {
+                                        item.loading = false;
+                                        item.loaded = true;
                                     });
                             }
 
@@ -308,19 +220,8 @@
                              */
                             function loadData(item) {
                                 var deferred = $q.defer();
-                                var searchCriteria = {};
+                                var searchCriteria = SocketWhereCondition.get(item);
 
-                                if (item.searchWord !== '') {
-                                    searchCriteria.or = _.map(item.columns, function(column) {
-                                        var temp = {};
-
-                                        temp[column.column] = {
-                                            contains: item.searchWord
-                                        };
-
-                                        return temp;
-                                    });
-                                }
                                 // Common parameters for count and data query
                                 var commonParameters = {
                                     where: _.merge(searchCriteria, {userId: $scope.userId})
@@ -333,22 +234,15 @@
                                     sort: item.sort.column + ' ' + (item.sort.direction ? 'DESC' : 'ASC')
                                 };
 
-                                // Fetch data count
-                                UserLogin[item.methodCount](commonParameters)
-                                    .success(function(response) {
-                                        var itemCount = response.count;
-
-                                        // Fetch data items
-                                        UserLogin[item.methodLoad](_.merge(commonParameters, getParameters))
-                                            .success(function(response) {
-                                                deferred.resolve({items: response, itemCount: itemCount});
-                                            })
-                                            .error(function(response) {
-                                                deferred.reject(response);
-                                            });
+                                $q
+                                    .all({
+                                        count: UserLogin[item.methodCount](commonParameters),
+                                        items: UserLogin[item.methodLoad](_.merge(commonParameters, getParameters))
                                     })
-                                    .error(function(response) {
-                                        deferred.reject(response);
+                                    .then(function(response) {
+                                        deferred.resolve({items: response.items.data, itemCount: response.count.data.count});
+                                    }, function(error) {
+                                        deferred.reject(error);
                                     });
 
                                 return deferred.promise;

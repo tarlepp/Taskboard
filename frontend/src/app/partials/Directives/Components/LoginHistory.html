@@ -32,6 +32,14 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="data-loading"
+                     data-ng-class="{'loading-fade': item.loading}"
+                     data-ng-show="item.loading"
+                >
+                    <template data-src="layout/loading"></template>
+                </div>
+
                 <table class="table table-striped table-hover table-condensed"
                     data-ng-class="{'loading-fade': item.loading}"
                 >

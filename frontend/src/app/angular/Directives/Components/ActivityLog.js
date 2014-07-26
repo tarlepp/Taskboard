@@ -27,63 +27,19 @@
                     controller: [
                         '$scope', '$timeout', '$q',
                         '_', 'SocketWhereCondition',
-                        'CurrentUser', 'ActivityLog',
+                        'CurrentUser', 'ListConfig', 'ListTitleItem', 'ActivityLog',
                         function($scope, $timeout, $q,
                                  _, SocketWhereCondition,
-                                 CurrentUser, ActivityLog
+                                 CurrentUser, ListConfig, ListTitleItem, ActivityLog
                         ) {
-                            $scope.user = CurrentUser.user();
-                            $scope.itemCount = 0;
-                            $scope.items = [];
-                            $scope.itemsPerPage = 15;
-                            $scope.currentPage = 1;
-                            $scope.where = {};
-                            $scope.loading = true;
-                            $scope.loaded = false;
+                            // Add default list configuration, see the service for more detailed information
+                            $scope = _.merge($scope, ListConfig.getDefault());
 
-                            $scope.titleItems = [
-                                {
-                                    title: 'Object',
-                                    column: 'objectName',
-                                    searchable: true,
-                                    sortable: true,
-                                    inSearch: true,
-                                    inTitle: true
-                                },
-                                {
-                                    title: 'ID',
-                                    column: 'objectId',
-                                    searchable: true,
-                                    sortable: true,
-                                    inSearch: true,
-                                    inTitle: true
-                                },
-                                {
-                                    title: 'Message',
-                                    column: 'message',
-                                    searchable: true,
-                                    sortable: true,
-                                    inSearch: true,
-                                    inTitle: true
-                                },
-                                {
-                                    title: 'Data',
-                                    column: 'objectData',
-                                    class: 'text-right',
-                                    searchable: true,
-                                    sortable: false,
-                                    inSearch: true,
-                                    inTitle: true
-                                },
-                                {
-                                    title: 'Stamp',
-                                    column: 'createdAt',
-                                    searchable: true,
-                                    sortable: true,
-                                    inSearch: true,
-                                    inTitle: true
-                                }
-                            ];
+                            // Fetch used title items from service
+                            $scope.titleItems = ListTitleItem.getUserActivityLog();
+
+                            // Store current user to scope
+                            $scope.user = CurrentUser.user();
 
                             // Initialize filter object
                             $scope.filters = {
@@ -179,7 +135,7 @@
 
                                     searchWordTimer = $timeout(function() {
                                         $scope.fetchData();
-                                    }, 350);
+                                    }, 400);
                                 }
                             });
 
@@ -200,7 +156,7 @@
 
                                     searchWordTimer = $timeout(function() {
                                         $scope.fetchData();
-                                    }, 500);
+                                    }, 400);
                                 }
                             }, true);
 

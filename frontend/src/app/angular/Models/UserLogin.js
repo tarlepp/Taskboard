@@ -19,23 +19,6 @@
                          DataService, BackendConfig
                 ) {
                     var endpoint = 'UserLogin';
-                    var items = [];
-                    var handlers = {};
-
-                    // Add handler for 'created' event
-                    handlers.created = function(response) {
-                        items.push(response);
-                    };
-
-                    // Subscribe to 'UserLogin' endpoint and attach event handlers to it
-                    $sailsSocket
-                        .subscribe(endpoint, function(message) {
-                            if (handlers[message.verb]) {
-                                handlers[message.verb](message);
-                            } else {
-                                console.log('todo: implement \'' + message.verb + '\' handler to \'UserLogin\' service.');
-                            }
-                        });
 
                     /**
                      * Helper function to parse used parameters in 'get' and 'count' methods.
@@ -52,62 +35,76 @@
 
                     // Load items from server
                     function load(parameters) {
-                        return DataService
-                            .collection(endpoint, parameters)
-                            .success(function(response) {
-                                items = response;
-
-                                return items;
-                            });
+                        return DataService.collection(endpoint, parameters);
                     }
 
                     // Load items (IP) from server
                     function loadIp(parameters) {
-                        return $sailsSocket.get(BackendConfig.url + '/' + endpoint + '/dataIp/', parseParameters(parameters));
+                        return $sailsSocket.get(
+                            BackendConfig.url + '/' + endpoint + '/dataIp/',
+                            parseParameters(parameters)
+                        );
                     }
 
                     // Load items (User-agent) from server
                     function loadAgent(parameters) {
-                        return $sailsSocket.get(BackendConfig.url + '/' + endpoint + '/dataAgent/', parseParameters(parameters));
+                        return $sailsSocket.get(
+                            BackendConfig.url + '/' + endpoint + '/dataAgent/',
+                            parseParameters(parameters)
+                        );
                     }
 
                     // Load items (Browser family) from server
                     function loadBrowserFamily(parameters) {
-                        return $sailsSocket.get(BackendConfig.url + '/' + endpoint + '/dataBrowserFamily/', parseParameters(parameters));
+                        return $sailsSocket.get(
+                            BackendConfig.url + '/' + endpoint + '/dataBrowserFamily/',
+                            parseParameters(parameters)
+                        );
                     }
 
                     // Load items (OS family) from server
                     function loadOsFamily(parameters) {
-                        return $sailsSocket.get(BackendConfig.url + '/' + endpoint + '/dataOsFamily/', parseParameters(parameters));
+                        return $sailsSocket.get(
+                            BackendConfig.url + '/' + endpoint + '/dataOsFamily/',
+                            parseParameters(parameters)
+                        );
                     }
 
                     // Return count of items
                     function count(parameters) {
-                        return DataService
-                            .count(endpoint, parameters)
-                            .success(function(response) {
-                                return response;
-                            });
+                        return DataService.count(endpoint, parameters);
                     }
 
                     // Return count of items (IP)
                     function countIp(parameters) {
-                        return $sailsSocket.get(BackendConfig.url + '/' + endpoint + '/countIp/', parseParameters(parameters));
+                        return $sailsSocket.get(
+                            BackendConfig.url + '/' + endpoint + '/countIp/',
+                            parseParameters(parameters)
+                        );
                     }
 
                     // Return count of items (User-agent)
                     function countAgent(parameters) {
-                        return $sailsSocket.get(BackendConfig.url + '/' + endpoint + '/countAgent/', parseParameters(parameters));
+                        return $sailsSocket.get(
+                            BackendConfig.url + '/' + endpoint + '/countAgent/',
+                            parseParameters(parameters)
+                        );
                     }
 
                     // Return count of items (Browser family)
                     function countBrowserFamily(parameters) {
-                        return $sailsSocket.get(BackendConfig.url + '/' + endpoint + '/countBrowserFamily/', parseParameters(parameters));
+                        return $sailsSocket.get(
+                            BackendConfig.url + '/' + endpoint + '/countBrowserFamily/',
+                            parseParameters(parameters)
+                        );
                     }
 
                     // Return count of items (OS family)
                     function countOsFamily(parameters) {
-                        return $sailsSocket.get(BackendConfig.url + '/' + endpoint + '/countOsFamily/', parseParameters(parameters));
+                        return $sailsSocket.get(
+                            BackendConfig.url + '/' + endpoint + '/countOsFamily/',
+                            parseParameters(parameters)
+                        );
                     }
 
                     return {

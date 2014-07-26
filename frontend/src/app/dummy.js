@@ -24,4 +24,20 @@ var models = {
         project:        '{models.project}'
     }
 };
+
+var services = {
+    ListConfig: {
+        getDefault: {
+            itemCount:      '{Number}',
+            items:          '{Array}',
+            itemsPerPage:   '{Number}',
+            currentPage:    '{Number}',
+            where:          '{Object}',
+            loading:        '{Boolean}',
+            loaded:         '{Boolean}',
+            methodLoad:     '{Function}'
+        }
+    }
+};
+
 /* jshint ignore:end */

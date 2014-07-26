@@ -13,99 +13,22 @@
                     templateUrl: '/Taskboard/partials/Directives/Components/UserProjects.html',
                     controller: [
                         '$scope', '$timeout', '$q',
-                        '_',
-                        'CurrentUser', 'UserRoles', 'Project', 'SocketWhereCondition',
+                        '_', 'SocketWhereCondition',
+                        'CurrentUser', 'UserRoles', 'Project', 'ListConfig', 'ListTitleItem',
                         function($scope, $timeout, $q,
-                                 _,
-                                 CurrentUser, UserRoles, Project, SocketWhereCondition
+                                 _, SocketWhereCondition,
+                                 CurrentUser, UserRoles, Project, ListConfig, ListTitleItem
                         ) {
                             // Todo: use $scope.userId to fetch user data
 
-                            $scope.user = CurrentUser.user();
-                            $scope.itemCount = 0;
-                            $scope.items = [];
-                            $scope.itemsPerPage = 10;
-                            $scope.currentPage = 1;
-                            $scope.where = {};
-                            $scope.loading = true;
-                            $scope.loaded = false;
+                            // Add default list configuration, see the service for more detailed information
+                            $scope = _.merge($scope, ListConfig.getDefault());
 
                             // Initialize used title items
-                            $scope.titleItems = [
-                                {
-                                    title: 'Project ID',
-                                    column: 'id',
-                                    searchable: true,
-                                    sortable: false,
-                                    inSearch: true,
-                                    inTitle: false
-                                },
-                                {
-                                    title: 'Project',
-                                    titleSearch: 'Project name',
-                                    column: 'title',
-                                    searchable: true,
-                                    sortable: true,
-                                    inSearch: true,
-                                    inTitle: true
-                                },
-                                {
-                                    title: 'Project description',
-                                    column: 'description',
-                                    searchable: true,
-                                    sortable: false,
-                                    inSearch: true,
-                                    inTitle: false
-                                },
-                                {
-                                    title: 'Role',
-                                    column: 'role',
-                                    searchable: false,
-                                    sortable: false,
-                                    inSearch: false,
-                                    inTitle: true
-                                },
-                                {
-                                    title: 'Members',
-                                    column: 'members.length',
-                                    searchable: false,
-                                    sortable: false,
-                                    inSearch: false,
-                                    inTitle: true
-                                },
-                                {
-                                    title: 'Sprints',
-                                    column: 'sprints.length',
-                                    searchable: false,
-                                    sortable: false,
-                                    inSearch: false,
-                                    inTitle: true
-                                },
-                                {
-                                    title: 'Schedule',
-                                    column: 'dateStart',
-                                    searchable: false,
-                                    sortable: true,
-                                    inSearch: false,
-                                    inTitle: true
-                                },
-                                {
-                                    title: 'Schedule start',
-                                    column: 'dateStart',
-                                    searchable: true,
-                                    sortable: false,
-                                    inSearch: true,
-                                    inTitle: false
-                                },
-                                {
-                                    title: 'Schedule end',
-                                    column: 'dateEnd',
-                                    searchable: true,
-                                    sortable: false,
-                                    inSearch: true,
-                                    inTitle: false
-                                }
-                            ];
+                            $scope.titleItems = ListTitleItem.getUserProject();
+
+                            // Store current user to scope
+                            $scope.user = CurrentUser.user();
 
                             // Initialize filter object
                             $scope.filters = {
@@ -232,7 +155,7 @@
 
                                     searchWordTimer = $timeout(function() {
                                         $scope.fetchData();
-                                    }, 350);
+                                    }, 400);
                                 }
                             });
 
@@ -253,7 +176,7 @@
 
                                     searchWordTimer = $timeout(function() {
                                         $scope.fetchData();
-                                    }, 500);
+                                    }, 400);
                                 }
                             }, true);
 
