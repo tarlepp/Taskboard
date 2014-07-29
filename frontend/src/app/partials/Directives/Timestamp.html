@@ -1,0 +1,31 @@
+<span id="qtip-trigger-{{id}}">
+    {{stampObject | amDateFormat:user.momentFormatDateTime}}
+
+    <div
+        data-qtip
+        data-qtip-id="{{id}}"
+        data-position="bottomRight"
+    >
+        <table class="timestampTooltip">
+            <tr>
+                <th>Local time</th>
+                <td>{{stampObject | amDateFormat:user.momentFormatDateTime}}</td>
+            </tr>
+            <tr>
+                <th></th>
+                <td class="text-muted">
+                    {{userTimezone.name}}<br />
+                    {{stampObject | amDateFormat:'[GMT]ZZ'}}
+                </td>
+            </tr>
+            <tr>
+                <th>UTC time</th>
+                <td>
+                    {{stampObjectUtc | amDateFormat:user.momentFormatDateTime}}
+                </td>
+            </tr>
+        </table>
+    </div>
+</span>
+
+
