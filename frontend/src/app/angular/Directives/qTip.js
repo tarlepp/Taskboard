@@ -84,7 +84,6 @@
 
                             var init = function() {
                                 jQuery('body').find(scope.parentId).each(function() {
-                                    console.log('founded');
                                     jQuery(this).qtip({
                                         metadata: {
                                             type: 'html5',      // Use HTML5 data-* attributes
