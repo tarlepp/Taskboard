@@ -16,6 +16,8 @@
  *  5)  Activity log (what user has done lately)
  *  6)  Login history
  *  7)  User object history
+ *
+ * @todo    Move tabs configuration to service
  */
 (function() {
     'use strict';
@@ -34,6 +36,8 @@
                     $scope.languages = languages.data;
                     $scope.timezones = timezones.data;
                     $scope.form = {};
+                    $scope.objectName = 'User';
+                    $scope.objectId = user.id;
 
                     $scope.tabs = [
                         {

@@ -67,3 +67,46 @@ pre {
     }
   }
 }
+
+.modal-body {
+  .tab-pane {
+    .history {
+      h4 {
+        border-bottom: 1px solid #dddddd;
+        line-height: 20px;
+        margin-bottom: 5px;
+        padding-left: 5px;
+
+        small {
+          span {
+            position: relative;
+            top: 3px;
+            margin-right: 5px;
+          }
+        }
+      }
+
+      .gravatar-icon {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+
+      .list-unstyled {
+        padding-left: 10px;
+      }
+    }
+  }
+}
+
+.timestampTooltip {
+  font-size: 13px;
+  line-height: 16px;
+
+  th {
+    text-align: right;
+  }
+
+  td {
+    padding-left: 5px;
+  }
+}
