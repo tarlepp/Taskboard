@@ -30,6 +30,7 @@
         'angularMoment',
         'angularjs-gravatardirective',
         'linkify',
+        'uuid',
         'sails.io'
     ]);
 
