@@ -7,20 +7,28 @@
     angular.module('Taskboard.services')
         .factory('TimeZone',
             [
-                'DataService',
-                function(DataService) {
+                '$q', 'DataService',
+                function($q, DataService) {
                     var endpoint = 'TimeZone';
                     var timezones = [];
 
                     // Load timezones from server
                     function get(parameters) {
-                        return DataService
-                            .collection(endpoint, parameters)
-                            .success(function(response) {
-                                timezones = response;
+                        if (timezones.length > 0) {
+                            var deferred = $q.defer();
 
-                                return timezones;
-                            });
+                            deferred.resolve({data: timezones});
+
+                            return deferred.promise;
+                        } else {
+                            return DataService
+                                .collection(endpoint, parameters)
+                                .success(function(response) {
+                                    timezones = response;
+
+                                    return timezones;
+                                });
+                        }
                     }
 
                     return {
