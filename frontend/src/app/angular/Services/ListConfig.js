@@ -20,7 +20,7 @@
                     return {
                         itemCount: 0,
                         items: [],
-                        itemsPerPage: 10,
+                        itemsPerPage: 15,
                         currentPage: 1,
                         where: {},
                         loading: true,
