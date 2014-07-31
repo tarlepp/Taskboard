@@ -17,6 +17,11 @@ module.exports.bootstrap = function(next) {
      */
     sails.services.passport.loadStrategies();
 
+    // This will catch all socket requests that are made and logs those to database.
+    sails.on('router:request', function(request) {
+        Logger.request(request);
+    });
+
     // Initialize backend database
     database.init(next);
 };

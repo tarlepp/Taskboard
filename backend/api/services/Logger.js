@@ -42,3 +42,37 @@ exports.userLogin = function(user, request) {
             }
         });
 };
+
+/**
+ * Service method to create request log. This is fired from two places:
+ *
+ *  1)  \config\bootstrap.js    = logs socket requests
+ *  2)  \config\http.js         = logs http requests
+ *
+ * Note that this method is called "silently" and if error occurs those are
+ * just added to sails error log.
+ *
+ * @todo    Make clean of this collection, because this will be a huge one :D
+ *
+ * @param   {Request}   request Request object
+ */
+exports.request = function(request) {
+    RequestLog
+        .create({
+            method:     request.method,
+            url:        request.url,
+            headers:    request.headers || {},
+            parameters: request.params || {},
+            query:      request.query || {},
+            body:       request.body || {},
+            protocol:   request.protocol,
+            ip:         request.ip,
+            user:       request.token || -1
+        })
+        .exec(function(error) {
+            if (error) {
+                sails.log.error(__filename + ':' + __line + ' [Failed to write request data to database]');
+                sails.log.error(error);
+            }
+        });
+};
