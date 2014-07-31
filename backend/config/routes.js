@@ -14,8 +14,12 @@
  * Finally, if those don't match either, the default 404 handler is triggered.
  * See `config/404.js` to adjust your app's 404 logic.
  *
- * For more information on routes, check out:
- * http://links.sailsjs.org/docs/config/routes
+ * Note: Sails doesn't ACTUALLY serve stuff from `assets`-- the default Gruntfile in Sails copies
+ * flat files from `assets` to `.tmp/public`.  This allows you to do things like compile LESS or
+ * CoffeeScript for the front-end.
+ *
+ * For more information on configuring custom routes, check out:
+ * http://sailsjs.org/#/documentation/concepts/Routes/RouteTargetSyntax.html
  */
 module.exports.routes = {
     '/logout': 'AuthController.logout',

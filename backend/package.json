@@ -10,7 +10,7 @@
     "sails.js"
   ],
   "dependencies": {
-    "sails": "~0.10.0-rc8",
+    "sails": "0.10.0-rc11",
     "sails-disk": "~0.10.0",
     "sails-mysql": "~0.10.0-rc7",
     "rc": "~0.3.3",
