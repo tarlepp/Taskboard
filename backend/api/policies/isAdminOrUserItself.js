@@ -18,12 +18,16 @@ module.exports = function(request, response, next) {
 
     // User itself, continue
     if (userId === request.token) {
+        sails.log.verbose("          OK");
+
         next();
     } else { // Otherwise we must check that user that made request is administrator user
         DataService.getUser(request.token, function(error, user) {
             if (error) { // Error occurred
                 next(error);
             } else if (user.admin) { // User is administrator, so continue
+                sails.log.verbose("          OK");
+
                 next();
             } else { // Otherwise send
                 error = new Error();
