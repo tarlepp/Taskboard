@@ -64,10 +64,12 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
             collection: 'Passport',
             via:        'user'
         },
+        // History objects that are attached to user
         histories: {
             collection: 'History',
             via:        'user'
         },
+        // Login objects that are attached to user
         logins: {
             collection: 'UserLogin',
             via:        'user'
