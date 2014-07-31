@@ -87,6 +87,20 @@ var Passport = {
          */
         validatePassword: function(password, next) {
             bcrypt.compare(password, this.password, next);
+        },
+
+        /**
+         * Remove sensitive data from JSON output.
+         *
+         * @returns {sails.model.passport}
+         */
+        toJSON: function() {
+            var object = this.toObject();
+
+            delete object.password;
+            delete object.tokens;
+
+            return object;
         }
     },
 
