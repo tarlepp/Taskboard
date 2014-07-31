@@ -52,7 +52,7 @@ module.exports.http = {
          * Example custom middleware; logs each request to the console.              *
          *                                                                           *
          ****************************************************************************/
-        requestLogger: function(request, respone, next) {
+        requestLogger: function(request, response, next) {
             Logger.request(request);
 
             return next();
