@@ -16,9 +16,9 @@ module.exports = {
      * @param   {Response}  response
      */
     count: function(request, response) {
-        var Model = actionUtil.parseModel(request);
+        var model = actionUtil.parseModel(request);
 
-        Model
+        model
             .count(actionUtil.parseCriteria(request))
             .exec(function found(error, count) {
                 if (error) {

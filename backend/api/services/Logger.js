@@ -4,8 +4,10 @@
  * Generic logger service which Taskboard backend uses. Currently this service contains
  * following methods:
  *
- *  userLogin(user, request)
+ *  login(user, request)
+ *  request(request)
  *
+ * You can find detailed information about these below.
  */
 
 /**
@@ -15,14 +17,14 @@
  * @param   {sails.model.user}  user        User object
  * @param   {Request}           request     Request object
  */
-exports.userLogin = function(user, request) {
-    sails.log.verbose(__filename + ':' + __line + ' [Service.Logger.userLogin() called]');
+exports.login = function(user, request) {
+    sails.log.verbose(__filename + ':' + __line + ' [Service.Logger.login() called]');
 
     // Parse detailed information from user-agent string
     var r = require('ua-parser').parse(request.headers['user-agent']);
 
     // Create new UserLogin row to database
-    UserLogin
+    sails.models['userlogin']
         .create({
             ip:             request.ip,
             host:           request.host,
@@ -57,7 +59,9 @@ exports.userLogin = function(user, request) {
  * @param   {Request}   request Request object
  */
 exports.request = function(request) {
-    RequestLog
+    sails.log.verbose(__filename + ':' + __line + ' [Service.Logger.request() called]');
+
+    sails.models['requestlog']
         .create({
             method:     request.method,
             url:        request.url,

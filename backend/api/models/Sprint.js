@@ -93,12 +93,12 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
         // Date start as moment object.
         dateStartObject: function() {
             return (this.dateStart && this.dateStart != '0000-00-00')
-                ? DateService.convertDateObjectToUtc(this.dateStart) : null;
+                ? sails.services['date'].convertDateObjectToUtc(this.dateStart) : null;
         },
         // Date end as moment object.
         dateEndObject: function() {
             return (this.dateEnd && this.dateEnd != '0000-00-00')
-                ? DateService.convertDateObjectToUtc(this.dateEnd) : null;
+                ? sails.services['date'].convertDateObjectToUtc(this.dateEnd) : null;
         }
     },
 
@@ -161,7 +161,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterCreate: function(record, next) {
-        HistoryService.write('Sprint', record, 'Added new sprint', 0, next);
+        sails.services['history'].write('Sprint', record, 'Added new sprint', 0, next);
     },
 
     /**
@@ -171,7 +171,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterUpdate: function(record, next) {
-        HistoryService.write('Sprint', record, 'Updated sprint data', 0, next);
+        sails.services['history'].write('Sprint', record, 'Updated sprint data', 0, next);
     },
 
     /**
@@ -184,7 +184,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
         async.each(
             records,
             function(record, callback) {
-                HistoryService.write('Sprint', record, 'Removed sprint', 0, callback);
+                sails.services['history'].write('Sprint', record, 'Removed sprint', 0, callback);
             },
             function(error) {
                 next(error);

@@ -27,7 +27,7 @@ module.exports.policies = {
     },
 
     UserController: {
-        '*': false,
-        'findOne': ['passport', 'authenticated', 'isAdminOrUserItself']
+        '*': true,
+        //'findOne': ['passport', 'authenticated', 'isAdminOrUserItself']
     }
 };

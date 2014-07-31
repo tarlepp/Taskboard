@@ -1,5 +1,10 @@
 'use strict';
 
+/**
+ * Token.js
+ *
+ * JWT token service which handles issuing and verifying tokens.
+ */
 var jwt = require('jsonwebtoken');
 
 /**
@@ -9,7 +14,7 @@ var jwt = require('jsonwebtoken');
  *
  * @returns {*}
  */
-module.exports.issueToken = function(payload) {
+module.exports.issue = function(payload) {
     return jwt.sign(
         payload, // This is the payload we want to put inside the token
         process.env.TOKEN_SECRET || "oursecret" // Secret string which will be used to sign the token
@@ -24,7 +29,7 @@ module.exports.issueToken = function(payload) {
  *
  * @returns {*}
  */
-module.exports.verifyToken = function(token, next) {
+module.exports.verify = function(token, next) {
     return jwt.verify(
         token, // The token to be verified
         process.env.TOKEN_SECRET || "oursecret", // The secret we used to sign it.

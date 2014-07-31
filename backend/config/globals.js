@@ -18,7 +18,7 @@ module.exports.globals = {
      * lodash --save, then var _ = require('lodash') at the top of any file.     *
      *                                                                           *
      ****************************************************************************/
-    _: true,
+    _: false,
 
     /****************************************************************************
      *                                                                           *
@@ -27,7 +27,7 @@ module.exports.globals = {
      * --save, then var async = require('async') at the top of any file.         *
      *                                                                           *
      ****************************************************************************/
-    async: true,
+    async: false,
 
     /****************************************************************************
      *                                                                           *
@@ -45,7 +45,7 @@ module.exports.globals = {
      * you can still access your services via sails.services.*                   *
      *                                                                           *
      ****************************************************************************/
-    services: true,
+    services: false,
 
     /****************************************************************************
      *                                                                           *
@@ -55,6 +55,6 @@ module.exports.globals = {
      * your models via sails.models.*.                                           *
      *                                                                           *
      ****************************************************************************/
-    models: true
+    models: false
 };
 

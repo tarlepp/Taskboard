@@ -35,7 +35,7 @@ var AuthController = {
      * @param   {Response}  response    Response object
      */
     provider: function(request, response) {
-        passport.endpoint(request, response);
+        sails.services['passport'].endpoint(request, response);
     },
 
     /**
@@ -71,16 +71,17 @@ var AuthController = {
      * @param   {Response}  response    Response object
      */
     callback: function(request, response) {
-        passport.callback(request, response, function(error, user) {
+        sails.services['passport'].callback(request, response, function(error, user) {
             request.login(user, function(error) {
                 // If an error was thrown, redirect the user to the login which should
                 // take care of rendering the error messages.
                 if (error) {
+                    console.log('whut....');
                     response.json(401, error);
                 } else { // Upon successful login, send back user data and JWT token
-                    Logger.userLogin(user, request);
+                    sails.services['logger'].login(user, request);
 
-                    response.json(200, {user: user, token: tokenService.issueToken(user.id)});
+                    response.json(200, {user: user, token: sails.services['token'].issue(user.id)});
                 }
             });
         });
@@ -109,7 +110,7 @@ var AuthController = {
                         protocol: 'local'
                     };
 
-                    DataService.getPassport(where, callback);
+                    sails.services['data'].getPassport(where, callback);
                 },
                 /**
                  * Job to validate given password against user passport object.

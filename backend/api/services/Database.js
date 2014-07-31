@@ -1,5 +1,10 @@
 'use strict';
 
+/**
+ * /api/services/Database.js
+ *
+ * Generic database service which will handle database initialize.
+ */
 var barrels = require('barrels');
 var fixtures = barrels.load().objects;
 
@@ -12,7 +17,7 @@ var fixtures = barrels.load().objects;
  * @param   {Function}  next
  */
 exports.init = function(next) {
-    User
+    sails.models['user']
         .find()
         .exec(function(error, users) {
             if (error) {

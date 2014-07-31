@@ -46,7 +46,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
         // Deadline date as moment object
         deadlineObject: function() {
             return (this.deadline && this.deadline != '0000-00-00')
-                ? DateService.convertDateObjectToUtc(this.deadline) : null;
+                ? sails.services['date'].convertDateObjectToUtc(this.deadline) : null;
         }
     },
 
@@ -109,7 +109,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterCreate: function(record, next) {
-        HistoryService.write('Epic', record, 'Added new epic', 0, next);
+        sails.services['history'].write('Epic', record, 'Added new epic', 0, next);
     },
 
     /**
@@ -119,7 +119,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterUpdate: function(record, next) {
-        HistoryService.write('Epic', record, 'Updated epic data', 0, next);
+        sails.services['history'].write('Epic', record, 'Updated epic data', 0, next);
     },
 
     /**
@@ -132,7 +132,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
         async.each(
             records,
             function(record, callback) {
-                HistoryService.write('Epic', record, 'Removed epic', 0, callback);
+                sails.services['history'].write('Epic', record, 'Removed epic', 0, callback);
             },
             function(error) {
                 next(error);

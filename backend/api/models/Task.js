@@ -74,12 +74,12 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
         // Time start as a moment object
         timeStartObject: function() {
             return (this.timeStart && this.timeStart != '0000-00-00 00:00:00')
-                ? DateService.convertDateObjectToUtc(this.timeStart) : null;
+                ? sails.services['date'].convertDateObjectToUtc(this.timeStart) : null;
         },
         // Time end as a moment object
         timeEndObject: function() {
             return (this.timeEnd && this.timeEnd != '0000-00-00 00:00:00')
-                ? DateService.convertDateObjectToUtc(this.timeEnd) : null;
+                ? sails.services['date'].convertDateObjectToUtc(this.timeEnd) : null;
         },
         // Current task duration as in seconds
         timeDuration: function() {
@@ -176,7 +176,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterCreate: function(record, next) {
-        HistoryService.write('Task', record, 'Added new task', 0, next);
+        sails.services['history'].write('Task', record, 'Added new task', 0, next);
     },
 
     /**
@@ -186,7 +186,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterUpdate: function(record, next) {
-        HistoryService.write('Task', record, 'Updated task data', 0, next);
+        sails.services['history'].write('Task', record, 'Updated task data', 0, next);
     },
 
     /**
@@ -199,7 +199,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
         async.each(
             records,
             function(record, callback) {
-                HistoryService.write('Task', record, 'Removed task', 0, callback);
+                sails.services['history'].write('Task', record, 'Removed task', 0, callback);
             },
             function(error) {
                 next(error);

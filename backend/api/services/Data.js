@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * /api/services/DataService.js
+ * /api/services/Data.js
  *
  * Generic data service which contains helper functions for data fetching.
  */
@@ -72,7 +72,7 @@ exports.sortAndPaginate = function(items, request) {
 exports.getUser = function(where, next, noExistsCheck) {
     noExistsCheck = noExistsCheck || false;
 
-    User
+    sails.models['user']
         .findOne(where)
         .populate('passports')
         .exec(function(error, /** sails.model.user */ user) {
@@ -100,7 +100,7 @@ exports.getUser = function(where, next, noExistsCheck) {
 exports.getPassport = function(where, next, noExistsCheck) {
     noExistsCheck = noExistsCheck || false;
 
-    Passport
+    sails.models['passport']
         .findOne(where)
         .exec(function(error, /** sails.model.passport */ passport) {
             if (error) {

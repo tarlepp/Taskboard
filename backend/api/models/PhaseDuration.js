@@ -1,5 +1,7 @@
 'use strict';
 
+var moment = require('moment-timezone');
+
 /**
  * PhaseDuration.js
  *
@@ -71,12 +73,12 @@ module.exports = {
         // Start time as moment object
         timeStartObject: function() {
             return (this.timeStart && this.timeStart != '0000-00-00 00:00:00')
-                ? DateService.convertDateObjectToUtc(this.timeStart) : null;
+                ? sails.services['date'].convertDateObjectToUtc(this.timeStart) : null;
         },
         // Start end as moment object
         timeEndObject: function() {
             return (this.timeEnd && this.timeEnd != '0000-00-00 00:00:00')
-                ? DateService.convertDateObjectToUtc(this.timeEnd) : null;
+                ? sails.services['date'].convertDateObjectToUtc(this.timeEnd) : null;
         },
         // Current phase duration as in seconds
         timeDuration: function() {
@@ -109,12 +111,12 @@ module.exports = {
         // Created timestamp as moment object
         createdAtObject: function () {
             return (this.createdAt && this.createdAt != '0000-00-00 00:00:00')
-                ? DateService.convertDateObjectToUtc(this.createdAt) : null;
+                ? sails.services['date'].convertDateObjectToUtc(this.createdAt) : null;
         },
         // Updated timestamp as moment object
         updatedAtObject: function () {
             return (this.updatedAt && this.updatedAt != '0000-00-00 00:00:00')
-                ? DateService.convertDateObjectToUtc(this.updatedAt) : null;
+                ? sails.services['date'].convertDateObjectToUtc(this.updatedAt) : null;
         }
     },
 

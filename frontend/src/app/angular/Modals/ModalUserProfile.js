@@ -37,7 +37,7 @@
                     $scope.timezones = timezones.data;
                     $scope.form = {};
                     $scope.objectName = 'User';
-                    $scope.objectId = user.id;
+                    $scope.objectId = user.data.id;
 
                     $scope.tabs = [
                         {
@@ -81,7 +81,7 @@
                     ];
 
                     $scope.reset = function() {
-                        $scope.user = angular.copy(user);
+                        $scope.user = angular.copy(user.data);
                     };
 
                     $scope.close = function() {

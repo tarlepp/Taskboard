@@ -22,14 +22,18 @@ module.exports = function(request, response, next) {
 
         next();
     } else { // Otherwise we must check that user that made request is administrator user
-        DataService.getUser(request.token, function(error, user) {
+        sails.services['data'].getUser(request.token, function(error, user) {
             if (error) { // Error occurred
+                sails.log.verbose('     ERROR - Data service getUser() method failed');
+
                 next(error);
             } else if (user.admin) { // User is administrator, so continue
                 sails.log.verbose("          OK");
-
+d
                 next();
             } else { // Otherwise send
+                sails.log.verbose('     ERROR - User not an administrator');
+
                 error = new Error();
 
                 error.message = 'You are not administrator user.';

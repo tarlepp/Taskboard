@@ -44,7 +44,7 @@ module.exports = function(request, response, next) {
     }
 
     // Verify JWT token via service
-    tokenService.verifyToken(token, function(error, token) {
+    sails.services['token'].verify(token, function(error, token) {
         if (error) {
             sails.log.verbose('     ERROR - The token is not valid');
 

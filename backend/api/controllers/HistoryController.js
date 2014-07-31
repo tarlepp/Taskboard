@@ -22,7 +22,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
         var objectId = request.param('objectId');
         var objectName = request.param('objectName');
 
-        History
+        sails.models['history']
             .find()
             .where({
                 objectName: objectName,
@@ -32,7 +32,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
             .sort('createdAt ASC')
             .exec(function(error, data) {
                 if (error) {
-                    ResponseService.makeError(error, request, response);
+                    sails.services['response'].makeError(error, request, response);
                 } else {
                     var historyRows = [];
 
@@ -73,7 +73,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
                  * @param   {Function}              callback    Callback function to call after row is processed
                  */
                 function(historyRow, callback) {
-                    var dateObject = DateService.convertDateObjectToUtc(historyRow.createdAt);
+                    var dateObject = sails.services['date'].convertDateObjectToUtc(historyRow.createdAt);
 
                     // Create main data array which contains all necessary data for this history row
                     var historyData = {
@@ -134,7 +134,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
                  */
                 function(error, results) {
                     if (error) {
-                        ResponseService.makeError(error, request, response);
+                        sails.services['response'].makeError(error, request, response);
                     } else {
                         response.json(_.compact(results).reverse());
                     }
@@ -260,14 +260,14 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
                 }
 
                 // Only fetch possible relation data if change type is insert or update AND data object is present
-                if (global[object] && typeof global[object] === 'object' && data.changeType != 'delete') {
+                if (sails.models[object] && typeof sails.models[object] === 'object' && data.changeType !== 'delete') {
                     // Fetch relation data for column
                     async.parallel(
                         {
                             // New value object data
                             dataNew: function(callback) {
                                 if (data.valueIdNew) {
-                                    global[object]
+                                    sails.models[object]
                                         .findOne(data.valueIdNew)
                                         .exec(function(error, objectData) {
                                             callback(error, objectData);
@@ -280,7 +280,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
                             // New value object data
                             dataOld: function(callback) {
                                 if (data.changeType == 'update' && data.valueIdOld) {
-                                    global[object]
+                                    sails.models[object]
                                         .findOne(data.valueIdOld)
                                         .exec(function(error, objectData) {
                                             callback(error, objectData);

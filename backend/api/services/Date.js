@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * /api/services/DateService.js
+ * /api/services/Date.js
  *
  * Generic date service which contains helper methods for date and time handling.
  */

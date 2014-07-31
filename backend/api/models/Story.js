@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var async = require('async');
+var moment = require('moment-timezone');
 
 /**
  * Story.js
@@ -102,12 +103,12 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
         // Time start as a moment object
         timeStartObject: function() {
             return (this.timeStart && this.timeStart != '0000-00-00 00:00:00')
-                ? DateService.convertDateObjectToUtc(this.timeStart) : null;
+                ? sails.services['date'].convertDateObjectToUtc(this.timeStart) : null;
         },
         // Time end as a moment object
         timeEndObject: function() {
             return (this.timeEnd && this.timeEnd != '0000-00-00 00:00:00')
-                ? DateService.convertDateObjectToUtc(this.timeEnd) : null;
+                ? sails.services['date'].convertDateObjectToUtc(this.timeEnd) : null;
         },
         // Current story duration as in seconds
         timeDuration: function() {
@@ -198,7 +199,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterCreate: function(record, next) {
-        HistoryService.write('Story', record, 'Added new story', 0, next);
+        sails.services['history'].write('Story', record, 'Added new story', 0, next);
     },
 
     /**
@@ -208,7 +209,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterUpdate: function(record, next) {
-        HistoryService.write('Story', record, 'Updated story data', 0, next);
+        sails.services['history'].write('Story', record, 'Updated story data', 0, next);
     },
 
     /**
@@ -221,7 +222,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
         async.each(
             records,
             function(record, callback) {
-                HistoryService.write('Sprint', record, 'Removed story', 0, callback);
+                sails.services['history'].write('Story', record, 'Removed story', 0, callback);
             },
             function(error) {
                 next(error);

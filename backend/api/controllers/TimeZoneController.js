@@ -33,6 +33,6 @@ module.exports = {
      * @param   {Response}  response    Response object
      */
     index: function(request, response) {
-        response.json(200, DateService.getTimezones());
+        response.json(200, sails.services['date'].getTimezones());
     }
 };

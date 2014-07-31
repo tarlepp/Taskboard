@@ -12,12 +12,12 @@
     angular.module('Taskboard.services')
         .factory('ModalService',
             [
-                '$modal', '$q',
+                '$modal', '$q', '$sailsSocket',
                 '_',
-                'CurrentUser', 'TimeZone', 'Language',
-                function($modal, $q,
+                'BackendConfig', 'CurrentUser', 'TimeZone', 'Language',
+                function($modal, $q, $sailsSocket,
                          _,
-                         CurrentUser, TimeZone, Language
+                         BackendConfig, CurrentUser, TimeZone, Language
                 ) {
                     return {
                         /**
@@ -50,15 +50,7 @@
                                 size: 'lg',
                                 resolve: {
                                     user: function() {
-                                        var currentUser = CurrentUser.user();
-
-                                        // By default we want to open modal with current user data on it
-                                        if (_.isUndefined(userId) || userId === currentUser.id) {
-                                            return angular.copy(currentUser);
-                                        } else { // Otherwise fetch another user from server
-                                            // todo
-                                            return {};
-                                        }
+                                        return $sailsSocket.get(BackendConfig.url + '/User/' + userId);
                                     },
                                     timezones: function() {
                                         return TimeZone.get();

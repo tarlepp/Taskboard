@@ -45,7 +45,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
         // Deadline date as moment object
         deadlineObject: function() {
             return (this.deadline && this.deadline != '0000-00-00')
-                ? DateService.convertDateObjectToUtc(this.deadline) : null;
+                ? sails.services['date'].convertDateObjectToUtc(this.deadline) : null;
         }
     },
 
@@ -108,7 +108,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterCreate: function(record, next) {
-        HistoryService.write('Milestone', record, 'Added new milestone', 0, next);
+        sails.services['history'].write('Milestone', record, 'Added new milestone', 0, next);
     },
 
     /**
@@ -118,7 +118,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterUpdate: function(record, next) {
-        HistoryService.write('Milestone', record, 'Updated milestone data', 0, next);
+        sails.services['history'].write('Milestone', record, 'Updated milestone data', 0, next);
     },
 
     /**
@@ -131,7 +131,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
         async.each(
             records,
             function(record, callback) {
-                HistoryService.write('Milestone', record, 'Removed milestone', 0, callback);
+                sails.services['history'].write('Milestone', record, 'Removed milestone', 0, callback);
             },
             function(error) {
                 next(error);

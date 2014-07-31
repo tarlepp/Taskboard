@@ -121,7 +121,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterCreate: function(record, next) {
-        HistoryService.write('TaskType', record, 'Added new task type', 0, next);
+        sails.services['history'].write('TaskType', record, 'Added new task type', 0, next);
     },
 
     /**
@@ -131,7 +131,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterUpdate: function(record, next) {
-        HistoryService.write('TaskType', record, 'Updated task type data', 0, next);
+        sails.services['history'].write('TaskType', record, 'Updated task type data', 0, next);
     },
 
     /**
@@ -144,7 +144,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
         async.each(
             records,
             function(record, callback) {
-                HistoryService.write('TaskType', record, 'Removed task type', 0, callback);
+                sails.services['history'].write('TaskType', record, 'Removed task type', 0, callback);
             },
             function(error) {
                 next(error);

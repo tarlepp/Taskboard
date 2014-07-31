@@ -39,11 +39,11 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
     dataIp: function(request, response) {
         var extraCriteria = {groupBy: ['ip'], sum: ['count']};
 
-        DataService.getCollection(request, extraCriteria, function(error, items) {
+        sails.services['data'].getCollection(request, extraCriteria, function(error, items) {
             if (error) {
                 response.json(500, error);
             } else {
-                response.json(200, DataService.sortAndPaginate(items, request));
+                response.json(200, sails.services['data'].sortAndPaginate(items, request));
             }
         });
     },
@@ -75,11 +75,11 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
     dataAgent: function(request, response) {
         var extraCriteria = {groupBy: ['agent'], sum: ['count']};
 
-        DataService.getCollection(request, extraCriteria, function(error, items) {
+        sails.services['data'].getCollection(request, extraCriteria, function(error, items) {
             if (error) {
                 response.json(500, error);
             } else {
-                response.json(200, DataService.sortAndPaginate(items, request));
+                response.json(200, sails.services['data'].sortAndPaginate(items, request));
             }
         });
     },
@@ -111,11 +111,11 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
     dataBrowserFamily: function(request, response) {
         var extraCriteria = {groupBy: ['browserFamily'], sum: ['count']};
 
-        DataService.getCollection(request, extraCriteria, function(error, items) {
+        sails.services['data'].getCollection(request, extraCriteria, function(error, items) {
             if (error) {
                 response.json(500, error);
             } else {
-                response.json(200, DataService.sortAndPaginate(items, request));
+                response.json(200, sails.services['data'].sortAndPaginate(items, request));
             }
         });
     },
@@ -147,11 +147,11 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
     dataOsFamily: function(request, response) {
         var extraCriteria = {groupBy: ['osFamily'], sum: ['count']};
 
-        DataService.getCollection(request, extraCriteria, function(error, items) {
+        sails.services['data'].getCollection(request, extraCriteria, function(error, items) {
             if (error) {
                 response.json(500, error);
             } else {
-                response.json(200, DataService.sortAndPaginate(items, request));
+                response.json(200, sails.services['data'].sortAndPaginate(items, request));
             }
         });
     },
@@ -173,7 +173,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
     countIp: function(request, response) {
         var extraCriteria = {groupBy: ['ip'], sum: ['count']};
 
-        DataService.getCollection(request, extraCriteria, function(error, items) {
+        sails.services['data'].getCollection(request, extraCriteria, function(error, items) {
             if (error) {
                 response.json(500, error);
             } else {
@@ -199,7 +199,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
     countAgent: function(request, response) {
         var extraCriteria = {groupBy: ['agent'], sum: ['count']};
 
-        DataService.getCollection(request, extraCriteria, function(error, items) {
+        sails.services['data'].getCollection(request, extraCriteria, function(error, items) {
             if (error) {
                 response.json(500, error);
             } else {
@@ -225,7 +225,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
     countBrowserFamily: function(request, response) {
         var extraCriteria = {groupBy: ['browserFamily'], sum: ['count']};
 
-        DataService.getCollection(request, extraCriteria, function(error, items) {
+        sails.services['data'].getCollection(request, extraCriteria, function(error, items) {
             if (error) {
                 response.json(500, error);
             } else {
@@ -251,7 +251,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
     countOsFamily: function(request, response) {
         var extraCriteria = {groupBy: ['osFamily'], sum: ['count']};
 
-        DataService.getCollection(request, extraCriteria, function(error, items) {
+        sails.services['data'].getCollection(request, extraCriteria, function(error, items) {
             if (error) {
                 response.json(500, error);
             } else {

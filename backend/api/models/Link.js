@@ -107,7 +107,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterCreate: function(record, next) {
-        HistoryService.write('Link', record, 'Added new link', 0, next);
+        sails.services['history'].write('Link', record, 'Added new link', 0, next);
     },
 
     /**
@@ -117,7 +117,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
      * @param   {Function}              next    Callback function
      */
     afterUpdate: function(record, next) {
-        HistoryService.write('Link', record, 'Updated link data', 0, next);
+        sails.services['history'].write('Link', record, 'Updated link data', 0, next);
     },
 
     /**
@@ -130,7 +130,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
         async.each(
             records,
             function(record, callback) {
-                HistoryService.write('Link', record, 'Removed link', 0, callback);
+                sails.services['history'].write('Link', record, 'Removed link', 0, callback);
             },
             function(error) {
                 next(error);

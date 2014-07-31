@@ -52,8 +52,8 @@ module.exports.http = {
          * Example custom middleware; logs each request to the console.              *
          *                                                                           *
          ****************************************************************************/
-        requestLogger: function(request, response, next) {
-            Logger.request(request);
+        myRequestLogger: function(request, response, next) {
+            sails.services['logger'].request(request);
 
             return next();
         }

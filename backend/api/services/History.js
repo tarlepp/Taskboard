@@ -3,7 +3,7 @@
 var _ = require('lodash');
 
 /**
- * /api/services/HistoryService.js
+ * /api/services/History.js
  *
  * History service which handles object history write / delete to database. Note that these
  * services are called from models lifecycle callbacks.
@@ -38,7 +38,7 @@ exports.write = function(objectName, data, message, userId, next) {
     });
 
     // Create new history row
-    History
+    sails.models['history']
         .create({
             objectId: objectId,
             objectName: objectName,
@@ -65,7 +65,7 @@ exports.write = function(objectName, data, message, userId, next) {
  */
 exports.remove = function(objectName, objectId, next) {
     // Remove all history rows
-    History
+    sails.models['history']
         .destroy({
             objectId: objectId,
             objectName: objectName
@@ -75,5 +75,7 @@ exports.remove = function(objectName, objectId, next) {
                 sails.log.error(__filename + ':' + __line + ' [Failed to remove object history data]');
                 sails.log.error(error);
             }
+
+            next(error);
         });
 };

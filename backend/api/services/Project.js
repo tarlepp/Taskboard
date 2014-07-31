@@ -24,7 +24,7 @@ exports.addDefaultProjectManager = function(project, next) {
     sails.log.verbose(__filename + ':' + __line + ' [Service.ProjectService.addDefaultProjectManager() called]');
 
     // Attach created user to project as in 'Manager' role
-    ProjectUser
+    sails.models['projectuser']
         .create({
             role:           2,
             project:        project.id,
@@ -120,7 +120,7 @@ exports.addDefaultPhases = function(project, next) {
          * @param   {function}          callback
          */
         function(phase, callback) {
-            Phase
+            sails.models['phase']
                 .create(phase)
                 .exec(callback);
         },
@@ -203,7 +203,7 @@ exports.addDefaultTaskTypes = function(project, next) {
          * @param   {function}              callback
          */
         function(taskType, callback) {
-            TaskType
+            sails.models['tasktype']
                 .create(taskType)
                 .exec(callback);
         },

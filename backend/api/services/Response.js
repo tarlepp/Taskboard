@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * ResponseService.js
+ * Response.js
  *
  * Generic helper service for response handling.
  */
