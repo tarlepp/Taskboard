@@ -11,8 +11,8 @@
     angular.module('Taskboard.services')
         .factory('UserModel',
             [
-                '$sailsSocket', 'DataService', '_',
-                function($sailsSocket, DataService, _) {
+                '$sailsSocket', 'DataService',
+                function($sailsSocket, DataService) {
                     var endpoint = 'user';
                     var user = {};
                     var users = [];

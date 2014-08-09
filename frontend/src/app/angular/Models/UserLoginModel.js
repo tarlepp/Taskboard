@@ -12,10 +12,8 @@
         .factory('UserLoginModel',
             [
                 '$sailsSocket',
-                '_',
                 'DataService', 'BackendConfig',
                 function($sailsSocket,
-                         _,
                          DataService, BackendConfig
                 ) {
                     var endpoint = 'UserLogin';
