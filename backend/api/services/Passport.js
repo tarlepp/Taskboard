@@ -117,7 +117,7 @@ passport.connect = function(request, query, profile, next) {
                                     next(error);
                                 } else {
                                     // Fetch the user associated with the Passport
-                                    User.findOne(passport.user, next);
+                                    sails.models['user'].findOne(passport.user.id, next);
                                 }
                             });
                     }
