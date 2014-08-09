@@ -26,11 +26,13 @@
                     templateUrl: '/Taskboard/partials/Directives/Components/ActivityLog.html',
                     controller: [
                         '$scope', '$timeout', '$q',
-                        '_', 'SocketWhereCondition',
-                        'ListConfig', 'ListTitleItem', 'ActivityLog',
+                        '_',
+                        'SocketWhereCondition','ListConfig', 'ListTitleItem',
+                        'ActivityLogModel',
                         function($scope, $timeout, $q,
-                                 _, SocketWhereCondition,
-                                 ListConfig, ListTitleItem, ActivityLog
+                                 _,
+                                 SocketWhereCondition, ListConfig, ListTitleItem,
+                                 ActivityLogModel
                         ) {
                             // Add default list configuration, see the service for more detailed information
                             $scope = _.merge($scope, ListConfig.getDefault());
@@ -96,12 +98,12 @@
                                     sort: $scope.sort.column + ' ' + ($scope.sort.direction ? 'ASC' : 'DESC')
                                 };
 
-                                var count = ActivityLog.count(commonParameters)
+                                var count = ActivityLogModel.count(commonParameters)
                                     .then(function(response) {
                                         $scope.itemCount = response.data.count;
                                     });
 
-                                var load = ActivityLog.load(_.merge(commonParameters, getParameters))
+                                var load = ActivityLogModel.load(_.merge(commonParameters, getParameters))
                                     .then(function(response) {
                                         $scope.items = response.data;
                                     });

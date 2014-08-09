@@ -13,11 +13,13 @@
                     templateUrl: '/Taskboard/partials/Directives/Components/UserProjects.html',
                     controller: [
                         '$scope', '$timeout', '$q',
-                        '_', 'SocketWhereCondition', 'UserModel',
-                        'CurrentUser', 'UserRoles', 'Project', 'ListConfig', 'ListTitleItem',
+                        '_', 'SocketWhereCondition',
+                        'CurrentUser', 'UserRoles', 'ListConfig', 'ListTitleItem',
+                        'UserModel', 'ProjectModel',
                         function($scope, $timeout, $q,
-                                 _, SocketWhereCondition, UserModel,
-                                 CurrentUser, UserRoles, Project, ListConfig, ListTitleItem
+                                 _, SocketWhereCondition,
+                                 CurrentUser, UserRoles, ListConfig, ListTitleItem,
+                                 UserModel, ProjectModel
                         ) {
                             // Fetch specified user data
                             UserModel
@@ -51,6 +53,7 @@
                              * Helper function to return user role text on project.
                              *
                              * @todo Localization?
+                             * @todo Move this to service?
                              */
                             $scope.getUserRole = function(projectUsers) {
                                 var output = '';
@@ -119,14 +122,14 @@
                                     sort: $scope.sort.column + ' ' + ($scope.sort.direction ? 'ASC' : 'DESC')
                                 };
 
-                                var count = Project.count(commonParameters)
+                                var count = ProjectModel.count(commonParameters)
                                     .then(function(response) {
-                                        $scope.itemCount = response.data.count;
+                                        $scope.itemCount = response.count;
                                     });
 
-                                var load = Project.load(_.merge(commonParameters, getParameters))
+                                var load = ProjectModel.load(_.merge(commonParameters, getParameters))
                                     .then(function(response) {
-                                        $scope.items = response.data;
+                                        $scope.items = response;
                                     });
 
                                 $q

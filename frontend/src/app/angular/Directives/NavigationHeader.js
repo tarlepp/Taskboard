@@ -20,10 +20,10 @@
                 controller: [
                     '$scope', '$filter',
                     'CurrentUser', 'Auth', 'SharedData', 'ModalService', '_',
-                    'Project', 'Sprint',
+                    'ProjectModel', 'SprintModel',
                     function($scope, $filter,
                              CurrentUser, Auth, SharedData, ModalService, _,
-                             Project, Sprint
+                             ProjectModel, SprintModel
                     ) {
                         $scope.sharedData = SharedData.data;
                         $scope.user = CurrentUser.user;
@@ -139,8 +139,8 @@
                          */
                         $scope.getSprintTitle = function(sprint) {
                             var bits = [
-                                $filter('amDateFormat')(sprint.dateStart, 'L'),
-                                $filter('amDateFormat')(sprint.dateEnd, 'L'),
+                                $filter('amDateFormat')(sprint.dateStart, $scope.user().momentFormatDate),
+                                $filter('amDateFormat')(sprint.dateEnd, $scope.user().momentFormatDate),
                                 sprint.title
                             ];
 
@@ -158,9 +158,9 @@
                          */
                         $scope.$watch('user().id', function(valueNew) {
                             if (!_.isUndefined(valueNew)) {
-                                Project
+                                ProjectModel
                                     .load()
-                                    .success(function(projects) {
+                                    .then(function(projects) {
                                         $scope.projectSelectText = projects.length > 0 ?
                                             'Choose project to show' : 'No projects yet...';
 
@@ -183,9 +183,9 @@
                             $scope.sharedData.sprintId = 0;
 
                             if (valueNew !== valueOld) {
-                                Sprint
+                                SprintModel
                                     .load({projectId: valueNew})
-                                    .success(function(sprints) {
+                                    .then(function(sprints) {
                                         $scope.sprintSelectText = sprints.length > 0 ?
                                             'Choose sprint to show' : 'No sprints in this project';
 

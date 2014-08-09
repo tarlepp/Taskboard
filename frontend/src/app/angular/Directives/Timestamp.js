@@ -22,14 +22,22 @@
                 },
                 templateUrl: '/Taskboard/partials/Directives/Timestamp.html',
                 controller: [
-                    '$scope', 'CurrentUser', 'TimeZone', 'moment', 'rfc4122', '_',
-                    function($scope, CurrentUser, TimeZone, moment, rfc4122, _) {
+                    '$scope',
+                    'moment', 'rfc4122', '_',
+                    'CurrentUser',
+                    'TimeZoneModel',
+                    function($scope,
+                             moment, rfc4122, _,
+                             CurrentUser,
+                             TimeZoneModel
+                    ) {
                         $scope.id = rfc4122.v4();
                         $scope.user = CurrentUser.user();
                         $scope.stampObject = moment($scope.stamp);
                         $scope.stampObjectUtc = moment($scope.stamp).utc();
 
-                        TimeZone
+                        // Fetch timezones
+                        TimeZoneModel
                             .get()
                             .then(function(response) {
                                 $scope.timezones = response.data;

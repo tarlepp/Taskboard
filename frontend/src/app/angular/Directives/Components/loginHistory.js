@@ -32,11 +32,13 @@
                     templateUrl: '/Taskboard/partials/Directives/Components/LoginHistory.html',
                     controller: [
                         '$scope', '$timeout', '$q',
-                        '_', 'SocketWhereCondition',
-                        'CurrentUser', 'ListTitleItem', 'UserLogin',
+                        '_',
+                        'SocketWhereCondition', 'CurrentUser', 'ListTitleItem',
+                        'UserLoginModel',
                         function($scope, $timeout, $q,
-                                 _, SocketWhereCondition,
-                                 CurrentUser, ListTitleItem, UserLogin
+                                 _,
+                                 SocketWhereCondition, CurrentUser, ListTitleItem,
+                                 UserLoginModel
                         ) {
                             $scope.user = CurrentUser.user();
                             $scope.itemsPerPage = 15;
@@ -134,11 +136,13 @@
                                     _.each(result, function(data, key) {
                                         _.merge($scope.items[key], data);
                                     });
-                                }, function(error) {
+                                })
+                                .catch(function(error) {
+                                    console.log(error);
+                                })
+                                .finally(function() {
                                     $scope.loading = false;
                                     $scope.loaded = true;
-
-                                    console.log(error);
                                 });
 
                             /**
@@ -236,8 +240,8 @@
 
                                 $q
                                     .all({
-                                        count: UserLogin[item.methodCount](commonParameters),
-                                        items: UserLogin[item.methodLoad](_.merge(commonParameters, getParameters))
+                                        count: UserLoginModel[item.methodCount](commonParameters),
+                                        items: UserLoginModel[item.methodLoad](_.merge(commonParameters, getParameters))
                                     })
                                     .then(function(response) {
                                         deferred.resolve({items: response.items.data, itemCount: response.count.data.count});
