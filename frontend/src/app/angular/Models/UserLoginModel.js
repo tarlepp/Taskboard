@@ -9,7 +9,7 @@
     'use strict';
 
     angular.module('Taskboard.services')
-        .factory('UserLogin',
+        .factory('UserLoginModel',
             [
                 '$sailsSocket',
                 '_',

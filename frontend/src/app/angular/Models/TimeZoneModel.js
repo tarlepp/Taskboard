@@ -5,7 +5,7 @@
     'use strict';
 
     angular.module('Taskboard.services')
-        .factory('TimeZone',
+        .factory('TimeZoneModel',
             [
                 '$q', 'DataService',
                 function($q, DataService) {
@@ -23,8 +23,8 @@
                         } else {
                             return DataService
                                 .collection(endpoint, parameters)
-                                .success(function(response) {
-                                    timezones = response;
+                                .then(function(response) {
+                                    timezones = response.data;
 
                                     return timezones;
                                 });

@@ -9,7 +9,7 @@
     'use strict';
 
     angular.module('Taskboard.services')
-        .factory('Sprint',
+        .factory('SprintModel',
             [
                 '$sailsSocket', 'DataService', '_',
                 function($sailsSocket, DataService, _) {
@@ -39,15 +39,19 @@
                     // Subscribe to 'sprint' endpoint and attach event handlers to it
                     $sailsSocket
                         .subscribe(endpoint, function(message) {
-                            handlers[message.verb](message);
+                            if (handlers[message.verb]) {
+                                handlers[message.verb](message);
+                            } else {
+                                console.log('Implement handling for \'' + message.verb + '\' socket messages');
+                            }
                         });
 
                     // Load sprints from server
                     function load(parameters) {
                         return DataService
                             .collection(endpoint, parameters)
-                            .success(function(response) {
-                                sprints = response;
+                            .then(function(response) {
+                                sprints = response.data;
 
                                 return sprints;
                             });
@@ -57,16 +61,26 @@
                     function fetch(identifier, parameters) {
                         return DataService
                             .fetch(endpoint, identifier, parameters)
-                            .success(function(response) {
-                                sprint = response;
+                            .then(function(response) {
+                                sprint = response.data;
 
                                 return sprint;
                             });
                     }
 
+                    // Return count of sprints
+                    function count(parameters) {
+                        return DataService
+                            .count(endpoint, parameters)
+                            .then(function(response) {
+                                return response.data;
+                            });
+                    }
+
                     return {
                         load: load,
-                        fetch: fetch
+                        fetch: fetch,
+                        count: count
                     };
                 }
             ]

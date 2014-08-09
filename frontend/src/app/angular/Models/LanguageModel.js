@@ -5,7 +5,7 @@
     'use strict';
 
     angular.module('Taskboard.services')
-        .factory('Language',
+        .factory('LanguageModel',
             [
                 'DataService',
                 function(DataService) {
@@ -16,8 +16,8 @@
                     function get(parameters) {
                         return DataService
                             .collection(endpoint, parameters)
-                            .success(function(response) {
-                                languages = response;
+                            .then(function(response) {
+                                languages = response.data;
 
                                 return languages;
                             });

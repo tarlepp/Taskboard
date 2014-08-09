@@ -9,7 +9,7 @@
     'use strict';
 
     angular.module('Taskboard.services')
-        .factory('ActivityLog',
+        .factory('ActivityLogModel',
             [
                 'DataService',
                 function(DataService) {

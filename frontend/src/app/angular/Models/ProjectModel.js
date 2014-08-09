@@ -9,7 +9,7 @@
     'use strict';
 
     angular.module('Taskboard.services')
-        .factory('Project',
+        .factory('ProjectModel',
             [
                 '$sailsSocket', 'DataService', '_',
                 function($sailsSocket, DataService, _) {
@@ -39,15 +39,19 @@
                     // Subscribe to 'project' endpoint and attach event handlers to it
                     $sailsSocket
                         .subscribe(endpoint, function(message) {
-                            handlers[message.verb](message);
+                            if (handlers[message.verb]) {
+                                handlers[message.verb](message);
+                            } else {
+                                console.log('Implement handling for \'' + message.verb + '\' socket messages');
+                            }
                         });
 
                     // Load projects from server
                     function load(parameters) {
                         return DataService
                             .collection(endpoint, parameters)
-                            .success(function(response) {
-                                projects = response;
+                            .then(function(response) {
+                                projects = response.data;
 
                                 return projects;
                             });
@@ -57,8 +61,8 @@
                     function fetch(identifier, parameters) {
                         return DataService
                             .fetch(endpoint, identifier, parameters)
-                            .success(function(response) {
-                                project = response;
+                            .then(function(response) {
+                                project = response.data;
 
                                 return project;
                             });
@@ -68,8 +72,8 @@
                     function count(parameters) {
                         return DataService
                             .count(endpoint, parameters)
-                            .success(function(response) {
-                                return response;
+                            .then(function(response) {
+                                return response.data;
                             });
                     }
 
