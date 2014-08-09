@@ -33,11 +33,11 @@
                          user, timezones, languages
                 ) {
                     $scope.auth = Auth;
-                    $scope.languages = languages.data;
-                    $scope.timezones = timezones.data;
+                    $scope.languages = languages;
+                    $scope.timezones = timezones;
                     $scope.form = {};
                     $scope.objectName = 'User';
-                    $scope.objectId = user.data.id;
+                    $scope.objectId = user.id;
 
                     $scope.tabs = [
                         {
@@ -81,7 +81,7 @@
                     ];
 
                     $scope.reset = function() {
-                        $scope.user = angular.copy(user.data);
+                        $scope.user = angular.copy(user);
                     };
 
                     $scope.close = function() {

@@ -14,10 +14,12 @@
             [
                 '$modal', '$q', '$sailsSocket',
                 '_',
-                'BackendConfig', 'CurrentUser', 'TimeZone', 'Language',
+                'BackendConfig', 'CurrentUser',
+                'TimeZoneModel', 'LanguageModel', 'UserModel',
                 function($modal, $q, $sailsSocket,
                          _,
-                         BackendConfig, CurrentUser, TimeZone, Language
+                         BackendConfig, CurrentUser,
+                         TimeZoneModel, LanguageModel, UserModel
                 ) {
                     return {
                         /**
@@ -50,13 +52,13 @@
                                 size: 'lg',
                                 resolve: {
                                     user: function() {
-                                        return $sailsSocket.get(BackendConfig.url + '/User/' + userId);
+                                        return UserModel.fetch(userId);
                                     },
                                     timezones: function() {
-                                        return TimeZone.get();
+                                        return TimeZoneModel.get();
                                     },
                                     languages: function() {
-                                        return Language.get();
+                                        return LanguageModel.get();
                                     }
                                 }
                             });
