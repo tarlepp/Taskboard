@@ -50,8 +50,7 @@
   }
 }
 
-pre {
-  &.json {
+#prettyjson {
     background-color: #ffffff;
     border: none;
     padding: 0;
@@ -59,13 +58,26 @@ pre {
     text-align: left;
 
     span {
-      display: table-cell;
+      &.sep {
+        display: inline;
+
+        &:after {
+          content: '\A';
+        }
+
+        &:last-of-type {
+          &:before {
+            content: '\A';
+          }
+        }
+      }
 
       &.key {
-        padding-left: 20px;
+        padding-left: 10px;
+        padding-right: 3px;
       }
     }
-  }
+
 }
 
 .modal-body {
