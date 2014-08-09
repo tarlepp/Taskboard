@@ -13,22 +13,27 @@
                     templateUrl: '/Taskboard/partials/Directives/Components/UserProjects.html',
                     controller: [
                         '$scope', '$timeout', '$q',
-                        '_', 'SocketWhereCondition',
+                        '_', 'SocketWhereCondition', 'UserModel',
                         'CurrentUser', 'UserRoles', 'Project', 'ListConfig', 'ListTitleItem',
                         function($scope, $timeout, $q,
-                                 _, SocketWhereCondition,
+                                 _, SocketWhereCondition, UserModel,
                                  CurrentUser, UserRoles, Project, ListConfig, ListTitleItem
                         ) {
-                            // Todo: use $scope.userId to fetch user data
+                            // Fetch specified user data
+                            UserModel
+                                .fetch($scope.userId)
+                                .then(function(response) {
+                                    $scope.user = response;
+                                });
+
+                            // Store current user to scope
+                            $scope.currentUser = CurrentUser.user();
 
                             // Add default list configuration, see the service for more detailed information
                             $scope = _.merge($scope, ListConfig.getDefault());
 
                             // Initialize used title items
                             $scope.titleItems = ListTitleItem.getUserProject();
-
-                            // Store current user to scope
-                            $scope.user = CurrentUser.user();
 
                             // Initialize filter object
                             $scope.filters = {
@@ -97,11 +102,7 @@
                                 }
                             };
 
-                            /**
-                             * Function to fetch project data from server
-                             *
-                             * @todo: async.js?
-                             */
+                            // Function to fetch project data from server
                             $scope.fetchData = function() {
                                 $scope.loading = true;
 
@@ -112,25 +113,28 @@
 
                                 // Data query specified parameters
                                 var getParameters = {
+                                    populate: ['sprints', 'projectUsers'],
                                     limit: $scope.itemsPerPage,
                                     skip: ($scope.currentPage - 1) * $scope.itemsPerPage,
                                     sort: $scope.sort.column + ' ' + ($scope.sort.direction ? 'ASC' : 'DESC')
                                 };
 
-                                $q
-                                    .all({
-                                        count: Project.count(commonParameters),
-                                        items: Project.load(_.merge(commonParameters, getParameters))
-                                    })
+                                var count = Project.count(commonParameters)
                                     .then(function(response) {
-                                        $scope.itemCount = response.count.data.count;
-                                        $scope.items = response.items.data;
+                                        $scope.itemCount = response.data.count;
+                                    });
 
-                                        $scope.loaded = true;
-                                        $scope.loading = false;
-                                    }, function(error) {
+                                var load = Project.load(_.merge(commonParameters, getParameters))
+                                    .then(function(response) {
+                                        $scope.items = response.data;
+                                    });
+
+                                $q
+                                    .all([count, load])
+                                    .catch(function(error) {
                                         console.log(error);
-
+                                    })
+                                    .finally(function() {
                                         $scope.loaded = true;
                                         $scope.loading = false;
                                     });
