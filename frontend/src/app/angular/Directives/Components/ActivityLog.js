@@ -27,19 +27,16 @@
                     controller: [
                         '$scope', '$timeout', '$q',
                         '_', 'SocketWhereCondition',
-                        'CurrentUser', 'ListConfig', 'ListTitleItem', 'ActivityLog',
+                        'ListConfig', 'ListTitleItem', 'ActivityLog',
                         function($scope, $timeout, $q,
                                  _, SocketWhereCondition,
-                                 CurrentUser, ListConfig, ListTitleItem, ActivityLog
+                                 ListConfig, ListTitleItem, ActivityLog
                         ) {
                             // Add default list configuration, see the service for more detailed information
                             $scope = _.merge($scope, ListConfig.getDefault());
 
                             // Fetch used title items from service
                             $scope.titleItems = ListTitleItem.getUserActivityLog();
-
-                            // Store current user to scope
-                            $scope.user = CurrentUser.user();
 
                             // Initialize filter object
                             $scope.filters = {
@@ -99,20 +96,22 @@
                                     sort: $scope.sort.column + ' ' + ($scope.sort.direction ? 'ASC' : 'DESC')
                                 };
 
-                                $q
-                                    .all({
-                                        count: ActivityLog.count(commonParameters),
-                                        items: ActivityLog.load(_.merge(commonParameters, getParameters))
-                                    })
+                                var count = ActivityLog.count(commonParameters)
                                     .then(function(response) {
-                                        $scope.itemCount = response.count.data.count;
-                                        $scope.items = response.items.data;
+                                        $scope.itemCount = response.data.count;
+                                    });
 
-                                        $scope.loaded = true;
-                                        $scope.loading = false;
-                                    }, function(error) {
+                                var load = ActivityLog.load(_.merge(commonParameters, getParameters))
+                                    .then(function(response) {
+                                        $scope.items = response.data;
+                                    });
+
+                                $q
+                                    .all([count, load])
+                                    .catch(function(error) {
                                         console.log(error);
-
+                                    })
+                                    .finally(function() {
                                         $scope.loaded = true;
                                         $scope.loading = false;
                                     });
