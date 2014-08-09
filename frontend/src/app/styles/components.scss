@@ -42,10 +42,6 @@
 
     .qtip-content {
       padding: 0;
-
-      pre {
-        font-size: 10px;
-      }
     }
   }
 }
@@ -56,6 +52,8 @@
     padding: 0;
     outline: none;
     text-align: left;
+    font-size: 11px;
+    font-family: monospace;
 
     span {
       &.sep {
