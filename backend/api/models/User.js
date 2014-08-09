@@ -229,6 +229,10 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
             collection: 'Link',
             via:        'updatedUser'
         },
+        requests: {
+            collection: 'RequestLog',
+            via:        'user'
+        },
 
         // Dynamic data attributes
 
