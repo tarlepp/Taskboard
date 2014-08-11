@@ -38,6 +38,18 @@
                             } else {
                                 return {};
                             }
+                        },
+                        update: function(user) {
+                            if (Storage.get('auth_token')) {
+                                // Fetch current user auth data
+                                var authData = angular.fromJson(Storage.get('auth_token'));
+
+                                // Replace user object with new one
+                                authData.user = user;
+
+                                // Store
+                                Storage.set('auth_token', JSON.stringify(authData));
+                            }
                         }
                     };
                 }
