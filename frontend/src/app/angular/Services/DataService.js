@@ -85,6 +85,18 @@
                             parameters = parameters || {};
 
                             return $sailsSocket.get(parseEndPointUrl(endPoint, identifier), parseParameters(parameters));
+                        },
+
+                        /**
+                         * Service method to update specified end point object.
+                         *
+                         * @param   {string}    endPoint    Name of the end point
+                         * @param   {number}    identifier  Identifier of endpoint object
+                         * @param   {{}}        data        Data to update
+                         * @returns {Promise|*}
+                         */
+                        update: function(endPoint, identifier, data) {
+                            return $sailsSocket.post(parseEndPointUrl(endPoint, identifier), data);
                         }
                     };
                 }
