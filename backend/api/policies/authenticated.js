@@ -11,7 +11,7 @@
  * @returns {*}
  */
 module.exports = function(request, response, next) {
-    sails.log.verbose(' POLICY - api/policies/authenticated.js');
+    sails.log.verbose(' POLICY - ' + __filename);
 
     var token;
 

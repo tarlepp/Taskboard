@@ -26,7 +26,7 @@
 var passport = require('passport');
 
 module.exports = function(request, response, next) {
-    sails.log.verbose(' POLICY - api/policies/passport.js');
+    sails.log.verbose(' POLICY - ' + __filename);
 
     // Initialize Passport
     passport.initialize()(request, response, function() {
