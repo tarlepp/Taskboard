@@ -105,9 +105,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
                     index++;
 
                     // We have no difference so just call callback function with no parameters
-                    if (historyRow.message) {
-                        callback(null, historyData);
-                    } else if (_.isUndefined(difference)) {
+                    if (_.isUndefined(difference)) {
                         callback(null, null);
                     } else { // Yeah some difference found...
                         var differenceArray = [];
