@@ -27,7 +27,10 @@ module.exports.policies = {
     },
 
     UserController: {
-        '*': true,
-        //'findOne': ['passport', 'authenticated', 'isAdminOrUserItself']
+        '*':        false,
+        'find':     ['passport', 'authenticated', 'isSocket'],
+        'findOne':  ['passport', 'authenticated', 'isSocket', 'isAdminOrUserItself'],
+        'create':   ['passport', 'authenticated', 'isSocket', 'isAdmin', 'addDataCreate'],
+        'update':   ['passport', 'authenticated', 'isSocket', 'isAdminOrUserItself', 'addDataUpdate']
     }
 };
