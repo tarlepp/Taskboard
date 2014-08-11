@@ -26,10 +26,12 @@
         .controller('ModalUserProfileController',
             [
                 '$scope', '$interval', '$modalInstance',
-                'Auth', 'moment', '_',
+                'Auth', 'moment', '_', 'CurrentUser', 'Message',
+                'UserModel',
                 'user', 'timezones', 'languages',
                 function($scope, $interval, $modalInstance,
-                         Auth, moment, _,
+                         Auth, moment, _, CurrentUser, Message,
+                         UserModel,
                          user, timezones, languages
                 ) {
                     $scope.auth = Auth;
@@ -96,14 +98,24 @@
                         $scope.$broadcast('show-errors-check-validity');
 
                         if ($scope.form.userBasic.$valid && $scope.form.userLanguageRegion.$valid) {
-                            console.log('implement data save');
-                            console.log($scope.user);
+                            UserModel
+                                .update($scope.user.id, $scope.user)
+                                .then(function(response) {
+                                    user = response.data;
+
+                                    CurrentUser.update(user);
+
+                                    $scope.reset();
+                                    $scope.$broadcast('data-updated');
+
+                                    Message.success('User data updated successfully.');
+                                });
+
+                            if (close) {
+                                $scope.close();
+                            }
                         } else {
                             console.log('validation error');
-                        }
-
-                        if (close) {
-                            $scope.close();
                         }
                     };
 

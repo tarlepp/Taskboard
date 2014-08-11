@@ -59,10 +59,17 @@
                             });
                     }
 
+                    // Update of specified user
+                    function update(identifier, data) {
+                        return DataService
+                            .update(endpoint, identifier, data);
+                    }
+
                     return {
                         load: load,
                         fetch: fetch,
-                        count: count
+                        count: count,
+                        update: update
                     };
                 }
             ]
