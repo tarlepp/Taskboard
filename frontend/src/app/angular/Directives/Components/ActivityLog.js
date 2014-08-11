@@ -170,6 +170,13 @@
                             $scope.$watch('currentPage', function() {
                                 $scope.fetchData();
                             });
+
+                            /**
+                             * Data updated, so let's fetch data again.
+                             */
+                            $scope.$on('data-updated', function() {
+                                $scope.fetchData();
+                            });
                         }
                     ]
                 };

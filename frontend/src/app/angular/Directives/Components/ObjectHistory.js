@@ -37,7 +37,7 @@
                             $scope.user = CurrentUser.user();
                             $scope.items = [];
 
-                            $scope.loadData = function() {
+                            $scope.fetchData = function() {
                                 $scope.loading = true;
                                 $scope.loaded = false;
 
@@ -49,17 +49,25 @@
                                 $sailsSocket
                                     .get(BackendConfig.url + '/history/formattedHistory', {params: parameters})
                                     .then(function(response) {
-                                        $scope.loading = false;
-                                        $scope.loaded = true;
-
                                         $scope.items = response.data;
-                                    }, function() {
-                                        $scope.loading = false;
+                                    })
+                                    .catch(function(error) {
+                                        console.log(error);
+                                    })
+                                    .finally(function() {
                                         $scope.loaded = true;
+                                        $scope.loading = false;
                                     });
                             };
 
-                            $scope.loadData();
+                            $scope.fetchData();
+
+                            /**
+                             * Data updated, so let's fetch data again.
+                             */
+                            $scope.$on('data-updated', function() {
+                                $scope.fetchData();
+                            });
                         }
                     ]
                 };
