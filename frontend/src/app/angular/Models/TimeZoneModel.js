@@ -17,7 +17,7 @@
                         if (timezones.length > 0) {
                             var deferred = $q.defer();
 
-                            deferred.resolve({data: timezones});
+                            deferred.resolve(timezones);
 
                             return deferred.promise;
                         } else {

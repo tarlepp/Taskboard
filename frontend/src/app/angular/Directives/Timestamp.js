@@ -40,7 +40,7 @@
                         TimeZoneModel
                             .get()
                             .then(function(response) {
-                                $scope.timezones = response.data;
+                                $scope.timezones = response.data || response;
 
                                 $scope.userTimezone = _.find($scope.timezones, function(timezone) {
                                     return timezone.id === $scope.user.momentTimezone;
