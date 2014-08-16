@@ -212,9 +212,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
                  */
                 function(error, results) {
                     // Store history row data
-                    historyRow.data = _.groupBy(_.compact(results), function(result) {
-                        return result.changeType;
-                    });
+                    historyRow.data = _.compact(results);
 
                     next(error, historyRow);
                 }
