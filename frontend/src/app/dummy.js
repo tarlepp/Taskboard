@@ -25,6 +25,20 @@ var models = {
     }
 };
 
+var helpers = {
+    history: {
+        data: {
+            changeType:     '{String}',
+            column:         '{String}',
+            columnType:     '{String}',
+            valueIdNew:     '{String|Number|Boolean|Float|Null}',
+            valueIdOld:     '{String|Number|Boolean|Float|Null}',
+            valueNew:       '{String|Number|Boolean|Float|Null}',
+            valueOld:       '{String|Number|Boolean|Float|Null}'
+        }
+    }
+};
+
 var services = {
     ListConfig: {
         getDefault: {

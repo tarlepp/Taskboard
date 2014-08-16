@@ -44,6 +44,43 @@
       padding: 0;
     }
   }
+
+  &.tooltip-history {
+    max-width: 450px;
+    font-size: 11px;
+
+    .qtip-content {
+      padding: 5px;
+    }
+
+    .table {
+      margin: 0;
+      border: none;
+
+      & > tbody > tr > th {
+        @include text-shadow(1px, 1px, 5px, rgba(0, 0, 0, .3));
+        font-size: 14px;
+        line-height: 14px;
+        color: #446e9b;
+        text-shadow: 1px 1px 3px rgba(51, 51, 51, .3);
+        background-color: #efefef;
+        padding: 2px 5px;
+        border-top: 1px solid #dddddd;
+        border-bottom: 1px solid #dddddd;
+      }
+
+      & > tbody > tr > td {
+        font-family: monospace;
+        font-size: 12px;
+        line-height: 12px;
+      }
+
+      & > tbody > tr > td:first-of-type,
+      & > tbody > tr > td:last-of-type {
+        border: none;
+      }
+    }
+  }
 }
 
 #prettyjson {

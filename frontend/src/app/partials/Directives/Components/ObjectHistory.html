@@ -21,7 +21,14 @@
         </h4>
 
         <ul class="list-unstyled">
-            <li>{{item.message}}</li>
+            <li>{{item.message}}
+                <ul class="text-medium">
+                    <object-history-item
+                        data-ng-repeat="item in item.data"
+                        data-item="item"
+                    ></object-history-item>
+                </ul>
+            </li>
         </ul>
     </div>
 </div>
