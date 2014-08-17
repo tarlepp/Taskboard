@@ -37,13 +37,22 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
      * @param   {Response}  response    Response object
      */
     dataIp: function(request, response) {
-        var extraCriteria = {groupBy: ['ip'], sum: ['count']};
+        var extraCriteria = {
+            groupBy: ['ip'],
+            sum: ['count']
+        };
 
         sails.services['data'].getCollection(request, extraCriteria, function(error, items) {
             if (error) {
                 response.json(500, error);
             } else {
-                response.json(200, sails.services['data'].sortAndPaginate(items, request));
+                response.json(
+                    200,
+                    sails.services['data'].rejectNullItems(
+                        sails.services['data'].sortAndPaginate(items, request),
+                        'count'
+                    )
+                );
             }
         });
     },
@@ -73,13 +82,22 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
      * @param   {Response}  response    Response object
      */
     dataAgent: function(request, response) {
-        var extraCriteria = {groupBy: ['agent'], sum: ['count']};
+        var extraCriteria = {
+            groupBy: ['agent'],
+            sum: ['count']
+        };
 
         sails.services['data'].getCollection(request, extraCriteria, function(error, items) {
             if (error) {
                 response.json(500, error);
             } else {
-                response.json(200, sails.services['data'].sortAndPaginate(items, request));
+                response.json(
+                    200,
+                    sails.services['data'].rejectNullItems(
+                        sails.services['data'].sortAndPaginate(items, request),
+                        'count'
+                    )
+                );
             }
         });
     },
@@ -109,13 +127,22 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
      * @param   {Response}  response    Response object
      */
     dataBrowserFamily: function(request, response) {
-        var extraCriteria = {groupBy: ['browserFamily'], sum: ['count']};
+        var extraCriteria = {
+            groupBy: ['browserFamily'],
+            sum: ['count']
+        };
 
         sails.services['data'].getCollection(request, extraCriteria, function(error, items) {
             if (error) {
                 response.json(500, error);
             } else {
-                response.json(200, sails.services['data'].sortAndPaginate(items, request));
+                response.json(
+                    200,
+                    sails.services['data'].rejectNullItems(
+                        sails.services['data'].sortAndPaginate(items, request),
+                        'count'
+                    )
+                );
             }
         });
     },
@@ -145,13 +172,22 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
      * @param   {Response}  response    Response object
      */
     dataOsFamily: function(request, response) {
-        var extraCriteria = {groupBy: ['osFamily'], sum: ['count']};
+        var extraCriteria = {
+            groupBy: ['osFamily'],
+            sum: ['count']
+        };
 
         sails.services['data'].getCollection(request, extraCriteria, function(error, items) {
             if (error) {
                 response.json(500, error);
             } else {
-                response.json(200, sails.services['data'].sortAndPaginate(items, request));
+                response.json(
+                    200,
+                    sails.services['data'].rejectNullItems(
+                        sails.services['data'].sortAndPaginate(items, request),
+                        'count'
+                    )
+                );
             }
         });
     },
@@ -171,7 +207,10 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
      * @param   {Response}  response    Response object
      */
     countIp: function(request, response) {
-        var extraCriteria = {groupBy: ['ip'], sum: ['count']};
+        var extraCriteria = {
+            groupBy: ['ip'],
+            sum: ['count']
+        };
 
         sails.services['data'].getCollection(request, extraCriteria, function(error, items) {
             if (error) {
@@ -197,7 +236,10 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
      * @param   {Response}  response    Response object
      */
     countAgent: function(request, response) {
-        var extraCriteria = {groupBy: ['agent'], sum: ['count']};
+        var extraCriteria = {
+            groupBy: ['agent'],
+            sum: ['count']
+        };
 
         sails.services['data'].getCollection(request, extraCriteria, function(error, items) {
             if (error) {
@@ -223,7 +265,10 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
      * @param   {Response}  response    Response object
      */
     countBrowserFamily: function(request, response) {
-        var extraCriteria = {groupBy: ['browserFamily'], sum: ['count']};
+        var extraCriteria = {
+            groupBy: ['browserFamily'],
+            sum: ['count']
+        };
 
         sails.services['data'].getCollection(request, extraCriteria, function(error, items) {
             if (error) {
@@ -249,7 +294,10 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
      * @param   {Response}  response    Response object
      */
     countOsFamily: function(request, response) {
-        var extraCriteria = {groupBy: ['osFamily'], sum: ['count']};
+        var extraCriteria = {
+            groupBy: ['osFamily'],
+            sum: ['count']
+        };
 
         sails.services['data'].getCollection(request, extraCriteria, function(error, items) {
             if (error) {
