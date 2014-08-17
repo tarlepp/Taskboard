@@ -63,6 +63,22 @@ exports.sortAndPaginate = function(items, request) {
 };
 
 /**
+ * Helper service method to remove objects from array where specified key is null.
+ *
+ * @param   {{}[]}      items   Array of objects
+ * @param   {String}    nullKey Object key to check if null or not
+ *
+ * @returns {Array}             Array of objects that hasn't null on specified key
+ */
+exports.rejectNullItems = function(items, nullKey) {
+    items = _.reject(items, function(item) {
+        return _.isNull(item[nullKey]);
+    });
+
+    return items;
+};
+
+/**
  * Service method to fetch single user data from database.
  *
  * @param   {Number|Object} where           Used query conditions
