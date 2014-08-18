@@ -203,9 +203,6 @@
 
                                         item.items = data.items;
                                         item.itemCount = data.itemCount;
-                                    }, function() {
-                                        item.loading = false;
-                                        item.loaded = true;
                                     });
                             }
 
