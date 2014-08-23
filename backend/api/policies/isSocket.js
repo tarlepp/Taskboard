@@ -8,7 +8,7 @@
  * @param   {Function}  next        Callback function
  */
 module.exports = function(request, response, next) {
-    sails.log.verbose(' POLICY - ' + __filename);
+    sails.log.verbose(' POLICY - ' + __filename + ':' + __line);
 
     // Yeah, we have socket request
     if (request.isSocket) {

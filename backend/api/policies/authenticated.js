@@ -5,13 +5,14 @@
  * JWT tokens to validate that user is authenticated. If use is not authenticate policy
  * sends 401 response back to client.
  *
- * @param   {Request}   request
- * @param   {Response}  response
- * @param   {Function}  next
+ * @param   {Request}   request     Request object
+ * @param   {Response}  response    Response object
+ * @param   {Function}  next        Callback function
+ *
  * @returns {*}
  */
 module.exports = function(request, response, next) {
-    sails.log.verbose(' POLICY - ' + __filename);
+    sails.log.verbose(' POLICY - ' + __filename + ':' + __line);
 
     var token;
 

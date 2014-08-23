@@ -11,7 +11,7 @@ var _ = require('lodash');
  * @param   {Function}  next        Callback function
  */
 module.exports = function(request, response, next) {
-    sails.log.verbose(' POLICY - ' + __filename);
+    sails.log.verbose(' POLICY - ' + __filename + ':' + __line);
 
     if (request.token) {
         var itemsToRemove = [

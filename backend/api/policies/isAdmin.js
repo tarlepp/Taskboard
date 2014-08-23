@@ -9,7 +9,7 @@
  * @param   {Function}  next        Callback function
  */
 module.exports = function(request, response, next) {
-    sails.log.verbose(' POLICY - ' + __filename);
+    sails.log.verbose(' POLICY - ' + __filename + ':' + __line);
 
     // Token founded
     if (request.token) {

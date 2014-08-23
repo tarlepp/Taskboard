@@ -1,5 +1,7 @@
 'use strict';
 
+var passport = require('passport');
+
 /**
  * Passport Middleware
  *
@@ -23,10 +25,8 @@
  * @param   {Object}    response
  * @param   {Function}  next
  */
-var passport = require('passport');
-
 module.exports = function(request, response, next) {
-    sails.log.verbose(' POLICY - ' + __filename);
+    sails.log.verbose(' POLICY - ' + __filename + ':' + __line);
 
     // Initialize Passport
     passport.initialize()(request, response, function() {
