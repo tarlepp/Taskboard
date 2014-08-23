@@ -5,7 +5,35 @@
  *
  * Generic data service which contains helper functions for data fetching.
  */
+
 var actionUtil = require('sails/lib/hooks/blueprints/actionUtil');
+
+/**
+ * Helper data fetch function which will return a collection of specified property of
+ * specified model data.
+ *
+ * @param   {string}    modelName       Name of the model
+ * @param   {string}    propertyName    Property to get
+ * @param   {{}}        criteria        Find criteria object
+ * @param   {Function}  next            Callback function
+ */
+exports.getCollectionProperty = function(modelName, propertyName, criteria, next) {
+    sails.models[modelName]
+        .find()
+        .where(criteria)
+        .exec(function(error, results) {
+            if (error) {
+                sails.log.error(__filename + ':' + __line + ' [Failed to fetch model \'' + modelName + '\' property collection]');
+                sails.log.error(error);
+                
+                return next(error, null);
+            } else if (!results) {
+                return next(null, []);
+            } else {
+                return next(null, _.pluck(results, propertyName));
+            }
+        });
+};
 
 /**
  * Helper function to fetch generic data from database with sails.js. Note that
@@ -93,12 +121,12 @@ exports.getUser = function(where, next, noExistsCheck) {
         .populate('passports')
         .exec(function(error, /** sails.model.user */ user) {
             if (error) {
-                sails.log.error(__filename + ":" + __line + " [Failed to fetch user data]");
+                sails.log.error(__filename + ':' + __line + ' [Failed to fetch user data]');
                 sails.log.error(error);
             } else if (!user && !noExistsCheck) {
                 error = new Error();
 
-                error.message = "User not found.";
+                error.message = 'User not found.';
                 error.status = 404;
             }
 
@@ -120,12 +148,12 @@ exports.getPassport = function(where, next, noExistsCheck) {
         .findOne(where)
         .exec(function(error, /** sails.model.passport */ passport) {
             if (error) {
-                sails.log.error(__filename + ":" + __line + " [Failed to fetch passport data]");
+                sails.log.error(__filename + ':' + __line + ' [Failed to fetch passport data]');
                 sails.log.error(error);
             } else if (!passport && !noExistsCheck) {
                 error = new Error();
 
-                error.message = "Passport not found.";
+                error.message = 'Passport not found.';
                 error.status = 404;
             }
 

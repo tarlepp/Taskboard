@@ -32,5 +32,21 @@ module.exports.policies = {
         'findOne':  ['passport', 'authenticated', 'isSocket', 'isAdminOrUserItself'],
         'create':   ['passport', 'authenticated', 'isSocket', 'isAdmin', 'addDataCreate'],
         'update':   ['passport', 'authenticated', 'isSocket', 'isAdminOrUserItself', 'addDataUpdate']
+    },
+
+    ProjectController: {
+        '*':        false,
+        'find':     ['passport', 'authenticated', 'isSocket', 'objectRight'],
+        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRight'],
+        'create':   ['passport', 'authenticated', 'isSocket', 'addDataCreate'],
+        'update':   ['passport', 'authenticated', 'isSocket', 'addDataUpdate']
+    },
+
+    SprintController: {
+        '*':        false,
+        'find':     ['passport', 'authenticated', 'isSocket', 'objectRight'],
+        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRight'],
+        'create':   ['passport', 'authenticated', 'isSocket', 'addDataCreate'],
+        'update':   ['passport', 'authenticated', 'isSocket', 'addDataUpdate']
     }
 };
