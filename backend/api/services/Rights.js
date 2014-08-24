@@ -315,7 +315,7 @@ exports.makeObjectRightUserlogin = function(request, response, next) {
 exports.makeObjectRightGenericProject = function(request, response, property, next) {
     // Determine valid project ids for current user
     sails.services['data']
-        .getCollectionProperty('projectuser', 'project', {user: request.token}, function(error, projectIds) {
+        .getCollectionProperty('projectuser', 'project', {user: 1}, function(error, projectIds) {
             return sails.services['rights']
                 .makeObjectCondition(error, projectIds, property, request, response, next);
         });
@@ -502,16 +502,29 @@ exports.makeObjectCondition = function(error, validIds, property, request, respo
         return response.negotiate(error);
     }
 
+    // Determine populate, limit and skip attributes
+    var populate = request.param('populate');
+    var limit = request.param('limit');
+    var skip = request.param('skip');
+    var sort = request.param('sort');
+
+    sails.log.verbose('Original query object for model \'' + model + '\' is following:');
+    sails.log.verbose(request.query);
+
     // Remove existing query
     delete request.query;
 
-    // Set new query to request, that blueprints will use after this
+    // Set new query object to request, that blueprints will use after this
     request.query = {
-        where: where
+        where: where,
+        populate: populate,
+        limit: limit,
+        skip: skip,
+        sort: sort
     };
 
-    sails.log.verbose('Mutilated where object for model \'' + model + '\' is following:');
-    sails.log.verbose(where);
+    sails.log.verbose('Mutilated query object for model \'' + model + '\' is following:');
+    sails.log.verbose(request.query);
 
     return next();
 };
