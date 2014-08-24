@@ -315,7 +315,7 @@ exports.makeObjectRightUserlogin = function(request, response, next) {
 exports.makeObjectRightGenericProject = function(request, response, property, next) {
     // Determine valid project ids for current user
     sails.services['data']
-        .getCollectionProperty('projectuser', 'project', {user: 1}, function(error, projectIds) {
+        .getCollectionProperty('projectuser', 'project', {user: request.token}, function(error, projectIds) {
             return sails.services['rights']
                 .makeObjectCondition(error, projectIds, property, request, response, next);
         });
