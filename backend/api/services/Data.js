@@ -79,7 +79,7 @@ exports.getCollection = function(request, extraCriteria, next) {
 exports.sortAndPaginate = function(items, request) {
     var limit = actionUtil.parseLimit(request);
     var skip = actionUtil.parseSkip(request);
-    var sort = actionUtil.parseSort(request).split(' ');
+    var sort = !_.isUndefined(actionUtil.parseSort(request)) ? actionUtil.parseSort(request).split(' ') : ['id'];
 
     items = _.sortBy(items, sort[0]);
 
