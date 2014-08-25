@@ -28,54 +28,54 @@ module.exports.policies = {
 
     CommentController: {
         '*':        false,
-        'find':     ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'count':    ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'create':   ['passport', 'authenticated', 'isSocket', 'addDataCreate'],
-        'update':   ['passport', 'authenticated', 'isSocket', 'addDataUpdate']
+        'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'create':   ['passport', 'authenticated', 'isSocket', 'objectRightAdd', 'addDataCreate'],
+        'update':   ['passport', 'authenticated', 'isSocket', 'objectRightMod', 'addDataUpdate']
     },
 
     EpicController: {
         '*':        false,
-        'find':     ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'count':    ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'create':   ['passport', 'authenticated', 'isSocket', 'addDataCreate'],
-        'update':   ['passport', 'authenticated', 'isSocket', 'addDataUpdate']
+        'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'create':   ['passport', 'authenticated', 'isSocket', 'objectRightAdd', 'addDataCreate'],
+        'update':   ['passport', 'authenticated', 'isSocket', 'objectRightMod', 'addDataUpdate']
     },
 
     ExcludeSprintDayController: {
         '*':        false,
-        'find':     ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'count':    ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'create':   ['passport', 'authenticated', 'isSocket', 'addDataCreate'],
-        'update':   ['passport', 'authenticated', 'isSocket', 'addDataUpdate']
+        'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'create':   ['passport', 'authenticated', 'isSocket', 'objectRightAdd', 'addDataCreate'],
+        'update':   ['passport', 'authenticated', 'isSocket', 'objectRightMod', 'addDataUpdate']
     },
 
     ExternalLinkController: {
         '*':        false,
-        'find':     ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'count':    ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'create':   ['passport', 'authenticated', 'isSocket', 'addDataCreate'],
-        'update':   ['passport', 'authenticated', 'isSocket', 'addDataUpdate']
+        'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'create':   ['passport', 'authenticated', 'isSocket', 'objectRightAdd', 'addDataCreate'],
+        'update':   ['passport', 'authenticated', 'isSocket', 'objectRightMod', 'addDataUpdate']
     },
 
     FileController: {
         '*':        false,
-        'find':     ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'count':    ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'create':   ['passport', 'authenticated', 'isSocket', 'addDataCreate'],
-        'update':   ['passport', 'authenticated', 'isSocket', 'addDataUpdate']
+        'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'create':   ['passport', 'authenticated', 'isSocket', 'objectRightAdd', 'addDataCreate'],
+        'update':   ['passport', 'authenticated', 'isSocket', 'objectRightMod', 'addDataUpdate']
     },
 
     HistoryController: {
         '*':                false,
-        'find':             ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'findOne':          ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'count':            ['passport', 'authenticated', 'isSocket', 'objectRight'],
+        'find':             ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'findOne':          ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'count':            ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'create':           false,
         'update':           false,
         'formattedHistory': ['passport', 'authenticated', 'isSocket']
@@ -83,92 +83,92 @@ module.exports.policies = {
 
     LanguageController: {
         '*':        false,
-        'find':     ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'count':    ['passport', 'authenticated', 'isSocket', 'objectRight'],
+        'find':     ['passport', 'authenticated', 'isSocket'],
+        'findOne':  ['passport', 'authenticated', 'isSocket'],
+        'count':    ['passport', 'authenticated', 'isSocket'],
         'create':   ['passport', 'authenticated', 'isSocket', 'isAdmin', 'addDataCreate'],
         'update':   ['passport', 'authenticated', 'isSocket', 'isAdmin', 'addDataUpdate']
     },
 
     LinkController: {
         '*':        false,
-        'find':     ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'count':    ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'create':   ['passport', 'authenticated', 'isSocket', 'addDataCreate'],
-        'update':   ['passport', 'authenticated', 'isSocket', 'addDataUpdate']
+        'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'create':   ['passport', 'authenticated', 'isSocket', 'objectRightAdd', 'addDataCreate'],
+        'update':   ['passport', 'authenticated', 'isSocket', 'objectRightMod', 'addDataUpdate']
     },
 
     MilestoneController: {
         '*':        false,
-        'find':     ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'count':    ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'create':   ['passport', 'authenticated', 'isSocket', 'addDataCreate'],
-        'update':   ['passport', 'authenticated', 'isSocket', 'addDataUpdate']
+        'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'create':   ['passport', 'authenticated', 'isSocket', 'objectRightAdd', 'addDataCreate'],
+        'update':   ['passport', 'authenticated', 'isSocket', 'objectRightMod', 'addDataUpdate']
     },
 
     PhaseController: {
         '*':        false,
-        'find':     ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'count':    ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'create':   ['passport', 'authenticated', 'isSocket', 'addDataCreate'],
-        'update':   ['passport', 'authenticated', 'isSocket', 'addDataUpdate']
+        'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'create':   ['passport', 'authenticated', 'isSocket', 'objectRightAdd', 'addDataCreate'],
+        'update':   ['passport', 'authenticated', 'isSocket', 'objectRightMod', 'addDataUpdate']
     },
 
     ProjectController: {
         '*':        false,
-        'find':     ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'count':    ['passport', 'authenticated', 'isSocket', 'objectRight'],
+        'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'create':   ['passport', 'authenticated', 'isSocket', 'addDataCreate'],
-        'update':   ['passport', 'authenticated', 'isSocket', 'addDataUpdate']
+        'update':   ['passport', 'authenticated', 'isSocket', 'objectRightMod', 'addDataUpdate']
     },
 
     ProjectUserController: {
         '*':        false,
-        'find':     ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'count':    ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'create':   ['passport', 'authenticated', 'isSocket', 'addDataCreate'],
-        'update':   ['passport', 'authenticated', 'isSocket', 'addDataUpdate']
+        'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'create':   ['passport', 'authenticated', 'isSocket', 'objectRightAdd', 'addDataCreate'],
+        'update':   ['passport', 'authenticated', 'isSocket', 'objectRightMod', 'addDataUpdate']
     },
 
     SprintController: {
         '*':        false,
-        'find':     ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'count':    ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'create':   ['passport', 'authenticated', 'isSocket', 'addDataCreate'],
-        'update':   ['passport', 'authenticated', 'isSocket', 'addDataUpdate']
+        'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'create':   ['passport', 'authenticated', 'isSocket', 'objectRightAdd', 'addDataCreate'],
+        'update':   ['passport', 'authenticated', 'isSocket', 'objectRightMod', 'addDataUpdate']
     },
 
     StoryController: {
         '*':        false,
-        'find':     ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'count':    ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'create':   ['passport', 'authenticated', 'isSocket', 'addDataCreate'],
-        'update':   ['passport', 'authenticated', 'isSocket', 'addDataUpdate']
+        'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'create':   ['passport', 'authenticated', 'isSocket', 'objectRightAdd', 'addDataCreate'],
+        'update':   ['passport', 'authenticated', 'isSocket', 'objectRightMod', 'addDataUpdate']
     },
 
     TaskController: {
         '*':        false,
-        'find':     ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'count':    ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'create':   ['passport', 'authenticated', 'isSocket', 'addDataCreate'],
-        'update':   ['passport', 'authenticated', 'isSocket', 'addDataUpdate']
+        'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'create':   ['passport', 'authenticated', 'isSocket', 'objectRightAdd', 'addDataCreate'],
+        'update':   ['passport', 'authenticated', 'isSocket', 'objectRightMod', 'addDataUpdate']
     },
 
     TaskTypeController: {
         '*':        false,
-        'find':     ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'count':    ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'create':   ['passport', 'authenticated', 'isSocket', 'addDataCreate'],
-        'update':   ['passport', 'authenticated', 'isSocket', 'addDataUpdate']
+        'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'create':   ['passport', 'authenticated', 'isSocket', 'objectRightAdd', 'addDataCreate'],
+        'update':   ['passport', 'authenticated', 'isSocket', 'objectRightMod', 'addDataUpdate']
     },
 
     TimezoneController: {
@@ -178,27 +178,27 @@ module.exports.policies = {
 
     UserController: {
         '*':        false,
-        'find':     ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRight', 'isAdminOrUserItself'],
-        'count':    ['passport', 'authenticated', 'isSocket', 'objectRight'],
+        'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet', 'isAdminOrUserItself'],
+        'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'create':   ['passport', 'authenticated', 'isSocket', 'isAdmin', 'addDataCreate'],
         'update':   ['passport', 'authenticated', 'isSocket', 'isAdminOrUserItself', 'addDataUpdate']
     },
 
     UserLoginController: {
         '*':                    true,
-        'find':                 ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'findOne':              ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'count':                ['passport', 'authenticated', 'isSocket', 'objectRight'],
+        'find':                 ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'findOne':              ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'count':                ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'create':               false,
         'update':               false,
-        'dataIp':               ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'dataAgent':            ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'dataBrowserFamily':    ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'dataOsFamily':         ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'countIp':              ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'countAgent':           ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'countBrowserFamily':   ['passport', 'authenticated', 'isSocket', 'objectRight'],
-        'countOsFamily':        ['passport', 'authenticated', 'isSocket', 'objectRight']
+        'dataIp':               ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'dataAgent':            ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'dataBrowserFamily':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'dataOsFamily':         ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'countIp':              ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'countAgent':           ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'countBrowserFamily':   ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
+        'countOsFamily':        ['passport', 'authenticated', 'isSocket', 'objectRightGet']
     }
 };
