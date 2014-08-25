@@ -42,14 +42,14 @@ module.exports = function(request, response, next) {
 
     // Determine model and method name
     var model = request.options.model || request.options.controller;
-    var method = 'makeObjectRight' + model.charAt(0).toUpperCase() + model.slice(1);
+    var method = 'makeObjectRightGet' + model.charAt(0).toUpperCase() + model.slice(1);
 
     // Yeah we found actual policy service function
-    if (typeof sails.services['rights'][method] === 'function') {
-        return sails.services['rights'][method](request, response, next);
+    if (typeof sails.services['rightsget'][method] === 'function') {
+        return sails.services['rightsget'][method](request, response, next);
     } else { // Oh noes, is this ok or not?
-        var message = 'There is not object specified right handling for \'' + model + '\' model. '
-            + 'Please \'' + method + '\' method this to \'Rights\' service.'
+        var message = 'There is not object specified get right handling for \'' + model + '\' model. '
+            + 'Please \'' + method + '\' method this to \'RightsGet\' service.'
         ;
 
         sails.log.warn(message);
