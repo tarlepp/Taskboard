@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * /api/services/Rights.js
+ * /api/services/RightsGet.js
  *
  * Generic rights service which contains functions to restrict users access only
  * to specified objects on each model. Note that these functions will restrict
@@ -18,11 +18,13 @@ var actionUtil = require('sails/lib/hooks/blueprints/actionUtil');
  * @param   {Request}   request     Request object
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function
+ *
+ * @returns {*}
  */
-exports.makeObjectRightComment = function(request, response, next) {
+exports.makeObjectRightGetComment = function(request, response, next) {
     sails.log.verbose('RIGHT - ' + __filename + ':' + __line);
 
-    return sails.services['rights']
+    return sails.services['rightsget']
         .makeObjectRightGenericDynamic(request, response, next);
 };
 
@@ -34,10 +36,10 @@ exports.makeObjectRightComment = function(request, response, next) {
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function
  */
-exports.makeObjectRightEpic = function(request, response, next) {
+exports.makeObjectRightGetEpic = function(request, response, next) {
     sails.log.verbose('RIGHT - ' + __filename + ':' + __line);
 
-    return sails.services['rights']
+    return sails.services['rightsget']
         .makeObjectRightGenericProject(request, response, 'project', next);
 };
 
@@ -49,10 +51,10 @@ exports.makeObjectRightEpic = function(request, response, next) {
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function
  */
-exports.makeObjectRightExcludesprintday = function(request, response, next) {
+exports.makeObjectRightGetExcludesprintday = function(request, response, next) {
     sails.log.verbose('RIGHT - ' + __filename + ':' + __line);
 
-    return sails.services['rights']
+    return sails.services['rightsget']
         .makeObjectRightGenericSprint(request, response, 'sprint', next);
 };
 
@@ -64,10 +66,10 @@ exports.makeObjectRightExcludesprintday = function(request, response, next) {
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function
  */
-exports.makeObjectRightExternallink = function(request, response, next) {
+exports.makeObjectRightGetExternallink = function(request, response, next) {
     sails.log.verbose('RIGHT - ' + __filename + ':' + __line);
 
-    return sails.services['rights']
+    return sails.services['rightsget']
         .makeObjectRightGenericProject(request, response, 'project', next);
 };
 
@@ -79,10 +81,10 @@ exports.makeObjectRightExternallink = function(request, response, next) {
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function
  */
-exports.makeObjectRightFile = function(request, response, next) {
+exports.makeObjectRightGetFile = function(request, response, next) {
     sails.log.verbose('RIGHT - ' + __filename + ':' + __line);
 
-    return sails.services['rights']
+    return sails.services['rightsget']
         .makeObjectRightGenericDynamic(request, response, next);
 };
 
@@ -94,26 +96,11 @@ exports.makeObjectRightFile = function(request, response, next) {
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function
  */
-exports.makeObjectRightHistory = function(request, response, next) {
+exports.makeObjectRightGetHistory = function(request, response, next) {
     sails.log.verbose('RIGHT - ' + __filename + ':' + __line);
 
-    return sails.services['rights']
+    return sails.services['rightsget']
         .makeObjectRightGenericDynamic(request, response, next);
-};
-
-/**
- * Service function which adds necessary object specified conditions for
- * Language model queries. This model doesn't contain any sensitive data
- * so there is not a row specified right checks.
- *
- * @param   {Request}   request     Request object
- * @param   {Response}  response    Response object
- * @param   {Function}  next        Callback function
- */
-exports.makeObjectRightLanguage = function(request, response, next) {
-    sails.log.verbose('RIGHT - ' + __filename + ':' + __line);
-
-    return next();
 };
 
 /**
@@ -124,10 +111,10 @@ exports.makeObjectRightLanguage = function(request, response, next) {
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function
  */
-exports.makeObjectRightLink = function(request, response, next) {
+exports.makeObjectRightGetLink = function(request, response, next) {
     sails.log.verbose('RIGHT - ' + __filename + ':' + __line);
 
-    return sails.services['rights']
+    return sails.services['rightsget']
         .makeObjectRightGenericDynamic(request, response, next);
 };
 
@@ -139,10 +126,10 @@ exports.makeObjectRightLink = function(request, response, next) {
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function
  */
-exports.makeObjectRightMilestone = function(request, response, next) {
+exports.makeObjectRightGetMilestone = function(request, response, next) {
     sails.log.verbose('RIGHT - ' + __filename + ':' + __line);
 
-    return sails.services['rights']
+    return sails.services['rightsget']
         .makeObjectRightGenericProject(request, response, 'project', next);
 };
 
@@ -154,10 +141,10 @@ exports.makeObjectRightMilestone = function(request, response, next) {
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function
  */
-exports.makeObjectRightPhase = function(request, response, next) {
+exports.makeObjectRightGetPhase = function(request, response, next) {
     sails.log.verbose('RIGHT - ' + __filename + ':' + __line);
 
-    return sails.services['rights']
+    return sails.services['rightsget']
         .makeObjectRightGenericProject(request, response, 'project', next);
 };
 
@@ -169,10 +156,10 @@ exports.makeObjectRightPhase = function(request, response, next) {
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function
  */
-exports.makeObjectRightProject = function(request, response, next) {
+exports.makeObjectRightGetProject = function(request, response, next) {
     sails.log.verbose('RIGHT - ' + __filename + ':' + __line);
 
-    return sails.services['rights']
+    return sails.services['rightsget']
         .makeObjectRightGenericProject(request, response, 'id', next);
 };
 
@@ -184,10 +171,10 @@ exports.makeObjectRightProject = function(request, response, next) {
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function
  */
-exports.makeObjectRightProjectuser = function(request, response, next) {
+exports.makeObjectRightGetProjectuser = function(request, response, next) {
     sails.log.verbose('RIGHT - ' + __filename + ':' + __line);
 
-    return sails.services['rights']
+    return sails.services['rightsget']
         .makeObjectRightGenericProject(request, response, 'id', next);
 };
 
@@ -199,10 +186,10 @@ exports.makeObjectRightProjectuser = function(request, response, next) {
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function
  */
-exports.makeObjectRightSprint = function(request, response, next) {
+exports.makeObjectRightGetSprint = function(request, response, next) {
     sails.log.verbose('RIGHT - ' + __filename + ':' + __line);
 
-    return sails.services['rights']
+    return sails.services['rightsget']
         .makeObjectRightGenericProject(request, response, 'project', next);
 };
 
@@ -214,10 +201,10 @@ exports.makeObjectRightSprint = function(request, response, next) {
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function
  */
-exports.makeObjectRightStory = function(request, response, next) {
+exports.makeObjectRightGetStory = function(request, response, next) {
     sails.log.verbose('RIGHT - ' + __filename + ':' + __line);
 
-    return sails.services['rights']
+    return sails.services['rightsget']
         .makeObjectRightGenericProject(request, response, 'project', next);
 };
 
@@ -229,10 +216,10 @@ exports.makeObjectRightStory = function(request, response, next) {
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function
  */
-exports.makeObjectRightTask = function(request, response, next) {
+exports.makeObjectRightGetTask = function(request, response, next) {
     sails.log.verbose('RIGHT - ' + __filename + ':' + __line);
 
-    return sails.services['rights']
+    return sails.services['rightsget']
         .makeObjectRightGenericStory(request, response, 'story', next);
 };
 
@@ -244,10 +231,10 @@ exports.makeObjectRightTask = function(request, response, next) {
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function
  */
-exports.makeObjectRightTasktype = function(request, response, next) {
+exports.makeObjectRightGetTasktype = function(request, response, next) {
     sails.log.verbose('RIGHT - ' + __filename + ':' + __line);
 
-    return sails.services['rights']
+    return sails.services['rightsget']
         .makeObjectRightGenericProject(request, response, 'project', next);
 };
 
@@ -259,10 +246,10 @@ exports.makeObjectRightTasktype = function(request, response, next) {
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function
  */
-exports.makeObjectRightUser = function(request, response, next) {
+exports.makeObjectRightGetUser = function(request, response, next) {
     sails.log.verbose('RIGHT - ' + __filename + ':' + __line);
 
-    return sails.services['rights']
+    return sails.services['rightsget']
         .makeObjectRightGenericUser(request, response, 'id', next);
 };
 
@@ -274,10 +261,10 @@ exports.makeObjectRightUser = function(request, response, next) {
  * @param   {Response}  response    Response object
  * @param   {Function}  next        Callback function
  */
-exports.makeObjectRightUserlogin = function(request, response, next) {
+exports.makeObjectRightGetUserlogin = function(request, response, next) {
     sails.log.verbose('RIGHT - ' + __filename + ':' + __line);
 
-    return sails.services['rights']
+    return sails.services['rightsget']
         .makeObjectRightGenericUser(request, response, 'user', next);
 };
 
@@ -295,17 +282,17 @@ exports.makeObjectRightUserlogin = function(request, response, next) {
  *      - if 'project' property exists in query remove not valid projects
  *      - if not add 'project' property to query with valid projects
  *
- * This helper function is called from following 'makeObjectRight*' functions,
+ * This helper function is called from following 'makeObjectRightGet*' functions,
  * because all of those models contains directly project id attribute.
- *  - makeObjectRightEpic
- *  - makeObjectRightExternallink
- *  - makeObjectRightMilestone
- *  - makeObjectRightPhase
- *  - makeObjectRightProject
- *  - makeObjectRightProjectuser
- *  - makeObjectRightSprint
- *  - makeObjectRightStory
- *  - makeObjectRightTasktype
+ *  - makeObjectRightGetEpic
+ *  - makeObjectRightGetExternallink
+ *  - makeObjectRightGetMilestone
+ *  - makeObjectRightGetPhase
+ *  - makeObjectRightGetProject
+ *  - makeObjectRightGetProjectuser
+ *  - makeObjectRightGetSprint
+ *  - makeObjectRightGetStory
+ *  - makeObjectRightGetTasktype
  *
  * @param   {Request}   request     Request object
  * @param   {Response}  response    Response object
@@ -316,7 +303,7 @@ exports.makeObjectRightGenericProject = function(request, response, property, ne
     // Determine valid project ids for current user
     sails.services['data']
         .getCollectionProperty('projectuser', 'project', {user: request.token}, function(error, projectIds) {
-            return sails.services['rights']
+            return sails.services['rightsget']
                 .makeObjectCondition(error, projectIds, property, request, response, next);
         });
 };
@@ -332,9 +319,9 @@ exports.makeObjectRightGenericProject = function(request, response, property, ne
  *      - if 'sprint' property exists in query remove not valid sprints
  *      - if not add 'sprint' property to query with valid sprints
  *
- * This helper function is called from following 'makeObjectRight*' functions,
+ * This helper function is called from following 'makeObjectRightGet*' functions,
  * because all of those models contains directly sprint id attribute.
- *  - makeObjectRightExcludesprintday
+ *  - makeObjectRightGetExcludesprintday
  *
  * @param   {Request}   request     Request object
  * @param   {Response}  response    Response object
@@ -351,7 +338,7 @@ exports.makeObjectRightGenericSprint = function(request, response, property, nex
                 // Determine sprint ids for current user
                 return sails.services['data']
                     .getCollectionProperty('sprint', 'id', {project: projectIds}, function(error, sprintIds) {
-                        return sails.services['rights']
+                        return sails.services['rightsget']
                             .makeObjectCondition(error, sprintIds, property, request, response, next);
                     });
             }
@@ -369,9 +356,9 @@ exports.makeObjectRightGenericSprint = function(request, response, property, nex
  *      - if 'story' property exists in query remove not valid stories
  *      - if not add 'story' property to query with valid stories
  *
- * This helper function is called from following 'makeObjectRight*' functions,
+ * This helper function is called from following 'makeObjectRightGet*' functions,
  * because all of those models contains directly story id attribute.
- *  - makeObjectRightTask
+ *  - makeObjectRightGetTask
  *
  * @param   {Request}   request     Request object
  * @param   {Response}  response    Response object
@@ -388,7 +375,7 @@ exports.makeObjectRightGenericStory = function(request, response, property, next
                 // Determine sprint ids for current user
                 return sails.services['data']
                     .getCollectionProperty('story', 'id', {project: projectIds}, function(error, storyIds) {
-                        return sails.services['rights']
+                        return sails.services['rightsget']
                             .makeObjectCondition(error, storyIds, property, request, response, next);
                     });
             }
@@ -406,9 +393,9 @@ exports.makeObjectRightGenericStory = function(request, response, property, next
  *      - if 'user' property exists in query remove not valid users
  *      - if not add 'user' property to query with valid users
  *
- * This helper function is called from following 'makeObjectRight*' functions,
+ * This helper function is called from following 'makeObjectRightGet*' functions,
  * because all of those models contains directly user id attribute.
- *  - makeObjectRightUser
+ *  - makeObjectRightGetUser
  *
  * @param   {Request}   request     Request object
  * @param   {Response}  response    Response object
@@ -425,7 +412,7 @@ exports.makeObjectRightGenericUser = function(request, response, property, next)
                 // Determine sprint ids for current user
                 return sails.services['data']
                     .getCollectionProperty('projectuser', 'user', {project: projectIds}, function(error, userIds) {
-                        return sails.services['rights']
+                        return sails.services['rightsget']
                             .makeObjectCondition(error, userIds, property, request, response, next);
                     });
             }
@@ -440,12 +427,12 @@ exports.makeObjectRightGenericUser = function(request, response, property, next)
  * Workflow with this is following:
  *  todo figure this out...
  *
- * This helper function is called from following 'makeObjectRight*' functions,
+ * This helper function is called from following 'makeObjectRightGet*' functions,
  * because all of those models contains 'objectName' and 'objectId' attributes
- *  - makeObjectRightComment
- *  - makeObjectRightFile
- *  - makeObjectRightHistory
- *  - makeObjectRightLink
+ *  - makeObjectRightGetComment
+ *  - makeObjectRightGetFile
+ *  - makeObjectRightGetHistory
+ *  - makeObjectRightGetLink
  *
  * @param   {Request}   request     Request object
  * @param   {Response}  response    Response object
@@ -487,7 +474,7 @@ exports.makeObjectCondition = function(error, validIds, property, request, respo
     sails.log.verbose('Founded following valid ids \'' + validIds.join(', ') + '\' for model \'' + model + '\'.');
 
     // Make where condition against specified model property with determined id values
-    var where = sails.services['rights']
+    var where = sails.services['rightsget']
         .makeConditionValidProperty(validIds, property, request);
 
     // There is no "valid" property values so we need to send 404 back to client
