@@ -1,46 +1,60 @@
 /**
- * Controller for user profile which is shown on modal. This controller needs following data
- * to be resolved before usage:
- *
- *  1)  user, either current user or specified user object
- *  2)  timezones, Promise of TimeZone factory .get() method
- *  3)  languages, Promise of Language factory .get() method
- *
- * Modal will contain all information about specified user, all of those are shown on our tabs
- * on modal. Data which is shown is following:
- *
- *  1)  Basic (user basic data)
- *  2)  Language and region
- *  3)  Password change
- *  4)  Projects where user is in some role
- *  5)  Activity log (what user has done lately)
- *  6)  Login history
- *  7)  User object history
- *
- * @todo    Move tabs configuration to service
+ * This file contains controller definitions for user modals. These controllers are for
+ * following use cases:
+ *  1) User profile edit
+ *  2) User profile add
+ *  3) Users list, just for admin users
  */
 (function() {
     'use strict';
 
+    /**
+     * Controller for user profile which is shown on modal. This controller needs following data
+     * to be resolved before usage:
+     *
+     *  1)  user, either current user or specified user object
+     *  2)  timezones, Promise of TimeZone factory .get() method
+     *  3)  languages, Promise of Language factory .get() method
+     *
+     * Modal will contain all information about specified user, all of those are shown on our tabs
+     * on modal. Data which is shown is following:
+     *
+     *  1)  Basic (user basic data)
+     *  2)  Language and region
+     *  3)  Password change
+     *  4)  Projects where user is in some role
+     *  5)  Activity log (what user has done lately)
+     *  6)  Login history
+     *  7)  User object history
+     *
+     * @todo    Move tabs configuration to service
+     */
     angular.module('Taskboard.controllers')
         .controller('ModalUserProfileController',
             [
                 '$scope', '$interval', '$modalInstance',
                 'Auth', 'moment', '_', 'CurrentUser', 'Message',
                 'UserModel',
-                'user', 'timezones', 'languages',
+                '_user', '_timezones', '_languages',
                 function($scope, $interval, $modalInstance,
                          Auth, moment, _, CurrentUser, Message,
                          UserModel,
-                         user, timezones, languages
+                         _user, _timezones, _languages
                 ) {
+                    // Init necessary scope attributes
                     $scope.auth = Auth;
-                    $scope.languages = languages;
-                    $scope.timezones = timezones;
-                    $scope.form = {};
+                    $scope.languages = _languages;
+                    $scope.timezones = _timezones;
                     $scope.objectName = 'User';
-                    $scope.objectId = user.id;
+                    $scope.objectId = _user.id;
+                    $scope.passwordNew = '';
+                    $scope.passwordCheck = '';
+                    $scope.form = {
+                        userBasic: {},
+                        userLanguageRegion: {}
+                    };
 
+                    // Specify tabs
                     $scope.tabs = [
                         {
                             title: 'Basic',
@@ -83,7 +97,7 @@
                     ];
 
                     $scope.reset = function() {
-                        $scope.user = angular.copy(user);
+                        $scope.user = angular.copy(_user);
                     };
 
                     $scope.close = function() {
@@ -101,9 +115,9 @@
                             UserModel
                                 .update($scope.user.id, $scope.user)
                                 .then(function(response) {
-                                    user = response.data;
+                                    _user = response.data;
 
-                                    CurrentUser.update(user);
+                                    CurrentUser.update(_user);
 
                                     $scope.reset();
                                     $scope.$broadcast('data-updated');
@@ -128,7 +142,7 @@
                     };
 
                     $scope.$watch('user', function(valueNew) {
-                        $scope.formChanged = !_.isEqual(valueNew, user);
+                        $scope.formChanged = !_.isEqual(valueNew, _user);
                     }, true);
 
                     $scope.$watch('user.language', function(valueNew) {
@@ -151,9 +165,6 @@
                         $scope.momentTime = now.format($scope.user.momentFormatTime);
                         $scope.momentDateTime = now.format($scope.user.momentFormatDateTime);
                     }
-
-                    $scope.passwordNew = '';
-                    $scope.passwordCheck = '';
 
                     $scope.reset();
                 }

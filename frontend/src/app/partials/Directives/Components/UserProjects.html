@@ -82,7 +82,7 @@
                         >
                             <ul class="action-menu">
                                 <li>
-                                    <a data-ng-click="openProjectEdit(project.id)">
+                                    <a data-ng-click="modalService.projectEdit(project.id)">
                                         <i class="fa fa-wrench"></i>
                                         Edit project
                                     </a>
@@ -90,7 +90,7 @@
                                 <li class="divider"></li>
                                 <li>
                                     <a class="text-danger"
-                                        data-ng-click="deleteProject(project.id)"
+                                        data-ng-click="modalService.projectDelete((project.id)"
                                     >
                                         <i class="fa fa-trash-o"></i>
                                         Delete project

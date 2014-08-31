@@ -14,10 +14,12 @@
                     controller: [
                         '$scope', '$timeout', '$q',
                         '_', 'SocketWhereCondition',
+                        'ModalService',
                         'CurrentUser', 'UserRoles', 'ListConfig', 'ListTitleItem',
                         'UserModel', 'ProjectModel',
                         function($scope, $timeout, $q,
                                  _, SocketWhereCondition,
+                                 ModalService,
                                  CurrentUser, UserRoles, ListConfig, ListTitleItem,
                                  UserModel, ProjectModel
                         ) {
@@ -27,6 +29,8 @@
                                 .then(function(response) {
                                     $scope.user = response;
                                 });
+
+                            $scope.modalService = ModalService;
 
                             // Store current user to scope
                             $scope.currentUser = CurrentUser.user();

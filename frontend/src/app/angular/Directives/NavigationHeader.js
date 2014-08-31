@@ -32,6 +32,7 @@
                         $scope.sprints = [];
                         $scope.sprintSelectText = 'Choose project to show';
                         $scope.projectSelectText = 'No projects yet...';
+                        $scope.modalService = ModalService;
 
                         // Function to logout current user from taskboard
                         $scope.logout = function() {
@@ -42,96 +43,10 @@
                             Auth.logout();
                         };
 
-                        // Todo: this sucks add some modal service to handle all this shit...
-
-                        // Function to open user profile modal
-                        $scope.openUserProfile = function() {
-                            ModalService.userProfile($scope.user().id);
-                        };
-
-                        // Function to open user profile modal
-                        $scope.openUsers = function() {
-                            console.log('todo: openUsers');
-                        };
-
-                        // Function to open general settings modal
-                        $scope.openGeneralSettings = function() {
-                            console.log('todo: openGeneralSettings');
-                        };
-
-                        // Function to open general settings modal
-                        $scope.openAuthenticationServers = function() {
-                            console.log('todo: openAuthenticationServers');
-                        };
-
-                        $scope.openProjectAdd = function() {
-                            console.log('todo: openProjectAdd');
-                        };
-
-                        $scope.openProjectEdit = function() {
-                            console.log('todo: openProjectEdit');
-                        };
-
-                        $scope.openProjectBacklog = function() {
-                            console.log('todo: openProjectBacklog');
-                        };
-
-                        $scope.openProjectSprints = function() {
-                            console.log('todo: openProjectSprints');
-                        };
-
-                        $scope.openProjectEpics = function() {
-                            console.log('todo: openProjectEpics');
-                        };
-
-                        $scope.openProjectMilestones = function() {
-                            console.log('todo: openProjectMilestones');
-                        };
-
-                        $scope.openProjectUsers = function() {
-                            console.log('todo: openProjectUsers');
-                        };
-
-                        $scope.openProjectPhases = function() {
-                            console.log('todo: openProjectPhases');
-                        };
-
-                        $scope.openProjectPlanning = function() {
-                            console.log('todo: openProjectPlanning');
-                        };
-
-                        $scope.openProjectExternalLinks = function() {
-                            console.log('todo: openProjectExternalLinks');
-                        };
-
-                        $scope.openProjectDelete = function() {
-                            console.log('todo: openProjectDelete');
-                        };
-
-                        $scope.openSprintAdd = function() {
-                            console.log('todo: openSprintAdd');
-                        };
-
-                        $scope.openSprintEdit = function() {
-                            console.log('todo: openSprintEdit');
-                        };
-
-                        $scope.openSprintBacklog = function() {
-                            console.log('todo: openSprintBacklog');
-                        };
-
-                        $scope.openSprintCharts = function() {
-                            console.log('todo: openSprintCharts');
-                        };
-
-                        $scope.openSprintDelete = function() {
-                            console.log('todo: openSprintDelete');
-                        };
-
                         /**
                          * Helper function to format sprint name to 'standard' format.
                          *
-                         * @todo    make service for there?
+                         * @todo    make service for this?
                          *
                          * @param   {models.sprint} sprint
                          *
@@ -153,14 +68,16 @@
                          *
                          * Note that this load() will also subscribe user to listen socket messages
                          * from 'Sprint' endpoint.
-                         *
-                         * @todo    Do we need Auth check also?
                          */
                         $scope.$watch('user().id', function(valueNew) {
                             if (!_.isUndefined(valueNew)) {
                                 ProjectModel
                                     .load()
                                     .then(function(projects) {
+                                        if (!_.isArray(projects) && _.isObject(projects)) {
+                                            projects = [projects];
+                                        }
+
                                         $scope.projectSelectText = projects.length > 0 ?
                                             'Choose project to show' : 'No projects yet...';
 
@@ -175,8 +92,6 @@
                          *
                          * Note that this load() will also subscribe user to listen socket messages
                          * from 'Sprint' endpoint.
-                         *
-                         * @todo    Do we need Auth check also?
                          */
                         $scope.$watch('sharedData.projectId', function(valueNew, valueOld) {
                             $scope.sprint = {};
@@ -184,8 +99,12 @@
 
                             if (valueNew !== valueOld) {
                                 SprintModel
-                                    .load({projectId: valueNew})
+                                    .load({project: valueNew})
                                     .then(function(sprints) {
+                                        if (!_.isArray(sprints) && _.isObject(sprints)) {
+                                            sprints = [sprints];
+                                        }
+
                                         $scope.sprintSelectText = sprints.length > 0 ?
                                             'Choose sprint to show' : 'No sprints in this project';
 

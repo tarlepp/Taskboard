@@ -34,7 +34,7 @@
                     </li>
 
                     <li class="pull-right">
-                        <a href="#" data-ng-click="openUserProfile()">
+                        <a href="#" data-ng-click="modalService.userProfile(user().id)">
                             <gravatar-image data-gravatar-email="user().email" data-gravatar-size="35" data-gravatar-rating="pg" data-gravatar-default="mm" data-gravatar-secure="true"></gravatar-image>
 
                             {{user().username}}

@@ -1,0 +1,18 @@
+<div class="modal-header" xmlns="http://www.w3.org/1999/html">
+    <a class="pull-right close"
+       data-ng-click="close()"
+    >
+        <i class="fa fa-times"></i>
+    </a>
+    <h3>{{project.title}}</h3>
+</div>
+
+<div class="modal-body">
+    <h1>Implement content</h1>
+
+    <pre>{{project|json}}</pre>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-sm btn-default pull-left" data-ng-click="close()">Close</button>
+</div>

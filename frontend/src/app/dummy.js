@@ -36,6 +36,20 @@ var helpers = {
             valueNew:       '{String|Number|Boolean|Float|Null}',
             valueOld:       '{String|Number|Boolean|Float|Null}'
         }
+    },
+    modalQueue: {
+        instance:   '{bootstrap.modalInstance}',
+        method:     '{String}',
+        parameters: '{*[]}'
+    }
+};
+
+var bootstrap = {
+    modalInstance: {
+        result:     '{Promise}',
+        opened:     '{Promise}',
+        close:      '{Function}',
+        dismiss:    '{Function}'
     }
 };
 
