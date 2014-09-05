@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="/ng-prettyjson/dist/ng-prettyjson.min.css">
         <link rel="stylesheet" href="/bootstrap-select/dist/css/bootstrap-select.css">
         <link rel="stylesheet" href="/qtip2/jquery.qtip.min.css">
+        <link rel="stylesheet" href="/angular-toastr/dist/angular-toastr.css">
         <!-- endinject -->
 
         <!-- inject:css -->
@@ -58,14 +59,16 @@
         <script src="/qtip2/jquery.qtip.min.js"></script>
         <script src="/jquery.complexify.js/jquery.complexify.banlist.js"></script>
         <script src="/jquery.complexify.js/jquery.complexify.min.js"></script>
+        <script src="/angular-toastr/dist/angular-toastr.js"></script>
+        <script src="/ngAnimate/js/angular-animate.min.js"></script>
         <script src="/sails.io.js/dist/sails.io.js"></script>
         <script src="/angularSails/dist/ngsails.io.js"></script>
         <!-- endinject -->
 
         <!-- TODO: Add here your backend API URL without trailing slashes -->
         <script>
+            io.sails.url = 'http://wunder.sytes.net:1339';
             io.sails.useCORSRouteToGetCookie = false;
-            io.sails.url = 'http://10.1.1.177:1339';
         </script>
 
         <!-- inject:js -->
@@ -73,7 +76,6 @@
         <script src="/app.js"></script>
         <script src="/dummy.js"></script>
         <script src="/angular/Components/LoDash.js"></script>
-        <script src="/angular/Components/Noty.js"></script>
         <script src="/angular/Components/moment.js"></script>
         <script src="/angular/Constants/AccessLevels.js"></script>
         <script src="/angular/Constants/BackendConfig.js"></script>
@@ -117,10 +119,10 @@
         <script src="/angular/Services/HttpStatus.js"></script>
         <script src="/angular/Services/ListConfig.js"></script>
         <script src="/angular/Services/ListTitleItem.js"></script>
-        <script src="/angular/Services/Message.js"></script>
         <script src="/angular/Services/SharedData.js"></script>
         <script src="/angular/Services/SocketWhereCondition.js"></script>
         <script src="/angular/Services/Storage.js"></script>
+        <script src="/angular/Services/TabConfig.js"></script>
         <script src="/board/board-controller.js"></script>
         <script src="/login/login-controller.js"></script>
         <!-- endinject -->

@@ -11,8 +11,8 @@
     angular.module('Taskboard.interceptors')
         .factory('ErrorInterceptor',
             [
-                '$q', 'Message', 'HttpStatus',
-                function($q, Message, HttpStatus) {
+                '$q', '$injector', 'HttpStatus',
+                function($q, $injector, HttpStatus) {
                     return {
                         /**
                          * Interceptor method which is triggered whenever response occurs on $http queries. Note
@@ -62,7 +62,7 @@
                             }
 
                             if (message && showErrorMessage) {
-                                Message.error(message);
+                                $injector.get('toastr').error(message);
                             }
 
                             return $q.reject(response);

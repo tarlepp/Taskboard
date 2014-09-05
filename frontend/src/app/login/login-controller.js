@@ -15,8 +15,13 @@
     angular.module('Taskboard.controllers')
         .controller('LoginController',
             [
-                '$scope', '$state', 'Auth',
-                function($scope, $state, Auth) {
+                '$scope', '$state',
+                'toastr',
+                'Auth',
+                function($scope, $state,
+                         toastr,
+                         Auth
+                ) {
                     // Already authenticated so redirect back to board
                     if (Auth.isAuthenticated()) {
                         $state.go('board.main');
@@ -34,6 +39,8 @@
                             .login($scope.credentials)
                             .then(
                                 function() {
+                                    toastr.info('Logged in successfully.');
+
                                     $state.go('board.main');
                                 },
                                 function() {

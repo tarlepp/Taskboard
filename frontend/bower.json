@@ -39,6 +39,8 @@
     "moment-timezone": "~0.2.1",
     "qtip2": "~2.2.0",
     "jquery.complexify.js": "*",
+    "angular-toastr": "~0.4.0",
+    "ngAnimate": "*",
     "angularSails": "*",
     "sails.io.js": "~0.10.3"
   },
@@ -81,6 +83,12 @@
       "main": [
         "dist/ng-prettyjson.min.css",
         "dist/ng-prettyjson.min.js"
+      ]
+    },
+    "ngAnimate": {
+      "main": [
+        "js/angular-animate.min.js",
+        "css/ng-animations.css"
       ]
     }
   }

@@ -23,12 +23,14 @@
     // Initialize 3rd party libraries
     angular.module('Taskboard.libraries', [
         'ngSanitize',
+        'ngAnimate',
         'ui.router',
         'ui.bootstrap',
         'ui.bootstrap.showErrors',
         'ngPrettyJson',
         'angularMoment',
         'angularjs-gravatardirective',
+        'toastr',
         'linkify',
         'uuid',
         'sails.io'
@@ -54,8 +56,10 @@
         .config(
             [
                 '$stateProvider', '$locationProvider', '$urlRouterProvider', '$httpProvider', '$sailsSocketProvider',
+                'toastrConfig',
                 'AccessLevels',
                 function($stateProvider, $locationProvider, $urlRouterProvider, $httpProvider, $sailsSocketProvider,
+                     toastrConfig,
                      AccessLevels
                 ) {
                     $httpProvider.defaults.useXDomain = true;
@@ -68,6 +72,26 @@
 
                     $sailsSocketProvider.interceptors.push('AuthInterceptor');
                     $sailsSocketProvider.interceptors.push('ErrorInterceptor');
+
+                    angular.extend(toastrConfig, {
+                        allowHtml: true,
+                        closeButton: true,
+                        closeHtml: '<button>&times;</button>',
+                        containerId: 'toast-container',
+                        extendedTimeOut: 0,
+                        iconClasses: {
+                            error: 'toast-error',
+                            info: 'toast-info',
+                            success: 'toast-success',
+                            warning: 'toast-warning'
+                        },
+                        messageClass: 'toast-message',
+                        positionClass: 'toast-top-right',
+                        tapToDismiss: true,
+                        timeOut: 5000,
+                        titleClass: 'toast-title',
+                        toastClass: 'toast'
+                    });
 
                     // Yeah we wanna to use HTML5 urls!
                     $locationProvider
@@ -112,6 +136,14 @@
                 }
             ]
         );
+
+    angular.module('Taskboard')
+        .config(function(datepickerConfig, datepickerPopupConfig) {
+            datepickerConfig.startingDay = 1;
+
+            datepickerPopupConfig.appendToBody = true;
+            datepickerPopupConfig.showButtonBar = false;
+        });
 
     /**
      * Frontend application run hook configuration. This will attach auth status
