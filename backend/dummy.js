@@ -31,6 +31,7 @@ var sails = {
             momentFormatTime:           '{string}',
             momentFormatDateTime:       '{string}',
             momentTimezone:             '{string}',
+            tabRefreshTime:             '{number}',
             passports:                  '{sails.model.passport[]}',
             histories:                  '{sails.model.history[]}',
             logins:                     '{sails.model.userLogin[]}',

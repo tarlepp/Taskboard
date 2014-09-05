@@ -56,6 +56,11 @@ module.exports = _.merge(_.cloneDeep(require('../base/Model')), {
             defaultsTo: 'Europe/Mariehamn',
             required:   true
         },
+        tabRefreshTime: {
+            type:       'integer',
+            defaultsTo: 60,
+            required:   true
+        },
 
         // Below is all specification for relations to another models
 
