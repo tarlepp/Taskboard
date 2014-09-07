@@ -9,7 +9,7 @@
                     scope: {
                         userId: '='
                     },
-                    replace: true,
+                    replace: false,
                     templateUrl: '/Taskboard/partials/Directives/Components/UserProjects.html',
                     controller: [
                         '$scope', '$timeout', '$q',
@@ -23,13 +23,19 @@
                                  CurrentUser, UserRoles, ListConfig, ListTitleItem,
                                  UserModel, ProjectModel
                         ) {
-                            // Fetch specified user data
-                            UserModel
-                                .fetch($scope.userId)
-                                .then(function(response) {
-                                    $scope.user = response;
-                                });
+                            // Directive initialize method
+                            $scope.init = function() {
+                                // Fetch specified user data
+                                UserModel
+                                    .fetch($scope.userId)
+                                    .then(function(response) {
+                                        $scope.user = response;
+                                    });
 
+                                $scope.fetchData();
+                            };
+
+                            // Store modal service
                             $scope.modalService = ModalService;
 
                             // Store current user to scope
@@ -197,8 +203,10 @@
                              *
                              * Note that this watcher will trigger init data query.
                              */
-                            $scope.$watch('currentPage', function() {
-                                $scope.fetchData();
+                            $scope.$watch('currentPage', function(valueNew, valueOld) {
+                                if (valueNew !== valueOld) {
+                                    $scope.fetchData();
+                                }
                             });
                         }
                     ]

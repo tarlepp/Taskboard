@@ -28,22 +28,63 @@
                     scope: {
                         userId: '@'
                     },
-                    replace: true,
+                    replace: false,
                     templateUrl: '/Taskboard/partials/Directives/Components/LoginHistory.html',
                     controller: [
                         '$scope', '$timeout', '$q',
                         '_',
-                        'SocketWhereCondition', 'CurrentUser', 'ListTitleItem',
+                        'SocketWhereCondition', 'CurrentUser', 'ListTitleItem', 'ListConfig',
                         'UserLoginModel',
                         function($scope, $timeout, $q,
                                  _,
-                                 SocketWhereCondition, CurrentUser, ListTitleItem,
+                                 SocketWhereCondition, CurrentUser, ListTitleItem, ListConfig,
                                  UserLoginModel
                         ) {
+                            // Directive initialize method
+                            $scope.init = function() {
+                                $scope.loading = true;
+                                $scope.loaded = true;
+
+                                /**
+                                 * First we must fetch all login data from server, note that we have
+                                 * five (5) different login data collection:
+                                 *
+                                 *  Full login list
+                                 *  Unique IP-addresses
+                                 *  Unique user-agents
+                                 *  Browser families
+                                 *  OS families
+                                 */
+                                $q
+                                    .all([
+                                        $scope.load(),
+                                        $scope.loadIp(),
+                                        $scope.loadAgent(),
+                                        $scope.loadBrowserFamily(),
+                                        $scope.loadOsFamily()
+                                    ])
+                                    .then(function(result) {
+                                        $scope.loading = false;
+                                        $scope.loaded = true;
+
+                                        _.each(result, function(data, key) {
+                                            _.merge($scope.items[key], data);
+                                        });
+                                    })
+                                    .catch(function(error) {
+                                        console.log(error);
+                                    })
+                                    .finally(function() {
+                                        $scope.loading = false;
+                                        $scope.loaded = true;
+                                    });
+                            };
+
+                            // Get current user data
                             $scope.user = CurrentUser.user();
-                            $scope.itemsPerPage = 15;
-                            $scope.loading = true;
-                            $scope.loaded = false;
+
+                            // Add default list configuration, see the service for more detailed information
+                            $scope = _.merge($scope, ListConfig.getDefault());
 
                             // Specify list initial data
                             $scope.items = ListTitleItem.getUserLoginHistory();
@@ -110,40 +151,6 @@
                             $scope.loadOsFamily = function() {
                                 return loadData($scope.items[4]);
                             };
-
-                            /**
-                             * First we must fetch all login data from server, note that we have
-                             * five (5) different login data collection:
-                             *
-                             *  Full login list
-                             *  Unique IP-addresses
-                             *  Unique user-agents
-                             *  Browser families
-                             *  OS families
-                             */
-                            $q
-                                .all([
-                                    $scope.load(),
-                                    $scope.loadIp(),
-                                    $scope.loadAgent(),
-                                    $scope.loadBrowserFamily(),
-                                    $scope.loadOsFamily()
-                                ])
-                                .then(function(result) {
-                                    $scope.loading = false;
-                                    $scope.loaded = true;
-
-                                    _.each(result, function(data, key) {
-                                        _.merge($scope.items[key], data);
-                                    });
-                                })
-                                .catch(function(error) {
-                                    console.log(error);
-                                })
-                                .finally(function() {
-                                    $scope.loading = false;
-                                    $scope.loaded = true;
-                                });
 
                             /**
                              * Iterate each item and assign needed watchers for those. At

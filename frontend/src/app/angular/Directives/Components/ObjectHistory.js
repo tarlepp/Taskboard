@@ -24,7 +24,7 @@
                         objectId: '@',
                         objectName: '@'
                     },
-                    replace: true,
+                    replace: false,
                     templateUrl: '/Taskboard/partials/Directives/Components/ObjectHistory.html',
                     controller: [
                         '$scope', '$sailsSocket',
@@ -36,10 +36,17 @@
                         ) {
                             $scope.user = CurrentUser.user();
                             $scope.items = [];
+                            $scope.loading = true;
+                            $scope.loaded = false;
 
+                            // Directive initialize method
+                            $scope.init = function() {
+                                $scope.fetchData();
+                            };
+
+                            // Scope function to fetch actual data
                             $scope.fetchData = function() {
                                 $scope.loading = true;
-                                $scope.loaded = false;
 
                                 var parameters = {
                                     objectId: $scope.objectId,
@@ -59,15 +66,6 @@
                                         $scope.loading = false;
                                     });
                             };
-
-                            $scope.fetchData();
-
-                            /**
-                             * Data updated, so let's fetch data again.
-                             */
-                            $scope.$on('data-updated', function() {
-                                $scope.fetchData();
-                            });
                         }
                     ]
                 };

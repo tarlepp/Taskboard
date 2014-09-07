@@ -22,18 +22,25 @@
                     scope: {
                         userId: '@'
                     },
-                    replace: true,
+                    replace: false,
                     templateUrl: '/Taskboard/partials/Directives/Components/ActivityLog.html',
                     controller: [
                         '$scope', '$timeout', '$q',
                         '_',
-                        'SocketWhereCondition','ListConfig', 'ListTitleItem',
+                        'SocketWhereCondition',
+                        'ListConfig', 'ListTitleItem',
                         'ActivityLogModel',
                         function($scope, $timeout, $q,
                                  _,
-                                 SocketWhereCondition, ListConfig, ListTitleItem,
+                                 SocketWhereCondition,
+                                 ListConfig, ListTitleItem,
                                  ActivityLogModel
                         ) {
+                            // Directive initialize method
+                            $scope.init = function() {
+                                $scope.fetchData();
+                            };
+
                             // Add default list configuration, see the service for more detailed information
                             $scope = _.merge($scope, ListConfig.getDefault());
 
@@ -167,15 +174,10 @@
                              *
                              * Note that this watcher will trigger init data query.
                              */
-                            $scope.$watch('currentPage', function() {
-                                $scope.fetchData();
-                            });
-
-                            /**
-                             * Data updated, so let's fetch data again.
-                             */
-                            $scope.$on('data-updated', function() {
-                                $scope.fetchData();
+                            $scope.$watch('currentPage', function(valueNew, valueOld) {
+                                if (valueNew !== valueOld) {
+                                    $scope.fetchData();
+                                }
                             });
                         }
                     ]
