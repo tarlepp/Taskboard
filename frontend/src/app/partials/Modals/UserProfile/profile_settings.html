@@ -1,0 +1,16 @@
+<form name="form.userSettings" class="form-horizontal" novalidate="novalidate">
+
+    <div class="form-group" data-show-errors>
+        <label class="col-xs-3 control-label">Tab refresh time</label>
+        <div class="col-xs-9 input-group">
+            <input type="range" min="0" max="300" class="form-control" name="user.tabRefreshTime"
+                data-ng-model="user.tabRefreshTime"
+            />
+
+            <span id="momentFormatDateShow" class="input-group-addon">{{tabRefreshTimeFormat(user.tabRefreshTime)}}</span>
+        </div>
+
+        <span class="help-block col-xs-offset-3">Time that modals tabs won't reload data from server.</span>
+    </div>
+
+</form>

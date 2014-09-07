@@ -8,7 +8,11 @@
 </div>
 
 <div class="modal-body">
-    <tabset>
+    <div data-ng-show="saving">
+        <template data-src="layout/saving"></template>
+    </div>
+
+    <tabset data-ng-class="{'loading-fade': saving}">
         <tab class="{{tab.class}}"
             data-ng-repeat="tab in tabs"
             data-select="selectTab(tab)"
