@@ -41,6 +41,14 @@ var helpers = {
         instance:   '{bootstrap.modalInstance}',
         method:     '{String}',
         parameters: '{*[]}'
+    },
+    tabConfig: {
+        title:      '{String}',
+        template:   '{String}',
+        buttonSet:  '{String}',
+        form:       '{String}',
+        hasInit:    '{String}',
+        lastUpdate: '{Date}'
     }
 };
 
