@@ -157,3 +157,24 @@
     padding-left: 5px;
   }
 }
+
+slider, [slider] {
+  margin: 15px 0 0 0;
+  height: 10px;
+
+  div.bar {
+    background-color: $colorBackgroundLightGrey;
+  }
+
+  div.handle {
+    top: -5px;
+    width: 25px;
+    @include border-radius(6px);
+    border-color: $colorBackgroundGradientStart;
+
+    &:after {
+      display: none;
+    }
+  }
+}
+

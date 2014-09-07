@@ -423,6 +423,10 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 6px;
 }
 
+.dropdown-menu {
+  z-index: 2000;
+}
+
 .bootstrap-select {
   .btn:focus {
     outline: none !important;
@@ -437,4 +441,31 @@ h1, h2, h3, h4, h5, h6 {
       }
     }
   }
+}
+
+.saving,
+.loading {
+  position: relative;
+  left: 50%;
+  width: 200px;
+  height: 100px;
+  margin-left: -100px;
+  margin-top: 20px;
+  z-index: 1000;
+
+  h4 {
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+    cursor: default;
+    font-weight: bold;
+    font-size: 14px;
+    color: $colorTextBlue;
+    background-color: transparent;
+    margin-top: 20px;
+    padding: 0 0 5px 0;
+    text-transform: uppercase;
+  }
+}
+
+.saving {
+  position: absolute;
 }
