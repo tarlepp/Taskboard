@@ -1,4 +1,4 @@
-<div>
+<div id="user-projects">
     <div data-ng-show="loading && !loaded">
         <template data-src="layout/loading"></template>
     </div>
@@ -19,7 +19,6 @@
         </div>
 
         <div class="data-loading"
-            data-ng-class="{'loading-fade': loading}"
             data-ng-show="loading"
         >
             <template data-src="layout/loading"></template>
@@ -90,7 +89,7 @@
                                 <li class="divider"></li>
                                 <li>
                                     <a class="text-danger"
-                                        data-ng-click="modalService.projectDelete((project.id)"
+                                        data-ng-click="modalService.projectDelete(project.id)"
                                     >
                                         <i class="fa fa-trash-o"></i>
                                         Delete project

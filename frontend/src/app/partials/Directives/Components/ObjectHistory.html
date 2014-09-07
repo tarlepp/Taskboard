@@ -1,34 +1,48 @@
-<div>
-    <div class="history"
-        data-ng-repeat="item in items"
-    >
-        <h4>
-            <small class="pull-right">
-                <span>
-                    {{item.user.lastName}} {{item.user.firstName}}
-                </span>
+<div id="object-history">
+    <div data-ng-show="loading && !loaded">
+        <template data-src="layout/loading"></template>
+    </div>
 
-                <gravatar-image
-                    data-gravatar-email="item.user.email"
-                    data-gravatar-size="25"
-                    data-gravatar-rating="pg"
-                    data-gravatar-default="mm"
-                    data-gravatar-secure="true"
-                ></gravatar-image>
-            </small>
+    <div data-ng-show="loaded">
 
-            <timestamp data-stamp="{{item.stamp}}"></timestamp>
-        </h4>
+        <div class="data-loading"
+            data-ng-show="loading"
+        >
+            <template data-src="layout/loading"></template>
+        </div>
 
-        <ul class="list-unstyled">
-            <li>{{item.message}}
-                <ul class="text-medium">
-                    <object-history-item
-                        data-ng-repeat="item in item.data"
-                        data-item="item"
-                    ></object-history-item>
-                </ul>
-            </li>
-        </ul>
+        <div class="history"
+            data-ng-repeat="item in items"
+            data-ng-class="{'loading-fade': loading}"
+        >
+            <h4>
+                <small class="pull-right">
+                    <span>
+                        {{item.user.lastName}} {{item.user.firstName}}
+                    </span>
+
+                    <gravatar-image
+                        data-gravatar-email="item.user.email"
+                        data-gravatar-size="25"
+                        data-gravatar-rating="pg"
+                        data-gravatar-default="mm"
+                        data-gravatar-secure="true"
+                    ></gravatar-image>
+                </small>
+
+                <timestamp data-stamp="{{item.stamp}}"></timestamp>
+            </h4>
+
+            <ul class="list-unstyled">
+                <li>{{item.message}}
+                    <ul class="text-medium">
+                        <object-history-item
+                            data-ng-repeat="item in item.data"
+                            data-item="item"
+                        ></object-history-item>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
