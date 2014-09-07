@@ -26,19 +26,21 @@
      *  5)  Activity log (what user has done lately)
      *  6)  Login history
      *  7)  User object history
-     *
-     * @todo    Move tabs configuration to service
      */
     angular.module('Taskboard.controllers')
         .controller('ModalUserProfileController',
             [
                 '$scope', '$interval', '$modalInstance',
-                'Auth', 'moment', '_', 'CurrentUser', 'Message',
+                '_', 'toastr', 'moment',
+                'Auth', 'CurrentUser',
                 'UserModel',
+                'TabConfig', 'TabInit',
                 '_user', '_timezones', '_languages',
                 function($scope, $interval, $modalInstance,
-                         Auth, moment, _, CurrentUser, Message,
+                         _, toastr, moment,
+                         Auth, CurrentUser,
                          UserModel,
+                         TabConfig, TabInit,
                          _user, _timezones, _languages
                 ) {
                     // Init necessary scope attributes
@@ -51,67 +53,48 @@
                     $scope.passwordCheck = '';
                     $scope.form = {
                         userBasic: {},
-                        userLanguageRegion: {}
+                        userLanguageRegion: {},
+                        userSettings: {}
                     };
 
-                    // Specify tabs
-                    $scope.tabs = [
-                        {
-                            title: 'Basic',
-                            template: 'Modals/UserProfile/profile_basic',
-                            buttonSet: 'main',
-                            form: 'userBasic'
-                        },
-                        {
-                            title: 'Language and region',
-                            template: 'Modals/UserProfile/profile_language_and_region',
-                            buttonSet: 'main',
-                            form: 'userLanguageRegion'
-                        },
-                        {
-                            title: 'Change password',
-                            template: 'Modals/UserProfile/profile_change_password',
-                            buttonSet: 'password',
-                            form: 'userPassword'
-                        },
-                        {
-                            title: 'Projects',
-                            template: 'Modals/UserProfile/profile_projects',
-                            buttonSet: ''
-                        },
-                        {
-                            title: 'Activity',
-                            template: 'Modals/UserProfile/profile_activity',
-                            buttonSet: ''
-                        },
-                        {
-                            title: 'Login history',
-                            template: 'Modals/UserProfile/profile_login_history'
-                        },
-                        {
-                            title: '<i class="fa fa-clock-o"></i> History',
-                            template: 'Common/object_history',
-                            class: 'pull-right',
-                            buttonSet: ''
-                        }
-                    ];
+                    $scope.saving = false;
 
+                    // Specify tabs
+                    $scope.tabs = TabConfig.userProfile();
+
+                    $scope.tabRefreshTimeFormat = function(value) {
+                        return (parseInt(value, 10) == 0) ? 'Always' : value + 's';
+                    };
+
+                    // Function to reset current form data
                     $scope.reset = function() {
                         $scope.user = angular.copy(_user);
                     };
 
+                    // Modal close, within this we need to reset current update interval
                     $scope.close = function() {
                         $interval.cancel($scope.timeUpdate);
 
                         $modalInstance.close();
                     };
 
+                    /**
+                     * Function to save current user data to database and update user data
+                     * in CurrentUser service.
+                     *
+                     * @param   {boolean}   [close]
+                     */
                     $scope.save = function(close) {
                         close = close || false;
 
                         $scope.$broadcast('show-errors-check-validity');
 
-                        if ($scope.form.userBasic.$valid && $scope.form.userLanguageRegion.$valid) {
+                        if ($scope.form.userBasic.$valid
+                            && $scope.form.userLanguageRegion.$valid
+                            && $scope.form.userSettings.$valid
+                        ) {
+                            $scope.saving = true;
+
                             UserModel
                                 .update($scope.user.id, $scope.user)
                                 .then(function(response) {
@@ -122,7 +105,9 @@
                                     $scope.reset();
                                     $scope.$broadcast('data-updated');
 
-                                    Message.success('User data updated successfully.');
+                                    toastr.success('User data updated successfully.');
+
+                                    $scope.saving = false;
                                 });
 
                             if (close) {
@@ -133,30 +118,43 @@
                         }
                     };
 
+                    /**
+                     * Function which is triggered whenever user activates tab on user profile
+                     * modal. This will check if current tab has init function defined, and if
+                     * it has function will trigger that automatic.
+                     *
+                     * @param   {helpers.tabConfig} tab
+                     */
                     $scope.selectTab = function(tab) {
                         $scope.activeTab = tab;
 
-                        if (tab.onSelect) {
-                            $scope[tab.onSelect]();
-                        }
+                        TabInit.init(tab);
                     };
 
+                    // Watcher for user object to track form changes
                     $scope.$watch('user', function(valueNew) {
                         $scope.formChanged = !_.isEqual(valueNew, _user);
                     }, true);
 
+                    // Whenever user changes language selection, we need to update current times
                     $scope.$watch('user.language', function(valueNew) {
                         moment.lang(valueNew);
 
                         updateTimes();
                     }, true);
 
+                    // Whenever user changes timezone selection, we need to update current times
                     $scope.$watch('user.momentTimezone', function() {
                         updateTimes();
                     }, true);
 
+                    // Initialize update interval
                     $scope.timeUpdate = $interval(updateTimes, 1000);
 
+                    /**
+                     * Simple helper function to update shown date and times on form,
+                     * this function is called within one second interval.
+                     */
                     function updateTimes() {
                         // Create new UTC time
                         var now = moment().utc().tz($scope.user.momentTimezone);
@@ -166,6 +164,7 @@
                         $scope.momentDateTime = now.format($scope.user.momentFormatDateTime);
                     }
 
+                    // Initialize modal
                     $scope.reset();
                 }
             ]
