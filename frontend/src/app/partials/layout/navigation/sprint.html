@@ -1,11 +1,9 @@
 
 <div class="input-group">
-    <select class="show-tick show-menu-arrow form-control"
+    <select id="sprintSelect" class="show-tick show-menu-arrow form-control"
         data-live-search="true"
         data-container="body"
-        data-bootstrap-select
-        data-collection="sprints"
-        data-refresh="sprintSelectText"
+        data-selectpicker
         data-ng-disabled="!(sharedData.projectId && sprints.length)"
         data-ng-model="sharedData.sprintId"
         data-ng-options="sprint.id as getSprintTitle(sprint) for sprint in sprints | orderBy:'!dateStart':'!dateEnd':'title'"

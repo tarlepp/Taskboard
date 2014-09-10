@@ -1,11 +1,9 @@
 
 <div class="input-group">
-    <select class="show-tick show-menu-arrow form-control"
+    <select id="projectSelect" class="show-tick show-menu-arrow form-control"
         data-live-search="true"
         data-container="body"
-        data-bootstrap-select
-        data-collection="projects"
-        data-refresh="projectSelectText"
+        data-selectpicker
         data-ng-disabled="!(projects.length)"
         data-ng-model="sharedData.projectId"
         data-ng-options="project.id as project.title for project in projects | orderBy:'title'"
