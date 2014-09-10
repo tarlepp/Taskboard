@@ -7,9 +7,6 @@
 (function() {
     'use strict';
 
-    /**
-     * todo make this happen!
-     */
     angular.module('Taskboard.controllers')
         .controller('ModalProjectEditController',
             [
@@ -18,17 +15,16 @@
                 'toastr',
                 'CurrentUser', 'ModalService',
                 'TabConfig',
-                '_project', '_sprints',
+                '_project',
                 function($scope, $modalInstance,
                          _,
                          toastr,
                          CurrentUser, ModalService,
                          TabConfig,
-                         _project, _sprints
+                         _project
                 ) {
                     $scope.currentUser = CurrentUser.user();
                     $scope.modalService = ModalService;
-                    $scope.sprints = _sprints;
 
                     // Specify tabs
                     $scope.tabs = TabConfig.projectEdit();
