@@ -24,6 +24,45 @@
     }
 }
 
+.input-group-addon {
+  &.input-group-btn {
+    padding: 0;
+    border: none;
+
+    .btn {
+      padding: 9px 13px;
+      border-radius: 0;
+      border: none;
+    }
+
+    &:last-of-type {
+      .btn {
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+      }
+    }
+  }
+}
+
+.btn-editor {
+  font-size: 14px;
+  padding: 3px 9px;
+  line-height: 20px;
+
+  &[name='html'],
+  &[name='pre'] {
+    font-size: 12px;
+  }
+}
+
+.btn-group-editor {
+  margin-bottom: 5px;
+}
+
+.btn-toolbar-editor {
+  margin-top: 5px;
+}
+
 .data-loading {
   -webkit-transition: opacity .2s ease-in-out;
   -moz-transition: opacity .2s ease-in-out;
