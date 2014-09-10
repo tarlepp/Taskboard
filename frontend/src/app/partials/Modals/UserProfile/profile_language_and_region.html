@@ -6,13 +6,11 @@
         <label class="col-lg-3 control-label">Language</label>
         <div class="col-lg-9">
             <select class="form-control in-modal show-tick show-menu-arrow" name="user.language"
+                data-selectpicker
                 data-live-search="true"
                 data-container="body"
-                data-bootstrap-select
-                data-tb-collection="languages"
-                data-tb-selected="user.language"
                 data-ng-model="user.language"
-                data-ng-options="language.code as (language.title + ' [' + language.code + ']') for language in languages"
+                data-ng-options="language.code as (language.title + ' [' + language.code + ']') for language in languages | orderBy: 'title'"
             ></select>
 
             <span class="help-block">This will affect to text / time localizations.</span>
@@ -23,13 +21,11 @@
         <label class="col-lg-3 control-label">Timezone</label>
         <div class="col-lg-9">
             <select class="form-control in-modal show-tick show-menu-arrow" name="user.momentTimezone"
+                data-selectpicker
                 data-live-search="true"
                 data-container="body"
-                data-bootstrap-select
-                data-tb-collection="timezones"
-                data-tb-selected="user.momentTimezone"
                 data-ng-model="user.momentTimezone"
-                data-ng-options="timezone.id as timezone.name for timezone in timezones"
+                data-ng-options="timezone.id as timezone.name for timezone in timezones | orderBy: 'name'"
             ></select>
 
             <span class="help-block">This will affect to datetime strings.</span>
