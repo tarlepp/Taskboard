@@ -11,45 +11,53 @@
     <div class="form-group">
         <label class="col-xs-3 control-label">Duration</label>
 
-        <div class="col-xs-3">
-            <p class="input-group">
-                <input type="text" class="form-control"
+        <div class="col-xs-5">
+            <div class="input-group">
+                <input type="text" class="form-control text-center"
                     data-datepicker-popup
                     data-ng-model="project.dateStart"
                     data-ng-click="openCalendar($event, 'dateStart')"
                     data-is-open="opened.dateStart"
+                    data-max-date="project.dateEnd"
                     data-ng-required="true"
-                    data-close-text="Close"
+                    data-ng-readonly="true"
                 />
-                <span class="input-group-btn">
+
+                <div class="input-group-addon input-group-btn">
                     <button type="button" class="btn btn-default"
                         data-ng-click="openCalendar($event, 'dateStart')"
-                    ><i class="fa fa-calendar"></i></button>
-                </span>
-            </p>
-        </div>
+                    >
+                        <i class="fa fa-calendar"></i>
+                    </button>
+                </div>
 
-        <div class="col-xs-1 text-center">
-            —
-        </div>
-
-        <div class="col-xs-3">
-            <p class="input-group">
-                <input type="text" class="form-control"
+                <input type="text" class="form-control text-center"
                     data-datepicker-popup
                     data-ng-model="project.dateEnd"
                     data-ng-click="openCalendar($event, 'dateEnd')"
                     data-is-open="opened.dateEnd"
+                    data-min-date="project.dateStart"
                     data-ng-required="true"
-                    data-close-text="Close"
+                    data-ng-readonly="true"
                 />
-                <span class="input-group-btn">
+                <div class="input-group-addon input-group-btn">
                     <button type="button" class="btn btn-default"
                         data-ng-click="openCalendar($event, 'dateEnd')"
-                    ><i class="fa fa-calendar"></i></button>
-                </span>
-            </p>
+                    >
+                        <i class="fa fa-calendar"></i>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
+
+    <div class="form-group form-group-editor">
+        <label class="col-xs-3 control-label">Description</label>
+        <div class="col-xs-9">
+            <div
+                data-text-angular
+                data-ng-model="project.description"
+            ></div>
+        </div>
 
 </form>
