@@ -6,6 +6,8 @@
  *
  * Also note that selected project + current user combination can has different access role to selected
  * project.
+ *
+ * @todo text translations?
  */
 (function() {
     'use strict';
@@ -19,10 +21,12 @@
                 templateUrl: '/Taskboard/partials/Directives/NavigationHeader/header.html',
                 controller: [
                     '$scope', '$filter',
-                    'CurrentUser', 'Auth', 'SharedData', 'ModalService', '_',
+                    '_',
+                    'CurrentUser', 'Auth', 'SharedData', 'ModalService', 'HelperService',
                     'ProjectModel', 'SprintModel',
                     function($scope, $filter,
-                             CurrentUser, Auth, SharedData, ModalService, _,
+                             _,
+                             CurrentUser, Auth, SharedData, ModalService, HelperService,
                              ProjectModel, SprintModel
                     ) {
                         $scope.sharedData = SharedData.data;
@@ -82,6 +86,8 @@
                                             'Choose project to show' : 'No projects yet...';
 
                                         $scope.projects = projects;
+
+                                        HelperService.refreshSelectPicker('#projectSelect');
                                     });
                             }
                         });
@@ -109,6 +115,8 @@
                                             'Choose sprint to show' : 'No sprints in this project';
 
                                         $scope.sprints = sprints;
+
+                                        HelperService.refreshSelectPicker('#sprintSelect');
                                     });
                             }
                         });
