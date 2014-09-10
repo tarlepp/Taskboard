@@ -30,9 +30,11 @@
         'ngPrettyJson',
         'angularMoment',
         'angularjs-gravatardirective',
+        'angular-bootstrap-select',
         'toastr',
         'linkify',
         'uuid',
+        'textAngular',
         'sails.io'
     ]);
 
@@ -56,23 +58,47 @@
         .config(
             [
                 '$stateProvider', '$locationProvider', '$urlRouterProvider', '$httpProvider', '$sailsSocketProvider',
+                '$provide',
                 'toastrConfig',
                 'AccessLevels',
                 function($stateProvider, $locationProvider, $urlRouterProvider, $httpProvider, $sailsSocketProvider,
-                     toastrConfig,
-                     AccessLevels
+                         $provide,
+                        toastrConfig,
+                        AccessLevels
                 ) {
                     $httpProvider.defaults.useXDomain = true;
 
                     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
-                    // Add interceptors for $httpProvider and $sailsSocketProvider
+                    // Add interceptors for $httpProvider
                     $httpProvider.interceptors.push('AuthInterceptor');
                     $httpProvider.interceptors.push('ErrorInterceptor');
 
+                    // Add interceptors for $sailsSocketProvider
                     $sailsSocketProvider.interceptors.push('AuthInterceptor');
                     $sailsSocketProvider.interceptors.push('ErrorInterceptor');
 
+                    // textAngular configuration 
+                    $provide.decorator('taOptions',
+                        [
+                            'taRegisterTool', '$delegate',
+                            function(taRegisterTool, taOptions) { // $delegate is the taOptions we are decorating
+                                taOptions.classes.toolbar = 'btn-toolbar btn-toolbar-editor';
+                                taOptions.classes.toolbarGroup = 'btn-group btn-group-editor';
+                                taOptions.classes.toolbarButton = 'btn btn-default btn-editor';
+
+                                taOptions.toolbar = [
+                                    ['bold', 'italics', 'underline', 'ul', 'ol', 'clear'],
+                                    ['justifyLeft', 'justifyCenter', 'justifyRight', 'indent', 'outdent', 'pre', 'quote'],
+                                    ['html', 'insertImage', 'insertLink']
+                                ];
+
+                                return taOptions;
+                            }
+                        ]
+                    );
+
+                    // toastr configuration
                     angular.extend(toastrConfig, {
                         allowHtml: true,
                         closeButton: true,
@@ -137,6 +163,7 @@
             ]
         );
 
+    // Datepicker configuration for application
     angular.module('Taskboard')
         .config(function(datepickerConfig, datepickerPopupConfig) {
             datepickerConfig.startingDay = 1;
