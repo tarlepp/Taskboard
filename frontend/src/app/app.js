@@ -23,7 +23,6 @@
     // Initialize 3rd party libraries
     angular.module('Taskboard.libraries', [
         'ngSanitize',
-        'ngAnimate',
         'ui.router',
         'ui.bootstrap',
         'ui.bootstrap.showErrors',
@@ -190,7 +189,7 @@
 
                     $rootScope.$watch('currentUser()', function(valueNew) {
                         if (valueNew && valueNew.language) {
-                            amMoment.changeLanguage(valueNew.language);
+                            amMoment.changeLocale(valueNew.language);
                         }
                     }, true);
 
