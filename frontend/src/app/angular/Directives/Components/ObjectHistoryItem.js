@@ -29,7 +29,8 @@
                      * @param   {helpers.history.data}  item    Item data
                      */
                     var getContentInsert = function(item) {
-                        console.log('Hey man, now it\'s time to implement this!');
+                        return 'Added value <span class="text-info">{{item.valueNew}}</span> to ' +
+                            'column <span class="text-info">{{item.column}}</span>';
                     };
 
                     /**
@@ -87,6 +88,7 @@
                      * @param   {helpers.history.data}  item    Item data
                      */
                     var getContentDelete = function(item) {
+                        console.log(item);
                         console.log('Hey man, now it\'s time to implement this!');
                     };
 
