@@ -40,6 +40,8 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
                 }
             },
             /**
+             * Main callback function which is called after all parallel jobs
+             * are done or an error has occurred while processing those.
              *
              * @param   {null|Error}    error
              * @param   {{
