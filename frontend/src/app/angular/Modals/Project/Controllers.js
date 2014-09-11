@@ -52,7 +52,7 @@
                             if (key !== name) {
                                 $scope.opened[key] = false;
                             }
-                        })
+                        });
                     };
 
                     // Function to close current modal

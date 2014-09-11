@@ -39,8 +39,8 @@
                                 var conditions = [];
 
                                 for (var i = 0; i < words.length; i++) {
-                                    (function(index) {
-                                        var conditionOr = _.map(columns, function(column) {
+                                    (function (index) {
+                                        var conditionOr = _.map(columns, function (column) {
                                             var condition = {};
 
                                             condition[column.column] = {

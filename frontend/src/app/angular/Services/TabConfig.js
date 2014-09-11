@@ -10,8 +10,7 @@
     angular.module('Taskboard.services')
         .factory('TabConfig',
             [
-                '_',
-                function(_) {
+                function() {
                     return {
                         /**
                          * Tab configurations for user profile modal

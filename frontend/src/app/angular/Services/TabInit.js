@@ -21,11 +21,11 @@
                             var currentTime = new Date();
 
                             // Yeah tab has init method and we need to run it
-                            if (tab.hasInit
-                                && (
-                                    !tab.lastUpdate
-                                    || !CurrentUser.user().tabRefreshTime
-                                    || currentTime.getTime() > tab.lastUpdate.getTime()
+                            if (tab.hasInit &&
+                                (
+                                    !tab.lastUpdate ||
+                                    !CurrentUser.user().tabRefreshTime ||
+                                    currentTime.getTime() > tab.lastUpdate.getTime()
                                 )
                             ) {
                                 // Add user specified interval to current time in seconds

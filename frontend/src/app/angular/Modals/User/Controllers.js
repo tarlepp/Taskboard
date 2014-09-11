@@ -63,7 +63,9 @@
                     $scope.tabs = TabConfig.userProfile();
 
                     $scope.tabRefreshTimeFormat = function(value) {
-                        return (parseInt(value, 10) == 0) ? 'Always' : value + 's';
+                        value = parseInt(value, 10);
+
+                        return (value === 0 || _.isNaN(value)) ? 'Always' : value + 's';
                     };
 
                     // Function to reset current form data
@@ -89,9 +91,9 @@
 
                         $scope.$broadcast('show-errors-check-validity');
 
-                        if ($scope.form.userBasic.$valid
-                            && $scope.form.userLanguageRegion.$valid
-                            && $scope.form.userSettings.$valid
+                        if ($scope.form.userBasic.$valid &&
+                            $scope.form.userLanguageRegion.$valid &&
+                            $scope.form.userSettings.$valid
                         ) {
                             $scope.saving = true;
 
