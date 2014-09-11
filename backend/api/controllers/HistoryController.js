@@ -22,42 +22,61 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
         var objectId = request.param('objectId');
         var objectName = request.param('objectName');
 
-        sails.models['history']
-            .find()
-            .where({
-                objectName: objectName,
-                objectId: objectId
-            })
-            .populate('user')
-            .sort('createdAt ASC')
-            .exec(function(error, data) {
+        async.parallel(
+            {
+                users: function(callback) {
+                    sails.models['user']
+                        .find()
+                        .exec(callback);
+                },
+                histories: function(callback) {
+                    sails.models['history']
+                        .find()
+                        .where({
+                            objectName: objectName,
+                            objectId: objectId
+                        })
+                        .exec(callback);
+                }
+            },
+            /**
+             *
+             * @param   {null|Error}    error
+             * @param   {{
+             *              users: sails.model.user[],
+             *              histories: sails.model.history[]
+             *          }}              data
+             */
+            function(error, data) {
                 if (error) {
                     sails.services['response'].makeError(error, request, response);
                 } else {
                     var historyRows = [];
 
                     // Remove duplicate rows
-                    _.each(data, function(row, key) {
-                        if (key === 0
-                            || row.message && !data[key - 1].message
-                            || row.objectData !== data[key - 1].objectData
-                            || row.message !== data[key - 1].message
+                    _.each(data.histories, function(row, key) {
+                        if (key === 0 ||
+                            row.message && !data.histories[key - 1].message ||
+                            row.objectData !== data.histories[key - 1].objectData ||
+                            row.message !== data.histories[key - 1].message
                         ) {
                             historyRows.push(row);
                         }
                     });
 
                     // Process history data
-                    processHistoryData(historyRows);
+                    processHistoryData(historyRows, data.users);
                 }
-            });
+            }
+        );
 
         /**
          * Function process history rows for specified object.
          *
          * @param   {sails.model.history[]} historyRows
+         * @param   {sails.model.user[]}    users
          */
-        function processHistoryData(historyRows) {
+        function processHistoryData(historyRows, users) {
             var index = 0;
 
             // Map all history rows to sub-methods
@@ -80,7 +99,7 @@ module.exports = _.merge(_.cloneDeep(require('../base/Controller')), {
                         message: historyRow.message,
                         index: index,
                         stamp: dateObject,
-                        user: historyRow.user,
+                        user: _.find(users, function(user) { return user.id === historyRow.user; }),
                         data: []
                     };
 
