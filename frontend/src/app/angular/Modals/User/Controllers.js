@@ -138,7 +138,7 @@
 
                     // Whenever user changes language selection, we need to update current times
                     $scope.$watch('user.language', function(valueNew) {
-                        moment.lang(valueNew);
+                        moment.locale(valueNew);
 
                         updateTimes();
                     }, true);
