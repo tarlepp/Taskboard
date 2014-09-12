@@ -19,7 +19,7 @@
  */
 module.exports.policies = {
     // Default policy for all controllers and actions
-    '*': ['passport', 'authenticated'],
+   // '*': ['passport', 'authenticated'],
 
     AuthController: {
         '*':                ['passport'],
@@ -28,6 +28,7 @@ module.exports.policies = {
 
     CommentController: {
         '*':        false,
+        'schema':   ['passport', 'authenticated', 'isSocket'],
         'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
@@ -37,6 +38,7 @@ module.exports.policies = {
 
     EpicController: {
         '*':        false,
+        'schema':   ['passport', 'authenticated', 'isSocket'],
         'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
@@ -46,6 +48,7 @@ module.exports.policies = {
 
     ExcludeSprintDayController: {
         '*':        false,
+        'schema':   ['passport', 'authenticated', 'isSocket'],
         'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
@@ -55,6 +58,7 @@ module.exports.policies = {
 
     ExternalLinkController: {
         '*':        false,
+        'schema':   ['passport', 'authenticated', 'isSocket'],
         'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
@@ -64,6 +68,7 @@ module.exports.policies = {
 
     FileController: {
         '*':        false,
+        'schema':   ['passport', 'authenticated', 'isSocket'],
         'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
@@ -73,6 +78,7 @@ module.exports.policies = {
 
     HistoryController: {
         '*':                false,
+        'schema':           ['passport', 'authenticated', 'isSocket'],
         'find':             ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'findOne':          ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'count':            ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
@@ -83,6 +89,7 @@ module.exports.policies = {
 
     LanguageController: {
         '*':        false,
+        'schema':   ['passport', 'authenticated', 'isSocket'],
         'find':     ['passport', 'authenticated', 'isSocket'],
         'findOne':  ['passport', 'authenticated', 'isSocket'],
         'count':    ['passport', 'authenticated', 'isSocket'],
@@ -92,6 +99,7 @@ module.exports.policies = {
 
     LinkController: {
         '*':        false,
+        'schema':   ['passport', 'authenticated', 'isSocket'],
         'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
@@ -101,6 +109,7 @@ module.exports.policies = {
 
     MilestoneController: {
         '*':        false,
+        'schema':   ['passport', 'authenticated', 'isSocket'],
         'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
@@ -110,6 +119,7 @@ module.exports.policies = {
 
     PhaseController: {
         '*':        false,
+        'schema':   ['passport', 'authenticated', 'isSocket'],
         'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
@@ -119,6 +129,7 @@ module.exports.policies = {
 
     ProjectController: {
         '*':        false,
+        'schema':   ['passport', 'authenticated', 'isSocket'],
         'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
@@ -128,6 +139,7 @@ module.exports.policies = {
 
     ProjectUserController: {
         '*':        false,
+        'schema':   ['passport', 'authenticated', 'isSocket'],
         'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
@@ -137,6 +149,7 @@ module.exports.policies = {
 
     SprintController: {
         '*':        false,
+        'schema':   ['passport', 'authenticated', 'isSocket'],
         'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
@@ -146,6 +159,7 @@ module.exports.policies = {
 
     StoryController: {
         '*':        false,
+        'schema':   ['passport', 'authenticated', 'isSocket'],
         'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
@@ -155,6 +169,7 @@ module.exports.policies = {
 
     TaskController: {
         '*':        false,
+        'schema':   ['passport', 'authenticated', 'isSocket'],
         'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
@@ -164,6 +179,7 @@ module.exports.policies = {
 
     TaskTypeController: {
         '*':        false,
+        'schema':   ['passport', 'authenticated', 'isSocket'],
         'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
@@ -178,6 +194,7 @@ module.exports.policies = {
 
     UserController: {
         '*':        false,
+        'schema':   ['passport', 'authenticated', 'isSocket'],
         'find':     ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'findOne':  ['passport', 'authenticated', 'isSocket', 'objectRightGet', 'isAdminOrUserItself'],
         'count':    ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
@@ -187,6 +204,7 @@ module.exports.policies = {
 
     UserLoginController: {
         '*':                    true,
+        'schema':               ['passport', 'authenticated', 'isSocket'],
         'find':                 ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'findOne':              ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
         'count':                ['passport', 'authenticated', 'isSocket', 'objectRightGet'],
