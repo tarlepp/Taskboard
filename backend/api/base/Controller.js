@@ -27,5 +27,23 @@ module.exports = {
                     response.json(200, {count: count});
                 }
             });
+    },
+    /**
+     * Generic schema action for controller, basically this will just simply return
+     * current controller model schema and associations properties as a JSON back to
+     * client.
+     *
+     * @param   {Request}   request
+     * @param   {Response}  response
+     */
+    schema: function(request, response) {
+        var model = actionUtil.parseModel(request);
+
+        var data = {
+            attributes: model.schema,
+            associations: model.associations
+        };
+
+        response.json(200, data);
     }
 };
