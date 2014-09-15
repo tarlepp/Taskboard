@@ -1,7 +1,6 @@
 /**
- * Generic data service to interact with Sails.js backend.
+ * Generic data service to interact with Sails.js backend via sockets.
  *
- * @todo Add support for generic POST, PUT and DELETE
  * @todo Do we need to check that BackendConfig.url is set
  */
 (function() {
@@ -10,8 +9,13 @@
     angular.module('Taskboard.services')
         .factory('DataService',
             [
-                '$q', '$sailsSocket', '_', 'BackendConfig',
-                function($q, $sailsSocket, _, BackendConfig) {
+                '$sailsSocket',
+                '_',
+                'BackendConfig',
+                function($sailsSocket,
+                         _,
+                         BackendConfig
+                ) {
                     /**
                      * Helper function to get "proper" end point url for sails backend API.
                      *
@@ -50,9 +54,7 @@
                          *
                          * @returns {Promise|*}
                          */
-                        count: function(endPoint, parameters) {
-                            parameters = parameters || {};
-
+                        'count': function(endPoint, parameters) {
                             return $sailsSocket.get(parseEndPointUrl(endPoint) + '/count/', parseParameters(parameters));
                         },
 
@@ -65,9 +67,7 @@
                          *
                          * @returns {Promise|*}
                          */
-                        collection: function(endPoint, parameters) {
-                            parameters = parameters || {};
-
+                        'collection': function(endPoint, parameters) {
                             return $sailsSocket.get(parseEndPointUrl(endPoint), parseParameters(parameters));
                         },
 
@@ -81,10 +81,20 @@
                          *
                          * @returns {Promise|*}
                          */
-                        fetch: function(endPoint, identifier, parameters) {
-                            parameters = parameters || {};
-
+                        'fetch': function(endPoint, identifier, parameters) {
                             return $sailsSocket.get(parseEndPointUrl(endPoint, identifier), parseParameters(parameters));
+                        },
+
+                        /**
+                         * Service method to create new object to specified end point.
+                         *
+                         * @param   {string}    endPoint    Name of the end point
+                         * @param   {{}}        data        Data to update
+                         *
+                         * @returns {Promise|*}
+                         */
+                        'create': function(endPoint, data) {
+                            return $sailsSocket.post(parseEndPointUrl(endPoint), data);
                         },
 
                         /**
@@ -93,10 +103,23 @@
                          * @param   {string}    endPoint    Name of the end point
                          * @param   {number}    identifier  Identifier of endpoint object
                          * @param   {{}}        data        Data to update
+                         *
                          * @returns {Promise|*}
                          */
-                        update: function(endPoint, identifier, data) {
-                            return $sailsSocket.post(parseEndPointUrl(endPoint, identifier), data);
+                        'update': function(endPoint, identifier, data) {
+                            return $sailsSocket.put(parseEndPointUrl(endPoint, identifier), data);
+                        },
+
+                        /**
+                         * Service method to delete specified object.
+                         *
+                         * @param   {string}    endPoint    Name of the end point
+                         * @param   {number}    identifier  Identifier of endpoint object
+                         *
+                         * @returns {Promise|*}
+                         */
+                        'delete': function(endPoint, identifier) {
+                            return $sailsSocket.delete(parseEndPointUrl(endPoint, identifier))
                         }
                     };
                 }
