@@ -17,7 +17,6 @@
             return {
                 restrict: 'E',
                 replace: true,
-                scope: {},
                 templateUrl: '/Taskboard/partials/Directives/NavigationHeader/header.html',
                 controller: [
                     '$scope', '$filter',
@@ -32,8 +31,6 @@
                         $scope.sharedData = SharedData.data;
                         $scope.user = CurrentUser.user;
                         $scope.auth = Auth;
-                        $scope.projects = [];
-                        $scope.sprints = [];
                         $scope.sprintSelectText = 'Choose project to show';
                         $scope.projectSelectText = 'No projects yet...';
                         $scope.modalService = ModalService;
@@ -78,10 +75,6 @@
                                 ProjectModel
                                     .load()
                                     .then(function(projects) {
-                                        if (!_.isArray(projects) && _.isObject(projects)) {
-                                            projects = [projects];
-                                        }
-
                                         $scope.projectSelectText = projects.length > 0 ?
                                             'Choose project to show' : 'No projects yet...';
 
