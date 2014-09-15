@@ -74,10 +74,15 @@
                                     form: 'projectBasic'
                                 },
                                 {
-                                    title: 'Sprint settings',
+                                    title: 'Settings',
                                     template: 'Modals/Project/settings',
                                     buttonSet: 'main',
-                                    form: 'projectBasic'
+                                    form: 'projectSprintSettings'
+                                },
+                                {
+                                    title: 'Users',
+                                    template: 'Modals/Project/users',
+                                    buttonSet: ''
                                 },
                                 {
                                     title: 'Backlog',
@@ -97,11 +102,6 @@
                                 {
                                     title: 'Epics',
                                     template: 'Modals/Project/epics',
-                                    buttonSet: ''
-                                },
-                                {
-                                    title: 'Users',
-                                    template: 'Modals/Project/users',
                                     buttonSet: ''
                                 }
                             ].concat(this._objectHistory());
