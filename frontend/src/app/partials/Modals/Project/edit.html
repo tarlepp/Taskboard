@@ -4,7 +4,7 @@
     >
         <i class="fa fa-times"></i>
     </a>
-    <h3>{{project.title}}</h3>
+    <h3>{{_project.title}}</h3>
 </div>
 
 <div class="modal-body">
@@ -29,4 +29,21 @@
 
 <div class="modal-footer">
     <button class="btn btn-sm btn-default pull-left" data-ng-click="close()">Close</button>
+
+    <div data-ng-show="activeTab.buttonSet == 'main'">
+        <button class="btn btn-sm btn-primary"
+            data-ng-click="reset()"
+            data-ng-disabled="!formChanged"
+        >Reset</button>
+
+        <button class="btn btn-sm btn-primary"
+            data-ng-click="save()"
+            data-ng-disabled="!formChanged || !(form.projectBasic.$valid && form.projectSprintSettings.$valid)"
+        >Save</button>
+
+        <button class="btn btn-sm btn-primary"
+            data-ng-click="save(true)"
+            data-ng-disabled="!formChanged || !(form.projectBasic.$valid && form.projectSprintSettings.$valid)"
+        >Save and close</button>
+    </div>
 </div>

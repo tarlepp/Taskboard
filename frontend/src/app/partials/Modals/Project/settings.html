@@ -1,1 +1,17 @@
-settings here
+<form name="form.projectSprintSettings" class="form-horizontal" novalidate="novalidate">
+    <h4 class="col-xs-offset-3">Sprint settings</h4>
+
+    <div class="form-group">
+        <div class="col-xs-9 col-xs-offset-3">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"
+                        data-ng-model="project.ignoreWeekends"
+                    /> Ignore weekends on this project
+                </label>
+            </div>
+
+            <span class="help-block text-nowrap">Ignore weekends by default on sprint add. This is just the default value for sprint add.</span>
+        </div>
+    </div>
+</form>
