@@ -25,6 +25,17 @@ var models = {
     }
 };
 
+var socket = {
+    message: {
+        update: {
+            data:       '{{}}',
+            id:         '{Number}',
+            verb:       '{String}',
+            previous:   '{{}}'
+        }
+    }
+};
+
 var helpers = {
     history: {
         data: {
