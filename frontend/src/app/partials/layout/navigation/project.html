@@ -6,9 +6,13 @@
         data-selectpicker
         data-ng-disabled="!(projects.length)"
         data-ng-model="sharedData.projectId"
-        data-ng-options="project.id as project.title for project in projects | orderBy:'title'"
     >
         <option style="display:none" value="" class="text-muted">{{projectSelectText}}</option>
+        <option value="{{project.id}}"
+            data-ng-repeat="project in projects | orderBy:'title'"
+        >
+            {{project.title}}
+        </option>
     </select>
 
     <span class="input-group-btn">

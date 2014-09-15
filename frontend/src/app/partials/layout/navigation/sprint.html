@@ -6,9 +6,13 @@
         data-selectpicker
         data-ng-disabled="!(sharedData.projectId && sprints.length)"
         data-ng-model="sharedData.sprintId"
-        data-ng-options="sprint.id as getSprintTitle(sprint) for sprint in sprints | orderBy:'!dateStart':'!dateEnd':'title'"
     >
         <option style="display:none" value="" class="text-muted">{{sprintSelectText}}</option>
+        <option value="{{sprint.id}}"
+            data-ng-repeat="sprint in sprints | orderBy:['-dateStart', '-dateEnd', 'title']"
+        >
+            {{getSprintTitle(sprint)}}
+        </option>
     </select>
 
     <span class="input-group-btn">
