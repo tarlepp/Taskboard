@@ -22,6 +22,9 @@ var models = {
         dateEnd:        '{Date}',
         ignoreWeekends: '{Boolean}',
         project:        '{models.project}'
+    },
+    count: {
+        count:          '{Number}'
     }
 };
 
