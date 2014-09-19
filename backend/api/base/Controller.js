@@ -28,6 +28,7 @@ module.exports = {
                 }
             });
     },
+
     /**
      * Generic schema action for controller, basically this will just simply return
      * current controller model schema and associations properties as a JSON back to
@@ -47,3 +48,4 @@ module.exports = {
         response.json(200, data);
     }
 };
+
