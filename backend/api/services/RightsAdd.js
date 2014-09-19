@@ -5,6 +5,12 @@
  *
  * Generic rights service which contains functions to restrict users add only
  * to specified objects on each model.
+ *
+ * User roles ara following:
+ *
+ *  0 = Viewer
+ *  1 = Contributor
+ *  2 = Administrator
  */
 
 var _ = require('lodash');
@@ -312,8 +318,8 @@ exports.checkRightToAddProject = function(request, response, property, roles, ne
     // Determine valid project ids for current user
     sails.services['data']
         .getCollectionProperty('projectuser', 'project', {user: request.token, role: roles}, function(error, projectIds) {
-            return sails.services['rightsadd']
-                .checkRightProperty(error, projectIds, property, request, response, next);
+            return sails.services['rights']
+                .checkRightProperty(error, projectIds, property, 'add', request, response, next);
         });
 };
 
@@ -346,8 +352,8 @@ exports.checkRightToAddSprint = function(request, response, property, roles, nex
                 // Determine sprint ids for current user
                 return sails.services['data']
                     .getCollectionProperty('sprint', 'id', {project: projectIds}, function(error, sprintIds) {
-                        return sails.services['rightsadd']
-                            .checkRightProperty(error, sprintIds, property, request, response, next);
+                        return sails.services['rights']
+                            .checkRightProperty(error, sprintIds, property, 'add', request, response, next);
                     });
             }
         });
@@ -382,8 +388,8 @@ exports.checkRightToAddStory = function(request, response, property, roles, next
                 // Determine sprint ids for current user
                 return sails.services['data']
                     .getCollectionProperty('story', 'id', {project: projectIds}, function(error, storyIds) {
-                        return sails.services['rightsadd']
-                            .checkRightProperty(error, storyIds, property, request, response, next);
+                        return sails.services['rights']
+                            .checkRightProperty(error, storyIds, property, 'add', request, response, next);
                     });
             }
         });
@@ -416,62 +422,3 @@ exports.checkRightToAddDynamic = function(request, response, roles, next) {
 
     return next();
 };
-
-/**
- *
- * @param   {null|Error}    error       Possible error object
- * @param   {null|[]}       validIds    Valid id values that are attached to current user
- * @param   {String}        property    Property name which is checked
- * @param   {Request}       request     Request object
- * @param   {Response}      response    Response object
- * @param   {Function}      next        Callback function
- *
- * @returns {*}
- */
-exports.checkRightProperty = function(error, validIds, property, request, response, next) {
-    if (error) {
-        sails.log.err('Error occurred while processing model add rights.');
-        sails.log.err(error);
-
-        return response.negotiate(error);
-    }
-
-    // Get parameter from request.
-    var param = parseInt(request.param(property), 10);
-
-    // Determine name of the current model
-    var model = request.options.model || request.options.controller;
-
-    // Parameter not found or it's not a number
-    if (!param || isNaN(param)) {
-        sails.log.warn('User did not provide required parameter \'' + property + '\' to add new \'' + model + '\' object.');
-
-        error = new Error();
-
-        error.status = 400;
-        error.message = 'Required parameter \'' + property + '\' is missing.';
-
-        return response.negotiate(error);
-    } else if (_.empty(validIds)) { // No valid ids founded
-        sails.log.warn('User tried to create new \'' + model + '\' object and he / she do not have any valid objects');
-
-        error = new Error();
-
-        error.status = 400;
-        error.message = 'You do not have access to add this object.';
-
-        return response.negotiate(error);
-    } else if (_.indexOf(validIds, param) === -1) { // Given parameter not allowed to current user
-        sails.log.warn('User tried to create new \'' + model + '\' object with data he / she do not have access.');
-
-        error = new Error();
-
-        error.status = 400;
-        error.message = 'You do not have access to add this object.';
-
-        return response.negotiate(error);
-    }
-
-    return next();
-};
-
