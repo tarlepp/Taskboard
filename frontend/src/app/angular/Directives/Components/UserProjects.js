@@ -137,7 +137,7 @@
                                         $scope.itemCount = response.count;
                                     });
 
-                                var load = ProjectModel.load(_.merge(commonParameters, getParameters))
+                                var load = ProjectModel.load(_.merge(commonParameters, getParameters), true)
                                     .then(function(response) {
                                         $scope.items = response;
                                     });
