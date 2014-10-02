@@ -34,7 +34,7 @@ module.exports = function(request, response, next) {
                     }
                 });
             } else {
-                sails.log.warning(__filename + ":" + __line + " [Auth failed - user signed in elsewhere]");
+                sails.log.warn(__filename + ":" + __line + " [Auth failed - user signed in elsewhere]");
 
                 request.flash.message("Someone else have been signed in with same credentials.", "error");
 
